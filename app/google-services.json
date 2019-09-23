@@ -1,0 +1,310 @@
+{
+  "project_info": {
+    "project_number": "105863687745",
+    "firebase_url": "https://ajkerdealseller.firebaseio.com",
+    "project_id": "ajkerdealseller",
+    "storage_bucket": "ajkerdealseller.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105863687745:android:736dc1814c0cdaae",
+        "android_client_info": {
+          "package_name": "bd.ajkerdeal_retention"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "105863687745-ks6t7ei9cc5cmkioa5jco1gf5ouhs5sa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "bd.ajkerdeal_retention",
+            "certificate_hash": "44717ce3effec643c09b5e5b563418f4790b047e"
+          }
+        },
+        {
+          "client_id": "105863687745-40lggudfua6q8kqhmothasi9r61sv2ru.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuk5jkX4ZJMKPPtN1PnTeRHqwsEDdz6KM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "105863687745-nph15r7sk29m31gplb5bv8je0jb3smev.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105863687745:android:ab27451e5edd8e47",
+        "android_client_info": {
+          "package_name": "co.m.ajkerdeal.customer.chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "105863687745-ckbjats0qs8vb7vk4l2svm2e9p08psf5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.m.ajkerdeal.customer.chat",
+            "certificate_hash": "6ffec9c0325c48e7917ef76b56879cb6fe6041df"
+          }
+        },
+        {
+          "client_id": "105863687745-rib7c6tca156ard4deu0iii84eorl2gp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.m.ajkerdeal.customer.chat",
+            "certificate_hash": "85a6e764f9db8db7f7f89710e2e5dc999e7c054e"
+          }
+        },
+        {
+          "client_id": "105863687745-40lggudfua6q8kqhmothasi9r61sv2ru.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuk5jkX4ZJMKPPtN1PnTeRHqwsEDdz6KM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "105863687745-nph15r7sk29m31gplb5bv8je0jb3smev.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105863687745:android:dac0d6bdd818344d",
+        "android_client_info": {
+          "package_name": "co.m.ajkerdeal.merchant.bulletins.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "105863687745-1ps16er440haql3mj04jc45hme5l1fme.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.m.ajkerdeal.merchant.bulletins.admin",
+            "certificate_hash": "85a6e764f9db8db7f7f89710e2e5dc999e7c054e"
+          }
+        },
+        {
+          "client_id": "105863687745-40lggudfua6q8kqhmothasi9r61sv2ru.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuk5jkX4ZJMKPPtN1PnTeRHqwsEDdz6KM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "105863687745-nph15r7sk29m31gplb5bv8je0jb3smev.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105863687745:android:1aef0931134bef21",
+        "android_client_info": {
+          "package_name": "com.ajkerdeal.app.ajkerdealcollector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "105863687745-vl6qt96gngknjb5ormfuhmoql83gb59m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ajkerdeal.app.ajkerdealcollector",
+            "certificate_hash": "6dd95daf6fcb01d24f9ea052d001b1d2836ad617"
+          }
+        },
+        {
+          "client_id": "105863687745-40lggudfua6q8kqhmothasi9r61sv2ru.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuk5jkX4ZJMKPPtN1PnTeRHqwsEDdz6KM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "105863687745-nph15r7sk29m31gplb5bv8je0jb3smev.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105863687745:android:73ae7c069de9fa6b",
+        "android_client_info": {
+          "package_name": "com.ajkerdeal.app.ajkerdealretention"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "105863687745-ca6to5e6rb4f3o7orj9lpl4klcbo28ph.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ajkerdeal.app.ajkerdealretention",
+            "certificate_hash": "6dd95daf6fcb01d24f9ea052d001b1d2836ad617"
+          }
+        },
+        {
+          "client_id": "105863687745-40lggudfua6q8kqhmothasi9r61sv2ru.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuk5jkX4ZJMKPPtN1PnTeRHqwsEDdz6KM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "105863687745-nph15r7sk29m31gplb5bv8je0jb3smev.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105863687745:android:7efb4b64e2c5a66b",
+        "android_client_info": {
+          "package_name": "com.ajkerdeal.app.ajkerdealseller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "105863687745-gqphn7almgl84sh5ah3mfcjfk9t5ndjh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ajkerdeal.app.ajkerdealseller",
+            "certificate_hash": "4e98aaf9714b6d079a4be76079965e93500221bc"
+          }
+        },
+        {
+          "client_id": "105863687745-ohvgj8g61li0bu9qjfrgm35r2dovse9j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ajkerdeal.app.ajkerdealseller",
+            "certificate_hash": "6a138fd4004fbe891ec045e29e415f5ce837c91d"
+          }
+        },
+        {
+          "client_id": "105863687745-lolubh7dvqkjltt1qbp95kb7pvvcnupn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ajkerdeal.app.ajkerdealseller",
+            "certificate_hash": "6ffec9c0325c48e7917ef76b56879cb6fe6041df"
+          }
+        },
+        {
+          "client_id": "105863687745-2374jrkt125noei7vjdel2gqrus0cjem.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ajkerdeal.app.ajkerdealseller",
+            "certificate_hash": "85a6e764f9db8db7f7f89710e2e5dc999e7c054e"
+          }
+        },
+        {
+          "client_id": "105863687745-354jv88r8ntofjithlo2jklluhd21nbg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ajkerdeal.app.ajkerdealseller",
+            "certificate_hash": "a59550fc4c5babe60fb169c90bdad463bcf97dea"
+          }
+        },
+        {
+          "client_id": "105863687745-40lggudfua6q8kqhmothasi9r61sv2ru.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuk5jkX4ZJMKPPtN1PnTeRHqwsEDdz6KM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "105863687745-nph15r7sk29m31gplb5bv8je0jb3smev.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105863687745:android:b4370e4dbed31f234b20c0",
+        "android_client_info": {
+          "package_name": "com.bd.deliverytiger.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "105863687745-c9vh2t421dg8oes7lgb8n98eb9t614og.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bd.deliverytiger.app",
+            "certificate_hash": "5c9ba404ed645c95d9adef005e2f9fc9b55d2ed2"
+          }
+        },
+        {
+          "client_id": "105863687745-40lggudfua6q8kqhmothasi9r61sv2ru.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuk5jkX4ZJMKPPtN1PnTeRHqwsEDdz6KM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "105863687745-nph15r7sk29m31gplb5bv8je0jb3smev.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
