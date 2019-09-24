@@ -14,15 +14,8 @@ import com.bd.deliverytiger.app.R
 class LoginFragment private constructor(): Fragment() {
 
     companion object{
-        @JvmStatic
-        fun newInstance(): LoginFragment{
-            val fragment = LoginFragment()
-            return fragment
-        }
-
-        fun getFragmentTag(): String? {
-            return LoginFragment::class.java.getName()
-        }
+        fun newInstance():LoginFragment = LoginFragment().apply {}
+        val tag = LoginFragment::class.java.name
     }
 
     override fun onCreateView(
@@ -33,5 +26,8 @@ class LoginFragment private constructor(): Fragment() {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+    }
 }
