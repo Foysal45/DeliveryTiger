@@ -5,4 +5,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="registration">Registration</string>
     <string name="login">Login</string>
+    <string name="write_proper_phone_number_recharge">সঠিক ফোন নাম্বার লিখুন।</string>
+    <string name="write_phone_number">ফোন নাম্বার লিখুন</string>
+
+    <string name="api_connect_error">দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে "\n" কিছুক্ষণ পর আবার চেষ্টা করুন</string>
+    <string name="error_msg">দুঃখিত,কিছুক্ষণ পর আবার চেষ্টা করুন</string>
+    <string name="write_password">পাসওয়ার্ড লিখুন</string>
+    <string name="match_pass">পাসওয়ার্ড ম্যাচ করেনি</string>
+
 </resources>
