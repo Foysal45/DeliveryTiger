@@ -85,7 +85,6 @@ class LoginFragment: Fragment() {
         if (!validate()) {
             return
         }
-
         val mobile = mobileET.text.toString()
         val password = passwordET.text.toString()
 
