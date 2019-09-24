@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
     private fun addSignUpFragment(){
         val fragment = SignUpFragment.newInstance()
         val ft: FragmentTransaction? = supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.loginActivityContainer, fragment, SignUpFragment.getFragmentTag())
+        ft?.add(R.id.loginActivityContainer, fragment, SignUpFragment.tag)
         // ft?.addToBackStack(LoginFragment.getFragmentTag())
         ft?.commit()
     }

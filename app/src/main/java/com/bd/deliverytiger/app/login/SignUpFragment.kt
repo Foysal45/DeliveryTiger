@@ -32,7 +32,7 @@ import retrofit2.Response
 /**
  * A simple [Fragment] subclass.
  */
-class SignUpFragment private constructor(): Fragment(),View.OnClickListener {
+class SignUpFragment: Fragment(),View.OnClickListener {
 
     companion object{
         @JvmStatic
@@ -40,10 +40,7 @@ class SignUpFragment private constructor(): Fragment(),View.OnClickListener {
             val fragment = SignUpFragment()
             return fragment
         }
-
-        fun getFragmentTag(): String? {
-            return SignUpFragment::class.java.getName()
-        }
+        val tag = LoginFragment::class.java.name
     }
 
     private lateinit var mContext: Context
@@ -84,7 +81,7 @@ class SignUpFragment private constructor(): Fragment(),View.OnClickListener {
                 signUp()
             }
             tvLogin -> {
-                addLoginFragment()
+                activity?.onBackPressed()
             }
         }
     }

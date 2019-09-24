@@ -28,7 +28,7 @@ import retrofit2.Response
 /**
  * A simple [Fragment] subclass.
  */
-class LoginFragment private constructor() : Fragment() {
+class LoginFragment: Fragment() {
 
     private val logTag = "LoginFragmentTag"
 
@@ -113,8 +113,8 @@ class LoginFragment private constructor() : Fragment() {
 
         val fragment = SignUpFragment.newInstance()
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.loginActivityContainer, fragment, SignUpFragment.getFragmentTag())
-        ft?.addToBackStack(SignUpFragment.getFragmentTag())
+        ft?.replace(R.id.loginActivityContainer, fragment, SignUpFragment.tag)
+        ft?.addToBackStack(SignUpFragment.tag)
         ft?.commit()
     }
 }
