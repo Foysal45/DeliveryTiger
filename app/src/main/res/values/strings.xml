@@ -5,6 +5,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="registration">Registration</string>
     <string name="login">Login</string>
+    <string name="reset_password">Reset your password</string>
     <string name="write_proper_phone_number_recharge">সঠিক ফোন নাম্বার লিখুন।</string>
     <string name="write_phone_number">ফোন নাম্বার লিখুন</string>
 

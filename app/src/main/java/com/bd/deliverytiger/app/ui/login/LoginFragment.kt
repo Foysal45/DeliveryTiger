@@ -73,7 +73,7 @@ class LoginFragment: Fragment() {
         }
         forgotPasswordTV.setOnClickListener {
 
-            context?.showToast("Under development")
+            addResetPasswordFragment()
         }
         signUpTV.setOnClickListener {
             goToSignUp()
@@ -175,6 +175,15 @@ class LoginFragment: Fragment() {
         startActivity(Intent(activity, HomeActivity::class.java))
         activity?.finish()
     }
+
+    private fun addResetPasswordFragment(){
+        val fragment = ResetPasswordFragment.newInstance()
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.loginActivityContainer, fragment, ResetPasswordFragment.tag)
+        ft?.addToBackStack(ResetPasswordFragment.tag)
+        ft?.commit()
+    }
+
 
 }
 

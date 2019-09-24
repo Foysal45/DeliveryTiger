@@ -158,7 +158,7 @@ class SignUpFragment: Fragment(),View.OnClickListener {
     // show toast method
     private fun showToast(message: String) {
         val toast = Toast.makeText(mContext, message, Toast.LENGTH_LONG)
-        toast.setGravity(Gravity.BOTTOM, 0, 0)
+        //toast.setGravity(Gravity.BOTTOM, 0, 0)
         toast.show()
     }
 

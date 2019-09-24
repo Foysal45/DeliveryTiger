@@ -50,5 +50,13 @@ class LoginActivity : AppCompatActivity() {
         ft?.commit()
     }
 
+    private fun addResetPasswordFragment(){
+        val fragment = ResetPasswordFragment.newInstance()
+        val ft: FragmentTransaction? = supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.loginActivityContainer, fragment, ResetPasswordFragment.tag)
+        // ft?.addToBackStack(LoginFragment.tag)
+        ft?.commit()
+    }
+
 
 }

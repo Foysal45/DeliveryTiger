@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.api.model.login
+package com.bd.deliverytiger.app.ui.login
 
 
 import android.os.Bundle
@@ -13,6 +13,12 @@ import com.bd.deliverytiger.app.R
  * A simple [Fragment] subclass.
  */
 class ResetPasswordFragment : Fragment() {
+
+    companion object {
+        fun newInstance(): ResetPasswordFragment = ResetPasswordFragment().apply {}
+        val tag = ResetPasswordFragment::class.java.name
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
