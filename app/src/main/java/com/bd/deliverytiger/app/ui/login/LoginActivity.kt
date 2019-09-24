@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.login
+package com.bd.deliverytiger.app.ui.login
 
 import android.os.Bundle
 import android.os.Handler

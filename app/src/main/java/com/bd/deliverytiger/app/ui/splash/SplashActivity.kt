@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.login.LoginActivity
+import com.bd.deliverytiger.app.ui.login.LoginActivity
 
 class SplashActivity : AppCompatActivity() {
 

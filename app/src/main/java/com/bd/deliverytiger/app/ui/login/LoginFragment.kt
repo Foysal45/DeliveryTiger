@@ -1,12 +1,14 @@
-package com.bd.deliverytiger.app.login
+package com.bd.deliverytiger.app.ui.login
 
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -20,6 +22,7 @@ import com.bd.deliverytiger.app.api.model.login.LoginBody
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
+import com.bd.deliverytiger.app.utils.Validator
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,6 +45,7 @@ class LoginFragment: Fragment() {
         fun newInstance(): LoginFragment = LoginFragment().apply {}
         val tag = LoginFragment::class.java.name
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,11 +80,16 @@ class LoginFragment: Fragment() {
 
     private fun login() {
 
+        if (!validate()) {
+            return
+        }
+
         val mobile = mobileET.text.toString()
         val password = passwordET.text.toString()
 
         val dialog = ProgressDialog(context)
         dialog.setMessage("Please wait")
+        dialog.setCancelable(false)
         dialog.show()
         val loginInterface = RetrofitSingleton.getInstance(context!!).create(LoginInterface::class.java)
         loginInterface.userLogin(LoginBody(mobile, password)).enqueue(object :
@@ -106,6 +115,48 @@ class LoginFragment: Fragment() {
             }
 
         })
+
+    }
+
+    private fun validate(): Boolean{
+        var go = true
+        if (mobileET.text.toString().isEmpty()) {
+            activity?.showToast(getString(R.string.write_phone_number))
+            go = false
+
+            mobileET.requestFocus()
+            editTextEnableOrDisable(mobileET)
+        } else if (!Validator.isValidMobileNumber(mobileET.text.toString()) || mobileET.text.toString().length < 11) {
+            context?.showToast(getString(R.string.write_proper_phone_number_recharge))
+            go = false
+            hideSoftKeyBoard()
+            mobileET.requestFocus()
+            editTextEnableOrDisable(mobileET)
+        } else if(passwordET.text.toString().isEmpty()) {
+            context?.showToast(getString(R.string.write_password))
+            go = false
+        }
+        hideSoftKeyBoard()
+        return go
+    }
+
+    // clear focus if payment lay blinking
+    private fun editTextEnableOrDisable(et: EditText) {
+        et.isSelected = false
+        et.isFocusable = false
+        et.isFocusableInTouchMode = true
+    }
+
+    private fun hideSoftKeyBoard() {
+        try {  // hide keyboard if its open
+            val inputMethodManager = activity!!.getSystemService(
+                Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(
+                activity!!.currentFocus!!.windowToken, 0)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
     }
 

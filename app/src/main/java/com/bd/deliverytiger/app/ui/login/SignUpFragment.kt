@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.login
+package com.bd.deliverytiger.app.ui.login
 
 
 import android.app.Activity
@@ -6,25 +6,25 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
-
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.`interface`.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.SignUpReqBody
 import com.bd.deliverytiger.app.api.model.login.SignUpResponse
-import com.bd.deliverytiger.app.utils.Helper
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
-import kotlinx.android.synthetic.main.fragment_sign_up.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
