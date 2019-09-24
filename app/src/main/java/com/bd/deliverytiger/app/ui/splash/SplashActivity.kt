@@ -24,10 +24,10 @@ class SplashActivity : AppCompatActivity() {
         splashLogoLayout = findViewById(R.id.splash_logo_layout)
 
         val animTranslation = ObjectAnimator.ofFloat(splashBackIV, "translationX", 0f, 80f)
-        animTranslation.duration = 3000
+        animTranslation.duration = 2000
 
         val animLogoFadeIn = ObjectAnimator.ofFloat(splashLogoLayout, "alpha", 0f, 1f)
-        animLogoFadeIn.duration = 3000
+        animLogoFadeIn.duration = 2000
 
         val animSet = AnimatorSet()
         animSet.play(animTranslation).with(animLogoFadeIn)
@@ -39,6 +39,7 @@ class SplashActivity : AppCompatActivity() {
             override fun onAnimationEnd(p0: Animator?) {
                 //Helper.showToast("Completed")
                 startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                finish()
             }
 
             override fun onAnimationCancel(p0: Animator?) {
