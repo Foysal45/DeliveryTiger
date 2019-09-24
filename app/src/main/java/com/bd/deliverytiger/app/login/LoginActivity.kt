@@ -15,6 +15,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
+        addLoginFragment()
 
     }
 
@@ -22,8 +23,18 @@ class LoginActivity : AppCompatActivity() {
         val fragment = LoginFragment.newInstance()
         val ft: FragmentTransaction? = supportFragmentManager?.beginTransaction()
         ft?.add(R.id.loginActivityContainer, fragment, LoginFragment.getFragmentTag())
-        ft?.addToBackStack(LoginFragment.getFragmentTag())
+       // ft?.addToBackStack(LoginFragment.getFragmentTag())
         ft?.commit()
     }
+
+
+    private fun addSignUpFragment(){
+        val fragment = SignUpFragment.newInstance()
+        val ft: FragmentTransaction? = supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.loginActivityContainer, fragment, SignUpFragment.getFragmentTag())
+        // ft?.addToBackStack(LoginFragment.getFragmentTag())
+        ft?.commit()
+    }
+
 
 }

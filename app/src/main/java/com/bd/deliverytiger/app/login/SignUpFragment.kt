@@ -2,26 +2,27 @@ package com.bd.deliverytiger.app.login
 
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+
 import com.bd.deliverytiger.app.R
 
 /**
  * A simple [Fragment] subclass.
  */
-class LoginFragment private constructor(): Fragment() {
+class SignUpFragment private constructor(): Fragment() {
 
     companion object{
         @JvmStatic
-        fun newInstance(): LoginFragment{
-            val fragment = LoginFragment()
+        fun newInstance(): SignUpFragment{
+            val fragment = SignUpFragment()
             return fragment
         }
 
         fun getFragmentTag(): String? {
-            return LoginFragment::class.java.getName()
+            return SignUpFragment::class.java.getName()
         }
     }
 
@@ -30,7 +31,7 @@ class LoginFragment private constructor(): Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
+        return inflater.inflate(R.layout.fragment_sign_up, container, false)
     }
 
 

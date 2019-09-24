@@ -3,6 +3,14 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="login_title_color">#66000000</color>
+
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="login_sign_up_tv_color">#66BB6A</color>
     <color name="black_70">#B3000000</color>
     <color name="black_80">#CC000000</color>
+    <color name="blur">#26FFFFFF</color>
+
 </resources>
