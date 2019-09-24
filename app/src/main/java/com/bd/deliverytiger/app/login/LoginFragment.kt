@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.login
 
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import com.bd.deliverytiger.app.api.`interface`.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.LoginBody
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
+import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
@@ -59,7 +61,7 @@ class LoginFragment private constructor() : Fragment() {
 
         mobileET.setText("01844172323")
         passwordET.setText("01844172323")
-        
+
         loginBtn.setOnClickListener {
             login()
         }
@@ -74,11 +76,18 @@ class LoginFragment private constructor() : Fragment() {
 
     private fun login() {
 
+        val mobile = mobileET.text.toString()
+        val password = passwordET.text.toString()
+
+        val dialog = ProgressDialog(context)
+        dialog.setMessage("Please wait")
+        dialog.show()
         val loginInterface = RetrofitSingleton.getInstance(context!!).create(LoginInterface::class.java)
-        loginInterface.userLogin(LoginBody("01844172323", "01844172323")).enqueue(object :
+        loginInterface.userLogin(LoginBody(mobile, password)).enqueue(object :
             Callback<GenericResponse<LoginResponse>> {
             override fun onFailure(call: Call<GenericResponse<LoginResponse>>, t: Throwable) {
                 Timber.d(logTag, "${t.message}")
+                dialog.hide()
             }
 
             override fun onResponse(
@@ -86,7 +95,14 @@ class LoginFragment private constructor() : Fragment() {
                 response: Response<GenericResponse<LoginResponse>>
             ) {
                 Timber.d(logTag, "${response.code()} ${response.message()}")
+                dialog.hide()
+                if (response.isSuccessful && response.body() != null) {
+                    if (response.body()!!.model != null) {
 
+                        SessionManager.accessToken = response.body()!!.model.token
+
+                    }
+                }
             }
 
         })
@@ -98,6 +114,7 @@ class LoginFragment private constructor() : Fragment() {
         val fragment = SignUpFragment.newInstance()
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpFragment.getFragmentTag())
+        ft?.addToBackStack(SignUpFragment.getFragmentTag())
         ft?.commit()
     }
 }
