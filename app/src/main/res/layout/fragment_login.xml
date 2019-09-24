@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/blur"
     android:layout_height="match_parent"
+    android:background="@color/blur"
     tools:context=".login.LoginFragment">
 
     <ImageView
@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_marginBottom="?attr/actionBarSize"
+        android:contentDescription="@string/cd"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,6 +26,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="?attr/actionBarSize"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/cd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -42,64 +45,146 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivLogo" />
 
-    <LinearLayout
-        android:layout_marginTop="24dp"
+    <androidx.cardview.widget.CardView
         android:id="@+id/editTextLay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/login_margin"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="@dimen/login_margin"
-        android:orientation="vertical"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/loginTitle">
 
-        <EditText
-            android:id="@+id/etLoginMobileNo"
+        <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            android:layout_height="@dimen/login_view_height"
-            android:background="@drawable/bg_login_top_edit_text"
-            android:hint="Mobile number"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/loginTitle" />
+            <EditText
+                android:id="@+id/etLoginMobileNo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_view_height"
+                android:background="@drawable/bg_login_top_edit_text"
+                android:hint="Mobile number"
+                android:importantForAutofill="no"
+                android:inputType="phone"
+                android:paddingStart="16dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14" />
 
-        <View
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/login_title_color" />
+
+            <EditText
+                android:id="@+id/etLoginPassword"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_view_height"
+                android:background="@drawable/bg_login_bottom_edit_text"
+                android:hint="Password"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:paddingStart="16dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo" />
+
+        </LinearLayout>
+
+        <!--<LinearLayout
             android:layout_width="match_parent"
-            android:background="@color/login_title_color"
-            android:layout_height="1px"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/login_mobile_input_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Mobile number"
+                app:boxBackgroundColor="@color/white"
+                app:boxCornerRadiusBottomEnd="0dp"
+                app:boxCornerRadiusBottomStart="0dp"
+                app:boxCornerRadiusTopEnd="4dp"
+                app:boxCornerRadiusTopStart="4dp"
+                app:boxStrokeColor="@color/white"
+                app:endIconMode="clear_text"
+                app:hintTextColor="@color/black_70">
 
-        <EditText
-            android:id="@+id/etLoginPassword"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/login_view_height"
-            android:background="@drawable/bg_login_bottom_edit_text"
-            android:hint="Password"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/login_mobile_input_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:importantForAutofill="no"
 
-    </LinearLayout>
+                    android:inputType="phone"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14"
+
+                    />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            &lt;!&ndash;<View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/login_title_color" />&ndash;&gt;
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/login_password_input_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:hint="Password"
+                app:boxBackgroundColor="@color/white"
+                app:boxCornerRadiusBottomEnd="4dp"
+                app:boxCornerRadiusBottomStart="4dp"
+                app:boxCornerRadiusTopEnd="0dp"
+                app:boxCornerRadiusTopStart="0dp"
+                app:boxStrokeColor="@color/white"
+                app:endIconMode="password_toggle"
+                app:hintTextColor="@color/black_70">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/login_password_input_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:importantForAutofill="no"
+                    android:inputType="textPassword"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>-->
+
+    </androidx.cardview.widget.CardView>
 
 
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/btnLogin"
-        android:backgroundTint="@color/login_sign_up_tv_color"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginStart="@dimen/login_margin"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="@dimen/login_margin"
+        android:backgroundTint="@color/login_sign_up_tv_color"
         android:padding="8dp"
         android:text="Login"
         android:textColor="@color/white"
