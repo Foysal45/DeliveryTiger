@@ -17,7 +17,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/blur</item>
         <item name="colorPrimaryDark">@color/blur</item>
-        <item name="colorAccent">@color/blur</item>
+
     </style>
 
 </resources>

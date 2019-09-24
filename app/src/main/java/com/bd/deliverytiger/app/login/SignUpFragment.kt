@@ -92,7 +92,7 @@ class SignUpFragment private constructor(): Fragment(),View.OnClickListener {
     private fun signUp(){
         if(validate()){
             val progressDialog = ProgressDialog(mContext)
-            progressDialog.setMessage("please wait")
+            progressDialog.setMessage("অপেক্ষা করুন")
             progressDialog.show()
 
             val retrofit = RetrofitSingleton.getInstance(mContext)
@@ -111,9 +111,12 @@ class SignUpFragment private constructor(): Fragment(),View.OnClickListener {
                     progressDialog.hide()
                   if(response.isSuccessful && response.body() != null){
                       Timber.e("userUserRegister",response.body().toString())
-
-                      //addLoginFragment()
+                      showToast(getString(R.string.success_in_signin))
+                      addLoginFragment()
                   } else {
+                      if (response.body() != null) {
+                          showToast(response.body()!!.errorMessage)
+                      }
                       Timber.e("userUserRegister","null")
                   }
                 }

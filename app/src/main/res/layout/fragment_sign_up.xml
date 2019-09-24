@@ -93,7 +93,7 @@
                 android:layout_height="@dimen/login_view_height"
                 android:background="@drawable/bg_login_middle_edit_text"
                 android:hint="Password"
-
+                android:inputType="textPassword"
                 android:paddingStart="16dp"
                 android:paddingTop="8dp"
                 android:paddingEnd="16dp"
@@ -108,6 +108,7 @@
                 android:background="@color/login_title_color" />
 
             <EditText
+                android:inputType="textPassword"
                 android:id="@+id/etSignUpConfirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_view_height"

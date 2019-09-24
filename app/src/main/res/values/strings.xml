@@ -12,5 +12,6 @@
     <string name="error_msg">দুঃখিত,কিছুক্ষণ পর আবার চেষ্টা করুন</string>
     <string name="write_password">পাসওয়ার্ড লিখুন</string>
     <string name="match_pass">পাসওয়ার্ড ম্যাচ করেনি</string>
+    <string name="success_in_signin">সফলভাবে সাইন আপ করেছেন</string>
 
 </resources>
