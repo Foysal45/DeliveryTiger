@@ -1,21 +1,32 @@
 package com.bd.deliverytiger.app.login
 
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.RetrofitSingleton
+import com.bd.deliverytiger.app.api.`interface`.LoginInterface
+import com.bd.deliverytiger.app.api.model.GenericResponse
+import com.bd.deliverytiger.app.api.model.login.LoginBody
+import com.bd.deliverytiger.app.api.model.login.LoginResponse
+import com.bd.deliverytiger.app.utils.Timber
 import com.google.android.material.button.MaterialButton
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * A simple [Fragment] subclass.
  */
-class LoginFragment private constructor(): Fragment() {
+class LoginFragment private constructor() : Fragment() {
 
     private val logTag = "LoginFragmentTag"
 
@@ -25,8 +36,8 @@ class LoginFragment private constructor(): Fragment() {
     private lateinit var forgotPasswordTV: TextView
     private lateinit var signUpTV: TextView
 
-    companion object{
-        fun newInstance():LoginFragment = LoginFragment().apply {}
+    companion object {
+        fun newInstance(): LoginFragment = LoginFragment().apply {}
         val tag = LoginFragment::class.java.name
     }
 
@@ -46,15 +57,40 @@ class LoginFragment private constructor(): Fragment() {
         forgotPasswordTV = view.findViewById(R.id.tvLoginForgotPassword)
         signUpTV = view.findViewById(R.id.tvLoginSignUp)
 
+        mobileET.setText("01844172323")
+        passwordET.setText("01844172323")
+        
         loginBtn.setOnClickListener {
-
+            login()
         }
         forgotPasswordTV.setOnClickListener {
 
+            context?.showToast("Under development")
         }
         signUpTV.setOnClickListener {
             goToSignUp()
         }
+    }
+
+    private fun login() {
+
+        val loginInterface = RetrofitSingleton.getInstance(context!!).create(LoginInterface::class.java)
+        loginInterface.userLogin(LoginBody("01844172323", "01844172323")).enqueue(object :
+            Callback<GenericResponse<LoginResponse>> {
+            override fun onFailure(call: Call<GenericResponse<LoginResponse>>, t: Throwable) {
+                Timber.d(logTag, "${t.message}")
+            }
+
+            override fun onResponse(
+                call: Call<GenericResponse<LoginResponse>>,
+                response: Response<GenericResponse<LoginResponse>>
+            ) {
+                Timber.d(logTag, "${response.code()} ${response.message()}")
+
+            }
+
+        })
+
     }
 
     private fun goToSignUp() {
@@ -64,4 +100,8 @@ class LoginFragment private constructor(): Fragment() {
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpFragment.getFragmentTag())
         ft?.commit()
     }
+}
+
+private fun Context?.showToast(msg: String) {
+    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }
