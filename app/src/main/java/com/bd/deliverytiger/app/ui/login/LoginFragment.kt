@@ -4,6 +4,7 @@ package com.bd.deliverytiger.app.ui.login
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import com.bd.deliverytiger.app.api.`interface`.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.LoginBody
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
+import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
@@ -105,11 +107,11 @@ class LoginFragment: Fragment() {
             ) {
                 Timber.d(logTag, "${response.code()} ${response.message()}")
                 dialog.hide()
-                if (response.isSuccessful && response.body() != null) {
+                if (response.isSuccessful && response.body() != null && isAdded) {
                     if (response.body()!!.model != null) {
 
                         SessionManager.accessToken = response.body()!!.model.token
-
+                        goToHomeActivity()
                     }
                 }
             }
@@ -168,6 +170,12 @@ class LoginFragment: Fragment() {
         ft?.addToBackStack(SignUpFragment.tag)
         ft?.commit()
     }
+
+    private fun goToHomeActivity() {
+        startActivity(Intent(activity, HomeActivity::class.java))
+        activity?.finish()
+    }
+
 }
 
 private fun Context?.showToast(msg: String) {
