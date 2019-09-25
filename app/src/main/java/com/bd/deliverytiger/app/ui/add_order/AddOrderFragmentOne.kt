@@ -2,7 +2,6 @@ package com.bd.deliverytiger.app.ui.add_order
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
@@ -81,10 +81,10 @@ class AddOrderFragmentOne : Fragment() {
     }
 
     private fun addOrderFragmentTwo(){
-        val fragment = AddOrderFragmentOne.newInstance()
+        val fragment = AddOrderFragmentTwo.newInstance()
         val ft: FragmentTransaction? = (context as FragmentActivity?)?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
-        ft?.addToBackStack(AddOrderFragmentOne.tag)
+        ft?.add(R.id.mainActivityContainer, fragment, AddOrderFragmentTwo.tag)
+        ft?.addToBackStack(AddOrderFragmentTwo.tag)
         ft?.commit()
     }
 

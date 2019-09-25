@@ -17,8 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="48dp"
@@ -27,61 +26,9 @@
             app:layout_constraintTop_toTopOf="parent">
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/addOrderTopLay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#FFF8E1"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/tvTotal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Total :"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_14"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvAddOrderTotalOrder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" ৳ 1047"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_14"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tvTotal"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvDetails"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Details"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_14"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/ivAddOrderArrow"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/ivAddOrderArrow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/add_order_down" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
+            <include layout="@layout/layout_total_order_details"
+                app:layout_constraintTop_toTopOf="parent"
+                />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/addOrderSecondTopLay"
