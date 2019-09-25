@@ -15,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
+import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentTwo
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
@@ -110,8 +111,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 toolbar.setNavigationIcon(R.drawable.ic_menu)
             }
             val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-            if (currentFragment != null) {
-
+            if (currentFragment is AddOrderFragmentOne || currentFragment is AddOrderFragmentTwo) {
+                addProductBtnVisibility(false)
+            } else {
+                addProductBtnVisibility(true)
             }
         }
     }

@@ -12,16 +12,12 @@ import com.bd.deliverytiger.app.ui.home.HomeActivity
 /**
  * A simple [Fragment] subclass.
  */
-class AddOrderFragmentOne : Fragment() {
+class AddOrderFragmentTwo : Fragment() {
 
-    companion object{
-
-        fun newInstance(): AddOrderFragmentOne {
-            val fragment = AddOrderFragmentOne()
-            return fragment
+    companion object {
+        fun newInstance(): AddOrderFragmentTwo = AddOrderFragmentTwo().apply {
         }
-        val tag = AddOrderFragmentOne::class.java.name
-
+        val tag = AddOrderFragmentTwo::class.java.name
     }
 
     override fun onCreateView(
@@ -29,13 +25,13 @@ class AddOrderFragmentOne : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_order_fragment_one, container, false)
+        return inflater.inflate(R.layout.fragment_add_order_fragment_two, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as HomeActivity).setToolbarTitle("কাস্টমারের তথ্য")
-    }
+        (activity as HomeActivity).setToolbarTitle("প্যাকেজ ও কালেকশনের তথ্য")
 
+    }
 
 }
