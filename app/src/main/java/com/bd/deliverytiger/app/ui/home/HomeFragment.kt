@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 
@@ -32,6 +34,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var mContext: Context
     private lateinit var btnAddOrder: Button
+    private lateinit var ivSurpriseBtn: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +47,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         btnAddOrder = view.findViewById(R.id.btnAddOrder)
+        ivSurpriseBtn = view.findViewById(R.id.ivSurpriseBtn)
     }
 
     override fun onStart() {
@@ -51,13 +55,17 @@ class HomeFragment : Fragment() {
         btnAddOrder.setOnClickListener {
             addOrderFragment()
         }
+
+        ivSurpriseBtn.setOnClickListener {
+            Toast.makeText(context,"Surprise",Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun addOrderFragment(){
         val fragment = AddOrderFragmentOne.newInstance()
         val ft: FragmentTransaction? = (mContext as FragmentActivity?)?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
-        // ft?.addToBackStack(LoginFragment.getFragmentTag())
+        ft?.addToBackStack(AddOrderFragmentOne.tag)
         ft?.commit()
     }
 
