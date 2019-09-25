@@ -113,6 +113,7 @@ class LoginFragment: Fragment() {
                     if (response.body()!!.model != null) {
 
                         SessionManager.accessToken = response.body()!!.model.token
+                        SessionManager.isLogin = true
                         goToHomeActivity()
                     }
                 }
