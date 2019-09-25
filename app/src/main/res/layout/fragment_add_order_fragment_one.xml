@@ -1,21 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    app:layout_constraintTop_toTopOf="parent">
 
-   <TextView
-       app:layout_constraintTop_toTopOf="parent"
-       app:layout_constraintBottom_toBottomOf="parent"
-       app:layout_constraintStart_toStartOf="parent"
-       android:layout_width="wrap_content"
-       android:textSize="24sp"
-       android:text=" add order fragments"
-       android:layout_height="wrap_content"/>
+    <ScrollView
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
 
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="48dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/addOrderTopLay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFF8E1"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tvTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total :"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_14"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvAddOrderTotalOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" ৳ 1047"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_14"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tvTotal"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Details"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_14"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/ivAddOrderArrow"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/ivAddOrderArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/add_order_down" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/addOrderSecondTopLay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/left_right_margin"
+                android:layout_marginTop="@dimen/left_right_margin"
+                android:layout_marginEnd="@dimen/left_right_margin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/addOrderTopLay">
+
+                <TextView
+                    android:id="@+id/tvCustomerDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Customer Details"
+                    android:textColor="@color/green_color"
+                    android:textSize="@dimen/text_16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvCustomerDetailsPageNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1/2"
+                    android:textColor="@color/green_color"
+                    android:textSize="@dimen/text_16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/left_right_margin"
+                android:layout_marginTop="@dimen/left_right_margin"
+                android:layout_marginEnd="@dimen/left_right_margin"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/addOrderSecondTopLay">
+
+                <EditText
+                    android:id="@+id/etCustomerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:background="@drawable/bg_add_order_edit_text_white"
+                    android:hint="Mobile number"
+                    android:importantForAutofill="no"
+                    android:inputType="phone"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14" />
+
+                <EditText
+                    android:id="@+id/etAddOrderMobileNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:background="@drawable/bg_add_order_edit_text"
+                    android:hint="Mobile number"
+                    android:importantForAutofill="no"
+                    android:inputType="phone"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14" />
+
+                <EditText
+                    android:id="@+id/etAlternativeMobileNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:background="@drawable/bg_add_order_edit_text"
+                    android:hint="Alternative Mobile Number"
+                    android:importantForAutofill="no"
+                    android:inputType="phone"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14" />
+
+                <EditText
+                    android:id="@+id/etDistrict"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:background="@drawable/bg_add_order_edit_text"
+                    android:hint="District"
+                    android:importantForAutofill="no"
+                    android:inputType="phone"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14" />
+
+                <EditText
+                    android:id="@+id/etThana"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:background="@drawable/bg_add_order_edit_text"
+                    android:hint="Thana"
+                    android:importantForAutofill="no"
+                    android:inputType="phone"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14" />
+
+                <EditText
+                    android:id="@+id/etAriaPostOffice"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:background="@drawable/bg_add_order_edit_text"
+                    android:hint="Aria/post Office"
+                    android:importantForAutofill="no"
+                    android:inputType="phone"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14" />
+
+                <EditText
+                    android:id="@+id/etCustomersAddress"
+                    android:layout_width="match_parent"
+                    android:gravity="start|top"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:background="@drawable/bg_add_order_edit_text"
+                    android:hint="Customer's Address"
+                    android:importantForAutofill="no"
+                    android:inputType="phone"
+                    android:minHeight="96dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14" />
+
+                <EditText
+                    android:id="@+id/etAdditionalNote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:background="@drawable/bg_add_order_edit_text"
+                    android:hint="Additional Node(Optional)"
+                    android:importantForAutofill="no"
+                    android:inputType="phone"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:minHeight="@dimen/login_view_height"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14" />
+
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="64dp"
+        android:background="@drawable/bg_add_order_next_page"
+        android:layout_height="56dp">
+
+        <ImageView
+            app:srcCompat="@drawable/add_order_next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
