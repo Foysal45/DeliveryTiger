@@ -10,6 +10,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 
@@ -68,7 +70,7 @@ class AddOrderFragmentOne : Fragment() {
 
         consLayGoNextPage.setOnClickListener {
            if(validate()){
-
+               addOrderFragmentTwo()
            }
         }
     }
@@ -76,6 +78,14 @@ class AddOrderFragmentOne : Fragment() {
     private fun validate(): Boolean {
         var go = true
         return go
+    }
+
+    private fun addOrderFragmentTwo(){
+        val fragment = AddOrderFragmentOne.newInstance()
+        val ft: FragmentTransaction? = (context as FragmentActivity?)?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
+        ft?.addToBackStack(AddOrderFragmentOne.tag)
+        ft?.commit()
     }
 
 
