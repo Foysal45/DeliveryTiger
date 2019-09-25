@@ -42,9 +42,12 @@ class LoginFragment: Fragment() {
     private lateinit var loginBtn: MaterialButton
     private lateinit var forgotPasswordTV: TextView
     private lateinit var signUpTV: TextView
+    private var sendOTP = false
 
     companion object {
-        fun newInstance(): LoginFragment = LoginFragment().apply {}
+        fun newInstance(sendOTP: Boolean): LoginFragment = LoginFragment().apply {
+            this.sendOTP = sendOTP
+        }
         val tag = LoginFragment::class.java.name
     }
 

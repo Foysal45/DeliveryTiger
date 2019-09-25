@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun addLoginFragment(){
-        val fragment = LoginFragment.newInstance()
+        val fragment = LoginFragment.newInstance(false)
         val ft: FragmentTransaction? = supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, LoginFragment.tag)
        // ft?.addToBackStack(LoginFragment.getFragmentTag())

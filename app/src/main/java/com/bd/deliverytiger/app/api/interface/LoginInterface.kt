@@ -16,4 +16,7 @@ interface LoginInterface {
 
     @POST("api/Account/UserRegister")
     fun userUserRegister(@Body body: SignUpReqBody): Call<GenericResponse<SignUpResponse>>
+
+    @POST("api/Account/ResetPassword")
+    fun userResetPassword(@Body body: SignUpReqBody): Call<GenericResponse<SignUpResponse>>
 }

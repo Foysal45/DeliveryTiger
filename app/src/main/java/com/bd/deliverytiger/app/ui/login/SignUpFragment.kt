@@ -148,7 +148,7 @@ class SignUpFragment: Fragment(),View.OnClickListener {
     }
 
     private fun addLoginFragment(){
-        val fragment = LoginFragment.newInstance()
+        val fragment = LoginFragment.newInstance(false)
         val ft: FragmentTransaction? = (mContext as FragmentActivity?)?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, LoginFragment.tag)
         // ft?.addToBackStack(LoginFragment.getFragmentTag())
