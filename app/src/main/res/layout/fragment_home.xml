@@ -30,7 +30,7 @@
                 android:id="@+id/tvCustomerDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Customer Details"
+                android:text="No order yet!"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_16"
                 app:layout_constraintBottom_toBottomOf="parent"
