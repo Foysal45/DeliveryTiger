@@ -3,20 +3,17 @@ package com.bd.deliverytiger.app.ui.home
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
-
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
-import com.bd.deliverytiger.app.ui.login.LoginFragment
-import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
  * A simple [Fragment] subclass.
@@ -30,6 +27,7 @@ class HomeFragment : Fragment() {
             return fragment
         }
         val tag = HomeFragment::class.java.name
+
     }
 
     private lateinit var mContext: Context
@@ -48,6 +46,8 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         btnAddOrder = view.findViewById(R.id.btnAddOrder)
         ivSurpriseBtn = view.findViewById(R.id.ivSurpriseBtn)
+
+        (activity as HomeActivity).setToolbarTitle("Delivery Tiger")
     }
 
     override fun onStart() {

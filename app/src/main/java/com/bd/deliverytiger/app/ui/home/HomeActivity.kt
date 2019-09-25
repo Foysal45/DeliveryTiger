@@ -3,17 +3,18 @@ package com.bd.deliverytiger.app.ui.home
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
@@ -22,32 +23,49 @@ import com.google.android.material.navigation.NavigationView
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    private lateinit var toolbar: Toolbar
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
+    private lateinit var addProductIV: ImageView
+    private lateinit var toolbarTitleTV: TextView
+
     private var doubleBackToExitPressedOnce = false
     private var navId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
+        addProductIV = findViewById(R.id.home_toolbar_add)
+        toolbarTitleTV = findViewById(R.id.home_toolbar_title)
         navView.setNavigationItemSelectedListener(this)
-        val toggle = ActionBarDrawerToggle(
-            this,
-            drawerLayout,
-            toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
+        /*val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+        toggle.drawerArrowDrawable.color = ActivityCompat.getColor(this, R.color.black_80)*/
+
+        toolbar.setNavigationIcon(R.drawable.ic_menu)
+        toolbar.setNavigationOnClickListener {
+            if (supportFragmentManager.backStackEntryCount > 0) {
+                onBackPressed()
+            } else {
+                drawerLayout.openDrawer(GravityCompat.START)
+            }
+        }
+
         drawerListener()
+        onBackStackChangeListener()
 
         addHomeFragment()
+
+        addProductIV.setOnClickListener {
+            addOrderFragment()
+        }
     }
 
     override fun onStart() {
@@ -79,6 +97,21 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Handler().postDelayed({
                     doubleBackToExitPressedOnce = false
                 }, 2000L)
+            }
+        }
+    }
+
+    private fun onBackStackChangeListener() {
+
+        supportFragmentManager.addOnBackStackChangedListener {
+            if (supportFragmentManager.backStackEntryCount > 0) {
+                toolbar.setNavigationIcon(R.drawable.ic_arrow_left)
+            } else {
+                toolbar.setNavigationIcon(R.drawable.ic_menu)
+            }
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+            if (currentFragment != null) {
+
             }
         }
     }
@@ -146,10 +179,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.home, menu)
-        return true
+    fun setToolbarTitle(title: String) {
+        toolbarTitleTV.text = title
+    }
+
+    fun addProductBtnVisibility(isVisible: Boolean) {
+        if (isVisible) {
+            addProductIV.visibility = View.VISIBLE
+        } else {
+            addProductIV.visibility = View.GONE
+        }
     }
 
     private fun addHomeFragment(){
@@ -160,5 +199,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         ft?.commit()
     }
 
+    private fun addOrderFragment(){
 
+        val fragment = AddOrderFragmentOne.newInstance()
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
+        ft.addToBackStack(AddOrderFragmentOne.tag)
+        ft.commit()
+    }
 }

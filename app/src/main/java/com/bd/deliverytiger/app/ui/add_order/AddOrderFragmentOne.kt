@@ -2,14 +2,12 @@ package com.bd.deliverytiger.app.ui.add_order
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.ui.login.LoginFragment
-import com.bd.deliverytiger.app.ui.login.SignUpFragment
+import com.bd.deliverytiger.app.ui.home.HomeActivity
 
 /**
  * A simple [Fragment] subclass.
@@ -17,12 +15,13 @@ import com.bd.deliverytiger.app.ui.login.SignUpFragment
 class AddOrderFragmentOne : Fragment() {
 
     companion object{
-        @JvmStatic
+
         fun newInstance(): AddOrderFragmentOne {
             val fragment = AddOrderFragmentOne()
             return fragment
         }
         val tag = AddOrderFragmentOne::class.java.name
+
     }
 
     override fun onCreateView(
@@ -33,7 +32,10 @@ class AddOrderFragmentOne : Fragment() {
         return inflater.inflate(R.layout.fragment_add_order_fragment_one, container, false)
     }
 
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as HomeActivity).setToolbarTitle("Add Product")
+    }
 
 
 }

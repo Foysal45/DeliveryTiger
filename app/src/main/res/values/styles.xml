@@ -14,10 +14,8 @@
     </style>
 
     <style name="loginActivityThem" parent="AppTheme">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/blur</item>
         <item name="colorPrimaryDark">@color/blur</item>
-
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
