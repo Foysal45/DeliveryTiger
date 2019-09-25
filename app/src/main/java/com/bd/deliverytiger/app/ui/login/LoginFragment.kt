@@ -25,6 +25,8 @@ import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
+import com.bd.deliverytiger.app.utils.Validator.editTextEnableOrDisable
+import com.bd.deliverytiger.app.utils.Validator.hideSoftKeyBoard
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
@@ -128,42 +130,19 @@ class LoginFragment: Fragment() {
         if (mobileET.text.toString().isEmpty()) {
             activity?.showToast(getString(R.string.write_phone_number))
             go = false
-
             mobileET.requestFocus()
-            editTextEnableOrDisable(mobileET)
         } else if (!Validator.isValidMobileNumber(mobileET.text.toString()) || mobileET.text.toString().length < 11) {
             context?.showToast(getString(R.string.write_proper_phone_number_recharge))
             go = false
-            hideSoftKeyBoard()
             mobileET.requestFocus()
-            editTextEnableOrDisable(mobileET)
         } else if(passwordET.text.toString().isEmpty()) {
             context?.showToast(getString(R.string.write_password))
             go = false
         }
-        hideSoftKeyBoard()
+        hideSoftKeyBoard(activity!!)
         return go
     }
 
-    // clear focus if payment lay blinking
-    private fun editTextEnableOrDisable(et: EditText) {
-        et.isSelected = false
-        et.isFocusable = false
-        et.isFocusableInTouchMode = true
-    }
-
-    private fun hideSoftKeyBoard() {
-        try {  // hide keyboard if its open
-            val inputMethodManager = activity!!.getSystemService(
-                Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(
-                activity!!.currentFocus!!.windowToken, 0)
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
 
     private fun goToSignUp() {
 

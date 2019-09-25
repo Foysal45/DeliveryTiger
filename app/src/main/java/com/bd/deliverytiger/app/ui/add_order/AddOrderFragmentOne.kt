@@ -14,14 +14,18 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.ui.home.HomeActivity
+import com.bd.deliverytiger.app.utils.Validator
+import com.bd.deliverytiger.app.utils.Validator.editTextEnableOrDisable
+import com.bd.deliverytiger.app.utils.Validator.hideSoftKeyBoard
+import com.bd.deliverytiger.app.utils.Validator.showShortToast
+import kotlinx.android.synthetic.main.fragment_sign_up.*
 
 /**
  * A simple [Fragment] subclass.
  */
-class AddOrderFragmentOne : Fragment() {
+class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     companion object{
-        @JvmStatic
         fun newInstance(): AddOrderFragmentOne {
             val fragment = AddOrderFragmentOne()
             return fragment
@@ -29,6 +33,7 @@ class AddOrderFragmentOne : Fragment() {
         val tag = AddOrderFragmentOne::class.java.name
     }
 
+    private lateinit var tvDetails: TextView
     private lateinit var tvAddOrderTotalOrder: TextView
     private lateinit var ivAddOrderArrow: ImageView
     private lateinit var etCustomerName: EditText
@@ -41,6 +46,16 @@ class AddOrderFragmentOne : Fragment() {
     private lateinit var etAdditionalNote: EditText
     private lateinit var consLayGoNextPage: ConstraintLayout
 
+    private var customerName = ""
+    private var mobileNo = ""
+    private var alternativeMobileNo = ""
+    private var district = 10
+    private var thana = 10
+    private var ariaPostOffice = 10
+    private var customersAddress = ""
+    private var additionalNote = ""
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,6 +67,7 @@ class AddOrderFragmentOne : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as HomeActivity).setToolbarTitle("কাস্টমারের তথ্য")
+        tvDetails = view.findViewById(R.id.tvDetails)
         tvAddOrderTotalOrder = view.findViewById(R.id.tvAddOrderTotalOrder)
         ivAddOrderArrow = view.findViewById(R.id.ivAddOrderArrow)
         etCustomerName = view.findViewById(R.id.etCustomerName)
@@ -63,21 +79,95 @@ class AddOrderFragmentOne : Fragment() {
         etCustomersAddress = view.findViewById(R.id.etCustomersAddress)
         etAdditionalNote = view.findViewById(R.id.etAdditionalNote)
         consLayGoNextPage = view.findViewById(R.id.consLayGoNextPage)
+
+        iniViewClicked()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    private fun iniViewClicked(){
+        consLayGoNextPage.setOnClickListener(this)
+        tvDetails.setOnClickListener(this)
+        tvAddOrderTotalOrder.setOnClickListener(this)
+        etDistrict.setOnClickListener(this)
+        etThana.setOnClickListener(this)
+        etAriaPostOffice.setOnClickListener(this)
+    }
 
-        consLayGoNextPage.setOnClickListener {
-           if(validate()){
-               addOrderFragmentTwo()
-           }
+    override fun onClick(p0: View?) {
+        when(p0){
+            consLayGoNextPage -> {
+                if(validate()){
+                    addOrderFragmentTwo()
+                }
+            }
+            tvDetails ->{
+
+            }
+            // same action tvDetails n tvAddOrderTotalOrder
+            tvAddOrderTotalOrder ->{
+
+            }
+            etDistrict ->{
+
+            }
+            etThana ->{
+
+            }
+            etAriaPostOffice ->{
+
+            }
+
         }
     }
 
+
     private fun validate(): Boolean {
         var go = true
+        getAllViewData()
+        if(customerName.isEmpty()){
+            showShortToast(context, getString(R.string.write_yr_name))
+            go = false
+            etCustomerName.requestFocus()
+        }
+        else if (mobileNo.isEmpty()) {
+            showShortToast(context, getString(R.string.write_phone_number))
+            go = false
+            etAddOrderMobileNo.requestFocus()
+        } else if (!Validator.isValidMobileNumber(mobileNo) || mobileNo.length < 11) {
+            showShortToast(context, getString(R.string.write_proper_phone_number_recharge))
+            go = false
+            etAddOrderMobileNo.requestFocus()
+        } else if(alternativeMobileNo.isEmpty()){
+            go = false
+            showShortToast(context!!, getString(R.string.write_alt_phone_number))
+            etAlternativeMobileNo.requestFocus()
+        }
+        else if(district == 0){
+            go = false
+            showShortToast(context!!, getString(R.string.select_dist))
+        }
+        else if(thana == 0){
+            go = false
+            showShortToast(context!!, getString(R.string.select_thana))
+        }
+        else if(ariaPostOffice == 0){
+            go = false
+            showShortToast(context!!, getString(R.string.select_aria))
+        }
+        else if(customersAddress.isEmpty()){
+            go = false
+            showShortToast(context!!, getString(R.string.write_yr_address))
+            etCustomersAddress.requestFocus()
+        }
+        hideSoftKeyBoard(activity!!)
         return go
+    }
+
+    private fun getAllViewData(){
+        customerName = etCustomerName.text.toString()
+        mobileNo = etAddOrderMobileNo.text.toString()
+        alternativeMobileNo = etAlternativeMobileNo.text.toString()
+        customersAddress = etCustomersAddress.text.toString()
+        additionalNote = etAdditionalNote.text.toString()
     }
 
     private fun addOrderFragmentTwo(){
@@ -87,6 +177,5 @@ class AddOrderFragmentOne : Fragment() {
         ft?.addToBackStack(AddOrderFragmentTwo.tag)
         ft?.commit()
     }
-
 
 }

@@ -8,6 +8,13 @@
     <string name="reset_password">Reset your password</string>
     <string name="write_proper_phone_number_recharge">সঠিক ফোন নাম্বার লিখুন।</string>
     <string name="write_phone_number">ফোন নাম্বার লিখুন</string>
+    <string name="write_alt_phone_number">অল্টারনেট ফোন নাম্বার লিখুন</string>
+    <string name="write_yr_name">আপনার নাম লিখুন</string>
+    <string name="write_yr_address">আপনার এড্রেস লিখুন</string>
+
+    <string name="select_dist">ডিস্ট্রিক্ট সিলেক্ট করুন</string>
+    <string name="select_thana">থানা সিলেক্ট করুন</string>
+    <string name="select_aria">এরিয়া পোস্ট অফিস সিলেক্ট করুন</string>
 
     <string name="api_connect_error">দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে "\n" কিছুক্ষণ পর আবার চেষ্টা করুন</string>
     <string name="error_msg">দুঃখিত,কিছুক্ষণ পর আবার চেষ্টা করুন</string>

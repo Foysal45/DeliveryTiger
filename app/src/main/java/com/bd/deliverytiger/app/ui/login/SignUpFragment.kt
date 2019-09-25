@@ -35,7 +35,6 @@ import retrofit2.Response
 class SignUpFragment: Fragment(),View.OnClickListener {
 
     companion object{
-        @JvmStatic
         fun newInstance(): SignUpFragment{
             val fragment = SignUpFragment()
             return fragment
@@ -127,15 +126,11 @@ class SignUpFragment: Fragment(),View.OnClickListener {
         if (etSignUpMobileNo.text.toString().isEmpty()) {
             showToast(getString(R.string.write_phone_number))
             go = false
-            hideSoftKeyBoard()
             etSignUpMobileNo.requestFocus()
-            editTextEnableOrDisable(etSignUpMobileNo)
         } else if (!Validator.isValidMobileNumber(etSignUpMobileNo.text.toString()) || etSignUpMobileNo.text.toString().length < 11) {
             showToast(getString(R.string.write_proper_phone_number_recharge))
             go = false
-            hideSoftKeyBoard()
             etSignUpMobileNo.requestFocus()
-            editTextEnableOrDisable(etSignUpMobileNo)
         } else if(etSignUpPassword.text.toString().isEmpty()) {
             showToast(getString(R.string.write_password))
             go = false
