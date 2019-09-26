@@ -208,17 +208,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun addOrderFragment(){
 
-        /*val fragment = AddOrderFragmentOne.newInstance()
+        val fragment = AddOrderFragmentOne.newInstance()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
         ft.addToBackStack(AddOrderFragmentOne.tag)
-        ft.commit()*/
-
-        val fragment = AddOrderFragmentTwo.newInstance()
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.mainActivityContainer, fragment, AddOrderFragmentTwo.tag)
-        ft.addToBackStack(AddOrderFragmentTwo.tag)
         ft.commit()
+
     }
 
     private fun addFragment(fragment: Fragment){
