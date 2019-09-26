@@ -18,7 +18,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="56dp"
+            android:paddingBottom="60dp"
             >
 
             <include
@@ -73,7 +73,7 @@
                     android:id="@+id/productName"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_view_height"
-                    android:layout_marginTop="@dimen/fab_margin"
+                    android:layout_marginTop="1dp"
                     android:background="@drawable/bg_add_order_edit_text"
                     android:hint="Product(s) name seperated by comma"
                     android:importantForAutofill="no"
@@ -93,19 +93,24 @@
                     android:weightSum="2">
 
                     <TextView
+                        android:id="@+id/delivery_only_tv"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="1"
                         android:background="@drawable/bg_stroke_gray_corner"
                         android:gravity="center"
-                        android:text="Only Delivery" />
+                        android:text="Only Delivery"
+                        android:textSize="@dimen/text_14"
+                        />
 
                     <TextView
+                        android:id="@+id/delivery_collection_tv"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="1"
                         android:background="@drawable/bg_stroke_gray_corner"
                         android:gravity="center"
+                        android:textSize="@dimen/text_14"
                         android:text="+ Collection" />
 
                 </LinearLayout>
@@ -124,41 +129,37 @@
                     android:paddingEnd="16dp"
                     android:paddingBottom="8dp"
                     android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14" />
+                    android:textSize="@dimen/text_14"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    />
 
-                <EditText
-                    android:id="@+id/weight"
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spinner_weight_selection"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_view_height"
                     android:layout_marginTop="@dimen/fab_margin"
-                    android:background="@drawable/bg_add_order_edit_text"
-                    android:hint="Weight (in kg)"
-                    android:importantForAutofill="no"
-                    android:inputType="phone"
-                    android:paddingStart="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="8dp"
-                    android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14" />
+                    android:background="@drawable/bg_spinner"
+                    android:theme="@style/custom_spinner_style"
+                    android:spinnerMode="dropdown"
+                    android:entries="@array/spinner_array_weight"
+                    />
 
-                <EditText
-                    android:id="@+id/packaging"
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spinner_packaging_selection"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_view_height"
                     android:layout_marginTop="@dimen/fab_margin"
-                    android:background="@drawable/bg_add_order_edit_text"
-                    android:hint="Packaging"
-                    android:importantForAutofill="no"
-                    android:inputType="phone"
-                    android:paddingStart="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="8dp"
-                    android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14" />
+                    android:background="@drawable/bg_spinner"
+                    android:theme="@style/custom_spinner_style"
+                    android:spinnerMode="dropdown"
+                    android:entries="@array/spinner_array_package"
+
+                    android:overlapAnchor="false"
+                    />
 
                 <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/check_breakable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -170,7 +171,7 @@
                     android:id="@+id/collectionAddress"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_view_height"
-                    android:layout_marginTop="@dimen/fab_margin"
+                    android:layout_marginTop="8dp"
                     android:background="@drawable/bg_add_order_edit_text"
                     android:hint="Collection Address (Optional)"
                     android:importantForAutofill="no"
@@ -182,191 +183,24 @@
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/delivery_type_selection_rV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    >
+                    android:clipToPadding="false"
+                    android:visibility="gone"
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/delivery_duration_1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginBottom="5dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/delivery_duration_2"
-                        app:layout_constraintBottom_toTopOf="@id/delivery_duration_3"
-                        app:layout_constraintHorizontal_chainStyle="spread"
-                        app:layout_constraintVertical_chainStyle="spread"
-                        >
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            android:background="#EFEFEF"
-                            android:contentDescription="@string/cd"
-                            app:srcCompat="@drawable/ic_delivery_regular"
-                            />
-
-                        <TextView
-                            android:id="@+id/card_duration_1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:text="5-7"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="days"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/card_duration_1" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/delivery_duration_2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="0dp"
-                        android:layout_marginBottom="5dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/delivery_duration_1"
-                        app:layout_constraintBottom_toTopOf="@id/delivery_duration_4"
-                        >
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            android:background="#EFEFEF"
-                            android:contentDescription="@string/cd"
-                            app:srcCompat="@drawable/ic_delivery_regular" />
-
-                        <TextView
-                            android:id="@+id/card_duration_2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:text="5-7"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="days"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/card_duration_2" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/delivery_duration_3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginBottom="0dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/delivery_duration_4"
-                        app:layout_constraintTop_toBottomOf="@id/delivery_duration_1"
-                        >
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            android:background="#EFEFEF"
-                            android:contentDescription="@string/cd"
-                            app:srcCompat="@drawable/ic_delivery_regular" />
-
-                        <TextView
-                            android:id="@+id/card_duration_3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:text="5-7"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="days"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/card_duration_3" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/delivery_duration_4"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="0dp"
-                        android:layout_marginBottom="0dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/delivery_duration_3"
-                        app:layout_constraintTop_toBottomOf="@id/delivery_duration_2"
-                        >
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            android:background="#EFEFEF"
-                            android:contentDescription="@string/cd"
-                            app:srcCompat="@drawable/ic_delivery_regular" />
-
-                        <TextView
-                            android:id="@+id/card_duration_4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:text="5-7"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="days"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/card_duration_4" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
+                    tools:visibility="visible"
+                    tools:listitem="@layout/item_view_delivery_type"
+                    tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    tools:orientation="vertical"
+                    tools:itemCount="4"
+                    tools:spanCount="2"
+                    />
 
                 <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/check_terms_condition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"

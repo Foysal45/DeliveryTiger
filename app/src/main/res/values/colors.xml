@@ -12,5 +12,6 @@
     <color name="black_80">#CC000000</color>
     <color name="blur">#FFFFFF</color>
     <color name="separator">#26000000</color>
+    <color name="hint">#66000000</color>
 
 </resources>
