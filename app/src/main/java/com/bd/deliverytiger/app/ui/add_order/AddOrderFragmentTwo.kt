@@ -10,13 +10,18 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatSpinner
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.`interface`.PlaceOrderInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
+import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
+import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
+import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
@@ -42,13 +47,16 @@ class AddOrderFragmentTwo : Fragment() {
     private lateinit var deliveryTypeRV: RecyclerView
 
     private lateinit var placeOrderInterface: PlaceOrderInterface
+    private lateinit var deliveryTypeAdapter: DeliveryTypeAdapter
 
     // API variable
     private val packagingDataList: MutableList<PackagingData> = mutableListOf()
+    private val deliveryTypeList: MutableList<WeightRangeWiseData> = mutableListOf()
     private var breakableCharge: Int = 0
     private var codChargePercentage: Double = 0.0
     private var codChargeMin: Int = 0
     private var packagingCharge: Double = 0.0
+    private var deliveryCharge: Double = 0.0
 
     companion object {
         fun newInstance(): AddOrderFragmentTwo = AddOrderFragmentTwo().apply {
@@ -83,6 +91,31 @@ class AddOrderFragmentTwo : Fragment() {
         placeOrderInterface = RetrofitSingleton.getInstance(context!!).create(PlaceOrderInterface::class.java)
         getBreakableCharge()
         getPackagingCharge()
+        getDeliveryCharge()
+
+        deliveryTypeAdapter = DeliveryTypeAdapter(context!!, deliveryTypeList)
+        with(deliveryTypeRV){
+            setHasFixedSize(true)
+            layoutManager = GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
+            adapter = deliveryTypeAdapter
+        }
+        deliveryTypeAdapter.onItemClick = { position, model ->
+
+            deliveryCharge = model.chargeAmount
+        }
+
+        deliveryCollection.setOnClickListener {
+            collectionAmountET.visibility = View.VISIBLE
+            deliveryCollection.background = ContextCompat.getDrawable(context!!, R.drawable.bg_add_order_edit_text)
+            deliveryOnly.background = ContextCompat.getDrawable(context!!, R.drawable.bg_stroke_gray_corner)
+        }
+
+        deliveryOnly.setOnClickListener {
+            collectionAmountET.visibility = View.GONE
+            deliveryOnly.background = ContextCompat.getDrawable(context!!, R.drawable.bg_add_order_edit_text)
+            deliveryCollection.background = ContextCompat.getDrawable(context!!, R.drawable.bg_stroke_gray_corner)
+
+        }
 
     }
 
@@ -156,6 +189,57 @@ class AddOrderFragmentTwo : Fragment() {
             }
         })
 
+    }
+
+    private fun getDeliveryCharge() {
+
+        placeOrderInterface.getDeliveryCharge(DeliveryChargeRequest(14,10026)).enqueue(object : Callback<GenericResponse<List<DeliveryChargeResponse>>> {
+            override fun onFailure(
+                call: Call<GenericResponse<List<DeliveryChargeResponse>>>,
+                t: Throwable
+            ) {
+
+            }
+
+            override fun onResponse(
+                call: Call<GenericResponse<List<DeliveryChargeResponse>>>,
+                response: Response<GenericResponse<List<DeliveryChargeResponse>>>
+            ) {
+                if (response.isSuccessful && response.body() != null && isAdded) {
+                    if (response.body()!!.model != null) {
+                        val model = response.body()!!.model
+
+                        val weightList: MutableList<String> = mutableListOf()
+                        for (model1 in model){
+                            weightList.add(model1.weight)
+                        }
+
+                        val weightAdapter = CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, weightList)
+                        spinnerWeight.adapter = weightAdapter
+                        spinnerWeight.onItemSelectedListener = object :AdapterView.OnItemSelectedListener {
+                            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                            }
+
+                            override fun onItemSelected(
+                                p0: AdapterView<*>?,
+                                p1: View?,
+                                p2: Int,
+                                p3: Long
+                            ) {
+                                val model2 = model[p2]
+
+                                deliveryTypeList.clear()
+                                deliveryTypeList.addAll(model2.weightRangeWiseData)
+                                deliveryTypeAdapter.notifyDataSetChanged()
+
+                            }
+                        }
+                    }
+                }
+            }
+
+        })
     }
 
     /*if (response.isSuccessful && response.body() != null && isAdded) {

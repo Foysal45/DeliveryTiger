@@ -88,6 +88,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_stroke_gray_corner"
                     android:layout_marginTop="@dimen/fab_margin"
                     android:orientation="horizontal"
                     android:weightSum="2">
@@ -134,29 +135,67 @@
                     tools:visibility="visible"
                     />
 
-                <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/spinner_weight_selection"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/login_view_height"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
-                    android:background="@drawable/bg_spinner"
-                    android:theme="@style/custom_spinner_style"
-                    android:spinnerMode="dropdown"
-                    android:entries="@array/spinner_array_weight"
-                    />
+                    >
 
-                <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/spinner_packaging_selection"
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/spinner_weight_selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_view_height"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:background="@drawable/bg_spinner"
+                        android:theme="@style/custom_spinner_style"
+                        android:spinnerMode="dropdown"
+                        android:overlapAnchor="false"
+                        tools:entries="@array/spinner_array_weight"
+                        />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_arrow_down"
+                        android:contentDescription="@string/cd"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/login_view_height"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
-                    android:background="@drawable/bg_spinner"
-                    android:theme="@style/custom_spinner_style"
-                    android:spinnerMode="dropdown"
-                    android:entries="@array/spinner_array_package"
+                    >
 
-                    android:overlapAnchor="false"
-                    />
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/spinner_packaging_selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_view_height"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:background="@drawable/bg_spinner"
+                        android:theme="@style/custom_spinner_style"
+                        android:spinnerMode="dropdown"
+                        tools:entries="@array/spinner_array_weight"
+                        android:overlapAnchor="false"
+                        />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_arrow_down"
+                        android:contentDescription="@string/cd"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/check_breakable"
@@ -189,7 +228,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:clipToPadding="false"
-                    android:visibility="gone"
 
                     tools:visibility="visible"
                     tools:listitem="@layout/item_view_delivery_type"
