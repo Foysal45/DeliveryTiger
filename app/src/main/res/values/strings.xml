@@ -29,5 +29,14 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <string-array name="features_list">
+        <item>৬৪ জেলা শহর ও ৪৯২ উপজেলায় মাত্র ২৫ টাকায় ডেলিভারি</item>
+        <item>COD চার্জ মাত্র ১.৫%</item>
+        <item>কোন রিটার্ন চার্জ নাই</item>
+        <item>আপনার ঠিকানা থেকে প্রোডাক্ট কালেকশন</item>
+        <item>৭ কার্যদিবসের মধ্যে পেমেন্ট</item>
+        <item>অনলাইনে পার্সেল ট্র্যাকিং সুবিধা</item>
+    </string-array>
+
 
 </resources>

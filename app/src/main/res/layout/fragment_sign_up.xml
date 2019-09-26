@@ -152,7 +152,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
             android:text="Already have an account?"
-            android:textColor="@color/login_title_color"
+            android:textColor="@color/black_80"
             android:textSize="@dimen/login_sign_up_tv_size"
             app:layout_constraintEnd_toStartOf="@id/tvLogin"
             app:layout_constraintHorizontal_chainStyle="packed"

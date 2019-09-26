@@ -12,10 +12,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentTwo
+import com.bd.deliverytiger.app.ui.features.DTFeaturesFragment
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
@@ -166,7 +168,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             }
             R.id.nav_features -> {
-
+                addFragment(DTFeaturesFragment.newInstance())
             }
             R.id.nav_logout -> {
 
@@ -209,5 +211,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         ft.replace(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
         ft.addToBackStack(AddOrderFragmentOne.tag)
         ft.commit()
+    }
+
+    private fun addFragment(fragment: Fragment){
+        val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
+        ft?.replace(R.id.mainActivityContainer, fragment, fragment.tag)
+        ft!!.addToBackStack(fragment.tag)
+        ft?.commit()
     }
 }
