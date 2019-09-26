@@ -79,7 +79,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_view_height"
                     android:background="@drawable/bg_add_order_edit_text"
-                    android:hint="Yout Name"
+                    android:hint="Your Name"
                     android:importantForAutofill="no"
                     android:inputType="phone"
                     android:paddingStart="16dp"
