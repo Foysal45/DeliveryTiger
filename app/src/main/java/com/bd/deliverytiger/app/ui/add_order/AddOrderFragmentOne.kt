@@ -1,6 +1,9 @@
 package com.bd.deliverytiger.app.ui.add_order
 
 
+import android.app.AlertDialog.Builder
+import android.app.ProgressDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,13 +15,27 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.RetrofitSingleton
+import com.bd.deliverytiger.app.api.`interface`.DistrictInterface
+import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
+import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
+import com.bd.deliverytiger.app.api.model.district.ThanaPayLoad
+import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
+import com.bd.deliverytiger.app.ui.district.ThanaOrAriaAdapter
 import com.bd.deliverytiger.app.ui.home.HomeActivity
+import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
-import com.bd.deliverytiger.app.utils.Validator.editTextEnableOrDisable
 import com.bd.deliverytiger.app.utils.Validator.hideSoftKeyBoard
 import com.bd.deliverytiger.app.utils.Validator.showShortToast
-import kotlinx.android.synthetic.main.fragment_sign_up.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 /**
  * A simple [Fragment] subclass.
@@ -49,11 +66,14 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var customerName = ""
     private var mobileNo = ""
     private var alternativeMobileNo = ""
-    private var district = 10
-    private var thana = 10
-    private var ariaPostOffice = 10
+    private var district = 0
+    private var thana = 0
+    private var ariaPostOffice = 0
     private var customersAddress = ""
     private var additionalNote = ""
+    private val districtList: ArrayList<DistrictDeliveryChargePayLoad> = ArrayList()
+    private val thanaOrAriaList: ArrayList<ThanaPayLoad> = ArrayList()
+    private var isAriaAvailable = true
 
 
     override fun onCreateView(
@@ -90,6 +110,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         etDistrict.setOnClickListener(this)
         etThana.setOnClickListener(this)
         etAriaPostOffice.setOnClickListener(this)
+
     }
 
     override fun onClick(p0: View?) {
@@ -107,13 +128,27 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
             }
             etDistrict ->{
-
+                if (districtList.isEmpty()) {
+                    getDistrictThanaOrAria(0,1)
+                } else {
+                    goToDistrict()
+                }
             }
             etThana ->{
-
+                if (district != 0) {
+                    getDistrictThanaOrAria(district,2)
+                } else {
+                    showShortToast(context!!, getString(R.string.select_dist))
+                }
             }
             etAriaPostOffice ->{
-
+                if (isAriaAvailable) {
+                    if (thana != 0) {
+                        getDistrictThanaOrAria(thana,3)
+                    } else {
+                        showShortToast(context!!, getString(R.string.select_thana))
+                    }
+                }
             }
 
         }
@@ -149,7 +184,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             go = false
             showShortToast(context!!, getString(R.string.select_thana))
         }
-        else if(ariaPostOffice == 0){
+        else if(isAriaAvailable && ariaPostOffice == 0){
             go = false
             showShortToast(context!!, getString(R.string.select_aria))
         }
@@ -177,5 +212,132 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         ft?.addToBackStack(AddOrderFragmentTwo.tag)
         ft?.commit()
     }
+
+    private fun getDistrictThanaOrAria(id: Int, track: Int){
+        hideSoftKeyBoard(activity!!)
+        //track = 1 district , track = 2 thana, track = 3 aria
+        val pd = ProgressDialog(context)
+        pd.setMessage("Loading")
+        pd.show()
+
+        val getDistrictThanaOrAria = RetrofitSingleton.getInstance(context!!).create(DistrictInterface::class.java)
+        getDistrictThanaOrAria.getAllDistrictFromApi(id).enqueue(object : Callback<DeliveryChargePayLoad>{
+            override fun onFailure(call: Call<DeliveryChargePayLoad>, t: Throwable) {
+                Timber.e("districtThanaOrAria_f-",t.toString())
+                pd.dismiss()
+            }
+
+            override fun onResponse(
+                call: Call<DeliveryChargePayLoad>,
+                response: Response<DeliveryChargePayLoad>
+            ) {
+                pd.dismiss()
+               if(response.isSuccessful && response.body() != null && response.body()!!.data!!.districtInfo != null){
+                   Timber.e("districtThanaOrAria_s-",response.body().toString())
+
+                   if (track == 1) {
+                       districtList.addAll(response.body()!!.data!!.districtInfo!!)
+                       goToDistrict()
+                   } else if(track == 2){
+                       thanaOrAriaList.clear()
+                       thanaOrAriaList.addAll(response.body()!!.data!!.districtInfo!![0].thanaHome!!)
+                       if (thanaOrAriaList.isNotEmpty()) {
+                           customAlertDialog(thanaOrAriaList, 1)
+                       }
+                   }else if(track == 3){
+                       thanaOrAriaList.clear()
+                       thanaOrAriaList.addAll(response.body()!!.data!!.districtInfo!![0].thanaHome!!)
+                       if (thanaOrAriaList.isNotEmpty()) {
+                           customAlertDialog(thanaOrAriaList, 2)
+                       }
+                   }
+               }
+            }
+
+        })
+    }
+
+    private fun goToDistrict() {
+
+        val distFrag = DistrictSelectFragment.newInstance(mContext, districtList)
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
+        ft?.add(R.id.mainActivityContainer, distFrag, tag)
+        ft?.addToBackStack("DistrictSelectFragment")
+        ft?.commit()
+
+        distFrag.setOnClick(object : DistrictSelectFragment.DistrictClick {
+            override fun onClick(position: Int, name: String, clickedID: Int) {
+                Timber.e("etDistrictSearch 6 - ",name + " " + clickedID.toString())
+                etDistrict.setText(name)
+                district = clickedID
+
+                thana = 0
+                ariaPostOffice = 0
+                etAriaPostOffice.setText("")
+                etThana.setText("")
+            }
+        })
+    }
+
+    private fun customAlertDialog(thanaOrAriaList: ArrayList<ThanaPayLoad>, track: Int){
+        hideSoftKeyBoard(activity!!)
+        val dialogBuilder = Builder(mContext)
+
+        val inflater: LayoutInflater = LayoutInflater.from(context)
+        val dialogView: View = inflater.inflate(R.layout.custom_alert_lay, null)
+        dialogBuilder.setView(dialogView)
+        dialogBuilder.setCancelable(false)
+        val textViewHead: TextView = dialogView.findViewById(R.id.headerDistrictOrThana)
+        val ivDistClose: ImageView = dialogView.findViewById(R.id.ivDistClose)
+        val rvListOfThanaOrAria: RecyclerView = dialogView.findViewById(R.id.rvListOfThanaOrAria)
+
+        if(track == 1) textViewHead.text = "থানা নির্বাচন করুন" else textViewHead.text = "এরিয়া/পোস্ট অফিস নির্বাচন করুন"
+
+        val dialog = dialogBuilder.create()
+        dialog.show()
+        val thanaOrAriaAdapter = ThanaOrAriaAdapter(mContext,thanaOrAriaList)
+        rvListOfThanaOrAria.apply {
+            layoutManager = LinearLayoutManager(mContext)
+            adapter = thanaOrAriaAdapter
+        }
+
+        ivDistClose.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        thanaOrAriaAdapter.setOnClick(object :ThanaOrAriaAdapter.OnClickedListener{
+            override fun onClick(pos: Int) {
+                dialog.dismiss()
+                isAriaAvailable = thanaOrAriaList[pos].hasArea == 1
+                Timber.e("isAriaAvailable",isAriaAvailable.toString() +" "+track)
+                if (track == 1) {
+                    etThana.setText(thanaOrAriaList[pos].thanaBng)
+                    thana = thanaOrAriaList[pos].thanaId
+                    ariaPostOffice = 0
+                    etAriaPostOffice.setText("")
+                } else {
+                    if (thanaOrAriaList[pos].postalCode != null) {
+                        if (thanaOrAriaList[pos].postalCode!!.isNotEmpty()) {
+                            ariaPostOffice = thanaOrAriaList[pos].postalCode?.toInt()!!
+                            etAriaPostOffice.setText(thanaOrAriaList[pos].thanaBng+" ("+thanaOrAriaList[pos].postalCode+")")
+                        } else {
+                            ariaPostOffice = 0
+                            isAriaAvailable = false
+                        }
+                    }
+                }
+            }
+
+        })
+
+
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        this.mContext = context
+    }
+    private lateinit var mContext:Context
 
 }

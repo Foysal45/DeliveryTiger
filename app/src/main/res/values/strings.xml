@@ -52,4 +52,12 @@
         <item>Bubble + Box (Tk 20)</item>
     </string-array>
 
+    <string-array name="spinner_array_select_thana">
+        <item>Thana</item>
+    </string-array>
+
+    <string-array name="spinner_array_select_aria">
+        <item>Aria/Post Office</item>
+    </string-array>
+
 </resources>
