@@ -84,5 +84,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <ImageView
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        app:srcCompat="@drawable/cod_collection_show_stat"
+        android:layout_height="wrap_content">
+
+    </ImageView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
