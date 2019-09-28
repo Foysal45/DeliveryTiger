@@ -1,7 +1,6 @@
 package com.bd.deliverytiger.app.ui.login
 
 
-import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -9,7 +8,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -25,7 +23,6 @@ import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
-import com.bd.deliverytiger.app.utils.Validator.editTextEnableOrDisable
 import com.bd.deliverytiger.app.utils.Validator.hideSoftKeyBoard
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
@@ -114,8 +111,7 @@ class LoginFragment: Fragment() {
                 if (response.isSuccessful && response.body() != null && isAdded) {
                     if (response.body()!!.model != null) {
 
-                        SessionManager.accessToken = response.body()!!.model.token
-                        SessionManager.isLogin = true
+                        SessionManager.createSession(response.body()!!.model)
                         goToHomeActivity()
                     }
                 }

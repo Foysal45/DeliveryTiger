@@ -13,6 +13,7 @@ import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
 class DeliveryTypeAdapter(private val mContext: Context?, private var dataList: MutableList<WeightRangeWiseData>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var onItemClick: ((position: Int, model: WeightRangeWiseData) -> Unit)? = null
+    private var selectedItem: Int = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(
@@ -44,7 +45,11 @@ class DeliveryTypeAdapter(private val mContext: Context?, private var dataList: 
             holder.dateRangeUnit.text = "Days"
             holder.deliveryType.text = model.deliveryType
 
-            val resId = R.drawable.ic_delivery_regular_unselected
+            val resId = if (position == selectedItem) {
+                R.drawable.ic_delivery_regular_selected
+            } else {
+                R.drawable.ic_delivery_regular_unselected
+            }
             holder.backgroundImage.setImageResource(resId)
             /*Glide.with(holder.backgroundImage.context)
                 .load()
@@ -65,9 +70,14 @@ class DeliveryTypeAdapter(private val mContext: Context?, private var dataList: 
                 val position = adapterPosition
                 if (position >= 0 && position < dataList.size) {
                     onItemClick?.invoke(position, dataList[position])
+                    selectedItem = position
+                    notifyDataSetChanged()
                 }
             }
         }
     }
 
+    fun clearSelectedItemPosition(){
+        selectedItem = -1
+    }
 }

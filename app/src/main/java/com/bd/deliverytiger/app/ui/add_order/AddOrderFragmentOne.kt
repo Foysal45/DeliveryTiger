@@ -34,8 +34,6 @@ import com.bd.deliverytiger.app.utils.Validator.showShortToast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -51,9 +49,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         val tag = AddOrderFragmentOne::class.java.name
     }
 
-    private lateinit var tvDetails: TextView
-    private lateinit var tvAddOrderTotalOrder: TextView
-    private lateinit var ivAddOrderArrow: ImageView
+
     private lateinit var etCustomerName: EditText
     private lateinit var etAddOrderMobileNo: EditText
     private lateinit var etAlternativeMobileNo: EditText
@@ -87,10 +83,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as HomeActivity).setToolbarTitle("কাস্টমারের তথ্য")
-        tvDetails = view.findViewById(R.id.tvDetails)
-        tvAddOrderTotalOrder = view.findViewById(R.id.tvAddOrderTotalOrder)
-        ivAddOrderArrow = view.findViewById(R.id.ivAddOrderArrow)
+
         etCustomerName = view.findViewById(R.id.etCustomerName)
         etAddOrderMobileNo = view.findViewById(R.id.etAddOrderMobileNo)
         etAlternativeMobileNo = view.findViewById(R.id.etAlternativeMobileNo)
@@ -104,10 +97,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         iniViewClicked()
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle("কাস্টমারের তথ্য")
+    }
+
     private fun iniViewClicked(){
         consLayGoNextPage.setOnClickListener(this)
-        tvDetails.setOnClickListener(this)
-        tvAddOrderTotalOrder.setOnClickListener(this)
         etDistrict.setOnClickListener(this)
         etThana.setOnClickListener(this)
         etAriaPostOffice.setOnClickListener(this)
@@ -121,13 +117,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     addOrderFragmentTwo()
                 }
             }
-            tvDetails ->{
-
-            }
             // same action tvDetails n tvAddOrderTotalOrder
-            tvAddOrderTotalOrder ->{
-
-            }
             etDistrict ->{
                 if (districtList.isEmpty()) {
                     getDistrictThanaOrAria(0,1)

@@ -9,11 +9,13 @@ data class LoginResponse(
     @SerializedName("userName")
     var userName: String,
     @SerializedName("companyName")
-    var companyName: Any?,
+    var companyName: String?,
     @SerializedName("password")
-    var password: Any?,
+    var password: String?,
     @SerializedName("token")
     var token: String,
+    @SerializedName("refreshToken")
+    var refreshToken: String,
     @SerializedName("mobile")
     var mobile: String,
     @SerializedName("isActive")
@@ -37,5 +39,7 @@ data class LoginResponse(
     @SerializedName("bkashNumber")
     var bkashNumber: String,
     @SerializedName("alterMobile")
-    var alterMobile: String
+    var alterMobile: String,
+    @SerializedName("maxCodCharge")
+    var maxCodCharge: Double
 )

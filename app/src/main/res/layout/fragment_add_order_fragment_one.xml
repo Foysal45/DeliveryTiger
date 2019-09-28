@@ -9,9 +9,9 @@
     app:layout_constraintTop_toTopOf="parent">
 
     <ScrollView
-        android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbars="none"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,10 +26,6 @@
             app:layout_constraintTop_toTopOf="parent">
 
 
-            <include layout="@layout/layout_total_order_details"
-                app:layout_constraintTop_toTopOf="parent"
-                />
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/addOrderSecondTopLay"
                 android:layout_width="match_parent"
@@ -38,7 +34,7 @@
                 android:layout_marginTop="@dimen/left_right_margin"
                 android:layout_marginEnd="@dimen/left_right_margin"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/addOrderTopLay">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/tvCustomerDetails"
@@ -126,9 +122,9 @@
                     android:layout_height="@dimen/login_view_height"
                     android:layout_marginTop="@dimen/fab_margin"
                     android:background="@drawable/bg_add_order_edit_text"
-                    android:hint="District"
-                    android:focusable="false"
                     android:drawableEnd="@drawable/add_order_chevron_down"
+                    android:focusable="false"
+                    android:hint="District"
                     android:importantForAutofill="no"
                     android:inputType="phone"
                     android:paddingStart="16dp"
@@ -144,9 +140,9 @@
                     android:layout_height="@dimen/login_view_height"
                     android:layout_marginTop="@dimen/fab_margin"
                     android:background="@drawable/bg_add_order_edit_text"
-                    android:hint="Thana"
-                    android:focusable="false"
                     android:drawableEnd="@drawable/add_order_chevron_down"
+                    android:focusable="false"
+                    android:hint="Thana"
                     android:importantForAutofill="no"
                     android:inputType="phone"
                     android:paddingStart="16dp"
@@ -162,14 +158,14 @@
                     android:layout_height="@dimen/login_view_height"
                     android:layout_marginTop="@dimen/fab_margin"
                     android:background="@drawable/bg_add_order_edit_text"
+                    android:drawableEnd="@drawable/add_order_chevron_down"
+                    android:focusable="false"
                     android:hint="Aria/post Office"
                     android:importantForAutofill="no"
                     android:inputType="phone"
                     android:paddingStart="16dp"
                     android:paddingTop="8dp"
                     android:paddingEnd="16dp"
-                    android:focusable="false"
-                    android:drawableEnd="@drawable/add_order_chevron_down"
                     android:paddingBottom="8dp"
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14" />
@@ -177,10 +173,10 @@
                 <EditText
                     android:id="@+id/etCustomersAddress"
                     android:layout_width="match_parent"
-                    android:gravity="start|top"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
                     android:background="@drawable/bg_add_order_edit_text"
+                    android:gravity="start|top"
                     android:hint="Customer's Address"
                     android:importantForAutofill="no"
                     android:minHeight="96dp"
@@ -199,11 +195,11 @@
                     android:background="@drawable/bg_add_order_edit_text"
                     android:hint="Additional Node(Optional)"
                     android:importantForAutofill="no"
+                    android:minHeight="@dimen/login_view_height"
                     android:paddingStart="16dp"
                     android:paddingTop="8dp"
                     android:paddingEnd="16dp"
                     android:paddingBottom="8dp"
-                    android:minHeight="@dimen/login_view_height"
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14" />
 
@@ -215,21 +211,21 @@
     </ScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_width="64dp"
         android:id="@+id/consLayGoNextPage"
+        android:layout_width="64dp"
+        android:layout_height="56dp"
         android:background="@drawable/bg_add_order_next_page"
-        android:layout_height="56dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            app:srcCompat="@drawable/add_order_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            app:srcCompat="@drawable/add_order_next" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

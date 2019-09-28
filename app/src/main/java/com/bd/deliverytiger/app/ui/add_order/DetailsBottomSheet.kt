@@ -21,6 +21,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
     private lateinit var breakableChargeTV: TextView
     private lateinit var collectionChargeTV: TextView
     private lateinit var packagingChargeTV: TextView
+    private lateinit var totalTV: TextView
     private lateinit var codPercentTV: TextView
 
     private lateinit var bundle: Bundle
@@ -51,6 +52,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
         breakableChargeTV = view.findViewById(R.id.details_item_value_3)
         collectionChargeTV = view.findViewById(R.id.details_item_value_4)
         packagingChargeTV = view.findViewById(R.id.details_item_value_5)
+        totalTV = view.findViewById(R.id.details_item_value_6)
         codPercentTV = view.findViewById(R.id.details_item_2)
 
         with(bundle) {
@@ -69,6 +71,9 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
         breakableChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payBreakableCharge, true)}"
         collectionChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payCollectionCharge, true)}"
         packagingChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payPackagingCharge, true)}"
+
+        val total = payShipmentCharge + payCODCharge + payBreakableCharge + payCollectionCharge + payPackagingCharge
+        totalTV.text = "৳ ${DigitConverter.toBanglaDigit(total, true)}"
 
     }
 

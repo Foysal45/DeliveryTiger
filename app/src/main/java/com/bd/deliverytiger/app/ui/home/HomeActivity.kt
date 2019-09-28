@@ -19,6 +19,7 @@ import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentTwo
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
+import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.features.DTFeaturesFragment
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
@@ -115,13 +116,23 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else {
                 toolbar.setNavigationIcon(R.drawable.ic_menu)
             }
-            val currentFragment =
-                supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-            if (currentFragment is AddOrderFragmentOne || currentFragment is AddOrderFragmentTwo) {
+            val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+            if (currentFragment is AddOrderFragmentOne || currentFragment is AddOrderFragmentTwo || currentFragment is DistrictSelectFragment) {
                 addProductBtnVisibility(false)
             } else {
                 addProductBtnVisibility(true)
             }
+
+            when(currentFragment){
+                is AddOrderFragmentOne -> {
+                    currentFragment.onResume()
+                }
+                is AddOrderFragmentTwo -> {
+                    currentFragment.onResume()
+                }
+            }
+
+
         }
     }
 
@@ -184,6 +195,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 finish()
             }
         }
+        navId = 0
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -213,18 +225,23 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun addOrderFragment() {
 
-        val fragment = AddOrderFragmentOne.newInstance()
+        /*val fragment = AddOrderFragmentOne.newInstance()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
         ft.addToBackStack(AddOrderFragmentOne.tag)
-        ft.commit()
+        ft.commit()*/
 
+        val fragment = AddOrderFragmentTwo.newInstance(null)
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.mainActivityContainer, fragment, AddOrderFragmentTwo.tag)
+        ft.addToBackStack(AddOrderFragmentTwo.tag)
+        ft.commit()
     }
 
-    private fun addFragment(fragment: Fragment) {
-        val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
-        ft?.replace(R.id.mainActivityContainer, fragment, fragment.tag)
-        ft!!.addToBackStack(fragment.tag)
-        ft?.commit()
+    private fun addFragment(fragment: Fragment){
+        val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.mainActivityContainer, fragment, fragment.tag)
+        ft.addToBackStack(fragment.tag)
+        ft.commit()
     }
 }

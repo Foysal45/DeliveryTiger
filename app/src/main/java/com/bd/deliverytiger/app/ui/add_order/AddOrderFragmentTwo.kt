@@ -26,6 +26,7 @@ import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.BundleFlag
 import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
 import com.bd.deliverytiger.app.utils.DigitConverter
+import com.bd.deliverytiger.app.utils.SessionManager
 import com.google.android.material.button.MaterialButtonToggleGroup
 import retrofit2.Call
 import retrofit2.Callback
@@ -65,6 +66,8 @@ class AddOrderFragmentTwo : Fragment() {
     private var isCollection: Boolean = false
     private var isBreakable: Boolean = false
     private var isAgreeTerms: Boolean = false
+    private var isWeightSelected: Boolean = false
+    private var isPackagingSelected: Boolean = false
     private var payCollectionAmount: Double = 0.0
     private var payShipmentCharge: Double = 0.0
     private var payCODCharge: Double = 0.0
@@ -73,7 +76,7 @@ class AddOrderFragmentTwo : Fragment() {
     private var payPackagingCharge: Double = 0.0
 
     // Bundle
-    private var bundle: Bundle? =null
+    private var bundle: Bundle? = null
     private var customerName: String = ""
     private var mobileNumber: String = ""
     private var altMobileNumber: String = ""
@@ -87,6 +90,7 @@ class AddOrderFragmentTwo : Fragment() {
         fun newInstance(bundle: Bundle?): AddOrderFragmentTwo = AddOrderFragmentTwo().apply {
             this.bundle = bundle
         }
+
         val tag = AddOrderFragmentTwo::class.java.name
     }
 
@@ -97,7 +101,7 @@ class AddOrderFragmentTwo : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as HomeActivity).setToolbarTitle("প্যাকেজ ও কালেকশনের তথ্য")
+
 
         productNameET = view.findViewById(R.id.productName)
         collectionAmountET = view.findViewById(R.id.collectionAmount)
@@ -113,26 +117,29 @@ class AddOrderFragmentTwo : Fragment() {
         totalTV = view.findViewById(R.id.tvAddOrderTotalOrder)
         totalLayout = view.findViewById(R.id.addOrderTopLay)
 
+
+        with(bundle) {
+            this?.let {
+                customerName = getString(BundleFlag.CUSTOMER_NAME, "")
+                mobileNumber = getString(BundleFlag.MOBILE_NUMBER, "")
+                altMobileNumber = getString(BundleFlag.ALT_MOBILE_NUMBER, "")
+                districtId = getInt(BundleFlag.DISTRICT_ID, 0)
+                thanaId = getInt(BundleFlag.THANA_ID, 0)
+                areaId = getInt(BundleFlag.ARIA_ID, 0)
+                address = getString(BundleFlag.CUSTOMERS_ADDRESS, "")
+                addressNote = getString(BundleFlag.ADDITIONAML_NOTE, "")
+            }
+        }
+
         placeOrderInterface = RetrofitSingleton.getInstance(context!!).create(PlaceOrderInterface::class.java)
         getBreakableCharge()
         getPackagingCharge()
         getDeliveryCharge()
 
-        with(bundle){
-            this?.let {
-                customerName = getString(BundleFlag.CUSTOMER_NAME,"")
-                mobileNumber = getString(BundleFlag.MOBILE_NUMBER,"")
-                altMobileNumber = getString(BundleFlag.ALT_MOBILE_NUMBER,"")
-                districtId = getInt(BundleFlag.DISTRICT_ID,0)
-                thanaId = getInt(BundleFlag.THANA_ID,0)
-                areaId = getInt(BundleFlag.ARIA_ID,0)
-                address = getString(BundleFlag.CUSTOMERS_ADDRESS,"")
-                addressNote = getString(BundleFlag.ADDITIONAML_NOTE,"")
-            }
-        }
+
 
         deliveryTypeAdapter = DeliveryTypeAdapter(context!!, deliveryTypeList)
-        with(deliveryTypeRV){
+        with(deliveryTypeRV) {
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
             adapter = deliveryTypeAdapter
@@ -140,12 +147,13 @@ class AddOrderFragmentTwo : Fragment() {
         deliveryTypeAdapter.onItemClick = { position, model ->
 
             payShipmentCharge = model.chargeAmount
+            calculateTotalPrice()
         }
 
 
         toggleButtonGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
-            if (isChecked){
-                when(checkedId) {
+            if (isChecked) {
+                when (checkedId) {
                     R.id.toggle_button_1 -> {
                         collectionAmountET.visibility = View.GONE
                         isCollection = false
@@ -160,6 +168,7 @@ class AddOrderFragmentTwo : Fragment() {
 
         checkBoxBreakable.setOnCheckedChangeListener { compoundButton, b ->
             isBreakable = b
+            calculateTotalPrice()
         }
 
         checkTerms.setOnCheckedChangeListener { compoundButton, b ->
@@ -177,7 +186,7 @@ class AddOrderFragmentTwo : Fragment() {
         totalLayout.setOnClickListener {
 
             val bundle = Bundle()
-            with(bundle){
+            with(bundle) {
                 putDouble("payShipmentCharge", payShipmentCharge)
                 putDouble("payCODCharge", payCODCharge)
                 putInt("payBreakableCharge", payBreakableCharge)
@@ -190,6 +199,11 @@ class AddOrderFragmentTwo : Fragment() {
             detailsSheet.show(childFragmentManager, DetailsBottomSheet.tag)
 
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle("প্যাকেজ ও কালেকশনের তথ্য")
     }
 
     private fun getBreakableCharge() {
@@ -217,8 +231,7 @@ class AddOrderFragmentTwo : Fragment() {
     private fun getPackagingCharge() {
 
         placeOrderInterface.getPackagingCharge().enqueue(object : Callback<GenericResponse<List<PackagingData>>> {
-            override fun onFailure(call: Call<GenericResponse<List<PackagingData>>>, t: Throwable) {
-            }
+            override fun onFailure(call: Call<GenericResponse<List<PackagingData>>>, t: Throwable) {}
 
             override fun onResponse(call: Call<GenericResponse<List<PackagingData>>>, response: Response<GenericResponse<List<PackagingData>>>) {
                 if (response.isSuccessful && response.body() != null && isAdded) {
@@ -229,21 +242,25 @@ class AddOrderFragmentTwo : Fragment() {
 
                         val packageNameList: MutableList<String> = mutableListOf()
                         packageNameList.add("প্যাকেজিং")
-                        for (model1 in packagingDataList){
+                        for (model1 in packagingDataList) {
                             packageNameList.add(model1.packagingName)
                         }
 
                         val packagingAdapter = CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, packageNameList)
                         spinnerPackaging.adapter = packagingAdapter
-                        spinnerPackaging.onItemSelectedListener = object :AdapterView.OnItemSelectedListener {
+                        spinnerPackaging.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                             override fun onNothingSelected(p0: AdapterView<*>?) {
 
                             }
 
                             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                                if (p2 != 0){
-                                    val model2 = packagingDataList[p2-1]
+                                if (p2 != 0) {
+                                    val model2 = packagingDataList[p2 - 1]
                                     payPackagingCharge = model2.packagingCharge
+                                    isPackagingSelected = true
+                                    calculateTotalPrice()
+                                } else {
+                                    isPackagingSelected = false
                                 }
                             }
 
@@ -257,38 +274,45 @@ class AddOrderFragmentTwo : Fragment() {
 
     private fun getDeliveryCharge() {
 
-        placeOrderInterface.getDeliveryCharge(DeliveryChargeRequest(14,10026)).enqueue(object : Callback<GenericResponse<List<DeliveryChargeResponse>>> {
+        placeOrderInterface.getDeliveryCharge(DeliveryChargeRequest(districtId, thanaId)).enqueue(object : Callback<GenericResponse<List<DeliveryChargeResponse>>> {
             override fun onFailure(call: Call<GenericResponse<List<DeliveryChargeResponse>>>, t: Throwable) {
 
             }
 
-            override fun onResponse(call: Call<GenericResponse<List<DeliveryChargeResponse>>>, response: Response<GenericResponse<List<DeliveryChargeResponse>>>) {
+            override fun onResponse(
+                call: Call<GenericResponse<List<DeliveryChargeResponse>>>,
+                response: Response<GenericResponse<List<DeliveryChargeResponse>>>
+            ) {
                 if (response.isSuccessful && response.body() != null && isAdded) {
                     if (response.body()!!.model != null) {
                         val model = response.body()!!.model
 
                         val weightList: MutableList<String> = mutableListOf()
                         weightList.add("ওজন (কেজি)")
-                        for (model1 in model){
+                        for (model1 in model) {
                             weightList.add(model1.weight)
                         }
 
                         val weightAdapter = CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, weightList)
                         spinnerWeight.adapter = weightAdapter
-                        spinnerWeight.onItemSelectedListener = object :AdapterView.OnItemSelectedListener {
+                        spinnerWeight.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                             override fun onNothingSelected(p0: AdapterView<*>?) {
 
                             }
 
                             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 
-                                if (p2 != 0){
-                                    val model2 = model[p2-1]
+                                if (p2 != 0) {
 
+                                    val model2 = model[p2 - 1]
+                                    deliveryTypeAdapter.clearSelectedItemPosition()
                                     deliveryTypeList.clear()
                                     deliveryTypeList.addAll(model2.weightRangeWiseData)
                                     deliveryTypeAdapter.notifyDataSetChanged()
+                                    isWeightSelected = true
                                 } else {
+                                    isWeightSelected = false
+                                    deliveryTypeAdapter.clearSelectedItemPosition()
                                     deliveryTypeList.clear()
                                     deliveryTypeAdapter.notifyDataSetChanged()
                                 }
@@ -304,22 +328,21 @@ class AddOrderFragmentTwo : Fragment() {
     private fun calculateTotalPrice() {
 
         // Total = Shipment + cod + breakable + collection + packaging
-        payCollectionCharge = 0.0 // SessionManager
+        payCollectionCharge = SessionManager.collectionCharge
         payCODCharge = payCollectionAmount * codChargePercentage
         var total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge
-        if (isBreakable){
+        if (isBreakable) {
             total += breakableChargeApi
             payBreakableCharge = breakableChargeApi
         }
 
         totalTV.text = DigitConverter.toBanglaDigit("৳$total", true)
 
-
     }
 
     private fun submitOrder() {
 
-        if (!validateFormData()){
+        if (!validateFormData()) {
             return
         }
         calculateTotalPrice()
@@ -334,17 +357,25 @@ class AddOrderFragmentTwo : Fragment() {
         }
         if (isCollection) {
             val collectionAmount = collectionAmountET.text.toString()
-            if (collectionAmount.isEmpty()){
+            if (collectionAmount.isEmpty()) {
                 context?.showToast("কালেকশন অ্যামাউন্ট লিখুন")
                 return false
             }
             try {
                 payCollectionAmount = collectionAmount.toDouble()
-            }catch (e: NumberFormatException ){
+            } catch (e: NumberFormatException) {
                 e.printStackTrace()
                 context?.showToast("কালেকশন অ্যামাউন্ট লিখুন")
                 return false
             }
+        }
+        if (!isWeightSelected) {
+            context?.showToast("প্যাকেজ এর ওজন সিলেক্ট করুন")
+            return false
+        }
+        if (!isPackagingSelected) {
+            context?.showToast("প্যাকেজিং সিলেক্ট করুন")
+            return false
         }
         if (!isAgreeTerms) {
             context?.showToast("প্লিজ একসেপ্ট টার্মস এন্ড কন্ডিশন")

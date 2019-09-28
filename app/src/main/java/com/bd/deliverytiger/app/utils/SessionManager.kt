@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.NonNull
 import androidx.core.content.edit
+import com.bd.deliverytiger.app.api.model.login.LoginResponse
 
 object SessionManager {
 
@@ -25,23 +26,28 @@ object SessionManager {
         pref = context.getSharedPreferences(Pref_Name, Context.MODE_PRIVATE)
     }
 
-    fun createSession(
-        userId: String?,
-        name: String?,
-        email: String?,
-        pic: String?,
-        status: String?,
-        loginKey: String?
-    ) {
+    fun createSession(model: LoginResponse) {
 
         pref.edit {
             putBoolean(Is_LOGIN, true)
-            putString(Key_UserId, userId)
-            putString(Key_UserName, name)
-            putString(Key_UserEmail, email)
-            putString(Key_UserPic, pic)
-            putString(Key_UserStatus, status)
-            putString(Key_UserLoginKey, loginKey)
+            putInt(Key_UserId, model.courierUserId)
+            putString(Key_UserName, model.userName)
+            putString(Key_UserName, model.companyName)
+            putString(Key_accessToken, model.token)
+            putString("refreshToken", model.refreshToken)
+            putString("mobile", model.mobile)
+            putString("address", model.address)
+            putString("emailAddress", model.emailAddress)
+            putString("bkashNumber", model.bkashNumber)
+            putString("alterMobile", model.alterMobile)
+            putBoolean("isActive", model.isActive)
+            putBoolean("sms", model.sms)
+            putBoolean("email", model.email)
+            putFloat("collectionCharge", model.collectionCharge.toFloat())
+            putFloat("returnCharge", model.returnCharge.toFloat())
+            putFloat("smsCharge", model.smsCharge.toFloat())
+            putFloat("mailCharge", model.mailCharge.toFloat())
+            putFloat("maxCodCharge", model.maxCodCharge.toFloat())
         }
     }
 
@@ -68,14 +74,24 @@ object SessionManager {
         }
 
     var fileBaseUrl: String
-    get() {
-        return pref.getString(Key_FileBaseUrl, "")!!
-    }
-    set(value) {
-        pref.edit {
-            putString(Key_FileBaseUrl, value)
-            commit()
+        get() {
+            return pref.getString(Key_FileBaseUrl, "")!!
         }
-    }
+        set(value) {
+            pref.edit {
+                putString(Key_FileBaseUrl, value)
+                commit()
+            }
+        }
 
+    var collectionCharge: Double
+        get() {
+            return pref.getFloat("collectionCharge", 0f).toDouble()
+        }
+        set(value) {
+            pref.edit {
+                putFloat("collectionCharge", value.toFloat())
+                commit()
+            }
+        }
 }
