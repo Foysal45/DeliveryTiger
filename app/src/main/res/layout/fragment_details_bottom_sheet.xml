@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    tools:context=".ui.add_order.DetailsBottomSheet">
+
+    <TextView
+        android:id="@+id/details_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Charge Breakdown"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/details_item_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginTop="30dp"
+        android:text="Shipment Charge :"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/details_title" />
+
+    <TextView
+        android:id="@+id/details_item_value_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/details_title"
+        tools:text="৳ ০" />
+
+
+    <TextView
+        android:id="@+id/details_item_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginTop="16dp"
+        android:text="COD Charge (..%) :"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/details_item_1" />
+
+    <TextView
+        android:id="@+id/details_item_value_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/details_item_value_1"
+        tools:text="৳ ০" />
+
+    <TextView
+        android:id="@+id/details_item_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginTop="16dp"
+        android:text="Fragile Item Charge :"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/details_item_2" />
+
+    <TextView
+        android:id="@+id/details_item_value_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/details_item_value_2"
+        tools:text="৳ ০" />
+
+
+    <TextView
+        android:id="@+id/details_item_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginTop="16dp"
+        android:text="Collection Charge :"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/details_item_3" />
+
+    <TextView
+        android:id="@+id/details_item_value_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/details_item_value_3"
+        tools:text="৳ ০" />
+
+    <TextView
+        android:id="@+id/details_item_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginTop="16dp"
+        android:text="Packaging Charge :"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/details_item_4" />
+
+    <TextView
+        android:id="@+id/details_item_value_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/details_item_value_4"
+        tools:text="৳ ০" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,11 +14,17 @@ object DigitConverter {
             return engCahrReplacer(digits)
         } else if (digits is Int) {
             return if (isComma) {
-                engCahrReplacer(formatNumber(digits))
+                engCahrReplacer(formatNumber(digits.toLong()))
             } else {
                 engCahrReplacer(digits.toString())
             }
-        } else {
+        } else if (digits is Double)
+            return if (isComma) {
+                engCahrReplacer(formatNumber(digits.toLong()))
+            } else {
+                engCahrReplacer(digits.toString())
+            }
+        else {
             return (digits as? String).toString()
         }
     }
@@ -62,10 +68,11 @@ object DigitConverter {
             .replace('9', '৯')
     }
 
-    private fun formatNumber(digits: Int): String {
+    private fun formatNumber(digits: Long): String {
         val decimalFormat = DecimalFormat()
         decimalFormat.isGroupingUsed = true
         decimalFormat.groupingSize = 3
-        return decimalFormat.format(digits.toLong())
+        return decimalFormat.format(digits)
     }
+
 }
