@@ -32,7 +32,7 @@ object SessionManager {
             putBoolean(Is_LOGIN, true)
             putInt(Key_UserId, model.courierUserId)
             putString(Key_UserName, model.userName)
-            putString(Key_UserName, model.companyName)
+            putString("companyName", model.companyName)
             putString(Key_accessToken, model.token)
             putString("refreshToken", model.refreshToken)
             putString("mobile", model.mobile)
@@ -94,4 +94,82 @@ object SessionManager {
                 commit()
             }
         }
+
+    var returnCharge: Double
+        get() {
+            return pref.getFloat("returnCharge", 0f).toDouble()
+        }
+        set(value) {
+            pref.edit {
+                putFloat("returnCharge", value.toFloat())
+                commit()
+            }
+        }
+
+    var courierUserId: Int
+        get() {
+            return pref.getInt(Key_UserId, 0)
+        }
+        set(value) {
+            pref.edit {
+                putInt(Key_UserId, value)
+                commit()
+            }
+        }
+
+    var userName: String
+        get() {
+            return pref.getString(Key_UserName, "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString(Key_UserName, value)
+                commit()
+            }
+        }
+
+    var companyName: String
+        get() {
+            return pref.getString("companyName", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("companyName", value)
+                commit()
+            }
+        }
+
+    var mobile: String
+        get() {
+            return pref.getString("mobile", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("mobile", value)
+                commit()
+            }
+        }
+
+    var address: String
+        get() {
+            return pref.getString("address", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("address", value)
+                commit()
+            }
+        }
+
+    var alterMobile: String
+        get() {
+            return pref.getString("alterMobile", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("alterMobile", value)
+                commit()
+            }
+        }
+
 }

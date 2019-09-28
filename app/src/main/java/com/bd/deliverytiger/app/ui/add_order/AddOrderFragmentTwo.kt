@@ -21,6 +21,7 @@ import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
 import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
+import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.BundleFlag
@@ -85,6 +86,11 @@ class AddOrderFragmentTwo : Fragment() {
     private var areaId: Int = 0
     private var address: String = ""
     private var addressNote: String = ""
+    private var paymentType: String = ""
+    private var orderType: String = ""
+    private var weight: String = ""
+    private var collectionName: String = ""
+    private var packingName: String = ""
 
     companion object {
         fun newInstance(bundle: Bundle?): AddOrderFragmentTwo = AddOrderFragmentTwo().apply {
@@ -346,12 +352,32 @@ class AddOrderFragmentTwo : Fragment() {
             return
         }
         calculateTotalPrice()
+
+        val requestBody = OrderRequest(
+            customerName,mobileNumber,altMobileNumber,address,districtId,thanaId,areaId,
+            "","","",collectionName,
+            payCollectionAmount.toInt(), payShipmentCharge.toInt(),SessionManager.courierUserId,
+            payBreakableCharge, addressNote, payCODCharge.toInt(), payCollectionCharge.toInt(), SessionManager.returnCharge.toInt(),"",
+            payPackagingCharge.toInt(), address)
+
+        placeOrderInterface.placeOrder(requestBody).enqueue(object : Callback<GenericResponse<OrderRequest>> {
+            override fun onFailure(call: Call<GenericResponse<OrderRequest>>, t: Throwable) {
+
+            }
+
+            override fun onResponse(call: Call<GenericResponse<OrderRequest>>, response: Response<GenericResponse<OrderRequest>>) {
+
+            }
+
+        })
+
+
     }
 
     private fun validateFormData(): Boolean {
 
-        val productName = productNameET.text.toString()
-        if (productName.isEmpty()) {
+        collectionName = productNameET.text.toString()
+        if (collectionName.isEmpty()) {
             context?.showToast("প্রোডাক্টের নাম লিখুন")
             return false
         }
