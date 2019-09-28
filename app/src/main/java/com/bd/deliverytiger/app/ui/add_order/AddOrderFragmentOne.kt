@@ -26,6 +26,7 @@ import com.bd.deliverytiger.app.api.model.district.ThanaPayLoad
 import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.district.ThanaOrAriaAdapter
 import com.bd.deliverytiger.app.ui.home.HomeActivity
+import com.bd.deliverytiger.app.utils.BundleFlag
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
 import com.bd.deliverytiger.app.utils.Validator.hideSoftKeyBoard
@@ -206,7 +207,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     private fun addOrderFragmentTwo(){
-        val fragment = AddOrderFragmentTwo.newInstance()
+        val fragment = AddOrderFragmentTwo.newInstance(getBundle())
         val ft: FragmentTransaction? = (context as FragmentActivity?)?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, AddOrderFragmentTwo.tag)
         ft?.addToBackStack(AddOrderFragmentTwo.tag)
@@ -332,6 +333,20 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         })
 
 
+    }
+
+    private fun getBundle(): Bundle{
+        val bundle = Bundle()
+        bundle.putString(BundleFlag.CUSTOMER_NAME,customerName)
+        bundle.putString(BundleFlag.MOBILE_NUMBER,mobileNo)
+        bundle.putString(BundleFlag.ALT_MOBILE_NUMBER,alternativeMobileNo)
+        bundle.putInt(BundleFlag.DISTRICT_ID,district)
+        bundle.putInt(BundleFlag.THANA_ID,thana)
+        bundle.putInt(BundleFlag.ARIA_ID,ariaPostOffice)
+        bundle.putString(BundleFlag.CUSTOMERS_ADDRESS,customersAddress)
+        bundle.putString(BundleFlag.ADDITIONAML_NOTE,additionalNote)
+
+        return bundle
     }
 
     override fun onAttach(context: Context) {

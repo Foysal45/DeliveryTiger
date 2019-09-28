@@ -24,7 +24,9 @@ import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
 import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.ui.home.HomeActivity
+import com.bd.deliverytiger.app.utils.BundleFlag
 import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
+import com.bd.deliverytiger.app.utils.Timber
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -57,9 +59,12 @@ class AddOrderFragmentTwo : Fragment() {
     private var codChargeMin: Int = 0
     private var packagingCharge: Double = 0.0
     private var deliveryCharge: Double = 0.0
+    private lateinit var dataBundle :Bundle
 
     companion object {
-        fun newInstance(): AddOrderFragmentTwo = AddOrderFragmentTwo().apply {
+        fun newInstance(dataBundle: Bundle): AddOrderFragmentTwo = AddOrderFragmentTwo().apply {
+            this.dataBundle = dataBundle // previous fragments data
+            // bundle getting flag are available in BundleFlag class
         }
         val tag = AddOrderFragmentTwo::class.java.name
     }
