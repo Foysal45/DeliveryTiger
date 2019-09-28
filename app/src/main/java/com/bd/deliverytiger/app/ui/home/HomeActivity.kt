@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentTwo
+import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.features.DTFeaturesFragment
 import com.bd.deliverytiger.app.ui.login.LoginActivity
@@ -114,7 +115,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else {
                 toolbar.setNavigationIcon(R.drawable.ic_menu)
             }
-            val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+            val currentFragment =
+                supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
             if (currentFragment is AddOrderFragmentOne || currentFragment is AddOrderFragmentTwo) {
                 addProductBtnVisibility(false)
             } else {
@@ -156,6 +158,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_bill -> {
 
+                addFragment(BillingofServiceFragment.newInstance())
             }
             R.id.nav_cod_collection -> {
 
@@ -200,7 +203,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun addHomeFragment(){
+    private fun addHomeFragment() {
 
         val fragment = HomeFragment.newInstance()
         val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
@@ -208,7 +211,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         ft?.commit()
     }
 
-    private fun addOrderFragment(){
+    private fun addOrderFragment() {
 
         val fragment = AddOrderFragmentOne.newInstance()
         val ft = supportFragmentManager.beginTransaction()
@@ -218,7 +221,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    private fun addFragment(fragment: Fragment){
+    private fun addFragment(fragment: Fragment) {
         val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
         ft?.replace(R.id.mainActivityContainer, fragment, fragment.tag)
         ft!!.addToBackStack(fragment.tag)

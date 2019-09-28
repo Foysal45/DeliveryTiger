@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
+import com.bd.deliverytiger.app.ui.features.DTFeaturesFragment
 
 /**
  * A simple [Fragment] subclass.
@@ -57,7 +58,7 @@ class HomeFragment : Fragment() {
         }
 
         ivSurpriseBtn.setOnClickListener {
-            Toast.makeText(context,"Surprise",Toast.LENGTH_SHORT).show()
+            addFeaturesFragment()
         }
     }
 
@@ -66,6 +67,14 @@ class HomeFragment : Fragment() {
         val ft: FragmentTransaction? = (mContext as FragmentActivity?)?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
         ft?.addToBackStack(AddOrderFragmentOne.tag)
+        ft?.commit()
+    }
+
+    private fun addFeaturesFragment(){
+        val fragment = DTFeaturesFragment.newInstance()
+        val ft: FragmentTransaction? = (mContext as FragmentActivity?)?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.mainActivityContainer, fragment, DTFeaturesFragment.tag)
+        ft?.addToBackStack(DTFeaturesFragment.tag)
         ft?.commit()
     }
 

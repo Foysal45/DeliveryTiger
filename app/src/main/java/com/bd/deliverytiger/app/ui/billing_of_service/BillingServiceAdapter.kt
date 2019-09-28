@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.ui.cod_collection
+package com.bd.deliverytiger.app.ui.billing_of_service
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 
-class CODCollectionAdapter(var context: Context) :
-    RecyclerView.Adapter<CODCollectionAdapter.myViewHolder>() {
+class BillingServiceAdapter(var context: Context) :
+    RecyclerView.Adapter<BillingServiceAdapter.myViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
         return myViewHolder(
             LayoutInflater.from(context).inflate(
-                R.layout.item_view_cod_collection,
+                R.layout.item_view_billing_collection,
                 parent,
                 false
             )

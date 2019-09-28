@@ -76,13 +76,15 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCODCollection"
+        android:paddingBottom="24dp"
         tools:listitem="@layout/item_view_cod_collection"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/viewID"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintVertical_weight="1"
+        android:layout_height="0dp"/>
 
     <ImageView
         app:layout_constraintBottom_toBottomOf="parent"

@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:id="@+id/itemMainLay"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         android:padding="@dimen/activity_horizontal_margin"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -65,10 +67,58 @@
             android:layout_weight="1"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:text="Unpaid"
+            android:text="৳ 6000"
             android:textColor="@color/black"
             android:textSize="@dimen/text_14" />
 
+        <TextView
+            android:paddingStart="8dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:maxWidth="100dp"
+            android:text="৳ 6000"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_14" />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="৳ 6000"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_14" />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:maxWidth="100dp"
+            android:text="৳ 6000"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_14" />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="৳ 6000"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_14" />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="Received"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_14" />
 
 
     </LinearLayout>

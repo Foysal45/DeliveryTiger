@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.ui.home.HomeActivity
 
 /**
  * A simple [Fragment] subclass.
@@ -36,6 +37,8 @@ class DTFeaturesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as HomeActivity).setToolbarTitle("Features")
+
         rvFeathers = view.findViewById(R.id.rvFeathers)
 
         val fAdapter = FeaturesListAdapter(context!!,resources.getStringArray(R.array.features_list))
