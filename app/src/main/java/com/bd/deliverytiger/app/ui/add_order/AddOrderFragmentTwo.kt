@@ -344,8 +344,10 @@ class AddOrderFragmentTwo : Fragment() {
         if (payCODCharge < codChargeMin){
             payCODCharge = codChargeMin.toDouble()
         }
-        if (payCODCharge > SessionManager.maxCodCharge){
-            payCODCharge = SessionManager.maxCodCharge
+        if (SessionManager.maxCodCharge != 0.0){
+            if (payCODCharge > SessionManager.maxCodCharge){
+                payCODCharge = SessionManager.maxCodCharge
+            }
         }
         var total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge
         if (isBreakable) {
