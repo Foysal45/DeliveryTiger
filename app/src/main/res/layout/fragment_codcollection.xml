@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/fab_margin"
-            android:text="Total Orders : 10"
+            android:text="মোট অর্ডার : ০"
             android:textColor="@color/black"
             android:textSize="@dimen/text_14"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -42,7 +42,7 @@
                 android:id="@+id/tvDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Filter"
+                android:text="ফিল্টার"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -76,7 +76,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCODCollection"
-        android:paddingBottom="24dp"
+        android:paddingBottom="4dp"
         tools:listitem="@layout/item_view_cod_collection"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

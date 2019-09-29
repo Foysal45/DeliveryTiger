@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/fab_margin"
-            android:text="Total Orders : 10"
+            android:text="মোট অর্ডার : ০"
             android:textColor="@color/black"
             android:textSize="@dimen/text_14"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -42,7 +42,7 @@
                 android:id="@+id/tvDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Filter"
+                android:text="ফিল্টার"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -67,8 +67,10 @@
 
     <HorizontalScrollView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintVertical_weight="1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addOrderTopLay">
 
@@ -106,7 +108,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:paddingStart="@dimen/fab_margin"
-                        android:text="Order Info"
+                        android:text="অর্ডার ইনফো"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
@@ -116,7 +118,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:maxWidth="100dp"
-                        android:text="Shipment Charge"
+                        android:text="শিপমেন্ট চার্জ"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
@@ -127,7 +129,7 @@
                         android:layout_weight="1"
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
-                        android:text="COD Charge"
+                        android:text="COD চার্জ"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
@@ -139,7 +141,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:maxWidth="100dp"
-                        android:text="Fragile Item Charge"
+                        android:text="ভঙ্গুর আইটেমের চার্জ"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
@@ -150,7 +152,7 @@
                         android:layout_weight="1"
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
-                        android:text="Collection Charge"
+                        android:text="কালেকশন চার্জ"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
@@ -160,7 +162,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:maxWidth="100dp"
-                        android:text="Return Charge"
+                        android:text="রিটার্ন চার্জ"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
@@ -171,18 +173,18 @@
                         android:layout_weight="1"
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
-                        android:text="Total Service Charge"
+                        android:text="মোট সার্ভিস চার্জ"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:layout_width="100dp"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
-                        android:text="Payment Status"
+                        android:text="পেমেন্ট স্ট্যাটাস"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
@@ -205,7 +207,6 @@
                 android:id="@+id/rvBillingService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="24dp"
                 tools:listitem="@layout/item_view_billing_collection" />
 
         </LinearLayout>
@@ -221,6 +222,15 @@
         app:srcCompat="@drawable/cod_collection_show_stat">
 
     </ImageView>
+
+    <ProgressBar
+        android:id="@+id/billingProgressBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

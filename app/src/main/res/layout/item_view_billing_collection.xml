@@ -6,7 +6,7 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:id="@+id/itemMainLay"
+        android:id="@+id/billingItemMainLay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/fab_margin"
             android:text="1"
+            android:id="@+id/tvBillingCounter"
             android:textColor="@color/black"
 
             android:textSize="@dimen/text_14" />
@@ -28,6 +29,7 @@
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:id="@+id/billingDetailsLay"
             android:orientation="vertical"
             android:paddingStart="@dimen/fab_margin"
             android:text="Sep 25, 2019"
@@ -35,6 +37,7 @@
             android:textSize="@dimen/text_14">
 
             <TextView
+                android:id="@+id/tvBillingOrderId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/cod_search"
@@ -44,6 +47,7 @@
                 android:textSize="@dimen/text_14" />
 
             <TextView
+                android:id="@+id/tvBillingOrderDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Sep 25, 2019"
@@ -53,6 +57,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tvBillingShipmentsCharge"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -62,6 +67,7 @@
             android:textSize="@dimen/text_14" />
 
         <TextView
+            android:id="@+id/tvBillingCODCharge"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -72,6 +78,7 @@
             android:textSize="@dimen/text_14" />
 
         <TextView
+            android:id="@+id/tvBillingFragileItemCharge"
             android:paddingStart="8dp"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
@@ -82,6 +89,7 @@
             android:textSize="@dimen/text_14" />
 
         <TextView
+            android:id="@+id/tvBillingCollectionCharge"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -92,6 +100,7 @@
             android:textSize="@dimen/text_14" />
 
         <TextView
+            android:id="@+id/tvBillingReturnCharge"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -101,6 +110,7 @@
             android:textSize="@dimen/text_14" />
 
         <TextView
+            android:id="@+id/tvBillingTotalServiceCharge"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -111,7 +121,8 @@
             android:textSize="@dimen/text_14" />
 
         <TextView
-            android:layout_width="100dp"
+            android:id="@+id/tvBillingPaymentStatus"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingStart="8dp"
@@ -127,7 +138,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/divider"
-        app:layout_constraintTop_toBottomOf="@id/itemMainLay" />
+        app:layout_constraintTop_toBottomOf="@id/billingItemMainLay" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

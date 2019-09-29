@@ -12,7 +12,7 @@ import com.bd.deliverytiger.app.R
 class OrderTrackingFragment : Fragment() {
 
     companion object{
-        fun newInstance(orderID: Int): OrderTrackingFragment {
+        fun newInstance(orderID: String): OrderTrackingFragment {
             val fragment = OrderTrackingFragment()
             fragment.orderID = orderID
             return fragment
@@ -20,7 +20,7 @@ class OrderTrackingFragment : Fragment() {
         val tag = OrderTrackingFragment::class.java.name
     }
 
-    private var orderID = 0
+    private var orderID = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

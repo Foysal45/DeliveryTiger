@@ -177,7 +177,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_order_tracking -> {
 
-                addFragment(OrderTrackingFragment.newInstance(0))
+                addFragment(OrderTrackingFragment.newInstance(""))
             }
             R.id.nav_report -> {
 

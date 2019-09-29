@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
+import com.bd.deliverytiger.app.utils.DigitConverter
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
 import retrofit2.Call
@@ -41,6 +43,7 @@ class CODCollectionFragment : Fragment() {
     }
 
     private lateinit var rvCODCollection: RecyclerView
+    private lateinit var tvTotalOrder: TextView
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var codCollectionAdapter: CODCollectionAdapter
     private lateinit var codCollectionInterface: CODCollectionInterface
@@ -65,9 +68,10 @@ class CODCollectionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as HomeActivity).setToolbarTitle("COD Collection")
+        (activity as HomeActivity).setToolbarTitle("COD কালেকশন")
         rvCODCollection = view.findViewById(R.id.rvCODCollection)
         codProgressBar = view.findViewById(R.id.codProgressBar)
+        tvTotalOrder = view.findViewById(R.id.tvTotalOrder)
 
         courierOrderViewModelList = ArrayList()
         // fromDate = getCurrentDateTime().toString()
@@ -114,7 +118,7 @@ class CODCollectionFragment : Fragment() {
 
         codCollectionAdapter.onItemClick = { position ->
 
-            addOrderTrackFragment()
+            addOrderTrackFragment(courierOrderViewModelList?.get(position)?.courierOrdersId.toString())
         }
     }
 
@@ -154,10 +158,15 @@ class CODCollectionFragment : Fragment() {
                     if (response.isSuccessful && response.body() != null && response.body()!!.model != null) {
                         courierOrderViewModelList?.addAll(response.body()!!.model.courierOrderViewModel!!)
                         totalLoadedData = courierOrderViewModelList!!.size
-                        totalCount = response.body()!!.model.totalCount!!.toInt()
+
                         codCollectionAdapter.notifyDataSetChanged()
                         isMoreDataAvailable = response.body()!!.model.courierOrderViewModel!!.size >= count-2
                         Timber.e("getAllCODCollectionResponse", " s " + response.body().toString())
+
+                        if (index < 20) {
+                            totalCount = response.body()!!.model.totalCount!!.toInt()
+                            tvTotalOrder.text ="মোট অর্ডার : " + DigitConverter.toBanglaDigit(totalCount)
+                        }
                     } else {
                         Timber.e("getAllCODCollectionResponse", " s null")
                     }
@@ -166,8 +175,8 @@ class CODCollectionFragment : Fragment() {
             })
     }
 
-    private fun addOrderTrackFragment() {
-        val fragment = OrderTrackingFragment.newInstance(0)
+    private fun addOrderTrackFragment(orderID: String) {
+        val fragment = OrderTrackingFragment.newInstance(orderID)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, OrderTrackingFragment.tag)
         ft?.addToBackStack(OrderTrackingFragment.tag)
