@@ -7,7 +7,7 @@ data class BreakableChargeData(
     @SerializedName("id")
     var id: Int,
     @SerializedName("breakableCharge")
-    var breakableCharge: Int,
+    var breakableCharge: Double,
     @SerializedName("codChargePercentage")
     var codChargePercentage: Double,
     @SerializedName("codChargeMin")

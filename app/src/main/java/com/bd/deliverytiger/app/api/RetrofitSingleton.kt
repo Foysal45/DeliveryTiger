@@ -3,6 +3,7 @@ package com.bd.deliverytiger.app.api
 import android.content.Context
 import androidx.annotation.NonNull
 import com.bd.deliverytiger.app.BuildConfig
+import com.bd.deliverytiger.app.interfaces.Session
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -19,6 +20,7 @@ class RetrofitSingleton private constructor() {
         @Volatile
         private var instance: Retrofit? = null
         private var okHttpClient: OkHttpClient? = null
+        private var session: Session? = null
 
         fun getInstance(@NonNull mContext: Context): Retrofit {
             return instance ?: synchronized(this) {
@@ -29,6 +31,10 @@ class RetrofitSingleton private constructor() {
                     //.addConverterFactory(ScalarsConverterFactory.create()) // Plain Text
                     .build().also { instance = it }
             }
+        }
+
+        fun addSessionListener(session: Session) {
+            this.session = session
         }
 
         private fun createOkHttpClient(context: Context): OkHttpClient {
@@ -58,7 +64,7 @@ class RetrofitSingleton private constructor() {
                     //this.level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.HEADERS  else HttpLoggingInterceptor.Level.NONE
                     this.level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY  else HttpLoggingInterceptor.Level.NONE
                 })
-                .addInterceptor(AuthInterceptor())
+                .addInterceptor(AuthInterceptor(session))
                 // connectionSpecs
                 //.connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS))
                 //.connectionSpecs(Collections.singletonList(customConnectionSpec))

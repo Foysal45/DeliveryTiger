@@ -51,6 +51,13 @@ object SessionManager {
         }
     }
 
+    fun clearSession() {
+        pref.edit {
+            clear()
+            commit()
+        }
+    }
+
     var accessToken: String
         get() {
             return pref.getString(Key_accessToken, "")!!
@@ -58,6 +65,17 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString(Key_accessToken, value)
+                commit()
+            }
+        }
+
+    var refreshToken: String
+        get() {
+            return pref.getString("refreshToken", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("refreshToken", value)
                 commit()
             }
         }
@@ -102,6 +120,17 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putFloat("returnCharge", value.toFloat())
+                commit()
+            }
+        }
+
+    var maxCodCharge: Double
+        get() {
+            return pref.getFloat("maxCodCharge", 0f).toDouble()
+        }
+        set(value) {
+            pref.edit {
+                putFloat("maxCodCharge", value.toFloat())
                 commit()
             }
         }
@@ -171,5 +200,16 @@ object SessionManager {
                 commit()
             }
         }
+    var versionName: String
+        get() {
+            return pref.getString("appVersionName", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("appVersionName", value)
+                commit()
+            }
+        }
+
 
 }

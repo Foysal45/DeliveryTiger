@@ -190,7 +190,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_logout -> {
 
-                SessionManager.isLogin = false
+                SessionManager.clearSession()
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
@@ -225,17 +225,17 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun addOrderFragment() {
 
-        /*val fragment = AddOrderFragmentOne.newInstance()
+        val fragment = AddOrderFragmentOne.newInstance()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
         ft.addToBackStack(AddOrderFragmentOne.tag)
-        ft.commit()*/
+        ft.commit()
 
-        val fragment = AddOrderFragmentTwo.newInstance(null)
+        /*val fragment = AddOrderFragmentTwo.newInstance(null)
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.mainActivityContainer, fragment, AddOrderFragmentTwo.tag)
         ft.addToBackStack(AddOrderFragmentTwo.tag)
-        ft.commit()
+        ft.commit()*/
     }
 
     private fun addFragment(fragment: Fragment){

@@ -27,7 +27,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
     private lateinit var bundle: Bundle
     private var payShipmentCharge: Double = 0.0
     private var payCODCharge: Double = 0.0
-    private var payBreakableCharge: Int = 0
+    private var payBreakableCharge: Double = 0.0
     private var payCollectionCharge: Double = 0.0
     private var payPackagingCharge: Double = 0.0
     private var codChargePercentage: Double = 0.0
@@ -58,7 +58,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
         with(bundle) {
             payShipmentCharge = getDouble("payShipmentCharge", 0.0)
             payCODCharge = getDouble("payCODCharge", 0.0)
-            payBreakableCharge = getInt("payBreakableCharge", 0)
+            payBreakableCharge = getDouble("payBreakableCharge", 0.0)
             payCollectionCharge = getDouble("payCollectionCharge", 0.0)
             payPackagingCharge = getDouble("payPackagingCharge", 0.0)
             codChargePercentage = getDouble("codChargePercentage", 0.0)

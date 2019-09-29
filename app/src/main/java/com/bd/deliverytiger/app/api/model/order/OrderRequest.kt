@@ -28,58 +28,31 @@ data class OrderRequest(
     @SerializedName("collectionName")
     var collectionName: String,
     @SerializedName("collectionAmount")
-    var collectionAmount: Int,
+    var collectionAmount: Double,
     @SerializedName("deliveryCharge")
-    var deliveryCharge: Int,
+    var deliveryCharge: Double,
     @SerializedName("merchantId")
     var merchantId: Int,
     @SerializedName("breakableCharge")
-    var breakableCharge: Int,
+    var breakableCharge: Double,
     @SerializedName("note")
     var note: String,
     @SerializedName("codCharge")
-    var codCharge: Int,
+    var codCharge: Double,
     @SerializedName("collectionCharge")
-    var collectionCharge: Int,
+    var collectionCharge: Double,
     @SerializedName("returnCharge")
-    var returnCharge: Int,
+    var returnCharge: Double,
     @SerializedName("packagingName")
     var packagingName: String,
     @SerializedName("packagingCharge")
-    var packagingCharge: Int,
+    var packagingCharge: Double,
     @SerializedName("collectAddress")
     var collectAddress: String,
-    @SerializedName("isActive")
-    var isActive: Boolean = true,
     @SerializedName("orderFrom")
     var orderFrom: String = "android",
-    //
-    @SerializedName("updatedBy")
-    var updatedBy: Int = 0,
-    @SerializedName("updatedOn")
-    var updatedOn: String = "",
-    @SerializedName("confirmationDate")
-    var confirmationDate: String = "",
-    @SerializedName("courierOrdersId")
-    var courierOrdersId: String = "",
-    @SerializedName("orderDate")
-    var orderDate: String = "",
-    @SerializedName("status")
-    var status: Int = 0,
-    @SerializedName("postedOn")
-    var postedOn: String = "",
-    @SerializedName("postedBy")
-    var postedBy: Int = 0,
-    @SerializedName("comment")
-    var comment: String = "",
-    @SerializedName("podNumber")
-    var podNumber: String = "",
-    @SerializedName("isConfirmedBy")
-    var isConfirmedBy: String = "",
-    @SerializedName("courierId")
-    var courierId: Int = 0,
-    @SerializedName("id")
-    var id: Int = 0,
-    @SerializedName("hubName")
-    var hubName: String = ""
+    @SerializedName("isActive")
+    var isActive: Boolean = true
+
+
 )

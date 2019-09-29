@@ -4,6 +4,7 @@ package com.bd.deliverytiger.app.ui.login
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +29,7 @@ import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 /**
  * A simple [Fragment] subclass.
@@ -112,6 +114,7 @@ class LoginFragment: Fragment() {
                     if (response.body()!!.model != null) {
 
                         SessionManager.createSession(response.body()!!.model)
+                        saveAppVersion()
                         goToHomeActivity()
                     }
                 }
@@ -139,6 +142,17 @@ class LoginFragment: Fragment() {
         return go
     }
 
+    private fun saveAppVersion() {
+        try {
+            val pInfo = context?.packageManager?.getPackageInfo(context?.packageName ?: "com.bd.deliverytiger.app", 0)
+            val version = pInfo?.versionName ?: "version"
+            SessionManager.versionName = version
+
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+
+    }
 
     private fun goToSignUp() {
 

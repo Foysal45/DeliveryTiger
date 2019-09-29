@@ -22,12 +22,10 @@ import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
 import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
+import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.ui.home.HomeActivity
-import com.bd.deliverytiger.app.utils.BundleFlag
-import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
-import com.bd.deliverytiger.app.utils.DigitConverter
-import com.bd.deliverytiger.app.utils.SessionManager
+import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButtonToggleGroup
 import retrofit2.Call
 import retrofit2.Callback
@@ -39,6 +37,7 @@ import retrofit2.Response
  */
 class AddOrderFragmentTwo : Fragment() {
 
+    private val logTag = "AddOrderFragmentLog"
     private lateinit var productNameET: EditText
     private lateinit var collectionAmountET: EditText
     private lateinit var spinnerWeight: AppCompatSpinner
@@ -62,7 +61,7 @@ class AddOrderFragmentTwo : Fragment() {
 
     private var codChargePercentage: Double = 0.0
     private var codChargeMin: Int = 0
-    private var breakableChargeApi: Int = 0
+    private var breakableChargeApi: Double = 0.0
 
     private var isCollection: Boolean = false
     private var isBreakable: Boolean = false
@@ -72,7 +71,7 @@ class AddOrderFragmentTwo : Fragment() {
     private var payCollectionAmount: Double = 0.0
     private var payShipmentCharge: Double = 0.0
     private var payCODCharge: Double = 0.0
-    private var payBreakableCharge: Int = 0
+    private var payBreakableCharge: Double = 0.0
     private var payCollectionCharge: Double = 0.0
     private var payPackagingCharge: Double = 0.0
 
@@ -86,8 +85,8 @@ class AddOrderFragmentTwo : Fragment() {
     private var areaId: Int = 0
     private var address: String = ""
     private var addressNote: String = ""
-    private var paymentType: String = ""
-    private var orderType: String = ""
+    private var deliveryType: String = ""
+    private var orderType: String = "Only Delivery" // Only Delivery  Delivery Taka Collection
     private var weight: String = ""
     private var collectionName: String = ""
     private var packingName: String = ""
@@ -153,6 +152,7 @@ class AddOrderFragmentTwo : Fragment() {
         deliveryTypeAdapter.onItemClick = { position, model ->
 
             payShipmentCharge = model.chargeAmount
+            deliveryType = "${model.deliveryType} ${model.days}"
             calculateTotalPrice()
         }
 
@@ -163,10 +163,13 @@ class AddOrderFragmentTwo : Fragment() {
                     R.id.toggle_button_1 -> {
                         collectionAmountET.visibility = View.GONE
                         isCollection = false
+                        orderType = "Only Delivery"
                     }
                     R.id.toggle_button_2 -> {
                         collectionAmountET.visibility = View.VISIBLE
                         isCollection = true
+                        orderType = "Delivery Taka Collection"
+                        calculateTotalPrice()
                     }
                 }
             }
@@ -195,7 +198,7 @@ class AddOrderFragmentTwo : Fragment() {
             with(bundle) {
                 putDouble("payShipmentCharge", payShipmentCharge)
                 putDouble("payCODCharge", payCODCharge)
-                putInt("payBreakableCharge", payBreakableCharge)
+                putDouble("payBreakableCharge", payBreakableCharge)
                 putDouble("payCollectionCharge", payCollectionCharge)
                 putDouble("payPackagingCharge", payPackagingCharge)
                 putDouble("codChargePercentage", codChargePercentage)
@@ -262,6 +265,7 @@ class AddOrderFragmentTwo : Fragment() {
                             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                                 if (p2 != 0) {
                                     val model2 = packagingDataList[p2 - 1]
+                                    packingName = model2.packagingName
                                     payPackagingCharge = model2.packagingCharge
                                     isPackagingSelected = true
                                     calculateTotalPrice()
@@ -311,6 +315,7 @@ class AddOrderFragmentTwo : Fragment() {
                                 if (p2 != 0) {
 
                                     val model2 = model[p2 - 1]
+                                    weight = model2.weight
                                     deliveryTypeAdapter.clearSelectedItemPosition()
                                     deliveryTypeList.clear()
                                     deliveryTypeList.addAll(model2.weightRangeWiseData)
@@ -335,7 +340,13 @@ class AddOrderFragmentTwo : Fragment() {
 
         // Total = Shipment + cod + breakable + collection + packaging
         payCollectionCharge = SessionManager.collectionCharge
-        payCODCharge = payCollectionAmount * codChargePercentage
+        payCODCharge = (payCollectionAmount/100.0) * codChargePercentage
+        if (payCODCharge < codChargeMin){
+            payCODCharge = codChargeMin.toDouble()
+        }
+        if (payCODCharge > SessionManager.maxCodCharge){
+            payCODCharge = SessionManager.maxCodCharge
+        }
         var total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge
         if (isBreakable) {
             total += breakableChargeApi
@@ -355,18 +366,24 @@ class AddOrderFragmentTwo : Fragment() {
 
         val requestBody = OrderRequest(
             customerName,mobileNumber,altMobileNumber,address,districtId,thanaId,areaId,
-            "","","",collectionName,
-            payCollectionAmount.toInt(), payShipmentCharge.toInt(),SessionManager.courierUserId,
-            payBreakableCharge, addressNote, payCODCharge.toInt(), payCollectionCharge.toInt(), SessionManager.returnCharge.toInt(),"",
-            payPackagingCharge.toInt(), address)
+            deliveryType,orderType,weight,collectionName,
+            payCollectionAmount, payShipmentCharge,SessionManager.courierUserId,
+            payBreakableCharge, addressNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge,packingName,
+            payPackagingCharge, address, "android-${SessionManager.versionName}")
 
-        placeOrderInterface.placeOrder(requestBody).enqueue(object : Callback<GenericResponse<OrderRequest>> {
-            override fun onFailure(call: Call<GenericResponse<OrderRequest>>, t: Throwable) {
+        placeOrderInterface.placeOrder(requestBody).enqueue(object : Callback<GenericResponse<OrderResponse>> {
+            override fun onFailure(call: Call<GenericResponse<OrderResponse>>, t: Throwable) {
 
             }
 
-            override fun onResponse(call: Call<GenericResponse<OrderRequest>>, response: Response<GenericResponse<OrderRequest>>) {
+            override fun onResponse(call: Call<GenericResponse<OrderResponse>>, response: Response<GenericResponse<OrderResponse>>) {
 
+                if (response.isSuccessful && response.body() != null){
+                    if (response.body()!!.model != null){
+                        Timber.d(logTag, "Order placed \n ${response.body()!!.model}")
+                        context?.showToast("Oder ID: ${response.body()!!.model.courierOrdersId}")
+                    }
+                }
             }
 
         })
