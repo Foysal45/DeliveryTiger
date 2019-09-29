@@ -17,7 +17,6 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
-        tools:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -25,6 +24,19 @@
         app:headerLayout="@layout/nav_header_home"
         app:menu="@menu/activity_home_drawer" />
 
-
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view_2"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:fitsSystemWindows="true"
+        android:layout_marginTop="16dp"
+        >
+        <FrameLayout
+            android:id="@+id/container_drawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

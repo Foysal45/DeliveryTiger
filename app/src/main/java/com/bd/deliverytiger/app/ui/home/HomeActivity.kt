@@ -33,6 +33,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var toolbar: Toolbar
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
+    private lateinit var navViewRight: NavigationView
     private lateinit var addProductIV: ImageView
     private lateinit var toolbarTitleTV: TextView
 
@@ -48,6 +49,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
+        navViewRight = findViewById(R.id.nav_view_2)
         addProductIV = findViewById(R.id.home_toolbar_add)
         toolbarTitleTV = findViewById(R.id.home_toolbar_title)
         navView.setNavigationItemSelectedListener(this)
@@ -65,6 +67,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, navViewRight)
         drawerListener()
         onBackStackChangeListener()
 
@@ -88,8 +91,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onBackPressed() {
 
         when {
-            drawerLayout.isDrawerOpen(GravityCompat.START) -> {
-                drawerLayout.closeDrawer(GravityCompat.START)
+            drawerLayout.isDrawerOpen(GravityCompat.START) || drawerLayout.isDrawerOpen(GravityCompat.END)-> {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                }
+                if (drawerLayout.isDrawerOpen(GravityCompat.END)){
+                    drawerLayout.closeDrawer(GravityCompat.END)
+                }
             }
             supportFragmentManager.backStackEntryCount > 0 -> {
                 supportFragmentManager.popBackStack()
@@ -162,31 +170,79 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
     }
 
+    fun openRightDrawer(){
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        drawerLayout.openDrawer(GravityCompat.END)
+    }
+
     private fun manageNavigationItemSelection(id: Int) {
         when (id) {
             R.id.nav_orders -> {
 
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is BillingofServiceFragment){
+                    Timber.d("tag", "Fragment already exist")
+                } else {
+
+                }
             }
             R.id.nav_bill -> {
 
-                addFragment(BillingofServiceFragment.newInstance())
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is BillingofServiceFragment){
+                    Timber.d("tag", "Fragment already exist")
+                } else {
+                    addFragment(BillingofServiceFragment.newInstance())
+                }
             }
             R.id.nav_cod_collection -> {
 
-                addFragment(CODCollectionFragment.newInstance())
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is CODCollectionFragment){
+                    Timber.d("tag", "Fragment already exist")
+                } else {
+                    addFragment(CODCollectionFragment.newInstance())
+                }
+
             }
             R.id.nav_order_tracking -> {
 
-                addFragment(OrderTrackingFragment.newInstance(""))
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is OrderTrackingFragment){
+                    Timber.d("tag", "Fragment already exist")
+                } else {
+                    addFragment(OrderTrackingFragment.newInstance(""))
+                }
+
             }
             R.id.nav_report -> {
 
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is BillingofServiceFragment){
+                    Timber.d("tag", "Fragment already exist")
+                } else {
+
+                }
             }
             R.id.nav_shipment_change -> {
 
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is BillingofServiceFragment){
+                    Timber.d("tag", "Fragment already exist")
+                } else {
+
+                }
             }
             R.id.nav_features -> {
-                addFragment(DTFeaturesFragment.newInstance())
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is DTFeaturesFragment){
+                    Timber.d("tag", "Fragment already exist")
+                } else {
+                    addFragment(DTFeaturesFragment.newInstance())
+                }
+
             }
             R.id.nav_logout -> {
 
@@ -227,7 +283,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val fragment = AddOrderFragmentOne.newInstance()
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
+        ft.add(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
         ft.addToBackStack(AddOrderFragmentOne.tag)
         ft.commit()
 

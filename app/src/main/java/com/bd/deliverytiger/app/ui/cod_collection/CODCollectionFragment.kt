@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
+import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.utils.DigitConverter
@@ -48,6 +50,7 @@ class CODCollectionFragment : Fragment() {
     private lateinit var codCollectionAdapter: CODCollectionAdapter
     private lateinit var codCollectionInterface: CODCollectionInterface
     private lateinit var codProgressBar: ProgressBar
+    private lateinit var filterLayout: LinearLayout
     private var isLoading = false
     private var totalLoadedData = 0
     private var layoutPosition = 0
@@ -71,6 +74,7 @@ class CODCollectionFragment : Fragment() {
         (activity as HomeActivity).setToolbarTitle("COD কালেকশন")
         rvCODCollection = view.findViewById(R.id.rvCODCollection)
         codProgressBar = view.findViewById(R.id.codProgressBar)
+        filterLayout = view.findViewById(R.id.codFilterLay)
         tvTotalOrder = view.findViewById(R.id.tvTotalOrder)
 
         courierOrderViewModelList = ArrayList()
@@ -106,6 +110,9 @@ class CODCollectionFragment : Fragment() {
             }
         })
 
+        filterLayout.setOnClickListener {
+            goToFilter()
+        }
 
     }
 
@@ -181,6 +188,33 @@ class CODCollectionFragment : Fragment() {
         ft?.add(R.id.mainActivityContainer, fragment, OrderTrackingFragment.tag)
         ft?.addToBackStack(OrderTrackingFragment.tag)
         ft?.commit()
+    }
+
+    private fun goToFilter(){
+
+        activity?.let {
+            (activity as HomeActivity).openRightDrawer()
+        }
+
+        val fragment = FilterFragment.newInstance()
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.container_drawer, fragment, FilterFragment.tag)
+        ft?.addToBackStack(FilterFragment.tag)
+        ft?.commit()
+
+        fragment.setFilterListener(object : FilterFragment.FilterListener{
+            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int) {
+                fromDate = fromDate1
+                toDate = toDate1
+                status = -1
+
+                courierOrderViewModelList?.clear()
+                codCollectionAdapter.notifyDataSetChanged()
+                getAllCODCollection(0,20)
+
+                activity?.onBackPressed()
+            }
+        })
     }
 
 }
