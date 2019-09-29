@@ -1,7 +1,6 @@
 package com.bd.deliverytiger.app.ui.cod_collection
 
 
-import android.app.SearchManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,23 +17,13 @@ import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
-import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.home.HomeActivity
-import com.bd.deliverytiger.app.ui.login.ResetPasswordFragment
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
-import com.bd.deliverytiger.app.utils.VariousTask
-import com.bd.deliverytiger.app.utils.VariousTask.getCurrentDateTime
-import com.bd.deliverytiger.app.utils.VariousTask.getPreviousDateTime
-import com.bd.deliverytiger.app.utils.VariousTask.showShortToast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -61,9 +50,10 @@ class CODCollectionFragment : Fragment() {
     private var layoutPosition = 0
     private var totalCount = 0
     private var courierOrderViewModelList: ArrayList<CourierOrderViewModel?>? = null
-    private var fromDate = ""
-    private var toDate = ""
-    private var status = 0
+    private var fromDate = "01-01-01"
+    private var toDate = "01-01-01"
+    private var status = -1
+    private var isMoreDataAvailable = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,10 +70,10 @@ class CODCollectionFragment : Fragment() {
         codProgressBar = view.findViewById(R.id.codProgressBar)
 
         courierOrderViewModelList = ArrayList()
-        fromDate = getCurrentDateTime().toString()
-        toDate = getPreviousDateTime(-1).toString()
+        // fromDate = getCurrentDateTime().toString()
+        // toDate = getPreviousDateTime(-1).toString()
 
-        Timber.e("CurrentDateTime", fromDate +"@"+toDate)
+        Timber.e("CurrentDateTime", fromDate + "@" + toDate)
 
         codCollectionInterface =
             RetrofitSingleton.getInstance(context!!).create(CODCollectionInterface::class.java)
@@ -99,15 +89,15 @@ class CODCollectionFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
                 layoutPosition = linearLayoutManager.findLastVisibleItemPosition()
                 Timber.e(
-                    "layoutPosition",
-                    layoutPosition.toString() + " " + totalLoadedData + " " + isLoading + " " + totalCount
+                    "layoutPosition", layoutPosition.toString() + " " + totalLoadedData + " " + isLoading + " " + totalCount
                 )
-                if (layoutPosition >= (totalLoadedData - 2) && !isLoading && layoutPosition < totalCount) {
-                    getAllCODCollection(totalLoadedData, 20)
-                    Timber.e(
-                        "layoutPosition loadMoreCalled ",
-                        layoutPosition.toString() + " " + totalLoadedData + " " + isLoading + " " + totalCount
-                    )
+                if (dy > 0) {
+                    if (layoutPosition >= (totalLoadedData - 2) && !isLoading && layoutPosition < totalCount && isMoreDataAvailable) {
+                        getAllCODCollection(totalLoadedData, 20)
+                        Timber.e("layoutPosition loadMoreCalled ",
+                            layoutPosition.toString() + " " + totalLoadedData + " " + isLoading + " " + totalCount
+                        )
+                    }
                 }
             }
         })
@@ -115,8 +105,8 @@ class CODCollectionFragment : Fragment() {
 
     }
 
-    private fun manageAdapter(){
-        codCollectionAdapter = CODCollectionAdapter(context!!,courierOrderViewModelList)
+    private fun manageAdapter() {
+        codCollectionAdapter = CODCollectionAdapter(context!!, courierOrderViewModelList)
         rvCODCollection.apply {
             layoutManager = linearLayoutManager
             adapter = codCollectionAdapter
@@ -147,7 +137,7 @@ class CODCollectionFragment : Fragment() {
                 ) {
                     isLoading = false
                     Timber.e("getAllCODCollectionResponse", " f " + t.toString())
-                    if(codProgressBar.visibility == View.VISIBLE){
+                    if (codProgressBar.visibility == View.VISIBLE) {
                         codProgressBar.visibility = View.GONE
                     }
 
@@ -157,7 +147,7 @@ class CODCollectionFragment : Fragment() {
                     call: Call<GenericResponse<CODResponse>>,
                     response: Response<GenericResponse<CODResponse>>
                 ) {
-                    if(codProgressBar.visibility == View.VISIBLE){
+                    if (codProgressBar.visibility == View.VISIBLE) {
                         codProgressBar.visibility = View.GONE
                     }
                     isLoading = false
@@ -166,6 +156,7 @@ class CODCollectionFragment : Fragment() {
                         totalLoadedData = courierOrderViewModelList!!.size
                         totalCount = response.body()!!.model.totalCount!!.toInt()
                         codCollectionAdapter.notifyDataSetChanged()
+                        isMoreDataAvailable = response.body()!!.model.courierOrderViewModel!!.size >= count-2
                         Timber.e("getAllCODCollectionResponse", " s " + response.body().toString())
                     } else {
                         Timber.e("getAllCODCollectionResponse", " s null")
@@ -175,10 +166,10 @@ class CODCollectionFragment : Fragment() {
             })
     }
 
-    private fun addOrderTrackFragment(){
+    private fun addOrderTrackFragment() {
         val fragment = OrderTrackingFragment.newInstance(0)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.mainActivityContainer, fragment, OrderTrackingFragment.tag)
+        ft?.add(R.id.mainActivityContainer, fragment, OrderTrackingFragment.tag)
         ft?.addToBackStack(OrderTrackingFragment.tag)
         ft?.commit()
     }

@@ -65,9 +65,11 @@ class BillingofServiceFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
                 layoutPosition = linearLayoutManager.findLastVisibleItemPosition()
                 Timber.e("layoutPosition",layoutPosition.toString()+" "+totalLoadedData+" "+isLoading+" "+totalCount)
-                if(layoutPosition >= totalLoadedData && !isLoading && layoutPosition < totalCount) {
-                   // getAllCODCollection(0,0)
-                    Timber.e("layoutPosition loadMoreCalled ",layoutPosition.toString()+" "+totalLoadedData+" "+isLoading+" "+totalCount)
+                if (dy > 0) {
+                    if(layoutPosition >= totalLoadedData && !isLoading && layoutPosition < totalCount) {
+                       // getAllCODCollection(0,0)
+                        Timber.e("layoutPosition loadMoreCalled ",layoutPosition.toString()+" "+totalLoadedData+" "+isLoading+" "+totalCount)
+                    }
                 }
             }
         })
