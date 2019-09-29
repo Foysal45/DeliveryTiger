@@ -1,12 +1,14 @@
 package com.bd.deliverytiger.app.api.`interface`
 
-import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
+import com.bd.deliverytiger.app.api.model.GenericResponse
+import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
+import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.Body
+import retrofit2.http.POST
 
 interface CODCollectionInterface {
-    @GET("/api/Other/GetAllDistrictFromApi/{id}")
-    fun getAllCODCollection(@Path("id") id: Int): Call<DeliveryChargePayLoad>
+    @POST("api/Fetch/LoadCourierOrder")
+    fun getAllCODCollection(@Body body: CODReqBody): Call<GenericResponse<CODResponse>>
 
 }

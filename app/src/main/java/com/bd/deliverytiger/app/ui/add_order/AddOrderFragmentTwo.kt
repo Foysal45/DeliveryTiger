@@ -142,7 +142,6 @@ class AddOrderFragmentTwo : Fragment() {
         getDeliveryCharge()
 
 
-
         deliveryTypeAdapter = DeliveryTypeAdapter(context!!, deliveryTypeList)
         with(deliveryTypeRV) {
             setHasFixedSize(true)

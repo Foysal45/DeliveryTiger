@@ -18,11 +18,13 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/fab_margin"
             android:text="1"
+            android:id="@+id/tvCodItemCount"
             android:textColor="@color/black"
 
             android:textSize="@dimen/text_14" />
 
         <LinearLayout
+            android:id="@+id/codOrderInfoLay"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -33,6 +35,7 @@
             android:textSize="@dimen/text_14">
 
             <TextView
+                android:id="@+id/tvCodOrderId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/cod_search"
@@ -42,6 +45,7 @@
                 android:textSize="@dimen/text_14" />
 
             <TextView
+                android:id="@+id/tvCodOrderDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Sep 25, 2019"
@@ -51,6 +55,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tvCodCollectionAmount"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -60,6 +65,7 @@
             android:textSize="@dimen/text_14" />
 
         <TextView
+            android:id="@+id/tvCodPaymentStatus"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

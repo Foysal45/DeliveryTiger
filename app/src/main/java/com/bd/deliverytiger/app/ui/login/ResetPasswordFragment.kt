@@ -23,8 +23,8 @@ import com.bd.deliverytiger.app.api.model.login.SignUpReqBody
 import com.bd.deliverytiger.app.api.model.login.SignUpResponse
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
-import com.bd.deliverytiger.app.utils.Validator.editTextEnableOrDisable
-import com.bd.deliverytiger.app.utils.Validator.hideSoftKeyBoard
+import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
+import com.bd.deliverytiger.app.utils.VariousTask.showShortToast
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -73,7 +73,7 @@ class ResetPasswordFragment : Fragment(), View.OnClickListener {
         when (p0) {
             btnReset -> {
                 if (!Validator.isValidMobileNumber(etResetMobileNo.text.toString()) || etResetMobileNo.text.toString().length < 11) {
-                    Validator.showShortToast(context, getString(R.string.write_proper_phone_number_recharge))
+                    showShortToast(context, getString(R.string.write_proper_phone_number_recharge))
                     hideSoftKeyBoard(activity!!)
                     etResetMobileNo.requestFocus()
                 } else {
@@ -114,11 +114,11 @@ class ResetPasswordFragment : Fragment(), View.OnClickListener {
                 progressDialog.hide()
                 if (response.isSuccessful && response.body() != null) {
                     Timber.e("userUserRegister", response.body().toString())
-                    Validator.showShortToast(context, getString(R.string.success_in_signin))
+                    showShortToast(context, getString(R.string.success_in_signin))
                     addLoginFragment(true)
                 } else {
                     if (response.body() != null) {
-                        Validator.showShortToast(context, response.body()!!.errorMessage)
+                        showShortToast(context, response.body()!!.errorMessage)
                     }
                     Timber.e("userUserRegister", "null")
                 }

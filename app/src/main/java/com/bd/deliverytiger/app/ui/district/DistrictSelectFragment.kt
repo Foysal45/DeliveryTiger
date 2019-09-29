@@ -18,8 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
 import com.bd.deliverytiger.app.utils.Timber
-import com.bd.deliverytiger.app.utils.Validator.hideSoftKeyBoard
-
+import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

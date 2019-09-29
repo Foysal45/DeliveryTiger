@@ -39,42 +39,4 @@ object Validator {
         return matcher.find()
     }
 
-
-    // show toast method
-    fun showLongToast(context: Context?, message: String) {
-        if (context != null) {
-            val toast = Toast.makeText(context, message, Toast.LENGTH_SHORT)
-            //toast.setGravity(Gravity.BOTTOM, 0, 0)
-            toast.show()
-        }
-    }
-
-    // show short toast method
-    fun showShortToast(context: Context?, message: String) {
-        if (context != null) {
-            val toast = Toast.makeText(context, message, Toast.LENGTH_LONG)
-            //toast.setGravity(Gravity.BOTTOM, 0, 0)
-            toast.show()
-        }
-    }
-
-    // clear focus if payment lay blinking
-    fun editTextEnableOrDisable(et: EditText) {
-        et.isSelected = false
-        et.isFocusable = false
-        et.isFocusableInTouchMode = true
-    }
-
-    fun hideSoftKeyBoard(activity: Activity) {
-        try {  // hide keyboard if its open
-            val inputMethodManager = activity!!.getSystemService(
-                Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(
-                activity!!.currentFocus!!.windowToken, 0)
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
 }

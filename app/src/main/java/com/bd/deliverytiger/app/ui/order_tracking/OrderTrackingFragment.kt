@@ -12,12 +12,15 @@ import com.bd.deliverytiger.app.R
 class OrderTrackingFragment : Fragment() {
 
     companion object{
-        fun newInstance(): OrderTrackingFragment {
+        fun newInstance(orderID: Int): OrderTrackingFragment {
             val fragment = OrderTrackingFragment()
+            fragment.orderID = orderID
             return fragment
         }
         val tag = OrderTrackingFragment::class.java.name
     }
+
+    private var orderID = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

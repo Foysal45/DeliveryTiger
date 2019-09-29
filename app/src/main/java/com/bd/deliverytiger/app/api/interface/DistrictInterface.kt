@@ -6,6 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface DistrictInterface {
-    @GET("/api/Other/GetAllDistrictFromApi/{id}")
+    @GET("api/Other/GetAllDistrictFromApi/{id}")
     fun getAllDistrictFromApi(@Path("id") id: Int): Call<DeliveryChargePayLoad>
 }

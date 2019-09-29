@@ -24,7 +24,7 @@ import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
-import com.bd.deliverytiger.app.utils.Validator.hideSoftKeyBoard
+import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback

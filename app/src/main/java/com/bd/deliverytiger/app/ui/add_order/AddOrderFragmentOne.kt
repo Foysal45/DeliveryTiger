@@ -29,8 +29,8 @@ import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.BundleFlag
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
-import com.bd.deliverytiger.app.utils.Validator.hideSoftKeyBoard
-import com.bd.deliverytiger.app.utils.Validator.showShortToast
+import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
+import com.bd.deliverytiger.app.utils.VariousTask.showShortToast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -162,11 +162,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             showShortToast(context, getString(R.string.write_proper_phone_number_recharge))
             go = false
             etAddOrderMobileNo.requestFocus()
-        } else if(alternativeMobileNo.isEmpty()){
+        }/* else if(alternativeMobileNo.isEmpty()){
             go = false
             showShortToast(context!!, getString(R.string.write_alt_phone_number))
             etAlternativeMobileNo.requestFocus()
-        }
+        }*/
         else if(district == 0){
             go = false
             showShortToast(context!!, getString(R.string.select_dist))
