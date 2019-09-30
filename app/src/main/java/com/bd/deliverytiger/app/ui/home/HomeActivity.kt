@@ -18,6 +18,7 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentTwo
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
+import com.bd.deliverytiger.app.ui.charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.features.DTFeaturesFragment
@@ -229,10 +230,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_shipment_change -> {
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-                if (currentFragment is BillingofServiceFragment){
+                if (currentFragment is ShipmentChargeFragment){
                     Timber.d("tag", "Fragment already exist")
                 } else {
-
+                    addFragment(ShipmentChargeFragment.newInstance())
                 }
             }
             R.id.nav_features -> {

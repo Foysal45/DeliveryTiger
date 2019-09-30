@@ -253,8 +253,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         val distFrag = DistrictSelectFragment.newInstance(mContext, districtList)
         val ft = activity?.supportFragmentManager?.beginTransaction()
         ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
-        ft?.add(R.id.mainActivityContainer, distFrag, tag)
-        ft?.addToBackStack("DistrictSelectFragment")
+        ft?.add(R.id.mainActivityContainer, distFrag, DistrictSelectFragment.tag)
+        ft?.addToBackStack(DistrictSelectFragment.tag)
         ft?.commit()
 
         distFrag.setOnClick(object : DistrictSelectFragment.DistrictClick {

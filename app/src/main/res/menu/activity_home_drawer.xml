@@ -1,42 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="none">
 
+        <item
+            android:id="@+id/nav_dashboard"
+            android:icon="@drawable/ic_dashboard"
+            android:title="ড্যাশবোর্ড" />
         <item
             android:id="@+id/nav_orders"
             android:icon="@drawable/ic_list"
-            android:title="Orders" />
+            android:title="সব অর্ডার" />
         <item
             android:id="@+id/nav_bill"
             android:icon="@drawable/ic_wallet"
-            android:title="Billing for Service" />
+            android:title="সার্ভিসের বিল" />
         <item
             android:id="@+id/nav_cod_collection"
             android:icon="@drawable/ic_handout"
-            android:title="COD Collection" />
+            android:title="COD কালেকশন" />
         <item
             android:id="@+id/nav_order_tracking"
             android:icon="@drawable/ic_package"
-            android:title="Order Tracking" />
+            android:title="অর্ডার ট্র্যাকিং" />
         <item
             android:id="@+id/nav_report"
             android:icon="@drawable/ic_analytics"
-            android:title="Report" />
+            android:title="Report"
+            android:visible="false"
+            />
         <item
             android:id="@+id/nav_shipment_change"
             android:icon="@drawable/ic_payment"
-            android:title="Shipment Charge" />
+            android:title="শিপমেন্ট চার্জ" />
         <item
             android:id="@+id/nav_features"
             android:icon="@drawable/ic_gift"
-            android:title="DT Features" />
+            android:title="DT ফিচারস" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout"
-            android:title="Logout" />
+            android:title="লগ আউট" />
     </group>
 
 

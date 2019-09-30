@@ -46,6 +46,7 @@ class DistrictSelectFragment : Fragment() {
                 this.districtList = districtList
                 this.mContext = context
             }
+        val tag = DistrictSelectFragment::class.java.name
     }
 
     private lateinit var rvSelectDistrict: RecyclerView
