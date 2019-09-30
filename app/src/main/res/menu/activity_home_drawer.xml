@@ -21,7 +21,7 @@
             android:title="COD কালেকশন" />
         <item
             android:id="@+id/nav_order_tracking"
-            android:icon="@drawable/ic_package"
+            android:icon="@drawable/ic_tracking"
             android:title="অর্ডার ট্র্যাকিং" />
         <item
             android:id="@+id/nav_report"
