@@ -103,6 +103,7 @@ class OrderTrackingFragment : Fragment() {
     private fun getOrderTrackingList(orderId: String, flag: String) {
         VariousTask.hideSoftKeyBoard(activity!!)
         rvOrderTrackProgress.visibility = View.VISIBLE
+        rvOrderTrack.visibility = View.GONE
         val orderTrackReqBody = OrderTrackReqBody(orderId)
         orderTrackInterface.getOrderTrackingList(flag, orderTrackReqBody)
             .enqueue(object : Callback<GenericResponse<List<OrderTrackMainResponse>>> {
@@ -119,9 +120,9 @@ class OrderTrackingFragment : Fragment() {
                     response: Response<GenericResponse<List<OrderTrackMainResponse>>>
                 ) {
                     rvOrderTrackProgress.visibility = View.GONE
-                    rvOrderTrack.visibility = View.VISIBLE
                     if (response.isSuccessful && response.body() != null && response.body()!!.model.isNotEmpty()) {
                         orderTrackStatusList.clear()
+                        rvOrderTrack.visibility = View.VISIBLE
                         orderTrackStatusList.addAll(response.body()!!.model)
                         orderTrackingAdapter.notifyDataSetChanged()
                         // rvOrderTrack.scrollToPosition(5)
