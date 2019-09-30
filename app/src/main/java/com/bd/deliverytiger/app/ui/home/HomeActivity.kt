@@ -324,10 +324,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         openRightDrawer()
 
         Handler().postDelayed({
-            val fragment = NotificationFragment.newInstance()
-            val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
-            ft.replace(R.id.container_drawer, fragment, NotificationFragment.tag)
-            ft.commit()
+
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.container_drawer)
+            if (currentFragment is NotificationFragment){
+                Timber.d("tag", "NotificationFragment already exist")
+            } else{
+                val fragment = NotificationFragment.newInstance()
+                val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
+                ft.replace(R.id.container_drawer, fragment, NotificationFragment.tag)
+                ft.commit()
+            }
         },300L)
 
     }

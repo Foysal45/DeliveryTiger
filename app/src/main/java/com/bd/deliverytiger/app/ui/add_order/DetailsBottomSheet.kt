@@ -64,7 +64,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
             codChargePercentage = getDouble("codChargePercentage", 0.0)
         }
 
-        codPercentTV.text = "COD Charge ($codChargePercentage%) :"
+        codPercentTV.text = "COD চার্জ (${DigitConverter.toBanglaDigit(codChargePercentage, false)}):"
 
         shipmentTV.text = "৳ ${DigitConverter.toBanglaDigit(payShipmentCharge, true)}"
         codChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payCODCharge, true)}"

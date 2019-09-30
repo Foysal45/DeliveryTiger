@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
@@ -48,7 +47,7 @@ class HomeFragment : Fragment() {
         btnAddOrder = view.findViewById(R.id.btnAddOrder)
         ivSurpriseBtn = view.findViewById(R.id.ivSurpriseBtn)
 
-        (activity as HomeActivity).setToolbarTitle("Delivery Tiger")
+        (activity as HomeActivity).setToolbarTitle("ডেলিভারি টাইগার")
     }
 
     override fun onStart() {

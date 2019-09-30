@@ -3,6 +3,9 @@ package com.bd.deliverytiger.app.ui.add_order
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,6 +57,8 @@ class AddOrderFragmentTwo : Fragment() {
 
     private lateinit var placeOrderInterface: PlaceOrderInterface
     private lateinit var deliveryTypeAdapter: DeliveryTypeAdapter
+    private var handler: Handler = Handler()
+    private var runnable: Runnable = Runnable {  }
 
     // API variable
     private val packagingDataList: MutableList<PackagingData> = mutableListOf()
@@ -155,6 +160,24 @@ class AddOrderFragmentTwo : Fragment() {
             calculateTotalPrice()
         }
 
+        collectionAmountET.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                handler.removeCallbacks(runnable)
+                runnable = Runnable {
+                    calculateTotalPrice()
+                    Timber.d(logTag, "$p0")
+                }
+                handler.postDelayed(runnable, 400L)
+            }
+
+        })
 
         toggleButtonGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked) {
@@ -338,7 +361,20 @@ class AddOrderFragmentTwo : Fragment() {
     private fun calculateTotalPrice() {
 
         // Total = Shipment + cod + breakable + collection + packaging
+        if (isCollection) {
+            val collectionAmount = collectionAmountET.text.toString()
+            if (collectionAmount.isNotEmpty()) {
+                try {
+                    payCollectionAmount = collectionAmount.toDouble()
+                } catch (e: NumberFormatException) {
+                    e.printStackTrace()
+                }
+            }
+        } else {
+            payCollectionAmount = 0.0
+        }
         payCollectionCharge = SessionManager.collectionCharge
+        val payReturnCharge = SessionManager.returnCharge
         payCODCharge = (payCollectionAmount/100.0) * codChargePercentage
         if (payCODCharge < codChargeMin){
             payCODCharge = codChargeMin.toDouble()
@@ -354,7 +390,7 @@ class AddOrderFragmentTwo : Fragment() {
             payBreakableCharge = breakableChargeApi
         }
 
-        totalTV.text = DigitConverter.toBanglaDigit("৳$total", true)
+        totalTV.text = DigitConverter.toBanglaDigit("৳ $total", true)
 
     }
 
