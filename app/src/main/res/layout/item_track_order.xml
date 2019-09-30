@@ -44,7 +44,6 @@
             />
         <TextView
             android:id="@+id/orderTrackDate"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="9 April, 2019"

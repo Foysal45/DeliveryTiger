@@ -73,6 +73,7 @@
         android:visibility="gone"
         android:layout_gravity="top"
         tools:visibility="visible"
+        android:paddingBottom="@dimen/fab_margin"
         tools:listitem="@layout/item_track_order"
         android:paddingStart="@dimen/left_right_margin"
         android:paddingEnd="@dimen/left_right_margin"

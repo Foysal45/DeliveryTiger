@@ -31,7 +31,7 @@
                 android:id="@+id/tvCustomerDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No order yet!"
+                android:text="কোন অর্ডার নেই !"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_16"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -39,7 +39,8 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:text="Add order"
+                android:text="নতুন অর্ডার"
+                android:minWidth="135dp"
                 android:id="@+id/btnAddOrder"
                 android:backgroundTint="@color/green_color"
                 app:layout_constraintTop_toTopOf="parent"

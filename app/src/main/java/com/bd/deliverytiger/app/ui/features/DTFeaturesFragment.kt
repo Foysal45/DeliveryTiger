@@ -37,7 +37,7 @@ class DTFeaturesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as HomeActivity).setToolbarTitle("Features")
+        (activity as HomeActivity).setToolbarTitle("ফিচারস")
 
         rvFeathers = view.findViewById(R.id.rvFeathers)
 
