@@ -35,7 +35,8 @@ class CODCollectionAdapter(
     override fun onBindViewHolder(holder: myViewHolder, position: Int) {
 
         formattedDate =
-            DigitConverter.toBanglaDate(courierOrderViewModelList?.get(position)?.courierOrderDateDetails?.confirmationDate.toString())
+            DigitConverter.toBanglaDate(courierOrderViewModelList?.get(position)?.courierOrderDateDetails?.confirmationDate.toString(),
+                "dd-MM-yyyy HH:mm:ss")
 
         holder.tvCodItemCount.text = DigitConverter.toBanglaDigit(position + 1)
         holder.tvCodOrderId.text =

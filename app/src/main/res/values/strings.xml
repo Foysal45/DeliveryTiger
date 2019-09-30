@@ -29,6 +29,10 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <string name="give_order_id">অর্ডার আইডি লিখুন</string>
+    <string name="give_right_order_id">সঠিক অর্ডার আইডি লিখুন</string>
+
+
     <string-array name="features_list">
         <item>৬৪ জেলা শহর ও ৪৯২ উপজেলায় মাত্র ২৫ টাকায় ডেলিভারি</item>
         <item>COD চার্জ মাত্র ১.৫%</item>

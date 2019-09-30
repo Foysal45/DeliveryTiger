@@ -198,7 +198,7 @@ class CODCollectionFragment : Fragment() {
 
         val fragment = FilterFragment.newInstance()
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container_drawer, fragment, FilterFragment.tag)
+        ft?.add(R.id.container_drawer, fragment, FilterFragment.tag)
         ft?.addToBackStack(FilterFragment.tag)
         ft?.commit()
 

@@ -1,14 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:focusable="true"
+    android:clickable="true"
     tools:context=".ui.order_tracking.OrderTrackingFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/tvLoginSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/left_right_margin"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/left_right_margin"
+        android:text="ডেলিভারি ট্র্যাক করতে কনসাইনমেন্ট নাম্বার/অর্ডার আইডি লিখুন"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/login_sign_up_tv_size"
+      />
+
+    <EditText
+        android:id="@+id/etOrderTrackId"
+        android:paddingStart="16dp"
+        android:layout_marginStart="@dimen/left_right_margin"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/left_right_margin"
+        android:hint="অর্ডার আইডি লিখুন"
+        android:background="@drawable/bg_add_order_edit_text_white"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/login_sign_up_tv_size"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"/>
+
+    <LinearLayout
+        android:layout_marginStart="@dimen/left_right_margin"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/left_right_margin"
+        android:gravity="center"
+        android:id="@+id/orderTrackClickedLay"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_login_btn"
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+
+        <ImageView
+            android:layout_marginEnd="@dimen/fab_margin"
+            app:srcCompat="@drawable/order_track_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/left_right_margin"
+            android:text="অর্ডার ট্র্যাক করুন"
+            android:textColor="@color/white"
+            android:textSize="@dimen/login_sign_up_tv_size"
+            />
+
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="@dimen/fab_margin"
+        android:visibility="gone"
+        android:layout_gravity="top"
+        tools:visibility="visible"
+        tools:listitem="@layout/item_track_order"
+        android:paddingStart="@dimen/left_right_margin"
+        android:paddingEnd="@dimen/left_right_margin"
+        android:id="@+id/rvOrderTrack"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/rvOrderTrackProgress"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

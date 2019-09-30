@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:tint="@color/light_green"
+            app:srcCompat="@drawable/order_track_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:id="@+id/verticalView"
+            android:layout_width="6dp"
+            android:layout_height="60dp"
+            android:background="@color/light_green" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:orientation="vertical"
+        android:layout_marginTop="1dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/orderTrackStatus"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delivered to Customer"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/login_sign_up_tv_size"
+            />
+        <TextView
+            android:id="@+id/orderTrackDate"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9 April, 2019"
+            android:textColor="@color/gray_500"
+            android:textSize="@dimen/login_sign_up_tv_size"
+            />
+
+
+    </LinearLayout>
+
+</LinearLayout>
