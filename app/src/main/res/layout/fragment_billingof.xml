@@ -4,7 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.cod_collection.CODCollectionFragment">
+    tools:context=".ui.cod_collection.CODCollectionFragment"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
 

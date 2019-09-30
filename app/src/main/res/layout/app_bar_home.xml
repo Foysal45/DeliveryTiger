@@ -43,13 +43,26 @@
                 <ImageView
                     android:id="@+id/home_toolbar_add"
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
-                    android:padding="12dp"
                     app:srcCompat="@drawable/ic_add_round"
                     android:contentDescription="@string/cd"
+                    android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+
+                <ImageView
+                    android:id="@+id/home_toolbar_notification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:layout_marginEnd="16dp"
+                    app:srcCompat="@drawable/ic_notification"
+                    android:contentDescription="@string/cd"
+                    app:layout_constraintEnd_toStartOf="@id/home_toolbar_add"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     />

@@ -23,9 +23,11 @@ import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.features.DTFeaturesFragment
 import com.bd.deliverytiger.app.ui.login.LoginActivity
+import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
+import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 
 
@@ -37,6 +39,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var navViewRight: NavigationView
     private lateinit var addProductIV: ImageView
     private lateinit var toolbarTitleTV: TextView
+    private lateinit var notificationIV: ImageView
 
     private var doubleBackToExitPressedOnce = false
     private var navId: Int = 0
@@ -53,6 +56,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navViewRight = findViewById(R.id.nav_view_2)
         addProductIV = findViewById(R.id.home_toolbar_add)
         toolbarTitleTV = findViewById(R.id.home_toolbar_title)
+        notificationIV = findViewById(R.id.home_toolbar_notification)
         navView.setNavigationItemSelectedListener(this)
         /*val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
@@ -72,10 +76,23 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerListener()
         onBackStackChangeListener()
 
+        val headerView = navView.getHeaderView(0)
+        val headerPic: ImageView = headerView.findViewById(R.id.nav_header_image)
+        val headerUserNameTV: TextView = headerView.findViewById(R.id.nav_header_title)
+        val headerDesignationTV: TextView = headerView.findViewById(R.id.nav_header_sub_title)
+        headerUserNameTV.text = SessionManager.companyName
+        headerDesignationTV.text = SessionManager.mobile
+        Glide.with(this)
+            .load("https://deliverytiger.com.bd/assets/images/user.png")
+            .into(headerPic)
+
         addHomeFragment()
 
         addProductIV.setOnClickListener {
             addOrderFragment()
+        }
+        notificationIV.setOnClickListener {
+            goToNotification()
         }
     }
 
@@ -195,7 +212,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (currentFragment is BillingofServiceFragment){
                     Timber.d("tag", "Fragment already exist")
                 } else {
-                    addFragment(BillingofServiceFragment.newInstance())
+                    addFragment(BillingofServiceFragment.newInstance(), BillingofServiceFragment.tag)
                 }
             }
             R.id.nav_cod_collection -> {
@@ -204,7 +221,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (currentFragment is CODCollectionFragment){
                     Timber.d("tag", "Fragment already exist")
                 } else {
-                    addFragment(CODCollectionFragment.newInstance())
+                    addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
                 }
 
             }
@@ -214,7 +231,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (currentFragment is OrderTrackingFragment){
                     Timber.d("tag", "Fragment already exist")
                 } else {
-                    addFragment(OrderTrackingFragment.newInstance(""))
+                    addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
                 }
 
             }
@@ -233,7 +250,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (currentFragment is ShipmentChargeFragment){
                     Timber.d("tag", "Fragment already exist")
                 } else {
-                    addFragment(ShipmentChargeFragment.newInstance())
+                    addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
                 }
             }
             R.id.nav_features -> {
@@ -241,7 +258,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (currentFragment is DTFeaturesFragment){
                     Timber.d("tag", "Fragment already exist")
                 } else {
-                    addFragment(DTFeaturesFragment.newInstance())
+                    addFragment(DTFeaturesFragment.newInstance(), DTFeaturesFragment.tag)
                 }
 
             }
@@ -295,10 +312,23 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         ft.commit()*/
     }
 
-    private fun addFragment(fragment: Fragment){
+    private fun addFragment(fragment: Fragment, tag: String){
         val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.mainActivityContainer, fragment, fragment.tag)
-        ft.addToBackStack(fragment.tag)
+        ft.replace(R.id.mainActivityContainer, fragment, tag)
+        ft.addToBackStack(tag)
         ft.commit()
+    }
+
+    private fun goToNotification() {
+
+        openRightDrawer()
+
+        Handler().postDelayed({
+            val fragment = NotificationFragment.newInstance()
+            val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
+            ft.replace(R.id.container_drawer, fragment, NotificationFragment.tag)
+            ft.commit()
+        },300L)
+
     }
 }
