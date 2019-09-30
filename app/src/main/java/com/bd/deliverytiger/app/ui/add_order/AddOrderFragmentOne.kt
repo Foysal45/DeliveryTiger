@@ -139,6 +139,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     } else {
                         showShortToast(context!!, getString(R.string.select_thana))
                     }
+                } else {
+                    showShortToast(context!!, getString(R.string.no_aria))
                 }
             }
 
