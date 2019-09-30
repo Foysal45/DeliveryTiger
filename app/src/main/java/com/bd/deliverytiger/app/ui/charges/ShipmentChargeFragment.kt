@@ -9,13 +9,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.`interface`.DistrictInterface
+import com.bd.deliverytiger.app.api.`interface`.PlaceOrderInterface
+import com.bd.deliverytiger.app.api.model.GenericResponse
+import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
+import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.ThanaPayLoad
@@ -37,8 +43,10 @@ class ShipmentChargeFragment : Fragment() {
     private lateinit var districtTV: TextView
     private lateinit var thanaTV: TextView
     private lateinit var calculateBtn: MaterialButton
+    private lateinit var progressBar: ProgressBar
+    private lateinit var chargeRV: RecyclerView
 
-
+    private lateinit var placeOrderInterface: PlaceOrderInterface
     private val districtList: ArrayList<DistrictDeliveryChargePayLoad> = ArrayList()
     private val thanaOrAriaList: ArrayList<ThanaPayLoad> = ArrayList()
     private var district = 0
@@ -74,6 +82,10 @@ class ShipmentChargeFragment : Fragment() {
         districtTV = view.findViewById(R.id.shipment_charge_District)
         thanaTV = view.findViewById(R.id.shipment_charge_Thana)
         calculateBtn = view.findViewById(R.id.shipment_charge_calculate)
+        progressBar = view.findViewById(R.id.shipment_charge_progressBar)
+        chargeRV = view.findViewById(R.id.shipment_charge_rv)
+
+        placeOrderInterface = RetrofitSingleton.getInstance(mContext).create(PlaceOrderInterface::class.java)
 
         districtTV.setOnClickListener {
             if (districtList.isEmpty()) {
@@ -93,6 +105,15 @@ class ShipmentChargeFragment : Fragment() {
 
         calculateBtn.setOnClickListener {
 
+            if(district == 0){
+                showShortToast(context!!, getString(R.string.select_dist))
+                return@setOnClickListener
+            }
+            if(thana == 0){
+                showShortToast(context!!, getString(R.string.select_thana))
+                return@setOnClickListener
+            }
+            getDeliveryCharge()
         }
 
     }
@@ -157,7 +178,7 @@ class ShipmentChargeFragment : Fragment() {
 
         distFrag.setOnClick(object : DistrictSelectFragment.DistrictClick {
             override fun onClick(position: Int, name: String, clickedID: Int) {
-                Timber.e("etDistrictSearch 6 - ",name + " " + clickedID.toString())
+                //Timber.e("etDistrictSearch 6 - ",name + " " + clickedID.toString())
                 districtTV.text = name
                 district = clickedID
 
@@ -220,6 +241,53 @@ class ShipmentChargeFragment : Fragment() {
         })
 
 
+    }
+
+    fun showShortToast(context: Context?, message: String) {
+        if (context != null) {
+            val toast = Toast.makeText(context, message, Toast.LENGTH_LONG)
+            //toast.setGravity(Gravity.BOTTOM, 0, 0)
+            toast.show()
+        }
+    }
+
+    private fun getDeliveryCharge() {
+
+        progressBar.visibility = View.VISIBLE
+        calculateBtn.isEnabled = false
+
+        placeOrderInterface.getDeliveryCharge(DeliveryChargeRequest(district, thana)).enqueue(object : Callback<GenericResponse<List<DeliveryChargeResponse>>> {
+            override fun onFailure(call: Call<GenericResponse<List<DeliveryChargeResponse>>>, t: Throwable) {
+                if (isAdded){
+                    progressBar.visibility = View.GONE
+                    calculateBtn.isEnabled = true
+                }
+            }
+
+            override fun onResponse(
+                call: Call<GenericResponse<List<DeliveryChargeResponse>>>,
+                response: Response<GenericResponse<List<DeliveryChargeResponse>>>
+            ) {
+                if (isAdded){
+                    progressBar.visibility = View.GONE
+                    calculateBtn.isEnabled = true
+                }
+                if (response.isSuccessful && response.body() != null && isAdded) {
+                    if (response.body()!!.model != null) {
+
+                        val model = response.body()!!.model
+                        val shipmentAdapter = ShipmentChargeAdapter(mContext, model)
+                        with(chargeRV){
+                            setHasFixedSize(true)
+                            layoutManager = LinearLayoutManager(mContext, RecyclerView.VERTICAL, false)
+                            adapter = shipmentAdapter
+                        }
+
+                    }
+                }
+            }
+
+        })
     }
 
 }

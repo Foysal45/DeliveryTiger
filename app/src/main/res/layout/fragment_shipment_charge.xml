@@ -1,70 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:clickable="true"
-    android:focusable="true"
+    android:fillViewport="true"
     tools:context=".ui.charges.ShipmentChargeFragment">
 
-    <TextView
-        android:id="@+id/shipment_charge_District"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/login_view_height"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:background="@drawable/bg_add_order_edit_text_white"
-        android:drawableEnd="@drawable/add_order_chevron_down"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:hint="জেলা নির্বাচন করুন"
-        android:importantForAutofill="no"
-        android:paddingStart="16dp"
-        android:paddingTop="8dp"
-        android:gravity="center_vertical"
-        android:paddingEnd="16dp"
-        android:paddingBottom="8dp"
-        android:textColor="@color/black_80"
-        android:textSize="@dimen/text_14" />
-
-    <TextView
-        android:id="@+id/shipment_charge_Thana"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/login_view_height"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:background="@drawable/bg_add_order_edit_text_white"
-        android:drawableEnd="@drawable/add_order_chevron_down"
-        app:layout_constraintTop_toBottomOf="@id/shipment_charge_District"
-        android:hint="থানা নির্বাচন করুন"
-        android:gravity="center_vertical"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="8dp"
-        android:textColor="@color/black_80"
-        android:textSize="@dimen/text_14" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/shipment_charge_calculate"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/green_color"
-        android:text="শিপমেন্ট চার্জের তালিকা"
-        app:layout_constraintTop_toBottomOf="@id/shipment_charge_Thana" />
+        android:background="@color/background"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingBottom="16dp"
+        >
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/shipment_charge_rv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/shipment_charge_calculate"
-        />
+        <TextView
+            android:id="@+id/shipment_charge_District"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_view_height"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:background="@drawable/bg_add_order_edit_text_white"
+            android:drawableEnd="@drawable/add_order_chevron_down"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="জেলা নির্বাচন করুন"
+            android:importantForAutofill="no"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:gravity="center_vertical"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/shipment_charge_Thana"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_view_height"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:background="@drawable/bg_add_order_edit_text_white"
+            android:drawableEnd="@drawable/add_order_chevron_down"
+            app:layout_constraintTop_toBottomOf="@id/shipment_charge_District"
+            android:hint="থানা নির্বাচন করুন"
+            android:gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/shipment_charge_calculate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/green_color"
+            android:text="শিপমেন্ট চার্জের তালিকা"
+            app:layout_constraintTop_toBottomOf="@id/shipment_charge_Thana" />
+
+        <ProgressBar
+            android:id="@+id/shipment_charge_progressBar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/shipment_charge_calculate"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
+            tools:visibility="visible"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/shipment_charge_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintTop_toBottomOf="@id/shipment_charge_calculate"
+
+            tools:listitem="@layout/item_view_shipment_charge"
+            tools:itemCount="5"
+            tools:spanCount="1"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

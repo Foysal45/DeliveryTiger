@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginBottom="5dp">
+
+    <TextView
+        android:id="@+id/item_view_shipment_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/green_color"
+        android:layout_marginStart="5dp"
+        android:textSize="@dimen/text_16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="500 gm"
+
+        />
+
+
+    <LinearLayout
+        android:id="@+id/item_view_shipment_regular_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_shipment_table"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        app:layout_constraintTop_toBottomOf="@id/item_view_shipment_weight">
+
+        <TextView
+            android:id="@+id/item_view_shipment_regular_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.4"
+            android:gravity="center"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_12"
+            android:maxLines="2"
+            tools:text="Regular\nDelivery" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/item_view_shipment_regular_rv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.6"
+
+            tools:itemCount="2"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_view_shipment_delivery"
+            tools:spanCount="1" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_view_shipment_express_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_shipment_table"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        app:layout_constraintTop_toBottomOf="@id/item_view_shipment_regular_layout">
+
+        <TextView
+            android:id="@+id/item_view_shipment_express_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.4"
+            android:gravity="center"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_12"
+            android:maxLines="2"
+            tools:text="Regular\nDelivery" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/item_view_shipment_express_rv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.6"
+
+            tools:itemCount="2"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_view_shipment_delivery"
+            tools:spanCount="1" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
