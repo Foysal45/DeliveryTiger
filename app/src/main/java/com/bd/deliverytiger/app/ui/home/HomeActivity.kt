@@ -87,7 +87,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .load("https://deliverytiger.com.bd/assets/images/user.png")
             .into(headerPic)
 
-        addHomeFragment()
+        //addHomeFragment()
+        addDashBoardFragment()
 
         addProductIV.setOnClickListener {
             addOrderFragment()
@@ -322,6 +323,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val fragment = HomeFragment.newInstance()
         val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
         ft?.replace(R.id.mainActivityContainer, fragment, HomeFragment.tag)
+        ft?.commit()
+    }
+
+    private fun addDashBoardFragment() {
+
+        val fragment = DashboardFragment.newInstance()
+        val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
+        ft?.replace(R.id.mainActivityContainer, fragment, DashboardFragment.tag)
         ft?.commit()
     }
 

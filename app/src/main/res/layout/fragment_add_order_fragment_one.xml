@@ -225,7 +225,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/add_order_next" />
+            app:srcCompat="@drawable/ic_arrow_right" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
