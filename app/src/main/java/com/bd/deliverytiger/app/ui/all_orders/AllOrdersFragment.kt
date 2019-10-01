@@ -59,7 +59,7 @@ class AllOrdersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as HomeActivity).setToolbarTitle("সব অর্ডার")
+
         rvAllOrder = view.findViewById(R.id.rvAllOrder)
         allOrderProgressBar = view.findViewById(R.id.allOrderProgressBar)
         tvTotalOrder = view.findViewById(R.id.tvTotalOrder)
@@ -102,6 +102,11 @@ class AllOrdersFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle("সব অর্ডার")
     }
 
     /*  private fun getAllOrders(index: Int, count: Int) {

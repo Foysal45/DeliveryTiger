@@ -144,7 +144,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         supportFragmentManager.addOnBackStackChangedListener {
             if (supportFragmentManager.backStackEntryCount > 0) {
-                toolbar.setNavigationIcon(R.drawable.ic_arrow_left)
+                toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
             } else {
                 toolbar.setNavigationIcon(R.drawable.ic_menu)
             }
@@ -158,6 +158,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             when (currentFragment) {
                 is DashboardFragment -> {
+                    currentFragment.onResume()
+                }
+                is AllOrdersFragment -> {
                     currentFragment.onResume()
                 }
                 is AddOrderFragmentOne -> {
@@ -236,7 +239,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is AllOrdersFragment) {
-                    Timber.d("tag", "BillingofServiceFragment already exist")
+                    Timber.d("tag", "AllOrdersFragment already exist")
                 } else {
                     addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
                 }

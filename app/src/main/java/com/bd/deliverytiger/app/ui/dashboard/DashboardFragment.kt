@@ -81,7 +81,7 @@ class DashboardFragment : Fragment() {
 
     private fun addFragment(fragment: Fragment, tag: String){
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.mainActivityContainer, fragment, tag)
+        ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
         ft?.commit()
     }
