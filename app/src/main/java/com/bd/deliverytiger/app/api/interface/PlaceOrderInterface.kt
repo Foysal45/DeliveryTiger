@@ -6,12 +6,11 @@ import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
+import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
+import com.bd.deliverytiger.app.api.model.order.UpdateOrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface PlaceOrderInterface {
 
@@ -26,6 +25,9 @@ interface PlaceOrderInterface {
 
     @POST("api/Order/AddOrder")
     fun placeOrder(@Body requestBody: OrderRequest): Call<GenericResponse<OrderResponse>>
+
+    @PUT("api/Update/UpdateCourierOrders/{courierOrdersId}")
+    fun placeOrderUpdate(@Path("courierOrdersId") courierOrdersId: String, @Body requestBody: UpdateOrderReqBody): Call<GenericResponse<UpdateOrderResponse>>
 
 
 }

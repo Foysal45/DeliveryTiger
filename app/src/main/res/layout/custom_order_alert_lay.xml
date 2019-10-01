@@ -45,25 +45,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addOrderSecondTopLay">
 
-        <EditText
-            android:id="@+id/etCustomerName"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/custom_alert_height"
-            android:background="@drawable/bg_add_order_edit_text"
-            android:hint="কাস্টমারের নাম"
-            android:importantForAutofill="no"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp"
-            android:textColor="@color/black_80"
-            android:textSize="@dimen/text_14" />
 
         <EditText
-            android:id="@+id/etAddOrderMobileNo"
+            android:id="@+id/etAlertAddOrderMobileNo"
             android:layout_width="match_parent"
             android:layout_height="@dimen/custom_alert_height"
-            android:layout_marginTop="@dimen/fab_margin"
             android:background="@drawable/bg_add_order_edit_text"
             android:hint="মোবাইল নাম্বার"
             android:importantForAutofill="no"
@@ -76,7 +62,7 @@
             android:textSize="@dimen/text_14" />
 
         <EditText
-            android:id="@+id/etAlternativeMobileNo"
+            android:id="@+id/etAlertAlternativeMobileNo"
             android:layout_width="match_parent"
             android:layout_height="@dimen/custom_alert_height"
             android:layout_marginTop="@dimen/fab_margin"
@@ -93,7 +79,7 @@
 
 
         <EditText
-            android:id="@+id/etCustomersAddress"
+            android:id="@+id/etAlertCustomersAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/fab_margin"
@@ -122,6 +108,7 @@
 
 
         <Button
+            android:id="@+id/btnAlertSubmit"
             android:text="আপডেট "
             android:layout_width="wrap_content"
             android:layout_height="40dp"/>

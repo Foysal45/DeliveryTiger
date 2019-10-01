@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -18,17 +18,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.`interface`.AllOrderInterface
+import com.bd.deliverytiger.app.api.`interface`.PlaceOrderInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
+import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
+import com.bd.deliverytiger.app.api.model.order.UpdateOrderResponse
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
-import com.bd.deliverytiger.app.utils.DigitConverter
-import com.bd.deliverytiger.app.utils.SessionManager
-import com.bd.deliverytiger.app.utils.Timber
-import com.bd.deliverytiger.app.utils.VariousTask
+import com.bd.deliverytiger.app.utils.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -133,7 +133,8 @@ class AllOrdersFragment : Fragment() {
         }
 
         allOrdersAdapter.onEditItemClick = { position ->
-            editOrder()
+            val orderUpdateReqBody = UpdateOrderReqBody(courierOrderViewModelList!![position]?.id,courierOrderViewModelList!![position]?.courierAddressContactInfo?.mobile,"","","",courierOrderViewModelList!![position]?.userInfo?.collectAddress,courierOrderViewModelList!![position]?.courierOrderInfo?.collectionName)
+            editOrder(courierOrderViewModelList!![position]?.courierOrdersId.toString(),orderUpdateReqBody)
         }
 
         allOrderFilterLay.setOnClickListener {
@@ -216,7 +217,7 @@ class AllOrdersFragment : Fragment() {
         val fragment = FilterFragment.newInstance(fromDate, toDate, status)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.container_drawer, fragment, FilterFragment.tag)
-       // ft?.addToBackStack(FilterFragment.tag)
+        // ft?.addToBackStack(FilterFragment.tag)
         ft?.commit()
 
         fragment.setFilterListener(object : FilterFragment.FilterListener {
@@ -234,20 +235,67 @@ class AllOrdersFragment : Fragment() {
         })
     }
 
-    private fun editOrder(){
+    private fun editOrder(orderId: String,updateOrderReqBody: UpdateOrderReqBody) {
         val dialogBuilder = AlertDialog.Builder(context)
 
         val inflater: LayoutInflater = LayoutInflater.from(context)
         val dialogView: View = inflater.inflate(R.layout.custom_order_alert_lay, null)
         dialogBuilder.setView(dialogView)
-       /* val textViewHead: TextView = dialogView.findViewById(R.id.headerDistrictOrThana)
-        val ivDistClose: ImageView = dialogView.findViewById(R.id.ivDistClose)
-        val rvListOfThanaOrAria: RecyclerView = dialogView.findViewById(R.id.rvListOfThanaOrAria)*/
-
+        val etAlertAddOrderMobileNo: TextView =
+            dialogView.findViewById(R.id.etAlertAddOrderMobileNo)
+        val etAlertAlternativeMobileNo: TextView =
+            dialogView.findViewById(R.id.etAlertAlternativeMobileNo)
+        val etAlertCustomersAddress: TextView =
+            dialogView.findViewById(R.id.etAlertCustomersAddress)
+        val btnAlertSubmit: Button = dialogView.findViewById(R.id.btnAlertSubmit)
 
         val dialog = dialogBuilder.create()
         dialog.show()
+
+        btnAlertSubmit.setOnClickListener {
+             if (etAlertAddOrderMobileNo.text.toString().isEmpty()) {
+                VariousTask.showShortToast(context, getString(R.string.write_phone_number))
+                etAlertAddOrderMobileNo.requestFocus()
+            } else if (!Validator.isValidMobileNumber(etAlertAddOrderMobileNo.text.toString()) || etAlertAddOrderMobileNo.text.toString().length < 11) {
+                VariousTask.showShortToast(
+                    context,
+                    getString(R.string.write_proper_phone_number_recharge)
+                )
+                etAlertAddOrderMobileNo.requestFocus()
+            } else if (etAlertCustomersAddress.text.toString().isEmpty()) {
+                VariousTask.showShortToast(context!!, getString(R.string.write_yr_address))
+                etAlertCustomersAddress.requestFocus()
+            } else {
+                 updateOrderReqBody.address = etAlertCustomersAddress.text.toString()
+                 updateOrderReqBody.mobile = etAlertAddOrderMobileNo.text.toString()
+                 updateOrderReqBody.otherMobile = etAlertAlternativeMobileNo.text.toString()
+                 updateOrderApiCall(orderId,updateOrderReqBody)
+                dialog.dismiss()
+            }
+        }
+
+
     }
 
+    private fun updateOrderApiCall(orderId: String,updateOrderReqBody: UpdateOrderReqBody){
+        val placeOrderInterface = RetrofitSingleton.getInstance(context!!).create(PlaceOrderInterface::class.java)
+        placeOrderInterface.placeOrderUpdate(orderId,updateOrderReqBody).enqueue(object :Callback<GenericResponse<UpdateOrderResponse>>{
+            override fun onFailure(call: Call<GenericResponse<UpdateOrderResponse>>, t: Throwable) {
+
+            }
+
+            override fun onResponse(
+                call: Call<GenericResponse<UpdateOrderResponse>>,
+                response: Response<GenericResponse<UpdateOrderResponse>>
+            ) {
+               if(response.isSuccessful && response.body() != null){
+                   VariousTask.showShortToast(context,"updated successful")
+               } else {
+                   VariousTask.showShortToast(context,"updated fail")
+               }
+            }
+
+        })
+    }
 
 }
