@@ -118,7 +118,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:layout_width="200dp"
+                        android:layout_width="220dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:maxWidth="100dp"
@@ -177,7 +177,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
                         android:text="তথ্য পরিবর্তন"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"

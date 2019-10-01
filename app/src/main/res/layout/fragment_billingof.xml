@@ -187,7 +187,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
                         android:text="পেমেন্ট স্ট্যাটাস"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"

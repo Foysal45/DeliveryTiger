@@ -97,12 +97,14 @@ class CODCollectionFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
                 layoutPosition = linearLayoutManager.findLastVisibleItemPosition()
                 Timber.e(
-                    "layoutPosition", layoutPosition.toString() + " " + totalLoadedData + " " + isLoading + " " + totalCount
+                    "layoutPosition",
+                    layoutPosition.toString() + " " + totalLoadedData + " " + isLoading + " " + totalCount
                 )
                 if (dy > 0) {
                     if (layoutPosition >= (totalLoadedData - 2) && !isLoading && layoutPosition < totalCount && isMoreDataAvailable) {
                         getAllCODCollection(totalLoadedData, 20)
-                        Timber.e("layoutPosition loadMoreCalled ",
+                        Timber.e(
+                            "layoutPosition loadMoreCalled ",
                             layoutPosition.toString() + " " + totalLoadedData + " " + isLoading + " " + totalCount
                         )
                     }
@@ -139,7 +141,7 @@ class CODCollectionFragment : Fragment() {
         codProgressBar.visibility = View.VISIBLE
         val reqModel = CODReqBody(
             status, ArrayList(), fromDate, toDate, SessionManager.courierUserId,
-            "", "","", index, count
+            "", "", "", index, count
         )  // text model
 
         Timber.e("getAllCODCollectionReq", reqModel.toString())
@@ -171,12 +173,14 @@ class CODCollectionFragment : Fragment() {
                         totalLoadedData = courierOrderViewModelList!!.size
 
                         codCollectionAdapter.notifyDataSetChanged()
-                        isMoreDataAvailable = response.body()!!.model.courierOrderViewModel!!.size >= count-2
+                        isMoreDataAvailable =
+                            response.body()!!.model.courierOrderViewModel!!.size >= count - 2
                         Timber.e("getAllCODCollectionResponse", " s " + response.body().toString())
 
                         if (index < 20) {
                             totalCount = response.body()!!.model.totalCount!!.toInt()
-                            tvTotalOrder.text ="মোট অর্ডার : " + DigitConverter.toBanglaDigit(totalCount)
+                            tvTotalOrder.text =
+                                "মোট অর্ডার : " + DigitConverter.toBanglaDigit(totalCount)
                         }
                     } else {
                         Timber.e("getAllCODCollectionResponse", " s null")
@@ -194,27 +198,29 @@ class CODCollectionFragment : Fragment() {
         ft?.commit()
     }
 
-    private fun goToFilter(){
+    private fun goToFilter() {
 
         activity?.let {
             (activity as HomeActivity).openRightDrawer()
         }
 
-        val fragment = FilterFragment.newInstance(fromDate,toDate,status)
+        val fragment = FilterFragment.newInstance(fromDate, toDate, status)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container_drawer, fragment, FilterFragment.tag)
-        ft?.addToBackStack(FilterFragment.tag)
+        ft?.replace(R.id.container_drawer, fragment, FilterFragment.tag)
+        //ft?.addToBackStack(FilterFragment.tag)
         ft?.commit()
 
-        fragment.setFilterListener(object : FilterFragment.FilterListener{
+        fragment.setFilterListener(object : FilterFragment.FilterListener {
             override fun selectedDate(fromDate1: String, toDate1: String, status1: Int) {
                 fromDate = fromDate1
                 toDate = toDate1
                 status = status1
 
+                Timber.e("statusC " , status.toString())
+
                 courierOrderViewModelList?.clear()
                 codCollectionAdapter.notifyDataSetChanged()
-                getAllCODCollection(0,20)
+                getAllCODCollection(0, 20)
 
                 activity?.onBackPressed()
             }

@@ -9,12 +9,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.billing_service.CourierOrderAmountDetail
+import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.utils.DigitConverter
 
 class AllOrdersAdapter(
     var context: Context,
-    var courierOrderAmountDetailList: ArrayList<CourierOrderAmountDetail?>?
+    var courierOrderAmountDetailList: ArrayList<CourierOrderViewModel?>?
 ) :
     RecyclerView.Adapter<AllOrdersAdapter.myViewHolder>() {
     private var formattedDate = ""
@@ -29,71 +29,84 @@ class AllOrdersAdapter(
     }
 
     override fun getItemCount(): Int {
-        return 15
+        return courierOrderAmountDetailList!!.size
     }
 
     override fun onBindViewHolder(holder: myViewHolder, position: Int) {
 
-    /*    *//*formattedDate =
-            DigitConverter.toBanglaDate(courierOrderAmountDetailList?.get(position)?.)*//*
+        formattedDate =
+            DigitConverter.toBanglaDate(
+                courierOrderAmountDetailList?.get(position)?.courierOrderDateDetails!!.orderDate,
+                "dd-MM-yyyy HH:mm:ss"
+            )
 
-        holder.tvBillingCounter.text = DigitConverter.toBanglaDigit(position + 1)
-        holder.tvBillingOrderId.text =
+        holder.tvAllOrderCounter.text = DigitConverter.toBanglaDigit(position + 1)
+        holder.tvAllOrderOrderId.text =
             courierOrderAmountDetailList?.get(position)?.courierOrdersId.toString()
-        //holder.tvBillingOrderDate.text = formattedDate
+        holder.tvAllOrderOrderDate.text = formattedDate
 
-        *//*   holder.tvBillingShipmentsCharge.text =
-               "৳ " + DigitConverter.toBanglaDigit(courierOrderAmountDetailList?.get(position)?.)*//*
+        holder.tvAllOrderCustomerInfo.text = getAddress(courierOrderAmountDetailList?.get(position)!!)
 
-        holder.tvBillingCODCharge.text =
-            "৳ " + DigitConverter.toBanglaDigit(courierOrderAmountDetailList?.get(position)?.codCharge)
+        holder.tvAllOrderPackageInfo.text = courierOrderAmountDetailList?.get(position)?.courierOrderInfo?.collectionName
         //holder.tvBillingFragileItemCharge.text ="৳ " + DigitConverter.toBanglaDigit(courierOrderAmountDetailList?.get(position)?.breakableCharge)
 
-        holder.tvBillingCollectionCharge.text =
-            "৳ " + DigitConverter.toBanglaDigit(courierOrderAmountDetailList?.get(position)?.collectionCharge)
+        holder.tvAllOrderCollectionAmount.text = "৳ " + DigitConverter.toBanglaDigit(courierOrderAmountDetailList?.get(position)?.courierPrice?.collectionAmount)
 
-        holder.tvBillingReturnCharge.text =
-            "৳ " + DigitConverter.toBanglaDigit(courierOrderAmountDetailList?.get(position)?.returnCharge)
+        holder.tvAllOrderTotalServiceCharge.text = "৳ " + DigitConverter.toBanglaDigit(courierOrderAmountDetailList?.get(position)?.courierPrice?.totalServiceCharge)
 
         //holder.tvBillingTotalServiceCharge.text ="৳ " + DigitConverter.toBanglaDigit(courierOrderAmountDetailList?.get(position)?.to)
 
-        holder.tvBillingPaymentStatus.text =
-            courierOrderAmountDetailList?.get(position)?.serviceBillingStatus
+        holder.tvAllOrderStatus.text = courierOrderAmountDetailList?.get(position)?.status
 
-        if (courierOrderAmountDetailList?.get(position)?.serviceBillingStatus.equals("Received")) {
+        /*if (courierOrderAmountDetailList?.get(position)?.serviceBillingStatus.equals("Received")) {
             holder.billingItemMainLay.setBackgroundColor(Color.parseColor("#E8F5E9"))
         } else {
             holder.billingItemMainLay.setBackgroundColor(Color.parseColor("#FFFFFF"))
         }*/
 
-     //   holder.viewAllOrderDivider.setBackgroundColor(Color.parseColor("#1A000000"))
     }
 
 
     inner class myViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val billingItemMainLay: LinearLayout = itemView.findViewById(R.id.billingItemMainLay)
-        val tvBillingCounter: TextView = itemView.findViewById(R.id.tvBillingCounter)
-        val tvBillingOrderId: TextView = itemView.findViewById(R.id.tvBillingOrderId)
-        val tvBillingOrderDate: TextView = itemView.findViewById(R.id.tvBillingOrderDate)
-        val tvBillingShipmentsCharge: TextView =
-            itemView.findViewById(R.id.tvBillingShipmentsCharge)
-        val tvBillingCODCharge: TextView = itemView.findViewById(R.id.tvBillingCODCharge)
-        val tvBillingFragileItemCharge: TextView =
-            itemView.findViewById(R.id.tvBillingFragileItemCharge)
-        val tvBillingCollectionCharge: TextView =
-            itemView.findViewById(R.id.tvBillingCollectionCharge)
-        val tvBillingReturnCharge: TextView = itemView.findViewById(R.id.tvBillingReturnCharge)
-        val tvBillingTotalServiceCharge: TextView =
-            itemView.findViewById(R.id.tvBillingTotalServiceCharge)
-        val billingDetailsLay: LinearLayout = itemView.findViewById(R.id.billingDetailsLay)
-       // val viewAllOrderDivider: View = itemView.findViewById(R.id.viewAllOrderDivider)
+        val addOrderItemMainLay: LinearLayout = itemView.findViewById(R.id.addOrderItemMainLay)
+        val tvAllOrderCounter: TextView = itemView.findViewById(R.id.tvAllOrderCounter)
+        val tvAllOrderOrderId: TextView = itemView.findViewById(R.id.tvAllOrderOrderId)
+        val tvAllOrderOrderDate: TextView = itemView.findViewById(R.id.tvAllOrderOrderDate)
+        val tvAllOrderCustomerInfo: TextView =
+            itemView.findViewById(R.id.tvAllOrderCustomerInfo)
+        val tvAllOrderPackageInfo: TextView = itemView.findViewById(R.id.tvAllOrderPackageInfo)
+        val tvAllOrderCollectionAmount: TextView =
+            itemView.findViewById(R.id.tvAllOrderCollectionAmount)
+        val tvAllOrderTotalServiceCharge: TextView =
+            itemView.findViewById(R.id.tvAllOrderTotalServiceCharge)
+        val tvAllOrderStatus: TextView = itemView.findViewById(R.id.tvAllOrderStatus)
+        val layAllOrderChangeInfo: LinearLayout =
+            itemView.findViewById(R.id.layAllOrderChangeInfo)
+        val allOrderDetailsLay: LinearLayout = itemView.findViewById(R.id.allOrderDetailsLay)
 
         init {
-            billingDetailsLay.setOnClickListener {
-                onItemClick?.invoke(adapterPosition)
+            allOrderDetailsLay.setOnClickListener {
+                onOrderItemClick?.invoke(adapterPosition)
+            }
+
+            layAllOrderChangeInfo.setOnClickListener {
+                onEditItemClick?.invoke(adapterPosition)
             }
         }
     }
 
-    var onItemClick: ((position: Int) -> Unit)? = null
+    var onOrderItemClick: ((position: Int) -> Unit)? = null
+    var onEditItemClick: ((position: Int) -> Unit)? = null
+
+    private fun getAddress(courierOrderViewModel: CourierOrderViewModel): String {
+        var mAddress: String = courierOrderViewModel?.customerName + "\n" +
+                courierOrderViewModel?.courierAddressContactInfo?.mobile + "," +
+                courierOrderViewModel?.courierAddressContactInfo?.otherMobile + "\n\n" +
+                courierOrderViewModel.courierAddressContactInfo?.address + "," +
+                courierOrderViewModel.courierAddressContactInfo?.areaPostalCode + "," +
+                courierOrderViewModel.courierAddressContactInfo?.thanaName + "," +
+                courierOrderViewModel.courierAddressContactInfo?.districtName
+
+        return mAddress
+    }
 }

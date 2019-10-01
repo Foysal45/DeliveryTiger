@@ -127,7 +127,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingStart="8dp"
-            android:paddingEnd="8dp"
             android:text="Received"
             android:textColor="@color/black"
             android:textSize="@dimen/text_14" />

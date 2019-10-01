@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -19,6 +20,7 @@ import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceMainResponse
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody
 import com.bd.deliverytiger.app.api.model.billing_service.CourierOrderAmountDetail
+import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.utils.DigitConverter
@@ -44,6 +46,8 @@ class BillingofServiceFragment : Fragment() {
 
     private lateinit var rvBillingService: RecyclerView
     private lateinit var tvTotalOrder: TextView
+    private lateinit var billingFilterLay: LinearLayout
+
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var billingServiceAdapter: BillingServiceAdapter
     private lateinit var billingServiceInterface: BillingServiceInterface
@@ -73,6 +77,7 @@ class BillingofServiceFragment : Fragment() {
         rvBillingService = view.findViewById(R.id.rvBillingService)
         billingProgressBar = view.findViewById(R.id.billingProgressBar)
         tvTotalOrder = view.findViewById(R.id.tvTotalOrder)
+        billingFilterLay = view.findViewById(R.id.billingFilterLay)
 
         billingServiceInterface =
             RetrofitSingleton.getInstance(context!!).create(BillingServiceInterface::class.java)
@@ -112,6 +117,10 @@ class BillingofServiceFragment : Fragment() {
                 }
             }
         })
+
+        billingFilterLay.setOnClickListener {
+            goToFilter()
+        }
     }
 
     override fun onResume() {
@@ -183,5 +192,33 @@ class BillingofServiceFragment : Fragment() {
         ft?.addToBackStack(OrderTrackingFragment.tag)
         ft?.commit()
     }
+    private fun goToFilter(){
+
+        activity?.let {
+            (activity as HomeActivity).openRightDrawer()
+        }
+
+        val fragment = FilterFragment.newInstance(fromDate,toDate,status)
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.container_drawer, fragment, FilterFragment.tag)
+        //ft?.addToBackStack(FilterFragment.tag)
+        ft?.commit()
+
+        fragment.setFilterListener(object : FilterFragment.FilterListener{
+            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int) {
+                fromDate = fromDate1
+                toDate = toDate1
+                status = status1
+
+
+                courierOrderAmountDetailList?.clear()
+                billingServiceAdapter.notifyDataSetChanged()
+                getBillingAddress(0,20)
+
+                activity?.onBackPressed()
+            }
+        })
+    }
+
 
 }
