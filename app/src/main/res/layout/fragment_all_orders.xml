@@ -33,7 +33,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:id="@+id/billingFilterLay"
+            android:id="@+id/allOrderFilterLay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/fab_margin"
@@ -118,22 +118,22 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:layout_width="100dp"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:maxWidth="100dp"
-                        android:text="শিপমেন্ট চার্জ"
+                        android:text="কাস্টমারের তথ্য"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:layout_width="100dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
-                        android:text="COD চার্জ"
+                        android:text="প্যাকজের তথ্য"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
@@ -145,39 +145,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:maxWidth="100dp"
-                        android:text="ভঙ্গুর আইটেমের চার্জ"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_14"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:text="কালেকশন চার্জ"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_14"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxWidth="100dp"
-                        android:text="রিটার্ন চার্জ"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_14"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:text="মোট সার্ভিস চার্জ"
+                        android:text="কালেকশনের পরিমান"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
@@ -188,12 +156,32 @@
                         android:layout_weight="1"
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
-                        android:text="পেমেন্ট স্ট্যাটাস"
+                        android:text="মোট সার্ভিস চার্জ"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
 
+                    <TextView
+                        android:paddingStart="8dp"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:maxWidth="100dp"
+                        android:text="স্ট্যাটাস"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_14"
+                        android:textStyle="bold" />
 
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:text="তথ্য পরিবর্তন"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_14"
+                        android:textStyle="bold" />
 
 
 
@@ -208,32 +196,23 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvBillingService"
+                android:id="@+id/rvAllOrder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/item_view_billing_collection" />
+                tools:listitem="@layout/item_view_all_orders" />
 
         </LinearLayout>
     </HorizontalScrollView>
 
-    <ImageView
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/cod_collection_show_stat">
-
-    </ImageView>
 
     <ProgressBar
-        android:id="@+id/billingProgressBar"
+        android:id="@+id/allOrderProgressBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="wrap_content"
+        android:visibility="gone"
         android:layout_height="wrap_content"/>
 
 

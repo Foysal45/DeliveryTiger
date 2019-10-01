@@ -9,6 +9,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
@@ -83,6 +84,7 @@ class BillingofServiceFragment : Fragment() {
         rvBillingService.apply {
             layoutManager = linearLayoutManager
             adapter = billingServiceAdapter
+            addItemDecoration(DividerItemDecoration(rvBillingService.getContext(), DividerItemDecoration.VERTICAL))
         }
 
         billingServiceAdapter.onItemClick = { position ->

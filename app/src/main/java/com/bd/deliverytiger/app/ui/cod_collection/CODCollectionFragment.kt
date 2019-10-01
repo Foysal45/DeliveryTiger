@@ -139,7 +139,7 @@ class CODCollectionFragment : Fragment() {
         codProgressBar.visibility = View.VISIBLE
         val reqModel = CODReqBody(
             status, ArrayList(), fromDate, toDate, SessionManager.courierUserId,
-            "", "", index, count
+            "", "","", index, count
         )  // text model
 
         Timber.e("getAllCODCollectionReq", reqModel.toString())
