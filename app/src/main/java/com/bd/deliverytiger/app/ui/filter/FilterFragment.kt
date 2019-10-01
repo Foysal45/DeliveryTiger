@@ -12,7 +12,7 @@ import androidx.appcompat.widget.AppCompatSpinner
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
-import com.bd.deliverytiger.app.api.`interface`.OrderStatusInterface
+import com.bd.deliverytiger.app.api.`interface`.OtherApiInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.status.StatusModel
 import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
@@ -31,7 +31,7 @@ class FilterFragment : Fragment() {
     private lateinit var statusSpinner: AppCompatSpinner
     private lateinit var applyBtn: MaterialButton
 
-    private lateinit var orderStatusInterface: OrderStatusInterface
+    private lateinit var otherApiInterface: OtherApiInterface
 
     private var gotFromDate: String = "01-01-01"
     private var gotToDate: String = "01-01-01"
@@ -71,7 +71,7 @@ class FilterFragment : Fragment() {
             toDateTV.text = gotToDate
         }
 
-        orderStatusInterface = RetrofitSingleton.getInstance(context!!).create(OrderStatusInterface::class.java)
+        otherApiInterface = RetrofitSingleton.getInstance(context!!).create(OtherApiInterface::class.java)
         loadOrderStatus()
 
         fromDateTV.setOnClickListener {
@@ -123,7 +123,7 @@ class FilterFragment : Fragment() {
     }
 
     private fun loadOrderStatus(){
-        orderStatusInterface.loadCourierOrderStatus().enqueue(object : Callback<GenericResponse<MutableList<StatusModel>>> {
+        otherApiInterface.loadCourierOrderStatus().enqueue(object : Callback<GenericResponse<MutableList<StatusModel>>> {
             override fun onFailure(call: Call<GenericResponse<MutableList<StatusModel>>>, t: Throwable) {
 
             }

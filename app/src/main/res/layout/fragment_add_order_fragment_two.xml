@@ -154,12 +154,11 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:contentDescription="@string/cd"
+                            android:tint="@color/hint"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/ic_arrow_down"
-                            android:tint="@color/hint"
-                            />
+                            app:srcCompat="@drawable/ic_arrow_down" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -184,11 +183,11 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:contentDescription="@string/cd"
+                            android:tint="@color/hint"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/ic_arrow_down"
-                            android:tint="@color/hint"/>
+                            app:srcCompat="@drawable/ic_arrow_down" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -231,14 +230,35 @@
                         tools:spanCount="2"
                         tools:visibility="visible" />
 
-                    <androidx.appcompat.widget.AppCompatCheckBox
-                        android:id="@+id/check_terms_condition"
-                        android:layout_width="wrap_content"
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="আমি শর্তাবলী মেনে নিলাম"
-                        android:textColor="@color/black_80"
-                        android:textSize="@dimen/text_14" />
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatCheckBox
+                            android:id="@+id/check_terms_condition"
+                            android:layout_width="26dp"
+                            android:layout_height="wrap_content"
+                            android:text="@null"
+                            android:textColor="@color/black_80"
+                            android:textSize="@dimen/text_14"
+
+                            />
+
+                        <TextView
+                            android:id="@+id/check_terms_condition_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="10dp"
+                            android:text="আমি শর্তাবলী মেনে নিলাম"
+                            android:textColor="@color/black_80"
+                            android:textSize="@dimen/text_14"
+
+                            />
+                    </LinearLayout>
 
                 </LinearLayout>
 

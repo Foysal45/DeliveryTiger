@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -48,6 +49,7 @@ class AddOrderFragmentTwo : Fragment() {
     private lateinit var checkBoxBreakable: AppCompatCheckBox
     private lateinit var collectionAddressET: EditText
     private lateinit var checkTerms: AppCompatCheckBox
+    private lateinit var checkTermsTV: TextView
     private lateinit var deliveryTypeRV: RecyclerView
     private lateinit var toggleButtonGroup: MaterialButtonToggleGroup
     private lateinit var submitBtn: LinearLayout
@@ -120,6 +122,7 @@ class AddOrderFragmentTwo : Fragment() {
         checkBoxBreakable = view.findViewById(R.id.check_breakable)
         collectionAddressET = view.findViewById(R.id.collectionAddress)
         checkTerms = view.findViewById(R.id.check_terms_condition)
+        checkTermsTV = view.findViewById(R.id.check_terms_condition_text)
         deliveryTypeRV = view.findViewById(R.id.delivery_type_selection_rV)
         toggleButtonGroup = view.findViewById(R.id.toggle_button_group)
         submitBtn = view.findViewById(R.id.submit_order)
@@ -202,8 +205,17 @@ class AddOrderFragmentTwo : Fragment() {
             calculateTotalPrice()
         }
 
+        checkTermsTV.text = HtmlCompat.fromHtml("আমি <font color='#66BB6A'>শর্তাবলী</font> মেনে নিলাম", HtmlCompat.FROM_HTML_MODE_LEGACY)
         checkTerms.setOnCheckedChangeListener { compoundButton, b ->
             isAgreeTerms = b
+        }
+        checkTermsTV.setOnClickListener {
+
+            val termsSheet = TermsConditionBottomSheet.newInstance()
+            termsSheet.show(childFragmentManager, TermsConditionBottomSheet.tag)
+            termsSheet.onTermsAgreed = {
+                checkTerms.isChecked = it
+            }
         }
 
         backBtn.setOnClickListener {

@@ -40,6 +40,11 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
         val tag = DetailsBottomSheet::class.java.name
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_details_bottom_sheet, container, false)
