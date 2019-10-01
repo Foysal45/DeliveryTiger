@@ -59,7 +59,7 @@ class OrderTrackingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as HomeActivity).setToolbarTitle("অর্ডার ট্র্যাকিং")
+
         rvOrderTrack = view.findViewById(R.id.rvOrderTrack)
         rvOrderTrackProgress = view.findViewById(R.id.rvOrderTrackProgress)
         orderTrackClickedLay = view.findViewById(R.id.orderTrackClickedLay)
@@ -98,6 +98,11 @@ class OrderTrackingFragment : Fragment() {
             etOrderTrackId.setText(orderID)
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle("অর্ডার ট্র্যাকিং")
     }
 
     private fun getOrderTrackingList(orderId: String, flag: String) {

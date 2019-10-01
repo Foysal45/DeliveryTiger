@@ -47,7 +47,7 @@ class HomeFragment : Fragment() {
         btnAddOrder = view.findViewById(R.id.btnAddOrder)
         ivSurpriseBtn = view.findViewById(R.id.ivSurpriseBtn)
 
-        (activity as HomeActivity).setToolbarTitle("ডেলিভারি টাইগার")
+        (activity as HomeActivity).setToolbarTitle("ড্যাশবোর্ড")
     }
 
     override fun onStart() {

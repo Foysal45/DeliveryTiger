@@ -2,13 +2,12 @@ package com.bd.deliverytiger.app.ui.features
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 
@@ -37,7 +36,7 @@ class DTFeaturesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as HomeActivity).setToolbarTitle("ফিচারস")
+
 
         rvFeathers = view.findViewById(R.id.rvFeathers)
 
@@ -50,5 +49,9 @@ class DTFeaturesFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle("ফিচারস")
+    }
 
 }

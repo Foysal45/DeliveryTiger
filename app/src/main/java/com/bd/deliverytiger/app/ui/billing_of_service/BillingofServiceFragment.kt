@@ -68,7 +68,7 @@ class BillingofServiceFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as HomeActivity).setToolbarTitle("সার্ভিসের বিল")
+
         rvBillingService = view.findViewById(R.id.rvBillingService)
         billingProgressBar = view.findViewById(R.id.billingProgressBar)
         tvTotalOrder = view.findViewById(R.id.tvTotalOrder)
@@ -110,6 +110,11 @@ class BillingofServiceFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle("সার্ভিসের বিল")
     }
 
     private fun getBillingAddress(index: Int, count: Int) {

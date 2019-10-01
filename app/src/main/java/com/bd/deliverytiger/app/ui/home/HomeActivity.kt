@@ -20,6 +20,7 @@ import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentTwo
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
+import com.bd.deliverytiger.app.ui.dashboard.DashboardFragment
 import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.features.DTFeaturesFragment
 import com.bd.deliverytiger.app.ui.login.LoginActivity
@@ -94,6 +95,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         notificationIV.setOnClickListener {
             goToNotification()
         }
+
     }
 
     override fun onStart() {
@@ -150,10 +152,28 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             when(currentFragment){
+                is DashboardFragment -> {
+                    currentFragment.onResume()
+                }
                 is AddOrderFragmentOne -> {
                     currentFragment.onResume()
                 }
                 is AddOrderFragmentTwo -> {
+                    currentFragment.onResume()
+                }
+                is BillingofServiceFragment -> {
+                    currentFragment.onResume()
+                }
+                is CODCollectionFragment -> {
+                    currentFragment.onResume()
+                }
+                is OrderTrackingFragment -> {
+                    currentFragment.onResume()
+                }
+                is ShipmentChargeFragment -> {
+                    currentFragment.onResume()
+                }
+                is DTFeaturesFragment -> {
                     currentFragment.onResume()
                 }
             }
@@ -197,11 +217,19 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun manageNavigationItemSelection(id: Int) {
         when (id) {
+            R.id.nav_dashboard -> {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is DashboardFragment){
+                    Timber.d("tag", "DashboardFragment already exist")
+                } else {
+                    addFragment(DashboardFragment.newInstance(), DashboardFragment.tag)
+                }
+            }
             R.id.nav_orders -> {
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is BillingofServiceFragment){
-                    Timber.d("tag", "Fragment already exist")
+                    Timber.d("tag", "BillingofServiceFragment already exist")
                 } else {
 
                 }
@@ -210,7 +238,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is BillingofServiceFragment){
-                    Timber.d("tag", "Fragment already exist")
+                    Timber.d("tag", "BillingofServiceFragment already exist")
                 } else {
                     addFragment(BillingofServiceFragment.newInstance(), BillingofServiceFragment.tag)
                 }
@@ -219,7 +247,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is CODCollectionFragment){
-                    Timber.d("tag", "Fragment already exist")
+                    Timber.d("tag", "CODCollectionFragment already exist")
                 } else {
                     addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
                 }
@@ -229,7 +257,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is OrderTrackingFragment){
-                    Timber.d("tag", "Fragment already exist")
+                    Timber.d("tag", "OrderTrackingFragment already exist")
                 } else {
                     addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
                 }
@@ -248,7 +276,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ShipmentChargeFragment){
-                    Timber.d("tag", "Fragment already exist")
+                    Timber.d("tag", "ShipmentChargeFragment already exist")
                 } else {
                     addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
                 }
@@ -256,7 +284,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_features -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is DTFeaturesFragment){
-                    Timber.d("tag", "Fragment already exist")
+                    Timber.d("tag", "DTFeaturesFragment already exist")
                 } else {
                     addFragment(DTFeaturesFragment.newInstance(), DTFeaturesFragment.tag)
                 }

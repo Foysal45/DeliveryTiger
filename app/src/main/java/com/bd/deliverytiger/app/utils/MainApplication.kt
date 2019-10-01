@@ -41,10 +41,11 @@ class MainApplication: Application() {
         val loginInterface = retrofit.create(LoginInterface::class.java)
         loginInterface.refreshToken(SessionManager.refreshToken).enqueue(object : Callback<GenericResponse<LoginResponse>>{
             override fun onFailure(call: Call<GenericResponse<LoginResponse>>, t: Throwable) {
-
+                Timber.d("applicationLog", "onFailure: ${t.message}")
             }
 
             override fun onResponse(call: Call<GenericResponse<LoginResponse>>, response: Response<GenericResponse<LoginResponse>>) {
+                Timber.d("applicationLog", "onResponse: ${response.code()} ${response.message()}")
                 if (response.isSuccessful && response.body() != null){
                     if (response.body()!!.model != null){
                         SessionManager.createSession(response.body()!!.model)

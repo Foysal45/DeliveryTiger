@@ -71,7 +71,7 @@ class CODCollectionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as HomeActivity).setToolbarTitle("COD কালেকশন")
+
         rvCODCollection = view.findViewById(R.id.rvCODCollection)
         codProgressBar = view.findViewById(R.id.codProgressBar)
         filterLayout = view.findViewById(R.id.codFilterLay)
@@ -116,6 +116,11 @@ class CODCollectionFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle("COD কালেকশন")
+    }
+
     private fun manageAdapter() {
         codCollectionAdapter = CODCollectionAdapter(context!!, courierOrderViewModelList)
         rvCODCollection.apply {
@@ -128,7 +133,6 @@ class CODCollectionFragment : Fragment() {
             addOrderTrackFragment(courierOrderViewModelList?.get(position)?.courierOrdersId.toString())
         }
     }
-
 
     private fun getAllCODCollection(index: Int, count: Int) {
         isLoading = true
