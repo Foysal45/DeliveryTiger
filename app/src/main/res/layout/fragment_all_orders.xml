@@ -101,7 +101,7 @@
                         android:layout_width="30dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/nav_header_vertical_spacing"
-                        android:text="999"
+                        android:text="#"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"
 
