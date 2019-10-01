@@ -1,10 +1,12 @@
 package com.bd.deliverytiger.app.ui.all_orders
 
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -131,7 +133,7 @@ class AllOrdersFragment : Fragment() {
         }
 
         allOrdersAdapter.onEditItemClick = { position ->
-            VariousTask.showShortToast(context, "edit")
+            editOrder()
         }
 
         allOrderFilterLay.setOnClickListener {
@@ -230,6 +232,21 @@ class AllOrdersFragment : Fragment() {
                 activity?.onBackPressed()
             }
         })
+    }
+
+    private fun editOrder(){
+        val dialogBuilder = AlertDialog.Builder(context)
+
+        val inflater: LayoutInflater = LayoutInflater.from(context)
+        val dialogView: View = inflater.inflate(R.layout.custom_order_alert_lay, null)
+        dialogBuilder.setView(dialogView)
+       /* val textViewHead: TextView = dialogView.findViewById(R.id.headerDistrictOrThana)
+        val ivDistClose: ImageView = dialogView.findViewById(R.id.ivDistClose)
+        val rvListOfThanaOrAria: RecyclerView = dialogView.findViewById(R.id.rvListOfThanaOrAria)*/
+
+
+        val dialog = dialogBuilder.create()
+        dialog.show()
     }
 
 

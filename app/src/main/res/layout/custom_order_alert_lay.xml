@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/addOrderSecondTopLay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvCustomerDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="কাস্টমারের তথ্য আপডেট করুন"
+            android:textColor="@color/green_color"
+            android:textSize="@dimen/text_16"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addOrderSecondTopLay">
+
+        <EditText
+            android:id="@+id/etCustomerName"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/custom_alert_height"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:hint="কাস্টমারের নাম"
+            android:importantForAutofill="no"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
+
+        <EditText
+            android:id="@+id/etAddOrderMobileNo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/custom_alert_height"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:hint="মোবাইল নাম্বার"
+            android:importantForAutofill="no"
+            android:inputType="phone"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
+
+        <EditText
+            android:id="@+id/etAlternativeMobileNo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/custom_alert_height"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:hint="বিকল্প মোবাইল নাম্বার"
+            android:importantForAutofill="no"
+            android:inputType="phone"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
+
+
+        <EditText
+            android:id="@+id/etCustomersAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:gravity="start|top"
+            android:hint="বিস্তারিত ঠিকানা লিখুন (বাড়ি/রোড/গ্রাম/হোল্ডিং)"
+            android:importantForAutofill="no"
+            android:minHeight="70dp"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_width="match_parent"
+        android:gravity="end|center"
+        android:layout_height="wrap_content">
+
+
+        <Button
+            android:text="আপডেট "
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
+

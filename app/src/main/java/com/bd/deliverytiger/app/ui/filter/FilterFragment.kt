@@ -169,6 +169,6 @@ class FilterFragment : Fragment() {
     }
 
     interface FilterListener {
-        fun selectedDate(fromDate: String, toDate: String, status: Int)
+        fun selectedDate(fromDate1: String, toDate1: String, status1: Int)
     }
 }
