@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|start"
         android:layout_marginTop="16dp"
-        android:text="COD চার্জ (..%):"
+        android:text="COD চার্জঃ (1.5%)"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
         app:layout_constraintStart_toStartOf="parent"

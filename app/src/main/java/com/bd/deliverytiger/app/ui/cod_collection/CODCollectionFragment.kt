@@ -200,7 +200,7 @@ class CODCollectionFragment : Fragment() {
             (activity as HomeActivity).openRightDrawer()
         }
 
-        val fragment = FilterFragment.newInstance()
+        val fragment = FilterFragment.newInstance(fromDate,toDate,status)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.container_drawer, fragment, FilterFragment.tag)
         ft?.addToBackStack(FilterFragment.tag)
@@ -210,7 +210,7 @@ class CODCollectionFragment : Fragment() {
             override fun selectedDate(fromDate1: String, toDate1: String, status1: Int) {
                 fromDate = fromDate1
                 toDate = toDate1
-                status = -1
+                status = status1
 
                 courierOrderViewModelList?.clear()
                 codCollectionAdapter.notifyDataSetChanged()
