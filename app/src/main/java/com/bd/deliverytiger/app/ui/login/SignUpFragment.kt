@@ -51,6 +51,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
     private lateinit var btnSignUp: Button
     private lateinit var tvLogin: TextView
 
+    private lateinit var OTPInterface: LoginInterface
     private var progressDialog: ProgressDialog? = null
 
     override fun onCreateView(
@@ -71,6 +72,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
 
         progressDialog = ProgressDialog(mContext)
         progressDialog?.setMessage("অপেক্ষা করুন")
+        progressDialog?.setCancelable(false)
 
         initClickListener()
     }

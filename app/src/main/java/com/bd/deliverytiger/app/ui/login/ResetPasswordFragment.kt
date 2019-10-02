@@ -1,31 +1,30 @@
 package com.bd.deliverytiger.app.ui.login
 
 
-import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
+import com.bd.deliverytiger.app.api.RetrofitSingletonAD
 import com.bd.deliverytiger.app.api.`interface`.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
-import com.bd.deliverytiger.app.api.model.login.SignUpReqBody
-import com.bd.deliverytiger.app.api.model.login.SignUpResponse
+import com.bd.deliverytiger.app.api.model.login.LoginResponse
+import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
+import com.bd.deliverytiger.app.api.model.login.OTPResponse
+import com.bd.deliverytiger.app.api.model.login.UserInfoRequest
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
 import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
 import com.bd.deliverytiger.app.utils.VariousTask.showShortToast
-import kotlinx.android.synthetic.main.fragment_sign_up.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,16 +34,24 @@ import retrofit2.Response
  */
 class ResetPasswordFragment : Fragment(), View.OnClickListener {
 
-    companion object {
-        fun newInstance(): ResetPasswordFragment = ResetPasswordFragment().apply {}
-        val tag = ResetPasswordFragment::class.java.name
-    }
+    private lateinit var mContext: Context
 
     private lateinit var etResetMobileNo: EditText
     private lateinit var btnReset: Button
     private lateinit var tvResetLogin: TextView
     private lateinit var tvRegister: TextView
 
+    private var progressDialog: ProgressDialog? = null
+
+    companion object {
+        fun newInstance(): ResetPasswordFragment = ResetPasswordFragment().apply {}
+        val tag = ResetPasswordFragment::class.java.name
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        this.mContext = context
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,6 +67,11 @@ class ResetPasswordFragment : Fragment(), View.OnClickListener {
         btnReset = view.findViewById(R.id.btnReset)
         tvResetLogin = view.findViewById(R.id.tvResetLogin)
         tvRegister = view.findViewById(R.id.tvRegister)
+
+        progressDialog = ProgressDialog(mContext)
+        progressDialog?.setMessage("অপেক্ষা করুন")
+        progressDialog?.setCancelable(false)
+
         intClickEvent()
     }
 
@@ -70,6 +82,7 @@ class ResetPasswordFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(p0: View?) {
+
         when (p0) {
             btnReset -> {
                 if (!Validator.isValidMobileNumber(etResetMobileNo.text.toString()) || etResetMobileNo.text.toString().length < 11) {
@@ -78,6 +91,7 @@ class ResetPasswordFragment : Fragment(), View.OnClickListener {
                     etResetMobileNo.requestFocus()
                 } else {
 
+                    checkIfUserExist()
                 }
             }
             tvRegister -> {
@@ -85,46 +99,72 @@ class ResetPasswordFragment : Fragment(), View.OnClickListener {
             }
             tvResetLogin -> {
                 // addLoginFragment()
-                activity?.onBackPressed()
+                addLoginFragment(false)
             }
         }
     }
 
 
-    private fun signUp() {
-        val progressDialog = ProgressDialog(context)
-        progressDialog.setMessage("অপেক্ষা করুন")
-        progressDialog.show()
+    private fun checkIfUserExist() {
 
-        val retrofit = RetrofitSingleton.getInstance(context!!)
-        val loginInterface = retrofit.create(LoginInterface::class.java)
-        val signUpReqBody =
-            SignUpReqBody(etSignUpMobileNo.text.toString(), etSignUpPassword.text.toString())
-        loginInterface.userResetPassword(signUpReqBody).enqueue(object :
-            Callback<GenericResponse<SignUpResponse>> {
-            override fun onFailure(call: Call<GenericResponse<SignUpResponse>>, t: Throwable) {
-                Timber.e("userUserRegister", "failed " + t.message)
-                progressDialog.hide()
+        progressDialog?.show()
+        val mobile = etResetMobileNo.text.toString()
+        val loginInterface = RetrofitSingleton.getInstance(mContext).create(LoginInterface::class.java)
+        loginInterface.getUserInfo(UserInfoRequest(mobile)).enqueue(object : Callback<GenericResponse<LoginResponse>> {
+            override fun onFailure(call: Call<GenericResponse<LoginResponse>>, t: Throwable) {
+                progressDialog?.dismiss()
             }
 
-            override fun onResponse(
-                call: Call<GenericResponse<SignUpResponse>>,
-                response: Response<GenericResponse<SignUpResponse>>
-            ) {
-                progressDialog.hide()
-                if (response.isSuccessful && response.body() != null) {
-                    Timber.e("userUserRegister", response.body().toString())
-                    showShortToast(context, getString(R.string.success_in_signin))
-                    addLoginFragment(true)
+            override fun onResponse(call: Call<GenericResponse<LoginResponse>>, response: Response<GenericResponse<LoginResponse>>) {
+
+                if (response.code() == 404) {
+                    progressDialog?.dismiss()
+                    showShortToast(context, "এই মোবাইল নম্বর দিয়ে রেজিস্টেশন করা হয়নি")
                 } else {
-                    if (response.body() != null) {
-                        showShortToast(context, response.body()!!.errorMessage)
-                    }
-                    Timber.e("userUserRegister", "null")
+                    sendOTP()
                 }
             }
 
         })
+    }
+
+    private fun sendOTP() {
+
+        val mobileNo = etResetMobileNo.text.toString()
+        val retrofit = RetrofitSingletonAD.getInstance(mContext)
+        val loginInterface = retrofit.create(LoginInterface::class.java)
+        val requestBody = OTPRequestModel(mobileNo, mobileNo)
+        loginInterface.sendOTP(requestBody).enqueue(object : Callback<OTPResponse> {
+            override fun onFailure(call: Call<OTPResponse>, t: Throwable) {
+                Timber.e("userUserRegister", "failed " + t.message)
+                progressDialog?.dismiss()
+            }
+
+            override fun onResponse(
+                call: Call<OTPResponse>,
+                response: Response<OTPResponse>
+            ) {
+                progressDialog?.dismiss()
+                if (response.isSuccessful && response.body() != null && isAdded) {
+                    Timber.e("userUserRegister", response.body().toString())
+                    showShortToast(context, response.body()!!.model ?: "Send")
+                    goToResetPasswordTwo()
+                }
+            }
+        })
+
+    }
+
+    private fun goToResetPasswordTwo(){
+
+        val mobileNo = etResetMobileNo.text.toString()
+
+        val fragment = ResetPasswordFinalFragment.newInstance(mobileNo)
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.loginActivityContainer, fragment, ResetPasswordFinalFragment.tag)
+        //ft?.addToBackStack(SignUpFragment.tag)
+        ft?.commit()
+
     }
 
     private fun goToSignUp() {
@@ -132,16 +172,16 @@ class ResetPasswordFragment : Fragment(), View.OnClickListener {
         val fragment = SignUpFragment.newInstance()
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpFragment.tag)
-        ft?.addToBackStack(SignUpFragment.tag)
+        //ft?.addToBackStack(SignUpFragment.tag)
         ft?.commit()
     }
 
     private fun addLoginFragment(sendOTP: Boolean) {
+
         val fragment = LoginFragment.newInstance(sendOTP)
-        val ft: FragmentTransaction? =
-            (context as FragmentActivity?)?.supportFragmentManager?.beginTransaction()
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, LoginFragment.tag)
-        ft?.addToBackStack(LoginFragment.tag)
+        //ft?.addToBackStack(LoginFragment.tag)
         ft?.commit()
     }
 

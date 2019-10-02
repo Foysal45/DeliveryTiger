@@ -42,21 +42,21 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    private fun addSignUpFragment(){
+    /*private fun addSignUpFragment(){
         val fragment = SignUpFragment.newInstance()
         val ft: FragmentTransaction? = supportFragmentManager?.beginTransaction()
         ft?.add(R.id.loginActivityContainer, fragment, SignUpFragment.tag)
         // ft?.addToBackStack(LoginFragment.getFragmentTag())
         ft?.commit()
-    }
+    }*/
 
-    private fun addResetPasswordFragment(){
+    /*private fun addResetPasswordFragment(){
         val fragment = ResetPasswordFragment.newInstance()
         val ft: FragmentTransaction? = supportFragmentManager?.beginTransaction()
         ft?.add(R.id.loginActivityContainer, fragment, ResetPasswordFragment.tag)
         // ft?.addToBackStack(LoginFragment.tag)
         ft?.commit()
-    }
+    }*/
 
 
 }

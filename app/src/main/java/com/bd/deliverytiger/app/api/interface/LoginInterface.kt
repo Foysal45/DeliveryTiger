@@ -3,10 +3,7 @@ package com.bd.deliverytiger.app.api.`interface`
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.*
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface LoginInterface {
 
@@ -19,7 +16,7 @@ interface LoginInterface {
     @POST("api/Account/UserRegister")
     fun userUserRegister(@Body body: SignUpReqBody): Call<GenericResponse<SignUpResponse>>
 
-    @POST("api/Account/ResetPassword")
+    @PUT("api/Account/ResetPassword")
     fun userResetPassword(@Body body: SignUpReqBody): Call<GenericResponse<SignUpResponse>>
 
     @POST("api/Account/GetCourierUsers")

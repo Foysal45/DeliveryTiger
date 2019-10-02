@@ -159,7 +159,7 @@ class LoginFragment: Fragment() {
         val fragment = SignUpFragment.newInstance()
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpFragment.tag)
-        ft?.addToBackStack(SignUpFragment.tag)
+        //ft?.addToBackStack(SignUpFragment.tag)
         ft?.commit()
     }
 
@@ -172,7 +172,7 @@ class LoginFragment: Fragment() {
         val fragment = ResetPasswordFragment.newInstance()
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, ResetPasswordFragment.tag)
-        ft?.addToBackStack(ResetPasswordFragment.tag)
+        //ft?.addToBackStack(ResetPasswordFragment.tag)
         ft?.commit()
     }
 
