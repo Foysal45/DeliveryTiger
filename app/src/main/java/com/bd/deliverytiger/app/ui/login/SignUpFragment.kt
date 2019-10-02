@@ -15,10 +15,13 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
+import com.bd.deliverytiger.app.api.RetrofitSingletonAD
 import com.bd.deliverytiger.app.api.`interface`.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
-import com.bd.deliverytiger.app.api.model.login.SignUpReqBody
-import com.bd.deliverytiger.app.api.model.login.SignUpResponse
+import com.bd.deliverytiger.app.api.model.login.LoginResponse
+import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
+import com.bd.deliverytiger.app.api.model.login.OTPResponse
+import com.bd.deliverytiger.app.api.model.login.UserInfoRequest
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
 import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
@@ -30,13 +33,14 @@ import retrofit2.Response
 /**
  * A simple [Fragment] subclass.
  */
-class SignUpFragment: Fragment(),View.OnClickListener {
+class SignUpFragment : Fragment(), View.OnClickListener {
 
-    companion object{
-        fun newInstance(): SignUpFragment{
+    companion object {
+        fun newInstance(): SignUpFragment {
             val fragment = SignUpFragment()
             return fragment
         }
+
         val tag = LoginFragment::class.java.name
     }
 
@@ -47,6 +51,7 @@ class SignUpFragment: Fragment(),View.OnClickListener {
     private lateinit var btnSignUp: Button
     private lateinit var tvLogin: TextView
 
+    private var progressDialog: ProgressDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,6 +69,9 @@ class SignUpFragment: Fragment(),View.OnClickListener {
         btnSignUp = view.findViewById(R.id.btnSignUp)
         tvLogin = view.findViewById(R.id.tvLogin)
 
+        progressDialog = ProgressDialog(mContext)
+        progressDialog?.setMessage("অপেক্ষা করুন")
+
         initClickListener()
     }
 
@@ -73,9 +81,11 @@ class SignUpFragment: Fragment(),View.OnClickListener {
     }
 
     override fun onClick(p0: View?) {
-        when (p0){
+        when (p0) {
             btnSignUp -> {
-                signUp()
+                if (validate()) {
+                    checkIfUserExist()
+                }
             }
             tvLogin -> {
                 activity?.onBackPressed()
@@ -83,68 +93,95 @@ class SignUpFragment: Fragment(),View.OnClickListener {
         }
     }
 
-    private fun signUp(){
-        if(validate()){
-            val progressDialog = ProgressDialog(mContext)
-            progressDialog.setMessage("অপেক্ষা করুন")
-            progressDialog.show()
+    private fun sendOTP() {
 
-            val retrofit = RetrofitSingleton.getInstance(mContext)
-            val loginInterface = retrofit.create(LoginInterface::class.java)
-            val signUpReqBody = SignUpReqBody(etSignUpMobileNo.text.toString(),etSignUpPassword.text.toString())
-            loginInterface.userUserRegister(signUpReqBody).enqueue(object : Callback<GenericResponse<SignUpResponse>>{
-                override fun onFailure(call: Call<GenericResponse<SignUpResponse>>, t: Throwable) {
-                    Timber.e("userUserRegister","failed "+t.message)
-                    progressDialog.hide()
+        progressDialog?.show()
+
+        val mobileNo = etSignUpMobileNo.text.toString()
+        val retrofit = RetrofitSingletonAD.getInstance(mContext)
+        val loginInterface = retrofit.create(LoginInterface::class.java)
+        val requestBody = OTPRequestModel(mobileNo, mobileNo)
+        loginInterface.sendOTP(requestBody).enqueue(object : Callback<OTPResponse> {
+            override fun onFailure(call: Call<OTPResponse>, t: Throwable) {
+                Timber.e("userUserRegister", "failed " + t.message)
+                progressDialog?.dismiss()
+            }
+
+            override fun onResponse(
+                call: Call<OTPResponse>,
+                response: Response<OTPResponse>
+            ) {
+                progressDialog?.dismiss()
+                if (response.isSuccessful && response.body() != null && isAdded) {
+                    Timber.e("userUserRegister", response.body().toString())
+                    showShortToast(context, response.body()!!.model ?: "Send")
+                    goToSignUpOTP()
                 }
+            }
+        })
 
-                override fun onResponse(
-                    call: Call<GenericResponse<SignUpResponse>>,
-                    response: Response<GenericResponse<SignUpResponse>>
-                ) {
-                    progressDialog.hide()
-                  if(response.isSuccessful && response.body() != null){
-                      Timber.e("userUserRegister",response.body().toString())
-                      showShortToast(context,getString(R.string.success_in_signin))
-                      addLoginFragment()
-                  } else {
-                      if (response.body() != null) {
-                          showShortToast(context,response.body()!!.errorMessage)
-                      }
-                      Timber.e("userUserRegister","null")
-                  }
-                }
-
-            })
-        }
     }
 
-    private fun validate(): Boolean{
+
+    private fun checkIfUserExist() {
+
+        progressDialog?.show()
+        val mobile = etSignUpMobileNo.text.toString()
+        val loginInterface = RetrofitSingleton.getInstance(mContext).create(LoginInterface::class.java)
+        loginInterface.getUserInfo(UserInfoRequest(mobile)).enqueue(object : Callback<GenericResponse<LoginResponse>> {
+            override fun onFailure(call: Call<GenericResponse<LoginResponse>>, t: Throwable) {
+                progressDialog?.dismiss()
+            }
+
+            override fun onResponse(call: Call<GenericResponse<LoginResponse>>, response: Response<GenericResponse<LoginResponse>>) {
+
+                if (response.code() == 404) {
+                    sendOTP()
+                } else {
+                    progressDialog?.dismiss()
+                    showShortToast(context, "এই মোবাইল নম্বর দিয়ে ইতিমধ্যে রেজিস্টেশন করা হয়েছে")
+                }
+            }
+
+        })
+    }
+
+    private fun validate(): Boolean {
         var go = true
         if (etSignUpMobileNo.text.toString().isEmpty()) {
-            showShortToast(context,getString(R.string.write_phone_number))
+            showShortToast(context, getString(R.string.write_phone_number))
             go = false
             etSignUpMobileNo.requestFocus()
         } else if (!Validator.isValidMobileNumber(etSignUpMobileNo.text.toString()) || etSignUpMobileNo.text.toString().length < 11) {
-            showShortToast(context,getString(R.string.write_proper_phone_number_recharge))
+            showShortToast(context, getString(R.string.write_proper_phone_number_recharge))
             go = false
             etSignUpMobileNo.requestFocus()
-        } else if(etSignUpPassword.text.toString().isEmpty()) {
-            showShortToast(context,getString(R.string.write_password))
+        } else if (etSignUpPassword.text.toString().isEmpty()) {
+            showShortToast(context, getString(R.string.write_password))
             go = false
-        } else if(etSignUpPassword.text.toString() != etSignUpConfirmPassword.text.toString()) {
-            showShortToast(context,getString(R.string.match_pass))
+        } else if (etSignUpPassword.text.toString() != etSignUpConfirmPassword.text.toString()) {
+            showShortToast(context, getString(R.string.match_pass))
             go = false
         }
         hideSoftKeyBoard(activity!!)
         return go
     }
 
-    private fun addLoginFragment(){
+    private fun addLoginFragment() {
         val fragment = LoginFragment.newInstance(false)
         val ft: FragmentTransaction? = (mContext as FragmentActivity?)?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, LoginFragment.tag)
-        // ft?.addToBackStack(LoginFragment.getFragmentTag())
+        ft?.commit()
+    }
+
+    private fun goToSignUpOTP() {
+
+        val mobile = etSignUpMobileNo.text.toString()
+        val password = etSignUpPassword.text.toString()
+
+        val fragment = SignUpOTPFragment.newInstance(mobile, password)
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.loginActivityContainer, fragment, SignUpOTPFragment.tag)
         ft?.commit()
     }
 

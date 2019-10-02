@@ -398,8 +398,10 @@ class AddOrderFragmentTwo : Fragment() {
         }
         var total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge
         if (isBreakable) {
-            total += breakableChargeApi
             payBreakableCharge = breakableChargeApi
+            total += payBreakableCharge
+        } else {
+            payBreakableCharge = 0.0
         }
 
         totalTV.text = DigitConverter.toBanglaDigit("৳ $total", true)

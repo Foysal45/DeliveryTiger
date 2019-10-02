@@ -30,6 +30,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/cd"
             app:srcCompat="@drawable/delivery_tiger_logo" />
 
         <TextView
@@ -37,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/login_view_height"
-            android:text="@string/registration"
+            android:text="রেজিস্ট্রেশন"
             android:textColor="@color/black_80"
             android:textSize="@dimen/login_title_size"
             android:textStyle="bold"
@@ -61,7 +62,6 @@
             android:layout_height="wrap_content">
 
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -74,14 +74,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_view_height"
                 android:background="@drawable/bg_login_top_edit_text"
-                android:hint="Mobile number"
+                android:hint="মোবাইল নম্বর"
                 android:paddingStart="16dp"
                 android:paddingTop="8dp"
                 android:paddingEnd="16dp"
                 android:paddingBottom="8dp"
+                android:textSize="@dimen/text_14"
+                android:textColor="@color/black_80"
+                android:inputType="phone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/loginTitle" />
+                app:layout_constraintTop_toBottomOf="@id/loginTitle"
+                android:importantForAutofill="no" />
 
             <View
                 android:layout_width="match_parent"
@@ -93,15 +97,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_view_height"
                 android:background="@drawable/bg_login_middle_edit_text"
-                android:hint="Password"
+                android:hint="পাসওয়ার্ড"
                 android:inputType="textPassword"
                 android:paddingStart="16dp"
                 android:paddingTop="8dp"
                 android:paddingEnd="16dp"
                 android:paddingBottom="8dp"
+                android:textSize="@dimen/text_14"
+                android:textColor="@color/black_80"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo" />
+                app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo"
+                android:importantForAutofill="no" />
 
             <View
                 android:layout_width="match_parent"
@@ -109,19 +116,22 @@
                 android:background="@color/login_title_color" />
 
             <EditText
-                android:inputType="textPassword"
                 android:id="@+id/etSignUpConfirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_view_height"
                 android:background="@drawable/bg_login_bottom_edit_text"
-                android:hint="Confirm password"
+                android:hint="নিশ্চিত পাসওয়ার্ড"
                 android:paddingStart="16dp"
                 android:paddingTop="8dp"
                 android:paddingEnd="16dp"
                 android:paddingBottom="8dp"
+                android:textSize="@dimen/text_14"
+                android:textColor="@color/black_80"
+                android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo" />
+                app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo"
+                android:importantForAutofill="no" />
 
         </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -137,7 +147,7 @@
             android:layout_marginEnd="@dimen/left_right_margin"
             android:backgroundTint="@color/green_color"
             android:padding="8dp"
-            android:text="Register"
+            android:text="রেজিস্টেশন"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -152,7 +162,7 @@
             android:layout_marginStart="@dimen/left_right_margin"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
-            android:text="Already have an account?"
+            android:text="একাউন্ট আছে?"
             android:textColor="@color/black_80"
             android:textSize="@dimen/login_sign_up_tv_size"
             app:layout_constraintEnd_toStartOf="@id/tvLogin"
@@ -166,7 +176,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/left_right_margin"
-            android:text="Log In"
+            android:text="লগইন করুন"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
             android:textColor="@color/green_color"

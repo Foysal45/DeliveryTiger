@@ -6,5 +6,11 @@ data class SignUpReqBody(
     @SerializedName("mobile")
     var mobile: String,
     @SerializedName("password")
-    var password: String
+    var password: String,
+    @SerializedName("userName")
+    var userName: String = "user name",
+    @SerializedName("address")
+    var address: String = "",
+    @SerializedName("isActive")
+    var isActive: Boolean = true
 )
