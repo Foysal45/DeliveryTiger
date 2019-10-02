@@ -246,7 +246,7 @@ class AddOrderFragmentTwo : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("প্যাকেজ ও কালেকশনের তথ্য")
+        (activity as HomeActivity).setToolbarTitle("নতুন অর্ডার")
     }
 
     private fun getBreakableCharge() {

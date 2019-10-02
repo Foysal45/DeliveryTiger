@@ -213,6 +213,17 @@ object SessionManager {
             }
         }
 
+    var profileImgUri: String
+        get() {
+            return pref.getString("profile_img", "").toString()
+        }
+        set(value) {
+            pref.edit {
+                putString("profile_img", value)
+                commit()
+            }
+        }
+
     fun getSessionData(): ProfileUpdateReqBody {
         val model = ProfileUpdateReqBody(pref.getInt(Key_UserId,0), pref.getString(Key_UserName,""),pref.getString("mobile",""),pref.getString("alterMobile",""),pref.getString("emailAddress",""),
             pref.getString("bkashNumber",""),pref.getString("address",""),pref.getBoolean("sms",false))

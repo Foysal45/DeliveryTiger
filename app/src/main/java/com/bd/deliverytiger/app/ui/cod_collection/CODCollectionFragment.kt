@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
@@ -128,6 +129,12 @@ class CODCollectionFragment : Fragment() {
         rvCODCollection.apply {
             layoutManager = linearLayoutManager
             adapter = codCollectionAdapter
+            addItemDecoration(
+                DividerItemDecoration(
+                    rvCODCollection.getContext(),
+                    DividerItemDecoration.VERTICAL
+                )
+            )
         }
 
         codCollectionAdapter.onItemClick = { position ->

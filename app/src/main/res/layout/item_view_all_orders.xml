@@ -24,7 +24,7 @@
             android:paddingTop="@dimen/fab_margin"
             android:paddingBottom="@dimen/fab_margin"
             android:text="1"
-            android:textColor="@color/black"
+            android:textColor="@color/black_80"
 
             android:textSize="@dimen/text_14" />
 
@@ -48,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/cod_search"
                 android:drawablePadding="8dp"
+                android:textStyle="bold"
                 android:text="DT-3421"
                 android:textColor="@color/green_color"
                 android:textSize="@dimen/text_14" />
@@ -57,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Sep 25, 2019"
-                android:textColor="@color/black"
+                android:textColor="@color/gray_500"
                 android:textSize="@dimen/text_14" />
 
         </LinearLayout>
@@ -141,7 +142,7 @@
             android:orientation="horizontal"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingStart="8dp">
+            android:paddingStart="16dp">
 
             <ImageView
                 android:layout_marginEnd="@dimen/size_4"
@@ -153,6 +154,7 @@
 
 
             <TextView
+                android:paddingTop="2dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="এডিট"

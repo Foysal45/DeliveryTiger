@@ -1,15 +1,16 @@
 package com.bd.deliverytiger.app.ui.profile
 
-
+import android.app.Activity.RESULT_OK
 import android.app.ProgressDialog
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.LinearLayout
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
@@ -25,6 +26,8 @@ import com.bd.deliverytiger.app.utils.VariousTask
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.InputStream
+
 
 /**
  * A simple [Fragment] subclass.
@@ -46,6 +49,8 @@ class ProfileFragment : Fragment() {
     private lateinit var etProductCollectionAddress: EditText
     private lateinit var checkSmsUpdate: CheckBox
     private lateinit var btnSaveProfile: Button
+    private lateinit var ivProfileImage: ImageView
+    private lateinit var ivEditProfileImage: ImageView
 
     private var customerName = ""
     private var mobileNo = ""
@@ -76,6 +81,8 @@ class ProfileFragment : Fragment() {
         etProductCollectionAddress = view.findViewById(R.id.etProductCollectionAddress)
         checkSmsUpdate = view.findViewById(R.id.checkSmsUpdate)
         btnSaveProfile = view.findViewById(R.id.btnSaveProfile)
+        ivProfileImage = view.findViewById(R.id.ivProfileImage)
+        ivEditProfileImage = view.findViewById(R.id.ivEditProfileImage)
 
 
         sunSetUserStoredData()
@@ -84,6 +91,16 @@ class ProfileFragment : Fragment() {
             if (validate()) {
                 updateProfile()
             }
+        }
+
+        ivEditProfileImage.setOnClickListener {
+            val photoPickerIntent = Intent(Intent.ACTION_PICK)
+            photoPickerIntent.type = "image/*"
+            startActivityForResult(photoPickerIntent, 101)
+        }
+
+        if (SessionManager.profileImgUri.isNotEmpty()) {
+            setProfileImgUrl(SessionManager.profileImgUri)
         }
 
     }
@@ -161,10 +178,13 @@ class ProfileFragment : Fragment() {
             checkSmsUpdate.isChecked
         )
 
-        profileUpdateInterface.updateMerchantInformation(SessionManager.courierUserId,proUpdateReqBody).enqueue(object :
-            Callback<GenericResponse<LoginResponse>>{
+        profileUpdateInterface.updateMerchantInformation(
+            SessionManager.courierUserId,
+            proUpdateReqBody
+        ).enqueue(object :
+            Callback<GenericResponse<LoginResponse>> {
             override fun onFailure(call: Call<GenericResponse<LoginResponse>>, t: Throwable) {
-                Timber.e("updateProfile f ",t.toString())
+                Timber.e("updateProfile f ", t.toString())
                 progressDialog.dismiss()
             }
 
@@ -173,9 +193,9 @@ class ProfileFragment : Fragment() {
                 response: Response<GenericResponse<LoginResponse>>
             ) {
                 progressDialog.dismiss()
-                if(response.isSuccessful && response.body() != null && response.body()?.model != null){
-                    Timber.e("updateProfile f ",response.body().toString())
-                    VariousTask.showShortToast(context,getString(R.string.update_success))
+                if (response.isSuccessful && response.body() != null && response.body()?.model != null) {
+                    Timber.e("updateProfile f ", response.body().toString())
+                    VariousTask.showShortToast(context, getString(R.string.update_success))
                     SessionManager.updateSession(proUpdateReqBody)
                     activity?.onBackPressed()
                 }
@@ -185,7 +205,7 @@ class ProfileFragment : Fragment() {
 
     }
 
-    private fun sunSetUserStoredData(){
+    private fun sunSetUserStoredData() {
 
         val model = SessionManager.getSessionData()
         etCustomerName.setText(model.userName)
@@ -196,6 +216,24 @@ class ProfileFragment : Fragment() {
         etEmailAddress.setText(model.emailAddress)
 
         checkSmsUpdate.isChecked = model.isSms!!
+    }
+
+    private fun setProfileImgUrl(imageUri: String?) {
+        try {
+            val imageStream: InputStream = activity?.contentResolver?.openInputStream(Uri.parse(imageUri!!))!!
+            val selectedImage: Bitmap? = BitmapFactory.decodeStream(imageStream)
+            ivProfileImage.scaleType = ImageView.ScaleType.CENTER_CROP
+            ivProfileImage.setImageBitmap(selectedImage)
+        } catch (e: Exception) {
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK && requestCode == 101) {
+            SessionManager.profileImgUri = data?.data.toString()
+            setProfileImgUrl(data?.data.toString())
+        }
     }
 
     override fun onResume() {

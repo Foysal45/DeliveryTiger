@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="30dp"
             android:text="Show"
-            android:textColor="@color/black_80"
+            android:textColor="@color/black"
             android:textSize="@dimen/text_14"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

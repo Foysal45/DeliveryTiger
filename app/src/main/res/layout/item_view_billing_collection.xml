@@ -37,6 +37,7 @@
             android:textSize="@dimen/text_14">
 
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/tvBillingOrderId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

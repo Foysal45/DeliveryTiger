@@ -99,7 +99,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("কাস্টমারের তথ্য")
+        (activity as HomeActivity).setToolbarTitle("নতুন অর্ডার")
     }
 
     private fun iniViewClicked(){

@@ -30,43 +30,41 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/left_right_margin"
         android:hint="অর্ডার আইডি লিখুন"
-        android:background="@drawable/bg_add_order_edit_text_white"
+        android:background="@drawable/bg_add_order_edit_text"
         android:textColor="@color/black_80"
         android:textSize="@dimen/login_sign_up_tv_size"
         android:layout_width="match_parent"
         android:layout_height="48dp"/>
 
+
     <LinearLayout
+        android:id="@+id/orderTrackClickedLay"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
         android:layout_marginStart="@dimen/left_right_margin"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/left_right_margin"
-        android:gravity="center"
-        android:id="@+id/orderTrackClickedLay"
-        android:orientation="horizontal"
         android:background="@drawable/bg_login_btn"
-        android:layout_width="match_parent"
-        android:layout_height="48dp">
+        android:gravity="center"
+        android:orientation="horizontal">
 
 
         <ImageView
-            android:layout_marginEnd="@dimen/fab_margin"
-            app:srcCompat="@drawable/order_track_search"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            app:srcCompat="@drawable/order_track_search" />
 
 
         <TextView
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/left_right_margin"
             android:text="অর্ডার ট্র্যাক করুন"
             android:textColor="@color/white"
-            android:textSize="@dimen/login_sign_up_tv_size"
-            />
+            android:textSize="@dimen/login_sign_up_tv_size" />
 
     </LinearLayout>
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="@dimen/fab_margin"

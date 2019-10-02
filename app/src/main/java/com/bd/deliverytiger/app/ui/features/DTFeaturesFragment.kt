@@ -51,7 +51,7 @@ class DTFeaturesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("ফিচারস")
+        (activity as HomeActivity).setToolbarTitle("DT ফিচারস")
     }
 
 }

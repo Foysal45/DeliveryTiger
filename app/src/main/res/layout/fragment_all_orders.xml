@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/fab_margin"
             android:text="মোট অর্ডার : ০"
-            android:textColor="@color/black"
+            android:textColor="@color/black_80"
             android:textSize="@dimen/text_14"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/fab_margin"
             android:orientation="horizontal"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -47,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ফিল্টার"
-                android:textColor="@color/black"
+                android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/ivAddOrderArrow"
@@ -102,7 +103,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/nav_header_vertical_spacing"
                         android:text="#"
-                        android:textColor="@color/black"
+                        android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
 
                         android:textStyle="bold" />
@@ -112,8 +113,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:paddingStart="@dimen/fab_margin"
-                        android:text="অর্ডার ইনফো"
-                        android:textColor="@color/black"
+                        android:text="অর্ডারের তথ্য"
+                        android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
 
@@ -123,7 +124,7 @@
                         android:layout_weight="1"
                         android:maxWidth="100dp"
                         android:text="কাস্টমারের তথ্য"
-                        android:textColor="@color/black"
+                        android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
 
@@ -133,8 +134,8 @@
                         android:layout_weight="1"
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
-                        android:text="প্যাকজের তথ্য"
-                        android:textColor="@color/black"
+                        android:text="প্যাকেজের তথ্য"
+                        android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
 
@@ -146,7 +147,7 @@
                         android:layout_weight="1"
                         android:maxWidth="100dp"
                         android:text="কালেকশনের পরিমান"
-                        android:textColor="@color/black"
+                        android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
 
@@ -157,7 +158,7 @@
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
                         android:text="মোট সার্ভিস চার্জ"
-                        android:textColor="@color/black"
+                        android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
 
@@ -168,7 +169,7 @@
                         android:layout_weight="1"
                         android:maxWidth="100dp"
                         android:text="স্ট্যাটাস"
-                        android:textColor="@color/black"
+                        android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
 
@@ -176,9 +177,9 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:paddingStart="8dp"
+                        android:paddingStart="16dp"
                         android:text="তথ্য পরিবর্তন"
-                        android:textColor="@color/black"
+                        android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
 

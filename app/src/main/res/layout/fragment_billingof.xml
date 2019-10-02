@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/fab_margin"
             android:orientation="horizontal"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -102,7 +103,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/nav_header_vertical_spacing"
                         android:text="#"
-                        android:textColor="@color/black"
+                        android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
 
                         android:textStyle="bold" />

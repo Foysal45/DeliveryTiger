@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackMainResponse
 import com.bd.deliverytiger.app.utils.DigitConverter
+import com.bd.deliverytiger.app.utils.Timber
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class OrderTrackingBottomSheet() : BottomSheetDialogFragment() {
+class OrderTrackingBottomSheet : BottomSheetDialogFragment() {
     companion object {
         fun newInstance(orderTrackMainResponse: OrderTrackMainResponse): OrderTrackingBottomSheet {
             val fragment = OrderTrackingBottomSheet()
@@ -35,6 +36,12 @@ class OrderTrackingBottomSheet() : BottomSheetDialogFragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_order_tracking_bottom_sheet, container, false)
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme)
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
