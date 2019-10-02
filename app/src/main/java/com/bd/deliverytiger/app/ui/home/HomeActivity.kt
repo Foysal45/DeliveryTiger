@@ -44,6 +44,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var addProductIV: ImageView
     private lateinit var toolbarTitleTV: TextView
     private lateinit var notificationIV: ImageView
+    private lateinit var trackingIV: ImageView
 
     private var doubleBackToExitPressedOnce = false
     private var navId: Int = 0
@@ -61,6 +62,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         addProductIV = findViewById(R.id.home_toolbar_add)
         toolbarTitleTV = findViewById(R.id.home_toolbar_title)
         notificationIV = findViewById(R.id.home_toolbar_notification)
+        trackingIV = findViewById(R.id.home_toolbar_tracking)
         navView.setNavigationItemSelectedListener(this)
         /*val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
@@ -106,7 +108,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         notificationIV.setOnClickListener {
             goToNotification()
         }
-
+        trackingIV.setOnClickListener {
+            goToOrderTracking()
+        }
     }
 
     override fun onStart() {
@@ -421,5 +425,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }, 300L)
 
+    }
+
+    private fun goToOrderTracking(){
+
+        val fragment = OrderTrackingFragment.newInstance("")
+        val ft = supportFragmentManager.beginTransaction()
+        ft.add(R.id.mainActivityContainer, fragment, OrderTrackingFragment.tag)
+        ft.addToBackStack(OrderTrackingFragment.tag)
+        ft.commit()
     }
 }
