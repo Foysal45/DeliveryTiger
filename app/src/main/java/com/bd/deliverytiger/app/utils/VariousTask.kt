@@ -50,14 +50,10 @@ object VariousTask {
         et.isFocusableInTouchMode = true
     }
 
-    fun hideSoftKeyBoard(activity: Activity) {
+    fun hideSoftKeyBoard(activity: Activity?) {
         try {  // hide keyboard if its open
-            val inputMethodManager = activity!!.getSystemService(
-                Activity.INPUT_METHOD_SERVICE
-            ) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(
-                activity!!.currentFocus!!.windowToken, 0
-            )
+            val inputMethodManager: InputMethodManager? = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager?.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
 
         } catch (e: Exception) {
             e.printStackTrace()

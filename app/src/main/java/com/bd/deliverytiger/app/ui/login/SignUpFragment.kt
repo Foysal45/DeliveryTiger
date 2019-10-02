@@ -85,6 +85,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
     override fun onClick(p0: View?) {
         when (p0) {
             btnSignUp -> {
+                hideSoftKeyBoard(activity)
                 if (validate()) {
                     checkIfUserExist()
                 }

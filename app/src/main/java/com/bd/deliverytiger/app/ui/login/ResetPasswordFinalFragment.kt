@@ -169,7 +169,7 @@ class ResetPasswordFinalFragment : Fragment() {
     }
 
     private fun addLoginFragment(){
-        val fragment = LoginFragment.newInstance(true)
+        val fragment = LoginFragment.newInstance(false)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, LoginFragment.tag)
         ft?.commit()

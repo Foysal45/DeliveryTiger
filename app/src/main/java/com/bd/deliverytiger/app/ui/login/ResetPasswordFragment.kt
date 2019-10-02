@@ -85,6 +85,7 @@ class ResetPasswordFragment : Fragment(), View.OnClickListener {
 
         when (p0) {
             btnReset -> {
+                hideSoftKeyBoard(activity)
                 if (!Validator.isValidMobileNumber(etResetMobileNo.text.toString()) || etResetMobileNo.text.toString().length < 11) {
                     showShortToast(context, getString(R.string.write_proper_phone_number_recharge))
                     hideSoftKeyBoard(activity!!)
@@ -95,10 +96,12 @@ class ResetPasswordFragment : Fragment(), View.OnClickListener {
                 }
             }
             tvRegister -> {
+                hideSoftKeyBoard(activity)
                 goToSignUp()
             }
             tvResetLogin -> {
                 // addLoginFragment()
+                hideSoftKeyBoard(activity)
                 addLoginFragment(false)
             }
         }

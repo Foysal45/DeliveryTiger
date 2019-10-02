@@ -10,10 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.`interface`.LoginInterface
@@ -38,6 +40,8 @@ class LoginFragment: Fragment() {
 
     private val logTag = "LoginFragmentTag"
 
+    private lateinit var alertLayout: LinearLayout
+    private lateinit var alertMsgTV: TextView
     private lateinit var mobileET: EditText
     private lateinit var passwordET: EditText
     private lateinit var loginBtn: MaterialButton
@@ -63,14 +67,26 @@ class LoginFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        alertLayout = view.findViewById(R.id.alert_msg_layout)
+        alertMsgTV = view.findViewById(R.id.alert_msg_tv)
         mobileET = view.findViewById(R.id.etLoginMobileNo)
         passwordET = view.findViewById(R.id.etLoginPassword)
         loginBtn = view.findViewById(R.id.btnLogin)
         forgotPasswordTV = view.findViewById(R.id.tvLoginForgotPassword)
         signUpTV = view.findViewById(R.id.tvLoginSignUp)
 
-        mobileET.setText("01844172323")
-        passwordET.setText("01844172323")
+        if (BuildConfig.DEBUG){
+            mobileET.setText("01844172323")
+            passwordET.setText("01844172323")
+        }
+
+        if (sendOTP){
+            alertLayout.visibility = View.VISIBLE
+            val registationMsg = "রেজিস্টেশন সফল হয়েছে! এখন আপনার লগইন তথ্য দিয়ে লগইন করতে পারেন"
+            alertMsgTV.text = registationMsg
+        } else {
+            alertLayout.visibility = View.GONE
+        }
 
         loginBtn.setOnClickListener {
             login()
@@ -86,6 +102,7 @@ class LoginFragment: Fragment() {
 
     private fun login() {
 
+        hideSoftKeyBoard(activity)
         if (!validate()) {
             return
         }

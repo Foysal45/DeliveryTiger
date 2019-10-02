@@ -42,11 +42,12 @@ class SignUpOTPFragment : Fragment() {
     private var userMobile: String = ""
     private var userPassword: String = ""
 
-    companion object{
-        fun newInstance(userMobile: String,userPassword: String): SignUpOTPFragment = SignUpOTPFragment().apply {
+    companion object {
+        fun newInstance(userMobile: String, userPassword: String): SignUpOTPFragment = SignUpOTPFragment().apply {
             this.userMobile = userMobile
             this.userPassword = userPassword
         }
+
         val tag = SignUpOTPFragment::class.java.name
     }
 
@@ -69,7 +70,7 @@ class SignUpOTPFragment : Fragment() {
         OTPET = view.findViewById(R.id.singUp_OTP_No)
         resendBtn = view.findViewById(R.id.singUp_otp_resend)
         backBtn = view.findViewById(R.id.singUp_back)
-        submitBtn= view.findViewById(R.id.singUp_btnReset)
+        submitBtn = view.findViewById(R.id.singUp_btnReset)
 
         OTPInterface = RetrofitSingletonAD.getInstance(mContext).create(LoginInterface::class.java)
         progressDialog = ProgressDialog(mContext)
@@ -77,13 +78,15 @@ class SignUpOTPFragment : Fragment() {
         progressDialog?.setCancelable(false)
 
         resendBtn.setOnClickListener {
+            VariousTask.hideSoftKeyBoard(activity)
             resendOTP()
         }
         backBtn.setOnClickListener {
+            VariousTask.hideSoftKeyBoard(activity)
             addLoginFragment()
         }
         submitBtn.setOnClickListener {
-
+            VariousTask.hideSoftKeyBoard(activity)
             checkOTP()
         }
     }
@@ -91,20 +94,20 @@ class SignUpOTPFragment : Fragment() {
     private fun checkOTP() {
 
         val OTPCode = OTPET.text.toString()
-        if (OTPCode.isEmpty()){
+        if (OTPCode.isEmpty()) {
             VariousTask.showShortToast(context, "OTP কোডটি লিখুন")
             return
         }
 
         progressDialog?.show()
-        OTPInterface.checkOTP(userMobile, OTPCode).enqueue(object : Callback<OTPCheckResponse>{
+        OTPInterface.checkOTP(userMobile, OTPCode).enqueue(object : Callback<OTPCheckResponse> {
             override fun onFailure(call: Call<OTPCheckResponse>, t: Throwable) {
                 progressDialog?.dismiss()
             }
 
             override fun onResponse(call: Call<OTPCheckResponse>, response: Response<OTPCheckResponse>) {
-                if (response.isSuccessful && response.body() != null && isAdded){
-                    if (response.body()!!.model == 1){
+                if (response.isSuccessful && response.body() != null && isAdded) {
+                    if (response.body()!!.model == 1) {
                         registerUser()
                     } else {
                         progressDialog?.dismiss()
@@ -118,10 +121,10 @@ class SignUpOTPFragment : Fragment() {
     private fun resendOTP() {
 
         progressDialog?.show()
-        val requestBody = OTPRequestModel(userMobile,userMobile)
-        OTPInterface.sendOTP(requestBody).enqueue(object : Callback<OTPResponse>{
+        val requestBody = OTPRequestModel(userMobile, userMobile)
+        OTPInterface.sendOTP(requestBody).enqueue(object : Callback<OTPResponse> {
             override fun onFailure(call: Call<OTPResponse>, t: Throwable) {
-                Timber.e("userUserRegister","failed "+t.message)
+                Timber.e("userUserRegister", "failed " + t.message)
                 progressDialog?.dismiss()
             }
 
@@ -130,8 +133,8 @@ class SignUpOTPFragment : Fragment() {
                 response: Response<OTPResponse>
             ) {
                 progressDialog?.dismiss()
-                if(response.isSuccessful && response.body() != null && isAdded){
-                    Timber.e("userUserRegister",response.body().toString())
+                if (response.isSuccessful && response.body() != null && isAdded) {
+                    Timber.e("userUserRegister", response.body().toString())
                     VariousTask.showShortToast(context, response.body()!!.model ?: "Send")
                 }
             }
@@ -144,7 +147,7 @@ class SignUpOTPFragment : Fragment() {
         val signUpReqBody = SignUpReqBody(userMobile, userPassword)
         loginInterface.userUserRegister(signUpReqBody).enqueue(object : Callback<GenericResponse<SignUpResponse>> {
             override fun onFailure(call: Call<GenericResponse<SignUpResponse>>, t: Throwable) {
-                Timber.e("userUserRegister","failed "+t.message)
+                Timber.e("userUserRegister", "failed " + t.message)
                 progressDialog?.dismiss()
             }
 
@@ -153,15 +156,15 @@ class SignUpOTPFragment : Fragment() {
                 response: Response<GenericResponse<SignUpResponse>>
             ) {
                 progressDialog?.dismiss()
-                if(response.isSuccessful && response.body() != null){
-                    Timber.e("userUserRegister",response.body().toString())
+                if (response.isSuccessful && response.body() != null) {
+                    Timber.e("userUserRegister", response.body().toString())
                     VariousTask.showShortToast(context, getString(R.string.success_in_signin))
                     addLoginFragment()
                 } else {
                     if (response.body() != null) {
                         VariousTask.showShortToast(context, response.body()!!.errorMessage)
                     }
-                    Timber.e("userUserRegister","null")
+                    Timber.e("userUserRegister", "null")
                 }
             }
 
@@ -169,7 +172,7 @@ class SignUpOTPFragment : Fragment() {
 
     }
 
-    private fun addLoginFragment(){
+    private fun addLoginFragment() {
         val fragment = LoginFragment.newInstance(true)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, LoginFragment.tag)

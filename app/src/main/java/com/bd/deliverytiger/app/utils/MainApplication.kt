@@ -1,11 +1,13 @@
 package com.bd.deliverytiger.app.utils
 
 import android.app.Application
+import android.content.Intent
 import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.`interface`.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.interfaces.Session
+import com.bd.deliverytiger.app.ui.login.LoginActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -46,9 +48,14 @@ class MainApplication: Application() {
 
             override fun onResponse(call: Call<GenericResponse<LoginResponse>>, response: Response<GenericResponse<LoginResponse>>) {
                 Timber.d("applicationLog", "onResponse: ${response.code()} ${response.message()}")
+                if (response.code() == 404){
+                    startActivity(Intent(this@MainApplication, LoginActivity::class.java))
+                }
                 if (response.isSuccessful && response.body() != null){
                     if (response.body()!!.model != null){
                         SessionManager.createSession(response.body()!!.model)
+                    } else {
+                        startActivity(Intent(this@MainApplication, LoginActivity::class.java))
                     }
                 }
             }

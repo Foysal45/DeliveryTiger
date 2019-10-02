@@ -45,6 +45,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivLogo" />
 
+
+    <LinearLayout
+        android:id="@+id/alert_msg_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/left_right_margin"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="@dimen/left_right_margin"
+        app:layout_constraintTop_toBottomOf="@id/loginTitle"
+        android:background="#E8F5E9"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+        <TextView
+            android:id="@+id/alert_msg_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_14"
+            android:textColor="#43A047"
+            android:padding="12dp"
+            android:gravity="center"
+            tools:text="ভেরিফিকেশনের জন্য আপনার মোবাইল নম্বরে OTP পাঠানো হয়েছে"/>
+
+    </LinearLayout>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/editTextLay"
         android:layout_width="match_parent"
@@ -57,7 +84,7 @@
         app:cardElevation="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginTitle">
+        app:layout_constraintTop_toBottomOf="@id/alert_msg_layout">
 
         <LinearLayout
             android:layout_width="match_parent"
