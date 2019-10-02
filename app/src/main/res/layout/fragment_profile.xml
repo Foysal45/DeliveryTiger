@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    tools:context=".ui.profile.ProfileFragment">
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/edit_profile_toggle_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        >
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_person_outline"
+            android:gravity="center"
+            app:strokeColor="#9CA5B4"
+            android:paddingStart="18dp"
+            android:backgroundTint="#9CA5B4"
+            />
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:icon="@drawable/ic_key"
+            android:paddingStart="18dp"
+            android:backgroundTint="#9CA5B4"
+            app:strokeColor="#9CA5B4"
+            app:strokeWidth="1dp"
+            />
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ব্যক্তিগত তথ্য"
+        android:textColor="@color/green_color"
+        android:textSize="@dimen/text_16"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/edit_profile_toggle_group"
+        android:padding="16dp"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/edit_profile_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:srcCompat="@drawable/ic_account"
+                tools:tint="@color/black_80"
+                android:contentDescription="@string/cd"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <ImageView
+                android:id="@+id/edit_profile_image_edit"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="4dp"
+                app:srcCompat="@drawable/ic_camera"
+                android:contentDescription="@string/cd"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <EditText
+            android:id="@+id/etCustomerName"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_view_height"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:hint="কাস্টমারের নাম"
+            android:importantForAutofill="no"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:layout_marginTop="16dp"
+            android:textSize="@dimen/text_14" />
+
+        <EditText
+            android:id="@+id/etAddOrderMobileNo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_view_height"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:hint="মোবাইল নাম্বার"
+            android:importantForAutofill="no"
+            android:inputType="phone"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
+
+        <EditText
+            android:id="@+id/etAlternativeMobileNo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_view_height"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:hint="বিকল্প মোবাইল নাম্বার"
+            android:importantForAutofill="no"
+            android:inputType="phone"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
+
+        <EditText
+            android:id="@+id/etBikashMobileNo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_view_height"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:hint="আপনার পেমেন্ট গ্রহনের বিকাশ নম্বর"
+            android:importantForAutofill="no"
+            android:inputType="phone"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
+
+        <EditText
+            android:id="@+id/etEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_view_height"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:hint="ইমেইল"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
+
+        <EditText
+            android:id="@+id/etProductCollectionAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:gravity="start|top"
+            android:hint="আপনার পণ্য সরবরাহের ঠিকানা"
+            android:importantForAutofill="no"
+            android:minHeight="96dp"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/check_sms_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="SMS আপডেট (চার্জ প্রযোজ্য)"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save_profile_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="সেভ"
+            android:textColor="@color/white"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/edit_profile_toggle_group"
+        android:padding="16dp"
+        >
+
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

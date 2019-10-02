@@ -27,9 +27,11 @@ import com.bd.deliverytiger.app.ui.features.DTFeaturesFragment
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
+import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.navigation.NavigationView
 
 
@@ -82,11 +84,18 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val headerPic: ImageView = headerView.findViewById(R.id.nav_header_image)
         val headerUserNameTV: TextView = headerView.findViewById(R.id.nav_header_title)
         val headerDesignationTV: TextView = headerView.findViewById(R.id.nav_header_sub_title)
+        val profileEdit: ImageView = headerView.findViewById(R.id.nav_header_profile_edit)
         headerUserNameTV.text = SessionManager.companyName
         headerDesignationTV.text = SessionManager.mobile
         Glide.with(this)
             .load("https://deliverytiger.com.bd/assets/images/user.png")
+            .apply(RequestOptions().placeholder(R.drawable.ic_account).circleCrop())
             .into(headerPic)
+        profileEdit.setOnClickListener {
+            navId = R.id.nav_header_profile_edit
+            drawerLayout.closeDrawer(GravityCompat.START)
+
+        }
 
         //addHomeFragment()
         addDashBoardFragment()
@@ -184,6 +193,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 is DTFeaturesFragment -> {
                     currentFragment.onResume()
                 }
+                is ProfileFragment -> {
+                    currentFragment.onResume()
+                }
             }
 
 
@@ -225,6 +237,15 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun manageNavigationItemSelection(id: Int) {
         when (id) {
+            R.id.nav_header_profile_edit -> {
+                val currentFragment =
+                    supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is ProfileFragment) {
+                    Timber.d("tag", "ProfileFragment already exist")
+                } else {
+                    addFragment(ProfileFragment.newInstance(), ProfileFragment.tag)
+                }
+            }
             R.id.nav_dashboard -> {
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
@@ -232,6 +253,15 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     Timber.d("tag", "DashboardFragment already exist")
                 } else {
                     addFragment(DashboardFragment.newInstance(), DashboardFragment.tag)
+                }
+            }
+            R.id.nav_new_order -> {
+                val currentFragment =
+                    supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is AddOrderFragmentOne) {
+                    Timber.d("tag", "AddOrderFragmentOne already exist")
+                } else {
+                    addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
                 }
             }
             R.id.nav_orders -> {

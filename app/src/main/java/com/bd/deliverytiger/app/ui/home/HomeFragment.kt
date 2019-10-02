@@ -47,6 +47,10 @@ class HomeFragment : Fragment() {
         btnAddOrder = view.findViewById(R.id.btnAddOrder)
         ivSurpriseBtn = view.findViewById(R.id.ivSurpriseBtn)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
         (activity as HomeActivity).setToolbarTitle("ড্যাশবোর্ড")
     }
 
