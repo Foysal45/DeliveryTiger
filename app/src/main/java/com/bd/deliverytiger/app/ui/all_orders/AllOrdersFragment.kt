@@ -133,8 +133,8 @@ class AllOrdersFragment : Fragment() {
         }
 
         allOrdersAdapter.onEditItemClick = { position ->
-            val orderUpdateReqBody = UpdateOrderReqBody(courierOrderViewModelList!![position]?.id,courierOrderViewModelList!![position]?.customerName,"","","",courierOrderViewModelList!![position]?.userInfo?.collectAddress,courierOrderViewModelList!![position]?.courierOrderInfo?.collectionName)
-            editOrder(courierOrderViewModelList!![position]?.courierOrdersId.toString(),orderUpdateReqBody)
+            val orderUpdateReqBody = UpdateOrderReqBody(courierOrderViewModelList!![position]?.id,courierOrderViewModelList!![position]?.customerName,courierOrderViewModelList!![position]?.courierAddressContactInfo?.mobile,courierOrderViewModelList!![position]?.courierAddressContactInfo?.otherMobile,courierOrderViewModelList!![position]?.courierAddressContactInfo?.address,courierOrderViewModelList!![position]?.userInfo?.collectAddress,courierOrderViewModelList!![position]?.courierOrderInfo?.collectionName)
+            editOrder(courierOrderViewModelList!![position]?.courierOrdersId.toString(),orderUpdateReqBody, position)
         }
 
         allOrderFilterLay.setOnClickListener {
@@ -235,7 +235,7 @@ class AllOrdersFragment : Fragment() {
         })
     }
 
-    private fun editOrder(orderId: String,updateOrderReqBody: UpdateOrderReqBody) {
+    private fun editOrder(orderId: String,updateOrderReqBody: UpdateOrderReqBody, indexPosition: Int) {
         val dialogBuilder = AlertDialog.Builder(context)
 
         val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -248,6 +248,11 @@ class AllOrdersFragment : Fragment() {
         val etAlertCustomersAddress: TextView =
             dialogView.findViewById(R.id.etAlertCustomersAddress)
         val btnAlertSubmit: Button = dialogView.findViewById(R.id.btnAlertSubmit)
+
+
+        etAlertAddOrderMobileNo.setText(updateOrderReqBody.mobile)
+        etAlertAlternativeMobileNo.setText(updateOrderReqBody.otherMobile)
+        etAlertCustomersAddress.setText(updateOrderReqBody.address)
 
         val dialog = dialogBuilder.create()
         dialog.show()
@@ -269,7 +274,7 @@ class AllOrdersFragment : Fragment() {
                  updateOrderReqBody.address = etAlertCustomersAddress.text.toString()
                  updateOrderReqBody.mobile = etAlertAddOrderMobileNo.text.toString()
                  updateOrderReqBody.otherMobile = etAlertAlternativeMobileNo.text.toString()
-                 updateOrderApiCall(orderId,updateOrderReqBody)
+                 updateOrderApiCall(orderId,updateOrderReqBody,indexPosition)
                 dialog.dismiss()
             }
         }
@@ -277,7 +282,7 @@ class AllOrdersFragment : Fragment() {
 
     }
 
-    private fun updateOrderApiCall(orderId: String,updateOrderReqBody: UpdateOrderReqBody){
+    private fun updateOrderApiCall(orderId: String,updateOrderReqBody: UpdateOrderReqBody, indexPos: Int){
         val placeOrderInterface = RetrofitSingleton.getInstance(context!!).create(PlaceOrderInterface::class.java)
         placeOrderInterface.placeOrderUpdate(orderId,updateOrderReqBody).enqueue(object :Callback<GenericResponse<UpdateOrderResponse>>{
             override fun onFailure(call: Call<GenericResponse<UpdateOrderResponse>>, t: Throwable) {
@@ -289,6 +294,12 @@ class AllOrdersFragment : Fragment() {
                 response: Response<GenericResponse<UpdateOrderResponse>>
             ) {
                if(response.isSuccessful && response.body() != null){
+                   courierOrderViewModelList?.get(indexPos)?.courierAddressContactInfo?.apply {
+                       mobile = updateOrderReqBody.mobile
+                       otherMobile = updateOrderReqBody.otherMobile
+                       address = updateOrderReqBody.address
+                   }
+                   allOrdersAdapter.notifyItemChanged(indexPos)
                    VariousTask.showShortToast(context,getString(R.string.update_success))
                } else {
                    VariousTask.showShortToast(context,getString(R.string.error_msg))
