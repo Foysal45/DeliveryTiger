@@ -39,6 +39,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
+                        android:textStyle="bold"
                         android:id="@+id/tvCustomerDetails"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -273,7 +274,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/go_to_previous_page"
         android:layout_width="64dp"
-        android:layout_height="56dp"
+        android:layout_height="48dp"
         android:background="@drawable/bg_add_order_previous_page"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -293,7 +294,7 @@
     <LinearLayout
         android:id="@+id/submit_order"
         android:layout_width="wrap_content"
-        android:layout_height="56dp"
+        android:layout_height="48dp"
         android:background="@drawable/bg_add_order_next_page"
         android:gravity="center"
         android:orientation="horizontal"
