@@ -379,7 +379,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun addDashBoardFragment() {
-
+        addProductBtnVisibility(false)
         val fragment = DashboardFragment.newInstance()
         val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
         ft?.replace(R.id.mainActivityContainer, fragment, DashboardFragment.tag)
