@@ -85,14 +85,11 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
+        android:id="@+id/mainActivityContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/mainActivityContainer"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:showIn="@layout/app_bar_home">
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

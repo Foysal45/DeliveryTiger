@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -50,6 +51,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
 
+    private lateinit var paymentDetailsLayout: LinearLayout
     private lateinit var etCustomerName: EditText
     private lateinit var etAddOrderMobileNo: EditText
     private lateinit var etAlternativeMobileNo: EditText
@@ -83,7 +85,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        paymentDetailsLayout = view.findViewById(R.id.payment_details)
         etCustomerName = view.findViewById(R.id.etCustomerName)
         etAddOrderMobileNo = view.findViewById(R.id.etAddOrderMobileNo)
         etAlternativeMobileNo = view.findViewById(R.id.etAlternativeMobileNo)
@@ -107,7 +109,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         etDistrict.setOnClickListener(this)
         etThana.setOnClickListener(this)
         etAriaPostOffice.setOnClickListener(this)
-
+        paymentDetailsLayout.setOnClickListener(this)
     }
 
     override fun onClick(p0: View?) {
@@ -142,6 +144,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 } else {
                     showShortToast(context!!, getString(R.string.no_aria))
                 }
+            }
+            paymentDetailsLayout -> {
+
+                val detailsSheet = DetailsBottomSheet.newInstance(Bundle())
+                detailsSheet.show(childFragmentManager, DetailsBottomSheet.tag)
             }
 
         }

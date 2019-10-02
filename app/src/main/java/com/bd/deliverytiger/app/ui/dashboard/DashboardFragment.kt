@@ -10,10 +10,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.DigitConverter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 /**
@@ -28,6 +30,7 @@ class DashboardFragment : Fragment() {
     private lateinit var paymentProcessingTV: TextView
     private lateinit var paymentReadyLayout: ConstraintLayout
     private lateinit var paymentReadyTV: TextView
+    private lateinit var addOrderBtn: FloatingActionButton
 
     companion object{
         fun newInstance(): DashboardFragment = DashboardFragment().apply {
@@ -54,6 +57,7 @@ class DashboardFragment : Fragment() {
         paymentProcessingTV = view.findViewById(R.id.dashboard_payment_processing_price_tv)
         paymentReadyLayout = view.findViewById(R.id.dashboard_payment_ready_layout)
         paymentReadyTV = view.findViewById(R.id.dashboard_payment_ready_price_tv)
+        addOrderBtn = view.findViewById(R.id.dashboard_add_order)
 
         serviceChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(783)}"
         paymentProcessingTV.text = "৳ ${DigitConverter.toBanglaDigit(567)}"
@@ -72,6 +76,9 @@ class DashboardFragment : Fragment() {
         paymentReadyLayout.setOnClickListener {
             addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
         }
+        addOrderBtn.setOnClickListener {
+            addOrderFragment()
+        }
     }
 
     override fun onResume() {
@@ -84,6 +91,16 @@ class DashboardFragment : Fragment() {
         ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
         ft?.commit()
+    }
+
+    private fun addOrderFragment() {
+
+        val fragment = AddOrderFragmentOne.newInstance()
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
+        ft?.addToBackStack(AddOrderFragmentOne.tag)
+        ft?.commit()
+
     }
 
 }

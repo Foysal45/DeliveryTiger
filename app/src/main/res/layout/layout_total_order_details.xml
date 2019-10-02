@@ -4,7 +4,7 @@
     android:id="@+id/addOrderTopLay"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFF8E1"
+    android:background="#FFE284"
     android:orientation="horizontal"
     android:padding="8dp">
 
@@ -12,6 +12,7 @@
         android:id="@+id/tvTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/fab_margin"
         android:text="সর্বমোট :"
         android:textColor="@color/black"
         android:textSize="@dimen/text_14"
@@ -24,12 +25,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
+        android:text="৳ ০"
         android:textColor="@color/black"
         android:textSize="@dimen/text_14"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/tvTotal"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="৳ ০" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvDetails"
@@ -46,12 +47,12 @@
         android:id="@+id/ivAddOrderArrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:contentDescription="@string/cd"
+        android:tint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_arrow_down"
-        android:tint="@color/black"
-        android:contentDescription="@string/cd"
-        />
+        app:srcCompat="@drawable/ic_arrow_down" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

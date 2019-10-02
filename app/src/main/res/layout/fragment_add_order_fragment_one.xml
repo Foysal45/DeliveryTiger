@@ -8,15 +8,23 @@
     android:focusable="true"
     >
 
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/payment_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        <include layout="@layout/layout_total_order_details" />
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:scrollbars="none"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
+        app:layout_constraintTop_toBottomOf="@id/payment_details"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -225,7 +233,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_arrow_right" />
+            app:srcCompat="@drawable/ic_arrow_right"
+            android:contentDescription="@string/cd"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

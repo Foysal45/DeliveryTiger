@@ -163,7 +163,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             val currentFragment: Fragment? =
                 supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-            if (currentFragment is AddOrderFragmentOne || currentFragment is AddOrderFragmentTwo || currentFragment is DistrictSelectFragment) {
+            if (currentFragment is DashboardFragment || currentFragment is AddOrderFragmentOne || currentFragment is AddOrderFragmentTwo || currentFragment is DistrictSelectFragment) {
                 addProductBtnVisibility(false)
             } else {
                 addProductBtnVisibility(true)
