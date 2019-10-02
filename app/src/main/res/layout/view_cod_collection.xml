@@ -58,6 +58,7 @@
     </LinearLayout>
 
     <View
+        android:visibility="gone"
         android:background="@color/divider"
         app:layout_constraintTop_toBottomOf="@id/topLay"
         android:layout_width="match_parent"
