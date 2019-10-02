@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import androidx.annotation.NonNull
 import androidx.core.content.edit
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
+import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
+import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 
 object SessionManager {
 
@@ -210,6 +212,25 @@ object SessionManager {
                 commit()
             }
         }
+
+    fun getSessionData(): ProfileUpdateReqBody {
+        val model = ProfileUpdateReqBody(pref.getInt(Key_UserId,0), pref.getString(Key_UserName,""),pref.getString("mobile",""),pref.getString("alterMobile",""),pref.getString("emailAddress",""),
+            pref.getString("bkashNumber",""),pref.getString("address",""),pref.getBoolean("sms",false))
+        return model
+    }
+
+    fun updateSession(model: ProfileUpdateReqBody) {
+        pref.edit {
+            putString(Key_UserName, model.userName)
+            putString("mobile", model.mobile)
+            putString("address", model.address)
+            putString("emailAddress", model.emailAddress)
+            putString("bkashNumber", model.bkashNumber)
+            putString("alterMobile", model.alterMobile)
+            putBoolean("sms", model.isSms!!)
+            putString("emailAddress", model.emailAddress)
+        }
+    }
 
 
 }

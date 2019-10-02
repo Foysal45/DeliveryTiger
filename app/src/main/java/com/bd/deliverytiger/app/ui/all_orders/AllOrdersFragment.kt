@@ -133,7 +133,7 @@ class AllOrdersFragment : Fragment() {
         }
 
         allOrdersAdapter.onEditItemClick = { position ->
-            val orderUpdateReqBody = UpdateOrderReqBody(courierOrderViewModelList!![position]?.id,courierOrderViewModelList!![position]?.courierAddressContactInfo?.mobile,"","","",courierOrderViewModelList!![position]?.userInfo?.collectAddress,courierOrderViewModelList!![position]?.courierOrderInfo?.collectionName)
+            val orderUpdateReqBody = UpdateOrderReqBody(courierOrderViewModelList!![position]?.id,courierOrderViewModelList!![position]?.customerName,"","","",courierOrderViewModelList!![position]?.userInfo?.collectAddress,courierOrderViewModelList!![position]?.courierOrderInfo?.collectionName)
             editOrder(courierOrderViewModelList!![position]?.courierOrdersId.toString(),orderUpdateReqBody)
         }
 
@@ -289,9 +289,9 @@ class AllOrdersFragment : Fragment() {
                 response: Response<GenericResponse<UpdateOrderResponse>>
             ) {
                if(response.isSuccessful && response.body() != null){
-                   VariousTask.showShortToast(context,"updated successful")
+                   VariousTask.showShortToast(context,getString(R.string.update_success))
                } else {
-                   VariousTask.showShortToast(context,"updated fail")
+                   VariousTask.showShortToast(context,getString(R.string.error_msg))
                }
             }
 

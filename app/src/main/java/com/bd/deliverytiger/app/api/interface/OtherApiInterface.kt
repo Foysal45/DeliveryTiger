@@ -13,4 +13,5 @@ interface OtherApiInterface {
 
     @GET("api/Settings/GetSettings")
     fun loadTerms(): Call<GenericResponse<TermsModel>>
+
 }

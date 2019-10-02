@@ -11,6 +11,8 @@
     <string name="write_alt_phone_number">বিকল্প মোবাইল নাম্বার লিখুন</string>
     <string name="write_yr_name">কাস্টমারের নাম লিখুন</string>
     <string name="write_yr_address">আপনার এড্রেস লিখুন</string>
+    <string name="write_email_address">আপনার ইমেইল এড্রেস লিখুন</string>
+    <string name="update_success">সফল ভাবে আপডেট হয়েছে</string>
 
     <string name="select_dist">ডিস্ট্রিক্ট সিলেক্ট করুন</string>
     <string name="select_thana">থানা সিলেক্ট করুন</string>
