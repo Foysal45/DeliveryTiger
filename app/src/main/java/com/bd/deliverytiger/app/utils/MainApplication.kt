@@ -1,13 +1,16 @@
 package com.bd.deliverytiger.app.utils
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Intent
+import android.provider.Settings
 import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.`interface`.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.interfaces.Session
 import com.bd.deliverytiger.app.ui.login.LoginActivity
+import com.google.firebase.iid.FirebaseInstanceId
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,11 +21,22 @@ class MainApplication: Application() {
     private lateinit var retrofit: Retrofit
     private var session: Session? = null
 
+    @SuppressLint("HardwareIds")
     override fun onCreate() {
         super.onCreate()
         SessionManager.init(this)
         RetrofitSingleton.addSessionListener(getSession())
         retrofit = RetrofitSingleton.getInstance(this)
+
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnSuccessListener {
+                val token = it.token
+                SessionManager.firebaseToken = token
+                Timber.d("applicationLog", "FirebaseToken:\n$token")
+            }
+
+        SessionManager.deviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+
     }
 
     fun getSession(): Session{

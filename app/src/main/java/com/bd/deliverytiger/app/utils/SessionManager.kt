@@ -92,6 +92,17 @@ object SessionManager {
             }
         }
 
+    var deviceId: String
+        get() {
+            return pref.getString("deviceId", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("deviceId", value)
+                commit()
+            }
+        }
+
     var isLogin: Boolean
         get() {
             return pref.getBoolean(Is_LOGIN, false)
