@@ -33,6 +33,7 @@ import com.bd.deliverytiger.app.utils.Timber
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.messaging.FirebaseMessaging
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -98,6 +99,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawerLayout.closeDrawer(GravityCompat.START)
 
         }
+
+        FirebaseMessaging.getInstance().subscribeToTopic("DeliveryTigerTopic")
 
         //addHomeFragment()
         addDashBoardFragment()

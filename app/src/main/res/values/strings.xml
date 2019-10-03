@@ -34,6 +34,7 @@
 
     <string name="give_order_id">অর্ডার আইডি লিখুন</string>
     <string name="give_right_order_id">সঠিক অর্ডার আইডি লিখুন</string>
+    <string name="default_notification_channel_id">Promotion</string>
 
 
     <string-array name="features_list">

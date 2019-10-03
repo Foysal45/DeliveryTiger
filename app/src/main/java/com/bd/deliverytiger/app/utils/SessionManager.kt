@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import androidx.annotation.NonNull
 import androidx.core.content.edit
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
-import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 
 object SessionManager {
@@ -78,6 +77,17 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString("refreshToken", value)
+                commit()
+            }
+        }
+
+    var firebaseToken: String
+        get() {
+            return pref.getString("firebaseToken", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("firebaseToken", value)
                 commit()
             }
         }
