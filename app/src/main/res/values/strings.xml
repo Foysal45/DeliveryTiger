@@ -14,7 +14,7 @@
     <string name="write_email_address">আপনার ইমেইল এড্রেস লিখুন</string>
     <string name="update_success">সফল ভাবে আপডেট হয়েছে</string>
 
-    <string name="select_dist">ডিস্ট্রিক্ট সিলেক্ট করুন</string>
+    <string name="select_dist">জেলা নির্বাচন করুন</string>
     <string name="select_thana">থানা সিলেক্ট করুন</string>
     <string name="select_aria">এরিয়া/পোস্ট অফিস সিলেক্ট করুন</string>
     <string name="no_aria">এরিয়া/পোস্ট অফিস নেই</string>
