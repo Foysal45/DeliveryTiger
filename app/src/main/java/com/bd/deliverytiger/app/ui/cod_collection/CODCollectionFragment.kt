@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -52,6 +54,8 @@ class CODCollectionFragment : Fragment() {
     private lateinit var codCollectionInterface: CODCollectionInterface
     private lateinit var codProgressBar: ProgressBar
     private lateinit var filterLayout: LinearLayout
+    private lateinit var viewID: ConstraintLayout
+    private lateinit var ivEmpty: ImageView
     private var isLoading = false
     private var totalLoadedData = 0
     private var layoutPosition = 0
@@ -77,6 +81,8 @@ class CODCollectionFragment : Fragment() {
         codProgressBar = view.findViewById(R.id.codProgressBar)
         filterLayout = view.findViewById(R.id.codFilterLay)
         tvTotalOrder = view.findViewById(R.id.tvTotalOrder)
+        viewID = view.findViewById(R.id.viewID)
+        ivEmpty = view.findViewById(R.id.ivEmpty)
 
         courierOrderViewModelList = ArrayList()
         // fromDate = getCurrentDateTime().toString()
@@ -187,6 +193,14 @@ class CODCollectionFragment : Fragment() {
                         if (index < 20) {
                             totalCount = response.body()!!.model.totalCount!!.toInt()
                             tvTotalOrder.text = "মোট অর্ডার: ${DigitConverter.toBanglaDigit(totalCount)} টি"
+                        }
+
+                        if(totalLoadedData == 0){
+                            viewID.visibility = View.GONE
+                            ivEmpty.visibility = View.VISIBLE
+                        } else {
+                            viewID.visibility = View.VISIBLE
+                            ivEmpty.visibility = View.GONE
                         }
                     } else {
                         Timber.e("getAllCODCollectionResponse", " s null")

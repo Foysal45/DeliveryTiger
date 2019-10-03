@@ -6,10 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -54,6 +51,8 @@ class AllOrdersFragment : Fragment() {
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var allOrdersAdapter: AllOrdersAdapter
     private lateinit var allOrderInterface: AllOrderInterface
+    private lateinit var ivEmpty: ImageView
+    private lateinit var topLay: LinearLayout
 
     private lateinit var allOrderProgressBar: ProgressBar
     private var isLoading = false
@@ -86,6 +85,8 @@ class AllOrdersFragment : Fragment() {
         allOrderProgressBar = view.findViewById(R.id.allOrderProgressBar)
         tvTotalOrder = view.findViewById(R.id.tvTotalOrder)
         allOrderFilterLay = view.findViewById(R.id.allOrderFilterLay)
+        ivEmpty = view.findViewById(R.id.ivEmpty)
+        topLay = view.findViewById(R.id.topLay)
 
         allOrderInterface =
             RetrofitSingleton.getInstance(context!!).create(AllOrderInterface::class.java)
@@ -189,6 +190,14 @@ class AllOrdersFragment : Fragment() {
                         if (index < 20) {
                             totalCount = response.body()!!.model.totalCount!!.toInt()
                             tvTotalOrder.text = "মোট অর্ডার: ${DigitConverter.toBanglaDigit(totalCount)} টি"
+                        }
+
+                        if(totalLoadedData == 0){
+                            topLay.visibility = View.GONE
+                            ivEmpty.visibility = View.VISIBLE
+                        } else {
+                            topLay.visibility = View.VISIBLE
+                            ivEmpty.visibility = View.GONE
                         }
 
                     } else {

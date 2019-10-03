@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -51,6 +52,8 @@ class BillingofServiceFragment : Fragment() {
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var billingServiceAdapter: BillingServiceAdapter
     private lateinit var billingServiceInterface: BillingServiceInterface
+    private lateinit var ivEmpty: ImageView
+    private lateinit var topLay: LinearLayout
 
     private lateinit var billingProgressBar: ProgressBar
     private var isLoading = false
@@ -78,6 +81,8 @@ class BillingofServiceFragment : Fragment() {
         billingProgressBar = view.findViewById(R.id.billingProgressBar)
         tvTotalOrder = view.findViewById(R.id.tvTotalOrder)
         billingFilterLay = view.findViewById(R.id.billingFilterLay)
+        ivEmpty = view.findViewById(R.id.ivEmpty)
+        topLay = view.findViewById(R.id.topLay)
 
         billingServiceInterface =
             RetrofitSingleton.getInstance(context!!).create(BillingServiceInterface::class.java)
@@ -175,6 +180,14 @@ class BillingofServiceFragment : Fragment() {
                         if (index < 20) {
                             totalCount = response.body()!!.model.totalDataCount!!.toInt()
                             tvTotalOrder.text ="মোট অর্ডার: ${DigitConverter.toBanglaDigit(totalCount)} টি"
+                        }
+
+                        if(totalLoadedData == 0){
+                            topLay.visibility = View.GONE
+                            ivEmpty.visibility = View.VISIBLE
+                        } else {
+                            topLay.visibility = View.VISIBLE
+                            ivEmpty.visibility = View.GONE
                         }
 
                     } else {
