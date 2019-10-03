@@ -132,7 +132,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_14"
             android:textColor="@color/green_color"
-            android:text="পুনরায় পাঠান"
+            android:text="পুনরায় কোড পাঠান"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:paddingTop="5dp"
