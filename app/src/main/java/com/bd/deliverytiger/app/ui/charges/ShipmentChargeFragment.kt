@@ -1,14 +1,12 @@
 package com.bd.deliverytiger.app.ui.charges
 
 
-import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -26,7 +24,8 @@ import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.ThanaPayLoad
 import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
-import com.bd.deliverytiger.app.ui.district.ThanaOrAriaAdapter
+import com.bd.deliverytiger.app.ui.district.v2.CustomModel
+import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.VariousTask
@@ -123,6 +122,8 @@ class ShipmentChargeFragment : Fragment() {
         (activity as HomeActivity).setToolbarTitle("শিপমেন্ট চার্জ")
     }
 
+
+
     private fun getDistrictThanaOrAria(id: Int, track: Int){
         VariousTask.hideSoftKeyBoard(activity!!)
         //track = 1 district , track = 2 thana, track = 3 aria
@@ -148,17 +149,31 @@ class ShipmentChargeFragment : Fragment() {
                     if (track == 1) {
                         districtList.addAll(response.body()!!.data!!.districtInfo!!)
                         goToDistrict()
+
                     } else if(track == 2){
                         thanaOrAriaList.clear()
                         thanaOrAriaList.addAll(response.body()!!.data!!.districtInfo!![0].thanaHome!!)
                         if (thanaOrAriaList.isNotEmpty()) {
-                            customAlertDialog(thanaOrAriaList, 1)
+                            //customAlertDialog(thanaOrAriaList, 1)
+                            val mList: ArrayList<CustomModel> = ArrayList()
+                            for((index,model) in thanaOrAriaList.withIndex()){
+                                mList.add(CustomModel(model.thanaId,model.thanaBng+"",model.thana+"",index))
+                            }
+                            thanaAriaSelect(thanaOrAriaList, 2, mList, "থানা নির্বাচন করুন")
                         }
+
+
+
                     }else if(track == 3){
                         thanaOrAriaList.clear()
                         thanaOrAriaList.addAll(response.body()!!.data!!.districtInfo!![0].thanaHome!!)
                         if (thanaOrAriaList.isNotEmpty()) {
-                            customAlertDialog(thanaOrAriaList, 2)
+                            //customAlertDialog(thanaOrAriaList, 2)
+                            val mList: ArrayList<CustomModel> = ArrayList()
+                            for((index,model) in thanaOrAriaList.withIndex()){
+                                mList.add(CustomModel(model.thanaId,model.thanaBng+"",model.thana+"",index))
+                            }
+                            thanaAriaSelect(thanaOrAriaList, 3, mList, "এরিয়া/পোস্ট অফিস নির্বাচন করুন")
                         }
                     }
                 }
@@ -189,7 +204,53 @@ class ShipmentChargeFragment : Fragment() {
         })
     }
 
-    private fun customAlertDialog(thanaOrAriaList: ArrayList<ThanaPayLoad>, track: Int){
+    private fun thanaAriaSelect(
+        thanaOrAriaList: ArrayList<ThanaPayLoad>,
+        track: Int,
+        list: ArrayList<CustomModel>, title: String
+    ) {
+        //track = 1 district , track = 2 thana, track = 3 aria
+        val distFrag = DistrictThanaAriaSelectFragment.newInstance(mContext, list,title)
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
+        ft?.add(R.id.mainActivityContainer, distFrag, DistrictSelectFragment.tag)
+        ft?.addToBackStack(DistrictSelectFragment.tag)
+        ft?.commit()
+
+        distFrag.onItemClick = { adapterPosition: Int, name: String, id: Int, listPostion ->
+            Timber.e("distFrag1", adapterPosition.toString()+" "+listPostion.toString() + " " + name + " " + id +" "+thanaOrAriaList[listPostion].postalCode+" s")
+
+            if (track == 1) {
+                thanaTV.text = districtList[listPostion].districtBng
+                district = id
+                thanaTV.text = ""
+                thana = 0
+                ariaPostOffice = 0
+            } else if (track == 2) {
+                isAriaAvailable = thanaOrAriaList[listPostion].hasArea == 1
+                thanaTV.setText(thanaOrAriaList[listPostion].thanaBng)
+                thana = thanaOrAriaList[listPostion].thanaId
+                ariaPostOffice = 0
+                //etAriaPostOffice.setText("")
+            } else if (track == 3) {
+                if (thanaOrAriaList[listPostion].postalCode != null) {
+                    if (thanaOrAriaList[listPostion].postalCode!!.isNotEmpty()) {
+                        ariaPostOffice = thanaOrAriaList[listPostion].postalCode?.toInt()!!
+                        //etAriaPostOffice.setText(thanaOrAriaList[listPostion].thanaBng + " (" + thanaOrAriaList[listPostion].postalCode + ")")
+                    } else {
+                        ariaPostOffice = 0
+                        // isAriaAvailable = false
+                        //etAriaPostOffice.setText(thanaOrAriaList[listPostion].thanaBng )
+                    }
+                } else {
+                    ariaPostOffice = 0
+                    //etAriaPostOffice.setText(thanaOrAriaList[listPostion].thanaBng )
+                }
+            }
+        }
+    }
+
+    /*private fun customAlertDialog(thanaOrAriaList: ArrayList<ThanaPayLoad>, track: Int){
         VariousTask.hideSoftKeyBoard(activity!!)
         val dialogBuilder = AlertDialog.Builder(mContext)
 
@@ -241,7 +302,7 @@ class ShipmentChargeFragment : Fragment() {
         })
 
 
-    }
+    }*/
 
     fun showShortToast(context: Context?, message: String) {
         if (context != null) {

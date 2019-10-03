@@ -113,7 +113,7 @@ class TermsConditionBottomSheet : BottomSheetDialogFragment() {
         super.onStart()
 
         val dialog = dialog as BottomSheetDialog?
-        dialog?.setCanceledOnTouchOutside(false)
+        //dialog?.setCanceledOnTouchOutside(false)
         val bottomSheet: FrameLayout? = dialog?.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         bottomSheet?.let {
             behaviour = BottomSheetBehavior.from(bottomSheet)

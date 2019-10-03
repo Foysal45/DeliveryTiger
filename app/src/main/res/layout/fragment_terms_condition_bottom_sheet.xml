@@ -43,7 +43,7 @@
         android:id="@+id/terms_sheet_condition_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12sp"
+        android:padding="16dp"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
         app:layout_constraintTop_toBottomOf="@id/terms_sheet_separator"
@@ -51,38 +51,45 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/terms_sheet_condition_disagree"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="4dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="#EDEDED"
-        android:minWidth="120dp"
+
         android:text="অসম্মতি"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
         android:visibility="gone"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/terms_sheet_condition_agree"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/terms_sheet_condition_text"
         tools:visibility="visible" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/terms_sheet_condition_agree"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/green_color"
-        android:minWidth="120dp"
+
         android:text="শর্ত মেনে নিলাম"
         android:textColor="@color/white"
         android:textSize="@dimen/text_14"
         android:visibility="gone"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintStart_toEndOf="@id/terms_sheet_condition_disagree"
         app:layout_constraintTop_toBottomOf="@id/terms_sheet_condition_text"
         tools:visibility="visible" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
