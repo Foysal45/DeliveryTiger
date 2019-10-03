@@ -9,7 +9,7 @@
             android:title="ড্যাশবোর্ড" />
         <item
             android:id="@+id/nav_new_order"
-            android:icon="@drawable/ic_nav_circle_outline"
+            android:icon="@drawable/ic_add_box"
             android:title="নতুন অর্ডার" />
         <item
             android:id="@+id/nav_orders"

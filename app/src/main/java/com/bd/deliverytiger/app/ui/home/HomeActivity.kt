@@ -22,7 +22,6 @@ import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.dashboard.DashboardFragment
-import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.features.DTFeaturesFragment
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
@@ -166,10 +165,15 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             val currentFragment: Fragment? =
                 supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-            if (currentFragment is DashboardFragment || currentFragment is AddOrderFragmentOne || currentFragment is AddOrderFragmentTwo || currentFragment is DistrictSelectFragment) {
+            if (currentFragment is DashboardFragment || currentFragment is AddOrderFragmentOne || currentFragment is AddOrderFragmentTwo) {
                 addProductBtnVisibility(false)
             } else {
                 addProductBtnVisibility(true)
+            }
+            if (currentFragment is OrderTrackingFragment){
+                trackingIV.visibility = View.GONE
+            } else {
+                trackingIV.visibility = View.VISIBLE
             }
 
             when (currentFragment) {

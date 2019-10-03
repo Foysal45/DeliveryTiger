@@ -186,8 +186,7 @@ class CODCollectionFragment : Fragment() {
 
                         if (index < 20) {
                             totalCount = response.body()!!.model.totalCount!!.toInt()
-                            tvTotalOrder.text =
-                                "মোট অর্ডার : " + DigitConverter.toBanglaDigit(totalCount)
+                            tvTotalOrder.text = "মোট অর্ডার: ${DigitConverter.toBanglaDigit(totalCount)} টি"
                         }
                     } else {
                         Timber.e("getAllCODCollectionResponse", " s null")

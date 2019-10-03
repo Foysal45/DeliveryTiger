@@ -7,7 +7,7 @@
     android:layout_marginStart="5dp"
     android:layout_marginTop="5dp"
     android:layout_marginEnd="5dp"
-    android:layout_marginBottom="5dp">
+    android:layout_marginBottom="16dp">
 
     <TextView
         android:id="@+id/item_view_shipment_weight"
@@ -16,6 +16,7 @@
         android:textColor="@color/green_color"
         android:layout_marginStart="5dp"
         android:textSize="@dimen/text_16"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="500 gm"
@@ -41,7 +42,7 @@
             android:layout_weight="0.4"
             android:gravity="center"
             android:textColor="@color/black_80"
-            android:textSize="@dimen/text_12"
+            android:textSize="@dimen/text_14"
             android:maxLines="2"
             tools:text="Regular\nDelivery" />
 
@@ -75,7 +76,7 @@
             android:layout_weight="0.4"
             android:gravity="center"
             android:textColor="@color/black_80"
-            android:textSize="@dimen/text_12"
+            android:textSize="@dimen/text_14"
             android:maxLines="2"
             tools:text="Regular\nDelivery" />
 
