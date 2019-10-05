@@ -227,10 +227,11 @@ class ProfileFragment : Fragment() {
     private fun setProfileImgUrl(imageUri: String?) {
         Timber.d("HomeActivityLog 1 ", SessionManager.profileImgUri)
         try {
-            val imgFile = File(imageUri+"");
-            val myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            ivProfileImage.setImageDrawable(getCircularImage(context, myBitmap))
-
+            val imgFile = File(imageUri + "");
+            if (imgFile.exists()) {
+                val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
+                ivProfileImage.setImageDrawable(getCircularImage(context, myBitmap))
+            }
         } catch (e: Exception) {
         }
     }
