@@ -449,8 +449,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setProfileImgUrl(imageUri: String?) {
         try {
-            val imgFile = File(imageUri);
-            val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath);
+            val imgFile = File(imageUri+"");
+            val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
             headerPic.setImageDrawable(VariousTask.getCircularImage(this, myBitmap))
 
         } catch (e: Exception) {

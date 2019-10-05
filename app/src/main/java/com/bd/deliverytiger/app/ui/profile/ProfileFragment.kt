@@ -5,7 +5,6 @@ import android.app.Activity.RESULT_OK
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -67,6 +66,7 @@ class ProfileFragment : Fragment() {
 
     private var productCollectionAddress = ""
     private var emailAddress = ""
+    private val GALLERY_REQ_CODE = 101
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -227,7 +227,7 @@ class ProfileFragment : Fragment() {
     private fun setProfileImgUrl(imageUri: String?) {
         Timber.d("HomeActivityLog 1 ", SessionManager.profileImgUri)
         try {
-            val imgFile = File(imageUri);
+            val imgFile = File(imageUri+"");
             val myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             ivProfileImage.setImageDrawable(getCircularImage(context, myBitmap))
 
@@ -237,15 +237,13 @@ class ProfileFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == 101) {
+        if (resultCode == RESULT_OK && requestCode == GALLERY_REQ_CODE) {
             val imageStream: InputStream =
                 activity?.contentResolver?.openInputStream(Uri.parse(data?.data.toString()))!!
-            val selectedImage: Bitmap? = BitmapFactory.decodeStream(imageStream)
-            val scImg = scaledBitmapImage(selectedImage!!)
+            val scImg = scaledBitmapImage(BitmapFactory.decodeStream(imageStream))
             ivProfileImage.setImageDrawable(getCircularImage(context, scImg))
 
-            val s = saveImage(scImg)
-            SessionManager.profileImgUri = s
+            SessionManager.profileImgUri = saveImage(scImg)
         }
     }
 
@@ -271,7 +269,7 @@ class ProfileFragment : Fragment() {
         } else {
             val photoPickerIntent = Intent(Intent.ACTION_PICK)
             photoPickerIntent.type = "image/*"
-            startActivityForResult(photoPickerIntent, 101)
+            startActivityForResult(photoPickerIntent, GALLERY_REQ_CODE)
         }
     }
 
