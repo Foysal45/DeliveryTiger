@@ -1,8 +1,10 @@
 package com.bd.deliverytiger.app.ui.profile
 
+import android.Manifest.permission
 import android.app.Activity.RESULT_OK
 import android.app.ProgressDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -11,6 +13,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
@@ -23,9 +27,13 @@ import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
 import com.bd.deliverytiger.app.utils.VariousTask
+import com.bd.deliverytiger.app.utils.VariousTask.getCircularImage
+import com.bd.deliverytiger.app.utils.VariousTask.saveImage
+import com.bd.deliverytiger.app.utils.VariousTask.scaledBitmapImage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.io.InputStream
 
 
@@ -94,9 +102,7 @@ class ProfileFragment : Fragment() {
         }
 
         ivEditProfileImage.setOnClickListener {
-            val photoPickerIntent = Intent(Intent.ACTION_PICK)
-            photoPickerIntent.type = "image/*"
-            startActivityForResult(photoPickerIntent, 101)
+            getImageFromDevice()
         }
 
         if (SessionManager.profileImgUri.isNotEmpty()) {
@@ -219,11 +225,12 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setProfileImgUrl(imageUri: String?) {
+        Timber.d("HomeActivityLog 1 ", SessionManager.profileImgUri)
         try {
-            val imageStream: InputStream = activity?.contentResolver?.openInputStream(Uri.parse(imageUri!!))!!
-            val selectedImage: Bitmap? = BitmapFactory.decodeStream(imageStream)
-            ivProfileImage.scaleType = ImageView.ScaleType.CENTER_CROP
-            ivProfileImage.setImageBitmap(selectedImage)
+            val imgFile = File(imageUri);
+            val myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            ivProfileImage.setImageDrawable(getCircularImage(context, myBitmap))
+
         } catch (e: Exception) {
         }
     }
@@ -231,8 +238,40 @@ class ProfileFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == 101) {
-            SessionManager.profileImgUri = data?.data.toString()
-            setProfileImgUrl(data?.data.toString())
+            val imageStream: InputStream =
+                activity?.contentResolver?.openInputStream(Uri.parse(data?.data.toString()))!!
+            val selectedImage: Bitmap? = BitmapFactory.decodeStream(imageStream)
+            val scImg = scaledBitmapImage(selectedImage!!)
+            ivProfileImage.setImageDrawable(getCircularImage(context, scImg))
+
+            val s = saveImage(scImg)
+            SessionManager.profileImgUri = s
+        }
+    }
+
+    private fun getImageFromDevice() {
+        if (ContextCompat.checkSelfPermission(
+                activity!!,
+                permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(
+                activity!!,
+                permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            ActivityCompat.requestPermissions(
+                activity!!,
+                arrayOf<String?>(
+                    permission.READ_EXTERNAL_STORAGE,
+                    permission.WRITE_EXTERNAL_STORAGE
+                ),
+                102
+            )
+        } else {
+            val photoPickerIntent = Intent(Intent.ACTION_PICK)
+            photoPickerIntent.type = "image/*"
+            startActivityForResult(photoPickerIntent, 101)
         }
     }
 

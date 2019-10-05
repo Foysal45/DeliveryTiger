@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.ui.home
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.view.MenuItem
@@ -29,10 +30,10 @@ import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import com.bd.deliverytiger.app.utils.VariousTask
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.messaging.FirebaseMessaging
+import java.io.File
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -45,6 +46,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var toolbarTitleTV: TextView
     private lateinit var notificationIV: ImageView
     private lateinit var trackingIV: ImageView
+    private lateinit var headerPic: ImageView
 
     private var doubleBackToExitPressedOnce = false
     private var navId: Int = 0
@@ -83,16 +85,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         onBackStackChangeListener()
 
         val headerView = navView.getHeaderView(0)
-        val headerPic: ImageView = headerView.findViewById(R.id.nav_header_image)
+        headerPic = headerView.findViewById(R.id.nav_header_image)
         val headerUserNameTV: TextView = headerView.findViewById(R.id.nav_header_title)
         val headerDesignationTV: TextView = headerView.findViewById(R.id.nav_header_sub_title)
         val profileEdit: ImageView = headerView.findViewById(R.id.nav_header_profile_edit)
         headerUserNameTV.text = SessionManager.companyName
         headerDesignationTV.text = SessionManager.mobile
-        Glide.with(this)
-            .load("https://deliverytiger.com.bd/assets/images/user.png")
-            .apply(RequestOptions().placeholder(R.drawable.ic_account).circleCrop())
-            .into(headerPic)
+
         profileEdit.setOnClickListener {
             navId = R.id.nav_header_profile_edit
             drawerLayout.closeDrawer(GravityCompat.START)
@@ -118,6 +117,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onStart() {
         super.onStart()
         Timber.d("HomeActivityLog", "onStart Called!")
+
+        if (SessionManager.profileImgUri.isNotEmpty()) {
+            Timber.d("HomeActivityLog 1 ", SessionManager.profileImgUri)
+            setProfileImgUrl(SessionManager.profileImgUri)
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -170,7 +174,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else {
                 addProductBtnVisibility(true)
             }
-            if (currentFragment is OrderTrackingFragment){
+            if (currentFragment is OrderTrackingFragment) {
                 trackingIV.visibility = View.GONE
             } else {
                 trackingIV.visibility = View.VISIBLE
@@ -434,12 +438,22 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    private fun goToOrderTracking(){
+    private fun goToOrderTracking() {
 
         val fragment = OrderTrackingFragment.newInstance("")
         val ft = supportFragmentManager.beginTransaction()
         ft.add(R.id.mainActivityContainer, fragment, OrderTrackingFragment.tag)
         ft.addToBackStack(OrderTrackingFragment.tag)
         ft.commit()
+    }
+
+    private fun setProfileImgUrl(imageUri: String?) {
+        try {
+            val imgFile = File(imageUri);
+            val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath);
+            headerPic.setImageDrawable(VariousTask.getCircularImage(this, myBitmap))
+
+        } catch (e: Exception) {
+        }
     }
 }

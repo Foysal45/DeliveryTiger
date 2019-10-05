@@ -11,13 +11,12 @@
 
     <ImageView
         android:id="@+id/nav_header_image"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:contentDescription="@string/cd"
-        tools:src="@drawable/ic_account"
+        android:src="@drawable/ic_account"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/nav_header_title"
-        android:layout_marginBottom="8dp"
         />
 
     <TextView
