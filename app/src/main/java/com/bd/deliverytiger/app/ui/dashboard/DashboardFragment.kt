@@ -5,17 +5,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.AdapterView
+import androidx.appcompat.widget.AppCompatSpinner
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.dashboard.DashboardModel
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
-import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
-import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
+import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
 import com.bd.deliverytiger.app.utils.DigitConverter
+import com.bd.deliverytiger.app.utils.Timber
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.util.*
 
 
 /**
@@ -24,12 +29,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class DashboardFragment : Fragment() {
 
     private lateinit var announcementLayout: ConstraintLayout
-    private lateinit var serviceChangeLayout: ConstraintLayout
-    private lateinit var serviceChargeTV: TextView
-    private lateinit var paymentProcessingLayout: ConstraintLayout
-    private lateinit var paymentProcessingTV: TextView
-    private lateinit var paymentReadyLayout: ConstraintLayout
-    private lateinit var paymentReadyTV: TextView
+    private lateinit var monthSpinner: AppCompatSpinner
+    private lateinit var dashboardRV: RecyclerView
     private lateinit var addOrderBtn: FloatingActionButton
 
     companion object{
@@ -51,34 +52,69 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         announcementLayout = view.findViewById(R.id.dashboard_announce_layout)
-        serviceChangeLayout = view.findViewById(R.id.dashboard_service_charge_layout)
-        serviceChargeTV = view.findViewById(R.id.dashboard_service_charge_price_tv)
-        paymentProcessingLayout = view.findViewById(R.id.dashboard_payment_processing_layout)
-        paymentProcessingTV = view.findViewById(R.id.dashboard_payment_processing_price_tv)
-        paymentReadyLayout = view.findViewById(R.id.dashboard_payment_ready_layout)
-        paymentReadyTV = view.findViewById(R.id.dashboard_payment_ready_price_tv)
+        monthSpinner = view.findViewById(R.id.spinner_month_selection)
+        dashboardRV = view.findViewById(R.id.dashboard_rv)
         addOrderBtn = view.findViewById(R.id.dashboard_add_order)
 
-        serviceChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(783)}"
-        paymentProcessingTV.text = "৳ ${DigitConverter.toBanglaDigit(567)}"
-        paymentReadyTV.text = "৳ ${DigitConverter.toBanglaDigit(1890)}"
 
-        announcementLayout.setOnClickListener {
-            val bottomSheet = AnnouncementBottomSheet.newInstance()
-            bottomSheet.show(childFragmentManager, AnnouncementBottomSheet.tag)
-        }
-        serviceChangeLayout.setOnClickListener {
-            addFragment(BillingofServiceFragment.newInstance(), BillingofServiceFragment.tag)
-        }
-        paymentProcessingLayout.setOnClickListener {
-            addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
-        }
-        paymentReadyLayout.setOnClickListener {
-            addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
-        }
         addOrderBtn.setOnClickListener {
             addOrderFragment()
         }
+
+        val banglaMonth = arrayOf("জানুয়ারী","ফেব্রুয়ারী","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর")
+        val calender = Calendar.getInstance()
+        val currentYear = calender.get(Calendar.YEAR)
+        val currentMonth = calender.get(Calendar.MONTH)
+        val list: MutableList<MonthDataModel> = mutableListOf()
+        val viewList: MutableList<String> = mutableListOf()
+        for (year in currentYear..2019){
+            var lastMonth = 11
+            if (year == currentYear) {
+                lastMonth = currentMonth
+            }
+            for (monthIndex in lastMonth downTo 0){
+                if (year == 2019 && monthIndex == 6) {
+                    break
+                }
+                list.add(MonthDataModel(monthIndex+1, year))
+                viewList.add("${banglaMonth[monthIndex]}, ${DigitConverter.toBanglaDigit(year)}")
+            }
+        }
+
+        val packagingAdapter = CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, viewList)
+        monthSpinner.adapter = packagingAdapter
+        monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val model = list[p2]
+                Timber.d("DashboardTag", "${model.monthId} ${model.year}")
+            }
+        }
+
+        val modelList: MutableList<DashboardModel> = mutableListOf()
+        modelList.add(DashboardModel(1890,"পেমেন্ট রেডি", 2, "positive"))
+        modelList.add(DashboardModel(171,"শিপমেন্ট হয়েছে", 1, "neutral"))
+        modelList.add(DashboardModel(24,"ডেলিভারি হয়েছে", 1, "positive"))
+        modelList.add(DashboardModel(3,"রিটার্ন হয়েছে", 1, "negative"))
+        modelList.add(DashboardModel(17,"প্রসেসিং", 1, "waiting"))
+
+        val dashboardAdapter = DashboardAdapter(context!!, modelList)
+        val gridLayoutManager = GridLayoutManager(context!!, 2, RecyclerView.VERTICAL, false)
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return modelList[position].spanCount
+            }
+        }
+        with(dashboardRV){
+            setHasFixedSize(true)
+            layoutManager = gridLayoutManager
+            adapter = dashboardAdapter
+        }
+
+
     }
 
     override fun onResume() {
