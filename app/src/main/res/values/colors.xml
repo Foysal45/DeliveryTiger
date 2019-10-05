@@ -22,5 +22,8 @@
     <color name="drawer_icon_color">#9ca5b4</color>
 
     <color name="bg_rv">#08000000</color>
+    <color name="positive">#66BB6A</color>
+    <color name="negative">#FF8E34</color>
+    <color name="neutral"></color>
 
 </resources>
