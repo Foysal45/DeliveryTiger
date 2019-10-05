@@ -18,14 +18,14 @@ import java.util.*
 
 object VariousTask {
 
-    fun getCurrentDateTime(): String? {
-        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
+    fun getCurrentDateTime(pattern: String = "yyyy-MM-dd'T'HH:mm:ss"): String? {
+        val dateFormat: DateFormat = SimpleDateFormat(pattern, Locale.US)
         val date = Date()
         return dateFormat.format(date)
     }
 
-    fun getPreviousDateTime(month: Int): String? {
-        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
+    fun getPreviousDateTime(month: Int, pattern: String = "yyyy-MM-dd'T'HH:mm:ss"): String? {
+        val dateFormat: DateFormat = SimpleDateFormat(pattern, Locale.US)
         val cal: Calendar = Calendar.getInstance()
         cal.add(Calendar.MONTH, -month)
         val result: Date = cal.time

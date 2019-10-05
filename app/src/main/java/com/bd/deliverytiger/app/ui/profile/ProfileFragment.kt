@@ -231,6 +231,7 @@ class ProfileFragment : Fragment() {
             if (imgFile.exists()) {
                 val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
                 ivProfileImage.setImageDrawable(getCircularImage(context, myBitmap))
+                //Timber.d("HomeActivityLog 2 ", myBitmap.allocationByteCount.toString()+" "+ myBitmap.byteCount.toString())
             }
         } catch (e: Exception) {
         }
