@@ -25,6 +25,7 @@ import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
+import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
 import com.bd.deliverytiger.app.utils.DigitConverter
 import com.bd.deliverytiger.app.utils.DigitConverter.banglaMonth
@@ -186,29 +187,29 @@ class DashboardFragment : Fragment() {
         }
 
         dashboardAdapter.onItemClick = { position, model ->
-            dashBoardClickEvent(model?.statusGroupId!!)
+            dashBoardClickEvent(model?.dashboardRouteUrl!!)
         }
     }
 
-    private fun dashBoardClickEvent(viewId: Int) {
-        when (viewId) {
-            0 -> {
+    private fun dashBoardClickEvent(dashboardRouteUrl: String) {
+        when (dashboardRouteUrl) {
+            "add-order" -> {
                 addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
             }
-            1 -> {
-                addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
-            }
-            2 -> {
-                addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
-            }
-            3 -> {
+            "billing-service" -> {
                 addFragment(BillingofServiceFragment.newInstance(), BillingofServiceFragment.tag)
             }
-            4 -> {
-                addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
-            }
-            5 -> {
+            "order-tracking" -> {
                 addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
+            }
+            "shipment-charge" -> {
+                addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
+            }
+            "all-order" -> {
+                addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
+            }
+            "cod-collection" -> {
+                addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
             }
             else -> {
                 addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
