@@ -10,13 +10,13 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.dashboard.DashboardModel
+import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponseModel
 import com.bd.deliverytiger.app.utils.DigitConverter
 
 
-class DashboardAdapter(private val mContext: Context?, private var dataList: MutableList<DashboardModel>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class DashboardAdapter(private val mContext: Context?, private var dataList: MutableList<DashboardResponseModel>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
-    var onItemClick: ((position: Int, model: DashboardModel) -> Unit)? = null
+    var onItemClick: ((position: Int, responseModel: DashboardResponseModel?) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(
@@ -44,14 +44,14 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
 
             val model = dataList[position]
 
-            holder.titleTV.text = model.title
+            holder.titleTV.text = model.name
             //ToDo: change later
             if (position == 0){
                 holder.countTV.text = "৳ ${DigitConverter.toBanglaDigit(model.count)}"
             } else {
                 holder.countTV.text = "${DigitConverter.toBanglaDigit(model.count)}"
             }
-            when(model.viewType) {
+            when(model.dashboardViewColorType) {
                 "positive" -> {
                     holder.parentLayout.setBackgroundColor(Color.parseColor("#EEF8EF"))
                     holder.designIV.setImageResource(R.drawable.ic_dashboard_design_3)
@@ -84,6 +84,12 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
         internal val designIV: ImageView = view.findViewById(R.id.item_view_dashboard_design)
         internal val countTV: TextView = view.findViewById(R.id.item_view_dashboard_count_tv)
         internal val titleTV: TextView = view.findViewById(R.id.item_view_dashboard_msg_tv)
+
+        init {
+            itemView.setOnClickListener {
+                onItemClick?.invoke(adapterPosition, dataList[adapterPosition])
+            }
+        }
     }
 
 }

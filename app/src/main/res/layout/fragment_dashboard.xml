@@ -359,4 +359,14 @@
         app:tint="@color/white"
         />
 
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/dashBoardProgress"
+        android:layout_width="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
