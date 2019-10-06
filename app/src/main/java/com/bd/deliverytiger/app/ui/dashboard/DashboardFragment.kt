@@ -22,7 +22,6 @@ import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponseModel
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
-import com.bd.deliverytiger.app.ui.charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment

@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.ui.charges
+package com.bd.deliverytiger.app.ui.shipment_charges
 
 import android.content.Context
 import android.view.LayoutInflater

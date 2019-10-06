@@ -20,7 +20,7 @@ import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentTwo
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
-import com.bd.deliverytiger.app.ui.charges.ShipmentChargeFragment
+import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.dashboard.DashboardFragment
 import com.bd.deliverytiger.app.ui.features.DTFeaturesFragment
