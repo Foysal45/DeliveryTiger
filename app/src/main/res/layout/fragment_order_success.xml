@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".ui.add_order.OrderSuccessFragment">
+
+   <ImageView
+       android:scaleType="fitXY"
+       app:srcCompat="@drawable/ic_illustration_success"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"/>
+
+
+    <TextView
+        android:layout_marginStart="@dimen/left_right_margin"
+        android:layout_marginEnd="@dimen/left_right_margin"
+        android:id="@+id/tvSuccessOrderId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="# DT-3421"
+        android:textStyle="bold"
+        android:textColor="@color/green_color"
+        android:textSize="@dimen/text_14" />
+
+    <TextView
+        android:layout_marginStart="@dimen/left_right_margin"
+        android:layout_marginEnd="@dimen/left_right_margin"
+        android:id="@+id/tvSuccessOrderTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="3-in-1 Multipurpose Screw Diver"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14" />
+
+    <View
+        android:layout_marginStart="@dimen/left_right_margin"
+        android:layout_marginEnd="@dimen/left_right_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:background="@color/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <TextView
+        android:layout_marginStart="@dimen/left_right_margin"
+        android:layout_marginEnd="@dimen/left_right_margin"
+        android:id="@+id/tvSuccessOrderAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Himel Chowdhury\n01722486102, 01903598036\n23F/A, Ashkona, Dakshinkhan, Airport, Dhaka"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14" />
+
+
+
+
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_marginBottom="@dimen/login_view_height"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/orderListClickedLay"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="@dimen/left_right_margin"
+        android:layout_marginTop="@dimen/left_right_margin"
+        android:layout_marginEnd="@dimen/left_right_margin"
+        android:background="@drawable/bg_login_btn"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:tint="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            app:srcCompat="@drawable/ic_list" />
+
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="অর্ডার লিস্ট দেখুন"
+            android:textColor="@color/white"
+            android:textSize="@dimen/login_sign_up_tv_size" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

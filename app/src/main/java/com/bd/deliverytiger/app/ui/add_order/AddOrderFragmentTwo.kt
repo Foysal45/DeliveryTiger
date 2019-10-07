@@ -15,6 +15,7 @@ import androidx.appcompat.widget.AppCompatSpinner
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
@@ -29,6 +30,7 @@ import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.ui.home.HomeActivity
+import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButtonToggleGroup
 import retrofit2.Call
@@ -432,7 +434,8 @@ class AddOrderFragmentTwo : Fragment() {
                 if (response.isSuccessful && response.body() != null){
                     if (response.body()!!.model != null){
                         Timber.d(logTag, "Order placed \n ${response.body()!!.model}")
-                        context?.showToast("Oder ID: ${response.body()!!.model.courierOrdersId}")
+                       // context?.showToast("Oder ID: ${response.body()!!.model.courierOrdersId}")
+                        addOrderSuccessFragment(response.body()!!.model)
                     }
                 }
             }
@@ -479,8 +482,19 @@ class AddOrderFragmentTwo : Fragment() {
         return true
     }
 
-}
+    private fun addOrderSuccessFragment(orderResponse: OrderResponse?) {
+        activity?.onBackPressed()
+        activity?.onBackPressed()
+        val fragment = OrderSuccessFragment.newInstance(orderResponse)
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.mainActivityContainer, fragment, OrderSuccessFragment.tag)
+        ft?.addToBackStack(OrderTrackingFragment.tag)
+        ft?.commit()
+    }
 
+}
+//val fragment = OrderSuccessFragment.newInstance(null)
 private fun Context?.showToast(msg: String) {
     Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }
+
