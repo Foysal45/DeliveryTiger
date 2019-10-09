@@ -57,7 +57,7 @@ class AllOrdersFragment : Fragment() {
     private var fromDate = "01-01-01"
     private var toDate = "01-01-01"
     private var status = -1
-    private var statusGroup = ""
+    private var statusGroup = "-1"
     private var isMoreDataAvailable = true
     private val statusList: MutableList<Int> = mutableListOf(-1)
     private val statusGroupList: MutableList<String> = mutableListOf("-1")

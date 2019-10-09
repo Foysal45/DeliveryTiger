@@ -64,6 +64,7 @@ class CODCollectionFragment : Fragment() {
     private var fromDate = "01-01-01"
     private var toDate = "01-01-01"
     private var status = -1
+    private var statusGroup = "-1"
     private var isMoreDataAvailable = true
     private val statusList: MutableList<Int> = mutableListOf(-1)
     private val statusGroupList: MutableList<String> = mutableListOf("-1")
@@ -233,11 +234,13 @@ class CODCollectionFragment : Fragment() {
         ft?.commit()
 
         fragment.setFilterListener(object : FilterFragment.FilterListener {
-            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup: String) {
+            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup1: String) {
                 fromDate = fromDate1
                 toDate = toDate1
                 status = status1
-
+                statusGroup = statusGroup1
+                statusGroupList.clear()
+                statusGroupList.add(statusGroup1)
                 Timber.e("statusC " , status.toString())
 
                 courierOrderViewModelList?.clear()
