@@ -100,9 +100,10 @@ class ResetPasswordFragment : Fragment(), View.OnClickListener {
                 goToSignUp()
             }
             tvResetLogin -> {
-                // addLoginFragment()
+
                 hideSoftKeyBoard(activity)
-                addLoginFragment(false)
+                activity?.onBackPressed()
+                //addLoginFragment(false)
             }
         }
     }
@@ -165,17 +166,19 @@ class ResetPasswordFragment : Fragment(), View.OnClickListener {
         val fragment = ResetPasswordFinalFragment.newInstance(mobileNo)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, ResetPasswordFinalFragment.tag)
-        //ft?.addToBackStack(SignUpFragment.tag)
+        ft?.addToBackStack(ResetPasswordFinalFragment.tag)
         ft?.commit()
 
     }
 
     private fun goToSignUp() {
 
+        //val currentFragment: Fragment? = activity?.supportFragmentManager?.findFragmentById(R.id.loginActivityContainer)
+        activity?.onBackPressed()
         val fragment = SignUpFragment.newInstance()
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpFragment.tag)
-        //ft?.addToBackStack(SignUpFragment.tag)
+        ft?.addToBackStack(SignUpFragment.tag)
         ft?.commit()
     }
 

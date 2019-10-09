@@ -171,28 +171,27 @@ class LoginFragment: Fragment() {
 
     }
 
+    private fun goToHomeActivity() {
+        startActivity(Intent(activity, HomeActivity::class.java))
+        activity?.finish()
+    }
+
     private fun goToSignUp() {
 
         val fragment = SignUpFragment.newInstance()
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpFragment.tag)
-        //ft?.addToBackStack(SignUpFragment.tag)
+        ft?.addToBackStack(SignUpFragment.tag)
         ft?.commit()
-    }
-
-    private fun goToHomeActivity() {
-        startActivity(Intent(activity, HomeActivity::class.java))
-        activity?.finish()
     }
 
     private fun addResetPasswordFragment(){
         val fragment = ResetPasswordFragment.newInstance()
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, ResetPasswordFragment.tag)
-        //ft?.addToBackStack(ResetPasswordFragment.tag)
+        ft?.addToBackStack(ResetPasswordFragment.tag)
         ft?.commit()
     }
-
 
 }
 

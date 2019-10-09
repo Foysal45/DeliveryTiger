@@ -11,7 +11,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
@@ -92,6 +91,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
             }
             tvLogin -> {
                 activity?.onBackPressed()
+                //goToLoginFragment()
             }
         }
     }
@@ -170,13 +170,6 @@ class SignUpFragment : Fragment(), View.OnClickListener {
         return go
     }
 
-    private fun addLoginFragment() {
-        val fragment = LoginFragment.newInstance(false)
-        val ft: FragmentTransaction? = (mContext as FragmentActivity?)?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.loginActivityContainer, fragment, LoginFragment.tag)
-        ft?.commit()
-    }
-
     private fun goToSignUpOTP() {
 
         val mobile = etSignUpMobileNo.text.toString()
@@ -185,6 +178,15 @@ class SignUpFragment : Fragment(), View.OnClickListener {
         val fragment = SignUpOTPFragment.newInstance(mobile, password)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpOTPFragment.tag)
+        ft?.commit()
+    }
+
+    private fun goToLoginFragment(sendOTP: Boolean = false) {
+
+        val fragment = LoginFragment.newInstance(sendOTP)
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.loginActivityContainer, fragment, LoginFragment.tag)
+        //ft?.addToBackStack(LoginFragment.tag)
         ft?.commit()
     }
 

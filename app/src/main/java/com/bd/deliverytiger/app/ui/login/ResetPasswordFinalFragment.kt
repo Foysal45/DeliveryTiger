@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
@@ -80,7 +81,9 @@ class ResetPasswordFinalFragment : Fragment() {
             resendOTP()
         }
         backBtn.setOnClickListener {
-            addLoginFragment()
+            //addLoginFragment()
+            //clearBackStack()
+            activity?.onBackPressed()
         }
         submitBtn.setOnClickListener {
 
@@ -169,10 +172,25 @@ class ResetPasswordFinalFragment : Fragment() {
     }
 
     private fun addLoginFragment(){
+
+        clearBackStack()
+
         val fragment = LoginFragment.newInstance(false)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, LoginFragment.tag)
         ft?.commit()
     }
 
+    private fun clearBackStack(){
+
+        val manager = activity?.supportFragmentManager
+        if (manager != null){
+            val stackCount = manager.backStackEntryCount
+            if (stackCount > 0){
+                val first = manager.getBackStackEntryAt(0)
+                manager.popBackStack(first.id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            }
+        }
+
+    }
 }

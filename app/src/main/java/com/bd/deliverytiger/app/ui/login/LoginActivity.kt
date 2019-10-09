@@ -18,6 +18,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+
+        //val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.loginActivityContainer)
         if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
         } else {
