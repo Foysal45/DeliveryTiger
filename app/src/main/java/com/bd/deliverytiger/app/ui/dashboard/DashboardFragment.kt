@@ -86,14 +86,14 @@ class DashboardFragment : Fragment() {
         val calender = Calendar.getInstance()
         currentYear = calender.get(Calendar.YEAR)
         val currentMonth = calender.get(Calendar.MONTH)
+        getDashBoardData(currentMonth + 1, currentYear)
 
-        val viewList: MutableList<String> = mutableListOf()
+        /*val viewList: MutableList<String> = mutableListOf()
         for (item in banglaMonth) {
             viewList.add("${item}, ${DigitConverter.toBanglaDigit(currentYear)}")
-        }
-        getDashBoardData(currentMonth)
+        }*/
 
-        /* val list: MutableList<MonthDataModel> = mutableListOf()
+         val list: MutableList<MonthDataModel> = mutableListOf()
          val viewList: MutableList<String> = mutableListOf()
          for (year in currentYear..2019){
              var lastMonth = 11
@@ -107,7 +107,7 @@ class DashboardFragment : Fragment() {
                  list.add(MonthDataModel(monthIndex+1, year))
                  viewList.add("${banglaMonth[monthIndex]}, ${DigitConverter.toBanglaDigit(year)}")
              }
-         }*/
+         }
 
         val packagingAdapter =
             CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, viewList)
@@ -119,24 +119,25 @@ class DashboardFragment : Fragment() {
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 if (!isLoading) {
-                    getDashBoardData(p2 + 1)
+                    val model = list[p2]
+                    getDashBoardData(model.monthId, model.year)
+                    Timber.d("DashboardTag", "${model.monthId} $currentYear")
                 }
-                Timber.d("DashboardTag", "${p2 + 1} ${currentYear}")
             }
         }
-        monthSpinner.setSelection(currentMonth)
+        //monthSpinner.setSelection(currentMonth)
 
 
     }
 
-    private fun getDashBoardData(selectedMonth: Int) {
+    private fun getDashBoardData(selectedMonth: Int, selectedYear: Int) {
         isLoading = true
         dashBoardProgress.visibility = View.VISIBLE
         val dashBoardInterface =
             RetrofitSingleton.getInstance(context!!).create(DashBoardInterface::class.java)
         val responseModelList: MutableList<DashboardResponseModel> = mutableListOf()
         val dashBoardReqBody =
-            DashBoardReqBody(selectedMonth, currentYear, SessionManager.courierUserId)
+            DashBoardReqBody(selectedMonth, selectedYear, SessionManager.courierUserId)
 
         Timber.d("DashboardTag r ", dashBoardReqBody.toString())
 
