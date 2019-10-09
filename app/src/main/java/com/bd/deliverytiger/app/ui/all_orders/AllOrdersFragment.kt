@@ -35,14 +35,7 @@ import retrofit2.Response
  */
 class AllOrdersFragment : Fragment() {
 
-    companion object {
-        fun newInstance(): AllOrdersFragment {
-            val fragment = AllOrdersFragment()
-            return fragment
-        }
 
-        val tag = AllOrdersFragment::class.java.name
-    }
 
     private lateinit var rvAllOrder: RecyclerView
     private lateinit var tvTotalOrder: TextView
@@ -53,6 +46,7 @@ class AllOrdersFragment : Fragment() {
     private lateinit var allOrderInterface: AllOrderInterface
     private lateinit var ivEmpty: ImageView
     private lateinit var topLay: LinearLayout
+    private lateinit var showStatus: ImageView
 
     private lateinit var allOrderProgressBar: ProgressBar
     private var isLoading = false
@@ -63,7 +57,23 @@ class AllOrdersFragment : Fragment() {
     private var fromDate = "01-01-01"
     private var toDate = "01-01-01"
     private var status = -1
+    private var statusGroup = ""
     private var isMoreDataAvailable = true
+    private val statusList: MutableList<Int> = mutableListOf(-1)
+    private val statusGroupList: MutableList<String> = mutableListOf("-1")
+    private var bundle: Bundle = Bundle()
+    private var collectionAmount = 0
+    private var paymentInProcessing = 0
+    private var paymentPaid = 0
+    private var paymentReady = 0
+
+    companion object {
+        fun newInstance(): AllOrdersFragment = AllOrdersFragment()
+        fun newInstance(bundle: Bundle): AllOrdersFragment = AllOrdersFragment().apply {
+            this.bundle = bundle
+        }
+        val tag = AllOrdersFragment::class.java.name
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,6 +97,16 @@ class AllOrdersFragment : Fragment() {
         allOrderFilterLay = view.findViewById(R.id.allOrderFilterLay)
         ivEmpty = view.findViewById(R.id.ivEmpty)
         topLay = view.findViewById(R.id.topLay)
+        showStatus = view.findViewById(R.id.show_status)
+
+        if (!bundle.isEmpty){
+            statusGroup = bundle.getString("statusGroup", "-1")
+            fromDate = bundle.getString("fromDate", "01-01-01")
+            toDate = bundle.getString("toDate","01-01-01")
+
+            statusGroupList.clear()
+            statusGroupList.add(statusGroup)
+        }
 
         allOrderInterface =
             RetrofitSingleton.getInstance(context!!).create(AllOrderInterface::class.java)
@@ -141,6 +161,12 @@ class AllOrdersFragment : Fragment() {
         allOrderFilterLay.setOnClickListener {
             goToFilter()
         }
+
+        showStatus.setOnClickListener {
+
+            /*val paymentSheet = PaymentStatusSheet.newInstance()
+            paymentSheet.show(childFragmentManager, PaymentStatusSheet.tag)*/
+        }
     }
 
     private fun getAllOrders(index: Int, count: Int) {
@@ -148,9 +174,9 @@ class AllOrdersFragment : Fragment() {
         isLoading = true
         allOrderProgressBar.visibility = View.VISIBLE
         val reqModel = CODReqBody(
-            status, ArrayList(), fromDate, toDate, SessionManager.courierUserId,
+            status, statusList, statusGroupList, fromDate, toDate, SessionManager.courierUserId,
             "", "", "", index, count
-        )  // text model
+        )
 
         Timber.e("getAllOrdersReq", reqModel.toString())
 
@@ -174,11 +200,16 @@ class AllOrdersFragment : Fragment() {
                         allOrderProgressBar.visibility = View.GONE
                     }
                     isLoading = false
-                    if (response.isSuccessful && response.body() != null && response.body()!!.model != null) {
+                    if (response.isSuccessful && response.body() != null && response.body()!!.model != null && isAdded) {
                         Timber.e(
                             "getAllOrdersResponse",
                             " s " + response.body()!!.model.courierOrderViewModel
                         )
+                        collectionAmount = response.body()!!.model.adTotalCollectionAmount?.toInt() ?: 0
+                        paymentInProcessing = response.body()!!.model.adCourierPaymentInfo?.paymentInProcessing?.toInt() ?: 0
+                        paymentPaid = response.body()!!.model.adCourierPaymentInfo?.paymentPaid?.toInt() ?: 0
+                        paymentReady = response.body()!!.model.adCourierPaymentInfo?.paymentReady?.toInt() ?: 0
+
                         courierOrderViewModelList?.addAll(response.body()!!.model.courierOrderViewModel!!)
                         totalLoadedData = courierOrderViewModelList!!.size
 
@@ -222,17 +253,20 @@ class AllOrdersFragment : Fragment() {
             (activity as HomeActivity).openRightDrawer()
         }
 
-        val fragment = FilterFragment.newInstance(fromDate, toDate, status)
+        val fragment = FilterFragment.newInstance(fromDate, toDate, status, statusGroup)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.container_drawer, fragment, FilterFragment.tag)
         // ft?.addToBackStack(FilterFragment.tag)
         ft?.commit()
 
         fragment.setFilterListener(object : FilterFragment.FilterListener {
-            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int) {
+            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int,statusGroup1: String) {
                 fromDate = fromDate1
                 toDate = toDate1
                 status = status1
+                statusGroup = statusGroup1
+                statusGroupList.clear()
+                statusGroupList.add(statusGroup1)
 
                 courierOrderViewModelList?.clear()
                 allOrdersAdapter.notifyDataSetChanged()

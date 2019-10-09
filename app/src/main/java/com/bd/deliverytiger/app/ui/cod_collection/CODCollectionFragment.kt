@@ -65,6 +65,8 @@ class CODCollectionFragment : Fragment() {
     private var toDate = "01-01-01"
     private var status = -1
     private var isMoreDataAvailable = true
+    private val statusList: MutableList<Int> = mutableListOf(-1)
+    private val statusGroupList: MutableList<String> = mutableListOf("-1")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -153,7 +155,7 @@ class CODCollectionFragment : Fragment() {
         isLoading = true
         codProgressBar.visibility = View.VISIBLE
         val reqModel = CODReqBody(
-            status, ArrayList(), fromDate, toDate, SessionManager.courierUserId,
+            status, statusList, statusGroupList, fromDate, toDate, SessionManager.courierUserId,
             "", "", "", index, count
         )  // text model
 
@@ -231,7 +233,7 @@ class CODCollectionFragment : Fragment() {
         ft?.commit()
 
         fragment.setFilterListener(object : FilterFragment.FilterListener {
-            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int) {
+            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup: String) {
                 fromDate = fromDate1
                 toDate = toDate1
                 status = status1

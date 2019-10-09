@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.api.`interface`
 
 import com.bd.deliverytiger.app.api.model.GenericResponse
+import com.bd.deliverytiger.app.api.model.status.StatusGroupModel
 import com.bd.deliverytiger.app.api.model.status.StatusModel
 import com.bd.deliverytiger.app.api.model.terms.TermsModel
 import retrofit2.Call
@@ -13,5 +14,8 @@ interface OtherApiInterface {
 
     @GET("api/Settings/GetSettings")
     fun loadTerms(): Call<GenericResponse<TermsModel>>
+
+    @GET("api/Fetch/GetStatusGroup")
+    fun loadStatusGroup(): Call<GenericResponse<MutableList<StatusGroupModel>>>
 
 }

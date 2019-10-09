@@ -50,6 +50,8 @@ class DashboardFragment : Fragment() {
     private lateinit var dashBoardProgress: ProgressBar
 
     private var currentYear = 0
+    private var selectedYear = 0
+    private var selectedMonth = 0
     private var isLoading = false
 
 
@@ -120,6 +122,8 @@ class DashboardFragment : Fragment() {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 if (!isLoading) {
                     val model = list[p2]
+                    selectedYear = model.year
+                    selectedMonth = model.monthId
                     getDashBoardData(model.monthId, model.year)
                     Timber.d("DashboardTag", "${model.monthId} $currentYear")
                 }
@@ -188,34 +192,34 @@ class DashboardFragment : Fragment() {
         }
 
         dashboardAdapter.onItemClick = { position, model ->
-            dashBoardClickEvent(model?.dashboardRouteUrl!!)
+            //dashBoardClickEvent(model?.dashboardRouteUrl!!)
+            if (model?.count != 0){
+                when (model?.dashboardRouteUrl) {
+                    "add-order" -> {
+                        addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+                    }
+                    "billing-service" -> {
+                        addFragment(BillingofServiceFragment.newInstance(), BillingofServiceFragment.tag)
+                    }
+                    "order-tracking" -> {
+                        addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
+                    }
+                    "shipment-charge" -> {
+                        addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
+                    }
+                    "all-order" -> {
+                        goToAllOrder(model)
+                    }
+                    "cod-collection" -> {
+                        addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
+                    }
+                    else -> {
+                        addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
+                    }
+                }
+            }
         }
-    }
 
-    private fun dashBoardClickEvent(dashboardRouteUrl: String) {
-        when (dashboardRouteUrl) {
-            "add-order" -> {
-                addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
-            }
-            "billing-service" -> {
-                addFragment(BillingofServiceFragment.newInstance(), BillingofServiceFragment.tag)
-            }
-            "order-tracking" -> {
-                addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
-            }
-            "shipment-charge" -> {
-                addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
-            }
-            "all-order" -> {
-                addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
-            }
-            "cod-collection" -> {
-                addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
-            }
-            else -> {
-                addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
-            }
-        }
     }
 
     override fun onResume() {
@@ -227,6 +231,24 @@ class DashboardFragment : Fragment() {
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
+        ft?.commit()
+    }
+
+    private fun goToAllOrder(model: DashboardResponseModel) {
+
+        val calendar = Calendar.getInstance()
+        calendar.set(selectedYear,selectedMonth-1,1)
+        val lastDate = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+
+        val bundle = Bundle()
+        bundle.putString("statusGroup", model.name)
+        bundle.putString("fromDate", "$selectedYear-$selectedMonth-01")
+        bundle.putString("toDate", "$selectedYear-$selectedMonth-$lastDate")
+
+        val fragment = AllOrdersFragment.newInstance(bundle)
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.mainActivityContainer, fragment, AllOrdersFragment.tag)
+        ft?.addToBackStack(AllOrdersFragment.tag)
         ft?.commit()
     }
 

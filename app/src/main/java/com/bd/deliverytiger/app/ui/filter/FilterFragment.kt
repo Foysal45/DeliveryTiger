@@ -14,6 +14,7 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.`interface`.OtherApiInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
+import com.bd.deliverytiger.app.api.model.status.StatusGroupModel
 import com.bd.deliverytiger.app.api.model.status.StatusModel
 import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
 import com.google.android.material.button.MaterialButton
@@ -36,14 +37,16 @@ class FilterFragment : Fragment() {
     private var gotFromDate: String = "01-01-01"
     private var gotToDate: String = "01-01-01"
     private var statusId = -1
+    private var statusGroup = ""
     private var isFromDateSelected = false
     private var isToDateSelected = false
 
     companion object{
-        fun newInstance(fromDate: String = "01-01-01", toDate: String = "01-01-01", status: Int = -1): FilterFragment = FilterFragment().apply {
+        fun newInstance(fromDate: String = "01-01-01", toDate: String = "01-01-01", status: Int = -1, statusGroup: String = ""): FilterFragment = FilterFragment().apply {
             this.gotFromDate = fromDate
             this.gotToDate = toDate
             this.statusId = status
+            this.statusGroup = statusGroup
         }
         val tag = FilterFragment::class.java.name
     }
@@ -72,7 +75,8 @@ class FilterFragment : Fragment() {
         }
 
         otherApiInterface = RetrofitSingleton.getInstance(context!!).create(OtherApiInterface::class.java)
-        loadOrderStatus()
+        //loadOrderStatus()
+        loadStatusGroup()
 
         fromDateTV.setOnClickListener {
 
@@ -109,14 +113,14 @@ class FilterFragment : Fragment() {
         applyBtn.setOnClickListener {
 
             if (!isFromDateSelected && !isToDateSelected){
-                listener?.selectedDate(gotFromDate, gotToDate, statusId)
+                listener?.selectedDate(gotFromDate, gotToDate, statusId, statusGroup)
             } else {
                 if (isFromDateSelected && !isToDateSelected) {
                     Toast.makeText(activity, "শেষের তারিখ দিন", Toast.LENGTH_SHORT).show()
                 } else if (isToDateSelected && !isFromDateSelected) {
                     Toast.makeText(activity, "শুরুর তারিখ দিন", Toast.LENGTH_SHORT).show()
                 } else if (isFromDateSelected && isToDateSelected) {
-                    listener?.selectedDate(gotFromDate, gotToDate, statusId)
+                    listener?.selectedDate(gotFromDate, gotToDate, statusId, statusGroup)
                 }
             }
         }
@@ -162,6 +166,49 @@ class FilterFragment : Fragment() {
         })
     }
 
+    private fun loadStatusGroup() {
+
+        otherApiInterface.loadStatusGroup().enqueue(object : Callback<GenericResponse<MutableList<StatusGroupModel>>> {
+            override fun onFailure(call: Call<GenericResponse<MutableList<StatusGroupModel>>>, t: Throwable) {
+
+            }
+
+            override fun onResponse(call: Call<GenericResponse<MutableList<StatusGroupModel>>>, response: Response<GenericResponse<MutableList<StatusGroupModel>>>) {
+                if (response.isSuccessful && response.body() != null){
+                    if (response.body()!!.model != null && response.body()!!.model.isNotEmpty()) {
+
+                        val statusList: MutableList<String> = mutableListOf()
+                        var preSelectedIndex = 0
+                        for ((index,model) in response.body()!!.model.withIndex()) {
+                            if (model.dashboardStatusGroup.isNotEmpty()){
+                                statusList.add(model.dashboardStatusGroup)
+                                if (model.dashboardStatusGroup == statusGroup) {
+                                    preSelectedIndex = statusList.size - 1
+                                }
+                            }
+                        }
+                        val packagingAdapter = CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, statusList)
+                        statusSpinner.adapter = packagingAdapter
+                        statusSpinner.setSelection(preSelectedIndex)
+
+
+                        statusSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                            }
+
+                            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                                //val model2 = response.body()!!.model[p2]
+                                statusGroup = statusList[p2]
+                            }
+
+                        }
+                    }
+                }
+            }
+        })
+    }
+
     private var listener: FilterListener? = null
 
     fun setFilterListener(listener: FilterListener) {
@@ -169,6 +216,6 @@ class FilterFragment : Fragment() {
     }
 
     interface FilterListener {
-        fun selectedDate(fromDate1: String, toDate1: String, status1: Int)
+        fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup: String)
     }
 }

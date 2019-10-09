@@ -17,5 +17,7 @@ data class DashboardResponseModel(
     @SerializedName("dashboardViewOrderBy")
     var dashboardViewOrderBy: Int? = 0,
     @SerializedName("dashboardRouteUrl")
-    var dashboardRouteUrl: String? = ""
+    var dashboardRouteUrl: String? = "",
+    @SerializedName("totalAmount")
+    var totalAmount: Double = 0.0
 )

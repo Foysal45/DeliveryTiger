@@ -218,7 +218,7 @@ class BillingofServiceFragment : Fragment() {
         ft?.commit()
 
         fragment.setFilterListener(object : FilterFragment.FilterListener{
-            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int) {
+            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup: String) {
                 fromDate = fromDate1
                 toDate = toDate1
                 status = status1

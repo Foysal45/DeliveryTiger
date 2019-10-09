@@ -7,7 +7,9 @@ data class CODReqBody(
     @SerializedName("status")
     var status: Int? = 0,
     @SerializedName("statusList")
-    var statusList: List<Int?>? = listOf(),
+    var statusList: List<Int>? = listOf(),
+    @SerializedName("statusGroup")
+    var statusGroup: MutableList<String> = mutableListOf(),
     @SerializedName("fromDate")
     var fromDate: String? = "",
     @SerializedName("toDate")
