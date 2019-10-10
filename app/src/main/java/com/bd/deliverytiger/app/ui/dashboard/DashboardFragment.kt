@@ -26,11 +26,8 @@ import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
-import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
-import com.bd.deliverytiger.app.utils.DigitConverter
+import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.DigitConverter.banglaMonth
-import com.bd.deliverytiger.app.utils.SessionManager
-import com.bd.deliverytiger.app.utils.Timber
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import retrofit2.Call
 import retrofit2.Callback
@@ -217,6 +214,8 @@ class DashboardFragment : Fragment() {
                         addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
                     }
                 }
+            } else {
+                VariousTask.showShortToast(context, "বিস্তারিত দেখানোর মতো পর্যাপ্ত তথ্য নেই")
             }
         }
 

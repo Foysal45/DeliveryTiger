@@ -255,7 +255,7 @@ class CODCollectionFragment : Fragment() {
                 Timber.e("statusC " , status.toString())
 
                 if (fromDate1 != "01-01-01"){
-                    val msg = "${DigitConverter.toBanglaDigit(fromDate1)} - ${DigitConverter.toBanglaDigit(toDate1)}"
+                    val msg = "${DigitConverter.toBanglaDate(fromDate1, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate1, "yyyy-MM-dd")}"
                     filterDateTag.text = msg
                     filterDateTag.visibility = View.VISIBLE
                 } else {

@@ -17,6 +17,7 @@ import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.status.StatusGroupModel
 import com.bd.deliverytiger.app.api.model.status.StatusModel
 import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
+import com.bd.deliverytiger.app.utils.DigitConverter
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
@@ -73,10 +74,12 @@ class FilterFragment : Fragment() {
         applyBtn = view.findViewById(R.id.filter_apply)
 
         if (gotFromDate != "01-01-01"){
-            fromDateTV.text = gotFromDate
+            val formattedDate = DigitConverter.toBanglaDate(gotFromDate, "yyyy-MM-dd")
+            fromDateTV.text = formattedDate
         }
         if (gotToDate != "01-01-01"){
-            toDateTV.text = gotToDate
+            val formattedDate = DigitConverter.toBanglaDate(gotToDate, "yyyy-MM-dd")
+            toDateTV.text = formattedDate
         }
 
         otherApiInterface = RetrofitSingleton.getInstance(context!!).create(OtherApiInterface::class.java)
@@ -97,7 +100,8 @@ class FilterFragment : Fragment() {
             fromDate.setDate(object : DatePickerDialogCustom.PassDateInterface2 {
                 override fun gotDate2(date: String, flag: Int) {
                     gotFromDate = date
-                    fromDateTV.text = gotFromDate
+                    val formattedDate = DigitConverter.toBanglaDate(gotFromDate, "yyyy-MM-dd")
+                    fromDateTV.text = formattedDate
                     isFromDateSelected = true
                 }
 
@@ -112,7 +116,8 @@ class FilterFragment : Fragment() {
             toDate.setDate(object : DatePickerDialogCustom.PassDateInterface2 {
                 override fun gotDate2(date: String, flag: Int) {
                     gotToDate = date
-                    toDateTV.text = gotToDate
+                    val formattedDate = DigitConverter.toBanglaDate(gotToDate, "yyyy-MM-dd")
+                    toDateTV.text = formattedDate
                     isToDateSelected = true
                 }
 
