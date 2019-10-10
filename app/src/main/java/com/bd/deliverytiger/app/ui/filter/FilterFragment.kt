@@ -27,6 +27,7 @@ import retrofit2.Response
  */
 class FilterFragment : Fragment() {
 
+    private lateinit var clearFilter: TextView
     private lateinit var fromDateTV: TextView
     private lateinit var toDateTV: TextView
     private lateinit var statusSpinner: AppCompatSpinner
@@ -37,16 +38,19 @@ class FilterFragment : Fragment() {
     private var gotFromDate: String = "01-01-01"
     private var gotToDate: String = "01-01-01"
     private var statusId = -1
-    private var statusGroup = ""
+    private var statusGroup = "-1"
+    private var filterType = 0
     private var isFromDateSelected = false
     private var isToDateSelected = false
+    private val statusList: MutableList<String> = mutableListOf()
 
     companion object{
-        fun newInstance(fromDate: String = "01-01-01", toDate: String = "01-01-01", status: Int = -1, statusGroup: String = ""): FilterFragment = FilterFragment().apply {
+        fun newInstance(fromDate: String = "01-01-01", toDate: String = "01-01-01", status: Int = -1, statusGroup: String = "-1", filterType: Int = 0): FilterFragment = FilterFragment().apply {
             this.gotFromDate = fromDate
             this.gotToDate = toDate
             this.statusId = status
             this.statusGroup = statusGroup
+            this.filterType = filterType
         }
         val tag = FilterFragment::class.java.name
     }
@@ -62,6 +66,7 @@ class FilterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        clearFilter = view.findViewById(R.id.filter_clear_tv)
         fromDateTV = view.findViewById(R.id.filter_date_from)
         toDateTV = view.findViewById(R.id.filter_date_to)
         statusSpinner = view.findViewById(R.id.filter_status_spinner)
@@ -75,8 +80,12 @@ class FilterFragment : Fragment() {
         }
 
         otherApiInterface = RetrofitSingleton.getInstance(context!!).create(OtherApiInterface::class.java)
-        //loadOrderStatus()
-        loadStatusGroup()
+        if (filterType == 0){
+            loadStatusGroup()
+        } else{
+            loadOrderStatus()
+        }
+
 
         fromDateTV.setOnClickListener {
 
@@ -124,6 +133,16 @@ class FilterFragment : Fragment() {
                 }
             }
         }
+
+        clearFilter.setOnClickListener {
+            fromDateTV.text = ""
+            toDateTV.text = ""
+            statusSpinner.setSelection(0)
+            gotFromDate = "01-01-01"
+            gotToDate = "01-01-01"
+            statusId = -1
+            statusGroup = "-1"
+        }
     }
 
     private fun loadOrderStatus(){
@@ -168,6 +187,11 @@ class FilterFragment : Fragment() {
 
     private fun loadStatusGroup() {
 
+        statusList.clear()
+        statusList.add("সকল স্ট্যাটাস")
+        val statusAdapter = CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, statusList)
+        statusSpinner.adapter = statusAdapter
+
         otherApiInterface.loadStatusGroup().enqueue(object : Callback<GenericResponse<MutableList<StatusGroupModel>>> {
             override fun onFailure(call: Call<GenericResponse<MutableList<StatusGroupModel>>>, t: Throwable) {
 
@@ -177,7 +201,8 @@ class FilterFragment : Fragment() {
                 if (response.isSuccessful && response.body() != null){
                     if (response.body()!!.model != null && response.body()!!.model.isNotEmpty()) {
 
-                        val statusList: MutableList<String> = mutableListOf()
+                        statusList.clear()
+                        statusList.add("সকল স্ট্যাটাস")
                         var preSelectedIndex = 0
                         for ((index,model) in response.body()!!.model.withIndex()) {
                             if (model.dashboardStatusGroup.isNotEmpty()){
@@ -187,8 +212,9 @@ class FilterFragment : Fragment() {
                                 }
                             }
                         }
-                        val packagingAdapter = CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, statusList)
-                        statusSpinner.adapter = packagingAdapter
+                        //val packagingAdapter = CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, statusList)
+                        //statusSpinner.adapter = packagingAdapter
+                        statusAdapter.notifyDataSetChanged()
                         statusSpinner.setSelection(preSelectedIndex)
 
 
@@ -199,7 +225,11 @@ class FilterFragment : Fragment() {
 
                             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                                 //val model2 = response.body()!!.model[p2]
-                                statusGroup = statusList[p2]
+                                if (p2 == 0){
+                                    statusGroup = "-1"
+                                } else {
+                                    statusGroup = statusList[p2]
+                                }
                             }
 
                         }

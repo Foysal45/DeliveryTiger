@@ -214,7 +214,7 @@ class BillingofServiceFragment : Fragment() {
             (activity as HomeActivity).openRightDrawer()
         }
 
-        val fragment = FilterFragment.newInstance(fromDate,toDate,status)
+        val fragment = FilterFragment.newInstance(fromDate,toDate,status,statusGroup)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.container_drawer, fragment, FilterFragment.tag)
         //ft?.addToBackStack(FilterFragment.tag)

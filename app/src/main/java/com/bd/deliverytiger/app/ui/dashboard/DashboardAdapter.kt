@@ -45,12 +45,16 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             val model = dataList[position]
 
             holder.titleTV.text = model.name
-            //ToDo: change later
-            if (position == 0){
-                holder.countTV.text = "৳ ${DigitConverter.toBanglaDigit(model.count)}"
-            } else {
-                holder.countTV.text = "${DigitConverter.toBanglaDigit(model.count)}"
+            var countMsg = "0"
+            if (model.dashboardCountSumView == "countsum"){
+                countMsg = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt())} (${DigitConverter.toBanglaDigit(model.count)})"
+            } else if (model.dashboardCountSumView == "count") {
+                countMsg = DigitConverter.toBanglaDigit(model.count)
+            } else if (model.dashboardCountSumView == "sum") {
+                countMsg = DigitConverter.toBanglaDigit(model.totalAmount.toInt())
             }
+            holder.countTV.text = countMsg
+
             when(model.dashboardViewColorType) {
                 "positive" -> {
                     holder.parentLayout.setBackgroundColor(Color.parseColor("#EEF8EF"))

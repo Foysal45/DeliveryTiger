@@ -25,5 +25,6 @@
     <color name="positive">#66BB6A</color>
     <color name="negative">#FF8E34</color>
     <color name="neutral"></color>
+    <color name="red">#E84545</color>
 
 </resources>

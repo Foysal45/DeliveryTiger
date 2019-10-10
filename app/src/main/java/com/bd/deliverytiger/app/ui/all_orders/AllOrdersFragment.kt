@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -26,6 +27,8 @@ import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.utils.*
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,20 +38,21 @@ import retrofit2.Response
  */
 class AllOrdersFragment : Fragment() {
 
-
-
     private lateinit var rvAllOrder: RecyclerView
     private lateinit var tvTotalOrder: TextView
     private lateinit var allOrderFilterLay: LinearLayout
-
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private lateinit var allOrdersAdapter: AllOrdersAdapter
-    private lateinit var allOrderInterface: AllOrderInterface
     private lateinit var ivEmpty: ImageView
     private lateinit var topLay: LinearLayout
     private lateinit var showStatus: ImageView
-
     private lateinit var allOrderProgressBar: ProgressBar
+    private lateinit var filterGroup: ChipGroup
+    private lateinit var filterDateTag: Chip
+    private lateinit var filterStatusTag: Chip
+
+    private lateinit var allOrdersAdapter: AllOrdersAdapter
+    private lateinit var allOrderInterface: AllOrderInterface
+
     private var isLoading = false
     private var totalLoadedData = 0
     private var layoutPosition = 0
@@ -98,6 +102,9 @@ class AllOrdersFragment : Fragment() {
         ivEmpty = view.findViewById(R.id.ivEmpty)
         topLay = view.findViewById(R.id.topLay)
         showStatus = view.findViewById(R.id.show_status)
+        filterGroup = view.findViewById(R.id.filter_tag_group)
+        filterDateTag = view.findViewById(R.id.filter_tag_date)
+        filterStatusTag = view.findViewById(R.id.filter_tag_status)
 
         if (!bundle.isEmpty){
             statusGroup = bundle.getString("statusGroup", "-1")
@@ -220,7 +227,8 @@ class AllOrdersFragment : Fragment() {
 
                         if (index < 20) {
                             totalCount = response.body()!!.model.totalCount!!.toInt()
-                            tvTotalOrder.text = "মোট অর্ডার: ${DigitConverter.toBanglaDigit(totalCount)} টি"
+                            val msg = "মোট অর্ডারঃ <font color='#CC000000'><b>${DigitConverter.toBanglaDigit(totalCount)}</b></font> টি"
+                            tvTotalOrder.text = HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY)
                         }
 
                         if(totalLoadedData == 0){
@@ -260,13 +268,60 @@ class AllOrdersFragment : Fragment() {
         ft?.commit()
 
         fragment.setFilterListener(object : FilterFragment.FilterListener {
-            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int,statusGroup1: String) {
+            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup1: String) {
                 fromDate = fromDate1
                 toDate = toDate1
                 status = status1
                 statusGroup = statusGroup1
                 statusGroupList.clear()
                 statusGroupList.add(statusGroup1)
+
+                if (fromDate1 != "01-01-01"){
+                    val msg = "${DigitConverter.toBanglaDigit(fromDate1)} - ${DigitConverter.toBanglaDigit(toDate1)}"
+                    filterDateTag.text = msg
+                    filterDateTag.visibility = View.VISIBLE
+                } else {
+                    filterDateTag.text = ""
+                    filterDateTag.visibility = View.GONE
+                    fromDate = "01-01-01"
+                    toDate = "01-01-01"
+                }
+
+                if (statusGroup != "-1"){
+                    filterStatusTag.text = statusGroup1
+                    filterStatusTag.visibility = View.VISIBLE
+                } else {
+                    filterStatusTag.text = ""
+                    filterStatusTag.visibility = View.GONE
+                    status = -1
+                    statusGroup = "-1"
+                    statusGroupList.clear()
+                    statusGroupList.add(statusGroup)
+                }
+
+                filterDateTag.setOnClickListener {
+                    filterDateTag.text = ""
+                    filterDateTag.visibility = View.GONE
+                    fromDate = "01-01-01"
+                    toDate = "01-01-01"
+
+                    courierOrderViewModelList?.clear()
+                    allOrdersAdapter.notifyDataSetChanged()
+                    getAllOrders(0, 20)
+                }
+
+                filterStatusTag.setOnClickListener {
+                    filterStatusTag.text = ""
+                    filterStatusTag.visibility = View.GONE
+                    status = -1
+                    statusGroup = "-1"
+                    statusGroupList.clear()
+                    statusGroupList.add(statusGroup)
+
+                    courierOrderViewModelList?.clear()
+                    allOrdersAdapter.notifyDataSetChanged()
+                    getAllOrders(0, 20)
+                }
 
                 courierOrderViewModelList?.clear()
                 allOrdersAdapter.notifyDataSetChanged()

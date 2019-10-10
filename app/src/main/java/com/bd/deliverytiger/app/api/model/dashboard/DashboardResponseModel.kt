@@ -18,6 +18,8 @@ data class DashboardResponseModel(
     var dashboardViewOrderBy: Int? = 0,
     @SerializedName("dashboardRouteUrl")
     var dashboardRouteUrl: String? = "",
+    @SerializedName("dashboardCountSumView")
+    var dashboardCountSumView: String? = "",
     @SerializedName("totalAmount")
     var totalAmount: Double = 0.0
 )

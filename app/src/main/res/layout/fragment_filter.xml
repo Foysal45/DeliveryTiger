@@ -21,6 +21,19 @@
         android:textSize="@dimen/text_16"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/filter_clear_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text="ক্লিয়ার"
+        android:textStyle="normal"
+        android:textColor="@color/red"
+        android:textSize="@dimen/text_16"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
     <View
         android:id="@+id/filter_separator"
         android:layout_width="match_parent"
