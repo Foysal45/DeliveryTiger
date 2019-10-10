@@ -9,65 +9,12 @@
     android:focusable="true"
     tools:context=".ui.cod_collection.CODCollectionFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-
-        android:id="@+id/addOrderTopLay"
+    <include
+        android:id="@+id/include_filter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFE284"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/tvTotalOrder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/fab_margin"
-            android:text="মোট অর্ডার : ০"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_14"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
-            android:id="@+id/codFilterLay"
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginEnd="@dimen/fab_margin"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/tvDetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ফিল্টার"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_14"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/ivAddOrderArrow"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/ivCodFilter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_4"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/cod_collection_filter" />
-
-
-        </LinearLayout>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        layout="@layout/layout_filter"
+        />
 
     <include
         layout="@layout/view_cod_collection"
@@ -76,7 +23,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/addOrderTopLay" />
+        app:layout_constraintTop_toBottomOf="@id/include_filter" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCODCollection"

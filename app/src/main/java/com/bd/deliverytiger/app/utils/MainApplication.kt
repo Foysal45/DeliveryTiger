@@ -63,7 +63,10 @@ class MainApplication: Application() {
             override fun onResponse(call: Call<GenericResponse<LoginResponse>>, response: Response<GenericResponse<LoginResponse>>) {
                 Timber.d("applicationLog", "onResponse: ${response.code()} ${response.message()}")
                 if (response.code() == 404){
-                    startActivity(Intent(this@MainApplication, LoginActivity::class.java))
+                    val intent = Intent(this@MainApplication, LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+
                 }
                 if (response.isSuccessful && response.body() != null){
                     if (response.body()!!.model != null){

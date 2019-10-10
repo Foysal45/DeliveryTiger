@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -28,6 +29,8 @@ import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.utils.DigitConverter
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,6 +59,10 @@ class CODCollectionFragment : Fragment() {
     private lateinit var filterLayout: LinearLayout
     private lateinit var viewID: ConstraintLayout
     private lateinit var ivEmpty: ImageView
+    private lateinit var filterGroup: ChipGroup
+    private lateinit var filterDateTag: Chip
+    private lateinit var filterStatusTag: Chip
+
     private var isLoading = false
     private var totalLoadedData = 0
     private var layoutPosition = 0
@@ -82,10 +89,13 @@ class CODCollectionFragment : Fragment() {
 
         rvCODCollection = view.findViewById(R.id.rvCODCollection)
         codProgressBar = view.findViewById(R.id.codProgressBar)
-        filterLayout = view.findViewById(R.id.codFilterLay)
+        filterLayout = view.findViewById(R.id.allOrderFilterLay)
         tvTotalOrder = view.findViewById(R.id.tvTotalOrder)
         viewID = view.findViewById(R.id.viewID)
         ivEmpty = view.findViewById(R.id.ivEmpty)
+        filterGroup = view.findViewById(R.id.filter_tag_group)
+        filterDateTag = view.findViewById(R.id.filter_tag_date)
+        filterStatusTag = view.findViewById(R.id.filter_tag_status)
 
         courierOrderViewModelList = ArrayList()
         // fromDate = getCurrentDateTime().toString()
@@ -195,7 +205,8 @@ class CODCollectionFragment : Fragment() {
 
                         if (index < 20) {
                             totalCount = response.body()!!.model.totalCount!!.toInt()
-                            tvTotalOrder.text = "মোট অর্ডার: ${DigitConverter.toBanglaDigit(totalCount)} টি"
+                            val msg = "মোট অর্ডারঃ <font color='#CC000000'><b>${DigitConverter.toBanglaDigit(totalCount)}</b></font> টি"
+                            tvTotalOrder.text = HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY)
                         }
 
                         if(totalLoadedData == 0){
@@ -242,6 +253,61 @@ class CODCollectionFragment : Fragment() {
                 statusGroupList.clear()
                 statusGroupList.add(statusGroup1)
                 Timber.e("statusC " , status.toString())
+
+                if (fromDate1 != "01-01-01"){
+                    val msg = "${DigitConverter.toBanglaDigit(fromDate1)} - ${DigitConverter.toBanglaDigit(toDate1)}"
+                    filterDateTag.text = msg
+                    filterDateTag.visibility = View.VISIBLE
+                } else {
+                    filterDateTag.text = ""
+                    filterDateTag.visibility = View.GONE
+                    fromDate = "01-01-01"
+                    toDate = "01-01-01"
+                }
+
+                if (statusGroup != "-1"){
+                    filterStatusTag.text = statusGroup1
+                    filterStatusTag.visibility = View.VISIBLE
+                } else {
+                    filterStatusTag.text = ""
+                    filterStatusTag.visibility = View.GONE
+                    status = -1
+                    statusGroup = "-1"
+                    statusGroupList.clear()
+                    statusGroupList.add(statusGroup)
+                }
+
+                filterDateTag.setOnClickListener {
+                    filterDateTag.text = ""
+                    filterDateTag.visibility = View.GONE
+                    fromDate = "01-01-01"
+                    toDate = "01-01-01"
+
+                    courierOrderViewModelList?.clear()
+                    codCollectionAdapter.notifyDataSetChanged()
+                    getAllCODCollection(0, 20)
+                }
+
+                filterStatusTag.setOnClickListener {
+                    filterStatusTag.text = ""
+                    filterStatusTag.visibility = View.GONE
+                    status = -1
+                    statusGroup = "-1"
+                    statusGroupList.clear()
+                    statusGroupList.add(statusGroup)
+
+                    courierOrderViewModelList?.clear()
+                    codCollectionAdapter.notifyDataSetChanged()
+                    getAllCODCollection(0, 20)
+                }
+
+                filterDateTag.setOnCloseIconClickListener {
+                    filterDateTag.performClick()
+                }
+
+                filterStatusTag.setOnCloseIconClickListener {
+                    filterStatusTag.performClick()
+                }
 
                 courierOrderViewModelList?.clear()
                 codCollectionAdapter.notifyDataSetChanged()

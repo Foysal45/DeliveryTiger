@@ -323,6 +323,14 @@ class AllOrdersFragment : Fragment() {
                     getAllOrders(0, 20)
                 }
 
+                filterDateTag.setOnCloseIconClickListener {
+                    filterDateTag.performClick()
+                }
+
+                filterStatusTag.setOnCloseIconClickListener {
+                    filterStatusTag.performClick()
+                }
+
                 courierOrderViewModelList?.clear()
                 allOrdersAdapter.notifyDataSetChanged()
                 getAllOrders(0, 20)

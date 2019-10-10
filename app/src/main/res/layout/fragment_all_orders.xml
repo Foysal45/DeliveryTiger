@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,121 +11,12 @@
     android:focusable="true"
     >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/addOrderTopLay"
+    <include
+        android:id="@+id/include_filter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFE284"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        >
-
-        <TextView
-            android:id="@+id/tvTotalOrder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/fab_margin"
-            android:layout_marginTop="4dp"
-            android:text="মোট অর্ডার : ০"
-            android:textColor="@color/black_80"
-            android:textSize="@dimen/text_14"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/allOrderFilterLay"
-            app:layout_constraintBottom_toBottomOf="@id/allOrderFilterLay"
-            />
-
-        <LinearLayout
-            android:id="@+id/allOrderFilterLay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="@dimen/fab_margin"
-            android:orientation="horizontal"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="UseCompoundDrawables">
-
-            <TextView
-                android:id="@+id/tvDetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ফিল্টার"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/text_14"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/ivAddOrderArrow"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/ivCodFilter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_4"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/cod_collection_filter"
-                android:contentDescription="@string/cd"
-                />
-
-
-        </LinearLayout>
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/allOrderFilterLay"
-            android:scrollbars="none"
-            android:layout_marginTop="8dp"
-            >
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/filter_tag_group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                app:singleLine="true"
-                >
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/filter_tag_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:chipBackgroundColor="@color/white"
-                    android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_12"
-                    app:closeIconTint="@color/gray_500"
-                    app:closeIconEnabled="true"
-                    android:visibility="gone"
-                    tools:visibility="visible"
-                    tools:text="২০১৯-১০-০১ - ২০১৯-১০-৩১"
-                    />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/filter_tag_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:closeIconTint="@color/gray_500"
-                    app:chipBackgroundColor="@color/white"
-                    android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_12"
-                    app:closeIconEnabled="true"
-                    tools:text="আপনি পেমেন্ট পেয়েছেন"
-                    android:visibility="gone"
-                    tools:visibility="visible"
-                    />
-
-            </com.google.android.material.chip.ChipGroup>
-
-        </HorizontalScrollView>
-
-
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        layout="@layout/layout_filter"
+        />
 
     <HorizontalScrollView
         android:layout_width="wrap_content"
@@ -133,7 +25,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/addOrderTopLay">
+        app:layout_constraintTop_toBottomOf="@id/include_filter">
 
         <LinearLayout
             android:layout_width="wrap_content"

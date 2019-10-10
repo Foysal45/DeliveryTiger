@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxWidth="100dp"
-            android:text="কালেকশনের পরিমান"
+            android:text="কালেকশন (৳)"
             android:textColor="@color/black"
             android:textSize="@dimen/text_14"
             android:textStyle="bold" />
@@ -50,7 +50,7 @@
             android:layout_weight="1"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:text="পেমেন্ট স্ট্যাটাস"
+            android:text="পেমেন্ট"
             android:textColor="@color/black"
             android:textSize="@dimen/text_14"
             android:textStyle="bold" />
