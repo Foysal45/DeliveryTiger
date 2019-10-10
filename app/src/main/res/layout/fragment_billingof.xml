@@ -4,27 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.cod_collection.CODCollectionFragment"
     android:background="@color/white"
     android:clickable="true"
     android:focusable="true"
-    >
+    tools:context=".ui.cod_collection.CODCollectionFragment">
 
     <include
         android:id="@+id/include_filter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         layout="@layout/layout_filter"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <HorizontalScrollView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        app:layout_constraintVertical_weight="1"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/include_filter">
+        app:layout_constraintTop_toBottomOf="@id/include_filter"
+        app:layout_constraintVertical_weight="1">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -88,11 +86,11 @@
 
 
                     <TextView
-                        android:paddingStart="8dp"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:maxWidth="100dp"
+                        android:paddingStart="8dp"
                         android:text="ভঙ্গুর চার্জ"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"
@@ -140,17 +138,13 @@
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
 
-
-
-
-
                 </LinearLayout>
 
-              <!--  <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/divider"
-                    app:layout_constraintTop_toBottomOf="@id/topLay" />-->
+                <!--  <View
+                      android:layout_width="match_parent"
+                      android:layout_height="2dp"
+                      android:background="@color/divider"
+                      app:layout_constraintTop_toBottomOf="@id/topLay" />-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -164,9 +158,10 @@
     </HorizontalScrollView>
 
     <ImageView
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/cd"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -176,24 +171,25 @@
 
     <ProgressBar
         android:id="@+id/billingProgressBar"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <ImageView
         android:id="@+id/ivEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/cd"
         android:visibility="gone"
-        app:srcCompat="@drawable/add_order_box_empty"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        app:srcCompat="@drawable/ic_empty_sad" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

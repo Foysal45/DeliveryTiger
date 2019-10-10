@@ -110,7 +110,7 @@ class LoginFragment: Fragment() {
         val password = passwordET.text.toString()
 
         val dialog = ProgressDialog(context)
-        dialog.setMessage("Please wait")
+        dialog.setMessage("অপেক্ষা করুন")
         dialog.setCancelable(false)
         dialog.show()
         val loginInterface = RetrofitSingleton.getInstance(context!!).create(LoginInterface::class.java)
