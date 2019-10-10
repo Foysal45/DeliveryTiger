@@ -12,6 +12,7 @@ class AuthInterceptor(private val session: Session?): Interceptor {
         request = request.newBuilder()
             .addHeader("Content-Type", "application/json")
             .addHeader("Accept", "application/json")
+            .addHeader("api-version", "1.0")
             .addHeader("Authorization", "Bearer ${SessionManager.accessToken}")
             .build()
 
