@@ -208,7 +208,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="24dp"
                 android:textSize="@dimen/text_14"
                 android:text="সেভ"
                 android:textColor="@color/white" />
@@ -276,7 +276,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="24dp"
                 android:text="আপডেট করুন"
                 android:textColor="@color/white" />
 
