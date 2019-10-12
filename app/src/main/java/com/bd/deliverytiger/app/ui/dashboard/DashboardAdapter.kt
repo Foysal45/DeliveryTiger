@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponseModel
@@ -44,22 +45,28 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
 
             val model = dataList[position]
 
-            holder.titleTV.text = model.name
+
             var countMsg = "0"
+            var titleMsg = ""
             when {
                 model.dashboardCountSumView == "countsum" -> {
-                    countMsg = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt())} (${DigitConverter.toBanglaDigit(model.count)})"
+                    countMsg = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt())}"
+                    titleMsg = "<font color='#CC000000'><b>${DigitConverter.toBanglaDigit(model.count)}</b></font>টি ${model.name}"
                 }
 
                 model.dashboardCountSumView == "count" -> {
                     countMsg = DigitConverter.toBanglaDigit(model.count)
+                    titleMsg = "${model.name}"
                 }
 
                 model.dashboardCountSumView == "sum" -> {
                     countMsg = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt())}"
+                    titleMsg = "${model.name}"
                 }
             }
             holder.countTV.text = countMsg
+            holder.titleTV.text = HtmlCompat.fromHtml(titleMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
 
             when(model.dashboardViewColorType) {
                 "positive" -> {

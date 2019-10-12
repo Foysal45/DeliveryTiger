@@ -33,12 +33,22 @@
             android:textColor="#73B4C8"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/item_view_dashboard_msg_tv"
+            app:layout_constraintBottom_toTopOf="@id/item_view_dashboard_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="৳ 783" />
 
+        <ImageView
+            android:id="@+id/item_view_dashboard_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/cd"
+            app:layout_constraintStart_toStartOf="@id/item_view_dashboard_count_tv"
+            app:layout_constraintTop_toBottomOf="@id/item_view_dashboard_count_tv"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:srcCompat="@drawable/ic_horn" />
 
         <TextView
             android:id="@+id/item_view_dashboard_msg_tv"
@@ -46,10 +56,11 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black_70"
             android:textSize="@dimen/text_14"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/item_view_dashboard_count_tv"
-            app:layout_constraintTop_toBottomOf="@id/item_view_dashboard_count_tv"
-            tools:text="সার্ভিসের বিল" />
+            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toEndOf="@id/item_view_dashboard_icon"
+            app:layout_constraintTop_toTopOf="@id/item_view_dashboard_icon"
+            app:layout_constraintBottom_toBottomOf="@id/item_view_dashboard_icon"
+            tools:text="৯টি সার্ভিসের বিল" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
