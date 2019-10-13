@@ -73,8 +73,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:layout_marginStart="@dimen/left_right_margin"
-                android:layout_marginEnd="@dimen/left_right_margin"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
 
                 >
 
@@ -106,8 +106,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
 
                 tools:listitem="@layout/item_view_dashboard"
                 tools:itemCount="6"

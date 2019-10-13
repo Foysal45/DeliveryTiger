@@ -51,7 +51,7 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             when {
                 model.dashboardCountSumView == "countsum" -> {
                     countMsg = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt())}"
-                    titleMsg = "<font color='#CC000000'><b>${DigitConverter.toBanglaDigit(model.count)}</b></font>টি ${model.name}"
+                    titleMsg = "<font color='#CC000000'><b>${DigitConverter.toBanglaDigit(model.count)}</b></font> টি ${model.name}"
                 }
 
                 model.dashboardCountSumView == "count" -> {
