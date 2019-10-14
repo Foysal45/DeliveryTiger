@@ -153,7 +153,6 @@ class LoginFragment: Fragment() {
                     if (response.body()!!.model != null) {
 
                         SessionManager.createSession(response.body()!!.model)
-
                         SessionManager.isRememberMe = true
                         SessionManager.loginId = mobile
                         SessionManager.loginPassword = password

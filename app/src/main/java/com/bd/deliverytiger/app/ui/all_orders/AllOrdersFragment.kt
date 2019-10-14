@@ -65,6 +65,7 @@ class AllOrdersFragment : Fragment() {
     private var isMoreDataAvailable = true
     private val statusList: MutableList<Int> = mutableListOf(-1)
     private val statusGroupList: MutableList<String> = mutableListOf("-1")
+    private var shouldOpenFilter: Boolean = false
     private var bundle: Bundle = Bundle()
     private var collectionAmount = 0
     private var paymentInProcessing = 0
@@ -72,7 +73,9 @@ class AllOrdersFragment : Fragment() {
     private var paymentReady = 0
 
     companion object {
-        fun newInstance(): AllOrdersFragment = AllOrdersFragment()
+        fun newInstance(shouldOpenFilter: Boolean = false): AllOrdersFragment = AllOrdersFragment().apply {
+            this.shouldOpenFilter = shouldOpenFilter
+        }
         fun newInstance(bundle: Bundle): AllOrdersFragment = AllOrdersFragment().apply {
             this.bundle = bundle
         }
@@ -175,6 +178,10 @@ class AllOrdersFragment : Fragment() {
             /*val paymentSheet = PaymentStatusSheet.newInstance()
             paymentSheet.show(childFragmentManager, PaymentStatusSheet.tag)*/
         }
+
+        if (shouldOpenFilter) {
+            allOrderFilterLay.performClick()
+        }
     }
 
     private fun getAllOrders(index: Int, count: Int) {
@@ -242,6 +249,8 @@ class AllOrdersFragment : Fragment() {
 
                     } else {
                         Timber.e("getAllOrdersResponse", " s null")
+                        //topLay.visibility = View.GONE
+                        //ivEmpty.visibility = View.VISIBLE
                     }
                 }
             })

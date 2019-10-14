@@ -41,100 +41,138 @@
         android:background="@color/separator"
         app:layout_constraintTop_toBottomOf="@id/filter_title" />
 
-    <TextView
-        android:id="@+id/filter_date_from"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/login_view_height"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/bg_add_order_edit_text"
-        android:drawableEnd="@drawable/ic_date"
-        android:hint="শুরু তারিখ"
-        android:paddingStart="20dp"
-        android:paddingTop="16dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="16dp"
-        android:textColor="@color/black_80"
-        android:textColorHint="@color/gray_500"
-        android:textSize="@dimen/text_14"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/filter_separator"
-        tools:text="27/04/19" />
-
-    <TextView
-        android:id="@+id/filter_from_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="থেকে"
-        android:textColor="@color/black_80"
-        android:textSize="@dimen/text_14"
-        app:layout_constraintTop_toBottomOf="@id/filter_date_from" />
-
-
-    <TextView
-        android:id="@+id/filter_date_to"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/login_view_height"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/bg_add_order_edit_text"
-        android:drawableEnd="@drawable/ic_date"
-        android:hint="শেষ তারিখ"
-        android:paddingStart="20dp"
-        android:paddingTop="16dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="16dp"
-        android:textColor="@color/black_80"
-        android:textColorHint="@color/gray_500"
-        android:textSize="@dimen/text_14"
-        app:layout_constraintTop_toBottomOf="@id/filter_from_tv"
-        tools:text="27/04/19" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/filter_status_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@id/filter_date_to">
-
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/filter_status_spinner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="2dp"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/login_view_height"
-            android:background="@drawable/bg_spinner"
-            android:overlapAnchor="false"
-            android:spinnerMode="dropdown"
-            android:theme="@style/custom_spinner_style"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:entries="@array/spinner_array_weight" />
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="@string/cd"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_arrow_drop_down"
-            />
+            <TextView
+                android:id="@+id/filter_date_from"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_view_height"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_add_order_edit_text"
+                android:drawableEnd="@drawable/ic_date"
+                android:hint="শুরু তারিখ"
+                android:paddingStart="20dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="16dp"
+                android:textColor="@color/black_80"
+                android:textColorHint="@color/gray_500"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="27/04/19" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/filter_from_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="থেকে"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintTop_toBottomOf="@id/filter_date_from" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/filter_apply"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/green_color"
-        android:text="এপ্লাই"
-        app:layout_constraintTop_toBottomOf="@id/filter_status_layout" />
+
+            <TextView
+                android:id="@+id/filter_date_to"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_view_height"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_add_order_edit_text"
+                android:drawableEnd="@drawable/ic_date"
+                android:hint="শেষ তারিখ"
+                android:paddingStart="20dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="16dp"
+                android:textColor="@color/black_80"
+                android:textColorHint="@color/gray_500"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintTop_toBottomOf="@id/filter_from_tv"
+                tools:text="27/04/19" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/filter_status_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="@dimen/fab_margin"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toBottomOf="@id/filter_date_to">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/filter_status_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:background="@drawable/bg_spinner"
+                    android:overlapAnchor="false"
+                    android:spinnerMode="dropdown"
+                    android:theme="@style/custom_spinner_style"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:entries="@array/spinner_array_weight" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@string/cd"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_arrow_drop_down"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <EditText
+                android:id="@+id/filter_search_key"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_view_height"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_add_order_edit_text"
+                android:hint="সার্চ কীওয়ার্ড লিখুন"
+                android:paddingStart="20dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:textColor="@color/black_80"
+                android:textColorHint="@color/gray_500"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintTop_toBottomOf="@id/filter_status_layout"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:imeOptions="actionDone"
+                />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/filter_apply"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@color/green_color"
+                android:text="এপ্লাই"
+                app:layout_constraintTop_toBottomOf="@id/filter_search_key" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

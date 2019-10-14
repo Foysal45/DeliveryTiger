@@ -18,10 +18,8 @@ import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentTwo
-import com.bd.deliverytiger.app.ui.add_order.OrderSuccessFragment
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
-import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.dashboard.DashboardFragment
 import com.bd.deliverytiger.app.ui.features.DTFeaturesFragment
@@ -29,6 +27,7 @@ import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
+import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.VariousTask
@@ -47,6 +46,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var toolbarTitleTV: TextView
     private lateinit var notificationIV: ImageView
     private lateinit var trackingIV: ImageView
+    private lateinit var searchIV: ImageView
     private lateinit var headerPic: ImageView
 
     private var doubleBackToExitPressedOnce = false
@@ -66,6 +66,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toolbarTitleTV = findViewById(R.id.home_toolbar_title)
         notificationIV = findViewById(R.id.home_toolbar_notification)
         trackingIV = findViewById(R.id.home_toolbar_tracking)
+        searchIV = findViewById(R.id.home_toolbar_search)
         navView.setNavigationItemSelectedListener(this)
         /*val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
@@ -112,6 +113,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         trackingIV.setOnClickListener {
             goToOrderTracking()
+        }
+        searchIV.setOnClickListener {
+            goToAllOrder()
         }
     }
 
@@ -174,6 +178,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 addProductBtnVisibility(false)
             } else {
                 addProductBtnVisibility(true)
+            }
+            if (currentFragment is DashboardFragment){
+                searchIV.visibility = View.VISIBLE
+            } else {
+                searchIV.visibility = View.GONE
             }
             if (currentFragment is OrderTrackingFragment) {
                 trackingIV.visibility = View.GONE
@@ -392,6 +401,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun addDashBoardFragment() {
         addProductBtnVisibility(false)
+        searchIV.visibility = View.VISIBLE
         val fragment = DashboardFragment.newInstance()
         val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
         ft?.replace(R.id.mainActivityContainer, fragment, DashboardFragment.tag)
@@ -445,6 +455,15 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val ft = supportFragmentManager.beginTransaction()
         ft.add(R.id.mainActivityContainer, fragment, OrderTrackingFragment.tag)
         ft.addToBackStack(OrderTrackingFragment.tag)
+        ft.commit()
+    }
+
+    private fun goToAllOrder() {
+
+        val fragment = AllOrdersFragment.newInstance(true)
+        val ft = supportFragmentManager.beginTransaction()
+        ft.add(R.id.mainActivityContainer, fragment, AllOrdersFragment.tag)
+        ft.addToBackStack(AllOrdersFragment.tag)
         ft.commit()
     }
 
