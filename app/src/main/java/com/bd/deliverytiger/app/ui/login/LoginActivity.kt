@@ -36,7 +36,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun addLoginFragment(){
-        val fragment = LoginFragment.newInstance(false)
+
+        val isSessionOut = intent.getBooleanExtra("isSessionOut", false)
+        intent.removeExtra("isSessionOut")
+        val fragment = LoginFragment.newInstance(false, isSessionOut)
         val ft: FragmentTransaction? = supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, LoginFragment.tag)
        // ft?.addToBackStack(LoginFragment.getFragmentTag())

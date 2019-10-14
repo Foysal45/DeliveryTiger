@@ -5,6 +5,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.`interface`.LoginInterface
@@ -47,11 +47,14 @@ class LoginFragment: Fragment() {
     private lateinit var loginBtn: MaterialButton
     private lateinit var forgotPasswordTV: TextView
     private lateinit var signUpTV: TextView
+    //private lateinit var checkRememberMe: AppCompatCheckBox
     private var sendOTP = false
+    private var isSessionOut = false
 
     companion object {
-        fun newInstance(sendOTP: Boolean): LoginFragment = LoginFragment().apply {
+        fun newInstance(sendOTP: Boolean, isSessionOut: Boolean = false): LoginFragment = LoginFragment().apply {
             this.sendOTP = sendOTP
+            this.isSessionOut = isSessionOut
         }
         val tag = LoginFragment::class.java.name
     }
@@ -74,16 +77,29 @@ class LoginFragment: Fragment() {
         loginBtn = view.findViewById(R.id.btnLogin)
         forgotPasswordTV = view.findViewById(R.id.tvLoginForgotPassword)
         signUpTV = view.findViewById(R.id.tvLoginSignUp)
+        //checkRememberMe = view.findViewById(R.id.login_checkBox_remember_me)
 
-        if (BuildConfig.DEBUG){
+        /*if (BuildConfig.DEBUG){
             mobileET.setText("01844172323")
             passwordET.setText("01844172323")
+        }*/
+
+        if (isSessionOut) {
+
+            val msg = "সেশন আউট হয়ে গেছে।\nঅ্যাপ ব্যবহার করতে পুনরায় লগইন করুন"
+            alertMsgTV.text = msg
+            alertMsgTV.setTextColor(Color.parseColor("#B28D13"))
+            alertLayout.setBackgroundColor(Color.parseColor("#FFF8E1"))
+            alertLayout.visibility = View.VISIBLE
+        } else {
+            alertLayout.visibility = View.GONE
         }
 
         if (sendOTP){
-            alertLayout.visibility = View.VISIBLE
+
             val registationMsg = "রেজিস্টেশন সফল হয়েছে! এখন আপনার লগইন তথ্য দিয়ে লগইন করতে পারেন"
             alertMsgTV.text = registationMsg
+            alertLayout.visibility = View.VISIBLE
         } else {
             alertLayout.visibility = View.GONE
         }
@@ -97,6 +113,12 @@ class LoginFragment: Fragment() {
         }
         signUpTV.setOnClickListener {
             goToSignUp()
+        }
+
+        if (SessionManager.isRememberMe){
+            //checkRememberMe.isChecked = true
+            mobileET.setText(SessionManager.loginId)
+            passwordET.setText(SessionManager.loginPassword)
         }
     }
 
@@ -131,6 +153,14 @@ class LoginFragment: Fragment() {
                     if (response.body()!!.model != null) {
 
                         SessionManager.createSession(response.body()!!.model)
+
+                        SessionManager.isRememberMe = true
+                        SessionManager.loginId = mobile
+                        SessionManager.loginPassword = password
+                        Timber.d(logTag, "Password saved")
+
+                        Timber.d(logTag, "Token: ${SessionManager.accessToken}")
+                        Timber.d(logTag, "RefreshToken: ${SessionManager.refreshToken}")
                         saveAppVersion()
                         goToHomeActivity()
                     }

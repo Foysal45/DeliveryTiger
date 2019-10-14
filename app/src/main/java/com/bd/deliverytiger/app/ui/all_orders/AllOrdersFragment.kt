@@ -113,6 +113,7 @@ class AllOrdersFragment : Fragment() {
 
             statusGroupList.clear()
             statusGroupList.add(statusGroup)
+            activeFilter()
         }
 
         allOrderInterface =
@@ -276,60 +277,7 @@ class AllOrdersFragment : Fragment() {
                 statusGroupList.clear()
                 statusGroupList.add(statusGroup1)
 
-                if (fromDate1 != "01-01-01"){
-                    val msg = "${DigitConverter.toBanglaDate(fromDate1, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate1, "yyyy-MM-dd")}"
-                    filterDateTag.text = msg
-                    filterDateTag.visibility = View.VISIBLE
-                } else {
-                    filterDateTag.text = ""
-                    filterDateTag.visibility = View.GONE
-                    fromDate = "01-01-01"
-                    toDate = "01-01-01"
-                }
-
-                if (statusGroup != "-1"){
-                    filterStatusTag.text = statusGroup1
-                    filterStatusTag.visibility = View.VISIBLE
-                } else {
-                    filterStatusTag.text = ""
-                    filterStatusTag.visibility = View.GONE
-                    status = -1
-                    statusGroup = "-1"
-                    statusGroupList.clear()
-                    statusGroupList.add(statusGroup)
-                }
-
-                filterDateTag.setOnClickListener {
-                    filterDateTag.text = ""
-                    filterDateTag.visibility = View.GONE
-                    fromDate = "01-01-01"
-                    toDate = "01-01-01"
-
-                    courierOrderViewModelList?.clear()
-                    allOrdersAdapter.notifyDataSetChanged()
-                    getAllOrders(0, 20)
-                }
-
-                filterStatusTag.setOnClickListener {
-                    filterStatusTag.text = ""
-                    filterStatusTag.visibility = View.GONE
-                    status = -1
-                    statusGroup = "-1"
-                    statusGroupList.clear()
-                    statusGroupList.add(statusGroup)
-
-                    courierOrderViewModelList?.clear()
-                    allOrdersAdapter.notifyDataSetChanged()
-                    getAllOrders(0, 20)
-                }
-
-                filterDateTag.setOnCloseIconClickListener {
-                    filterDateTag.performClick()
-                }
-
-                filterStatusTag.setOnCloseIconClickListener {
-                    filterStatusTag.performClick()
-                }
+                activeFilter()
 
                 courierOrderViewModelList?.clear()
                 allOrdersAdapter.notifyDataSetChanged()
@@ -338,6 +286,64 @@ class AllOrdersFragment : Fragment() {
                 activity?.onBackPressed()
             }
         })
+    }
+
+    private fun activeFilter(){
+
+        if (fromDate != "01-01-01"){
+            val msg = "${DigitConverter.toBanglaDate(fromDate, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate, "yyyy-MM-dd")}"
+            filterDateTag.text = msg
+            filterDateTag.visibility = View.VISIBLE
+        } else {
+            filterDateTag.text = ""
+            filterDateTag.visibility = View.GONE
+            fromDate = "01-01-01"
+            toDate = "01-01-01"
+        }
+
+        if (statusGroup != "-1"){
+            filterStatusTag.text = statusGroup
+            filterStatusTag.visibility = View.VISIBLE
+        } else {
+            filterStatusTag.text = ""
+            filterStatusTag.visibility = View.GONE
+            status = -1
+            statusGroup = "-1"
+            statusGroupList.clear()
+            statusGroupList.add(statusGroup)
+        }
+
+        filterDateTag.setOnClickListener {
+            filterDateTag.text = ""
+            filterDateTag.visibility = View.GONE
+            fromDate = "01-01-01"
+            toDate = "01-01-01"
+
+            courierOrderViewModelList?.clear()
+            allOrdersAdapter.notifyDataSetChanged()
+            getAllOrders(0, 20)
+        }
+
+        filterStatusTag.setOnClickListener {
+            filterStatusTag.text = ""
+            filterStatusTag.visibility = View.GONE
+            status = -1
+            statusGroup = "-1"
+            statusGroupList.clear()
+            statusGroupList.add(statusGroup)
+
+            courierOrderViewModelList?.clear()
+            allOrdersAdapter.notifyDataSetChanged()
+            getAllOrders(0, 20)
+        }
+
+        filterDateTag.setOnCloseIconClickListener {
+            filterDateTag.performClick()
+        }
+
+        filterStatusTag.setOnCloseIconClickListener {
+            filterStatusTag.performClick()
+        }
     }
 
     private fun editOrder(orderId: String,updateOrderReqBody: UpdateOrderReqBody, indexPosition: Int) {

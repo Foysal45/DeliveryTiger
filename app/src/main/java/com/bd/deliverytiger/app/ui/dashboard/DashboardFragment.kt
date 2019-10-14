@@ -87,6 +87,8 @@ class DashboardFragment : Fragment() {
         val currentMonth = calender.get(Calendar.MONTH)
         getDashBoardData(currentMonth + 1, currentYear)
 
+        selectedYear = currentYear
+        selectedMonth = currentMonth + 1
         /*val viewList: MutableList<String> = mutableListOf()
         for (item in banglaMonth) {
             viewList.add("${item}, ${DigitConverter.toBanglaDigit(currentYear)}")

@@ -65,6 +65,7 @@ class MainApplication: Application() {
                 if (response.code() == 404){
                     val intent = Intent(this@MainApplication, LoginActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    intent.putExtra("isSessionOut", true)
                     startActivity(intent)
 
                 }

@@ -203,6 +203,19 @@
 
     </androidx.cardview.widget.CardView>
 
+    <!--<androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/login_checkBox_remember_me"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+
+        android:layout_marginStart="@dimen/left_right_margin"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="@dimen/left_right_margin"
+        android:textColor="@color/gray_500"
+        android:textSize="@dimen/text_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextLay"
+        android:text="আমাকে মনে রাখুন"/>-->
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
@@ -210,8 +223,8 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginStart="@dimen/left_right_margin"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="@dimen/left_right_margin"
+        android:layout_marginTop="24dp"
         android:backgroundTint="@color/green_color"
         android:padding="8dp"
         android:text="লগইন"

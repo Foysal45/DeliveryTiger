@@ -55,7 +55,6 @@ object SessionManager {
     fun clearSession() {
         pref.edit {
             clear()
-            commit()
         }
     }
 
@@ -66,7 +65,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString(Key_accessToken, value)
-                commit()
             }
         }
 
@@ -77,7 +75,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString("refreshToken", value)
-                commit()
             }
         }
 
@@ -88,7 +85,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString("firebaseToken", value)
-                commit()
             }
         }
 
@@ -99,7 +95,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString("deviceId", value)
-                commit()
             }
         }
 
@@ -110,7 +105,36 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putBoolean(Is_LOGIN, value)
-                commit()
+            }
+        }
+
+    var isRememberMe: Boolean
+        get() {
+            return pref.getBoolean("isRememberMe", false)
+        }
+        set(value) {
+            pref.edit {
+                putBoolean("isRememberMe", value)
+            }
+        }
+
+    var loginId: String
+        get() {
+            return pref.getString("loginID", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("loginID", value)
+            }
+        }
+
+    var loginPassword: String
+        get() {
+            return pref.getString("loginPassword", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("loginPassword", value)
             }
         }
 
@@ -121,7 +145,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString(Key_FileBaseUrl, value)
-                commit()
             }
         }
 
@@ -132,7 +155,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putFloat("collectionCharge", value.toFloat())
-                commit()
             }
         }
 
@@ -143,7 +165,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putFloat("returnCharge", value.toFloat())
-                commit()
             }
         }
 
@@ -154,7 +175,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putFloat("maxCodCharge", value.toFloat())
-                commit()
             }
         }
 
@@ -165,7 +185,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putInt(Key_UserId, value)
-                commit()
             }
         }
 
@@ -176,7 +195,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString(Key_UserName, value)
-                commit()
             }
         }
 
@@ -187,7 +205,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString("companyName", value)
-                commit()
             }
         }
 
@@ -198,7 +215,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString("mobile", value)
-                commit()
             }
         }
 
@@ -209,7 +225,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString("address", value)
-                commit()
             }
         }
 
@@ -220,7 +235,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString("alterMobile", value)
-                commit()
             }
         }
     var versionName: String
@@ -230,7 +244,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString("appVersionName", value)
-                commit()
             }
         }
 
@@ -241,7 +254,6 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString("profile_img", value)
-                commit()
             }
         }
 
