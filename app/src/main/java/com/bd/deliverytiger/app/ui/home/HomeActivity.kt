@@ -23,6 +23,7 @@ import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.dashboard.DashboardFragment
 import com.bd.deliverytiger.app.ui.features.DTFeaturesFragment
+import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
@@ -43,11 +44,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var navView: NavigationView
     private lateinit var navViewRight: NavigationView
     private lateinit var addProductIV: ImageView
+    private lateinit var logoIV: ImageView
     private lateinit var toolbarTitleTV: TextView
     private lateinit var notificationIV: ImageView
     private lateinit var trackingIV: ImageView
     private lateinit var searchIV: ImageView
     private lateinit var headerPic: ImageView
+    private lateinit var separetor: View
 
     private var doubleBackToExitPressedOnce = false
     private var navId: Int = 0
@@ -62,11 +65,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
         navViewRight = findViewById(R.id.nav_view_2)
+        logoIV = findViewById(R.id.home_toolbar_logo)
         addProductIV = findViewById(R.id.home_toolbar_add)
         toolbarTitleTV = findViewById(R.id.home_toolbar_title)
         notificationIV = findViewById(R.id.home_toolbar_notification)
         trackingIV = findViewById(R.id.home_toolbar_tracking)
         searchIV = findViewById(R.id.home_toolbar_search)
+        separetor = findViewById(R.id.home_toolbar_separator)
         navView.setNavigationItemSelectedListener(this)
         /*val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
@@ -169,8 +174,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportFragmentManager.addOnBackStackChangedListener {
             if (supportFragmentManager.backStackEntryCount > 0) {
                 toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+                logoIV.visibility = View.GONE
             } else {
                 toolbar.setNavigationIcon(R.drawable.ic_menu)
+                logoIV.visibility = View.VISIBLE
+                setToolbarTitle("")
             }
             val currentFragment: Fragment? =
                 supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
@@ -180,9 +188,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 addProductBtnVisibility(true)
             }
             if (currentFragment is DashboardFragment){
+                //logoIV.visibility = View.VISIBLE
                 searchIV.visibility = View.VISIBLE
+                separetor.visibility = View.VISIBLE
             } else {
+                //logoIV.visibility = View.GONE
                 searchIV.visibility = View.GONE
+                separetor.visibility = View.GONE
             }
             if (currentFragment is OrderTrackingFragment) {
                 trackingIV.visibility = View.GONE
@@ -237,15 +249,35 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun drawerListener() {
 
+
         drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {
+
+                if (newState == DrawerLayout.STATE_SETTLING) {
+                    if (!drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                        // Drawer started opening
+
+                    } else {
+                        // Drawer started closing
+                        val currentFragment = supportFragmentManager.findFragmentById(R.id.container_drawer)
+                        if (currentFragment is FilterFragment) {
+                            currentFragment.forceHideKeyboard()
+                        }
+                    }
+                }
             }
 
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+                /*if (slideOffset == 1.0F && drawerLayout.isDrawerOpen(GravityCompat.END)){
+
+                }*/
             }
 
             override fun onDrawerClosed(drawerView: View) {
                 manageNavigationItemSelection(navId)
+                Timber.d("HomeActivityLog", "onDrawerClosed called")
+                //val inputMethodManager: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                //inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
             }
 
             override fun onDrawerOpened(drawerView: View) {
@@ -400,6 +432,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun addDashBoardFragment() {
+        logoIV.visibility = View.VISIBLE
         addProductBtnVisibility(false)
         searchIV.visibility = View.VISIBLE
         val fragment = DashboardFragment.newInstance()

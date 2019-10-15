@@ -68,8 +68,9 @@ class BillingofServiceFragment : Fragment() {
     private var layoutPosition = 0
     private var totalCount = 0
     private var courierOrderAmountDetailList: ArrayList<CourierOrderAmountDetail?>? = null
-    private var fromDate = "01-01-01"
-    private var toDate = "01-01-01"
+    private var defaultDate = "2001-01-01"
+    private var fromDate = "2001-01-01"
+    private var toDate = "2001-01-01"
     private var status = -1
     private var statusGroup = "-1"
     private var orderId = ""
@@ -158,7 +159,7 @@ class BillingofServiceFragment : Fragment() {
         // billingProgressBar.visibility = View.VISIBLE
         val reqModel = BillingServiceReqBody(
             status, statusList, statusGroupList, fromDate, toDate, SessionManager.courierUserId,
-            "", orderId, index, count
+            "", orderId,collectionName,mobileNumber, index, count
         )  // text model
 
         Timber.e("getAllBillingServiceReq", reqModel.toString())
@@ -253,8 +254,8 @@ class BillingofServiceFragment : Fragment() {
                     mobileNumber = ""
                     collectionName = ""
                     orderId = ""
-                    fromDate = "01-01-01"
-                    toDate = "01-01-01"
+                    fromDate = defaultDate
+                    toDate = defaultDate
                     status = -1
                     statusGroup = "-1"
                     statusGroupList.clear()
@@ -273,15 +274,15 @@ class BillingofServiceFragment : Fragment() {
                     }
                 }
 
-                if (fromDate1 != "01-01-01"){
+                if (fromDate1 != defaultDate){
                     val msg = "${DigitConverter.toBanglaDate(fromDate1, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate1, "yyyy-MM-dd")}"
                     filterDateTag.text = msg
                     filterDateTag.visibility = View.VISIBLE
                 } else {
                     filterDateTag.text = ""
                     filterDateTag.visibility = View.GONE
-                    fromDate = "01-01-01"
-                    toDate = "01-01-01"
+                    fromDate = defaultDate
+                    toDate = defaultDate
                 }
 
                 if (statusGroup != "-1"){
@@ -308,8 +309,8 @@ class BillingofServiceFragment : Fragment() {
                 filterDateTag.setOnClickListener {
                     filterDateTag.text = ""
                     filterDateTag.visibility = View.GONE
-                    fromDate = "01-01-01"
-                    toDate = "01-01-01"
+                    fromDate = defaultDate
+                    toDate = defaultDate
 
                     courierOrderAmountDetailList?.clear()
                     billingServiceAdapter.notifyDataSetChanged()
@@ -340,8 +341,8 @@ class BillingofServiceFragment : Fragment() {
                 filterSearchKeyTag.setOnClickListener {
                     filterSearchKeyTag.text = ""
                     filterSearchKeyTag.visibility = View.GONE
-                    fromDate = "01-01-01"
-                    toDate = "01-01-01"
+                    fromDate = defaultDate
+                    toDate = defaultDate
                     status = -1
                     statusGroup = "-1"
                     statusGroupList.clear()

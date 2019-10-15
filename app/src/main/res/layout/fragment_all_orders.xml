@@ -57,7 +57,7 @@
                         android:layout_width="140dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:paddingStart="@dimen/fab_margin"
+
                         android:text="অর্ডারের তথ্য"
                         android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
@@ -73,7 +73,7 @@
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <!--<TextView
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -82,7 +82,7 @@
                         android:text="প্যাকেজের তথ্য"
                         android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
-                        android:textStyle="bold" />
+                        android:textStyle="bold" />-->
 
 
                     <TextView
@@ -107,7 +107,7 @@
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <!--<TextView
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -116,7 +116,7 @@
                         android:text="স্ট্যাটাস"
                         android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
-                        android:textStyle="bold" />
+                        android:textStyle="bold" />-->
 
                     <TextView
                         android:layout_width="100dp"

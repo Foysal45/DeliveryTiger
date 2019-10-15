@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.ui.filter
 
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import com.bd.deliverytiger.app.api.model.status.StatusModel
 import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
 import com.bd.deliverytiger.app.utils.DigitConverter
 import com.bd.deliverytiger.app.utils.Validator
+import com.bd.deliverytiger.app.utils.VariousTask
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
@@ -39,8 +41,8 @@ class FilterFragment : Fragment() {
 
     private lateinit var otherApiInterface: OtherApiInterface
 
-    private var gotFromDate: String = "01-01-01"
-    private var gotToDate: String = "01-01-01"
+    private var gotFromDate: String = "2001-01-01"
+    private var gotToDate: String = "2001-01-01"
     private var statusId = -1
     private var statusGroup = "-1"
     private var filterType = 0
@@ -51,7 +53,7 @@ class FilterFragment : Fragment() {
     private var searchType = 0
 
     companion object{
-        fun newInstance(fromDate: String = "01-01-01", toDate: String = "01-01-01", status: Int = -1, statusGroup: String = "-1", filterType: Int = 0): FilterFragment = FilterFragment().apply {
+        fun newInstance(fromDate: String = "2001-01-01", toDate: String = "2001-01-01", status: Int = -1, statusGroup: String = "-1", filterType: Int = 0): FilterFragment = FilterFragment().apply {
             this.gotFromDate = fromDate
             this.gotToDate = toDate
             this.statusId = status
@@ -79,26 +81,37 @@ class FilterFragment : Fragment() {
         statusSpinner = view.findViewById(R.id.filter_status_spinner)
         applyBtn = view.findViewById(R.id.filter_apply)
 
-        if (gotFromDate != "01-01-01"){
+        if (gotFromDate != "2001-01-01"){
             val formattedDate = DigitConverter.toBanglaDate(gotFromDate, "yyyy-MM-dd")
             fromDateTV.text = formattedDate
         }
-        if (gotToDate != "01-01-01"){
+        if (gotToDate != "2001-01-01"){
             val formattedDate = DigitConverter.toBanglaDate(gotToDate, "yyyy-MM-dd")
             toDateTV.text = formattedDate
         }
 
         otherApiInterface = RetrofitSingleton.getInstance(context!!).create(OtherApiInterface::class.java)
-        if (filterType == 0){
-            loadStatusGroup()
-        } else{
-            loadOrderStatus()
+        loadStatusGroup()
+        if (filterType == 1){
+            searchET.isFocusableInTouchMode = true
+            searchET.requestFocus()
+            Handler().postDelayed({
+                VariousTask.showKeyboard(activity)
+            }, 200L)
         }
 
+        searchET.onFocusChangeListener = object : View.OnFocusChangeListener{
+            override fun onFocusChange(p0: View?, p1: Boolean) {
+                if (!p1){
+                    //VariousTask.hideSoftKeyBoard(activity)
+                }
+            }
+
+        }
 
         fromDateTV.setOnClickListener {
 
-            val date = if (gotToDate != "01-01-01") gotToDate else ""
+            val date = if (gotToDate != "2001-01-01") gotToDate else ""
             val fromDate = DatePickerDialogCustom.newInstance(1, date)
             activity?.supportFragmentManager?.let {
                     it1 -> fromDate.show(it1, "")
@@ -116,7 +129,7 @@ class FilterFragment : Fragment() {
 
         toDateTV.setOnClickListener {
 
-            val date = if (gotFromDate != "01-01-01") gotFromDate else ""
+            val date = if (gotFromDate != "2001-01-01") gotFromDate else ""
             val toDate = DatePickerDialogCustom.newInstance(2, date)
             activity?.supportFragmentManager?.let { it1 -> toDate.show(it1, "") }
             toDate.setDate(object : DatePickerDialogCustom.PassDateInterface2 {
@@ -161,11 +174,15 @@ class FilterFragment : Fragment() {
             fromDateTV.text = ""
             toDateTV.text = ""
             statusSpinner.setSelection(0)
-            gotFromDate = "01-01-01"
-            gotToDate = "01-01-01"
+            gotFromDate = "2001-01-01"
+            gotToDate = "2001-01-01"
             statusId = -1
             statusGroup = "-1"
         }
+    }
+
+    fun forceHideKeyboard(){
+        VariousTask.hideSoftKeyBoard(activity)
     }
 
     private fun loadOrderStatus(){

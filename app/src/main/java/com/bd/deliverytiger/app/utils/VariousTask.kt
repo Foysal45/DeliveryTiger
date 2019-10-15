@@ -69,6 +69,16 @@ object VariousTask {
 
     }
 
+    fun showKeyboard(activity: Activity?) {
+        //activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        try {
+            val inputMethodManager = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     fun saveImage(finalBitmap: Bitmap): String {
         val root = Environment.getExternalStorageDirectory().toString()
         val myDir = File("$root/TMPFOLDER")

@@ -22,6 +22,8 @@ data class CODReqBody(
     var orderIds: String? = "",
     @SerializedName("collectionName")
     var collectionName: String? ="",
+    @SerializedName("mobile")
+    var mobile: String = "",
     @SerializedName("index")
     var index: Int? = 0,
     @SerializedName("count")

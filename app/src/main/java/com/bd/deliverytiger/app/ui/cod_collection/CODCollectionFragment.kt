@@ -69,8 +69,9 @@ class CODCollectionFragment : Fragment() {
     private var layoutPosition = 0
     private var totalCount = 0
     private var courierOrderViewModelList: ArrayList<CourierOrderViewModel?>? = null
-    private var fromDate = "01-01-01"
-    private var toDate = "01-01-01"
+    private var defaultDate = "2001-01-01"
+    private var fromDate = "2001-01-01"
+    private var toDate = "2001-01-01"
     private var status = -1
     private var statusGroup = "-1"
     private var orderId = ""
@@ -174,7 +175,7 @@ class CODCollectionFragment : Fragment() {
         codProgressBar.visibility = View.VISIBLE
         val reqModel = CODReqBody(
             status, statusList, statusGroupList, fromDate, toDate, SessionManager.courierUserId,
-            "", orderId, collectionName, index, count
+            "", orderId, collectionName, mobileNumber, index, count
         )  // text model
 
         Timber.e("getAllCODCollectionReq", reqModel.toString())
@@ -268,8 +269,8 @@ class CODCollectionFragment : Fragment() {
                     mobileNumber = ""
                     collectionName = ""
                     orderId = ""
-                    fromDate = "01-01-01"
-                    toDate = "01-01-01"
+                    fromDate = defaultDate
+                    toDate = defaultDate
                     status = -1
                     statusGroup = "-1"
                     statusGroupList.clear()
@@ -288,15 +289,15 @@ class CODCollectionFragment : Fragment() {
                     }
                 }
 
-                if (fromDate1 != "01-01-01"){
+                if (fromDate1 != defaultDate){
                     val msg = "${DigitConverter.toBanglaDate(fromDate1, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate1, "yyyy-MM-dd")}"
                     filterDateTag.text = msg
                     filterDateTag.visibility = View.VISIBLE
                 } else {
                     filterDateTag.text = ""
                     filterDateTag.visibility = View.GONE
-                    fromDate = "01-01-01"
-                    toDate = "01-01-01"
+                    fromDate = defaultDate
+                    toDate = defaultDate
                 }
 
                 if (statusGroup != "-1"){
@@ -323,8 +324,8 @@ class CODCollectionFragment : Fragment() {
                 filterDateTag.setOnClickListener {
                     filterDateTag.text = ""
                     filterDateTag.visibility = View.GONE
-                    fromDate = "01-01-01"
-                    toDate = "01-01-01"
+                    fromDate = defaultDate
+                    toDate = defaultDate
 
                     courierOrderViewModelList?.clear()
                     codCollectionAdapter.notifyDataSetChanged()
@@ -355,8 +356,8 @@ class CODCollectionFragment : Fragment() {
                 filterSearchKeyTag.setOnClickListener {
                     filterSearchKeyTag.text = ""
                     filterSearchKeyTag.visibility = View.GONE
-                    fromDate = "01-01-01"
-                    toDate = "01-01-01"
+                    fromDate = defaultDate
+                    toDate = defaultDate
                     status = -1
                     statusGroup = "-1"
                     statusGroupList.clear()

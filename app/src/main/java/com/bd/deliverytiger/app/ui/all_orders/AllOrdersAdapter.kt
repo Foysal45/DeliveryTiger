@@ -1,7 +1,6 @@
 package com.bd.deliverytiger.app.ui.all_orders
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.utils.DigitConverter
+import com.google.android.material.button.MaterialButton
 
 class AllOrdersAdapter(
     var context: Context,
@@ -63,6 +63,7 @@ class AllOrdersAdapter(
         } else {
             holder.billingItemMainLay.setBackgroundColor(Color.parseColor("#FFFFFF"))
         }*/
+        holder.changeInfoBtn.isEnabled = courierOrderAmountDetailList?.get(position)?.buttonFlag ?: false
 
     }
 
@@ -80,16 +81,16 @@ class AllOrdersAdapter(
         val tvAllOrderTotalServiceCharge: TextView =
             itemView.findViewById(R.id.tvAllOrderTotalServiceCharge)
         val tvAllOrderStatus: TextView = itemView.findViewById(R.id.tvAllOrderStatus)
-        val layAllOrderChangeInfo: LinearLayout =
-            itemView.findViewById(R.id.layAllOrderChangeInfo)
         val allOrderDetailsLay: LinearLayout = itemView.findViewById(R.id.allOrderDetailsLay)
+        val changeInfoBtn: MaterialButton = itemView.findViewById(R.id.changeInfoBtn)
+        //val layAllOrderChangeInfo: LinearLayout = itemView.findViewById(R.id.layAllOrderChangeInfo)
 
         init {
             allOrderDetailsLay.setOnClickListener {
                 onOrderItemClick?.invoke(adapterPosition)
             }
 
-            layAllOrderChangeInfo.setOnClickListener {
+            changeInfoBtn.setOnClickListener {
                 onEditItemClick?.invoke(adapterPosition)
             }
         }

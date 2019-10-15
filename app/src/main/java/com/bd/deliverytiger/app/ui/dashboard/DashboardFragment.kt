@@ -23,7 +23,6 @@ import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
-import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.utils.*
@@ -225,7 +224,7 @@ class DashboardFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("ড্যাশবোর্ড")
+        //(activity as HomeActivity).setToolbarTitle("ড্যাশবোর্ড")
     }
 
     private fun addFragment(fragment: Fragment, tag: String) {
@@ -245,6 +244,7 @@ class DashboardFragment : Fragment() {
         bundle.putString("statusGroup", model.name)
         bundle.putString("fromDate", "$selectedYear-$selectedMonth-01")
         bundle.putString("toDate", "$selectedYear-$selectedMonth-$lastDate")
+        bundle.putString("dashboardStatusFilter", model.dashboardStatusFilter)
 
         val fragment = AllOrdersFragment.newInstance(bundle)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()

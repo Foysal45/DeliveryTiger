@@ -49,5 +49,7 @@ data class CourierOrderViewModel(
     @SerializedName("classNameCss")
     var classNameCss: String? = null,
     @SerializedName("paidUnpaidColor")
-    var paidUnpaidColor: String? = null
+    var paidUnpaidColor: String? = null,
+    @SerializedName("buttonFlag")
+    var buttonFlag: Boolean = false
 )

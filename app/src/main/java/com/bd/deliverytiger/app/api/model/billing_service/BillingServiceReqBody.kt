@@ -20,6 +20,10 @@ data class BillingServiceReqBody(
     var podNumber: String? = "",
     @SerializedName("orderIds")
     var orderIds: String? = "",
+    @SerializedName("collectionName")
+    var collectionName: String? ="",
+    @SerializedName("mobile")
+    var mobile: String = "",
     @SerializedName("index")
     var index: Int? = 0,
     @SerializedName("count")

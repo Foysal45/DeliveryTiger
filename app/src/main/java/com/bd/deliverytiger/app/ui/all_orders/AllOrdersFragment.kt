@@ -60,8 +60,9 @@ class AllOrdersFragment : Fragment() {
     private var layoutPosition = 0
     private var totalCount = 0
     private var courierOrderViewModelList: ArrayList<CourierOrderViewModel?>? = null
-    private var fromDate = "01-01-01"
-    private var toDate = "01-01-01"
+    private var defaultDate = "2001-01-01"
+    private var fromDate = "2001-01-01"
+    private var toDate = "2001-01-01"
     private var status = -1
     private var statusGroup = "-1"
     private var orderId = ""
@@ -119,11 +120,13 @@ class AllOrdersFragment : Fragment() {
 
         if (!bundle.isEmpty){
             statusGroup = bundle.getString("statusGroup", "-1")
-            fromDate = bundle.getString("fromDate", "01-01-01")
-            toDate = bundle.getString("toDate","01-01-01")
+            fromDate = bundle.getString("fromDate", defaultDate)
+            toDate = bundle.getString("toDate",defaultDate)
+            val dashboardStatusFilter = bundle.getString("dashboardStatusFilter", "-1")
 
+            val statusArray = dashboardStatusFilter.split(",")
             statusGroupList.clear()
-            statusGroupList.add(statusGroup)
+            statusGroupList.addAll(statusArray)
             activeFilter()
         }
 
@@ -188,7 +191,7 @@ class AllOrdersFragment : Fragment() {
         }
 
         if (shouldOpenFilter) {
-            allOrderFilterLay.performClick()
+            goToFilter(1)
         }
     }
 
@@ -198,7 +201,7 @@ class AllOrdersFragment : Fragment() {
         allOrderProgressBar.visibility = View.VISIBLE
         val reqModel = CODReqBody(
             status, statusList, statusGroupList, fromDate, toDate, SessionManager.courierUserId,
-            "", orderId, collectionName, index, count
+            "", orderId, collectionName, mobileNumber, index, count
         )
 
         Timber.e("getAllOrdersReq", reqModel.toString())
@@ -273,13 +276,13 @@ class AllOrdersFragment : Fragment() {
         ft?.commit()
     }
 
-    private fun goToFilter() {
+    private fun goToFilter(filterType: Int = 0) {
 
         activity?.let {
             (activity as HomeActivity).openRightDrawer()
         }
 
-        val fragment = FilterFragment.newInstance(fromDate, toDate, status, statusGroup)
+        val fragment = FilterFragment.newInstance(fromDate, toDate, status, statusGroup, filterType)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.container_drawer, fragment, FilterFragment.tag)
         // ft?.addToBackStack(FilterFragment.tag)
@@ -300,8 +303,8 @@ class AllOrdersFragment : Fragment() {
                     mobileNumber = ""
                     collectionName = ""
                     orderId = ""
-                    fromDate = "01-01-01"
-                    toDate = "01-01-01"
+                    fromDate = defaultDate
+                    toDate = defaultDate
                     status = -1
                     statusGroup = "-1"
                     statusGroupList.clear()
@@ -333,15 +336,15 @@ class AllOrdersFragment : Fragment() {
 
     private fun activeFilter(){
 
-        if (fromDate != "01-01-01"){
+        if (fromDate != defaultDate){
             val msg = "${DigitConverter.toBanglaDate(fromDate, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate, "yyyy-MM-dd")}"
             filterDateTag.text = msg
             filterDateTag.visibility = View.VISIBLE
         } else {
             filterDateTag.text = ""
             filterDateTag.visibility = View.GONE
-            fromDate = "01-01-01"
-            toDate = "01-01-01"
+            fromDate = defaultDate
+            toDate = defaultDate
         }
 
         if (statusGroup != "-1"){
@@ -368,8 +371,8 @@ class AllOrdersFragment : Fragment() {
         filterDateTag.setOnClickListener {
             filterDateTag.text = ""
             filterDateTag.visibility = View.GONE
-            fromDate = "01-01-01"
-            toDate = "01-01-01"
+            fromDate = defaultDate
+            toDate = defaultDate
 
             courierOrderViewModelList?.clear()
             allOrdersAdapter.notifyDataSetChanged()
@@ -400,8 +403,8 @@ class AllOrdersFragment : Fragment() {
         filterSearchKeyTag.setOnClickListener {
             filterSearchKeyTag.text = ""
             filterSearchKeyTag.visibility = View.GONE
-            fromDate = "01-01-01"
-            toDate = "01-01-01"
+            fromDate = defaultDate
+            toDate = defaultDate
             status = -1
             statusGroup = "-1"
             statusGroupList.clear()

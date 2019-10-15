@@ -21,5 +21,7 @@ data class DashboardResponseModel(
     @SerializedName("dashboardCountSumView")
     var dashboardCountSumView: String? = "",
     @SerializedName("totalAmount")
-    var totalAmount: Double = 0.0
+    var totalAmount: Double = 0.0,
+    @SerializedName("dashboardStatusFilter")
+    var dashboardStatusFilter: String = ""
 )
