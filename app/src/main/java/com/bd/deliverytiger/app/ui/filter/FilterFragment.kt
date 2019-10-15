@@ -100,14 +100,14 @@ class FilterFragment : Fragment() {
             }, 200L)
         }
 
-        searchET.onFocusChangeListener = object : View.OnFocusChangeListener{
+        /*searchET.onFocusChangeListener = object : View.OnFocusChangeListener{
             override fun onFocusChange(p0: View?, p1: Boolean) {
                 if (!p1){
-                    //VariousTask.hideSoftKeyBoard(activity)
+                    VariousTask.hideSoftKeyBoard(activity)
                 }
             }
 
-        }
+        }*/
 
         fromDateTV.setOnClickListener {
 
