@@ -52,6 +52,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <EditText
+                android:id="@+id/filter_search_key"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_view_height"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_add_order_edit_text"
+                android:hint="সার্চ কীওয়ার্ড লিখুন"
+                android:paddingStart="20dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:textColor="@color/black_80"
+                android:textColorHint="@color/gray_500"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintTop_toTopOf="parent"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:imeOptions="actionDone"
+                />
+
+
             <TextView
                 android:id="@+id/filter_date_from"
                 android:layout_width="match_parent"
@@ -69,7 +92,7 @@
                 android:textColor="@color/black_80"
                 android:textColorHint="@color/gray_500"
                 android:textSize="@dimen/text_14"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/filter_search_key"
                 tools:text="27/04/19" />
 
             <TextView
@@ -137,29 +160,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <EditText
-                android:id="@+id/filter_search_key"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_view_height"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/bg_add_order_edit_text"
-                android:hint="সার্চ কীওয়ার্ড লিখুন"
-                android:paddingStart="20dp"
-                android:paddingEnd="8dp"
-                android:paddingTop="14dp"
-                android:paddingBottom="14dp"
-                android:textColor="@color/black_80"
-                android:textColorHint="@color/gray_500"
-                android:textSize="@dimen/text_14"
-                app:layout_constraintTop_toBottomOf="@id/filter_status_layout"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:imeOptions="actionDone"
-                />
-
-
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/filter_apply"
                 android:layout_width="match_parent"
@@ -169,7 +169,7 @@
                 android:layout_marginEnd="16dp"
                 android:backgroundTint="@color/green_color"
                 android:text="এপ্লাই"
-                app:layout_constraintTop_toBottomOf="@id/filter_search_key" />
+                app:layout_constraintTop_toBottomOf="@id/filter_status_layout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

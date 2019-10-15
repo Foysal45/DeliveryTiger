@@ -49,6 +49,8 @@ class AllOrdersFragment : Fragment() {
     private lateinit var filterGroup: ChipGroup
     private lateinit var filterDateTag: Chip
     private lateinit var filterStatusTag: Chip
+    private lateinit var filterSearchKeyTag: Chip
+
 
     private lateinit var allOrdersAdapter: AllOrdersAdapter
     private lateinit var allOrderInterface: AllOrderInterface
@@ -62,6 +64,11 @@ class AllOrdersFragment : Fragment() {
     private var toDate = "01-01-01"
     private var status = -1
     private var statusGroup = "-1"
+    private var orderId = ""
+    private var mobileNumber = ""
+    private var collectionName = ""
+    private var searchKeys = ""
+    private var searchTypes = 0
     private var isMoreDataAvailable = true
     private val statusList: MutableList<Int> = mutableListOf(-1)
     private val statusGroupList: MutableList<String> = mutableListOf("-1")
@@ -108,6 +115,7 @@ class AllOrdersFragment : Fragment() {
         filterGroup = view.findViewById(R.id.filter_tag_group)
         filterDateTag = view.findViewById(R.id.filter_tag_date)
         filterStatusTag = view.findViewById(R.id.filter_tag_status)
+        filterSearchKeyTag = view.findViewById(R.id.filter_tag_searchKey)
 
         if (!bundle.isEmpty){
             statusGroup = bundle.getString("statusGroup", "-1")
@@ -190,7 +198,7 @@ class AllOrdersFragment : Fragment() {
         allOrderProgressBar.visibility = View.VISIBLE
         val reqModel = CODReqBody(
             status, statusList, statusGroupList, fromDate, toDate, SessionManager.courierUserId,
-            "", "", "", index, count
+            "", orderId, collectionName, index, count
         )
 
         Timber.e("getAllOrdersReq", reqModel.toString())
@@ -278,13 +286,39 @@ class AllOrdersFragment : Fragment() {
         ft?.commit()
 
         fragment.setFilterListener(object : FilterFragment.FilterListener {
-            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup1: String) {
+            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup1: String, searchKey: String, searchType: Int) {
                 fromDate = fromDate1
                 toDate = toDate1
                 status = status1
                 statusGroup = statusGroup1
                 statusGroupList.clear()
                 statusGroupList.add(statusGroup1)
+                searchKeys = searchKey
+                searchTypes = searchType
+
+                if (searchType != 0){
+                    mobileNumber = ""
+                    collectionName = ""
+                    orderId = ""
+                    fromDate = "01-01-01"
+                    toDate = "01-01-01"
+                    status = -1
+                    statusGroup = "-1"
+                    statusGroupList.clear()
+                    statusGroupList.add(statusGroup1)
+                }
+
+                when(searchType){
+                    1 -> {
+                        mobileNumber = searchKey
+                    }
+                    2 -> {
+                        orderId = searchKey
+                    }
+                    3 -> {
+                        collectionName = searchKey
+                    }
+                }
 
                 activeFilter()
 
@@ -322,6 +356,15 @@ class AllOrdersFragment : Fragment() {
             statusGroupList.add(statusGroup)
         }
 
+        if (searchTypes != 0) {
+            filterSearchKeyTag.text = searchKeys
+            filterSearchKeyTag.visibility = View.VISIBLE
+        } else {
+            filterSearchKeyTag.text = ""
+            filterSearchKeyTag.visibility = View.GONE
+
+        }
+
         filterDateTag.setOnClickListener {
             filterDateTag.text = ""
             filterDateTag.visibility = View.GONE
@@ -352,6 +395,30 @@ class AllOrdersFragment : Fragment() {
 
         filterStatusTag.setOnCloseIconClickListener {
             filterStatusTag.performClick()
+        }
+
+        filterSearchKeyTag.setOnClickListener {
+            filterSearchKeyTag.text = ""
+            filterSearchKeyTag.visibility = View.GONE
+            fromDate = "01-01-01"
+            toDate = "01-01-01"
+            status = -1
+            statusGroup = "-1"
+            statusGroupList.clear()
+            statusGroupList.add(statusGroup)
+            mobileNumber = ""
+            collectionName = ""
+            orderId = ""
+            searchKeys = ""
+            searchTypes = 0
+
+            courierOrderViewModelList?.clear()
+            allOrdersAdapter.notifyDataSetChanged()
+            getAllOrders(0, 20)
+        }
+
+        filterSearchKeyTag.setOnCloseIconClickListener {
+            filterSearchKeyTag.performClick()
         }
     }
 

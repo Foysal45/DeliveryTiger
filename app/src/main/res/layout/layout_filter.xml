@@ -112,6 +112,20 @@
                 tools:visibility="visible"
                 />
 
+            <com.google.android.material.chip.Chip
+                android:id="@+id/filter_tag_searchKey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:closeIconTint="@color/gray_500"
+                app:chipBackgroundColor="@color/white"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_12"
+                android:elevation="2dp"
+                app:closeIconEnabled="true"
+                tools:text="আপনি পেমেন্ট পেয়েছেন"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
         </com.google.android.material.chip.ChipGroup>
 
     </HorizontalScrollView>

@@ -58,6 +58,7 @@ class BillingofServiceFragment : Fragment() {
     private lateinit var filterGroup: ChipGroup
     private lateinit var filterDateTag: Chip
     private lateinit var filterStatusTag: Chip
+    private lateinit var filterSearchKeyTag: Chip
 
     private lateinit var billingServiceAdapter: BillingServiceAdapter
     private lateinit var billingServiceInterface: BillingServiceInterface
@@ -71,6 +72,11 @@ class BillingofServiceFragment : Fragment() {
     private var toDate = "01-01-01"
     private var status = -1
     private var statusGroup = "-1"
+    private var orderId = ""
+    private var mobileNumber = ""
+    private var collectionName = ""
+    private var searchKeys = ""
+    private var searchTypes = 0
     private var isMoreDataAvailable = true
     private val statusList: MutableList<Int> = mutableListOf(-1)
     private val statusGroupList: MutableList<String> = mutableListOf("-1")
@@ -95,6 +101,7 @@ class BillingofServiceFragment : Fragment() {
         filterGroup = view.findViewById(R.id.filter_tag_group)
         filterDateTag = view.findViewById(R.id.filter_tag_date)
         filterStatusTag = view.findViewById(R.id.filter_tag_status)
+        filterSearchKeyTag = view.findViewById(R.id.filter_tag_searchKey)
 
         billingServiceInterface =
             RetrofitSingleton.getInstance(context!!).create(BillingServiceInterface::class.java)
@@ -151,7 +158,7 @@ class BillingofServiceFragment : Fragment() {
         // billingProgressBar.visibility = View.VISIBLE
         val reqModel = BillingServiceReqBody(
             status, statusList, statusGroupList, fromDate, toDate, SessionManager.courierUserId,
-            "", "", index, count
+            "", orderId, index, count
         )  // text model
 
         Timber.e("getAllBillingServiceReq", reqModel.toString())
@@ -231,13 +238,40 @@ class BillingofServiceFragment : Fragment() {
         ft?.commit()
 
         fragment.setFilterListener(object : FilterFragment.FilterListener{
-            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup1: String) {
+            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup1: String, searchKey: String, searchType: Int) {
                 fromDate = fromDate1
                 toDate = toDate1
                 status = status1
                 statusGroup = statusGroup1
                 statusGroupList.clear()
                 statusGroupList.add(statusGroup1)
+
+                searchKeys = searchKey
+                searchTypes = searchType
+
+                if (searchType != 0){
+                    mobileNumber = ""
+                    collectionName = ""
+                    orderId = ""
+                    fromDate = "01-01-01"
+                    toDate = "01-01-01"
+                    status = -1
+                    statusGroup = "-1"
+                    statusGroupList.clear()
+                    statusGroupList.add(statusGroup1)
+                }
+
+                when(searchType){
+                    1 -> {
+                        mobileNumber = searchKey
+                    }
+                    2 -> {
+                        orderId = searchKey
+                    }
+                    3 -> {
+                        collectionName = searchKey
+                    }
+                }
 
                 if (fromDate1 != "01-01-01"){
                     val msg = "${DigitConverter.toBanglaDate(fromDate1, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate1, "yyyy-MM-dd")}"
@@ -260,6 +294,15 @@ class BillingofServiceFragment : Fragment() {
                     statusGroup = "-1"
                     statusGroupList.clear()
                     statusGroupList.add(statusGroup)
+                }
+
+                if (searchTypes != 0) {
+                    filterSearchKeyTag.text = searchKeys
+                    filterSearchKeyTag.visibility = View.VISIBLE
+                } else {
+                    filterSearchKeyTag.text = ""
+                    filterSearchKeyTag.visibility = View.GONE
+
                 }
 
                 filterDateTag.setOnClickListener {
@@ -292,6 +335,30 @@ class BillingofServiceFragment : Fragment() {
 
                 filterStatusTag.setOnCloseIconClickListener {
                     filterStatusTag.performClick()
+                }
+
+                filterSearchKeyTag.setOnClickListener {
+                    filterSearchKeyTag.text = ""
+                    filterSearchKeyTag.visibility = View.GONE
+                    fromDate = "01-01-01"
+                    toDate = "01-01-01"
+                    status = -1
+                    statusGroup = "-1"
+                    statusGroupList.clear()
+                    statusGroupList.add(statusGroup)
+                    mobileNumber = ""
+                    collectionName = ""
+                    orderId = ""
+                    searchKeys = ""
+                    searchTypes = 0
+
+                    courierOrderAmountDetailList?.clear()
+                    billingServiceAdapter.notifyDataSetChanged()
+                    getBillingAddress(0,20)
+                }
+
+                filterSearchKeyTag.setOnCloseIconClickListener {
+                    filterSearchKeyTag.performClick()
                 }
 
                 courierOrderAmountDetailList?.clear()

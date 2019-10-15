@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatSpinner
@@ -18,6 +19,7 @@ import com.bd.deliverytiger.app.api.model.status.StatusGroupModel
 import com.bd.deliverytiger.app.api.model.status.StatusModel
 import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
 import com.bd.deliverytiger.app.utils.DigitConverter
+import com.bd.deliverytiger.app.utils.Validator
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,6 +30,7 @@ import retrofit2.Response
  */
 class FilterFragment : Fragment() {
 
+    private lateinit var searchET: EditText
     private lateinit var clearFilter: TextView
     private lateinit var fromDateTV: TextView
     private lateinit var toDateTV: TextView
@@ -44,6 +47,8 @@ class FilterFragment : Fragment() {
     private var isFromDateSelected = false
     private var isToDateSelected = false
     private val statusList: MutableList<String> = mutableListOf()
+    private var searchKey = ""
+    private var searchType = 0
 
     companion object{
         fun newInstance(fromDate: String = "01-01-01", toDate: String = "01-01-01", status: Int = -1, statusGroup: String = "-1", filterType: Int = 0): FilterFragment = FilterFragment().apply {
@@ -67,6 +72,7 @@ class FilterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        searchET = view.findViewById(R.id.filter_search_key)
         clearFilter = view.findViewById(R.id.filter_clear_tv)
         fromDateTV = view.findViewById(R.id.filter_date_from)
         toDateTV = view.findViewById(R.id.filter_date_to)
@@ -126,17 +132,29 @@ class FilterFragment : Fragment() {
 
         applyBtn.setOnClickListener {
 
+            searchKey = searchET.text.toString()
+            if (searchKey.isNotEmpty()){
+                if (Validator.isValidMobileNumber(searchKey)){
+                    searchType = 1
+                } else if (searchKey.contains("DT-", ignoreCase = true)){
+                    searchType = 2
+                } else {
+                    searchType = 3
+                }
+            }
+
             if (!isFromDateSelected && !isToDateSelected){
-                listener?.selectedDate(gotFromDate, gotToDate, statusId, statusGroup)
+                listener?.selectedDate(gotFromDate, gotToDate, statusId, statusGroup, searchKey, searchType)
             } else {
                 if (isFromDateSelected && !isToDateSelected) {
                     Toast.makeText(activity, "শেষের তারিখ দিন", Toast.LENGTH_SHORT).show()
                 } else if (isToDateSelected && !isFromDateSelected) {
                     Toast.makeText(activity, "শুরুর তারিখ দিন", Toast.LENGTH_SHORT).show()
                 } else if (isFromDateSelected && isToDateSelected) {
-                    listener?.selectedDate(gotFromDate, gotToDate, statusId, statusGroup)
+                    listener?.selectedDate(gotFromDate, gotToDate, statusId, statusGroup, searchKey, searchType)
                 }
             }
+
         }
 
         clearFilter.setOnClickListener {
@@ -251,6 +269,6 @@ class FilterFragment : Fragment() {
     }
 
     interface FilterListener {
-        fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup: String)
+        fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup: String, searchKey: String, searchType: Int)
     }
 }
