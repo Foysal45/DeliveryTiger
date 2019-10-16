@@ -50,16 +50,10 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 tools:text="DT-3421"
-                android:textColor="@color/green_color"
+                android:textColor="@color/black"
                 android:textSize="@dimen/text_14" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_tracking_text"
-                android:contentDescription="@string/cd"
-                />
+
 
             <TextView
                 android:id="@+id/tvAllOrderOrderDate"
@@ -69,29 +63,38 @@
                 android:textColor="@color/gray_500"
                 android:textSize="@dimen/text_12" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="প্যাকেজের তথ্য:"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_12" />
+
             <TextView
                 android:id="@+id/tvAllOrderPackageInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 tools:text="package info"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_12" />
 
             <TextView
-                android:id="@+id/tvAllOrderStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:text="বর্তমান স্ট্যাটাস:"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_12" />
+            <TextView
+                android:id="@+id/tvAllOrderStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 tools:text="Status"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_12" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/ic_tracking_text"
+                android:contentDescription="@string/cd"
+                />
 
         </LinearLayout>
 

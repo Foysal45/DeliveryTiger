@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
@@ -179,6 +180,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (supportFragmentManager.backStackEntryCount > 0) {
                 toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
                 logoIV.visibility = View.GONE
+
             } else {
                 toolbar.setNavigationIcon(R.drawable.ic_menu)
                 logoIV.visibility = View.VISIBLE
@@ -322,7 +324,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (currentFragment is DashboardFragment) {
                     Timber.d("tag", "DashboardFragment already exist")
                 } else {
-                    addFragment(DashboardFragment.newInstance(), DashboardFragment.tag)
+                    //addFragment(DashboardFragment.newInstance(), DashboardFragment.tag)
+                    if (supportFragmentManager.backStackEntryCount > 0) {
+                        val first= supportFragmentManager.getBackStackEntryAt(0)
+                        supportFragmentManager.popBackStack(first.id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    }
                 }
             }
             R.id.nav_new_order -> {
