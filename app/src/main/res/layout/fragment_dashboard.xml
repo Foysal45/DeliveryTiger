@@ -123,21 +123,22 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp"
                 >
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_14"
+                    android:textSize="@dimen/text_16"
                     android:textColor="@color/black_80"
+                    android:layout_marginBottom="8dp"
                     app:layout_constraintTop_toTopOf="parent"
                     android:text="নতুন অর্ডার দিন"/>
 
                 <View
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:background="@drawable/bg_round"/>
 
 
