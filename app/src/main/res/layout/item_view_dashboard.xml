@@ -53,8 +53,8 @@
 
         <ImageView
             android:id="@+id/item_view_dashboard_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:adjustViewBounds="true"
             android:contentDescription="@string/cd"
             android:layout_marginTop="8dp"

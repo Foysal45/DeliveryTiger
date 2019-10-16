@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -44,6 +45,7 @@ class DashboardFragment : Fragment() {
     private lateinit var dashboardRV: RecyclerView
     private lateinit var addOrderBtn: FloatingActionButton
     private lateinit var dashBoardProgress: ProgressBar
+    private lateinit var addOrderNewBtn: LinearLayout
 
     private var currentYear = 0
     private var selectedYear = 0
@@ -75,9 +77,13 @@ class DashboardFragment : Fragment() {
         dashboardRV = view.findViewById(R.id.dashboard_rv)
         addOrderBtn = view.findViewById(R.id.dashboard_add_order)
         dashBoardProgress = view.findViewById(R.id.dashBoardProgress)
+        addOrderNewBtn = view.findViewById(R.id.dashboard_add_order_new)
 
 
         addOrderBtn.setOnClickListener {
+            addOrderFragment()
+        }
+        addOrderNewBtn.setOnClickListener {
             addOrderFragment()
         }
 
