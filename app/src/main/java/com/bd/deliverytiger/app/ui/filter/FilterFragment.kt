@@ -53,12 +53,13 @@ class FilterFragment : Fragment() {
     private var searchType = 0
 
     companion object{
-        fun newInstance(fromDate: String = "2001-01-01", toDate: String = "2001-01-01", status: Int = -1, statusGroup: String = "-1", filterType: Int = 0): FilterFragment = FilterFragment().apply {
+        fun newInstance(fromDate: String = "2001-01-01", toDate: String = "2001-01-01", status: Int = -1, statusGroup: String = "-1", searchKey: String = "", filterType: Int = 0): FilterFragment = FilterFragment().apply {
             this.gotFromDate = fromDate
             this.gotToDate = toDate
             this.statusId = status
             this.statusGroup = statusGroup
             this.filterType = filterType
+            this.searchKey = searchKey
         }
         val tag = FilterFragment::class.java.name
     }
@@ -88,6 +89,10 @@ class FilterFragment : Fragment() {
         if (gotToDate != "2001-01-01"){
             val formattedDate = DigitConverter.toBanglaDate(gotToDate, "yyyy-MM-dd")
             toDateTV.text = formattedDate
+        }
+
+        if (searchKey.isNotEmpty()){
+            searchET.setText(searchKey)
         }
 
         otherApiInterface = RetrofitSingleton.getInstance(context!!).create(OtherApiInterface::class.java)
@@ -178,6 +183,9 @@ class FilterFragment : Fragment() {
             gotToDate = "2001-01-01"
             statusId = -1
             statusGroup = "-1"
+            searchType = 0
+            searchKey = ""
+            searchET.text.clear()
         }
     }
 

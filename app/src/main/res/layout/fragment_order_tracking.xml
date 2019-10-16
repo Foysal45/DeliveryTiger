@@ -18,7 +18,7 @@
         android:layout_marginStart="@dimen/left_right_margin"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/left_right_margin"
-        android:text="ডেলিভারি ট্র্যাক করতে কনসাইনমেন্ট নাম্বার/অর্ডার আইডি লিখুন"
+        android:text="কনসাইনমেন্ট নাম্বার/অর্ডার আইডি লিখে ট্র্যাক করুন"
         android:textColor="@color/black_80"
         android:textSize="@dimen/login_sign_up_tv_size"
       />

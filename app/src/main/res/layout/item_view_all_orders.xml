@@ -67,16 +67,22 @@
                 android:layout_height="wrap_content"
                 tools:text="Sep 25, 2019"
                 android:textColor="@color/gray_500"
-                android:textSize="@dimen/text_14" />
+                android:textSize="@dimen/text_12" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="প্যাকেজের তথ্য:"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_12" />
             <TextView
                 android:id="@+id/tvAllOrderPackageInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 tools:text="package info"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_14" />
+                android:textSize="@dimen/text_12" />
 
             <TextView
                 android:id="@+id/tvAllOrderStatus"
@@ -85,7 +91,7 @@
                 android:layout_marginTop="8dp"
                 tools:text="Status"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_14" />
+                android:textSize="@dimen/text_12" />
 
         </LinearLayout>
 

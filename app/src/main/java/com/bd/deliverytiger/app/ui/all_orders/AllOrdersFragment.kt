@@ -282,7 +282,7 @@ class AllOrdersFragment : Fragment() {
             (activity as HomeActivity).openRightDrawer()
         }
 
-        val fragment = FilterFragment.newInstance(fromDate, toDate, status, statusGroup, filterType)
+        val fragment = FilterFragment.newInstance(fromDate, toDate, status, statusGroup, searchKeys, filterType)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.container_drawer, fragment, FilterFragment.tag)
         // ft?.addToBackStack(FilterFragment.tag)
@@ -299,16 +299,12 @@ class AllOrdersFragment : Fragment() {
                 searchKeys = searchKey
                 searchTypes = searchType
 
-                if (searchType != 0){
+                Timber.d("filterTag", "$searchKey $searchType")
+
+                if (searchType == 0){
                     mobileNumber = ""
                     collectionName = ""
                     orderId = ""
-                    fromDate = defaultDate
-                    toDate = defaultDate
-                    status = -1
-                    statusGroup = "-1"
-                    statusGroupList.clear()
-                    statusGroupList.add(statusGroup1)
                 }
 
                 when(searchType){

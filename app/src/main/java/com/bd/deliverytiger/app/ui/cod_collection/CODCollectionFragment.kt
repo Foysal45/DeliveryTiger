@@ -246,7 +246,7 @@ class CODCollectionFragment : Fragment() {
             (activity as HomeActivity).openRightDrawer()
         }
 
-        val fragment = FilterFragment.newInstance(fromDate, toDate, status, statusGroup)
+        val fragment = FilterFragment.newInstance(fromDate, toDate, status, statusGroup, searchKeys)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.container_drawer, fragment, FilterFragment.tag)
         //ft?.addToBackStack(FilterFragment.tag)
@@ -265,16 +265,10 @@ class CODCollectionFragment : Fragment() {
                 searchKeys = searchKey
                 searchTypes = searchType
 
-                if (searchType != 0){
+                if (searchType == 0){
                     mobileNumber = ""
                     collectionName = ""
                     orderId = ""
-                    fromDate = defaultDate
-                    toDate = defaultDate
-                    status = -1
-                    statusGroup = "-1"
-                    statusGroupList.clear()
-                    statusGroupList.add(statusGroup1)
                 }
 
                 when(searchType){
