@@ -2,6 +2,6 @@ package com.bd.deliverytiger.app.utils
 
 object AppConstant {
 
-    val POLICY_URL = "https://m.ajkerdeal.com/privacypolicy.aspx"
+    val POLICY_URL = "https://deliverytiger.com.bd/privacypolicy.html"
 
 }
