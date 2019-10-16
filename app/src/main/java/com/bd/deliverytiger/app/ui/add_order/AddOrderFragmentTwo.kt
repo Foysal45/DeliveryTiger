@@ -476,8 +476,12 @@ class AddOrderFragmentTwo : Fragment() {
             context?.showToast("প্যাকেজিং সিলেক্ট করুন")
             return false
         }
+        if (deliveryType.isEmpty()){
+            context?.showToast("ডেলিভারি টাইপ সিলেক্ট করুন")
+            return false
+        }
         if (!isAgreeTerms) {
-            context?.showToast("প্লিজ একসেপ্ট টার্মস এন্ড কন্ডিশন")
+            context?.showToast("শর্তাবলী মেনে অর্ডার দিন")
             return false
         }
 

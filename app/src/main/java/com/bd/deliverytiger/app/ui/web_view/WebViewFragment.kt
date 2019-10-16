@@ -64,11 +64,11 @@ class WebViewFragment : Fragment() {
         webSettings.javaScriptEnabled = true
         webSettings.domStorageEnabled = true
         webSettings.allowFileAccess = true
-        webSettings.setSupportZoom(true)
+        webSettings.setSupportZoom(false)
         webSettings.builtInZoomControls = true
         webSettings.displayZoomControls = false
-        webSettings.loadWithOverviewMode = true
-        webSettings.useWideViewPort = true
+        //webSettings.loadWithOverviewMode = true
+        //webSettings.useWideViewPort = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
         }

@@ -102,7 +102,7 @@ class FilterFragment : Fragment() {
             searchET.requestFocus()
             Handler().postDelayed({
                 VariousTask.showKeyboard(activity)
-            }, 200L)
+            }, 300L)
         }
 
         /*searchET.onFocusChangeListener = object : View.OnFocusChangeListener{
