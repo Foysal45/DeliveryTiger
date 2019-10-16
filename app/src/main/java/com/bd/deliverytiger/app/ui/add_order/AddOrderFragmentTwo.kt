@@ -384,20 +384,22 @@ class AddOrderFragmentTwo : Fragment() {
                     e.printStackTrace()
                 }
             }
+            payCODCharge = (payCollectionAmount/100.0) * codChargePercentage
+            if (payCODCharge < codChargeMin){
+                payCODCharge = codChargeMin.toDouble()
+            }
+            if (SessionManager.maxCodCharge != 0.0){
+                if (payCODCharge > SessionManager.maxCodCharge){
+                    payCODCharge = SessionManager.maxCodCharge
+                }
+            }
+
         } else {
             payCollectionAmount = 0.0
+            payCODCharge = 0.0
         }
         payCollectionCharge = SessionManager.collectionCharge
-        val payReturnCharge = SessionManager.returnCharge
-        payCODCharge = (payCollectionAmount/100.0) * codChargePercentage
-        if (payCODCharge < codChargeMin){
-            payCODCharge = codChargeMin.toDouble()
-        }
-        if (SessionManager.maxCodCharge != 0.0){
-            if (payCODCharge > SessionManager.maxCodCharge){
-                payCODCharge = SessionManager.maxCodCharge
-            }
-        }
+        //val payReturnCharge = SessionManager.returnCharge
         var total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge
         if (isBreakable) {
             payBreakableCharge = breakableChargeApi
