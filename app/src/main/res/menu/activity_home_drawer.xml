@@ -42,6 +42,10 @@
             android:icon="@drawable/ic_gift"
             android:title="DT ফিচারস" />
         <item
+            android:id="@+id/nav_privacy"
+            android:icon="@drawable/ic_privacy"
+            android:title="প্রাইভেসি পলিসি" />
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout"
             android:title="লগ আউট" />

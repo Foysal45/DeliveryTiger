@@ -29,6 +29,8 @@ import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
+import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
+import com.bd.deliverytiger.app.utils.AppConstant
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.VariousTask
@@ -131,6 +133,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (SessionManager.profileImgUri.isNotEmpty()) {
             Timber.d("HomeActivityLog 1 ", SessionManager.profileImgUri)
             setProfileImgUrl(SessionManager.profileImgUri)
+        } else {
+            headerPic.setImageResource(R.drawable.ic_account)
         }
     }
 
@@ -201,6 +205,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else {
                 trackingIV.visibility = View.VISIBLE
             }
+            if (currentFragment is WebViewFragment) {
+                trackingIV.visibility = View.GONE
+                searchIV.visibility = View.GONE
+                separetor.visibility = View.GONE
+                addProductBtnVisibility(false)
+            }
 
             when (currentFragment) {
                 is DashboardFragment -> {
@@ -231,6 +241,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     currentFragment.onResume()
                 }
                 is ProfileFragment -> {
+                    currentFragment.onResume()
+                }
+                is WebViewFragment -> {
                     currentFragment.onResume()
                 }
             }
@@ -396,6 +409,21 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
 
             }
+            R.id.nav_privacy -> {
+                val currentFragment =
+                    supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is WebViewFragment) {
+                    Timber.d("tag", "WebViewFragment already exist")
+                } else {
+
+                    try {
+                        val fragment = WebViewFragment.newInstance(AppConstant.POLICY_URL, "প্রাইভেসি পলিসি")
+                        addFragment(fragment, WebViewFragment.tag)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
             R.id.nav_logout -> {
 
                 SessionManager.clearSession()
@@ -408,7 +436,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
     }
 
     fun setToolbarTitle(title: String) {
@@ -502,7 +529,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setProfileImgUrl(imageUri: String?) {
         try {
-            val imgFile = File(imageUri + "");
+            val imgFile = File(imageUri + "")
             if (imgFile.exists()) {
                 val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
                 headerPic.setImageDrawable(VariousTask.getCircularImage(this, myBitmap))

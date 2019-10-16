@@ -23,5 +23,7 @@ data class DashboardResponseModel(
     @SerializedName("totalAmount")
     var totalAmount: Double = 0.0,
     @SerializedName("dashboardStatusFilter")
-    var dashboardStatusFilter: String = ""
+    var dashboardStatusFilter: String = "",
+    @SerializedName("dashboardImageUrl")
+    var dashboardImageUrl: String = ""
 )

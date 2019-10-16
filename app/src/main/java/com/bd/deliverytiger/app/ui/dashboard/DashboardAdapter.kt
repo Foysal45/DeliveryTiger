@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponseModel
 import com.bd.deliverytiger.app.utils.DigitConverter
+import com.bumptech.glide.Glide
 
 
 class DashboardAdapter(private val mContext: Context?, private var dataList: MutableList<DashboardResponseModel>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -91,6 +92,9 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
                 }
             }
 
+            Glide.with(holder.iconIV.context)
+                .load(model.dashboardImageUrl)
+                .into(holder.iconIV)
 
         }
     }
@@ -101,6 +105,7 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
         internal val designIV: ImageView = view.findViewById(R.id.item_view_dashboard_design)
         internal val countTV: TextView = view.findViewById(R.id.item_view_dashboard_count_tv)
         internal val titleTV: TextView = view.findViewById(R.id.item_view_dashboard_msg_tv)
+        internal val iconIV: ImageView = view.findViewById(R.id.item_view_dashboard_icon)
 
         init {
             itemView.setOnClickListener {

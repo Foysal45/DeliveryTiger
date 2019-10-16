@@ -60,7 +60,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/bg_add_order_edit_text"
-                android:hint="অর্ডার আইডি,ফোন নম্বর দিয়ে সার্চ করুন"
+                android:hint="অর্ডার আইডি/ফোন নম্বর দিয়ে সার্চ করুন"
                 android:paddingStart="20dp"
                 android:paddingEnd="8dp"
                 android:paddingTop="14dp"
