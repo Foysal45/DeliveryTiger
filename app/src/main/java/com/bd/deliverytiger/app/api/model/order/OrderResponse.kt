@@ -29,9 +29,9 @@ data class OrderResponse(
     @SerializedName("collectionName")
     var collectionName: String? = "",
     @SerializedName("collectionAmount")
-    var collectionAmount: Int? = 0,
+    var collectionAmount: Float? = 0.0f,
     @SerializedName("deliveryCharge")
-    var deliveryCharge: Int? = 0,
+    var deliveryCharge: Float? = 0.0f,
     @SerializedName("isActive")
     var isActive: Boolean? = false,
     @SerializedName("updatedBy")
@@ -57,23 +57,23 @@ data class OrderResponse(
     @SerializedName("podNumber")
     var podNumber: String? = "",
     @SerializedName("breakableCharge")
-    var breakableCharge: Int? = 0,
+    var breakableCharge: Float? = 0.0f,
     @SerializedName("note")
     var note: String? = "",
     @SerializedName("isConfirmedBy")
     var isConfirmedBy: String? = "",
     @SerializedName("codCharge")
-    var codCharge: Int? = 0,
+    var codCharge: Float? = 0.0f,
     @SerializedName("courierId")
     var courierId: Int? = 0,
     @SerializedName("collectionCharge")
-    var collectionCharge: Int? = 0,
+    var collectionCharge: Float? = 0.0f,
     @SerializedName("returnCharge")
-    var returnCharge: Int? = 0,
+    var returnCharge: Float? = 0.0f,
     @SerializedName("packagingName")
     var packagingName: String? = "",
     @SerializedName("packagingCharge")
-    var packagingCharge: Int? = 0,
+    var packagingCharge: Float? = 0.0f,
     @SerializedName("collectAddress")
     var collectAddress: String? = "",
     @SerializedName("hubName")

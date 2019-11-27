@@ -78,7 +78,9 @@
         android:id="@+id/rvOrderTrack"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        tools:itemCount="5"
+        />
 
     <ProgressBar
         android:visibility="gone"

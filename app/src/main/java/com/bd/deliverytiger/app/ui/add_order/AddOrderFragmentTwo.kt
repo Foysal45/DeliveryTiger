@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.ui.add_order
 
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -99,6 +100,7 @@ class AddOrderFragmentTwo : Fragment() {
     private var weight: String = ""
     private var collectionName: String = ""
     private var packingName: String = ""
+    private var collectionAddress: String = ""
 
     companion object {
         fun newInstance(bundle: Bundle?): AddOrderFragmentTwo = AddOrderFragmentTwo().apply {
@@ -419,20 +421,30 @@ class AddOrderFragmentTwo : Fragment() {
         }
         calculateTotalPrice()
 
+        val dialog = ProgressDialog(context)
+        dialog.setMessage("অপেক্ষা করুন")
+        dialog.setCancelable(false)
+        dialog.show()
+
+        if (collectionAddress.isEmpty()) {
+            collectionAddress = SessionManager.address
+        }
+
         val requestBody = OrderRequest(
             customerName,mobileNumber,altMobileNumber,address,districtId,thanaId,areaId,
             deliveryType,orderType,weight,collectionName,
             payCollectionAmount, payShipmentCharge,SessionManager.courierUserId,
             payBreakableCharge, addressNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge,packingName,
-            payPackagingCharge, address, "android-${SessionManager.versionName}")
+            payPackagingCharge, collectionAddress, "android-${SessionManager.versionName}")
 
         placeOrderInterface.placeOrder(requestBody).enqueue(object : Callback<GenericResponse<OrderResponse>> {
             override fun onFailure(call: Call<GenericResponse<OrderResponse>>, t: Throwable) {
-
+                dialog?.hide()
+                Timber.d(logTag, "${t.message}")
             }
 
             override fun onResponse(call: Call<GenericResponse<OrderResponse>>, response: Response<GenericResponse<OrderResponse>>) {
-
+                dialog?.hide()
                 if (response.isSuccessful && response.body() != null){
                     if (response.body()!!.model != null){
                         Timber.d(logTag, "Order placed \n ${response.body()!!.model}")
@@ -450,6 +462,7 @@ class AddOrderFragmentTwo : Fragment() {
     private fun validateFormData(): Boolean {
 
         collectionName = productNameET.text.toString()
+        collectionAddress = collectionAddressET.text.toString()
         if (collectionName.isEmpty()) {
             context?.showToast("প্রোডাক্টের নাম লিখুন")
             return false
