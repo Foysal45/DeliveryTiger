@@ -161,7 +161,7 @@ class AddOrderFragmentTwo : Fragment() {
             adapter = deliveryTypeAdapter
         }
         deliveryTypeAdapter.onItemClick = { position, model ->
-
+            deliveryTypeRV.requestFocus()
             payShipmentCharge = model.chargeAmount
             deliveryType = "${model.deliveryType} ${model.days}"
             calculateTotalPrice()

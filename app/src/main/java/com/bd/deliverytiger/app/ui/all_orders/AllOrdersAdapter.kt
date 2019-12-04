@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
@@ -63,7 +64,21 @@ class AllOrdersAdapter(
         } else {
             holder.billingItemMainLay.setBackgroundColor(Color.parseColor("#FFFFFF"))
         }*/
-        holder.changeInfoBtn.isEnabled = courierOrderAmountDetailList?.get(position)?.buttonFlag ?: false
+
+        if (courierOrderAmountDetailList?.get(position)?.buttonFlag == true){
+
+            holder.changeInfoBtn.isEnabled = true
+            holder.changeInfoBtn.icon = ContextCompat.getDrawable(holder.changeInfoBtn.context, R.drawable.all_order_edit)
+            //holder.changeInfoBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.green_color)))
+            holder.changeInfoBtn.text = "এডিট"
+
+        } else {
+            holder.changeInfoBtn.isEnabled = false
+            holder.changeInfoBtn.text = "প্রযোজ্য নয়"
+            holder.changeInfoBtn.icon = null
+            //holder.changeInfoBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.gray_500)))
+        }
+        //holder.changeInfoBtn.isEnabled = courierOrderAmountDetailList?.get(position)?.buttonFlag ?: false
 
     }
 

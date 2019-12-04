@@ -1,7 +1,6 @@
 package com.bd.deliverytiger.app.ui.add_order
 
 
-import android.app.AlertDialog.Builder
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
@@ -9,15 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.`interface`.DistrictInterface
@@ -25,7 +20,6 @@ import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.ThanaPayLoad
 import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
-import com.bd.deliverytiger.app.ui.district.ThanaOrAriaAdapter
 import com.bd.deliverytiger.app.ui.district.v2.CustomModel
 import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
@@ -187,7 +181,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         } else if (isAriaAvailable && ariaPostOffice == 0) {
             go = false
             showShortToast(context!!, getString(R.string.select_aria))
-        } else if (customersAddress.isEmpty()) {
+        } else if (customersAddress.isEmpty() || customersAddress.length < 10) {
             go = false
             showShortToast(context!!, getString(R.string.write_yr_address))
             etCustomersAddress.requestFocus()

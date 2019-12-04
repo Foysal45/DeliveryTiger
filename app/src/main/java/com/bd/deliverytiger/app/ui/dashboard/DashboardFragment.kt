@@ -222,7 +222,7 @@ class DashboardFragment : Fragment() {
                     }
                 }
             } else {
-                VariousTask.showShortToast(context, "বিস্তারিত দেখানোর মতো পর্যাপ্ত তথ্য নেই")
+                VariousTask.showShortToast(context, "পর্যাপ্ত তথ্য নেই")
             }
         }
 
