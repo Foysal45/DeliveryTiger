@@ -37,7 +37,7 @@ class AllOrdersAdapter(
         formattedDate =
             DigitConverter.toBanglaDate(
                 courierOrderAmountDetailList?.get(position)?.courierOrderDateDetails!!.orderDate,
-                "dd-MM-yyyy HH:mm:ss"
+                "MM-dd-yyyy HH:mm:ss"
             )
 
         holder.tvAllOrderCounter.text = DigitConverter.toBanglaDigit(position + 1)
