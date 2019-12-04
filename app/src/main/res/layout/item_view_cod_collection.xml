@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -36,23 +37,30 @@
             android:textSize="@dimen/text_14">
 
             <TextView
-                android:textStyle="bold"
                 android:id="@+id/tvCodOrderId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/cod_search"
-                android:drawablePadding="8dp"
-                android:text="DT-3421"
-                android:textColor="@color/green_color"
+                android:textStyle="bold"
+                tools:text="DT-3421"
+                android:textColor="@color/black"
                 android:textSize="@dimen/text_14" />
 
             <TextView
                 android:id="@+id/tvCodOrderDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sep 25, 2019"
+                tools:text="Sep 25, 2019"
                 android:textColor="@color/gray_500"
-                android:textSize="@dimen/text_14" />
+                android:textSize="@dimen/text_12" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:adjustViewBounds="true"
+                android:layout_marginTop="8dp"
+                app:srcCompat="@drawable/ic_tracking_text"
+                android:contentDescription="@string/cd"
+                />
 
         </LinearLayout>
 
@@ -62,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxWidth="100dp"
-            android:text="৳ 6000"
+            tools:text="৳ 6000"
             android:textColor="@color/black"
             android:textSize="@dimen/text_14" />
 
@@ -73,7 +81,7 @@
             android:layout_weight="1"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:text="Unpaid"
+            tools:text="Unpaid"
             android:textColor="@color/black"
             android:textSize="@dimen/text_14" />
 

@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:paddingStart="@dimen/fab_margin"
-                        android:text="অর্ডার ইনফো"
+                        android:text="অর্ডার তথ্য"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_14"
                         android:textStyle="bold" />

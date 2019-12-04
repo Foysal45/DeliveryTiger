@@ -35,7 +35,7 @@ class BillingServiceAdapter(
     override fun onBindViewHolder(holder: myViewHolder, position: Int) {
 
         /*formattedDate =
-            DigitConverter.toBanglaDate(courierOrderAmountDetailList?.get(position)?.)*/
+           DigitConverter.toBanglaDate(courierOrderAmountDetailList?.get(position)?.)*/
 
         holder.tvBillingCounter.text = DigitConverter.toBanglaDigit(position + 1)
         holder.tvBillingOrderId.text =
@@ -54,7 +54,8 @@ class BillingServiceAdapter(
 
         holder.tvBillingTotalServiceCharge.text ="৳ " + DigitConverter.toBanglaDigit(courierOrderAmountDetailList?.get(position)?.totalAmount)
 
-        holder.tvBillingPaymentStatus.text =courierOrderAmountDetailList?.get(position)?.serviceBillingStatus
+        holder.tvBillingPaymentStatus.text = courierOrderAmountDetailList?.get(position)?.serviceBillingStatus
+        holder.paymentStatus.text = courierOrderAmountDetailList?.get(position)?.serviceBillingStatus
 
         if (courierOrderAmountDetailList?.get(position)?.serviceBillingStatus.equals("Received")) {
             holder.billingItemMainLay.setBackgroundColor(Color.parseColor("#E8F5E9"))
@@ -82,6 +83,7 @@ class BillingServiceAdapter(
             itemView.findViewById(R.id.tvBillingTotalServiceCharge)
         val tvBillingPaymentStatus: TextView = itemView.findViewById(R.id.tvBillingPaymentStatus)
         val billingDetailsLay: LinearLayout = itemView.findViewById(R.id.billingDetailsLay)
+        val paymentStatus: TextView = itemView.findViewById(R.id.tvAllOrderStatus)
       //  val viewBillingCollectionDivider: View = itemView.findViewById(R.id.viewBillingCollectionDivider)
 
         init {
