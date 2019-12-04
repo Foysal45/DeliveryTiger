@@ -24,7 +24,7 @@
     <color name="bg_rv">#08000000</color>
     <color name="positive">#66BB6A</color>
     <color name="negative">#FF8E34</color>
-    <color name="neutral"></color>
+    <color name="neutral">#E1F3F3</color>
     <color name="red">#E84545</color>
 
 </resources>
