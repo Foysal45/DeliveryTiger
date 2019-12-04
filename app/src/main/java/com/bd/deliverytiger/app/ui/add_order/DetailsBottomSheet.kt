@@ -69,6 +69,8 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
             codChargePercentage = getDouble("codChargePercentage", 0.0)
         }
 
+
+
         codPercentTV.text = "COD চার্জঃ (${DigitConverter.toBanglaDigit(codChargePercentage, false)}%)"
 
         shipmentTV.text = "৳ ${DigitConverter.toBanglaDigit(payShipmentCharge, true)}"
@@ -77,7 +79,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
         collectionChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payCollectionCharge, true)}"
         packagingChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payPackagingCharge, true)}"
 
-        val total = payShipmentCharge + payCODCharge + payBreakableCharge + payCollectionCharge + payPackagingCharge
+        val total: Double = payShipmentCharge + payCODCharge + payBreakableCharge + payCollectionCharge + payPackagingCharge
         totalTV.text = "৳ ${DigitConverter.toBanglaDigit(total, true)}"
 
     }

@@ -7,6 +7,13 @@ import java.util.*
 object DigitConverter {
 
     val banglaMonth = arrayOf("জানুয়ারী","ফেব্রুয়ারী","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর")
+    private var decimalFormat: DecimalFormat? = null
+
+    init {
+        decimalFormat = DecimalFormat("#,##,###.##")
+        //decimalFormat?.isGroupingUsed = true
+        //decimalFormat?.groupingSize = 3
+    }
 
     fun toBanglaDigit(digits: Any?, isComma: Boolean = false): String {
 
@@ -14,13 +21,13 @@ object DigitConverter {
             return engCahrReplacer(digits)
         } else if (digits is Int) {
             return if (isComma) {
-                engCahrReplacer(formatNumber(digits.toLong()))
+                engCahrReplacer(formatNumber(digits))
             } else {
                 engCahrReplacer(digits.toString())
             }
         } else if (digits is Double)
             return if (isComma) {
-                engCahrReplacer(formatNumber(digits.toLong()))
+                engCahrReplacer(formatNumber(digits))
             } else {
                 engCahrReplacer(digits.toString())
             }
@@ -68,11 +75,9 @@ object DigitConverter {
             .replace('9', '৯')
     }
 
-    private fun formatNumber(digits: Long): String {
-        val decimalFormat = DecimalFormat()
-        decimalFormat.isGroupingUsed = true
-        decimalFormat.groupingSize = 3
-        return decimalFormat.format(digits)
+    private fun formatNumber(digits: Any): String {
+
+        return decimalFormat?.format(digits) ?: digits.toString()
     }
 
 }
