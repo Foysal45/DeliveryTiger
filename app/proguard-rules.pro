@@ -108,3 +108,8 @@
 ##---------------End: proguard configuration for Gson  ----------
 
 -dontwarn com.crashlytics.**
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
