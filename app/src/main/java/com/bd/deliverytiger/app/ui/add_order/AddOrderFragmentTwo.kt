@@ -410,7 +410,7 @@ class AddOrderFragmentTwo : Fragment() {
             payBreakableCharge = 0.0
         }
 
-        totalTV.text = DigitConverter.toBanglaDigit("৳ $total", true)
+        totalTV.text = "৳ ${DigitConverter.toBanglaDigit(total, true)}"
 
     }
 
