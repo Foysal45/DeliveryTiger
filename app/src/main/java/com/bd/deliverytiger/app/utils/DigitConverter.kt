@@ -10,7 +10,7 @@ object DigitConverter {
     private var decimalFormat: DecimalFormat? = null
 
     init {
-        decimalFormat = DecimalFormat("#,##,###.00")
+        decimalFormat = DecimalFormat("#,##,##0.00")
         //decimalFormat?.isGroupingUsed = true
         //decimalFormat?.groupingSize = 3
     }
