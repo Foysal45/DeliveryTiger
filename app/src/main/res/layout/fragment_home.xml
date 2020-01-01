@@ -42,13 +42,14 @@
                 android:text="নতুন অর্ডার"
                 android:minWidth="135dp"
                 android:id="@+id/btnAddOrder"
-                android:backgroundTint="@color/green_color"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/login_view_height"/>
+                android:layout_height="@dimen/login_view_height"
+                android:backgroundTint="@color/colorPrimary"
+                />
 
 
         </LinearLayout>

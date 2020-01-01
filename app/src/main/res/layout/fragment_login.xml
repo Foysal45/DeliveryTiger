@@ -1,269 +1,280 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.LoginFragment">
+    tools:context=".ui.login.LoginFragment"
+    >
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:layout_marginBottom="?attr/actionBarSize"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/cd"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/delivery_tiger_login_bg" />
-
-
-    <ImageView
-        android:id="@+id/ivLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/cd"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/delivery_tiger_logo" />
-
-    <TextView
-        android:id="@+id/loginTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="লগইন"
-        android:textColor="@color/black_80"
-        android:textSize="@dimen/login_title_size"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivLogo" />
-
-
-    <LinearLayout
-        android:id="@+id/alert_msg_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginStart="@dimen/left_right_margin"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="@dimen/left_right_margin"
-        app:layout_constraintTop_toBottomOf="@id/loginTitle"
-        android:background="#E8F5E9"
-        android:visibility="gone"
-        tools:visibility="visible"
-        >
+        tools:context=".ui.login.LoginFragment">
 
-        <TextView
-            android:id="@+id/alert_msg_tv"
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_marginBottom="?attr/actionBarSize"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/cd"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/delivery_tiger_login_bg" />
+
+
+        <ImageView
+            android:id="@+id/ivLogo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_14"
-            android:textColor="#43A047"
-            android:padding="12dp"
-            android:gravity="center"
-            tools:text="ভেরিফিকেশনের জন্য আপনার মোবাইল নম্বরে OTP পাঠানো হয়েছে"/>
+            android:layout_marginTop="?attr/actionBarSize"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/cd"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_logo" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/loginTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="লগইন"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/login_title_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivLogo" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/editTextLay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/left_right_margin"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="@dimen/left_right_margin"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/alert_msg_layout">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/etLoginMobileNo"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_view_height"
-                android:background="@drawable/bg_login_top_edit_text"
-                android:hint="মোবাইল নম্বর লিখুন"
-                android:importantForAutofill="no"
-                android:inputType="phone"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/text_14" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/login_title_color" />
-
-            <EditText
-                android:id="@+id/etLoginPassword"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_view_height"
-                android:background="@drawable/bg_login_bottom_edit_text"
-                android:hint="পাসওয়ার্ড লিখুন"
-                android:importantForAutofill="no"
-                android:inputType="textPassword"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/text_14"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo" />
-
-        </LinearLayout>
-
-        <!--<LinearLayout
+            android:id="@+id/alert_msg_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginStart="@dimen/left_right_margin"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/left_right_margin"
+            app:layout_constraintTop_toBottomOf="@id/loginTitle"
+            android:background="#E8F5E9"
+            android:visibility="gone"
+            tools:visibility="visible"
             >
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/login_mobile_input_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+
+            <TextView
+                android:id="@+id/alert_msg_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_14"
+                android:textColor="#43A047"
+                android:padding="12dp"
+                android:gravity="center"
+                tools:text="ভেরিফিকেশনের জন্য আপনার মোবাইল নম্বরে OTP পাঠানো হয়েছে"/>
+
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/editTextLay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/left_right_margin"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/left_right_margin"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/alert_msg_layout">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Mobile number"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusBottomEnd="0dp"
-                app:boxCornerRadiusBottomStart="0dp"
-                app:boxCornerRadiusTopEnd="4dp"
-                app:boxCornerRadiusTopStart="4dp"
-                app:boxStrokeColor="@color/white"
-                app:endIconMode="clear_text"
-                app:hintTextColor="@color/black_70">
+                android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/login_mobile_input_et"
+                <EditText
+                    android:id="@+id/etLoginMobileNo"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:layout_height="@dimen/login_view_height"
+                    android:background="@drawable/bg_login_top_edit_text"
+                    android:hint="মোবাইল নম্বর লিখুন"
                     android:importantForAutofill="no"
-
                     android:inputType="phone"
-                    android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14"
-
-                    />
-
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            &lt;!&ndash;<View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/login_title_color" />&ndash;&gt;
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/login_password_input_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:hint="Password"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusBottomEnd="4dp"
-                app:boxCornerRadiusBottomStart="4dp"
-                app:boxCornerRadiusTopEnd="0dp"
-                app:boxCornerRadiusTopStart="0dp"
-                app:boxStrokeColor="@color/white"
-                app:endIconMode="password_toggle"
-                app:hintTextColor="@color/black_70">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/login_password_input_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:importantForAutofill="no"
-                    android:inputType="textPassword"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/login_title_color" />
 
-        </LinearLayout>-->
+                <EditText
+                    android:id="@+id/etLoginPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:background="@drawable/bg_login_bottom_edit_text"
+                    android:hint="পাসওয়ার্ড লিখুন"
+                    android:importantForAutofill="no"
+                    android:inputType="textPassword"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo" />
 
-    </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
-    <!--<androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/login_checkBox_remember_me"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/login_mobile_input_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Mobile number"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxCornerRadiusBottomEnd="0dp"
+                    app:boxCornerRadiusBottomStart="0dp"
+                    app:boxCornerRadiusTopEnd="4dp"
+                    app:boxCornerRadiusTopStart="4dp"
+                    app:boxStrokeColor="@color/white"
+                    app:endIconMode="clear_text"
+                    app:hintTextColor="@color/black_70">
 
-        android:layout_marginStart="@dimen/left_right_margin"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="@dimen/left_right_margin"
-        android:textColor="@color/gray_500"
-        android:textSize="@dimen/text_12"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTextLay"
-        android:text="আমাকে মনে রাখুন"/>-->
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/login_mobile_input_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:importantForAutofill="no"
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLogin"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginStart="@dimen/left_right_margin"
-        android:layout_marginEnd="@dimen/left_right_margin"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="@color/green_color"
-        android:padding="8dp"
-        android:text="লগইন"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTextLay" />
+                        android:inputType="phone"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
 
-
-    <TextView
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:id="@+id/tvLoginForgotPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/left_right_margin"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="@dimen/left_right_margin"
-        android:text="পাসওয়ার্ড ভুলে গেছেন?"
-        android:textColor="@color/green_color"
-        android:textSize="@dimen/login_sign_up_tv_size"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnLogin" />
-
-    <TextView
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:id="@+id/tvLoginSignUp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/left_right_margin"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="@dimen/left_right_margin"
-        android:text="নতুন একাউন্ট খুলুন"
-        android:textColor="@color/green_color"
-        android:textSize="@dimen/login_sign_up_tv_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnLogin" />
+                        />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                &lt;!&ndash;<View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/login_title_color" />&ndash;&gt;
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/login_password_input_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:hint="Password"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxCornerRadiusBottomEnd="4dp"
+                    app:boxCornerRadiusBottomStart="4dp"
+                    app:boxCornerRadiusTopEnd="0dp"
+                    app:boxCornerRadiusTopStart="0dp"
+                    app:boxStrokeColor="@color/white"
+                    app:endIconMode="password_toggle"
+                    app:hintTextColor="@color/black_70">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/login_password_input_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:importantForAutofill="no"
+                        android:inputType="textPassword"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>-->
+
+        </androidx.cardview.widget.CardView>
+
+        <!--<androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/login_checkBox_remember_me"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+
+            android:layout_marginStart="@dimen/left_right_margin"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="@dimen/left_right_margin"
+            android:textColor="@color/gray_500"
+            android:textSize="@dimen/text_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editTextLay"
+            android:text="আমাকে মনে রাখুন"/>-->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogin"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="@dimen/left_right_margin"
+            android:layout_marginEnd="@dimen/left_right_margin"
+            android:layout_marginTop="24dp"
+            android:padding="8dp"
+            android:text="লগইন"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editTextLay"
+            android:backgroundTint="@color/colorPrimary"
+            />
+
+
+        <TextView
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:id="@+id/tvLoginForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/left_right_margin"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/left_right_margin"
+            android:text="পাসওয়ার্ড ভুলে গেছেন?"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/login_sign_up_tv_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnLogin" />
+
+        <TextView
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:id="@+id/tvLoginSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/left_right_margin"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/left_right_margin"
+            android:text="নতুন একাউন্ট খুলুন"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/login_sign_up_tv_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnLogin" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
+

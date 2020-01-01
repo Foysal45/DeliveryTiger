@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
+import com.bd.deliverytiger.app.utils.setStatusBarColor
 
 class LoginActivity : AppCompatActivity() {
 
@@ -14,7 +17,25 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        addLoginFragment()
+        onBackStackChangeListener()
+        addUserRoleFragment()
+    }
+
+    private fun onBackStackChangeListener() {
+
+        supportFragmentManager.addOnBackStackChangedListener {
+
+            /*if (supportFragmentManager.backStackEntryCount > 0) {
+            } else {
+            }*/
+
+            val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.loginActivityContainer)
+            if (currentFragment is OrderTrackingFragment) {
+                setStatusBarColor()
+            } else {
+                setStatusBarColor(R.color.blur)
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -35,6 +56,15 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun addUserRoleFragment(){
+
+        //val fragment = OrderTrackingFragment.newInstance("")
+        val fragment = UserRoleSelectionFragment.newInstance()
+        val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
+        ft?.replace(R.id.loginActivityContainer, fragment, UserRoleSelectionFragment.tag)
+        ft?.commit()
+    }
+
     private fun addLoginFragment(){
 
         val isSessionOut = intent.getBooleanExtra("isSessionOut", false)
@@ -42,10 +72,9 @@ class LoginActivity : AppCompatActivity() {
         val fragment = LoginFragment.newInstance(false, isSessionOut)
         val ft: FragmentTransaction? = supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, LoginFragment.tag)
-       // ft?.addToBackStack(LoginFragment.getFragmentTag())
+        // ft?.addToBackStack(LoginFragment.getFragmentTag())
         ft?.commit()
     }
-
 
     /*private fun addSignUpFragment(){
         val fragment = SignUpFragment.newInstance()
@@ -62,6 +91,7 @@ class LoginActivity : AppCompatActivity() {
         // ft?.addToBackStack(LoginFragment.tag)
         ft?.commit()
     }*/
+
 
 
 }

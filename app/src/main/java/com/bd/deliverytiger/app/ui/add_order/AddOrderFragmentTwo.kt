@@ -209,7 +209,7 @@ class AddOrderFragmentTwo : Fragment() {
             calculateTotalPrice()
         }
 
-        checkTermsTV.text = HtmlCompat.fromHtml("আমি <font color='#66BB6A'>শর্তাবলী</font> মেনে নিলাম", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        checkTermsTV.text = HtmlCompat.fromHtml("আমি <font color='#00844A'>শর্তাবলী</font> মেনে নিলাম", HtmlCompat.FROM_HTML_MODE_LEGACY)
         checkTerms.setOnCheckedChangeListener { compoundButton, b ->
             isAgreeTerms = b
         }

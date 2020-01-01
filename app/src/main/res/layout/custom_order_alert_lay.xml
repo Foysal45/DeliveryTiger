@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="কাস্টমারের তথ্য আপডেট করুন"
-            android:textColor="@color/green_color"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/text_16"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -112,9 +112,11 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="@dimen/left_right_margin"
         android:layout_marginBottom="16dp"
-        android:text="Update "
+        android:text="Update"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_14" />
+        android:textSize="@dimen/text_14"
+        android:backgroundTint="@color/colorPrimary"
+        />
 
 
 </LinearLayout>

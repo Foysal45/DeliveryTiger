@@ -140,7 +140,7 @@ class LoginFragment: Fragment() {
             Callback<GenericResponse<LoginResponse>> {
             override fun onFailure(call: Call<GenericResponse<LoginResponse>>, t: Throwable) {
                 Timber.d(logTag, "${t.message}")
-                dialog.hide()
+                dialog.dismiss()
             }
 
             override fun onResponse(
@@ -148,7 +148,7 @@ class LoginFragment: Fragment() {
                 response: Response<GenericResponse<LoginResponse>>
             ) {
                 Timber.d(logTag, "${response.code()} ${response.message()}")
-                dialog.hide()
+                dialog.dismiss()
                 if (response.isSuccessful && response.body() != null && isAdded) {
                     if (response.body()!!.model != null) {
 

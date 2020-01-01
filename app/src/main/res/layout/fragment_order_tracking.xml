@@ -1,93 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@color/white"
-    android:focusable="true"
-    android:clickable="true"
-    tools:context=".ui.order_tracking.OrderTrackingFragment">
+    android:layout_height="match_parent">
 
-
-    <TextView
-        android:id="@+id/tvLoginSignUp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/left_right_margin"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="@dimen/left_right_margin"
-        android:text="কনসাইনমেন্ট নাম্বার/অর্ডার আইডি লিখে ট্র্যাক করুন"
-        android:textColor="@color/black_80"
-        android:textSize="@dimen/login_sign_up_tv_size"
-      />
-
-    <EditText
-        android:id="@+id/etOrderTrackId"
-        android:paddingStart="16dp"
-        android:layout_marginStart="@dimen/left_right_margin"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="@dimen/left_right_margin"
-        android:hint="অর্ডার আইডি লিখুন"
-        android:background="@drawable/bg_add_order_edit_text"
-        android:textColor="@color/black_80"
-        android:textSize="@dimen/login_sign_up_tv_size"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"/>
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarTracking"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title=""
+            app:titleTextColor="@color/black_80"
+            tools:visibility="visible">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/search_top_lay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_tracking_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/cd"
+                    android:padding="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_arrow_back" />
+
+                <TextView
+                    android:id="@+id/tracking_toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/black_80"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iv_tracking_back"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Test" />
+
+                <ImageView
+                    android:id="@+id/iv_tracking_destroy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/cd"
+                    android:padding="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_logout" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-        android:id="@+id/orderTrackClickedLay"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginStart="@dimen/left_right_margin"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="@dimen/left_right_margin"
-        android:background="@drawable/bg_login_btn"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            app:srcCompat="@drawable/order_track_search" />
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".ui.order_tracking.OrderTrackingFragment">
 
 
         <TextView
-
+            android:id="@+id/tvLoginSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="অর্ডার ট্র্যাক করুন"
-            android:textColor="@color/white"
+            android:layout_marginStart="@dimen/left_right_margin"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/left_right_margin"
+            android:text="কনসাইনমেন্ট নাম্বার/অর্ডার আইডি লিখে ট্র্যাক করুন"
+            android:textColor="@color/black_80"
             android:textSize="@dimen/login_sign_up_tv_size" />
+
+        <EditText
+            android:id="@+id/etOrderTrackId"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="@dimen/left_right_margin"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/left_right_margin"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:hint="অর্ডার আইডি লিখুন"
+            android:paddingStart="16dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/login_sign_up_tv_size" />
+
+
+        <LinearLayout
+            android:id="@+id/orderTrackClickedLay"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="@dimen/left_right_margin"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/left_right_margin"
+            android:background="@drawable/bg_login_btn"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                app:srcCompat="@drawable/order_track_search" />
+
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="অর্ডার ট্র্যাক করুন"
+                android:textColor="@color/white"
+                android:textSize="@dimen/login_sign_up_tv_size" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvOrderTrack"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="top"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:paddingStart="@dimen/left_right_margin"
+            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:paddingEnd="@dimen/left_right_margin"
+            android:paddingBottom="@dimen/fab_margin"
+            android:visibility="gone"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_track_order"
+            tools:visibility="visible" />
+
+        <ProgressBar
+            android:id="@+id/rvOrderTrackProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:visibility="gone" />
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="@dimen/fab_margin"
-        android:visibility="gone"
-        android:layout_gravity="top"
-        tools:visibility="visible"
-        android:paddingBottom="@dimen/fab_margin"
-        tools:listitem="@layout/item_track_order"
-        android:paddingStart="@dimen/left_right_margin"
-        android:paddingEnd="@dimen/left_right_margin"
-        android:id="@+id/rvOrderTrack"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:itemCount="5"
-        />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <ProgressBar
-        android:visibility="gone"
-        android:id="@+id/rvOrderTrackProgress"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 
-</LinearLayout>
+

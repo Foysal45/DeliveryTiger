@@ -29,7 +29,7 @@
             android:layout_marginStart="@dimen/left_right_margin"
             android:layout_marginEnd="@dimen/left_right_margin"
             android:text="# DT-3421"
-            android:textColor="@color/green_color"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/text_14"
             android:textStyle="bold" />
 

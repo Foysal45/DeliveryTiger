@@ -62,7 +62,7 @@
             android:layout_marginStart="@dimen/left_right_margin"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/left_right_margin"
-            android:backgroundTint="@color/green_color"
+            android:backgroundTint="@color/colorPrimary"
             android:text="শিপমেন্ট চার্জের তালিকা"
             app:layout_constraintTop_toBottomOf="@id/shipment_charge_Thana" />
 

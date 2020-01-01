@@ -13,7 +13,7 @@
         android:id="@+id/item_view_shipment_weight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/green_color"
+        android:textColor="@color/colorPrimary"
         android:layout_marginStart="5dp"
         android:textSize="@dimen/text_16"
         android:textStyle="bold"

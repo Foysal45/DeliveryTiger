@@ -49,7 +49,7 @@ class FCMService: FirebaseMessagingService() {
             setContentTitle(title)
             setContentText(description)
             setAutoCancel(true)
-            setColor(ContextCompat.getColor(this@FCMService, R.color.green_color))
+            setColor(ContextCompat.getColor(this@FCMService, R.color.colorPrimary))
             setDefaults(NotificationCompat.DEFAULT_ALL)
             priority = NotificationCompat.PRIORITY_DEFAULT
             setContentIntent(pendingIntent)

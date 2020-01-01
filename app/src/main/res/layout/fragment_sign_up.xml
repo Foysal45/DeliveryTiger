@@ -31,7 +31,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:contentDescription="@string/cd"
-            app:srcCompat="@drawable/delivery_tiger_logo" />
+            app:srcCompat="@drawable/ic_logo" />
 
         <TextView
             android:id="@+id/loginTitle"
@@ -145,7 +145,7 @@
             android:layout_marginStart="@dimen/left_right_margin"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="@dimen/left_right_margin"
-            android:backgroundTint="@color/green_color"
+            android:backgroundTint="@color/colorPrimary"
             android:padding="8dp"
             android:text="রেজিস্ট্রেশন"
             android:textColor="@color/white"
@@ -179,7 +179,7 @@
             android:text="লগইন করুন"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:textColor="@color/green_color"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/login_sign_up_tv_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvLoginForgotPassword"

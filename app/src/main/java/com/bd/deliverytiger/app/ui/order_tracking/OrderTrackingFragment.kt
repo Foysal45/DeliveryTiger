@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.ProgressBar
+import android.widget.*
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,6 +42,11 @@ class OrderTrackingFragment : Fragment() {
     private lateinit var rvOrderTrackProgress: ProgressBar
     private lateinit var orderTrackClickedLay: LinearLayout
     private lateinit var etOrderTrackId: EditText
+    private lateinit var toolbarTracking: Toolbar
+    private lateinit var iv_tracking_back: ImageView
+    private lateinit var iv_tracking_destroy: ImageView
+    private lateinit var tracking_toolbar_title: TextView
+
 
     private lateinit var mLinerLayoutManager: LinearLayoutManager
     private lateinit var orderTrackingAdapter: OrderTrackingAdapter
@@ -64,6 +68,10 @@ class OrderTrackingFragment : Fragment() {
         rvOrderTrackProgress = view.findViewById(R.id.rvOrderTrackProgress)
         orderTrackClickedLay = view.findViewById(R.id.orderTrackClickedLay)
         etOrderTrackId = view.findViewById(R.id.etOrderTrackId)
+        toolbarTracking = view.findViewById(R.id.toolbarTracking)
+        iv_tracking_back = view.findViewById(R.id.iv_tracking_back)
+        iv_tracking_destroy = view.findViewById(R.id.iv_tracking_destroy)
+        tracking_toolbar_title = view.findViewById(R.id.tracking_toolbar_title)
 
         orderTrackInterface =
             RetrofitSingleton.getInstance(context!!).create(OrderTrackInterface::class.java)
@@ -102,7 +110,20 @@ class OrderTrackingFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("অর্ডার ট্র্যাকিং")
+        if (activity is HomeActivity) {
+            toolbarTracking.visibility = View.GONE
+            (activity as HomeActivity).setToolbarTitle("অর্ডার ট্র্যাকিং")
+        }else{
+            toolbarTracking.visibility = View.VISIBLE
+            tracking_toolbar_title.text = "অর্ডার ট্র্যাকিং"
+            iv_tracking_back.setOnClickListener {
+                activity?.onBackPressed()
+            }
+            iv_tracking_destroy.setOnClickListener {
+                activity?.moveTaskToBack(true)
+                activity?.finish()
+            }
+        }
     }
 
     private fun getOrderTrackingList(orderId: String, flag: String) {

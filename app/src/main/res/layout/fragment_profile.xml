@@ -51,7 +51,7 @@
             android:paddingStart="@dimen/left_right_margin"
             android:layout_marginTop="16dp"
             android:text="ব্যক্তিগত তথ্য"
-            android:textColor="@color/green_color"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/text_16"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -211,7 +211,9 @@
                 android:layout_marginBottom="24dp"
                 android:textSize="@dimen/text_14"
                 android:text="সেভ"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:backgroundTint="@color/colorPrimary"
+                />
 
         </LinearLayout>
 
@@ -278,7 +280,9 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="24dp"
                 android:text="আপডেট করুন"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:backgroundTint="@color/colorPrimary"
+                />
 
         </LinearLayout>
 

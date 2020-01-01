@@ -77,7 +77,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/green_color"
+        android:backgroundTint="@color/colorPrimary"
 
         android:text="শর্ত মেনে নিলাম"
         android:textColor="@color/white"

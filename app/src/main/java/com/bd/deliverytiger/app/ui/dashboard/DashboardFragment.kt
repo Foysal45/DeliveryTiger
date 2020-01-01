@@ -101,7 +101,9 @@ class DashboardFragment : Fragment() {
 
          val list: MutableList<MonthDataModel> = mutableListOf()
          val viewList: MutableList<String> = mutableListOf()
-         for (year in currentYear..2019){
+        //Timber.d("DashboardTag", "currentYear: $currentYear")
+         for (year in currentYear downTo 2019){
+             //Timber.d("DashboardTag", "year: $year")
              var lastMonth = 11
              if (year == currentYear) {
                  lastMonth = currentMonth
@@ -114,6 +116,8 @@ class DashboardFragment : Fragment() {
                  viewList.add("${banglaMonth[monthIndex]}, ${DigitConverter.toBanglaDigit(year)}")
              }
          }
+
+        //Timber.d("DashboardTag", "")
 
         val packagingAdapter =
             CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, viewList)

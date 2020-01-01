@@ -12,7 +12,6 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:tint="@color/light_green"
             app:srcCompat="@drawable/order_track_circle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -21,7 +20,7 @@
             android:id="@+id/verticalView"
             android:layout_width="6dp"
             android:layout_height="60dp"
-            android:background="@color/light_green" />
+            android:background="@color/colorPrimary" />
 
     </LinearLayout>
 
