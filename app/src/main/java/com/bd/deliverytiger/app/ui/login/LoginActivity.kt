@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.ui.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
@@ -18,7 +19,23 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         onBackStackChangeListener()
-        addUserRoleFragment()
+
+        val isSessionOut = intent.getBooleanExtra("isSessionOut", false)
+        intent.removeExtra("isSessionOut")
+        if (isSessionOut) {
+            addLoginFragment(isSessionOut)
+        } else {
+            addUserRoleFragment()
+        }
+
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if (intent == null) {
+            return
+        }
+
     }
 
     private fun onBackStackChangeListener() {
@@ -65,10 +82,8 @@ class LoginActivity : AppCompatActivity() {
         ft?.commit()
     }
 
-    private fun addLoginFragment(){
+    private fun addLoginFragment(isSessionOut: Boolean){
 
-        val isSessionOut = intent.getBooleanExtra("isSessionOut", false)
-        intent.removeExtra("isSessionOut")
         val fragment = LoginFragment.newInstance(false, isSessionOut)
         val ft: FragmentTransaction? = supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, LoginFragment.tag)

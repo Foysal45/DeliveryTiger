@@ -77,7 +77,7 @@ class OrderTrackingFragment : Fragment() {
             RetrofitSingleton.getInstance(context!!).create(OrderTrackInterface::class.java)
 
         orderTrackStatusList = ArrayList()
-        mLinerLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
+        mLinerLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         orderTrackingAdapter = OrderTrackingAdapter(context!!, orderTrackStatusList)
 
         orderTrackingAdapter.onItemClick = { position ->
@@ -85,6 +85,7 @@ class OrderTrackingFragment : Fragment() {
         }
 
         rvOrderTrack.apply {
+            setHasFixedSize(true)
             layoutManager = mLinerLayoutManager
             adapter = orderTrackingAdapter
         }
@@ -149,13 +150,13 @@ class OrderTrackingFragment : Fragment() {
                     if (response.isSuccessful && response.body() != null && response.body()!!.model.isNotEmpty()) {
                         orderTrackStatusList.clear()
                         rvOrderTrack.visibility = View.VISIBLE
-                        orderTrackStatusList.addAll(response.body()!!.model)
+                        orderTrackStatusList.addAll(response.body()!!.model.reversed())
                         orderTrackingAdapter.notifyDataSetChanged()
                         // rvOrderTrack.scrollToPosition(5)
-                        mLinerLayoutManager.scrollToPositionWithOffset(
+                        /*mLinerLayoutManager.scrollToPositionWithOffset(
                             orderTrackStatusList.size - 1,
                             0
-                        );
+                        );*/
                         Timber.e("getOrderTrackingList s ", response.body()!!.toString())
                     } else {
                         VariousTask.showShortToast(context, getString(R.string.give_right_order_id))

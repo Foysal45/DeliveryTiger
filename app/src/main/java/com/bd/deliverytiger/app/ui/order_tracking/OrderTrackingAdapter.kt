@@ -36,7 +36,7 @@ class OrderTrackingAdapter(
 
         holder.orderTrackStatus.text = orderTrackStatusList?.get(position)?.orderTrackStatusGroup
 
-        if (position == 0) holder.verticalView.visibility = View.GONE
+        if (position == (orderTrackStatusList.size - 1)) holder.verticalView.visibility = View.GONE
         else holder.verticalView.visibility = View.VISIBLE
     }
 

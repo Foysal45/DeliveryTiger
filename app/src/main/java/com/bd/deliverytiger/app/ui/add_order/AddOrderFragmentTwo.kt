@@ -482,15 +482,15 @@ class AddOrderFragmentTwo : Fragment() {
             }
         }
         if (!isWeightSelected) {
-            context?.showToast("প্যাকেজ এর ওজন সিলেক্ট করুন")
+            context?.showToast("প্যাকেজ এর ওজন নির্বাচন করুন")
             return false
         }
         if (!isPackagingSelected) {
-            context?.showToast("প্যাকেজিং সিলেক্ট করুন")
+            context?.showToast("প্যাকেজিং নির্বাচন করুন")
             return false
         }
         if (deliveryType.isEmpty()){
-            context?.showToast("ডেলিভারি টাইপ সিলেক্ট করুন")
+            context?.showToast("ডেলিভারি টাইপ নির্বাচন করুন")
             return false
         }
         if (!isAgreeTerms) {
