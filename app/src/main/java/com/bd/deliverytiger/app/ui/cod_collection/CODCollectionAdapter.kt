@@ -36,7 +36,7 @@ class CODCollectionAdapter(
 
         formattedDate =
             DigitConverter.toBanglaDate(courierOrderViewModelList?.get(position)?.courierOrderDateDetails?.confirmationDate.toString(),
-                "dd-MM-yyyy HH:mm:ss")
+                "MM-dd-yyyy HH:mm:ss")
 
         holder.tvCodItemCount.text = DigitConverter.toBanglaDigit(position + 1)
         holder.tvCodOrderId.text =
