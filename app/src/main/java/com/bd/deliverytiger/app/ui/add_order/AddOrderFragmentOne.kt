@@ -396,7 +396,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             } else if (track == 3) {
                 if (thanaOrAriaList[listPostion].postalCode != null) {
                     if (thanaOrAriaList[listPostion].postalCode!!.isNotEmpty()) {
-                        ariaPostOffice = thanaOrAriaList[listPostion].postalCode?.toInt()!!
+                        ariaPostOffice = thanaOrAriaList[listPostion].thanaId
                         etAriaPostOffice.setText(thanaOrAriaList[listPostion].thanaBng + " (" + thanaOrAriaList[listPostion].postalCode + ")")
                     } else {
                         ariaPostOffice = 0
