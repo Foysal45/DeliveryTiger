@@ -52,6 +52,9 @@ class DashboardFragment : Fragment() {
     private var selectedMonth = 0
     private var isLoading = false
 
+    private lateinit var dashboardAdapter: DashboardAdapter
+    private val responseModelList: MutableList<DashboardResponseModel> = mutableListOf()
+    private lateinit var dashBoardInterface: DashBoardInterface
 
     companion object {
         fun newInstance(): DashboardFragment = DashboardFragment().apply {
@@ -79,6 +82,10 @@ class DashboardFragment : Fragment() {
         dashBoardProgress = view.findViewById(R.id.dashBoardProgress)
         addOrderNewBtn = view.findViewById(R.id.dashboard_add_order_new)
 
+
+        dashBoardInterface = RetrofitSingleton.getInstance(context!!).create(DashBoardInterface::class.java)
+
+        setDashBoardAdapter()
 
         addOrderBtn.setOnClickListener {
             addOrderFragment()
@@ -145,14 +152,10 @@ class DashboardFragment : Fragment() {
     private fun getDashBoardData(selectedMonth: Int, selectedYear: Int) {
         isLoading = true
         dashBoardProgress.visibility = View.VISIBLE
-        val dashBoardInterface =
-            RetrofitSingleton.getInstance(context!!).create(DashBoardInterface::class.java)
-        val responseModelList: MutableList<DashboardResponseModel> = mutableListOf()
-        val dashBoardReqBody =
-            DashBoardReqBody(selectedMonth, selectedYear, SessionManager.courierUserId)
 
+
+        val dashBoardReqBody = DashBoardReqBody(selectedMonth, selectedYear, SessionManager.courierUserId)
         Timber.d("DashboardTag r ", dashBoardReqBody.toString())
-
         dashBoardInterface.getDashboardStatusGroup(dashBoardReqBody)
             .enqueue(object : Callback<GenericResponse<List<DashboardResponseModel>>> {
                 override fun onFailure(
@@ -172,17 +175,20 @@ class DashboardFragment : Fragment() {
                     dashBoardProgress.visibility = View.GONE
                     if (response.isSuccessful && response.body() != null) {
                         Timber.d("DashboardTag f ", response.body().toString())
-                        responseModelList.addAll(response.body()!!.model)
-                        setDashBoardAdapter(responseModelList)
+                        if (!response.body()!!.model.isNullOrEmpty()) {
+                            responseModelList.clear()
+                            responseModelList.addAll(response.body()!!.model)
+                            dashboardAdapter.notifyDataSetChanged()
+                        }
                     }
                 }
 
             })
     }
 
-    private fun setDashBoardAdapter(responseModelList: MutableList<DashboardResponseModel>) {
+    private fun setDashBoardAdapter() {
 
-        val dashboardAdapter = DashboardAdapter(context!!, responseModelList)
+        dashboardAdapter = DashboardAdapter(context!!, responseModelList)
         val gridLayoutManager = GridLayoutManager(context!!, 2, RecyclerView.VERTICAL, false)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
