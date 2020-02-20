@@ -23,6 +23,8 @@ data class OrderRequest(
     var paymentType: String,
     @SerializedName("orderType")
     var orderType: String,
+    @SerializedName("productType")
+    var productType: String,
     @SerializedName("weight")
     var weight: String,
     @SerializedName("collectionName")

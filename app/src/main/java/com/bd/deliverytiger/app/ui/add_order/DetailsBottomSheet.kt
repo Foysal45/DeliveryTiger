@@ -31,6 +31,8 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
     private var payCollectionCharge: Double = 0.0
     private var payPackagingCharge: Double = 0.0
     private var codChargePercentage: Double = 0.0
+    private var total: Double = 0.0
+    private var bigProductFlag: Boolean = false
 
 
     companion object{
@@ -67,9 +69,8 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
             payCollectionCharge = getDouble("payCollectionCharge", 0.0)
             payPackagingCharge = getDouble("payPackagingCharge", 0.0)
             codChargePercentage = getDouble("codChargePercentage", 0.0)
+            total = getDouble("total", 0.0)
         }
-
-
 
         codPercentTV.text = "COD চার্জঃ (${DigitConverter.toBanglaDigit(codChargePercentage, false)}%)"
 
@@ -79,7 +80,10 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
         collectionChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payCollectionCharge, true)}"
         packagingChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payPackagingCharge, true)}"
 
-        val total: Double = payShipmentCharge + payCODCharge + payBreakableCharge + payCollectionCharge + payPackagingCharge
+
+        val total = total
+            // payShipmentCharge + payCODCharge + payBreakableCharge + payCollectionCharge + payPackagingCharge
+
         totalTV.text = "৳ ${DigitConverter.toBanglaDigit(total, true)}"
 
     }

@@ -55,6 +55,7 @@ class AddOrderFragmentTwo : Fragment() {
     private lateinit var checkTermsTV: TextView
     private lateinit var deliveryTypeRV: RecyclerView
     private lateinit var toggleButtonGroup: MaterialButtonToggleGroup
+    private lateinit var toggleButtonGroupSize: MaterialButtonToggleGroup
     private lateinit var submitBtn: LinearLayout
     private lateinit var backBtn: ConstraintLayout
     private lateinit var totalTV: TextView
@@ -72,8 +73,11 @@ class AddOrderFragmentTwo : Fragment() {
     private var codChargePercentage: Double = 0.0
     private var codChargeMin: Int = 0
     private var breakableChargeApi: Double = 0.0
+    private var bigProductCharge: Double = 0.0
+    private var isCheckBigProduct : Boolean = false
 
     private var isCollection: Boolean = false
+    private var isProductSize: Boolean = false
     private var isBreakable: Boolean = false
     private var isAgreeTerms: Boolean = false
     private var isWeightSelected: Boolean = false
@@ -84,6 +88,9 @@ class AddOrderFragmentTwo : Fragment() {
     private var payBreakableCharge: Double = 0.0
     private var payCollectionCharge: Double = 0.0
     private var payPackagingCharge: Double = 0.0
+
+    private var boroProduct: Double = 0.0
+    private var total: Double = 0.0
 
     // Bundle
     private var bundle: Bundle? = null
@@ -97,6 +104,7 @@ class AddOrderFragmentTwo : Fragment() {
     private var addressNote: String = ""
     private var deliveryType: String = ""
     private var orderType: String = "Only Delivery" // Only Delivery  Delivery Taka Collection
+    private var productType: String = "Small" // Only Delivery  Delivery Taka Collection
     private var weight: String = ""
     private var collectionName: String = ""
     private var packingName: String = ""
@@ -129,6 +137,7 @@ class AddOrderFragmentTwo : Fragment() {
         checkTermsTV = view.findViewById(R.id.check_terms_condition_text)
         deliveryTypeRV = view.findViewById(R.id.delivery_type_selection_rV)
         toggleButtonGroup = view.findViewById(R.id.toggle_button_group)
+        toggleButtonGroupSize = view.findViewById(R.id.toggle_button_group_size)
         submitBtn = view.findViewById(R.id.submit_order)
         backBtn = view.findViewById(R.id.go_to_previous_page)
         totalTV = view.findViewById(R.id.tvAddOrderTotalOrder)
@@ -204,6 +213,28 @@ class AddOrderFragmentTwo : Fragment() {
             }
         }
 
+        toggleButtonGroupSize.addOnButtonCheckedListener { group1, checkedId1, isChecked1 ->
+            if (isChecked1) {
+                when (checkedId1) {
+                    R.id.toggle_button_size_choto -> {
+                    //    Toast.makeText(context, "Product Size Choto", Toast.LENGTH_LONG).show()
+                        //isProductSize = false
+                        isCheckBigProduct = false
+                        calculateTotalPrice()
+                     //   productType = "Small"
+                    }
+                    R.id.toggle_button_size_boro -> {
+                     //   Toast.makeText(context, "Product Size Boro", Toast.LENGTH_LONG).show()
+                        //isProductSize = true
+                    //    boroProduct = 200.00
+                    //    productType = "Large"
+                        isCheckBigProduct = true
+                        calculateTotalPrice()
+                    }
+                }
+            }
+        }
+
         checkBoxBreakable.setOnCheckedChangeListener { compoundButton, b ->
             isBreakable = b
             calculateTotalPrice()
@@ -240,6 +271,7 @@ class AddOrderFragmentTwo : Fragment() {
                 putDouble("payCollectionCharge", payCollectionCharge)
                 putDouble("payPackagingCharge", payPackagingCharge)
                 putDouble("codChargePercentage", codChargePercentage)
+                putDouble("total", total)
             }
 
             val detailsSheet = DetailsBottomSheet.newInstance(bundle)
@@ -263,10 +295,15 @@ class AddOrderFragmentTwo : Fragment() {
             override fun onResponse(call: Call<GenericResponse<BreakableChargeData>>, response: Response<GenericResponse<BreakableChargeData>>) {
                 if (response.isSuccessful && response.body() != null && isAdded) {
                     if (response.body()!!.model != null) {
+
                         val model = response.body()!!.model
                         breakableChargeApi = model.breakableCharge
                         codChargePercentage = model.codChargePercentage
                         codChargeMin = model.codChargeMin
+                        bigProductCharge = model.bigProductCharge
+
+                        Timber.d("BreakableCharge ", " BreakableCharge_msg " + response.body()!!.model)
+                        Timber.d("BigProductCharge : ", "12 " + bigProductCharge)
                     }
                 }
             }
@@ -282,6 +319,9 @@ class AddOrderFragmentTwo : Fragment() {
 
             override fun onResponse(call: Call<GenericResponse<List<PackagingData>>>, response: Response<GenericResponse<List<PackagingData>>>) {
                 if (response.isSuccessful && response.body() != null && isAdded) {
+
+                    Timber.d("PackagingCharge ", " PackagingCharge_msg " + response.body()!!.model)
+
                     if (response.body()!!.model != null) {
                         val model = response.body()!!.model
                         packagingDataList.clear()
@@ -332,6 +372,9 @@ class AddOrderFragmentTwo : Fragment() {
                 response: Response<GenericResponse<List<DeliveryChargeResponse>>>
             ) {
                 if (response.isSuccessful && response.body() != null && isAdded) {
+
+                    Timber.d("DeliveryCharge ", " DeliveryCharge_msg " + response.body()!!.model)
+
                     if (response.body()!!.model != null) {
                         val model = response.body()!!.model
 
@@ -401,8 +444,14 @@ class AddOrderFragmentTwo : Fragment() {
             payCODCharge = 0.0
         }
         payCollectionCharge = SessionManager.collectionCharge
+
         //val payReturnCharge = SessionManager.returnCharge
-        var total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge
+        if (isCheckBigProduct){
+             total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge + bigProductCharge
+        } else {
+             total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge
+        }
+
         if (isBreakable) {
             payBreakableCharge = breakableChargeApi
             total += payBreakableCharge
@@ -411,6 +460,8 @@ class AddOrderFragmentTwo : Fragment() {
         }
 
         totalTV.text = "৳ ${DigitConverter.toBanglaDigit(total, true)}"
+
+        Timber.d("BigProductCharge : ", "12 " + bigProductCharge)
 
     }
 
@@ -432,7 +483,7 @@ class AddOrderFragmentTwo : Fragment() {
 
         val requestBody = OrderRequest(
             customerName,mobileNumber,altMobileNumber,address,districtId,thanaId,areaId,
-            deliveryType,orderType,weight,collectionName,
+            deliveryType,orderType,productType,weight,collectionName,
             payCollectionAmount, payShipmentCharge,SessionManager.courierUserId,
             payBreakableCharge, addressNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge,packingName,
             payPackagingCharge, collectionAddress, "android-${SessionManager.versionName}")
@@ -446,10 +497,17 @@ class AddOrderFragmentTwo : Fragment() {
             override fun onResponse(call: Call<GenericResponse<OrderResponse>>, response: Response<GenericResponse<OrderResponse>>) {
                 dialog?.hide()
                 if (response.isSuccessful && response.body() != null){
+
+                    Timber.d("submitOrder ", " submitOrder_msg " + response.body())
+
                     if (response.body()!!.model != null){
                         Timber.d(logTag, "Order placed \n ${response.body()!!.model}")
+
                        // context?.showToast("Oder ID: ${response.body()!!.model.courierOrdersId}")
                         addOrderSuccessFragment(response.body()!!.model)
+
+                        Timber.d("addOrderSuccessFragment ", " addOrderSuccessFragment_msg " + response.body()!!.model + " Product Size - " + response.body()!!.model.productType)
+                        Timber.d("addOrderSuccessFragment1 ", " addOrderSuccessFragment_msg1 " + " Product Size - " + response.body()!!.model.productType)
                     }
                 }
             }
@@ -512,8 +570,8 @@ class AddOrderFragmentTwo : Fragment() {
     }
 
 }
-//val fragment = OrderSuccessFragment.newInstance(null)
-private fun Context?.showToast(msg: String) {
-    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    //val fragment = OrderSuccessFragment.newInstance(null)
+    private fun Context?.showToast(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }
 
