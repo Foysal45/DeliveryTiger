@@ -89,7 +89,6 @@ class AddOrderFragmentTwo : Fragment() {
     private var payCollectionCharge: Double = 0.0
     private var payPackagingCharge: Double = 0.0
 
-    private var boroProduct: Double = 0.0
     private var total: Double = 0.0
 
     // Bundle
@@ -104,11 +103,15 @@ class AddOrderFragmentTwo : Fragment() {
     private var addressNote: String = ""
     private var deliveryType: String = ""
     private var orderType: String = "Only Delivery" // Only Delivery  Delivery Taka Collection
-    private var productType: String = "Small" // Only Delivery  Delivery Taka Collection
+    private var productType: String = "small" // Only Delivery  Delivery Taka Collection
     private var weight: String = ""
     private var collectionName: String = ""
     private var packingName: String = ""
     private var collectionAddress: String = ""
+
+    private var deliveryRangeId: Int = 0
+    private var weightRangeId: Int = 0
+    private var boroProductCheck: Boolean = false
 
     companion object {
         fun newInstance(bundle: Bundle?): AddOrderFragmentTwo = AddOrderFragmentTwo().apply {
@@ -171,8 +174,17 @@ class AddOrderFragmentTwo : Fragment() {
         }
         deliveryTypeAdapter.onItemClick = { position, model ->
             deliveryTypeRV.requestFocus()
+            /*if (isCheckBigProduct){
+                payShipmentCharge = model.chargeAmount + bigProductCharge
+                boroProductCheck = true
+            } else {
+                payShipmentCharge = model.chargeAmount
+                boroProductCheck = false
+            }*/
             payShipmentCharge = model.chargeAmount
             deliveryType = "${model.deliveryType} ${model.days}"
+            deliveryRangeId = model.deliveryRangeId
+            weightRangeId = model.weightRangeId
             calculateTotalPrice()
         }
 
@@ -217,17 +229,12 @@ class AddOrderFragmentTwo : Fragment() {
             if (isChecked1) {
                 when (checkedId1) {
                     R.id.toggle_button_size_choto -> {
-                    //    Toast.makeText(context, "Product Size Choto", Toast.LENGTH_LONG).show()
-                        //isProductSize = false
                         isCheckBigProduct = false
+                        productType = "small"
                         calculateTotalPrice()
-                     //   productType = "Small"
                     }
                     R.id.toggle_button_size_boro -> {
-                     //   Toast.makeText(context, "Product Size Boro", Toast.LENGTH_LONG).show()
-                        //isProductSize = true
-                    //    boroProduct = 200.00
-                    //    productType = "Large"
+                        productType = "big"
                         isCheckBigProduct = true
                         calculateTotalPrice()
                     }
@@ -271,6 +278,9 @@ class AddOrderFragmentTwo : Fragment() {
                 putDouble("payCollectionCharge", payCollectionCharge)
                 putDouble("payPackagingCharge", payPackagingCharge)
                 putDouble("codChargePercentage", codChargePercentage)
+                putDouble("bigProductCharge", bigProductCharge)
+                putBoolean("boroProductCheck", boroProductCheck)
+                putString("productType", productType)
                 putDouble("total", total)
             }
 
@@ -302,8 +312,8 @@ class AddOrderFragmentTwo : Fragment() {
                         codChargeMin = model.codChargeMin
                         bigProductCharge = model.bigProductCharge
 
-                        Timber.d("BreakableCharge ", " BreakableCharge_msg " + response.body()!!.model)
-                        Timber.d("BigProductCharge : ", "12 " + bigProductCharge)
+                       /* Timber.d("BreakableCharge ", " BreakableCharge_msg " + response.body()!!.model)
+                        Timber.d("BigProductCharge : ", "12 " + bigProductCharge)*/
                     }
                 }
             }
@@ -452,6 +462,8 @@ class AddOrderFragmentTwo : Fragment() {
              total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge
         }
 
+     //   total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge
+
         if (isBreakable) {
             payBreakableCharge = breakableChargeApi
             total += payBreakableCharge
@@ -483,10 +495,10 @@ class AddOrderFragmentTwo : Fragment() {
 
         val requestBody = OrderRequest(
             customerName,mobileNumber,altMobileNumber,address,districtId,thanaId,areaId,
-            deliveryType,orderType,productType,weight,collectionName,
+            deliveryType,orderType,weight,collectionName,
             payCollectionAmount, payShipmentCharge,SessionManager.courierUserId,
             payBreakableCharge, addressNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge,packingName,
-            payPackagingCharge, collectionAddress, "android-${SessionManager.versionName}")
+            payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId,"android-${SessionManager.versionName}")
 
         placeOrderInterface.placeOrder(requestBody).enqueue(object : Callback<GenericResponse<OrderResponse>> {
             override fun onFailure(call: Call<GenericResponse<OrderResponse>>, t: Throwable) {
@@ -504,6 +516,11 @@ class AddOrderFragmentTwo : Fragment() {
                         Timber.d(logTag, "Order placed \n ${response.body()!!.model}")
 
                        // context?.showToast("Oder ID: ${response.body()!!.model.courierOrdersId}")
+                      /*  if (isCheckBigProduct){
+                            response.body()!!.model.deliveryCharge = payShipmentCharge.toFloat()
+                        } else {
+                            response.body()!!.model.deliveryCharge = payShipmentCharge.toFloat() + bigProductCharge.toFloat()
+                        }*/
                         addOrderSuccessFragment(response.body()!!.model)
 
                         Timber.d("addOrderSuccessFragment ", " addOrderSuccessFragment_msg " + response.body()!!.model + " Product Size - " + response.body()!!.model.productType)

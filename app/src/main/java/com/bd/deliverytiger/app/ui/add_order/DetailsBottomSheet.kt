@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.utils.DigitConverter
+import com.bd.deliverytiger.app.utils.Timber
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 /**
@@ -31,8 +32,10 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
     private var payCollectionCharge: Double = 0.0
     private var payPackagingCharge: Double = 0.0
     private var codChargePercentage: Double = 0.0
+    private var boroProductCheck: Boolean = false
+    private var bigProductCharge: Double = 0.0
     private var total: Double = 0.0
-    private var bigProductFlag: Boolean = false
+    private var productType: String = ""
 
 
     companion object{
@@ -69,24 +72,36 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
             payCollectionCharge = getDouble("payCollectionCharge", 0.0)
             payPackagingCharge = getDouble("payPackagingCharge", 0.0)
             codChargePercentage = getDouble("codChargePercentage", 0.0)
+            bigProductCharge = getDouble("bigProductCharge", 0.0)
+            boroProductCheck = getBoolean("boroProductCheck", false)
+            productType = getString("productType", "")
             total = getDouble("total", 0.0)
         }
 
+        Timber.d("bigProductCharge ", ""+ boroProductCheck)
+
         codPercentTV.text = "COD চার্জঃ (${DigitConverter.toBanglaDigit(codChargePercentage, false)}%)"
 
-        shipmentTV.text = "৳ ${DigitConverter.toBanglaDigit(payShipmentCharge, true)}"
+       /* if (bigProductCharge > 0.0){
+            total =  payShipmentCharge + payCODCharge + payBreakableCharge + payCollectionCharge + payPackagingCharge + bigProductCharge
+        } else {
+            total =  payShipmentCharge + payCODCharge + payBreakableCharge + payCollectionCharge + payPackagingCharge
+        }*/
+
+
+        if(productType.equals("small")){
+            shipmentTV.text = "৳ ${DigitConverter.toBanglaDigit(payShipmentCharge, true)}"
+        }else if(productType.equals("big")){
+            shipmentTV.text = "৳ ${DigitConverter.toBanglaDigit(payShipmentCharge+bigProductCharge, true)}"
+        }
+
         codChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payCODCharge, true)}"
         breakableChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payBreakableCharge, true)}"
         collectionChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payCollectionCharge, true)}"
         packagingChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payPackagingCharge, true)}"
 
-
-        val total = total
-            // payShipmentCharge + payCODCharge + payBreakableCharge + payCollectionCharge + payPackagingCharge
-
         totalTV.text = "৳ ${DigitConverter.toBanglaDigit(total, true)}"
+        Timber.d("total_value ", ""+ total)
 
     }
-
-
 }

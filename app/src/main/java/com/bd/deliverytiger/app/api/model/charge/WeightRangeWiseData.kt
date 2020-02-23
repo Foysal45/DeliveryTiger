@@ -4,6 +4,8 @@ package com.bd.deliverytiger.app.api.model.charge
 import com.google.gson.annotations.SerializedName
 
 data class WeightRangeWiseData(
+    @SerializedName("deliveryRangeId")
+    var deliveryRangeId: Int,
     @SerializedName("deliveryType")
     var deliveryType: String,
     @SerializedName("weightRangeId")

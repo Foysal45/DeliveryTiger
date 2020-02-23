@@ -23,8 +23,6 @@ data class OrderRequest(
     var paymentType: String,
     @SerializedName("orderType")
     var orderType: String,
-    @SerializedName("productType")
-    var productType: String,
     @SerializedName("weight")
     var weight: String,
     @SerializedName("collectionName")
@@ -51,6 +49,12 @@ data class OrderRequest(
     var packagingCharge: Double,
     @SerializedName("collectAddress")
     var collectAddress: String,
+    @SerializedName("productType")
+    var productType: String,
+    @SerializedName("deliveryRangeId")
+    var deliveryRangeId: Int,
+    @SerializedName("weightRangeId")
+    var weightRangeId: Int,
     @SerializedName("orderFrom")
     var orderFrom: String = "android",
     @SerializedName("isActive")

@@ -24,8 +24,6 @@ data class OrderResponse(
     var paymentType: String? = "",
     @SerializedName("orderType")
     var orderType: String? = "",
-    @SerializedName("productType")
-    var productType: String? = "",
     @SerializedName("weight")
     var weight: String? = "",
     @SerializedName("collectionName")
@@ -79,5 +77,11 @@ data class OrderResponse(
     @SerializedName("collectAddress")
     var collectAddress: String? = "",
     @SerializedName("hubName")
-    var hubName: String? = ""
+    var hubName: String? = "",
+    @SerializedName("productType")
+    var productType: String,
+    @SerializedName("deliveryRangeId")
+    var deliveryRangeId: Int,
+    @SerializedName("weightRangeId")
+    var weightRangeId: Int
 )
