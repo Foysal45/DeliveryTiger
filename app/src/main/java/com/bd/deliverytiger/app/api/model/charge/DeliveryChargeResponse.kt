@@ -8,6 +8,8 @@ data class DeliveryChargeResponse(
     var weightRangeId: Int,
     @SerializedName("weight")
     var weight: String,
+    @SerializedName("isOpenBox")
+    var isOpenBox: Boolean,
     @SerializedName("weightRangeWiseData")
     var weightRangeWiseData: List<WeightRangeWiseData>,
     @SerializedName("deliveryTypeModel")

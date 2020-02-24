@@ -83,5 +83,7 @@ data class OrderResponse(
     @SerializedName("deliveryRangeId")
     var deliveryRangeId: Int,
     @SerializedName("weightRangeId")
-    var weightRangeId: Int
+    var weightRangeId: Int,
+    @SerializedName("isOpenBox")
+    var isOpenBox: Boolean
 )

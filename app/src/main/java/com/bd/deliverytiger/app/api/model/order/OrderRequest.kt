@@ -55,6 +55,8 @@ data class OrderRequest(
     var deliveryRangeId: Int,
     @SerializedName("weightRangeId")
     var weightRangeId: Int,
+    @SerializedName("isOpenBox")
+    var isOpenBox: Boolean,
     @SerializedName("orderFrom")
     var orderFrom: String = "android",
     @SerializedName("isActive")

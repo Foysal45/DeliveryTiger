@@ -77,7 +77,6 @@ class AddOrderFragmentTwo : Fragment() {
     private var isCheckBigProduct : Boolean = false
 
     private var isCollection: Boolean = false
-    private var isProductSize: Boolean = false
     private var isBreakable: Boolean = false
     private var isAgreeTerms: Boolean = false
     private var isWeightSelected: Boolean = false
@@ -88,6 +87,7 @@ class AddOrderFragmentTwo : Fragment() {
     private var payBreakableCharge: Double = 0.0
     private var payCollectionCharge: Double = 0.0
     private var payPackagingCharge: Double = 0.0
+    private var isOpenBoxCheck: Boolean = false
 
     private var total: Double = 0.0
 
@@ -174,13 +174,6 @@ class AddOrderFragmentTwo : Fragment() {
         }
         deliveryTypeAdapter.onItemClick = { position, model ->
             deliveryTypeRV.requestFocus()
-            /*if (isCheckBigProduct){
-                payShipmentCharge = model.chargeAmount + bigProductCharge
-                boroProductCheck = true
-            } else {
-                payShipmentCharge = model.chargeAmount
-                boroProductCheck = false
-            }*/
             payShipmentCharge = model.chargeAmount
             deliveryType = "${model.deliveryType} ${model.days}"
             deliveryRangeId = model.deliveryRangeId
@@ -234,8 +227,8 @@ class AddOrderFragmentTwo : Fragment() {
                         calculateTotalPrice()
                     }
                     R.id.toggle_button_size_boro -> {
-                        productType = "big"
                         isCheckBigProduct = true
+                        productType = "big"
                         calculateTotalPrice()
                     }
                 }
@@ -312,8 +305,6 @@ class AddOrderFragmentTwo : Fragment() {
                         codChargeMin = model.codChargeMin
                         bigProductCharge = model.bigProductCharge
 
-                       /* Timber.d("BreakableCharge ", " BreakableCharge_msg " + response.body()!!.model)
-                        Timber.d("BigProductCharge : ", "12 " + bigProductCharge)*/
                     }
                 }
             }
@@ -402,6 +393,8 @@ class AddOrderFragmentTwo : Fragment() {
                             }
 
                             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+
+                                isOpenBoxCheck = response.body()!!.model.get(p2).isOpenBox
 
                                 if (p2 != 0) {
 
@@ -493,12 +486,18 @@ class AddOrderFragmentTwo : Fragment() {
             collectionAddress = SessionManager.address
         }
 
+        if(productType.equals("small")){
+            payShipmentCharge
+        } else {
+            payShipmentCharge = payShipmentCharge + bigProductCharge
+        }
+
         val requestBody = OrderRequest(
             customerName,mobileNumber,altMobileNumber,address,districtId,thanaId,areaId,
             deliveryType,orderType,weight,collectionName,
             payCollectionAmount, payShipmentCharge,SessionManager.courierUserId,
             payBreakableCharge, addressNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge,packingName,
-            payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId,"android-${SessionManager.versionName}")
+            payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,"android-${SessionManager.versionName}")
 
         placeOrderInterface.placeOrder(requestBody).enqueue(object : Callback<GenericResponse<OrderResponse>> {
             override fun onFailure(call: Call<GenericResponse<OrderResponse>>, t: Throwable) {
@@ -515,23 +514,12 @@ class AddOrderFragmentTwo : Fragment() {
                     if (response.body()!!.model != null){
                         Timber.d(logTag, "Order placed \n ${response.body()!!.model}")
 
-                       // context?.showToast("Oder ID: ${response.body()!!.model.courierOrdersId}")
-                      /*  if (isCheckBigProduct){
-                            response.body()!!.model.deliveryCharge = payShipmentCharge.toFloat()
-                        } else {
-                            response.body()!!.model.deliveryCharge = payShipmentCharge.toFloat() + bigProductCharge.toFloat()
-                        }*/
                         addOrderSuccessFragment(response.body()!!.model)
-
-                        Timber.d("addOrderSuccessFragment ", " addOrderSuccessFragment_msg " + response.body()!!.model + " Product Size - " + response.body()!!.model.productType)
-                        Timber.d("addOrderSuccessFragment1 ", " addOrderSuccessFragment_msg1 " + " Product Size - " + response.body()!!.model.productType)
                     }
                 }
             }
 
         })
-
-
     }
 
     private fun validateFormData(): Boolean {
