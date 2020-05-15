@@ -19,14 +19,11 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.VariousTask
 
-/**
- * A simple [Fragment] subclass.
- */
 class DistrictThanaAriaSelectFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(context: Context, list: ArrayList<CustomModel>,title: String) =
+        fun newInstance(context: Context?, list: ArrayList<CustomModel>,title: String) =
             DistrictThanaAriaSelectFragment().apply {
                 this.list = list
                 this.mContext = context
@@ -38,7 +35,7 @@ class DistrictThanaAriaSelectFragment : Fragment() {
 
     private lateinit var title: String
     private var list: ArrayList<CustomModel> = ArrayList()
-    private lateinit var mContext: Context
+    private var mContext: Context? = null
     private lateinit var etDistrictSearch: AutoCompleteTextView
     private lateinit var rvDistrictSuggestion: RecyclerView
     private lateinit var adapter: ArrayAdapter<CustomModel>
