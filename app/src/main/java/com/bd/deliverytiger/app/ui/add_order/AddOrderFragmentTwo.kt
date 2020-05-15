@@ -38,10 +38,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
-/**
- * A simple [Fragment] subclass.
- */
 class AddOrderFragmentTwo : Fragment() {
 
     private val logTag = "AddOrderFragmentLog"
@@ -168,7 +164,8 @@ class AddOrderFragmentTwo : Fragment() {
 
         deliveryTypeAdapter = DeliveryTypeAdapter(context!!, deliveryTypeList)
         with(deliveryTypeRV) {
-            setHasFixedSize(true)
+            setHasFixedSize(false)
+            isNestedScrollingEnabled = false
             layoutManager = GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
             adapter = deliveryTypeAdapter
         }

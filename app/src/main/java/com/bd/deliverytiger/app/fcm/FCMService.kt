@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.os.Build
@@ -20,7 +21,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.transition.Transition
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -88,44 +91,37 @@ class FCMService: FirebaseMessagingService() {
                 Glide.with(applicationContext)
                     .asBitmap()
                     .load(imageLink)
-                    .listener(object : RequestListener<Bitmap> {
-                        override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Bitmap>, isFirstResource: Boolean): Boolean {
+                    .into(object : CustomTarget<Bitmap?>() {
+
+                        override fun onLoadCleared(placeholder: Drawable?) {
                             notificationManager.notify(1, builder.build())
-                            return false
                         }
 
-                        override fun onResourceReady(resource: Bitmap, model: Any, target: Target<Bitmap>, dataSource: DataSource, isFirstResource: Boolean): Boolean {
-
+                        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap?>?) {
                             val notificationStyle = NotificationCompat.BigPictureStyle()
                             notificationStyle.bigPicture(resource)
                             notificationStyle.bigLargeIcon(null)
                             builder.setStyle(notificationStyle)
                             notificationManager.notify(1, builder.build())
-
-                            return false
                         }
                     })
-                    .submit(440, 230)
             }
             "3" -> { // BigTextWithSideImage
                 Glide.with(applicationContext)
                     .asBitmap()
-                    .load(productImage)
-                    .listener(object : RequestListener<Bitmap> {
-                        override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Bitmap>, isFirstResource: Boolean): Boolean {
+                    .load(imageLink)
+                    .into(object : CustomTarget<Bitmap?>() {
+
+                        override fun onLoadCleared(placeholder: Drawable?) {
                             notificationManager.notify(1, builder.build())
-                            return false
                         }
 
-                        override fun onResourceReady(resource: Bitmap, model: Any, target: Target<Bitmap>, dataSource: DataSource, isFirstResource: Boolean): Boolean {
-
+                        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap?>?) {
                             builder.setLargeIcon(resource)
                             builder.setStyle(NotificationCompat.BigTextStyle().bigText("$description\n$bigText"))
                             notificationManager.notify(1, builder.build())
-                            return false
                         }
                     })
-                    .submit(256, 256)
             }
         }
 

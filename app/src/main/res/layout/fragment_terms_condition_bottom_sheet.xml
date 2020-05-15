@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-
+    android:layout_height="match_parent"
     tools:context=".ui.add_order.TermsConditionBottomSheet">
 
     <TextView
@@ -27,6 +26,66 @@
         android:background="@color/separator"
         app:layout_constraintTop_toBottomOf="@id/terms_sheet_title_tv" />
 
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        app:layout_constraintBottom_toTopOf="@id/terms_sheet_condition_disagree"
+        app:layout_constraintTop_toBottomOf="@id/terms_sheet_separator"
+        app:layout_constraintVertical_bias="0"
+        android:paddingBottom="70dp"
+        >
+
+        <TextView
+            android:id="@+id/terms_sheet_condition_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14"
+            tools:text="@tools:sample/full_names" />
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/terms_sheet_condition_disagree"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#EDEDED"
+        android:text="অসম্মতি"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        android:visibility="gone"
+
+        app:layout_constraintBottom_toBottomOf="@id/scrollView"
+        app:layout_constraintEnd_toStartOf="@id/terms_sheet_condition_agree"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+
+        tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/terms_sheet_condition_agree"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="শর্ত মেনে নিলাম"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_14"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/scrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/terms_sheet_condition_disagree"
+
+        tools:visibility="visible" />
+
     <ProgressBar
         android:id="@+id/terms_sheet_progress"
         android:layout_width="30dp"
@@ -37,59 +96,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
-
-
-    <TextView
-        android:id="@+id/terms_sheet_condition_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:textColor="@color/black_80"
-        android:textSize="@dimen/text_14"
-        app:layout_constraintTop_toBottomOf="@id/terms_sheet_separator"
-        tools:text="@tools:sample/full_names" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/terms_sheet_condition_disagree"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="#EDEDED"
-
-        android:text="অসম্মতি"
-        android:textColor="@color/black_80"
-        android:textSize="@dimen/text_14"
-        android:visibility="gone"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/terms_sheet_condition_agree"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/terms_sheet_condition_text"
-        tools:visibility="visible" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/terms_sheet_condition_agree"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/colorPrimary"
-
-        android:text="শর্ত মেনে নিলাম"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_14"
-        android:visibility="gone"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        app:layout_constraintStart_toEndOf="@id/terms_sheet_condition_disagree"
-        app:layout_constraintTop_toBottomOf="@id/terms_sheet_condition_text"
-        tools:visibility="visible" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,6 +28,7 @@ import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
 import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.iid.FirebaseInstanceId
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -84,6 +85,12 @@ class LoginFragment: Fragment() {
             passwordET.setText("01844172323")
         }*/
 
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+                val token = it.token
+                SessionManager.firebaseToken = token
+                Timber.d("applicationLog", "FirebaseToken:\n$token")
+        }
+
         if (isSessionOut) {
 
             val msg = "সেশন আউট হয়ে গেছে।\nঅ্যাপ ব্যবহার করতে পুনরায় লগইন করুন"
@@ -136,7 +143,7 @@ class LoginFragment: Fragment() {
         dialog.setCancelable(false)
         dialog.show()
         val loginInterface = RetrofitSingleton.getInstance(context!!).create(LoginInterface::class.java)
-        loginInterface.userLogin(LoginBody(mobile, password)).enqueue(object :
+        loginInterface.userLogin(LoginBody(mobile, password, SessionManager.firebaseToken)).enqueue(object :
             Callback<GenericResponse<LoginResponse>> {
             override fun onFailure(call: Call<GenericResponse<LoginResponse>>, t: Throwable) {
                 Timber.d(logTag, "${t.message}")

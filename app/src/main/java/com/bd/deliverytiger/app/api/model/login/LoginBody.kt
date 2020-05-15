@@ -6,5 +6,7 @@ data class LoginBody(
     @SerializedName("mobile")
     var mobile: String,
     @SerializedName("password")
-    var password: String
+    var password: String,
+    @SerializedName("firebaseToken")
+    var firebaseToken: String = ""
 )
