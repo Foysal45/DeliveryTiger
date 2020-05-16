@@ -391,8 +391,6 @@ class AddOrderFragmentTwo : Fragment() {
 
                             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 
-                                isOpenBoxCheck = response.body()!!.model.get(p2).isOpenBox
-
                                 if (p2 != 0) {
 
                                     val model2 = model[p2 - 1]
@@ -402,6 +400,7 @@ class AddOrderFragmentTwo : Fragment() {
                                     deliveryTypeList.addAll(model2.weightRangeWiseData)
                                     deliveryTypeAdapter.notifyDataSetChanged()
                                     isWeightSelected = true
+                                    isOpenBoxCheck = model2.isOpenBox
                                 } else {
                                     isWeightSelected = false
                                     deliveryTypeAdapter.clearSelectedItemPosition()

@@ -42,11 +42,7 @@ class DeliveryTypeAdapter(private val mContext: Context?, private var dataList: 
             val model = dataList[position]
 
             holder.dateRange.text = model.days
-            if (model.deliveryType.contains("SameDay", true)) {
-                holder.dateRangeUnit.text = "ঘন্টা"
-            } else {
-                holder.dateRangeUnit.text = "দিন"
-            }
+            holder.dateRangeUnit.text = model.dayType
             holder.deliveryType.text = model.deliveryType
 
             val resId = if (position == selectedItem) {

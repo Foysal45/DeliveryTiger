@@ -13,5 +13,7 @@ data class WeightRangeWiseData(
     @SerializedName("chargeAmount")
     var chargeAmount: Double,
     @SerializedName("days")
-    var days: String
+    var days: String,
+    @SerializedName("dayType")
+    var dayType: String? = ""
 )
