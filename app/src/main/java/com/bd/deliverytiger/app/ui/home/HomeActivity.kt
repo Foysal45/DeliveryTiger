@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.notification.FCMNotification
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentTwo
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
@@ -27,6 +28,7 @@ import com.bd.deliverytiger.app.ui.features.DTFeaturesFragment
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
+import com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
@@ -125,6 +127,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         searchIV.setOnClickListener {
             goToAllOrder()
         }
+
+        onNewIntent(intent)
     }
 
     override fun onStart() {
@@ -141,7 +145,20 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        if (intent != null) {
+            val model: FCMNotification? = intent.getParcelableExtra("data")
+            if (model != null) {
+                val fragment = NotificationPreviewFragment.newInstance(model)
+                val tag = NotificationPreviewFragment.fragmentTag
 
+                val ft = supportFragmentManager.beginTransaction()
+                ft.add(R.id.mainActivityContainer, fragment, tag)
+                ft.addToBackStack(tag)
+                ft.commit()
+
+                intent.data = null
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -213,6 +230,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 separetor.visibility = View.GONE
                 addProductBtnVisibility(false)
             }
+            if (currentFragment is NotificationPreviewFragment) {
+                trackingIV.visibility = View.GONE
+                searchIV.visibility = View.GONE
+                separetor.visibility = View.GONE
+                addProductBtnVisibility(false)
+            }
 
             when (currentFragment) {
                 is DashboardFragment -> {
@@ -246,6 +269,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     currentFragment.onResume()
                 }
                 is WebViewFragment -> {
+                    currentFragment.onResume()
+                }
+                is NotificationPreviewFragment -> {
                     currentFragment.onResume()
                 }
             }

@@ -14,15 +14,12 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.notification.FCMNotification
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -38,11 +35,13 @@ class FCMService: FirebaseMessagingService() {
         val type = p0.data["notificationType"] ?: "0"
         val imageLink = p0.data["imageLink"] ?: ""
         val bigText = p0.data["bigText"] ?: ""
-        val productImage = p0.data["productImage"] ?: ""
+
+        val model = FCMNotification(type, title, description, bigText, imageLink)
 
 
         val intent = Intent(this, HomeActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.putExtra("data", model)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
 
