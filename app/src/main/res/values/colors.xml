@@ -11,6 +11,7 @@
     <color name="black_90">#E6000000</color>
     <color name="black_80">#CC000000</color>
     <color name="black_70">#B3000000</color>
+    <color name="black_15">#26000000</color>
     <color name="blur">#FFFFFF</color>
     <color name="separator">#26000000</color>
     <color name="hint">#66000000</color>

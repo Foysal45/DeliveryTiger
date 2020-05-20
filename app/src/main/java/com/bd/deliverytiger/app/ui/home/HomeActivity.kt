@@ -24,6 +24,7 @@ import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.dashboard.DashboardFragment
+import com.bd.deliverytiger.app.ui.dialog.PopupDialog
 import com.bd.deliverytiger.app.ui.features.DTFeaturesFragment
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.login.LoginActivity
@@ -129,6 +130,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         onNewIntent(intent)
+        //showPopupDialog()
     }
 
     override fun onStart() {
@@ -156,7 +158,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 ft.addToBackStack(tag)
                 ft.commit()
 
-                intent.data = null
+                intent.removeExtra("data")
             }
         }
     }
@@ -568,5 +570,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         } catch (e: Exception) {
         }
+    }
+
+    private fun showPopupDialog() {
+        val imageUrl = "https://static.ajkerdeal.com/images/merchant/image_200520.jpg"
+        val tag = PopupDialog.tag
+        val dialog = PopupDialog.newInstance(imageUrl)
+        dialog.show(supportFragmentManager, tag)
     }
 }
