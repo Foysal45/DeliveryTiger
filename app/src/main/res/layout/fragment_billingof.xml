@@ -15,14 +15,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <HorizontalScrollView
+    <!--<HorizontalScrollView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/include_filter"
-        app:layout_constraintVertical_weight="1">
+        app:layout_constraintVertical_weight="1"
+        android:overScrollMode="never"
+        >
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -140,22 +142,33 @@
 
                 </LinearLayout>
 
-                <!--  <View
+                &lt;!&ndash;  <View
                       android:layout_width="match_parent"
                       android:layout_height="2dp"
                       android:background="@color/divider"
-                      app:layout_constraintTop_toBottomOf="@id/topLay" />-->
+                      app:layout_constraintTop_toBottomOf="@id/topLay" />&ndash;&gt;
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvBillingService"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/item_view_billing_collection" />
+
 
         </LinearLayout>
-    </HorizontalScrollView>
+    </HorizontalScrollView>-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBillingService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/item_view_service_bill"
+        app:layout_constraintTop_toBottomOf="@id/include_filter"
+        android:overScrollMode="never"
+        android:background="#eeeeee"
+        android:clipToPadding="false"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+
+        tools:itemCount="3"
+        />
 
     <ImageView
         android:layout_width="wrap_content"

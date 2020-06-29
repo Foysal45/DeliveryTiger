@@ -12,7 +12,6 @@ import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
@@ -25,6 +24,8 @@ import com.bd.deliverytiger.app.api.model.billing_service.CourierOrderAmountDeta
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
+import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
+import com.bd.deliverytiger.app.utils.AppConstant
 import com.bd.deliverytiger.app.utils.DigitConverter
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.Timber
@@ -53,7 +54,7 @@ class BillingofServiceFragment : Fragment() {
     private lateinit var billingFilterLay: LinearLayout
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var ivEmpty: ImageView
-    private lateinit var topLay: LinearLayout
+    //private lateinit var topLay: LinearLayout
     private lateinit var billingProgressBar: ProgressBar
     private lateinit var filterGroup: ChipGroup
     private lateinit var filterDateTag: Chip
@@ -98,7 +99,7 @@ class BillingofServiceFragment : Fragment() {
         tvTotalOrder = view.findViewById(R.id.tvTotalOrder)
         billingFilterLay = view.findViewById(R.id.allOrderFilterLay)
         ivEmpty = view.findViewById(R.id.ivEmpty)
-        topLay = view.findViewById(R.id.topLay)
+        //topLay = view.findViewById(R.id.topLay)
         filterGroup = view.findViewById(R.id.filter_tag_group)
         filterDateTag = view.findViewById(R.id.filter_tag_date)
         filterStatusTag = view.findViewById(R.id.filter_tag_status)
@@ -114,14 +115,21 @@ class BillingofServiceFragment : Fragment() {
         rvBillingService.apply {
             layoutManager = linearLayoutManager
             adapter = billingServiceAdapter
-            addItemDecoration(DividerItemDecoration(rvBillingService.getContext(), DividerItemDecoration.VERTICAL))
+            //addItemDecoration(DividerItemDecoration(rvBillingService.getContext(), DividerItemDecoration.VERTICAL))
         }
 
         billingServiceAdapter.onItemClick = { position ->
             addOrderTrackFragment(courierOrderAmountDetailList!![position]?.courierOrdersId.toString())
         }
 
-        getBillingAddress(0, 20)
+        billingServiceAdapter.onPaymentClick = { position ->
+            val model = courierOrderAmountDetailList!![position]
+            model?.courierOrdersId?.let {
+                paymentGateway(it)
+            }
+        }
+
+
 
         rvBillingService.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -151,6 +159,9 @@ class BillingofServiceFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (activity as HomeActivity).setToolbarTitle("সার্ভিসের বিল")
+        courierOrderAmountDetailList?.clear()
+        billingServiceAdapter.notifyDataSetChanged()
+        getBillingAddress(0, 20)
     }
 
     private fun getBillingAddress(index: Int, count: Int) {
@@ -204,10 +215,10 @@ class BillingofServiceFragment : Fragment() {
                         }
 
                         if(totalLoadedData == 0){
-                            topLay.visibility = View.GONE
+                            //topLay.visibility = View.GONE
                             ivEmpty.visibility = View.VISIBLE
                         } else {
-                            topLay.visibility = View.VISIBLE
+                            //topLay.visibility = View.VISIBLE
                             ivEmpty.visibility = View.GONE
                         }
 
@@ -226,6 +237,19 @@ class BillingofServiceFragment : Fragment() {
         ft?.addToBackStack(OrderTrackingFragment.tag)
         ft?.commit()
     }
+
+    private fun paymentGateway(orderId: String) {
+
+        val url = "${AppConstant.GATEWAY}?CID=$orderId"
+        val fragment = WebViewFragment.newInstance(url, "পেমেন্ট")
+        val tag = WebViewFragment.tag
+
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.mainActivityContainer, fragment, tag)
+        ft?.addToBackStack(tag)
+        ft?.commit()
+    }
+
     private fun goToFilter(){
 
         activity?.let {
