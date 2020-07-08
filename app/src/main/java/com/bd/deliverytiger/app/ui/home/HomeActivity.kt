@@ -5,7 +5,9 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -34,11 +36,9 @@ import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
-import com.bd.deliverytiger.app.utils.AppConstant
-import com.bd.deliverytiger.app.utils.SessionManager
-import com.bd.deliverytiger.app.utils.Timber
-import com.bd.deliverytiger.app.utils.VariousTask
+import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.messaging.FirebaseMessaging
 import java.io.File
 
@@ -466,6 +466,34 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
         navId = 0
+    }
+
+    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+        if (event?.action == MotionEvent.ACTION_DOWN) {
+            val view = currentFocus
+            if (view is TextInputEditText || view is EditText) {
+                if (!isPointInsideView(event.rawX, event.rawY, view)) {
+                    view.clearFocus()
+                    callFragmentHideKeyboard()
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event)
+    }
+
+    private fun isPointInsideView(x: Float, y: Float, view: View): Boolean {
+        val location = IntArray(2)
+        view.getLocationOnScreen(location)
+        val viewX = location[0]
+        val viewY = location[1]
+
+        // point is inside view bounds
+        return ((x > viewX && x < (viewX + view.width)) && (y > viewY && y < (viewY + view.height)))
+    }
+
+    private fun callFragmentHideKeyboard() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+        currentFragment?.hideKeyboard()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

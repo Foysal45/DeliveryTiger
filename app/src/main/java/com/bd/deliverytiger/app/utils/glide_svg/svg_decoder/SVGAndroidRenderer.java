@@ -478,7 +478,7 @@ class SVGAndroidRenderer
    @SuppressWarnings("deprecation")
    private void  doStroke(Path path)
    {
-      // TODO handle degenerate subpaths properly
+      //  handle degenerate subpaths properly
 
       if (state.style.vectorEffect == VectorEffect.NonScalingStroke)
       {
@@ -799,7 +799,7 @@ class SVGAndroidRenderer
                                                                         0,       0,       0,       0, 0,
                                                                         SVGAndroidRenderer.LUMINANCE_TO_ALPHA_RED, SVGAndroidRenderer.LUMINANCE_TO_ALPHA_GREEN, SVGAndroidRenderer.LUMINANCE_TO_ALPHA_BLUE, 0, 0});
            maskPaint1.setColorFilter(new ColorMatrixColorFilter(luminanceToAlpha));
-           canvas.saveLayer(null, maskPaint1, Canvas.ALL_SAVE_FLAG);   // TODO use real mask bounds
+           canvas.saveLayer(null, maskPaint1, Canvas.ALL_SAVE_FLAG);   //use real mask bounds
 
              // Render the mask content into the step 1 layer
              SVG.SvgObject  ref = document.resolveIRI(state.style.mask);
@@ -2228,7 +2228,7 @@ class SVGAndroidRenderer
 
       if (isSpecified(style, SVG.SPECIFIED_STROKE_MITERLIMIT))
       {
-         // FIXME: must be >= 0
+         // must be >= 0
          state.style.strokeMiterLimit = style.strokeMiterLimit;
          state.strokePaint.setStrokeMiter(style.strokeMiterLimit);
       }
@@ -4421,7 +4421,7 @@ class SVGAndroidRenderer
       updateStyle(baseState, Style.getDefaultStyle());
       baseState.style.overflow = false;    // By default patterns do not overflow
 
-      // SVG2 TODO: Patterns now inherit from the element referencing the pattern
+      // SVG2 Patterns now inherit from the element referencing the pattern
       state = findInheritFromAncestorState(pattern, baseState);
 
       // The bounds of the area we need to cover with pattern to ensure that our shape is filled

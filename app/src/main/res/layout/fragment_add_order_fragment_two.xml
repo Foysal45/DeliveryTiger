@@ -39,13 +39,13 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:textStyle="bold"
                         android:id="@+id/tvCustomerDetails"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="প্যাকেজ ও কালেকশনের তথ্য"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/text_16"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -95,8 +95,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:gravity="center"
-                        app:singleSelection="true"
                         app:checkedButton="@id/toggle_button_1"
+                        app:singleSelection="true"
 
                         >
 
@@ -126,8 +126,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:gravity="center"
-                        app:singleSelection="true"
                         app:checkedButton="@id/toggle_button_size_choto"
+                        app:singleSelection="true"
 
                         >
 
@@ -212,7 +212,7 @@
                             android:spinnerMode="dropdown"
                             android:theme="@style/custom_spinner_style"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:entries="@array/spinner_array_weight" />
+                            tools:entries="@array/spinner_array_package" />
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -226,25 +226,72 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.appcompat.widget.AppCompatCheckBox
-                        android:id="@+id/check_breakable"
-                        android:layout_width="wrap_content"
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text=" ভঙ্গুর/তরল প্রোডাক্ট"
-                        android:textColor="@color/black_80"
-                        android:textSize="@dimen/text_14" />
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatCheckBox
+                            android:id="@+id/check_breakable"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ভঙ্গুর/তরল প্রোডাক্ট"
+                            android:textColor="@color/black_80"
+                            android:textSize="@dimen/text_14" />
+
+                        <androidx.appcompat.widget.AppCompatCheckBox
+                            android:id="@+id/checkOpenBox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="ওপেন বাক্স"
+                            android:textColor="@color/black_80"
+                            android:textSize="@dimen/text_14"
+                            android:visibility="gone"
+                            tools:visibility="visible"
+                            />
+                    </LinearLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp">
+
+                        <androidx.appcompat.widget.AppCompatSpinner
+                            android:id="@+id/spinnerCollectionLocation"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/login_view_height"
+                            android:background="@drawable/bg_spinner"
+                            android:overlapAnchor="false"
+                            android:spinnerMode="dropdown"
+                            android:theme="@style/custom_spinner_style"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:entries="@array/spinner_array_collection_location" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:contentDescription="@string/cd"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <EditText
                         android:id="@+id/collectionAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="@dimen/login_view_height"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/fab_margin"
                         android:background="@drawable/bg_add_order_edit_text"
-                        android:hint="কালেকশন ঠিকানা (অপশনাল)"
+                        android:hint="কালেকশন ঠিকানা"
                         android:importantForAutofill="no"
                         android:inputType="textMultiLine"
+                        android:minHeight="@dimen/login_view_height"
                         android:paddingStart="16dp"
                         android:paddingTop="8dp"
                         android:paddingEnd="16dp"
@@ -267,11 +314,61 @@
                         tools:spanCount="2"
                         tools:visibility="visible" />
 
+                    <TextView
+                        android:id="@+id/deliveryDatePicker"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_view_height"
+                        android:layout_marginTop="@dimen/fab_margin"
+                        android:background="@drawable/bg_spinner"
+                        android:drawableStart="@drawable/ic_date"
+                        android:drawablePadding="8dp"
+                        android:gravity="center_vertical"
+                        android:hint="ডেলিভারি তারিখ"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/collectionDatePicker"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_view_height"
+                        android:layout_marginTop="@dimen/fab_margin"
+                        android:background="@drawable/bg_spinner"
+                        android:drawableStart="@drawable/ic_date"
+                        android:drawablePadding="8dp"
+                        android:gravity="center_vertical"
+                        android:hint="কালেকশন তারিখ"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/checkOfficeDrop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="অফিস এ ড্রপ করতে চাই"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        />
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="8dp"
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatCheckBox

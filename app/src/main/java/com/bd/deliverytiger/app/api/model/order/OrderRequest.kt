@@ -60,7 +60,17 @@ data class OrderRequest(
     @SerializedName("orderFrom")
     var orderFrom: String = "android",
     @SerializedName("isActive")
-    var isActive: Boolean = true
+    var isActive: Boolean = true,
 
+    @SerializedName("collectAddressDistrictId")
+    var collectAddressDistrictId: Int = 0,
+    @SerializedName("collectAddressThanaId")
+    var collectAddressThanaId: Int = 0,
+    @SerializedName("merchantDeliveryDate")
+    var merchantDeliveryDate: String = "",
+    @SerializedName("merchantCollectionDate")
+    var merchantCollectionDate: String = "",
+    @SerializedName("officeDrop")
+    var officeDrop: Boolean = false
 
 )

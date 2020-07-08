@@ -46,11 +46,11 @@ class BillingServiceAdapter(var context: Context, var courierOrderAmountDetailLi
         if (courierOrderAmountDetailList?.get(position)?.serviceBillingStatus.equals("Received")) {
             //holder.billingItemMainLay.setBackgroundColor(Color.parseColor("#E8F5E9"))
             holder.tvBillingPaymentStatus.setTextColor(ContextCompat.getColor(holder.tvBillingPaymentStatus.context, R.color.colorPrimary))
-            holder.paymentBtn.visibility = View.GONE
+            //holder.paymentBtn.visibility = View.GONE
         } else {
             //holder.billingItemMainLay.setBackgroundColor(Color.parseColor("#FFFFFF"))
             holder.tvBillingPaymentStatus.setTextColor(ContextCompat.getColor(holder.tvBillingPaymentStatus.context, R.color.black_90))
-            holder.paymentBtn.visibility = View.VISIBLE
+            //holder.paymentBtn.visibility = View.VISIBLE
         }
         //holder.viewBillingCollectionDivider.setBackgroundColor(Color.parseColor("#1A000000"))
     }
@@ -74,16 +74,16 @@ class BillingServiceAdapter(var context: Context, var courierOrderAmountDetailLi
 
 
         internal val track: ImageView = itemView.findViewById(R.id.track)
-        internal val paymentBtn: TextView = itemView.findViewById(R.id.payment)
+        //internal val paymentBtn: TextView = itemView.findViewById(R.id.payment)
 
 
         init {
             track.setOnClickListener {
                 onItemClick?.invoke(adapterPosition)
             }
-            paymentBtn.setOnClickListener {
+            /*paymentBtn.setOnClickListener {
                 onPaymentClick?.invoke(adapterPosition)
-            }
+            }*/
         }
     }
 

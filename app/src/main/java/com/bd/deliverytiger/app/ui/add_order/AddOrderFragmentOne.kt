@@ -181,12 +181,16 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         } else if (isAriaAvailable && ariaPostOffice == 0) {
             go = false
             showShortToast(context!!, getString(R.string.select_aria))
-        } else if (customersAddress.isEmpty() || customersAddress.length < 10) {
+        } else if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
             go = false
             showShortToast(context!!, getString(R.string.write_yr_address))
             etCustomersAddress.requestFocus()
         }
         hideSoftKeyBoard(activity!!)
+        //ToDo: Remove
+        //mockUserData()
+        //go = true
+
         return go
     }
 
@@ -287,6 +291,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 ariaPostOffice = 0
                 etAriaPostOffice.setText("")
                 etThana.setText("")
+                etAriaPostOffice.visibility = View.GONE
             }
         })
         /*     if (list.isEmpty()) {
@@ -393,6 +398,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 thana = thanaOrAriaList[listPostion].thanaId
                 ariaPostOffice = 0
                 etAriaPostOffice.setText("")
+                if (isAriaAvailable) {
+                    etAriaPostOffice.visibility = View.VISIBLE
+                } else {
+                    etAriaPostOffice.visibility = View.GONE
+                }
             } else if (track == 3) {
                 if (thanaOrAriaList[listPostion].postalCode != null) {
                     if (thanaOrAriaList[listPostion].postalCode!!.isNotEmpty()) {
@@ -432,5 +442,16 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     private lateinit var mContext: Context
+
+    private fun mockUserData() {
+        customerName = "Test Customer Name"
+        mobileNo = "01555555555"
+        alternativeMobileNo = "01555555556"
+        district = 14
+        thana = 10026
+        ariaPostOffice = 0
+        customersAddress = "Test Customer Address from IT"
+        additionalNote = "This is test order from IT"
+    }
 
 }

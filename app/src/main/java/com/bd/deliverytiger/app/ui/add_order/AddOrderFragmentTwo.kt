@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.ui.add_order
 
 
+import android.app.DatePickerDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
@@ -21,15 +22,19 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
+import com.bd.deliverytiger.app.api.`interface`.DistrictInterface
 import com.bd.deliverytiger.app.api.`interface`.PlaceOrderInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
 import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
+import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
+import com.bd.deliverytiger.app.api.model.district.ThanaPayLoad
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
+import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.utils.*
@@ -37,6 +42,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class AddOrderFragmentTwo : Fragment() {
 
@@ -56,8 +62,15 @@ class AddOrderFragmentTwo : Fragment() {
     private lateinit var backBtn: ConstraintLayout
     private lateinit var totalTV: TextView
     private lateinit var totalLayout: ConstraintLayout
+    private lateinit var deliveryDatePicker: TextView
+    private lateinit var collectionDatePicker: TextView
+    private lateinit var checkOfficeDrop: AppCompatCheckBox
+    private lateinit var checkOpenBox: AppCompatCheckBox
+    private lateinit var spinnerCollectionLocation: AppCompatSpinner
+
 
     private lateinit var placeOrderInterface: PlaceOrderInterface
+    private lateinit var districtInterface: DistrictInterface
     private lateinit var deliveryTypeAdapter: DeliveryTypeAdapter
     private var handler: Handler = Handler()
     private var runnable: Runnable = Runnable {  }
@@ -84,6 +97,8 @@ class AddOrderFragmentTwo : Fragment() {
     private var payCollectionCharge: Double = 0.0
     private var payPackagingCharge: Double = 0.0
     private var isOpenBoxCheck: Boolean = false
+    private var isOfficeDrop: Boolean = false
+    private var isCollectionLocationSelected: Boolean = false
 
     private var total: Double = 0.0
 
@@ -108,6 +123,13 @@ class AddOrderFragmentTwo : Fragment() {
     private var deliveryRangeId: Int = 0
     private var weightRangeId: Int = 0
     private var boroProductCheck: Boolean = false
+
+    private var deliveryTypeFlag: Int = 0
+    private var deliveryDate: String = ""
+    private var collectionDate: String = ""
+    private var collectionDistrictId: Int = 0
+    private var collectionThanaId: Int = 0
+
 
     companion object {
         fun newInstance(bundle: Bundle?): AddOrderFragmentTwo = AddOrderFragmentTwo().apply {
@@ -141,6 +163,12 @@ class AddOrderFragmentTwo : Fragment() {
         backBtn = view.findViewById(R.id.go_to_previous_page)
         totalTV = view.findViewById(R.id.tvAddOrderTotalOrder)
         totalLayout = view.findViewById(R.id.addOrderTopLay)
+        deliveryDatePicker = view.findViewById(R.id.deliveryDatePicker)
+        collectionDatePicker = view.findViewById(R.id.collectionDatePicker)
+        checkOfficeDrop = view.findViewById(R.id.checkOfficeDrop)
+        checkOpenBox = view.findViewById(R.id.checkOpenBox)
+        spinnerCollectionLocation = view.findViewById(R.id.spinnerCollectionLocation)
+
 
 
         with(bundle) {
@@ -156,10 +184,13 @@ class AddOrderFragmentTwo : Fragment() {
             }
         }
 
-        placeOrderInterface = RetrofitSingleton.getInstance(context!!).create(PlaceOrderInterface::class.java)
+        val retrofit = RetrofitSingleton.getInstance(requireContext())
+        placeOrderInterface = retrofit.create(PlaceOrderInterface::class.java)
+        districtInterface = retrofit.create(DistrictInterface::class.java)
         getBreakableCharge()
         getPackagingCharge()
         getDeliveryCharge()
+        getPickupLocation()
 
 
         deliveryTypeAdapter = DeliveryTypeAdapter(context!!, deliveryTypeList)
@@ -167,15 +198,56 @@ class AddOrderFragmentTwo : Fragment() {
             setHasFixedSize(false)
             isNestedScrollingEnabled = false
             layoutManager = GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
+            layoutAnimation = null
             adapter = deliveryTypeAdapter
         }
         deliveryTypeAdapter.onItemClick = { position, model ->
-            deliveryTypeRV.requestFocus()
+            //deliveryTypeRV.requestFocus()
             payShipmentCharge = model.chargeAmount
             deliveryType = "${model.deliveryType} ${model.days}"
             deliveryRangeId = model.deliveryRangeId
             weightRangeId = model.weightRangeId
+
+
+            Timber.d("sameDayDebug","deliveryTypeFlag $deliveryType")
+            deliveryTypeFlag = when (model.deliveryType) {
+                "Same Day Delivery" -> {
+                    deliveryDatePicker.visibility = View.VISIBLE
+                    collectionDatePicker.visibility = View.VISIBLE
+                    checkOfficeDrop.visibility = View.GONE
+                    checkOfficeDrop.isChecked = false
+                    deliveryDate = ""
+                    deliveryDatePicker.text = ""
+                    collectionDate = ""
+                    collectionDatePicker.text = ""
+                    1
+                }
+                "Next Day Delivery" -> {
+                    deliveryDatePicker.visibility = View.VISIBLE
+                    collectionDatePicker.visibility = View.VISIBLE
+                    checkOfficeDrop.visibility = View.GONE
+                    checkOfficeDrop.isChecked = false
+                    deliveryDate = ""
+                    deliveryDatePicker.text = ""
+                    collectionDate = ""
+                    collectionDatePicker.text = ""
+                    2
+                }
+                "Regular Delivery" -> {
+                    deliveryDatePicker.visibility = View.GONE
+                    collectionDatePicker.visibility = View.GONE
+                    checkOfficeDrop.visibility = View.VISIBLE
+                    deliveryDate = ""
+                    deliveryDatePicker.text = ""
+                    collectionDate = ""
+                    collectionDatePicker.text = ""
+                    3
+                }
+                else -> 0
+            }
+
             calculateTotalPrice()
+
         }
 
         collectionAmountET.addTextChangedListener(object : TextWatcher{
@@ -237,6 +309,11 @@ class AddOrderFragmentTwo : Fragment() {
             calculateTotalPrice()
         }
 
+        checkOfficeDrop.setOnCheckedChangeListener { buttonView, isChecked ->
+            isOfficeDrop = isChecked
+            calculateTotalPrice()
+        }
+
         checkTermsTV.text = HtmlCompat.fromHtml("আমি <font color='#00844A'>শর্তাবলী</font> মেনে নিলাম", HtmlCompat.FROM_HTML_MODE_LEGACY)
         checkTerms.setOnCheckedChangeListener { compoundButton, b ->
             isAgreeTerms = b
@@ -278,11 +355,69 @@ class AddOrderFragmentTwo : Fragment() {
             detailsSheet.show(childFragmentManager, DetailsBottomSheet.tag)
 
         }
+
+        deliveryDatePicker.setOnClickListener {
+            datePicker(1)
+        }
+        collectionDatePicker.setOnClickListener {
+            datePicker(2)
+        }
     }
+
 
     override fun onResume() {
         super.onResume()
         (activity as HomeActivity).setToolbarTitle("নতুন অর্ডার")
+    }
+
+    private fun datePicker(dateTypeFlag: Int) {
+
+        val calendar = Calendar.getInstance()
+        var minDate = calendar.timeInMillis
+        var day = calendar.get(Calendar.DAY_OF_MONTH)
+        val month = calendar.get(Calendar.MONTH)
+        val year = calendar.get(Calendar.YEAR)
+        val hour24 = calendar.get(Calendar.HOUR_OF_DAY)
+
+
+        if (deliveryTypeFlag == 1) {
+            if (hour24 >= 11) {
+                calendar.set(Calendar.DAY_OF_MONTH, day + 1)
+                minDate = calendar.timeInMillis
+            }
+        } else if (deliveryTypeFlag == 2) {
+            if (hour24 >= 16) {
+                calendar.set(Calendar.DAY_OF_MONTH, day + 2)
+                minDate = calendar.timeInMillis
+            } else {
+                calendar.set(Calendar.DAY_OF_MONTH, day + 1)
+                minDate = calendar.timeInMillis
+            }
+        }
+
+        val datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+
+            if (dateTypeFlag == 1) {
+                deliveryDate = "${month+1}/$dayOfMonth/$year"
+                deliveryDatePicker.text = DigitConverter.toBanglaDigit(deliveryDate)
+                collectionDatePicker.text = DigitConverter.toBanglaDigit(deliveryDate)
+                val msg = if (deliveryTypeFlag == 1) {
+                    "পার্সেলটি অবশ্যই আমাদের ডেলিভারি ম্যানকে দুপুর 2:30, $dayOfMonth তারিখের এর মধ্যে দিতে হবে অন্যথায় অর্ডারটি ক্যান্সেল হয়ে যাবে।"
+                } else if (deliveryTypeFlag == 2) {
+                    "পার্সেলটি অবশ্যই আমাদের ডেলিভারি ম্যানকে বিকাল 5.30, ${dayOfMonth-1} তারিখের এর মধ্যে দিতে হবে অন্যথায় অর্ডারটি ক্যান্সেল হয়ে যাবে।"
+                } else {
+                    "পার্সেলটি অবশ্যই আমাদের ডেলিভারি ম্যানকে যথা সময় বুঝিয়ে দিতে হবে অন্যথায় অর্ডারটি ক্যান্সেল হয়ে যাবে।"
+                }
+                alert("নির্দেশনা", msg, false).show()
+            } else if (dateTypeFlag == 2) {
+                collectionDate = "${month+1}/$dayOfMonth/$year"
+                collectionDatePicker.text = DigitConverter.toBanglaDigit(collectionDate)
+            }
+
+        },year,month,day)
+        datePicker.datePicker.minDate = minDate
+        //datePicker.datePicker.maxDate = calendar.timeInMillis
+        datePicker.show()
     }
 
     private fun getBreakableCharge() {
@@ -400,7 +535,12 @@ class AddOrderFragmentTwo : Fragment() {
                                     deliveryTypeList.addAll(model2.weightRangeWiseData)
                                     deliveryTypeAdapter.notifyDataSetChanged()
                                     isWeightSelected = true
-                                    isOpenBoxCheck = model2.isOpenBox
+                                    //isOpenBoxCheck = model2.isOpenBox
+                                    if (model2.isOpenBox) {
+                                        checkOpenBox.visibility = View.VISIBLE
+                                    } else {
+                                        checkOpenBox.visibility = View.GONE
+                                    }
                                 } else {
                                     isWeightSelected = false
                                     deliveryTypeAdapter.clearSelectedItemPosition()
@@ -414,6 +554,81 @@ class AddOrderFragmentTwo : Fragment() {
             }
 
         })
+    }
+
+    private fun getPickupLocation() {
+
+        placeOrderInterface.getPickupLocations(SessionManager.courierUserId).enqueue(object : Callback<GenericResponse<List<PickupLocation>>> {
+            override fun onFailure(call: Call<GenericResponse<List<PickupLocation>>>, t: Throwable) {}
+            override fun onResponse(call: Call<GenericResponse<List<PickupLocation>>>, response: Response<GenericResponse<List<PickupLocation>>>) {
+                if (response.isSuccessful && response.body() != null && isAdded) {
+                    if (response.body()!!.model != null) {
+                        val pickupParentList = response.body()!!.model
+                        if (pickupParentList.isNotEmpty()) {
+                            setUpCollectionSpinner(pickupParentList, null, 1)
+                        } else {
+                            getDistrictThanaOrAria(14)
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    private fun getDistrictThanaOrAria(districtId: Int) {
+
+        districtInterface.getAllDistrictFromApi(districtId).enqueue(object : Callback<DeliveryChargePayLoad>{
+            override fun onFailure(call: Call<DeliveryChargePayLoad>, t: Throwable) {}
+            override fun onResponse(call: Call<DeliveryChargePayLoad>, response: Response<DeliveryChargePayLoad>) {
+                if (response.isSuccessful && response.body() != null && response.body()!!.data!!.districtInfo != null){
+                    val thanaOrAriaList = response.body()!!.data!!.districtInfo!![0].thanaHome!!
+                    setUpCollectionSpinner(null, thanaOrAriaList, 2)
+                }
+            }
+        })
+    }
+
+    private fun setUpCollectionSpinner(pickupParentList: List<PickupLocation>?, thanaOrAriaList: List<ThanaPayLoad>?, optionFlag: Int) {
+
+        val pickupList: MutableList<String> = mutableListOf()
+        pickupList.add("কালেকশন লোকেশন")
+        if (optionFlag == 1) {
+            pickupParentList?.forEach {
+                pickupList.add(it.thanaName ?: "")
+            }
+        } else if (optionFlag == 2) {
+            thanaOrAriaList?.forEach {
+                pickupList.add(it.thanaBng ?: "")
+            }
+        }
+
+        val pickupAdapter = CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, pickupList)
+        spinnerCollectionLocation.adapter = pickupAdapter
+        spinnerCollectionLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+                    if (position != 0) {
+                        if (optionFlag == 1) {
+                            val model = pickupParentList!![position-1]
+                            collectionAddress = model.pickupAddress ?: ""
+                            collectionAddressET.setText(collectionAddress)
+                            collectionDistrictId = model.districtId
+                            collectionThanaId = model.thanaId
+                        } else if (optionFlag == 2) {
+                            val model = thanaOrAriaList!![position-1]
+                            collectionAddress = ""
+                            collectionAddressET.setText(collectionAddress)
+                            collectionDistrictId = 14
+                            collectionThanaId = model.thanaId
+                        }
+                        isCollectionLocationSelected = true
+                    } else {
+                        isCollectionLocationSelected = false
+                    }
+            }
+        }
     }
 
     private fun calculateTotalPrice() {
@@ -442,7 +657,12 @@ class AddOrderFragmentTwo : Fragment() {
             payCollectionAmount = 0.0
             payCODCharge = 0.0
         }
-        payCollectionCharge = SessionManager.collectionCharge
+
+        if (isOfficeDrop) {
+            payCollectionCharge = 0.0
+        } else {
+            payCollectionCharge = SessionManager.collectionCharge
+        }
 
         //val payReturnCharge = SessionManager.returnCharge
         if (isCheckBigProduct){
@@ -450,6 +670,8 @@ class AddOrderFragmentTwo : Fragment() {
         } else {
              total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge
         }
+
+
 
      //   total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge
 
@@ -488,12 +710,15 @@ class AddOrderFragmentTwo : Fragment() {
             payShipmentCharge = payShipmentCharge + bigProductCharge
         }
 
+        isOpenBoxCheck = checkOpenBox.isChecked
+
         val requestBody = OrderRequest(
             customerName,mobileNumber,altMobileNumber,address,districtId,thanaId,areaId,
             deliveryType,orderType,weight,collectionName,
             payCollectionAmount, payShipmentCharge,SessionManager.courierUserId,
             payBreakableCharge, addressNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge,packingName,
-            payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,"android-${SessionManager.versionName}")
+            payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,
+            "android-${SessionManager.versionName}", true, collectionDistrictId,collectionThanaId,deliveryDate, collectionDate, isOfficeDrop)
 
         placeOrderInterface.placeOrder(requestBody).enqueue(object : Callback<GenericResponse<OrderResponse>> {
             override fun onFailure(call: Call<GenericResponse<OrderResponse>>, t: Throwable) {
@@ -548,8 +773,24 @@ class AddOrderFragmentTwo : Fragment() {
             context?.showToast("প্যাকেজিং নির্বাচন করুন")
             return false
         }
+        if (!isCollectionLocationSelected) {
+            context?.showToast("কালেকশন লোকেশন নির্বাচন করুন")
+            return false
+        }
+        if (collectionAddress.trim().isEmpty()) {
+            context?.showToast("কালেকশন ঠিকানা লিখুন")
+            return false
+        }
+        if (collectionAddress.trim().length < 15) {
+            context?.showToast("বিস্তারিত কালেকশন ঠিকানা লিখুন, ন্যূনতম ১৫ ডিজিট")
+            return false
+        }
         if (deliveryType.isEmpty()){
             context?.showToast("ডেলিভারি টাইপ নির্বাচন করুন")
+            return false
+        }
+        if (deliveryDatePicker.visibility == View.VISIBLE && deliveryDate.isEmpty()) {
+            context?.showToast("ডেলিভারি তারিখ নির্বাচন করুন")
             return false
         }
         if (!isAgreeTerms) {

@@ -20,6 +20,15 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
+    signingConfigs {
+        release
+        debug {
+            storeFile rootProject.file('debugkeystore.jks')
+            storePassword 'android'
+            keyAlias = 'key0'
+            keyPassword 'android'
+        }
+    }
     buildTypes {
         debug {
             minifyEnabled true
@@ -28,19 +37,15 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
-    }
-    signingConfigs {
-        release
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
@@ -49,6 +54,9 @@ android {
             def apkName = 'DeliveryTigerApp' + '_' + variantName + '_v' + versionName + '.apk'
             output.outputFileName = apkName
         }
+    }
+    dataBinding {
+        enabled = true
     }
 }
 
@@ -98,6 +106,7 @@ dependencies {
 
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

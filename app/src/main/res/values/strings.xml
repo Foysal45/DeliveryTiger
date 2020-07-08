@@ -10,7 +10,7 @@
     <string name="write_phone_number">মোবাইল নাম্বার লিখুন</string>
     <string name="write_alt_phone_number">বিকল্প মোবাইল নাম্বার লিখুন</string>
     <string name="write_yr_name">কাস্টমারের নাম লিখুন</string>
-    <string name="write_yr_address">বিস্তারিত ঠিকানা লিখুন (বাড়ি/রোড/গ্রাম/হোল্ডিং)</string>
+    <string name="write_yr_address">বিস্তারিত ঠিকানা লিখুন (বাড়ি/রোড/গ্রাম/হোল্ডিং), ন্যূনতম ১৫ ডিজিট</string>
     <string name="write_email_address">আপনার ইমেইল এড্রেস লিখুন</string>
     <string name="update_success">সফল ভাবে আপডেট হয়েছে</string>
 
@@ -47,17 +47,13 @@
     </string-array>
 
     <string-array name="spinner_array_weight">
-        <item>Weight (in kg)</item>
-        <item>Item 1</item>
-        <item>Item 2</item>
+        <item>ওজন (কেজি)</item>
     </string-array>
     <string-array name="spinner_array_package">
-        <item>Packaging</item>
-        <item>No Extra packing</item>
-        <item>Box (Tk 15)</item>
-        <item>Poly (Tk 5)</item>
-        <item>Bubble + Poly (Tk 10)</item>
-        <item>Bubble + Box (Tk 20)</item>
+        <item>প্যাকেজিং</item>
+    </string-array>
+    <string-array name="spinner_array_collection_location">
+        <item>কালেকশন লোকেশন</item>
     </string-array>
 
     <string-array name="spinner_array_select_thana">

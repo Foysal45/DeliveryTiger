@@ -9,6 +9,7 @@ import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
+import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -29,5 +30,7 @@ interface PlaceOrderInterface {
     @PUT("api/Update/UpdateCourierOrders/{courierOrdersId}")
     fun placeOrderUpdate(@Path("courierOrdersId") courierOrdersId: String, @Body requestBody: UpdateOrderReqBody): Call<GenericResponse<UpdateOrderResponse>>
 
+    @GET("api/Fetch/GetPickupLocations/{courierUserId}")
+    fun getPickupLocations(@Path("courierUserId") courierUserId: Int): Call<GenericResponse<List<PickupLocation>>>
 
 }

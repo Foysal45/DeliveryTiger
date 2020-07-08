@@ -5,15 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
+import com.bumptech.glide.Glide
 
 class DeliveryTypeAdapter(private val mContext: Context?, private var dataList: MutableList<WeightRangeWiseData>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var onItemClick: ((position: Int, model: WeightRangeWiseData) -> Unit)? = null
     private var selectedItem: Int = -1
+    //private val requestOption = RequestOptions().placeholder(R.drawable.ic_delivery_regular_unselected)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(
@@ -41,19 +42,26 @@ class DeliveryTypeAdapter(private val mContext: Context?, private var dataList: 
 
             val model = dataList[position]
 
-            holder.dateRange.text = model.days
-            holder.dateRangeUnit.text = model.dayType
-            holder.deliveryType.text = model.deliveryType
+            //holder.dateRange.text = model.days
+            //holder.dateRangeUnit.text = model.dayType
+            //holder.deliveryType.text = model.deliveryType
 
-            val resId = if (position == selectedItem) {
+            /*val resId = if (position == selectedItem) {
                 R.drawable.ic_delivery_regular_selected
             } else {
                 R.drawable.ic_delivery_regular_unselected
+            }*/
+            //holder.backgroundImage.setImageResource(resId)
+
+            if (position == selectedItem) {
+                Glide.with(holder.backgroundImage.context)
+                    .load(model.onImageLink)
+                    .into(holder.backgroundImage)
+            } else {
+                Glide.with(holder.backgroundImage.context)
+                    .load(model.offImageLink)
+                    .into(holder.backgroundImage)
             }
-            holder.backgroundImage.setImageResource(resId)
-            /*Glide.with(holder.backgroundImage.context)
-                .load()
-                .into(holder.backgroundImage)*/
 
         }
     }
@@ -61,9 +69,9 @@ class DeliveryTypeAdapter(private val mContext: Context?, private var dataList: 
     internal inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         internal val backgroundImage: ImageView = view.findViewById(R.id.item_view_delivery_type_image)
-        internal val dateRange: TextView = view.findViewById(R.id.item_view_delivery_type_range)
-        internal val dateRangeUnit: TextView = view.findViewById(R.id.item_view_delivery_type_range_unit)
-        internal val deliveryType: TextView = view.findViewById(R.id.item_view_delivery_type_tv)
+        //internal val dateRange: TextView = view.findViewById(R.id.item_view_delivery_type_range)
+        //internal val dateRangeUnit: TextView = view.findViewById(R.id.item_view_delivery_type_range_unit)
+        //internal val deliveryType: TextView = view.findViewById(R.id.item_view_delivery_type_tv)
 
         init {
             view.setOnClickListener {

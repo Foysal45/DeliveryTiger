@@ -15,5 +15,9 @@ data class WeightRangeWiseData(
     @SerializedName("days")
     var days: String,
     @SerializedName("dayType")
-    var dayType: String? = ""
+    var dayType: String? = "",
+    @SerializedName("onImageLink")
+    var onImageLink: String? = "",
+    @SerializedName("offImageLink")
+    var offImageLink: String? = ""
 )

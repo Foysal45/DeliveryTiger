@@ -861,7 +861,7 @@ class CSSParser
                break;
 
             case target:
-               //TODO
+
                pseudo = new PseudoClassTarget();
                selector.addedAttributeOrPseudo();
                break;
@@ -1263,11 +1263,11 @@ class CSSParser
             if (!scan.consume("important")) {
                throw new CSSParseException("Malformed rule set: found unexpected '!'");
             }
-            // We don't do anything with these. We just ignore them. TODO
+            // We don't do anything with these. We just ignore them.
             scan.skipWhitespace();
          }
          scan.consume(';');
-         // TODO: support CSS only values such as "inherit"
+         //  support CSS only values such as "inherit"
          SVGParser.processStyleProperty(ruleStyle, propertyName, propertyValue);
          scan.skipWhitespace();
          if (scan.empty() || scan.consume('}'))
@@ -1629,7 +1629,7 @@ class CSSParser
            return ((SvgContainer)obj).getChildren().size() == 0;
          else
            return true;
-         // FIXME  all SVG graphics elements can have children, although for now we drop and ignore
+         //   all SVG graphics elements can have children, although for now we drop and ignore
          // them. This will be fixed when implement the DOM.  For now return true.
       }
 
