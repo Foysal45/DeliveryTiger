@@ -8,9 +8,12 @@ import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.`interface`.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
+import com.bd.deliverytiger.app.di.appModule
 import com.bd.deliverytiger.app.interfaces.Session
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.google.firebase.iid.FirebaseInstanceId
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,6 +27,9 @@ class MainApplication: Application() {
     @SuppressLint("HardwareIds")
     override fun onCreate() {
         super.onCreate()
+
+        timber.log.Timber.plant(timber.log.Timber.DebugTree())
+
         SessionManager.init(this)
         RetrofitSingleton.addSessionListener(getSession())
         retrofit = RetrofitSingleton.getInstance(this)
@@ -36,6 +42,12 @@ class MainApplication: Application() {
             }
 
         SessionManager.deviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+
+
+        startKoin {
+            androidContext(this@MainApplication)
+            modules(listOf(appModule))
+        }
 
     }
 

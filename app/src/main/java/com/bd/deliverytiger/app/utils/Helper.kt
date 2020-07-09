@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.utils
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -13,6 +14,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 
 fun Context.showToast(msg: String) =
     Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
@@ -92,3 +94,30 @@ fun Activity.alert(title: CharSequence? = null, message: CharSequence? = null, s
     textView?.typeface = typeface
     return dialog
 }
+
+fun Context.toast(msg: String?, time: Int = Toast.LENGTH_SHORT) {
+    if (!msg.isNullOrEmpty())
+        Toast.makeText(this, msg, time).show()
+}
+
+fun View.snackbar(message: String, length: Int = Snackbar.LENGTH_INDEFINITE){
+    Snackbar.make(this, message, length).also { snackbar ->
+        snackbar.setAction("ঠিক আছে") {
+            snackbar.dismiss()
+        }
+    }.show()
+}
+
+fun View.snackbar(message: String, length: Int = Snackbar.LENGTH_INDEFINITE, actionName: String, onClick: ((view: View) -> Unit)? = null): Snackbar {
+    return Snackbar.make(this, message, length).also { snackbar ->
+        snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
+        snackbar.setActionTextColor(Color.YELLOW)
+        snackbar.setAction(actionName) {
+            onClick?.invoke(it)
+            snackbar.dismiss()
+        }
+    }
+}
+
+val <T> T.exhaustive: T
+    get() = this

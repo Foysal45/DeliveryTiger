@@ -125,6 +125,10 @@ class AddOrderFragmentTwo : Fragment() {
     private var boroProductCheck: Boolean = false
 
     private var deliveryTypeFlag: Int = 0
+    private var alertMsg: String = ""
+    private var logicExpression: String = ""
+    private var dayAdvance: String = ""
+    private var isSameDay: Boolean = false
     private var deliveryDate: String = ""
     private var collectionDate: String = ""
     private var collectionDistrictId: Int = 0
@@ -208,10 +212,25 @@ class AddOrderFragmentTwo : Fragment() {
             deliveryRangeId = model.deliveryRangeId
             weightRangeId = model.weightRangeId
 
+            alertMsg = model.deliveryAlertMessage ?: ""
+            logicExpression = model.loginHours ?: ""
+            dayAdvance = model.dateAdvance ?: ""
+            val showHide = model.showHide
 
-            Timber.d("sameDayDebug","deliveryTypeFlag $deliveryType")
-            deliveryTypeFlag = when (model.deliveryType) {
-                "Same Day Delivery" -> {
+            when (showHide) {
+                // Hide All fields
+                0 -> {
+                    deliveryDatePicker.visibility = View.GONE
+                    collectionDatePicker.visibility = View.GONE
+                    checkOfficeDrop.visibility = View.GONE
+                    checkOfficeDrop.isChecked = false
+                    deliveryDate = ""
+                    deliveryDatePicker.text = ""
+                    collectionDate = ""
+                    collectionDatePicker.text = ""
+                }
+                // Show delivery date collection date
+                1 -> {
                     deliveryDatePicker.visibility = View.VISIBLE
                     collectionDatePicker.visibility = View.VISIBLE
                     checkOfficeDrop.visibility = View.GONE
@@ -220,20 +239,9 @@ class AddOrderFragmentTwo : Fragment() {
                     deliveryDatePicker.text = ""
                     collectionDate = ""
                     collectionDatePicker.text = ""
-                    1
                 }
-                "Next Day Delivery" -> {
-                    deliveryDatePicker.visibility = View.VISIBLE
-                    collectionDatePicker.visibility = View.VISIBLE
-                    checkOfficeDrop.visibility = View.GONE
-                    checkOfficeDrop.isChecked = false
-                    deliveryDate = ""
-                    deliveryDatePicker.text = ""
-                    collectionDate = ""
-                    collectionDatePicker.text = ""
-                    2
-                }
-                "Regular Delivery" -> {
+                // Show office drop
+                2 -> {
                     deliveryDatePicker.visibility = View.GONE
                     collectionDatePicker.visibility = View.GONE
                     checkOfficeDrop.visibility = View.VISIBLE
@@ -241,9 +249,7 @@ class AddOrderFragmentTwo : Fragment() {
                     deliveryDatePicker.text = ""
                     collectionDate = ""
                     collectionDatePicker.text = ""
-                    3
                 }
-                else -> 0
             }
 
             calculateTotalPrice()
@@ -374,26 +380,55 @@ class AddOrderFragmentTwo : Fragment() {
 
         val calendar = Calendar.getInstance()
         var minDate = calendar.timeInMillis
-        var day = calendar.get(Calendar.DAY_OF_MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
         val month = calendar.get(Calendar.MONTH)
         val year = calendar.get(Calendar.YEAR)
         val hour24 = calendar.get(Calendar.HOUR_OF_DAY)
 
+        if (logicExpression.isNotEmpty()) {
+            if (dayAdvance.isNotEmpty()) {
+                try {
+                    val dayArray = dayAdvance.split(",")
+                    isSameDay = dayArray[1].toInt() == 0
 
-        if (deliveryTypeFlag == 1) {
+                    val flag = executeExpression("$hour24 $logicExpression")
+                    if (flag) {
+                        val advanceBy = dayArray[0].toInt()
+                        if (advanceBy != 0) {
+                            calendar.add(Calendar.DAY_OF_MONTH, advanceBy)
+                            minDate = calendar.timeInMillis
+                        }
+                    } else {
+                        val advanceBy = dayArray[1].toInt()
+                        if (advanceBy != 0) {
+                            calendar.add(Calendar.DAY_OF_MONTH, advanceBy)
+                            minDate = calendar.timeInMillis
+                        }
+                    }
+                } catch (e: Exception) {
+                    Timber.d("error", "Msg: ${e.message}")
+                }
+            } else {
+                isSameDay = false
+            }
+        } else {
+            isSameDay = false
+        }
+
+        /*if (deliveryTypeFlag == 1) {
             if (hour24 >= 11) {
-                calendar.set(Calendar.DAY_OF_MONTH, day + 1)
+                calendar.add(Calendar.DAY_OF_MONTH, 1)
                 minDate = calendar.timeInMillis
             }
         } else if (deliveryTypeFlag == 2) {
             if (hour24 >= 16) {
-                calendar.set(Calendar.DAY_OF_MONTH, day + 2)
+                calendar.add(Calendar.DAY_OF_MONTH, 2)
                 minDate = calendar.timeInMillis
             } else {
-                calendar.set(Calendar.DAY_OF_MONTH, day + 1)
+                calendar.add(Calendar.DAY_OF_MONTH,  1)
                 minDate = calendar.timeInMillis
             }
-        }
+        }*/
 
         val datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
 
@@ -401,14 +436,14 @@ class AddOrderFragmentTwo : Fragment() {
                 deliveryDate = "${month+1}/$dayOfMonth/$year"
                 deliveryDatePicker.text = DigitConverter.toBanglaDigit(deliveryDate)
                 collectionDatePicker.text = DigitConverter.toBanglaDigit(deliveryDate)
-                val msg = if (deliveryTypeFlag == 1) {
-                    "পার্সেলটি অবশ্যই আমাদের ডেলিভারি ম্যানকে দুপুর 2:30, $dayOfMonth তারিখের এর মধ্যে দিতে হবে অন্যথায় অর্ডারটি ক্যান্সেল হয়ে যাবে।"
-                } else if (deliveryTypeFlag == 2) {
-                    "পার্সেলটি অবশ্যই আমাদের ডেলিভারি ম্যানকে বিকাল 5.30, ${dayOfMonth-1} তারিখের এর মধ্যে দিতে হবে অন্যথায় অর্ডারটি ক্যান্সেল হয়ে যাবে।"
-                } else {
-                    "পার্সেলটি অবশ্যই আমাদের ডেলিভারি ম্যানকে যথা সময় বুঝিয়ে দিতে হবে অন্যথায় অর্ডারটি ক্যান্সেল হয়ে যাবে।"
+
+                //${dayOfMonth-1}
+                if (alertMsg.isNotEmpty()) {
+                    val day = if (isSameDay) "$dayOfMonth" else "${dayOfMonth-1}"
+                    alertMsg = alertMsg.replace("dt-deliverydate", day, true)
+                    alert("নির্দেশনা", alertMsg, false).show()
                 }
-                alert("নির্দেশনা", msg, false).show()
+
             } else if (dateTypeFlag == 2) {
                 collectionDate = "${month+1}/$dayOfMonth/$year"
                 collectionDatePicker.text = DigitConverter.toBanglaDigit(collectionDate)
@@ -418,6 +453,25 @@ class AddOrderFragmentTwo : Fragment() {
         datePicker.datePicker.minDate = minDate
         //datePicker.datePicker.maxDate = calendar.timeInMillis
         datePicker.show()
+    }
+
+    private fun executeExpression(expression: String): Boolean {
+        // e.g 10 >= 11
+        when {
+            expression.contains(">=") -> {
+                val digits = expression.split(">=")
+                if (digits.isNotEmpty()) {
+                    return (digits[0].trim().toInt() >= digits[1].trim().toInt())
+                }
+            }
+            expression.contains("<=") -> {
+                val digits = expression.split("<=")
+                if (digits.isNotEmpty()) {
+                    return (digits[0].trim().toInt() <= digits[1].trim().toInt())
+                }
+            }
+        }
+        return false
     }
 
     private fun getBreakableCharge() {

@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.notification.FCMNotification
+import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bumptech.glide.Glide
 
@@ -21,10 +21,10 @@ class NotificationPreviewFragment : Fragment() {
     private lateinit var bigTextTV: TextView
     private lateinit var bigImageTV: ImageView
 
-    var model: FCMNotification? = null
+    var model: FCMData? = null
 
     companion object {
-        fun newInstance(model: FCMNotification?): NotificationPreviewFragment = NotificationPreviewFragment().apply {
+        fun newInstance(model: FCMData?): NotificationPreviewFragment = NotificationPreviewFragment().apply {
             this.model = model
         }
 
@@ -51,10 +51,10 @@ class NotificationPreviewFragment : Fragment() {
             bigTextTV.text = toHTML(model?.bigText ?: "")
         }
 
-        if (!model?.imageLink.isNullOrEmpty()) {
+        if (!model?.imageUrl.isNullOrEmpty()) {
             bigImageTV.visibility = View.VISIBLE
             Glide.with(requireContext())
-                .load(model?.imageLink)
+                .load(model?.imageUrl)
                 .into(bigImageTV)
         }
     }

@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.notification.FCMNotification
+import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentTwo
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
@@ -34,6 +34,7 @@ import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
+import com.bd.deliverytiger.app.ui.service_bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
@@ -148,7 +149,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent != null) {
-            val model: FCMNotification? = intent.getParcelableExtra("data")
+            val model: FCMData? = intent.getParcelableExtra("data")
             if (model != null) {
                 val fragment = NotificationPreviewFragment.newInstance(model)
                 val tag = NotificationPreviewFragment.fragmentTag
@@ -253,6 +254,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     currentFragment.onResume()
                 }
                 is BillingofServiceFragment -> {
+                    currentFragment.onResume()
+                }
+                is ServiceBillPayFragment -> {
                     currentFragment.onResume()
                 }
                 is CODCollectionFragment -> {
@@ -380,15 +384,19 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_bill -> {
 
-                val currentFragment =
-                    supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is BillingofServiceFragment) {
                     Timber.d("tag", "BillingofServiceFragment already exist")
                 } else {
-                    addFragment(
-                        BillingofServiceFragment.newInstance(),
-                        BillingofServiceFragment.tag
-                    )
+                    addFragment(BillingofServiceFragment.newInstance(), BillingofServiceFragment.tag)
+                }
+            }
+            R.id.nav_bill_pay -> {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is ServiceBillPayFragment) {
+                    Timber.d("tag", "ServiceBillPayFragment already exist")
+                } else {
+                    addFragment(ServiceBillPayFragment.newInstance(), ServiceBillPayFragment.tag)
                 }
             }
             R.id.nav_cod_collection -> {

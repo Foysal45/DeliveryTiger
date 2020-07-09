@@ -10,9 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 
-/**
- * A simple [Fragment] subclass.
- */
 class NotificationFragment : Fragment() {
 
     private lateinit var notificationRV: RecyclerView
@@ -39,10 +36,10 @@ class NotificationFragment : Fragment() {
             list.add("Notification title will be here $i")
         }
 
-        val notificationAdapter = NotificationAdapter(context!!, list)
+        val notificationAdapter = NotificationAdapter(requireContext(), list)
         with(notificationRV){
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
+            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             adapter = notificationAdapter
         }
     }

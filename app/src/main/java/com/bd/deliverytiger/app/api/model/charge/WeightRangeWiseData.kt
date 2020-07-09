@@ -19,5 +19,13 @@ data class WeightRangeWiseData(
     @SerializedName("onImageLink")
     var onImageLink: String? = "",
     @SerializedName("offImageLink")
-    var offImageLink: String? = ""
+    var offImageLink: String? = "",
+    @SerializedName("showHide")
+    var showHide: Int = 0,
+    @SerializedName("deliveryAlertMessage")
+    var deliveryAlertMessage: String? = "",
+    @SerializedName("loginHours")
+    var loginHours: String? = "",
+    @SerializedName("dateAdvance")
+    var dateAdvance: String? = ""
 )

@@ -5,6 +5,7 @@ import androidx.annotation.NonNull
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.interfaces.Session
 import com.bd.deliverytiger.app.utils.AppConstant
+import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,11 +13,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class RetrofitSingleton private constructor() {
+class RetrofitSingletonADM private constructor() {
 
     companion object {
-
-        //private val baseUrl = "https://adcore.ajkerdeal.com/"
 
         @Volatile
         private var instance: Retrofit? = null
@@ -26,8 +25,9 @@ class RetrofitSingleton private constructor() {
         fun getInstance(@NonNull mContext: Context): Retrofit {
             return instance ?: synchronized(this) {
                 instance ?: Retrofit.Builder()
+                    .addCallAdapterFactory(NetworkResponseAdapterFactory())
                     .client(createOkHttpClient(mContext))
-                    .baseUrl(AppConstant.BASE_URL_ADCORE)
+                    .baseUrl(AppConstant.BASE_URL_ADM)
                     .addConverterFactory(GsonConverterFactory.create()) // Json
                     //.addConverterFactory(ScalarsConverterFactory.create()) // Plain Text
                     .build().also { instance = it }
@@ -65,7 +65,7 @@ class RetrofitSingleton private constructor() {
                     //this.level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.HEADERS  else HttpLoggingInterceptor.Level.NONE
                     this.level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY  else HttpLoggingInterceptor.Level.NONE
                 })
-                .addInterceptor(AuthInterceptor(session))
+                //.addInterceptor(AuthInterceptor(session))
                 // connectionSpecs
                 //.connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS))
                 //.connectionSpecs(Collections.singletonList(customConnectionSpec))

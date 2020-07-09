@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.NonNull
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.interfaces.Session
+import com.bd.deliverytiger.app.utils.AppConstant
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -15,7 +16,7 @@ class RetrofitSingletonAD {
 
     companion object {
 
-        private val baseUrl = "https://api.ajkerdeal.com/"
+        //private val baseUrl = "https://api.ajkerdeal.com/"
 
         @Volatile
         private var instance: Retrofit? = null
@@ -26,7 +27,7 @@ class RetrofitSingletonAD {
             return instance ?: synchronized(this) {
                 instance ?: Retrofit.Builder()
                     .client(createOkHttpClient(mContext))
-                    .baseUrl(baseUrl)
+                    .baseUrl(AppConstant.BASE_URL_API)
                     .addConverterFactory(GsonConverterFactory.create()) // Json
                     //.addConverterFactory(ScalarsConverterFactory.create()) // Plain Text
                     .build().also { instance = it }

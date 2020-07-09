@@ -55,7 +55,12 @@
     <string-array name="spinner_array_collection_location">
         <item>কালেকশন লোকেশন</item>
     </string-array>
-
+    <string-array name="arrayMonth">
+        <item>মাস নির্বাচন</item>
+    </string-array>
+    <string-array name="arrayYear">
+        <item>বছর নির্বাচন</item>
+    </string-array>
     <string-array name="spinner_array_select_thana">
         <item>Thana</item>
     </string-array>
