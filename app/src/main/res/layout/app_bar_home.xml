@@ -136,6 +136,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+
         android:contentDescription="@string/cd"
         android:layout_gravity="bottom|end"
         android:text="নতুন অর্ডার"
@@ -144,7 +145,7 @@
         app:fabSize="normal"
         app:icon="@drawable/ic_add"
         app:iconTint="@color/white"
-
+        app:layout_behavior=".utils.HideBottomViewOnScrollBehavior"
         />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
