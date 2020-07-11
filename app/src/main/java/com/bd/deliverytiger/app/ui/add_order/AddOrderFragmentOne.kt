@@ -2,7 +2,6 @@ package com.bd.deliverytiger.app.ui.add_order
 
 
 import android.app.ProgressDialog
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,30 +22,14 @@ import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.district.v2.CustomModel
 import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
-import com.bd.deliverytiger.app.utils.BundleFlag
-import com.bd.deliverytiger.app.utils.Timber
-import com.bd.deliverytiger.app.utils.Validator
-import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
-import com.bd.deliverytiger.app.utils.VariousTask.showShortToast
+import com.bd.deliverytiger.app.utils.*
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-/**
- * A simple [Fragment] subclass.
- */
 class AddOrderFragmentOne : Fragment(), View.OnClickListener {
-
-    companion object {
-        fun newInstance(): AddOrderFragmentOne {
-            val fragment = AddOrderFragmentOne()
-            return fragment
-        }
-
-        val tag = AddOrderFragmentOne::class.java.name
-    }
-
 
     private lateinit var paymentDetailsLayout: LinearLayout
     private lateinit var etCustomerName: EditText
@@ -71,12 +54,14 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private val thanaOrAriaList: ArrayList<ThanaPayLoad> = ArrayList()
     private var isAriaAvailable = true
 
+    private val viewModel: AddOrderViewModel by inject()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    companion object {
+        fun newInstance(): AddOrderFragmentOne = AddOrderFragmentOne()
+        val tag: String = AddOrderFragmentOne::class.java.name
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_add_order_fragment_one, container, false)
     }
 
@@ -128,7 +113,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 if (district != 0) {
                     getDistrictThanaOrAria(district, 2)
                 } else {
-                    showShortToast(context!!, getString(R.string.select_dist))
+                    context?.toast(getString(R.string.select_dist))
                 }
             }
             etAriaPostOffice -> {
@@ -136,10 +121,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     if (thana != 0) {
                         getDistrictThanaOrAria(thana, 3)
                     } else {
-                        showShortToast(context!!, getString(R.string.select_thana))
+                        context?.toast(getString(R.string.select_thana))
                     }
                 } else {
-                    showShortToast(context!!, getString(R.string.no_aria))
+                    context?.toast(getString(R.string.no_aria))
                 }
             }
             paymentDetailsLayout -> {
@@ -156,37 +141,37 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         var go = true
         getAllViewData()
         if (customerName.isEmpty()) {
-            showShortToast(context, getString(R.string.write_yr_name))
+            context?.toast(getString(R.string.write_yr_name))
             go = false
             etCustomerName.requestFocus()
         } else if (mobileNo.isEmpty()) {
-            showShortToast(context, getString(R.string.write_phone_number))
+            context?.toast(getString(R.string.write_phone_number))
             go = false
             etAddOrderMobileNo.requestFocus()
         } else if (!Validator.isValidMobileNumber(mobileNo) || mobileNo.length < 11) {
-            showShortToast(context, getString(R.string.write_proper_phone_number_recharge))
+            context?.toast(getString(R.string.write_proper_phone_number_recharge))
             go = false
             etAddOrderMobileNo.requestFocus()
         }/* else if(alternativeMobileNo.isEmpty()){
             go = false
-            showShortToast(context!!, getString(R.string.write_alt_phone_number))
+            context?.toast(context!!, getString(R.string.write_alt_phone_number))
             etAlternativeMobileNo.requestFocus()
         }*/
         else if (district == 0) {
             go = false
-            showShortToast(context!!, getString(R.string.select_dist))
+            context?.toast( getString(R.string.select_dist))
         } else if (thana == 0) {
             go = false
-            showShortToast(context!!, getString(R.string.select_thana))
+            context?.toast( getString(R.string.select_thana))
         } else if (isAriaAvailable && ariaPostOffice == 0) {
             go = false
-            showShortToast(context!!, getString(R.string.select_aria))
+            context?.toast( getString(R.string.select_aria))
         } else if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
             go = false
-            showShortToast(context!!, getString(R.string.write_yr_address))
+            context?.toast( getString(R.string.write_yr_address))
             etCustomersAddress.requestFocus()
         }
-        hideSoftKeyBoard(activity!!)
+        hideKeyboard()
         //ToDo: Remove
         //mockUserData()
         //go = true
@@ -212,14 +197,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     private fun getDistrictThanaOrAria(id: Int, track: Int) {
-        hideSoftKeyBoard(activity!!)
+        hideKeyboard()
         //track = 1 district , track = 2 thana, track = 3 aria
         val pd = ProgressDialog(context)
         pd.setMessage("Loading")
         pd.show()
 
-        val getDistrictThanaOrAria =
-            RetrofitSingleton.getInstance(context!!).create(DistrictInterface::class.java)
+        val getDistrictThanaOrAria = RetrofitSingleton.getInstance(requireContext()).create(DistrictInterface::class.java)
         getDistrictThanaOrAria.getAllDistrictFromApi(id)
             .enqueue(object : Callback<DeliveryChargePayLoad> {
                 override fun onFailure(call: Call<DeliveryChargePayLoad>, t: Throwable) {
@@ -274,7 +258,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     private fun goToDistrict() {
 
-        val distFrag = DistrictSelectFragment.newInstance(mContext, districtList)
+        val distFrag = DistrictSelectFragment.newInstance(requireContext(), districtList)
         val ft = activity?.supportFragmentManager?.beginTransaction()
         ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
         ft?.add(R.id.mainActivityContainer, distFrag, DistrictSelectFragment.tag)
@@ -294,85 +278,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 etAriaPostOffice.visibility = View.GONE
             }
         })
-        /*     if (list.isEmpty()) {
-                 for (model in districtList){
-                     list.add(CustomModel(model.districtId,model.districtBng+"",model.district+""))
-                 }
-             }
-
-             val distFrag = DistrictThanaAriaSelectFragment.newInstance(mContext, list)
-             val ft = activity?.supportFragmentManager?.beginTransaction()
-             ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
-             ft?.add(R.id.mainActivityContainer, distFrag, DistrictSelectFragment.tag)
-             ft?.addToBackStack(DistrictSelectFragment.tag)
-             ft?.commit()
-
-             distFrag.onItemClick={ position: Int, name: String, id: Int ->
-                 Timber.e("distFrag1",position.toString() +" "+name+" "+id)
-
-                 etDistrict.setText(name)
-                 district = id
-
-                 thana = 0
-                 ariaPostOffice = 0
-                 etAriaPostOffice.setText("")
-                 etThana.setText("")
-             }*/
     }
-
-/*    private fun customAlertDialog(thanaOrAriaList: ArrayList<ThanaPayLoad>, track: Int) {
-        hideSoftKeyBoard(activity!!)
-        val dialogBuilder = Builder(mContext)
-
-        val inflater: LayoutInflater = LayoutInflater.from(context)
-        val dialogView: View = inflater.inflate(R.layout.custom_alert_lay, null)
-        dialogBuilder.setView(dialogView)
-        dialogBuilder.setCancelable(false)
-        val textViewHead: TextView = dialogView.findViewById(R.id.headerDistrictOrThana)
-        val ivDistClose: ImageView = dialogView.findViewById(R.id.ivDistClose)
-        val rvListOfThanaOrAria: RecyclerView = dialogView.findViewById(R.id.rvListOfThanaOrAria)
-
-        if (track == 1) textViewHead.text = "থানা নির্বাচন করুন" else textViewHead.text =
-            "এরিয়া/পোস্ট অফিস নির্বাচন করুন"
-
-        val dialog = dialogBuilder.create()
-        dialog.show()
-        val thanaOrAriaAdapter = ThanaOrAriaAdapter(mContext, thanaOrAriaList)
-        rvListOfThanaOrAria.apply {
-            layoutManager = LinearLayoutManager(mContext)
-            adapter = thanaOrAriaAdapter
-        }
-
-        ivDistClose.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        thanaOrAriaAdapter.setOnClick(object : ThanaOrAriaAdapter.OnClickedListener {
-            override fun onClick(pos: Int) {
-                dialog.dismiss()
-                isAriaAvailable = thanaOrAriaList[pos].hasArea == 1
-                Timber.e("isAriaAvailable", isAriaAvailable.toString() + " " + track)
-                if (track == 1) {
-                    etThana.setText(thanaOrAriaList[pos].thanaBng)
-                    thana = thanaOrAriaList[pos].thanaId
-                    ariaPostOffice = 0
-                    etAriaPostOffice.setText("")
-                } else {
-                    if (thanaOrAriaList[pos].postalCode != null) {
-                        if (thanaOrAriaList[pos].postalCode!!.isNotEmpty()) {
-                            ariaPostOffice = thanaOrAriaList[pos].postalCode?.toInt()!!
-                            etAriaPostOffice.setText(thanaOrAriaList[pos].thanaBng + " (" + thanaOrAriaList[pos].postalCode + ")")
-                        } else {
-                            ariaPostOffice = 0
-                            isAriaAvailable = false
-                        }
-                    }
-                }
-            }
-
-        })
-
-    }*/
 
     private fun thanaAriaSelect(
         thanaOrAriaList: ArrayList<ThanaPayLoad>,
@@ -380,7 +286,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         list: ArrayList<CustomModel> , title: String
     ) {
         //track = 1 district , track = 2 thana, track = 3 aria
-        val distFrag = DistrictThanaAriaSelectFragment.newInstance(mContext, list,title)
+        val distFrag = DistrictThanaAriaSelectFragment.newInstance(requireContext(), list,title)
         val ft = activity?.supportFragmentManager?.beginTransaction()
         ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
         ft?.add(R.id.mainActivityContainer, distFrag, DistrictSelectFragment.tag)
@@ -435,14 +341,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         return bundle
     }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        this.mContext = context
-    }
-
-    private lateinit var mContext: Context
-
+    
     private fun mockUserData() {
         customerName = "Test Customer Name"
         mobileNo = "01555555555"

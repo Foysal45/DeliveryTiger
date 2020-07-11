@@ -7,5 +7,5 @@ object AppConstant {
     const val BASE_URL_ADM = "https://adm.ajkerdeal.com/"
 
     const val POLICY_URL = "https://deliverytiger.com.bd/privacypolicy.html"
-    const val GATEWAY = "https://m.ajkerdeal.com/MSingleOrder/bkashpaymentofdeliverytigerforapp.aspx"//?CID=DT-1111
+    const val GATEWAY = "https://m.ajkerdeal.com/MSingleOrder/bkashpaymentofdeliverytigerforapp.aspx"//?CourierID=4376&FromDate=2020-06-01&ToDate=2020-06-30
 }

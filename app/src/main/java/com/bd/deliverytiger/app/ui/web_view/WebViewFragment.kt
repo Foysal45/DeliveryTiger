@@ -11,16 +11,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.*
+import android.webkit.SslErrorHandler
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.ui.home.HomeActivity
+import org.koin.android.ext.android.inject
 
-/**
- * A simple [Fragment] subclass.
- */
 class WebViewFragment : Fragment() {
 
     private val TAG = "WebViewFragment"
@@ -31,6 +32,8 @@ class WebViewFragment : Fragment() {
 
     private var webTitle: String = ""
     private var loadUrl: String = ""
+
+    private val repository: AppRepository by inject()
 
     companion object {
         fun newInstance(url: String, title: String): WebViewFragment = WebViewFragment().apply {
@@ -45,11 +48,7 @@ class WebViewFragment : Fragment() {
         mContext = context
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_web_view, container, false)
     }
 
@@ -76,7 +75,7 @@ class WebViewFragment : Fragment() {
         webView.clearCache(true)
         webView.clearHistory()
         webView.isHorizontalScrollBarEnabled = false
-        webView.addJavascriptInterface(WebAppInterface(mContext), "Android")
+        webView.addJavascriptInterface(WebAppInterface(mContext,repository,arguments), "Android")
         webView.webViewClient = Callback()
 
         //webViewTitle.text = webTitle // set toolbar title
@@ -129,18 +128,6 @@ class WebViewFragment : Fragment() {
             builder.setNegativeButton("cancel") { dialog, which -> handler.cancel() }
             val dialog = builder.create()
             dialog.show()
-        }
-    }
-
-    /**
-     * Java Script Interface here
-     */
-    inner class WebAppInterface internal constructor(internal var mContext: Context) {
-
-        /** Show a toast from the web page  */
-        @JavascriptInterface
-        fun showToast(toast: String) {
-            Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show()
         }
     }
 

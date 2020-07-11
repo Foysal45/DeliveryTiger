@@ -28,6 +28,7 @@
     <color name="negative">#FF8E34</color>
     <color name="neutral">#E1F3F3</color>
     <color name="red">#E84545</color>
+    <color name="header_layout_color">#FFE284</color>
 
 
 </resources>

@@ -54,10 +54,10 @@ class RetrofitSingletonADM private constructor() {
 
             return okHttpClient ?: OkHttpClient.Builder()
                 // Time out
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(10, TimeUnit.SECONDS)
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .writeTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(1, TimeUnit.MINUTES)
                 // Cache
                 .cache(Cache(context.cacheDir, (10 * 1024 * 1024).toLong())) // 10 MB
                 // LoggingInterceptor

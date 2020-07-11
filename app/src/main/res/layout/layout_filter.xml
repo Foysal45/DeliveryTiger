@@ -6,7 +6,7 @@
     android:id="@+id/addOrderTopLay"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFE284"
+    android:background="@color/header_layout_color"
     android:orientation="horizontal"
     app:layout_constraintTop_toTopOf="parent"
     >

@@ -1,9 +1,24 @@
 package com.bd.deliverytiger.app.repository
 
 import com.bd.deliverytiger.app.api.`interface`.ApiInterfaceADM
+import com.bd.deliverytiger.app.api.`interface`.ApiInterfaceCore
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
 
-class AppRepository(private val apiInterface: ApiInterfaceADM) {
+class AppRepository(private val apiInterfaceADM: ApiInterfaceADM, private val apiInterfaceCore: ApiInterfaceCore) {
 
-    suspend fun getMerchantMonthlyReceivable(requestBody: MonthlyReceivableRequest) = apiInterface.getMerchantMonthlyReceivable(requestBody)
+    //******************** ADM ********************//
+
+    suspend fun getMerchantMonthlyReceivable(requestBody: MonthlyReceivableRequest) = apiInterfaceADM.getMerchantMonthlyReceivable(requestBody)
+
+    suspend fun getPaymentHistory(courierUserId: Int) = apiInterfaceADM.getPaymentHistory(courierUserId)
+
+    suspend fun getPaymentHistoryDetails(transactionId: String) = apiInterfaceADM.getPaymentHistoryDetails(transactionId)
+
+    //******************** ADCORE ********************//
+
+    fun getAllDistrictFromApi(id: Int) = apiInterfaceCore.getAllDistrictFromApi(id)
+
+    fun getMerchantCredit(courierUserId: Int) = apiInterfaceCore.getMerchantCredit(courierUserId)
+
+
 }

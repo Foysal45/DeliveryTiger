@@ -33,11 +33,13 @@ import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
+import com.bd.deliverytiger.app.ui.payment_history.PaymentHistoryFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.ui.service_bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.messaging.FirebaseMessaging
@@ -132,6 +134,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         onNewIntent(intent)
         //showPopupDialog()
+
+        val fab = findViewById<ExtendedFloatingActionButton>(R.id.fab)
     }
 
     override fun onStart() {
@@ -263,6 +267,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     currentFragment.onResume()
                 }
                 is OrderTrackingFragment -> {
+                    currentFragment.onResume()
+                }
+                is PaymentHistoryFragment -> {
                     currentFragment.onResume()
                 }
                 is ShipmentChargeFragment -> {
@@ -421,14 +428,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
 
             }
-            R.id.nav_report -> {
+            R.id.nav_payment_history -> {
 
-                val currentFragment =
-                    supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-                if (currentFragment is BillingofServiceFragment) {
-                    Timber.d("tag", "Fragment already exist")
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is PaymentHistoryFragment) {
+                    Timber.d("tag", "PaymentHistory already exist")
                 } else {
-
+                    addFragment(PaymentHistoryFragment.newInstance(), PaymentHistoryFragment.tag)
                 }
             }
             R.id.nav_shipment_change -> {
@@ -520,13 +526,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun addHomeFragment() {
 
-        val fragment = HomeFragment.newInstance()
-        val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
-        ft?.replace(R.id.mainActivityContainer, fragment, HomeFragment.tag)
-        ft?.commit()
-    }
 
     private fun addDashBoardFragment() {
         logoIV.visibility = View.VISIBLE

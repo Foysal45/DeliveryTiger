@@ -32,10 +32,9 @@
             android:icon="@drawable/ic_tracking"
             android:title="অর্ডার ট্র্যাকিং" />
         <item
-            android:id="@+id/nav_report"
+            android:id="@+id/nav_payment_history"
             android:icon="@drawable/ic_analytics"
-            android:title="Report"
-            android:visible="false"
+            android:title="পেমেন্ট ইতিবৃত্ত"
             />
         <item
             android:id="@+id/nav_shipment_change"
