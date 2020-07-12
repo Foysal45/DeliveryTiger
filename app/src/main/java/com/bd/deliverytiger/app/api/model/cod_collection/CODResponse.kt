@@ -11,5 +11,5 @@ data class CODResponse(
     @SerializedName("adCourierPaymentInfo")
     var adCourierPaymentInfo: AdCourierPaymentInfo? = null,
     @SerializedName("courierOrderViewModel")
-    var courierOrderViewModel: List<CourierOrderViewModel?>? = null
+    var courierOrderViewModel: List<CourierOrderViewModel>? = null
 )

@@ -52,7 +52,7 @@ class PaymentHistoryFragment: Fragment() {
         }
 
         // ToDo: remove
-        viewModel.getPaymentHistory(35800/*SessionManager.courierUserId*/).observe(viewLifecycleOwner, Observer {
+        viewModel.getPaymentHistory(3383/*SessionManager.courierUserId*/).observe(viewLifecycleOwner, Observer {
             it?.let { list ->
                 dataAdapter.initLoad(list)
                 if (list.isEmpty()) {

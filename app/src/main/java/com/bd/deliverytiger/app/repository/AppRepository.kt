@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.repository
 
 import com.bd.deliverytiger.app.api.`interface`.ApiInterfaceADM
 import com.bd.deliverytiger.app.api.`interface`.ApiInterfaceCore
+import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
 
 class AppRepository(private val apiInterfaceADM: ApiInterfaceADM, private val apiInterfaceCore: ApiInterfaceCore) {
@@ -15,6 +16,8 @@ class AppRepository(private val apiInterfaceADM: ApiInterfaceADM, private val ap
     suspend fun getPaymentHistoryDetails(transactionId: String) = apiInterfaceADM.getPaymentHistoryDetails(transactionId)
 
     //******************** ADCORE ********************//
+
+    fun getDashboardStatusGroup(requestBody: DashBoardReqBody) = apiInterfaceCore.getDashboardStatusGroup(requestBody)
 
     fun getAllDistrictFromApi(id: Int) = apiInterfaceCore.getAllDistrictFromApi(id)
 

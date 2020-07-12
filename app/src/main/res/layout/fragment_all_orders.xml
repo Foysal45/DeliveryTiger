@@ -15,139 +15,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <HorizontalScrollView
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAllOrder"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/background"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/include_filter"
-        app:layout_constraintVertical_weight="1">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-
-                <LinearLayout
-                    android:id="@+id/topLay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/bg_cod_top_lay"
-                    android:padding="@dimen/activity_horizontal_margin"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:layout_width="30dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/nav_header_vertical_spacing"
-                        android:text="#"
-                        android:textColor="@color/black_80"
-                        android:textSize="@dimen/text_14"
-
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="140dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-
-                        android:text="অর্ডারের তথ্য"
-                        android:textColor="@color/black_80"
-                        android:textSize="@dimen/text_14"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="220dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxWidth="100dp"
-                        android:text="কাস্টমারের তথ্য"
-                        android:textColor="@color/black_80"
-                        android:textSize="@dimen/text_14"
-                        android:textStyle="bold" />
-
-                    <!--<TextView
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:text="প্যাকেজের তথ্য"
-                        android:textColor="@color/black_80"
-                        android:textSize="@dimen/text_14"
-                        android:textStyle="bold" />-->
-
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxWidth="100dp"
-                        android:paddingStart="8dp"
-                        android:text="কালেকশন (৳)"
-                        android:textColor="@color/black_80"
-                        android:textSize="@dimen/text_14"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:text="মোট সার্ভিস চার্জ"
-                        android:textColor="@color/black_80"
-                        android:textSize="@dimen/text_14"
-                        android:textStyle="bold" />
-
-                    <!--<TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxWidth="100dp"
-                        android:paddingStart="8dp"
-                        android:text="স্ট্যাটাস"
-                        android:textColor="@color/black_80"
-                        android:textSize="@dimen/text_14"
-                        android:textStyle="bold" />-->
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingStart="16dp"
-                        android:text="তথ্য পরিবর্তন"
-                        android:textColor="@color/black_80"
-                        android:textSize="@dimen/text_14"
-                        android:textStyle="bold" />
-
-
-                </LinearLayout>
-
-                <!--  <View
-                      android:layout_width="match_parent"
-                      android:layout_height="2dp"
-                      android:background="@color/divider"
-                      app:layout_constraintTop_toBottomOf="@id/topLay" />-->
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvAllOrder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/item_view_all_orders" />
-
-        </LinearLayout>
-    </HorizontalScrollView>
-
+        tools:itemCount="3"
+        tools:listitem="@layout/item_view_all_order" />
 
     <ProgressBar
         android:id="@+id/allOrderProgressBar"
@@ -157,7 +38,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/ivEmpty"
@@ -172,16 +54,5 @@
         app:srcCompat="@drawable/ic_empty_sad"
         tools:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/show_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/cd"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/cod_collection_show_stat"
-        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

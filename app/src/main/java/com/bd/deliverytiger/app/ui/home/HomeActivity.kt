@@ -27,7 +27,6 @@ import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.dashboard.DashboardFragment
 import com.bd.deliverytiger.app.ui.dialog.PopupDialog
-import com.bd.deliverytiger.app.ui.features.DTFeaturesFragment
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
@@ -60,6 +59,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var searchIV: ImageView
     private lateinit var headerPic: ImageView
     private lateinit var separetor: View
+    private lateinit var addOrderFab: ExtendedFloatingActionButton
 
     private var doubleBackToExitPressedOnce = false
     private var navId: Int = 0
@@ -81,6 +81,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         trackingIV = findViewById(R.id.home_toolbar_tracking)
         searchIV = findViewById(R.id.home_toolbar_search)
         separetor = findViewById(R.id.home_toolbar_separator)
+        addOrderFab = findViewById(R.id.addOrderFab)
         navView.setNavigationItemSelectedListener(this)
         /*val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
@@ -135,7 +136,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         onNewIntent(intent)
         //showPopupDialog()
 
-        val fab = findViewById<ExtendedFloatingActionButton>(R.id.fab)
+
+        addOrderFab.setOnClickListener {
+            addOrderFragment()
+        }
     }
 
     override fun onStart() {
@@ -212,7 +216,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             val currentFragment: Fragment? =
                 supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-            if (currentFragment is DashboardFragment || currentFragment is AddOrderFragmentOne || currentFragment is AddOrderFragmentTwo) {
+            if (currentFragment is AddOrderFragmentOne || currentFragment is AddOrderFragmentTwo) {
                 addProductBtnVisibility(false)
             } else {
                 addProductBtnVisibility(true)
@@ -273,9 +277,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     currentFragment.onResume()
                 }
                 is ShipmentChargeFragment -> {
-                    currentFragment.onResume()
-                }
-                is DTFeaturesFragment -> {
                     currentFragment.onResume()
                 }
                 is ProfileFragment -> {
@@ -447,16 +448,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
                 }
             }
-            R.id.nav_features -> {
-                val currentFragment =
-                    supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-                if (currentFragment is DTFeaturesFragment) {
-                    Timber.d("tag", "DTFeaturesFragment already exist")
-                } else {
-                    addFragment(DTFeaturesFragment.newInstance(), DTFeaturesFragment.tag)
-                }
-
-            }
             R.id.nav_privacy -> {
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
@@ -518,19 +509,20 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toolbarTitleTV.text = title
     }
 
-    fun addProductBtnVisibility(isVisible: Boolean) {
+    private fun addProductBtnVisibility(isVisible: Boolean) {
         if (isVisible) {
             addProductIV.visibility = View.VISIBLE
+            addOrderFab.show()
         } else {
             addProductIV.visibility = View.GONE
+            addOrderFab.hide()
         }
     }
 
 
-
     private fun addDashBoardFragment() {
         logoIV.visibility = View.VISIBLE
-        addProductBtnVisibility(false)
+        addProductBtnVisibility(true)
         searchIV.visibility = View.VISIBLE
         val fragment = DashboardFragment.newInstance()
         val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()

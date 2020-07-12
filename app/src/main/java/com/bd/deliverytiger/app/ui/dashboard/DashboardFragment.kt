@@ -1,23 +1,19 @@
 package com.bd.deliverytiger.app.ui.dashboard
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.LinearLayout
+import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.appcompat.widget.AppCompatSpinner
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.RetrofitSingleton
-import com.bd.deliverytiger.app.api.`interface`.DashBoardInterface
-import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponseModel
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
@@ -28,24 +24,17 @@ import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.DigitConverter.banglaMonth
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import org.koin.android.ext.android.inject
 import java.util.*
 
-
-/**
- * A simple [Fragment] subclass.
- */
 class DashboardFragment : Fragment() {
 
-    private lateinit var announcementLayout: ConstraintLayout
     private lateinit var monthSpinner: AppCompatSpinner
     private lateinit var dashboardRV: RecyclerView
-    private lateinit var addOrderBtn: FloatingActionButton
-    private lateinit var dashBoardProgress: ProgressBar
-    private lateinit var addOrderNewBtn: LinearLayout
+    private lateinit var progressBar: ProgressBar
+    private lateinit var bannerImage: ImageView
 
     private var currentYear = 0
     private var selectedYear = 0
@@ -54,142 +43,67 @@ class DashboardFragment : Fragment() {
 
     private lateinit var dashboardAdapter: DashboardAdapter
     private val responseModelList: MutableList<DashboardResponseModel> = mutableListOf()
-    private lateinit var dashBoardInterface: DashBoardInterface
+    private val viewModel: DashboardViewModel by inject()
 
     companion object {
-        fun newInstance(): DashboardFragment = DashboardFragment().apply {
-
-        }
-
-        val tag = DashboardFragment::class.java.name
+        fun newInstance(): DashboardFragment = DashboardFragment().apply {}
+        val tag: String = DashboardFragment::class.java.name
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        announcementLayout = view.findViewById(R.id.dashboard_announce_layout)
         monthSpinner = view.findViewById(R.id.spinner_month_selection)
         dashboardRV = view.findViewById(R.id.dashboard_rv)
-        addOrderBtn = view.findViewById(R.id.dashboard_add_order)
-        dashBoardProgress = view.findViewById(R.id.dashBoardProgress)
-        addOrderNewBtn = view.findViewById(R.id.dashboard_add_order_new)
-
-
-        dashBoardInterface = RetrofitSingleton.getInstance(context!!).create(DashBoardInterface::class.java)
-
-        setDashBoardAdapter()
-
-        addOrderBtn.setOnClickListener {
-            addOrderFragment()
-        }
-        addOrderNewBtn.setOnClickListener {
-            addOrderFragment()
-        }
-
-        val calender = Calendar.getInstance()
-        currentYear = calender.get(Calendar.YEAR)
-        val currentMonth = calender.get(Calendar.MONTH)
-        getDashBoardData(currentMonth + 1, currentYear)
-
-        selectedYear = currentYear
-        selectedMonth = currentMonth + 1
-        /*val viewList: MutableList<String> = mutableListOf()
-        for (item in banglaMonth) {
-            viewList.add("${item}, ${DigitConverter.toBanglaDigit(currentYear)}")
-        }*/
-
-         val list: MutableList<MonthDataModel> = mutableListOf()
-         val viewList: MutableList<String> = mutableListOf()
-        //Timber.d("DashboardTag", "currentYear: $currentYear")
-         for (year in currentYear downTo 2019){
-             //Timber.d("DashboardTag", "year: $year")
-             var lastMonth = 11
-             if (year == currentYear) {
-                 lastMonth = currentMonth
-             }
-             for (monthIndex in lastMonth downTo 0){
-                 if (year == 2019 && monthIndex == 6) {
-                     break
-                 }
-                 list.add(MonthDataModel(monthIndex+1, year))
-                 viewList.add("${banglaMonth[monthIndex]}, ${DigitConverter.toBanglaDigit(year)}")
-             }
-         }
-
-        //Timber.d("DashboardTag", "")
-
-        val packagingAdapter =
-            CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, viewList)
-        monthSpinner.adapter = packagingAdapter
-        monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                if (!isLoading) {
-                    val model = list[p2]
-                    selectedYear = model.year
-                    selectedMonth = model.monthId
-                    getDashBoardData(model.monthId, model.year)
-                    Timber.d("DashboardTag", "${model.monthId} $currentYear")
-                }
-            }
-        }
-        //monthSpinner.setSelection(currentMonth)
-
-
+        progressBar = view.findViewById(R.id.dashBoardProgress)
+        bannerImage = view.findViewById(R.id.bannerImage)
     }
 
-    private fun getDashBoardData(selectedMonth: Int, selectedYear: Int) {
-        isLoading = true
-        dashBoardProgress.visibility = View.VISIBLE
+    override fun onResume() {
+        super.onResume()
+        //(activity as HomeActivity).setToolbarTitle("ড্যাশবোর্ড")
+    }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
-        val dashBoardReqBody = DashBoardReqBody(selectedMonth, selectedYear, SessionManager.courierUserId)
-        Timber.d("DashboardTag r ", dashBoardReqBody.toString())
-        dashBoardInterface.getDashboardStatusGroup(dashBoardReqBody)
-            .enqueue(object : Callback<GenericResponse<List<DashboardResponseModel>>> {
-                override fun onFailure(
-                    call: Call<GenericResponse<List<DashboardResponseModel>>>,
-                    t: Throwable
-                ) {
-                    Timber.d("DashboardTag f ", t.toString())
-                    isLoading = false
-                    dashBoardProgress.visibility = View.GONE
+        setDashBoardAdapter()
+        setSpinner()
+
+        Glide.with(requireContext())
+            .load(R.drawable.ic_banner_place)
+            .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
+            .into(bannerImage)
+
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is ViewState.ShowMessage -> {
+                    context?.toast(state.message)
                 }
-
-                override fun onResponse(
-                    call: Call<GenericResponse<List<DashboardResponseModel>>>,
-                    response: Response<GenericResponse<List<DashboardResponseModel>>>
-                ) {
-                    isLoading = false
-                    dashBoardProgress.visibility = View.GONE
-                    if (response.isSuccessful && response.body() != null) {
-                        Timber.d("DashboardTag f ", response.body().toString())
-                        if (!response.body()!!.model.isNullOrEmpty()) {
-                            responseModelList.clear()
-                            responseModelList.addAll(response.body()!!.model)
-                            dashboardAdapter.notifyDataSetChanged()
-                        }
+                is ViewState.KeyboardState -> {
+                    hideKeyboard()
+                }
+                is ViewState.ProgressState -> {
+                    if (state.isShow) {
+                        progressBar?.visibility = View.VISIBLE
+                        isLoading = true
+                    } else {
+                        progressBar?.visibility = View.GONE
+                        isLoading = false
                     }
                 }
-
-            })
+            }
+        })
     }
 
     private fun setDashBoardAdapter() {
 
-        dashboardAdapter = DashboardAdapter(context!!, responseModelList)
-        val gridLayoutManager = GridLayoutManager(context!!, 2, RecyclerView.VERTICAL, false)
+        dashboardAdapter = DashboardAdapter(requireContext(), responseModelList)
+        val gridLayoutManager = GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 if (responseModelList[position].dashboardSpanCount!! == 0 || responseModelList[position].dashboardSpanCount!! > 2) {
@@ -238,9 +152,60 @@ class DashboardFragment : Fragment() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        //(activity as HomeActivity).setToolbarTitle("ড্যাশবোর্ড")
+    private fun setSpinner() {
+        val calender = Calendar.getInstance()
+        currentYear = calender.get(Calendar.YEAR)
+        val currentMonth = calender.get(Calendar.MONTH)
+        selectedYear = currentYear
+        selectedMonth = currentMonth + 1
+        getDashBoardData(selectedMonth, selectedYear)
+
+        val list: MutableList<MonthDataModel> = mutableListOf()
+        val viewList: MutableList<String> = mutableListOf()
+        for (year in currentYear downTo 2019){
+            //Timber.d("DashboardTag", "year: $year")
+            var lastMonth = 11
+            if (year == currentYear) {
+                lastMonth = currentMonth
+            }
+            for (monthIndex in lastMonth downTo 0){
+                if (year == 2019 && monthIndex == 6) {
+                    break
+                }
+                list.add(MonthDataModel(monthIndex+1, year))
+                viewList.add("${banglaMonth[monthIndex]}, ${DigitConverter.toBanglaDigit(year)}")
+            }
+        }
+
+        val packagingAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, viewList)
+        monthSpinner.adapter = packagingAdapter
+        monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                if (!isLoading) {
+                    val model = list[p2]
+                    selectedYear = model.year
+                    selectedMonth = model.monthId
+                    getDashBoardData(model.monthId, model.year)
+                    Timber.d("DashboardTag", "${model.monthId} $currentYear")
+                }
+            }
+        }
+        //monthSpinner.setSelection(currentMonth)
+    }
+
+    private fun getDashBoardData(selectedMonth: Int, selectedYear: Int) {
+
+        val dashBoardReqBody = DashBoardReqBody(selectedMonth, selectedYear, SessionManager.courierUserId)
+        Timber.d("DashboardTag r ", dashBoardReqBody.toString())
+        viewModel.getDashboardStatusGroup(dashBoardReqBody).observe(viewLifecycleOwner, Observer {
+            responseModelList.clear()
+            responseModelList.addAll(it)
+            dashboardAdapter.notifyDataSetChanged()
+        })
     }
 
     private fun addFragment(fragment: Fragment, tag: String) {
@@ -267,16 +232,6 @@ class DashboardFragment : Fragment() {
         ft?.add(R.id.mainActivityContainer, fragment, AllOrdersFragment.tag)
         ft?.addToBackStack(AllOrdersFragment.tag)
         ft?.commit()
-    }
-
-    private fun addOrderFragment() {
-
-        val fragment = AddOrderFragmentOne.newInstance()
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
-        ft?.addToBackStack(AddOrderFragmentOne.tag)
-        ft?.commit()
-
     }
 
 }

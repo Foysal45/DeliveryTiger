@@ -25,10 +25,10 @@ interface ApiInterfaceADM {
     @POST("api/account/reports/GetMerchantMonthlyReveivableList")
     suspend fun getMerchantMonthlyReceivable(@Body requestBody: MonthlyReceivableRequest): NetworkResponse<MonthlyReceivableResponse, ErrorResponse>
 
-    @GET("api/account/reports/GetMerchantPaidChequeList/{courierUserId}")
+    @GET("api/account/reports/GetDTMerchantPaidChequeList/{courierUserId}")
     suspend fun getPaymentHistory(@Path("courierUserId") courierUserId: Int): NetworkResponse<List<PaymentData>, ErrorResponse>
 
-    @GET("api/account/reports/GetMerchantPaidChequeDetails/{transactionId}")
+    @GET("api/account/reports/GetDTMerchantPaidChequeDetails/{transactionId}")
     suspend fun getPaymentHistoryDetails(@Path("transactionId") transactionId: String): NetworkResponse<List<PaymentDetailsResponse>, ErrorResponse>
 
 }

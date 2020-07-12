@@ -1,6 +1,5 @@
 package com.bd.deliverytiger.app.ui.all_orders
 
-
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +9,6 @@ import android.widget.*
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
@@ -33,9 +31,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-/**
- * A simple [Fragment] subclass.
- */
 class AllOrdersFragment : Fragment() {
 
     private lateinit var rvAllOrder: RecyclerView
@@ -43,8 +38,7 @@ class AllOrdersFragment : Fragment() {
     private lateinit var allOrderFilterLay: LinearLayout
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var ivEmpty: ImageView
-    private lateinit var topLay: LinearLayout
-    private lateinit var showStatus: ImageView
+
     private lateinit var allOrderProgressBar: ProgressBar
     private lateinit var filterGroup: ChipGroup
     private lateinit var filterDateTag: Chip
@@ -59,7 +53,7 @@ class AllOrdersFragment : Fragment() {
     private var totalLoadedData = 0
     private var layoutPosition = 0
     private var totalCount = 0
-    private var courierOrderViewModelList: ArrayList<CourierOrderViewModel?>? = null
+    private var courierOrderViewModelList: MutableList<CourierOrderViewModel> = mutableListOf()
     private var defaultDate = "2001-01-01"
     private var fromDate = "2001-01-01"
     private var toDate = "2001-01-01"
@@ -90,11 +84,7 @@ class AllOrdersFragment : Fragment() {
         val tag = AllOrdersFragment::class.java.name
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_all_orders, container, false)
     }
 
@@ -111,8 +101,8 @@ class AllOrdersFragment : Fragment() {
         tvTotalOrder = view.findViewById(R.id.tvTotalOrder)
         allOrderFilterLay = view.findViewById(R.id.allOrderFilterLay)
         ivEmpty = view.findViewById(R.id.ivEmpty)
-        topLay = view.findViewById(R.id.topLay)
-        showStatus = view.findViewById(R.id.show_status)
+
+
         filterGroup = view.findViewById(R.id.filter_tag_group)
         filterDateTag = view.findViewById(R.id.filter_tag_date)
         filterStatusTag = view.findViewById(R.id.filter_tag_status)
@@ -131,21 +121,16 @@ class AllOrdersFragment : Fragment() {
         }
 
         allOrderInterface =
-            RetrofitSingleton.getInstance(context!!).create(AllOrderInterface::class.java)
+            RetrofitSingleton.getInstance(requireContext()).create(AllOrderInterface::class.java)
 
-        courierOrderViewModelList = ArrayList()
+
         linearLayoutManager = LinearLayoutManager(context)
 
-        allOrdersAdapter = AllOrdersAdapter(context!!, courierOrderViewModelList)
+        allOrdersAdapter = AllOrdersAdapter(requireContext(), courierOrderViewModelList)
         rvAllOrder.apply {
             layoutManager = linearLayoutManager
-            addItemDecoration(
-                DividerItemDecoration(
-                    rvAllOrder.getContext(),
-                    DividerItemDecoration.VERTICAL
-                )
-            )
             adapter = allOrdersAdapter
+            //addItemDecoration(DividerItemDecoration(rvAllOrder.getContext(), DividerItemDecoration.VERTICAL))
         }
 
 
@@ -184,11 +169,7 @@ class AllOrdersFragment : Fragment() {
             goToFilter()
         }
 
-        showStatus.setOnClickListener {
 
-            /*val paymentSheet = PaymentStatusSheet.newInstance()
-            paymentSheet.show(childFragmentManager, PaymentStatusSheet.tag)*/
-        }
 
         if (shouldOpenFilter) {
             goToFilter(1)
@@ -251,10 +232,8 @@ class AllOrdersFragment : Fragment() {
                         }
 
                         if(totalLoadedData == 0){
-                            topLay.visibility = View.GONE
                             ivEmpty.visibility = View.VISIBLE
                         } else {
-                            topLay.visibility = View.VISIBLE
                             ivEmpty.visibility = View.GONE
                         }
 
@@ -454,7 +433,7 @@ class AllOrdersFragment : Fragment() {
                 )
                 etAlertAddOrderMobileNo.requestFocus()
             } else if (etAlertCustomersAddress.text.toString().isEmpty()) {
-                VariousTask.showShortToast(context!!, getString(R.string.write_yr_address))
+                VariousTask.showShortToast(requireContext(), getString(R.string.write_yr_address))
                 etAlertCustomersAddress.requestFocus()
             } else {
                  updateOrderReqBody.address = etAlertCustomersAddress.text.toString()
@@ -469,7 +448,7 @@ class AllOrdersFragment : Fragment() {
     }
 
     private fun updateOrderApiCall(orderId: String,updateOrderReqBody: UpdateOrderReqBody, indexPos: Int){
-        val placeOrderInterface = RetrofitSingleton.getInstance(context!!).create(PlaceOrderInterface::class.java)
+        val placeOrderInterface = RetrofitSingleton.getInstance(requireContext()).create(PlaceOrderInterface::class.java)
         placeOrderInterface.placeOrderUpdate(orderId,updateOrderReqBody).enqueue(object :Callback<GenericResponse<UpdateOrderResponse>>{
             override fun onFailure(call: Call<GenericResponse<UpdateOrderResponse>>, t: Throwable) {
 
