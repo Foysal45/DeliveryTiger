@@ -32,7 +32,7 @@ import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
-import com.bd.deliverytiger.app.ui.payment_history.PaymentHistoryFragment
+import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.ui.service_bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
@@ -273,7 +273,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 is OrderTrackingFragment -> {
                     currentFragment.onResume()
                 }
-                is PaymentHistoryFragment -> {
+                is PaymentStatementFragment -> {
                     currentFragment.onResume()
                 }
                 is ShipmentChargeFragment -> {
@@ -432,10 +432,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_payment_history -> {
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-                if (currentFragment is PaymentHistoryFragment) {
+                if (currentFragment is PaymentStatementFragment) {
                     Timber.d("tag", "PaymentHistory already exist")
                 } else {
-                    addFragment(PaymentHistoryFragment.newInstance(), PaymentHistoryFragment.tag)
+                    addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
                 }
             }
             R.id.nav_shipment_change -> {

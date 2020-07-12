@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.ui.payment_history
+package com.bd.deliverytiger.app.ui.payment_statement
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,28 +9,29 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.databinding.FragmentPaymentHistoryBinding
+import com.bd.deliverytiger.app.databinding.FragmentPaymentStatementBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
-import com.bd.deliverytiger.app.ui.payment_history.details.PaymentHistoryDetailFragment
+import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailFragment
+import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.ViewState
 import com.bd.deliverytiger.app.utils.hideKeyboard
 import com.bd.deliverytiger.app.utils.toast
 import org.koin.android.ext.android.inject
 
 
-class PaymentHistoryFragment: Fragment() {
+class PaymentStatementFragment: Fragment() {
 
-    private val viewModel: PaymentHistoryViewModel by inject()
-    private var binding: FragmentPaymentHistoryBinding? = null
-    private lateinit var dataAdapter: PaymentHistoryAdapter
+    private val viewModel: PaymentStatementViewModel by inject()
+    private var binding: FragmentPaymentStatementBinding? = null
+    private lateinit var dataAdapter: PaymentStatementAdapter
 
     companion object {
-        fun newInstance(): PaymentHistoryFragment = PaymentHistoryFragment()
-        val tag: String = PaymentHistoryFragment::class.java.name
+        fun newInstance(): PaymentStatementFragment = PaymentStatementFragment()
+        val tag: String = PaymentStatementFragment::class.java.name
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentPaymentHistoryBinding.inflate(inflater).also {
+        return FragmentPaymentStatementBinding.inflate(inflater).also {
             binding = it
         }.root
     }
@@ -38,7 +39,7 @@ class PaymentHistoryFragment: Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        dataAdapter = PaymentHistoryAdapter()
+        dataAdapter = PaymentStatementAdapter()
         with(binding?.recyclerview!!) {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
@@ -52,7 +53,7 @@ class PaymentHistoryFragment: Fragment() {
         }
 
         // ToDo: remove
-        viewModel.getPaymentHistory(3383/*SessionManager.courierUserId*/).observe(viewLifecycleOwner, Observer {
+        viewModel.getPaymentHistory(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {
             it?.let { list ->
                 dataAdapter.initLoad(list)
                 if (list.isEmpty()) {
@@ -85,8 +86,8 @@ class PaymentHistoryFragment: Fragment() {
 
     private fun goToDetails(transactionId: String) {
 
-        val fragment = PaymentHistoryDetailFragment.newInstance(transactionId)
-        val tag = PaymentHistoryDetailFragment.tag
+        val fragment = PaymentStatementDetailFragment.newInstance(transactionId)
+        val tag = PaymentStatementDetailFragment.tag
 
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, tag)
@@ -96,7 +97,7 @@ class PaymentHistoryFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("পেমেন্ট ইতিবৃত্ত")
+        (activity as HomeActivity).setToolbarTitle("পেমেন্ট স্টেটমেন্ট")
     }
 
     override fun onDestroyView() {

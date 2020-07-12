@@ -1,8 +1,8 @@
 package com.bd.deliverytiger.app.api.`interface`
 
 import com.bd.deliverytiger.app.api.model.ErrorResponse
-import com.bd.deliverytiger.app.api.model.payment_history.PaymentData
-import com.bd.deliverytiger.app.api.model.payment_history.PaymentDetailsResponse
+import com.bd.deliverytiger.app.api.model.payment_statement.PaymentData
+import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsResponse
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableResponse
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -22,7 +22,7 @@ interface ApiInterfaceADM {
 
     //https://adm.ajkerdeal.com/
 
-    @POST("api/account/reports/GetMerchantMonthlyReveivableList")
+    @POST("api/account/reports/GetMerchantMonthlyReceivableList")
     suspend fun getMerchantMonthlyReceivable(@Body requestBody: MonthlyReceivableRequest): NetworkResponse<MonthlyReceivableResponse, ErrorResponse>
 
     @GET("api/account/reports/GetDTMerchantPaidChequeList/{courierUserId}")

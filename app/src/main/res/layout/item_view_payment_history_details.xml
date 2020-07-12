@@ -27,10 +27,10 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="বুকিং কোড" />
+                android:text="অর্ডার কোড" />
 
             <TextView
-                android:id="@+id/bookingCode"
+                android:id="@+id/orderCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
@@ -39,7 +39,7 @@
                 app:layout_constraintBottom_toTopOf="@id/separator"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="2638136"
+                tools:text="DT-38954"
                  />
 
 
@@ -49,7 +49,7 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="6dp"
                 android:background="@color/separator"
-                app:layout_constraintTop_toBottomOf="@id/bookingCode" />
+                app:layout_constraintTop_toBottomOf="@id/orderCode" />
 
 
 
@@ -58,14 +58,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="পরিমাণ"
+                android:text="কালেক্টেড অ্যামাউন্ট"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator" />
 
             <TextView
-                android:id="@+id/quantity"
+                android:id="@+id/collectedAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -73,29 +73,47 @@
                 android:textSize="@dimen/text_14"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator"
-                tools:text="১ টি" />
+                tools:text="৯৯৯ ৳" />
 
             <TextView
                 android:id="@+id/key3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="অ্যামাউন্ট"
+                android:text="মোট চার্জ"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/key2" />
 
             <TextView
-                android:id="@+id/amount"
+                android:id="@+id/totalCharge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/quantity"
+                app:layout_constraintTop_toBottomOf="@id/collectedAmount"
                 tools:text="৯৯৯ ৳" />
 
+            <TextView
+                android:id="@+id/key4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="সর্বমোট পেমেন্ট"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/key3" />
 
+            <TextView
+                android:id="@+id/netAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/totalCharge"
+                tools:text="৯৯৯ ৳" />
 
 
 

@@ -11,7 +11,6 @@
         android:focusable="true"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:paddingTop="8dp"
         android:background="@color/background"
         >
 
@@ -21,12 +20,12 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:overScrollMode="never"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="80dp"
 
             tools:itemCount="4"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_view_payment_history"
+            tools:listitem="@layout/item_view_payment_statement"
             tools:orientation="vertical"
             tools:spanCount="2"
             tools:visibility="visible"

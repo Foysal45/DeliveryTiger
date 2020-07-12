@@ -36,7 +36,7 @@
         <item
             android:id="@+id/nav_payment_history"
             android:icon="@drawable/ic_analytics"
-            android:title="পেমেন্ট ইতিবৃত্ত"
+            android:title="পেমেন্ট স্টেটমেন্ট"
             />
         <item
             android:id="@+id/nav_shipment_change"

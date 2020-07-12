@@ -1,10 +1,10 @@
-package com.bd.deliverytiger.app.ui.payment_history
+package com.bd.deliverytiger.app.ui.payment_statement
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bd.deliverytiger.app.api.model.payment_history.PaymentData
+import com.bd.deliverytiger.app.api.model.payment_statement.PaymentData
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
 import com.bd.deliverytiger.app.utils.exhaustive
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-class PaymentHistoryViewModel(private val repository: AppRepository): ViewModel() {
+class PaymentStatementViewModel(private val repository: AppRepository): ViewModel() {
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
 
