@@ -8,4 +8,5 @@ object AppConstant {
 
     const val POLICY_URL = "https://deliverytiger.com.bd/privacypolicy.html"
     const val GATEWAY = "https://m.ajkerdeal.com/MSingleOrder/bkashpaymentofdeliverytigerforapp.aspx"//?CourierID=4376&FromDate=2020-06-01&ToDate=2020-06-30
+    const val TEST_BANNER = "https://static.ajkerdeal.com/images/merchant/same_day_delivery.jpg"
 }

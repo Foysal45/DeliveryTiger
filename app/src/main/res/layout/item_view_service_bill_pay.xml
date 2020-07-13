@@ -7,32 +7,31 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:paddingStart="4dp"
-        android:paddingEnd="4dp"
-        >
+        android:paddingEnd="4dp">
 
         <TextView
             android:id="@+id/orderCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="DT-999999"
-            android:textSize="14sp"
             android:textColor="@color/black_90"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="DT-999999" />
 
         <TextView
             android:id="@+id/totalChange"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="৯৯৯৯ ৳"
-            android:textSize="14sp"
             android:textColor="@color/black_90"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="৯৯৯৯ ৳" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -3,6 +3,7 @@ package com.bd.deliverytiger.app.utils
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
+import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -121,3 +122,7 @@ fun View.snackbar(message: String, length: Int = Snackbar.LENGTH_INDEFINITE, act
 
 val <T> T.exhaustive: T
     get() = this
+
+fun Context.dpToPx(value: Float): Int {
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, this.resources.displayMetrics).toInt()
+}

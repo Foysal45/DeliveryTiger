@@ -2,25 +2,18 @@ package com.bd.deliverytiger.app.ui.add_order
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
-import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
-import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.utils.VariousTask
 
-/**
- * A simple [Fragment] subclass.
- */
 class OrderSuccessFragment : Fragment() {
 
     companion object {

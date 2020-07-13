@@ -28,7 +28,7 @@ class PaymentStatementDetailsAdapter() : RecyclerView.Adapter<RecyclerView.ViewH
             val model = dataList[position]
             holder.binding.orderCode.text = model.orderCode
             holder.binding.collectedAmount.text = "${DigitConverter.toBanglaDigit(model.collectedAmount)} ৳"
-            holder.binding.totalCharge.text = "${DigitConverter.toBanglaDigit(model.totalCharge)} ৳"
+            holder.binding.totalCharge.text = "- ${DigitConverter.toBanglaDigit(model.totalCharge)} ৳"
             holder.binding.netAmount.text = "${DigitConverter.toBanglaDigit(model.amount)} ৳"
         }
     }

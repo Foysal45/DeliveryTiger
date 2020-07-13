@@ -7,6 +7,7 @@ import android.os.Handler
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -83,6 +84,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         separetor = findViewById(R.id.home_toolbar_separator)
         addOrderFab = findViewById(R.id.addOrderFab)
         navView.setNavigationItemSelectedListener(this)
+
+        //moveFabBy(300f)
         /*val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
@@ -214,21 +217,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 logoIV.visibility = View.VISIBLE
                 setToolbarTitle("")
             }
-            val currentFragment: Fragment? =
-                supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+            val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
             if (currentFragment is AddOrderFragmentOne || currentFragment is AddOrderFragmentTwo) {
                 addProductBtnVisibility(false)
             } else {
                 addProductBtnVisibility(true)
-            }
-            if (currentFragment is DashboardFragment){
-                //logoIV.visibility = View.VISIBLE
-                searchIV.visibility = View.VISIBLE
-                separetor.visibility = View.VISIBLE
-            } else {
-                //logoIV.visibility = View.GONE
-                searchIV.visibility = View.GONE
-                separetor.visibility = View.GONE
             }
             if (currentFragment is OrderTrackingFragment) {
                 trackingIV.visibility = View.GONE
@@ -246,6 +239,20 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 searchIV.visibility = View.GONE
                 separetor.visibility = View.GONE
                 addProductBtnVisibility(false)
+            }
+            if (currentFragment is ServiceBillPayFragment) {
+                addOrderFab.hide()
+            }
+            if (currentFragment is DashboardFragment){
+                //logoIV.visibility = View.VISIBLE
+                searchIV.visibility = View.VISIBLE
+                separetor.visibility = View.VISIBLE
+                moveFabBy(100f)
+            } else {
+                //logoIV.visibility = View.GONE
+                searchIV.visibility = View.GONE
+                separetor.visibility = View.GONE
+                moveFabBy(24f)
             }
 
             when (currentFragment) {
@@ -289,7 +296,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     currentFragment.onResume()
                 }
             }
-
 
         }
     }
@@ -494,6 +500,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // point is inside view bounds
         return ((x > viewX && x < (viewX + view.width)) && (y > viewY && y < (viewY + view.height)))
+    }
+
+    private fun moveFabBy(value: Float) {
+        timber.log.Timber.d("moveFabBy: $value")
+        val param = addOrderFab.layoutParams as ViewGroup.MarginLayoutParams
+        param.setMargins(0,0, this.dpToPx(24f), this.dpToPx(value))
+        addOrderFab.layoutParams = param
     }
 
     private fun callFragmentHideKeyboard() {

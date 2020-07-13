@@ -5,9 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.ProgressBar
-import androidx.appcompat.widget.AppCompatSpinner
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
@@ -16,11 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponseModel
+import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
+import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.DigitConverter.banglaMonth
@@ -31,19 +30,16 @@ import java.util.*
 
 class DashboardFragment : Fragment() {
 
-    private lateinit var monthSpinner: AppCompatSpinner
-    private lateinit var dashboardRV: RecyclerView
-    private lateinit var progressBar: ProgressBar
-    private lateinit var bannerImage: ImageView
+    private var binding: FragmentDashboardBinding? = null
+
+    private lateinit var dashboardAdapter: DashboardAdapter
+    private val responseModelList: MutableList<DashboardResponseModel> = mutableListOf()
+    private val viewModel: DashboardViewModel by inject()
 
     private var currentYear = 0
     private var selectedYear = 0
     private var selectedMonth = 0
     private var isLoading = false
-
-    private lateinit var dashboardAdapter: DashboardAdapter
-    private val responseModelList: MutableList<DashboardResponseModel> = mutableListOf()
-    private val viewModel: DashboardViewModel by inject()
 
     companion object {
         fun newInstance(): DashboardFragment = DashboardFragment().apply {}
@@ -51,21 +47,9 @@ class DashboardFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_dashboard, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        monthSpinner = view.findViewById(R.id.spinner_month_selection)
-        dashboardRV = view.findViewById(R.id.dashboard_rv)
-        progressBar = view.findViewById(R.id.dashBoardProgress)
-        bannerImage = view.findViewById(R.id.bannerImage)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        //(activity as HomeActivity).setToolbarTitle("ড্যাশবোর্ড")
+        return FragmentDashboardBinding.inflate(inflater).also {
+            binding = it
+        }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -74,10 +58,11 @@ class DashboardFragment : Fragment() {
         setDashBoardAdapter()
         setSpinner()
 
+        binding?.bannerImage?.visibility = View.VISIBLE
         Glide.with(requireContext())
-            .load(R.drawable.ic_banner_place)
+            .load(AppConstant.TEST_BANNER)
             .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
-            .into(bannerImage)
+            .into(binding?.bannerImage!!)
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -89,10 +74,10 @@ class DashboardFragment : Fragment() {
                 }
                 is ViewState.ProgressState -> {
                     if (state.isShow) {
-                        progressBar?.visibility = View.VISIBLE
+                        binding?.progressBar?.visibility = View.VISIBLE
                         isLoading = true
                     } else {
-                        progressBar?.visibility = View.GONE
+                        binding?.progressBar?.visibility = View.GONE
                         isLoading = false
                     }
                 }
@@ -106,20 +91,20 @@ class DashboardFragment : Fragment() {
         val gridLayoutManager = GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                if (responseModelList[position].dashboardSpanCount!! == 0 || responseModelList[position].dashboardSpanCount!! > 2) {
-                    return 2
+                return if (responseModelList[position].dashboardSpanCount!! == 0 || responseModelList[position].dashboardSpanCount!! > 2) {
+                    2
                 } else {
-                    return responseModelList[position].dashboardSpanCount!!
+                    responseModelList[position].dashboardSpanCount!!
                 }
             }
         }
-        with(dashboardRV) {
-            setHasFixedSize(true)
+        with(binding?.recyclerview!!) {
+            setHasFixedSize(false)
             layoutManager = gridLayoutManager
             adapter = dashboardAdapter
         }
 
-        dashboardAdapter.onItemClick = { position, model ->
+        dashboardAdapter.onItemClick = { _, model ->
             //dashBoardClickEvent(model?.dashboardRouteUrl!!)
             if (model?.count != 0){
                 when (model?.dashboardRouteUrl) {
@@ -136,7 +121,7 @@ class DashboardFragment : Fragment() {
                         addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
                     }
                     "all-order" -> {
-                        goToAllOrder(model)
+                        goToAllOrder(model.name ?: "", model.dashboardStatusFilter)
                     }
                     "cod-collection" -> {
                         addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
@@ -148,6 +133,14 @@ class DashboardFragment : Fragment() {
             } else {
                 VariousTask.showShortToast(context, "পর্যাপ্ত তথ্য নেই")
             }
+        }
+
+        binding?.paymentInfoLayout?.setOnClickListener {
+            goToAllOrder("পেমেন্ট রেডি", "পেমেন্ট রেডি")
+        }
+
+        binding?.paymentDoneLayout?.setOnClickListener {
+            addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
         }
 
     }
@@ -178,8 +171,8 @@ class DashboardFragment : Fragment() {
         }
 
         val packagingAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, viewList)
-        monthSpinner.adapter = packagingAdapter
-        monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding?.monthSpinner?.adapter = packagingAdapter
+        binding?.monthSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
 
             }
@@ -215,17 +208,17 @@ class DashboardFragment : Fragment() {
         ft?.commit()
     }
 
-    private fun goToAllOrder(model: DashboardResponseModel) {
+    private fun goToAllOrder(statusGroupName: String, statusFilter: String) {
 
         val calendar = Calendar.getInstance()
         calendar.set(selectedYear,selectedMonth-1,1)
         val lastDate = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
 
         val bundle = Bundle()
-        bundle.putString("statusGroup", model.name)
+        bundle.putString("statusGroup", statusGroupName)
         bundle.putString("fromDate", "$selectedYear-$selectedMonth-01")
         bundle.putString("toDate", "$selectedYear-$selectedMonth-$lastDate")
-        bundle.putString("dashboardStatusFilter", model.dashboardStatusFilter)
+        bundle.putString("dashboardStatusFilter", statusFilter)
 
         val fragment = AllOrdersFragment.newInstance(bundle)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
@@ -234,4 +227,9 @@ class DashboardFragment : Fragment() {
         ft?.commit()
     }
 
+    override fun onDestroyView() {
+        binding?.unbind()
+        binding = null
+        super.onDestroyView()
+    }
 }

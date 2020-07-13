@@ -78,12 +78,12 @@ class PaymentStatementDetailFragment: Fragment() {
             binding?.paymentMedium?.text = model?.modeOfPayment
             binding?.orderCount?.text = "${DigitConverter.toBanglaDigit(model?.totalOrderCount.toString())} টি"
             binding?.totalCollectionAmount?.text = "${DigitConverter.toBanglaDigit(model?.netCollectedAmount.toString())} ৳"
-            binding?.totalCharge?.text = "${DigitConverter.toBanglaDigit(model?.netTotalCharge.toString())} ৳"
-            binding?.totalAdjustment?.text = "${DigitConverter.toBanglaDigit(model?.netAdjustedAmount.toString())} ৳"
+            binding?.totalCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.netTotalCharge.toString())} ৳"
+            binding?.totalAdjustment?.text = "- ${DigitConverter.toBanglaDigit(model?.netAdjustedAmount.toString())} ৳"
             binding?.totalPayment?.text = "${DigitConverter.toBanglaDigit(model?.netPaidAmount.toString())} ৳"
 
             binding?.filterTab?.getTabAt(0)?.text = "পেইড (${DigitConverter.toBanglaDigit(model?.totalCrOrderCount.toString())})"
-            binding?.filterTab?.getTabAt(1)?.text = "এডজাস্টড (${DigitConverter.toBanglaDigit(model?.totalAdOrderCount.toString())})"
+            binding?.filterTab?.getTabAt(1)?.text = "এডজাস্টেড (${DigitConverter.toBanglaDigit(model?.totalAdOrderCount.toString())})"
 
             filterOrderList(model?.orderList, "CR")
             binding?.filterTab?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{

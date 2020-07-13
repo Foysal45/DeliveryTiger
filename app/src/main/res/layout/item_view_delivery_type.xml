@@ -8,11 +8,11 @@
     <ImageView
         android:id="@+id/item_view_delivery_type_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
+        android:layout_height="70dp"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/cd"
-        tools:srcCompat="@drawable/ic_delivery_regular_unselected"
-        android:background="@color/black_5"
+        tools:srcCompat="@drawable/ic_sameday"
+        tools:background="@color/black_5"
         />
 
     <!--<TextView

@@ -19,10 +19,10 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/transaction"
+                android:id="@+id/date1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ট্রানজেকশন নম্বর"
+                android:text="তারিখ"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/text_14"
                 android:textStyle="bold"
@@ -30,7 +30,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/transactionNo"
+                android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
@@ -39,7 +39,7 @@
                 app:layout_constraintBottom_toTopOf="@id/separator"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="5301745" />
+                tools:text="28-Jan-2020" />
 
 
             <View
@@ -48,7 +48,7 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="6dp"
                 android:background="@color/separator"
-                app:layout_constraintTop_toBottomOf="@id/transactionNo" />
+                app:layout_constraintTop_toBottomOf="@id/date" />
 
 
             <TextView
@@ -56,14 +56,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="তারিখ"
+                android:text="ট্রানজেকশন নম্বর"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator" />
 
             <TextView
-                android:id="@+id/date"
+                android:id="@+id/transactionNo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -71,7 +71,7 @@
                 android:textSize="@dimen/text_14"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator"
-                tools:text="28-Jan-2020" />
+                tools:text="5301745" />
 
             <TextView
                 android:id="@+id/key2"
@@ -90,7 +90,7 @@
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/date"
+                app:layout_constraintTop_toBottomOf="@id/transactionNo"
                 tools:text="EFT / Cheque" />
 
             <TextView

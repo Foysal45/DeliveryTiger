@@ -1,86 +1,73 @@
 package com.bd.deliverytiger.app.ui.web_view
 
-
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.graphics.Bitmap
 import android.net.http.SslError
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.SslErrorHandler
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import android.widget.ProgressBar
+import android.webkit.*
 import androidx.fragment.app.Fragment
-import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.databinding.FragmentWebViewBinding
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 
 class WebViewFragment : Fragment() {
 
-    private val TAG = "WebViewFragment"
-    private lateinit var mContext: Context
-
-    private lateinit var webView: WebView
-    private var progressBar: ProgressBar? = null
+    private val repository: AppRepository by inject()
+    private var binding: FragmentWebViewBinding? = null
 
     private var webTitle: String = ""
     private var loadUrl: String = ""
-
-    private val repository: AppRepository by inject()
+    private var bundle: Bundle? = null
 
     companion object {
-        fun newInstance(url: String, title: String): WebViewFragment = WebViewFragment().apply {
+        fun newInstance(url: String, title: String, bundle: Bundle? = null): WebViewFragment = WebViewFragment().apply {
             this.loadUrl = url
             this.webTitle = title
+            this.bundle = bundle
         }
-        val tag = WebViewFragment::class.java.name
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mContext = context
+        val tag: String = WebViewFragment::class.java.name
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_web_view, container, false)
+        return FragmentWebViewBinding.inflate(inflater).also {
+            binding = it
+        }.root
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
-        webView = view.findViewById(R.id.webView)
-        progressBar = view.findViewById(R.id.custom_progress_bar)
+        Timber.d("WebView Url: $loadUrl")
+        Timber.d("WebView Bundle: ${bundle.toString()}")
 
-        val webSettings = webView.settings
-        webSettings.javaScriptEnabled = true
-        webSettings.domStorageEnabled = true
-        webSettings.allowFileAccess = true
-        webSettings.setSupportZoom(false)
-        webSettings.builtInZoomControls = true
-        webSettings.displayZoomControls = false
-        //webSettings.loadWithOverviewMode = true
-        //webSettings.useWideViewPort = true
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
+        binding?.webView!!.settings.apply {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            allowFileAccess = true
+            setSupportZoom(true)
+            builtInZoomControls = true
+            displayZoomControls = false
+            mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
+            //loadWithOverviewMode = true
+            //useWideViewPort = true
         }
-        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
-        webView.clearCache(true)
-        webView.clearHistory()
-        webView.isHorizontalScrollBarEnabled = false
-        webView.addJavascriptInterface(WebAppInterface(mContext,repository,arguments), "Android")
-        webView.webViewClient = Callback()
+        with(binding?.webView!!) {
+            setLayerType(View.LAYER_TYPE_HARDWARE, null)
+            clearHistory()
+            isHorizontalScrollBarEnabled = false
+            addJavascriptInterface(WebAppInterface(requireContext(), repository, bundle), "Android")
+            webViewClient = Callback()
+            //clearCache(true)
+        }
 
-        //webViewTitle.text = webTitle // set toolbar title
-        webView.loadUrl(loadUrl)
-
+        binding?.webView?.loadUrl(loadUrl)
     }
 
     override fun onResume() {
@@ -90,45 +77,58 @@ class WebViewFragment : Fragment() {
 
     inner class Callback : WebViewClient() {
 
-        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-            return super.shouldOverrideUrlLoading(view, url)
-        }
+        /*override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+            return super.shouldOverrideUrlLoading(view, request)
+            // Url base logic here
+            *//*val url = request?.url?.path
+            if (url?.startsWith("intent://scan/") == true) {
+                // Do Stuff
+                return true
+            }*//*
+        }*/
 
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
-            progressBar?.visibility = View.VISIBLE
+            binding?.progressBar?.visibility = View.VISIBLE
         }
 
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
-            progressBar?.visibility = View.GONE
+            binding?.progressBar?.visibility = View.GONE
         }
 
-        @SuppressWarnings("deprecation")
-        override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
-            super.onReceivedError(view, errorCode, description, failingUrl)
-            progressBar?.visibility = View.GONE
+        override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+            super.onReceivedError(view, request, error)
+            Timber.d(error.toString())
+            binding?.progressBar?.visibility = View.GONE
         }
 
-        override fun onReceivedSslError(view: WebView, handler: SslErrorHandler, error: SslError) {
-            //super.onReceivedSslError(view, handler, error);
-            val builder = AlertDialog.Builder(mContext)
-            var message = "SSL Certificate error."
-            when (error.primaryError) {
-                SslError.SSL_UNTRUSTED -> message = "The certificate authority is not trusted."
-                SslError.SSL_EXPIRED -> message = "The certificate has expired."
-                SslError.SSL_IDMISMATCH -> message = "The certificate Hostname mismatch."
-                SslError.SSL_NOTYETVALID -> message = "The certificate is not yet valid."
+        override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
+            super.onReceivedSslError(view, handler, error)
+
+            val builder = AlertDialog.Builder(requireContext())
+            var message = when (error?.primaryError) {
+                SslError.SSL_UNTRUSTED -> "The certificate authority is not trusted."
+                SslError.SSL_EXPIRED -> "The certificate has expired."
+                SslError.SSL_IDMISMATCH -> "The certificate Hostname mismatch."
+                SslError.SSL_NOTYETVALID -> "The certificate is not yet valid."
+                else -> "SSL Error."
             }
             message += " Do you want to continue anyway?"
 
             builder.setTitle("SSL Certificate Error")
             builder.setMessage(message)
-            builder.setPositiveButton("continue") { dialog, which -> handler.proceed() }
-            builder.setNegativeButton("cancel") { dialog, which -> handler.cancel() }
+            builder.setPositiveButton("continue") { _, _ -> handler?.proceed() }
+            builder.setNegativeButton("cancel") { _, _ -> handler?.cancel() }
             val dialog = builder.create()
             dialog.show()
         }
+    }
+
+    override fun onDestroyView() {
+        binding?.unbind()
+        binding = null
+        super.onDestroyView()
     }
 
 }

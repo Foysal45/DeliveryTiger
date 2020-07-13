@@ -5,6 +5,7 @@ import com.bd.deliverytiger.app.api.model.payment_statement.PaymentData
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsResponse
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableResponse
+import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
 import com.haroldadmin.cnradapter.NetworkResponse
 import retrofit2.Retrofit
 import retrofit2.http.Body
@@ -24,6 +25,9 @@ interface ApiInterfaceADM {
 
     @POST("api/account/reports/GetMerchantMonthlyReceivableList")
     suspend fun getMerchantMonthlyReceivable(@Body requestBody: MonthlyReceivableRequest): NetworkResponse<MonthlyReceivableResponse, ErrorResponse>
+
+    @POST("api/account/reports/BulkMerchantCashCollection")
+    suspend fun bulkMerchantCashCollection(@Body requestBody: MonthlyReceivableUpdateRequest): NetworkResponse<String, ErrorResponse>
 
     @GET("api/account/reports/GetDTMerchantPaidChequeList/{courierUserId}")
     suspend fun getPaymentHistory(@Path("courierUserId") courierUserId: Int): NetworkResponse<List<PaymentData>, ErrorResponse>

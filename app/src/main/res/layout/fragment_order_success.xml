@@ -1,69 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.add_order.OrderSuccessFragment">
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="0dp">
 
-    <LinearLayout
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/cd"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/ic_illustration_success" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/cd"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/ic_illustration_success" />
+    <TextView
+        android:id="@+id/tvSuccessOrderId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/left_right_margin"
+        android:layout_marginEnd="@dimen/left_right_margin"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_14"
+        android:textStyle="bold"
+        tools:text="# DT-3421" />
 
+    <TextView
+        android:id="@+id/tvSuccessOrderTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/left_right_margin"
+        android:layout_marginEnd="@dimen/left_right_margin"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        tools:text="3-in-1 Multipurpose Screw Diver" />
 
-        <TextView
-            android:id="@+id/tvSuccessOrderId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/left_right_margin"
-            android:layout_marginEnd="@dimen/left_right_margin"
-            android:text="# DT-3421"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/text_14"
-            android:textStyle="bold" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/left_right_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/left_right_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:background="@color/divider" />
 
-        <TextView
-            android:id="@+id/tvSuccessOrderTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/left_right_margin"
-            android:layout_marginEnd="@dimen/left_right_margin"
-            android:text="3-in-1 Multipurpose Screw Diver"
-            android:textColor="@color/black_80"
-            android:textSize="@dimen/text_14" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="@dimen/left_right_margin"
-            android:layout_marginTop="@dimen/fab_margin"
-            android:layout_marginEnd="@dimen/left_right_margin"
-            android:layout_marginBottom="@dimen/fab_margin"
-            android:background="@color/divider" />
-
-        <TextView
-            android:id="@+id/tvSuccessOrderAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/left_right_margin"
-            android:layout_marginEnd="@dimen/left_right_margin"
-            android:text="Himel Chowdhury\n01722486102, 01903598036\n23F/A, Ashkona, Dakshinkhan, Airport, Dhaka"
-            android:textColor="@color/black_80"
-            android:textSize="@dimen/text_14" />
-
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tvSuccessOrderAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/left_right_margin"
+        android:layout_marginEnd="@dimen/left_right_margin"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        tools:text="Himel Chowdhury\n01722486102, 01903598036\n23F/A, Ashkona, Dakshinkhan, Airport, Dhaka" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -72,9 +63,7 @@
         android:layout_marginTop="@dimen/left_right_margin"
         android:layout_marginEnd="@dimen/left_right_margin"
         android:layout_marginBottom="@dimen/login_view_height"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:cardCornerRadius="4dp"
-        >
+        app:cardCornerRadius="4dp">
 
         <LinearLayout
             android:id="@+id/orderListClickedLay"
@@ -84,7 +73,6 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -92,7 +80,6 @@
                 android:contentDescription="@string/cd"
                 android:tint="@color/white"
                 app:srcCompat="@drawable/ic_list" />
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -105,5 +92,8 @@
 
     </androidx.cardview.widget.CardView>
 
+</LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

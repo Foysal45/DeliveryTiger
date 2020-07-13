@@ -1,11 +1,13 @@
 package com.bd.deliverytiger.app.ui.service_bill_pay
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
@@ -13,14 +15,18 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
+import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
+import com.bd.deliverytiger.app.api.model.service_bill_pay.OrderCode
+import com.bd.deliverytiger.app.api.model.service_bill_pay.OrderData
 import com.bd.deliverytiger.app.databinding.FragmentServiceBillPayBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
 import org.koin.android.ext.android.inject
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.*
-
+@SuppressLint("SetTextI18n")
 class ServiceBillPayFragment: Fragment() {
 
     private val viewModel: ServiceBillViewModel by inject()
@@ -31,6 +37,7 @@ class ServiceBillPayFragment: Fragment() {
     private var selectedYear: Int = 0
     private var fromDate: String = ""
     private var toDate: String = ""
+    private val orderList: MutableList<OrderData> = mutableListOf()
 
     companion object {
         fun newInstance(): ServiceBillPayFragment = ServiceBillPayFragment()
@@ -52,10 +59,10 @@ class ServiceBillPayFragment: Fragment() {
         val monthList: MutableList<String> = mutableListOf()
         val yearList: MutableList<String> = mutableListOf()
         for (year in currentYear downTo 2019){
-            yearList.add("${DigitConverter.toBanglaDigit(year)}")
+            yearList.add(DigitConverter.toBanglaDigit(year))
         }
         for (monthIndex in 0..11){
-            monthList.add("${DigitConverter.banglaMonth[monthIndex]}")
+            monthList.add(DigitConverter.banglaMonth[monthIndex])
         }
 
         calender.add(Calendar.MONTH, -1)
@@ -101,7 +108,7 @@ class ServiceBillPayFragment: Fragment() {
             addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         }
 
-        fetchMerchantMonthlyReceivable(selectedYear, selectedMonthIndex)
+        //fetchMerchantMonthlyReceivable(selectedYear, selectedMonthIndex) on Resume
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -122,9 +129,11 @@ class ServiceBillPayFragment: Fragment() {
         })
 
         binding?.payBtn?.setOnClickListener {
-            paymentGateway("4376"/*SessionManager.courierUserId.toString()*/,fromDate, toDate)
+
+            paymentGateway(fromDate, toDate)
         }
     }
+
 
     private fun fetchMerchantMonthlyReceivable(year: Int, monthIndex: Int) {
 
@@ -137,11 +146,12 @@ class ServiceBillPayFragment: Fragment() {
         toDate = "$year-${monthIndex+1}-$lastDay"
 
         // ToDo: remove
-        val request = MonthlyReceivableRequest("4376"/*SessionManager.courierUserId.toString()*/,fromDate, toDate)
+        val request = MonthlyReceivableRequest(SessionManager.courierUserId.toString(),fromDate, toDate)
         viewModel.getMerchantMonthlyReceivable(request).observe(viewLifecycleOwner, Observer {
             it.orderList?.let { list ->
                 dataAdapter.initLoad(list)
-
+                orderList.clear()
+                orderList.addAll(list)
                 if (list.isEmpty()) {
                     binding?.emptyView?.visibility = View.VISIBLE
                     binding?.payBtn?.visibility = View.GONE
@@ -160,12 +170,27 @@ class ServiceBillPayFragment: Fragment() {
     override fun onResume() {
         super.onResume()
         (activity as HomeActivity).setToolbarTitle("সার্ভিসের বিল পেমেন্ট")
+        fetchMerchantMonthlyReceivable(selectedYear, selectedMonthIndex)
     }
 
-    private fun paymentGateway(courierId: String, from: String, to: String) {
+    private fun paymentGateway(from: String, to: String) {
+
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+        val date = sdf.format(System.currentTimeMillis())
+        val orderCodeList: MutableList<OrderCode> = mutableListOf()
+        orderList.forEach {
+            orderCodeList.add(OrderCode(it.orderCode?: "DT-",it.totalAmount,"Bkash-$date"))
+        }
+        val model = MonthlyReceivableUpdateRequest(date,"",orderCodeList)
+        val bundle = bundleOf(
+            "requestBody" to model
+        )
+
+        // ToDo: remove
+        val courierId = SessionManager.courierUserId.toString() //6188
 
         val url = "${AppConstant.GATEWAY}?CourierID=$courierId&FromDate=$from&ToDate=$to"
-        val fragment = WebViewFragment.newInstance(url, "পেমেন্ট")
+        val fragment = WebViewFragment.newInstance(url, "পেমেন্ট", bundle)
         val tag = WebViewFragment.tag
 
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()

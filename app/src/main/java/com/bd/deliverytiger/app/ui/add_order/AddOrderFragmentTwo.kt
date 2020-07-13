@@ -112,6 +112,7 @@ class AddOrderFragmentTwo : Fragment() {
     private var areaId: Int = 0
     private var address: String = ""
     private var addressNote: String = ""
+
     private var deliveryType: String = ""
     private var orderType: String = "Only Delivery" // Only Delivery  Delivery Taka Collection
     private var productType: String = "small" // Only Delivery  Delivery Taka Collection

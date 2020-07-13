@@ -115,7 +115,7 @@
                     android:id="@+id/key5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="মোট চার্জ"
+                    android:text="অ্যাডজাস্টমেন্ট (সার্ভিস চার্জ)"
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14"
                     app:layout_constraintStart_toStartOf="parent"
@@ -125,7 +125,7 @@
                     android:id="@+id/totalCharge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black_80"
+                    android:textColor="@color/red"
                     android:textSize="@dimen/text_14"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/totalCollectionAmount"
@@ -135,7 +135,7 @@
                     android:id="@+id/key6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="অ্যাডজাস্টমেন্ট"
+                    android:text="অ্যাডজাস্টমেন্ট (অ্যাডভান্স পেমেন্ট)"
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14"
                     app:layout_constraintStart_toStartOf="parent"
@@ -145,7 +145,7 @@
                     android:id="@+id/totalAdjustment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black_80"
+                    android:textColor="@color/red"
                     android:textSize="@dimen/text_14"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/totalCharge"
@@ -185,6 +185,8 @@
             app:tabMode="fixed"
             android:visibility="gone"
             tools:visibility="visible"
+            app:tabIndicatorColor="@color/red"
+            app:tabSelectedTextColor="@color/red"
             >
 
             <com.google.android.material.tabs.TabItem
@@ -197,7 +199,7 @@
                 android:id="@+id/tabItem2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="এডজাস্টড"
+                android:text="এডজাস্টেড"
                 />
 
         </com.google.android.material.tabs.TabLayout>
@@ -210,7 +212,7 @@
             android:clipToPadding="false"
             android:overScrollMode="never"
             android:paddingTop="3dp"
-            android:paddingBottom="80dp"
+            android:paddingBottom="@dimen/list_bottom_padding"
             android:layout_marginTop="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/filterTab"
