@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+
+    <files-path name="files_images_o" path="Android/data/com.bd.deliverytiger.app/files/Pictures/Camera" />
+    <external-path name="external_images_o" path="Android/data/com.bd.deliverytiger.app/files/Pictures/Camera" />
+    <external-files-path name="external_files_images_o" path="Android/data/com.bd.deliverytiger.app/files/Pictures/Camera" />
+
+    <external-path name="external_images" path="Pictures/Camera" />
+    <external-files-path name="external_files_images" path="Pictures/Camera" />
+</paths>

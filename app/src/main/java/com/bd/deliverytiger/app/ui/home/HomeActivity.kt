@@ -34,6 +34,7 @@ import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
+import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.ui.service_bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
@@ -58,6 +59,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var notificationIV: ImageView
     private lateinit var trackingIV: ImageView
     private lateinit var searchIV: ImageView
+    private lateinit var downloadTV: ImageView
     private lateinit var headerPic: ImageView
     private lateinit var separetor: View
     private lateinit var addOrderFab: ExtendedFloatingActionButton
@@ -68,6 +70,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl")
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl")
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl")
+
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -81,6 +88,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         notificationIV = findViewById(R.id.home_toolbar_notification)
         trackingIV = findViewById(R.id.home_toolbar_tracking)
         searchIV = findViewById(R.id.home_toolbar_search)
+        downloadTV = findViewById(R.id.home_toolbar_download)
         separetor = findViewById(R.id.home_toolbar_separator)
         addOrderFab = findViewById(R.id.addOrderFab)
         navView.setNavigationItemSelectedListener(this)
@@ -134,6 +142,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         searchIV.setOnClickListener {
             goToAllOrder()
+        }
+        downloadTV.setOnClickListener {
+            val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+            if (currentFragment is PaymentStatementDetailFragment) {
+                currentFragment.downloadFile()
+            }
         }
 
         onNewIntent(intent)
@@ -242,6 +256,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             if (currentFragment is ServiceBillPayFragment) {
                 addOrderFab.hide()
+            }
+            if (currentFragment is PaymentStatementDetailFragment) {
+                downloadTV.visibility = View.VISIBLE
+            } else {
+                downloadTV.visibility = View.GONE
             }
             if (currentFragment is DashboardFragment){
                 //logoIV.visibility = View.VISIBLE

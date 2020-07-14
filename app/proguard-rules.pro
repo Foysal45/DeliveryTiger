@@ -122,3 +122,18 @@
 -keep public class * extends java.lang.Exception
 -keep class com.google.firebase.crashlytics.** { *; }
 -dontwarn com.google.firebase.crashlytics.**
+
+-keep class org.openxmlformats.** { *; }
+-keep class schemaorg_apache_xmlbeans.* { *; }
+-keep class schemasMicrosoftComOfficeExcel.* { *; }
+-keep class schemasMicrosoftComOfficeOffice.* { *; }
+-keep class schemasMicrosoftComOfficePowerpoint.* { *; }
+-keep class schemasMicrosoftComOfficeWord.* { *; }
+-keep class schemasMicrosoftComVml.* { *; }
+-keep class aavax.xml.* { *; }
+-keep class org.apache.poi.* { *; }
+-keep class org.apache.xmlbeans.* { *; }
+-keep class org.dom4j.* { *; }
+-keep class org.w3c.dom.* { *; }
+-keep class repackage.* { *; }
+-keep class schemaorg_apache_xmlbeans.* { *; }
