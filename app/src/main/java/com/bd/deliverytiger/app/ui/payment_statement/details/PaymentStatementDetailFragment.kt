@@ -178,11 +178,7 @@ class PaymentStatementDetailFragment : Fragment() {
             return if (storagePermission != PackageManager.PERMISSION_GRANTED) {
                 val storagePermissionRationale = ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 if (storagePermissionRationale) {
-                    alert("Permission Required", "App required Storage permission to function properly. Please grand permission.", true, "Give Permission", "Cancel") {
-                        if (it == AlertDialog.BUTTON_POSITIVE) {
-                            requestPermissions(permissions, permissionStorage)
-                        }
-                    }
+                    requestPermissions(permissions, permissionStorage)
                 } else {
                     requestPermissions(permissions, permissionStorage)
                 }
@@ -228,8 +224,13 @@ class PaymentStatementDetailFragment : Fragment() {
 
     private fun generateExcel() {
 
-        val generator = ExcelGenerator(requireContext())
-        generator.writeExcel(responseModel)
+        if (responseModel != null) {
+            val generator = ExcelGenerator(requireContext())
+            generator.writeExcel(responseModel)
+        } else {
+            context?.toast("কোনো তথ্য নেই")
+        }
+
     }
 
 }
