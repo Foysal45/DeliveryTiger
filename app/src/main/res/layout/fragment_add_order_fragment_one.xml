@@ -261,7 +261,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:gravity="center"
                             app:checkedButton="@id/toggle_button_1"
                             app:singleSelection="true"
 
@@ -271,53 +270,23 @@
                                 android:id="@+id/toggle_button_1"
                                 style="?attr/materialButtonOutlinedStyle"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="56dp"
                                 android:text="শুধু ডেলিভারি"
                                 android:textAllCaps="false"
-
+                                android:layout_weight="1"
                                 />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/toggle_button_2"
                                 style="?attr/materialButtonOutlinedStyle"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="56dp"
                                 android:text="ডেলিভারি+টাকা কালেকশন"
-                                android:textAllCaps="false" />
-
-                        </com.google.android.material.button.MaterialButtonToggleGroup>
-
-                        <com.google.android.material.button.MaterialButtonToggleGroup
-                            android:id="@+id/toggle_button_group_size"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:gravity="center"
-                            app:checkedButton="@id/toggle_button_size_choto"
-                            app:singleSelection="true"
-
-                            >
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/toggle_button_size_choto"
-                                style="?attr/materialButtonOutlinedStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="ছোট"
                                 android:textAllCaps="false"
-
+                                android:layout_weight="1"
                                 />
 
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/toggle_button_size_boro"
-                                style="?attr/materialButtonOutlinedStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="বড় (১ কিউবিক ফুটের বেশি)"
-                                android:textAllCaps="false" />
-
                         </com.google.android.material.button.MaterialButtonToggleGroup>
-
 
                         <EditText
                             android:id="@+id/collectionAmount"
@@ -365,66 +334,67 @@
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/fab_margin">
-
-                            <androidx.appcompat.widget.AppCompatSpinner
-                                android:id="@+id/spinner_packaging_selection"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/login_view_height"
-                                android:background="@drawable/bg_spinner"
-                                android:overlapAnchor="false"
-                                android:spinnerMode="dropdown"
-                                android:theme="@style/custom_spinner_style"
-                                app:layout_constraintTop_toTopOf="parent"
-                                tools:entries="@array/spinner_array_package" />
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                android:contentDescription="@string/cd"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:srcCompat="@drawable/ic_arrow_drop_down" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:orientation="horizontal">
+                            android:layout_marginTop="@dimen/fab_margin"
+                            android:orientation="horizontal"
+
+                            >
 
                             <androidx.appcompat.widget.AppCompatCheckBox
                                 android:id="@+id/check_breakable"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:text="ভঙ্গুর/তরল প্রোডাক্ট"
-                                android:textColor="@color/black_80"
-                                android:textSize="@dimen/text_14" />
-
-                            <androidx.appcompat.widget.AppCompatCheckBox
-                                android:id="@+id/checkOpenBox"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="ওপেন বাক্স"
+                                android:paddingStart="8dp"
+                                android:paddingEnd="8dp"
                                 android:textColor="@color/black_80"
                                 android:textSize="@dimen/text_14"
+                                android:background="@drawable/bg_spinner"
+                                android:layout_marginEnd="5dp"
+                                android:layout_weight="1"
+                                />
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/packagingLayout"
+                                android:layout_width="220dp"
+                                android:layout_height="wrap_content"
                                 android:visibility="gone"
                                 tools:visibility="visible"
-                                />
+
+                                >
+
+                                <androidx.appcompat.widget.AppCompatSpinner
+                                    android:id="@+id/spinner_packaging_selection"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/login_view_height"
+                                    android:background="@drawable/bg_spinner"
+                                    android:overlapAnchor="false"
+                                    android:spinnerMode="dropdown"
+                                    android:theme="@style/custom_spinner_style"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    tools:entries="@array/spinner_array_package" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="8dp"
+                                    android:contentDescription="@string/cd"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                         </LinearLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp">
+                            android:layout_marginTop="@dimen/fab_margin">
 
                             <androidx.appcompat.widget.AppCompatSpinner
                                 android:id="@+id/spinnerCollectionLocation"
@@ -464,7 +434,10 @@
                             android:paddingEnd="16dp"
                             android:paddingBottom="8dp"
                             android:textColor="@color/black_80"
-                            android:textSize="@dimen/text_14" />
+                            android:textSize="@dimen/text_14"
+                            android:visibility="gone"
+                            tools:visibility="visible"
+                            />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/delivery_type_selection_rV"
@@ -521,21 +494,23 @@
 
                         <androidx.appcompat.widget.AppCompatCheckBox
                             android:id="@+id/checkOfficeDrop"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="@dimen/fab_margin"
                             android:text="অফিস এ ড্রপ করতে চাই"
                             android:textColor="@color/black_80"
                             android:textSize="@dimen/text_14"
                             android:visibility="gone"
                             tools:visibility="visible"
+
+                            android:background="@drawable/bg_add_order_edit_text"
                             />
 
                         <EditText
                             android:id="@+id/etAdditionalNote"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="@dimen/fab_margin"
                             android:background="@drawable/bg_add_order_edit_text"
                             android:hint="এডিশনাল নোট (অপশনাল)"
                             android:importantForAutofill="no"

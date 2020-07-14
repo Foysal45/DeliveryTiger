@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.utils
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.Color
 import android.util.TypedValue
@@ -42,6 +43,24 @@ fun View.hideKeyboard() {
 
 fun Activity.setStatusBarColor(@ColorRes colorCode: Int = R.color.colorPrimaryDark) {
     window?.statusBarColor = ActivityCompat.getColor(this, colorCode)
+}
+
+fun Activity.progressDialog(message: String = getString(R.string.waiting)): ProgressDialog {
+
+    val dialog = ProgressDialog(this)
+    with(dialog) {
+        setMessage(message)
+    }
+    return dialog
+}
+
+fun Fragment.progressDialog(message: String = getString(R.string.waiting)): ProgressDialog {
+
+    val dialog = ProgressDialog(requireContext())
+    with(dialog) {
+        setMessage(message)
+    }
+    return dialog
 }
 
 fun Fragment.alert(title: CharSequence? = null, message: CharSequence? = null, showCancel: Boolean = false, positiveButtonText: String = "ঠিক আছে", negativeButtonText: String = "ক্যানসেল", listener: ((type: Int) -> Unit)? = null): AlertDialog {

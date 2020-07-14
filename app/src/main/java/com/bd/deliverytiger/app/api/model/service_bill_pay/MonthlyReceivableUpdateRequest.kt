@@ -18,5 +18,5 @@ data class MonthlyReceivableUpdateRequest(
     @SerializedName("LedgerId")
     var ledgerId: Int = 8053,
     @SerializedName("Type")
-    var type: String = "C"
+    var type: String = "M"
 ) : Parcelable

@@ -36,6 +36,8 @@
     <string name="give_right_order_id">সঠিক অর্ডার আইডি লিখুন</string>
     <string name="default_notification_channel_id">Promotion</string>
 
+    <string name="waiting">অপেক্ষা করুন</string>
+
 
     <string-array name="features_list">
         <item>৬৪ জেলা শহর ও ৪৯২ উপজেলায় মাত্র ২৫ টাকায় ডেলিভারি</item>

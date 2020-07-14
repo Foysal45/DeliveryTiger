@@ -175,11 +175,13 @@ class ServiceBillPayFragment: Fragment() {
 
     private fun paymentGateway(from: String, to: String) {
 
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+        val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+        val sdfTrans = SimpleDateFormat("dd/MM/yyyy", Locale.US)
         val date = sdf.format(System.currentTimeMillis())
+        val dateTrans = sdfTrans.format(System.currentTimeMillis())
         val orderCodeList: MutableList<OrderCode> = mutableListOf()
         orderList.forEach {
-            orderCodeList.add(OrderCode(it.orderCode?: "DT-",it.totalAmount,"Bkash-$date"))
+            orderCodeList.add(OrderCode(it.orderCode?: "DT-",it.totalAmount,"Bkash-$dateTrans"))
         }
         val model = MonthlyReceivableUpdateRequest(date,"",orderCodeList)
         val bundle = bundleOf(

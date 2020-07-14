@@ -23,15 +23,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.RetrofitSingleton
-import com.bd.deliverytiger.app.api.`interface`.DistrictInterface
-import com.bd.deliverytiger.app.api.`interface`.PlaceOrderInterface
-import com.bd.deliverytiger.app.api.model.GenericResponse
-import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
-import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
 import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
-import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.ThanaPayLoad
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
@@ -47,9 +40,6 @@ import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import org.koin.android.ext.android.inject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -71,6 +61,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private lateinit var productNameET: EditText
     private lateinit var collectionAmountET: EditText
     private lateinit var spinnerWeight: AppCompatSpinner
+    private lateinit var packagingLayout: ConstraintLayout
     private lateinit var spinnerPackaging: AppCompatSpinner
     private lateinit var checkBoxBreakable: AppCompatCheckBox
     private lateinit var collectionAddressET: EditText
@@ -78,7 +69,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private lateinit var checkTermsTV: TextView
     private lateinit var deliveryTypeRV: RecyclerView
     private lateinit var toggleButtonGroup: MaterialButtonToggleGroup
-    private lateinit var toggleButtonGroupSize: MaterialButtonToggleGroup
 
 
     private lateinit var totalTV: TextView
@@ -86,12 +76,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private lateinit var deliveryDatePicker: TextView
     private lateinit var collectionDatePicker: TextView
     private lateinit var checkOfficeDrop: AppCompatCheckBox
-    private lateinit var checkOpenBox: AppCompatCheckBox
     private lateinit var spinnerCollectionLocation: AppCompatSpinner
     private lateinit var orderPlaceBtn: MaterialButton
 
-    private lateinit var placeOrderInterface: PlaceOrderInterface
-    private lateinit var districtInterface: DistrictInterface
     private lateinit var deliveryTypeAdapter: DeliveryTypeAdapter
     private var handler: Handler = Handler()
     private var runnable: Runnable = Runnable {  }
@@ -138,8 +125,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var total: Double = 0.0
 
     private var deliveryType: String = ""
-    private var orderType: String = "Only Delivery" // Only Delivery  Delivery Taka Collection
-    private var productType: String = "small" // Only Delivery  Delivery Taka Collection
+    private var orderType: String = "Only Delivery"
+    private var productType: String = "small"
     private var weight: String = ""
     private var collectionName: String = ""
     private var packingName: String = ""
@@ -187,6 +174,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         productNameET = view.findViewById(R.id.productName)
         collectionAmountET = view.findViewById(R.id.collectionAmount)
         spinnerWeight = view.findViewById(R.id.spinner_weight_selection)
+        packagingLayout = view.findViewById(R.id.packagingLayout)
         spinnerPackaging = view.findViewById(R.id.spinner_packaging_selection)
         checkBoxBreakable = view.findViewById(R.id.check_breakable)
         collectionAddressET = view.findViewById(R.id.collectionAddress)
@@ -194,14 +182,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         checkTermsTV = view.findViewById(R.id.check_terms_condition_text)
         deliveryTypeRV = view.findViewById(R.id.delivery_type_selection_rV)
         toggleButtonGroup = view.findViewById(R.id.toggle_button_group)
-        toggleButtonGroupSize = view.findViewById(R.id.toggle_button_group_size)
+
 
         totalTV = view.findViewById(R.id.tvAddOrderTotalOrder)
         totalLayout = view.findViewById(R.id.addOrderTopLay)
         deliveryDatePicker = view.findViewById(R.id.deliveryDatePicker)
         collectionDatePicker = view.findViewById(R.id.collectionDatePicker)
         checkOfficeDrop = view.findViewById(R.id.checkOfficeDrop)
-        checkOpenBox = view.findViewById(R.id.checkOpenBox)
         spinnerCollectionLocation = view.findViewById(R.id.spinnerCollectionLocation)
         orderPlaceBtn = view.findViewById(R.id.orderPlaceBtn)
 
@@ -211,9 +198,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         paymentDetailsLayout.setOnClickListener(this)
         orderPlaceBtn.setOnClickListener(this)
 
-        val retrofit = RetrofitSingleton.getInstance(requireContext())
-        placeOrderInterface = retrofit.create(PlaceOrderInterface::class.java)
-        districtInterface = retrofit.create(DistrictInterface::class.java)
         getBreakableCharge()
         getPackagingCharge()
         getPickupLocation()
@@ -315,26 +299,17 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             }
         }
 
-        toggleButtonGroupSize.addOnButtonCheckedListener { group1, checkedId1, isChecked1 ->
-            if (isChecked1) {
-                when (checkedId1) {
-                    R.id.toggle_button_size_choto -> {
-                        isCheckBigProduct = false
-                        productType = "small"
-                        calculateTotalPrice()
-                    }
-                    R.id.toggle_button_size_boro -> {
-                        isCheckBigProduct = true
-                        productType = "big"
-                        calculateTotalPrice()
-                    }
+        checkBoxBreakable.setOnCheckedChangeListener { compoundButton, isChecked ->
+            isBreakable = isChecked
+            calculateTotalPrice()
+            if (isChecked) {
+                packagingLayout.visibility = View.VISIBLE
+            } else {
+                packagingLayout.visibility = View.GONE
+                if (isPackagingSelected) {
+                    spinnerPackaging.setSelection(1, false)
                 }
             }
-        }
-
-        checkBoxBreakable.setOnCheckedChangeListener { compoundButton, b ->
-            isBreakable = b
-            calculateTotalPrice()
         }
 
         checkOfficeDrop.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -514,53 +489,39 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private fun getDistrictThanaOrAria(id: Int, track: Int) {
         hideKeyboard()
         //track = 1 district , track = 2 thana, track = 3 aria
-        val pd = ProgressDialog(context)
-        pd.setMessage("Loading")
-        pd.show()
-
-        val getDistrictThanaOrAria = RetrofitSingleton.getInstance(requireContext()).create(DistrictInterface::class.java)
-        getDistrictThanaOrAria.getAllDistrictFromApi(id).enqueue(object : Callback<DeliveryChargePayLoad> {
-            override fun onFailure(call: Call<DeliveryChargePayLoad>, t: Throwable) {
-                Timber.e("districtThanaOrAria_f-", t.toString())
-                pd.dismiss()
-            }
-
-            override fun onResponse(call: Call<DeliveryChargePayLoad>, response: Response<DeliveryChargePayLoad>) {
-                pd.dismiss()
-                if (response.isSuccessful && response.body() != null && response.body()!!.data!!.districtInfo != null) {
-                    Timber.e("districtThanaOrAria_s-", response.body().toString())
-
-                    if (track == 1) {
-                        districtList.addAll(response.body()!!.data!!.districtInfo!!)
-                        goToDistrict()
-                    } else if (track == 2) {
-                        thanaOrAriaList.clear()
-                        thanaOrAriaList.addAll(response.body()!!.data!!.districtInfo!![0].thanaHome!!)
-                        if (thanaOrAriaList.isNotEmpty()) {
-                            //customAlertDialog(thanaOrAriaList, 1)
-                            val mList: ArrayList<CustomModel> = ArrayList()
-                            for((index,model) in thanaOrAriaList.withIndex()){
-                                mList.add(CustomModel(model.thanaId,model.thanaBng+"",model.thana+"",index))
-                            }
-                            thanaAriaSelect(thanaOrAriaList,2,mList,"থানা নির্বাচন করুন")
-                        }
-                    } else if (track == 3) {
-                        thanaOrAriaList.clear()
-                        thanaOrAriaList.addAll(response.body()!!.data!!.districtInfo!![0].thanaHome!!)
-                        if (thanaOrAriaList.isNotEmpty()) {
-                           // customAlertDialog(thanaOrAriaList, 2)
-                            val mList: ArrayList<CustomModel> = ArrayList()
-                            var temp = 0
-                            for((index,model) in thanaOrAriaList.withIndex()){
-                                temp = 0
-                                if (model.postalCode != null && model.postalCode?.isNotEmpty()!!) {
-                                    temp = model.postalCode?.toInt()!!
-                                }
-                                mList.add(CustomModel(temp,model.thanaBng+"",model.thana+"",index))
-                            }
-                            thanaAriaSelect(thanaOrAriaList,3,mList, "এরিয়া/পোস্ট অফিস নির্বাচন করুন")
-                        }
+        val dialog = progressDialog()
+        dialog.show()
+        viewModel.getAllDistrictFromApi(id).observe(viewLifecycleOwner, Observer {
+            dialog.dismiss()
+            if (track == 1) {
+                districtList.addAll(it)
+                goToDistrict()
+            } else if (track == 2) {
+                thanaOrAriaList.clear()
+                thanaOrAriaList.addAll(it[0].thanaHome!!)
+                if (thanaOrAriaList.isNotEmpty()) {
+                    //customAlertDialog(thanaOrAriaList, 1)
+                    val mList: ArrayList<CustomModel> = ArrayList()
+                    for((index,model) in thanaOrAriaList.withIndex()){
+                        mList.add(CustomModel(model.thanaId,model.thanaBng+"",model.thana+"",index))
                     }
+                    thanaAriaSelect(thanaOrAriaList,2,mList,"থানা নির্বাচন করুন")
+                }
+            } else if (track == 3) {
+                thanaOrAriaList.clear()
+                thanaOrAriaList.addAll(it[0].thanaHome!!)
+                if (thanaOrAriaList.isNotEmpty()) {
+                    // customAlertDialog(thanaOrAriaList, 2)
+                    val mList: ArrayList<CustomModel> = ArrayList()
+                    var temp = 0
+                    for((index,model) in thanaOrAriaList.withIndex()){
+                        temp = 0
+                        if (model.postalCode != null && model.postalCode?.isNotEmpty()!!) {
+                            temp = model.postalCode?.toInt()!!
+                        }
+                        mList.add(CustomModel(temp,model.thanaBng+"",model.thana+"",index))
+                    }
+                    thanaAriaSelect(thanaOrAriaList,3,mList, "এরিয়া/পোস্ট অফিস নির্বাচন করুন")
                 }
             }
         })
@@ -748,169 +709,109 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     private fun getBreakableCharge() {
 
-        placeOrderInterface.getBreakableCharge().enqueue(object : Callback<GenericResponse<BreakableChargeData>> {
-            override fun onFailure(call: Call<GenericResponse<BreakableChargeData>>, t: Throwable) {
-
-            }
-
-            override fun onResponse(call: Call<GenericResponse<BreakableChargeData>>, response: Response<GenericResponse<BreakableChargeData>>) {
-                if (response.isSuccessful && response.body() != null && isAdded) {
-                    if (response.body()!!.model != null) {
-
-                        val model = response.body()!!.model
-                        breakableChargeApi = model.breakableCharge
-                        codChargePercentage = model.codChargePercentage
-                        codChargeMin = model.codChargeMin
-                        bigProductCharge = model.bigProductCharge
-
-                    }
-                }
-            }
-
+        viewModel.getBreakableCharge().observe(viewLifecycleOwner, Observer { model ->
+            breakableChargeApi = model.breakableCharge
+            codChargePercentage = model.codChargePercentage
+            codChargeMin = model.codChargeMin
+            bigProductCharge = model.bigProductCharge
         })
 
     }
 
     private fun getPackagingCharge() {
 
-        placeOrderInterface.getPackagingCharge().enqueue(object : Callback<GenericResponse<List<PackagingData>>> {
-            override fun onFailure(call: Call<GenericResponse<List<PackagingData>>>, t: Throwable) {}
+        viewModel.getPackagingCharge().observe(viewLifecycleOwner, Observer { list ->
+            packagingDataList.clear()
+            packagingDataList.addAll(list)
 
-            override fun onResponse(call: Call<GenericResponse<List<PackagingData>>>, response: Response<GenericResponse<List<PackagingData>>>) {
-                if (response.isSuccessful && response.body() != null && isAdded) {
+            val packageNameList: MutableList<String> = mutableListOf()
+            packageNameList.add("প্যাকেজিং")
+            for (model1 in packagingDataList) {
+                packageNameList.add(model1.packagingName)
+            }
 
-                    Timber.d("PackagingCharge ", " PackagingCharge_msg " + response.body()!!.model)
+            val packagingAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, packageNameList)
+            spinnerPackaging.adapter = packagingAdapter
+            spinnerPackaging.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(p0: AdapterView<*>?) {
 
-                    if (response.body()!!.model != null) {
-                        val model = response.body()!!.model
-                        packagingDataList.clear()
-                        packagingDataList.addAll(model)
+                }
 
-                        val packageNameList: MutableList<String> = mutableListOf()
-                        packageNameList.add("প্যাকেজিং")
-                        for (model1 in packagingDataList) {
-                            packageNameList.add(model1.packagingName)
-                        }
-
-                        val packagingAdapter = CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, packageNameList)
-                        spinnerPackaging.adapter = packagingAdapter
-                        spinnerPackaging.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                            }
-
-                            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                                if (p2 != 0) {
-                                    val model2 = packagingDataList[p2 - 1]
-                                    packingName = model2.packagingName
-                                    payPackagingCharge = model2.packagingCharge
-                                    isPackagingSelected = true
-                                    calculateTotalPrice()
-                                } else {
-                                    isPackagingSelected = false
-                                }
-                            }
-
-                        }
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    if (p2 != 0) {
+                        val model2 = packagingDataList[p2 - 1]
+                        packingName = model2.packagingName
+                        payPackagingCharge = model2.packagingCharge
+                        isPackagingSelected = true
+                        calculateTotalPrice()
+                    } else {
+                        isPackagingSelected = false
                     }
                 }
+
             }
+            spinnerPackaging.setSelection(1, false)
         })
 
     }
 
     private fun getDeliveryCharge() {
 
-        placeOrderInterface.getDeliveryCharge(DeliveryChargeRequest(districtId, thanaId)).enqueue(object : Callback<GenericResponse<List<DeliveryChargeResponse>>> {
-            override fun onFailure(call: Call<GenericResponse<List<DeliveryChargeResponse>>>, t: Throwable) {
-
+        viewModel.getDeliveryCharge(DeliveryChargeRequest(districtId, thanaId)).observe(viewLifecycleOwner, Observer { list ->
+            val weightList: MutableList<String> = mutableListOf()
+            weightList.add("ওজন (কেজি)")
+            for (model1 in list) {
+                weightList.add(model1.weight)
             }
 
-            override fun onResponse(
-                call: Call<GenericResponse<List<DeliveryChargeResponse>>>,
-                response: Response<GenericResponse<List<DeliveryChargeResponse>>>
-            ) {
-                if (response.isSuccessful && response.body() != null && isAdded) {
+            val weightAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, weightList)
+            spinnerWeight.adapter = weightAdapter
+            spinnerWeight.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(p0: AdapterView<*>?) {
 
-                    Timber.d("DeliveryCharge ", " DeliveryCharge_msg " + response.body()!!.model)
+                }
 
-                    if (response.body()!!.model != null) {
-                        val model = response.body()!!.model
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 
-                        val weightList: MutableList<String> = mutableListOf()
-                        weightList.add("ওজন (কেজি)")
-                        for (model1 in model) {
-                            weightList.add(model1.weight)
-                        }
+                    if (p2 != 0) {
 
-                        val weightAdapter = CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, weightList)
-                        spinnerWeight.adapter = weightAdapter
-                        spinnerWeight.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                            }
-
-                            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-
-                                if (p2 != 0) {
-
-                                    val model2 = model[p2 - 1]
-                                    weight = model2.weight
-                                    deliveryTypeAdapter.clearSelectedItemPosition()
-                                    deliveryTypeList.clear()
-                                    deliveryTypeList.addAll(model2.weightRangeWiseData)
-                                    deliveryTypeAdapter.notifyDataSetChanged()
-                                    isWeightSelected = true
-                                    //isOpenBoxCheck = model2.isOpenBox
-                                    if (model2.isOpenBox) {
-                                        checkOpenBox.visibility = View.VISIBLE
-                                    } else {
-                                        checkOpenBox.visibility = View.GONE
-                                    }
-                                } else {
-                                    isWeightSelected = false
-                                    deliveryTypeAdapter.clearSelectedItemPosition()
-                                    deliveryTypeList.clear()
-                                    deliveryTypeAdapter.notifyDataSetChanged()
-                                }
-                            }
-                        }
+                        val model2 = list[p2 - 1]
+                        weight = model2.weight
+                        deliveryTypeAdapter.clearSelectedItemPosition()
+                        deliveryTypeList.clear()
+                        deliveryTypeList.addAll(model2.weightRangeWiseData)
+                        deliveryTypeAdapter.notifyDataSetChanged()
+                        isWeightSelected = true
+                    } else {
+                        isWeightSelected = false
+                        deliveryTypeAdapter.clearSelectedItemPosition()
+                        deliveryTypeList.clear()
+                        deliveryTypeAdapter.notifyDataSetChanged()
                     }
                 }
             }
-
         })
+
+
     }
 
     private fun getPickupLocation() {
 
-        placeOrderInterface.getPickupLocations(SessionManager.courierUserId).enqueue(object : Callback<GenericResponse<List<PickupLocation>>> {
-            override fun onFailure(call: Call<GenericResponse<List<PickupLocation>>>, t: Throwable) {}
-            override fun onResponse(call: Call<GenericResponse<List<PickupLocation>>>, response: Response<GenericResponse<List<PickupLocation>>>) {
-                if (response.isSuccessful && response.body() != null && isAdded) {
-                    if (response.body()!!.model != null) {
-                        val pickupParentList = response.body()!!.model
-                        if (pickupParentList.isNotEmpty()) {
-                            setUpCollectionSpinner(pickupParentList, null, 1)
-                        } else {
-                            getDistrictThanaOrAria(14)
-                        }
-                    }
-                }
+        viewModel.getPickupLocations(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list ->
+            if (list.isNotEmpty()) {
+                setUpCollectionSpinner(list, null, 1)
+                collectionAddressET.visibility = View.GONE
+            } else {
+                getDistrictThanaOrAria(14)
+                collectionAddressET.visibility = View.VISIBLE
             }
         })
     }
 
     private fun getDistrictThanaOrAria(districtId: Int) {
 
-        districtInterface.getAllDistrictFromApi(districtId).enqueue(object : Callback<DeliveryChargePayLoad>{
-            override fun onFailure(call: Call<DeliveryChargePayLoad>, t: Throwable) {}
-            override fun onResponse(call: Call<DeliveryChargePayLoad>, response: Response<DeliveryChargePayLoad>) {
-                if (response.isSuccessful && response.body() != null && response.body()!!.data!!.districtInfo != null){
-                    val thanaOrAriaList = response.body()!!.data!!.districtInfo!![0].thanaHome!!
-                    setUpCollectionSpinner(null, thanaOrAriaList, 2)
-                }
-            }
+        viewModel.getAllDistrictFromApi(districtId).observe(viewLifecycleOwner, Observer { list ->
+            setUpCollectionSpinner(null, list.first().thanaHome, 2)
         })
     }
 
@@ -1036,7 +937,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             payShipmentCharge = payShipmentCharge + bigProductCharge
         }
 
-        isOpenBoxCheck = checkOpenBox.isChecked
 
         val requestBody = OrderRequest(
             customerName,mobileNo,alternativeMobileNo,customersAddress,districtId,thanaId,areaId,
@@ -1046,27 +946,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,
             "android-${SessionManager.versionName}", true, collectionDistrictId,collectionThanaId,deliveryDate, collectionDate, isOfficeDrop)
 
-        placeOrderInterface.placeOrder(requestBody).enqueue(object : Callback<GenericResponse<OrderResponse>> {
-            override fun onFailure(call: Call<GenericResponse<OrderResponse>>, t: Throwable) {
-                dialog?.hide()
-                Timber.d(logTag, "${t.message}")
-            }
 
-            override fun onResponse(call: Call<GenericResponse<OrderResponse>>, response: Response<GenericResponse<OrderResponse>>) {
-                dialog?.hide()
-                if (response.isSuccessful && response.body() != null){
-
-                    Timber.d("submitOrder ", " submitOrder_msg " + response.body())
-
-                    if (response.body()!!.model != null){
-                        Timber.d(logTag, "Order placed \n ${response.body()!!.model}")
-
-                        addOrderSuccessFragment(response.body()!!.model)
-                    }
-                }
-            }
-
+        viewModel.placeOrder(requestBody).observe(viewLifecycleOwner, Observer { model ->
+            dialog?.hide()
+            addOrderSuccessFragment(model)
         })
+
     }
 
     private fun validateFormData(): Boolean {
