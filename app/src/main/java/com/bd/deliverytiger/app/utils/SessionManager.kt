@@ -297,23 +297,6 @@ object SessionManager {
             }
         }
 
-    var isBannerShown: Boolean
-        get() {
-            return pref.getBoolean("isBannerShown", false)
-        }
-        set(value) {
-            pref.edit {
-                putBoolean("isBannerShown", value)
-            }
-        }
-    var bannerImgUri: String
-        get() {
-            return pref.getString("bannerImgUri", "").toString()
-        }
-        set(value) {
-            pref.edit {
-                putString("bannerImgUri", value)
-            }
-        }
+
 
 }

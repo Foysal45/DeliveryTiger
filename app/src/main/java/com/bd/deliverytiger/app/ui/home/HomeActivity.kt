@@ -156,9 +156,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         viewModel.getBannerInfo().observe(this, Observer { model ->
 
-            SessionManager.isBannerShown = model.showBanner
-            SessionManager.bannerImgUri = model.bannerUrl ?: ""
-
+            val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+            if (currentFragment is DashboardFragment) {
+                currentFragment.showBanner(model.showBanner, model.bannerUrl)
+            }
             if (model.showPopupBanner) {
                 // No frequency show all time
                 if (model.popupFrequency == 0) {

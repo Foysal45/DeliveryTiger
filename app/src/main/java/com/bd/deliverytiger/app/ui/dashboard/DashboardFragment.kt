@@ -2,7 +2,6 @@ package com.bd.deliverytiger.app.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,17 +69,7 @@ class DashboardFragment : Fragment() {
         setDashBoardAdapter()
         setSpinner()
 
-        Handler().postDelayed({
-            if (SessionManager.isBannerShown) {
-                binding?.bannerImage?.visibility = View.VISIBLE
-                Glide.with(requireContext())
-                    .load(SessionManager.bannerImgUri)
-                    .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
-                    .into(binding?.bannerImage!!)
-            } else {
-                binding?.bannerImage?.visibility = View.GONE
-            }
-        }, 300L)
+
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -103,7 +92,21 @@ class DashboardFragment : Fragment() {
         })
     }
 
+    /**
+     * Called from Home Activity
+     */
+    fun showBanner(showBanner: Boolean, bannerImgUri: String?) {
 
+        if (showBanner) {
+            binding?.bannerImage?.visibility = View.VISIBLE
+            Glide.with(requireContext())
+                .load(bannerImgUri)
+                .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
+                .into(binding?.bannerImage!!)
+        } else {
+            binding?.bannerImage?.visibility = View.GONE
+        }
+    }
 
     private fun setDashBoardAdapter() {
 
@@ -126,7 +129,7 @@ class DashboardFragment : Fragment() {
 
         dashboardAdapter.onItemClick = { _, model ->
             //dashBoardClickEvent(model?.dashboardRouteUrl!!)
-            if (model?.count != 0){
+            if (model?.count != 0) {
                 when (model?.dashboardRouteUrl) {
                     "add-order" -> {
                         addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
@@ -207,17 +210,17 @@ class DashboardFragment : Fragment() {
         val list: MutableList<MonthDataModel> = mutableListOf()
         viewList.clear()
         viewList.add(getString(R.string.dashboard_spinner_temp))
-        for (year in currentYear downTo 2019){
+        for (year in currentYear downTo 2019) {
             //Timber.d("DashboardTag", "year: $year")
             var lastMonth = 11
             if (year == currentYear) {
                 lastMonth = currentMonth
             }
-            for (monthIndex in lastMonth downTo 0){
+            for (monthIndex in lastMonth downTo 0) {
                 if (year == 2019 && monthIndex == 6) {
                     break
                 }
-                list.add(MonthDataModel(monthIndex+1, year))
+                list.add(MonthDataModel(monthIndex + 1, year))
                 viewList.add("${banglaMonth[monthIndex]}, ${DigitConverter.toBanglaDigit(year)}")
             }
         }
@@ -231,12 +234,12 @@ class DashboardFragment : Fragment() {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
                 if (position > 0) {
                     if (!isLoading) {
-                        val model = list[position-1]
+                        val model = list[position - 1]
                         selectedYear = model.year
                         selectedMonth = model.monthId
 
                         val calendar = Calendar.getInstance()
-                        calendar.set(selectedYear,selectedMonth-1,1)
+                        calendar.set(selectedYear, selectedMonth - 1, 1)
                         val lastDate = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
                         selectedStartDate = "$selectedYear-$selectedMonth-01"
                         selectedEndDate = "$selectedYear-$selectedMonth-$lastDate"
