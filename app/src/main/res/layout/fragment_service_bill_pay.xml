@@ -159,6 +159,8 @@
             android:textColor="@color/white"
             android:backgroundTint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"
+            tools:visibility="visible"
             />
 
 

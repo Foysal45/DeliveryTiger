@@ -5,7 +5,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/header_layout_color">
+        android:background="@color/header_layout_color"
+        android:id="@+id/parent"
+        >
 
         <TextView
             android:id="@+id/info1"

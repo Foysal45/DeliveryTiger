@@ -40,7 +40,7 @@ import com.bd.deliverytiger.app.ui.service_bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.messaging.FirebaseMessaging
@@ -62,7 +62,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var downloadTV: ImageView
     private lateinit var headerPic: ImageView
     private lateinit var separetor: View
-    private lateinit var addOrderFab: ExtendedFloatingActionButton
+    private lateinit var addOrderFab: FloatingActionButton
 
     private var doubleBackToExitPressedOnce = false
     private var navId: Int = 0
@@ -92,6 +92,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         separetor = findViewById(R.id.home_toolbar_separator)
         addOrderFab = findViewById(R.id.addOrderFab)
         navView.setNavigationItemSelectedListener(this)
+
 
         //moveFabBy(300f)
         /*val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -232,7 +233,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 setToolbarTitle("")
             }
             val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-            if (currentFragment is AddOrderFragmentOne || currentFragment is AddOrderFragmentTwo) {
+            if (currentFragment is DashboardFragment || currentFragment is AddOrderFragmentOne || currentFragment is AddOrderFragmentTwo) {
                 addProductBtnVisibility(false)
             } else {
                 addProductBtnVisibility(true)
@@ -266,12 +267,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 //logoIV.visibility = View.VISIBLE
                 searchIV.visibility = View.VISIBLE
                 separetor.visibility = View.VISIBLE
-                moveFabBy(100f)
+                //moveFabBy(100f)
             } else {
                 //logoIV.visibility = View.GONE
                 searchIV.visibility = View.GONE
                 separetor.visibility = View.GONE
-                moveFabBy(24f)
+                //moveFabBy(24f)
             }
 
             when (currentFragment) {
@@ -521,12 +522,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return ((x > viewX && x < (viewX + view.width)) && (y > viewY && y < (viewY + view.height)))
     }
 
-    private fun moveFabBy(value: Float) {
-        timber.log.Timber.d("moveFabBy: $value")
-        val param = addOrderFab.layoutParams as ViewGroup.MarginLayoutParams
-        param.setMargins(0,0, this.dpToPx(24f), this.dpToPx(value))
-        addOrderFab.layoutParams = param
-    }
 
     private fun callFragmentHideKeyboard() {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
@@ -541,21 +536,26 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toolbarTitleTV.text = title
     }
 
-    private fun addProductBtnVisibility(isVisible: Boolean) {
+    private fun addProductBtnVisibility(isVisible: Boolean, withFab: Boolean = true) {
         if (isVisible) {
             addProductIV.visibility = View.VISIBLE
-            addOrderFab.show()
+            if (withFab) {
+                addOrderFab.show()
+            }
         } else {
             addProductIV.visibility = View.GONE
-            addOrderFab.hide()
+            if (withFab) {
+                addOrderFab.hide()
+            }
         }
     }
 
 
     private fun addDashBoardFragment() {
         logoIV.visibility = View.VISIBLE
-        addProductBtnVisibility(true)
+        addProductBtnVisibility(false)
         searchIV.visibility = View.VISIBLE
+
         val fragment = DashboardFragment.newInstance()
         val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
         ft?.replace(R.id.mainActivityContainer, fragment, DashboardFragment.tag)
@@ -637,5 +637,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val tag = PopupDialog.tag
         val dialog = PopupDialog.newInstance(imageUrl)
         dialog.show(supportFragmentManager, tag)
+    }
+
+    private fun moveFabBy(value: Float) {
+        timber.log.Timber.d("moveFabBy: $value")
+        val param = addOrderFab.layoutParams as ViewGroup.MarginLayoutParams
+        param.setMargins(0,0, this.dpToPx(24f), this.dpToPx(value))
+        addOrderFab.layoutParams = param
     }
 }

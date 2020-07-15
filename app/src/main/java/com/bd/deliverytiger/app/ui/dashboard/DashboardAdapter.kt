@@ -5,20 +5,18 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponseModel
+import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.utils.DigitConverter
-import com.bumptech.glide.Glide
 
 
-class DashboardAdapter(private val mContext: Context?, private var dataList: MutableList<DashboardResponseModel>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class DashboardAdapter(private val mContext: Context?, private var dataList: MutableList<DashboardData>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
-    var onItemClick: ((position: Int, responseModel: DashboardResponseModel?) -> Unit)? = null
+    var onItemClick: ((position: Int, data: DashboardData?) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(
@@ -72,29 +70,29 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             when(model.dashboardViewColorType) {
                 "positive" -> {
                     holder.parentLayout.setBackgroundColor(Color.parseColor("#EEF8EF"))
-                    holder.designIV.setImageResource(R.drawable.ic_dashboard_design_3)
+                    //holder.designIV.setImageResource(R.drawable.ic_dashboard_design_3)
                     holder.countTV.setTextColor(Color.parseColor("#66BB6A"))
                 }
                 "neutral" -> {
                     holder.parentLayout.setBackgroundColor(Color.parseColor("#E1F3F3"))
-                    holder.designIV.setImageResource(R.drawable.ic_dashboard_design_1)
+                    //holder.designIV.setImageResource(R.drawable.ic_dashboard_design_1)
                     holder.countTV.setTextColor(Color.parseColor("#73B4C8"))
                 }
                 "negative" -> {
                     holder.parentLayout.setBackgroundColor(Color.parseColor("#FFEBDB"))
-                    holder.designIV.setImageResource(R.drawable.ic_dashboard_design_4)
+                    //holder.designIV.setImageResource(R.drawable.ic_dashboard_design_4)
                     holder.countTV.setTextColor(Color.parseColor("#FF8E34"))
                 }
                 "waiting" -> {
                     holder.parentLayout.setBackgroundColor(Color.parseColor("#FFF4DB"))
-                    holder.designIV.setImageResource(R.drawable.ic_dashboard_design_2)
+                    //holder.designIV.setImageResource(R.drawable.ic_dashboard_design_2)
                     holder.countTV.setTextColor(Color.parseColor("#FFB300"))
                 }
             }
 
-            Glide.with(holder.iconIV.context)
+            /*Glide.with(holder.iconIV.context)
                 .load(model.dashboardImageUrl)
-                .into(holder.iconIV)
+                .into(holder.iconIV)*/
 
         }
     }
@@ -102,10 +100,10 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
     internal inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         internal val parentLayout: ConstraintLayout = view.findViewById(R.id.item_view_dashboard_parent)
-        internal val designIV: ImageView = view.findViewById(R.id.item_view_dashboard_design)
+        //internal val designIV: ImageView = view.findViewById(R.id.item_view_dashboard_design)
         internal val countTV: TextView = view.findViewById(R.id.item_view_dashboard_count_tv)
         internal val titleTV: TextView = view.findViewById(R.id.item_view_dashboard_msg_tv)
-        internal val iconIV: ImageView = view.findViewById(R.id.item_view_dashboard_icon)
+        //internal val iconIV: ImageView = view.findViewById(R.id.item_view_dashboard_icon)
 
         init {
             itemView.setOnClickListener {

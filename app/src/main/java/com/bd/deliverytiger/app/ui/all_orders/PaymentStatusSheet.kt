@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponseModel
+import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.ui.dashboard.DashboardAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -53,8 +53,8 @@ class PaymentStatusSheet : BottomSheetDialogFragment() {
 
         paymentRV = view.findViewById(R.id.payment_status_sheet_rv)
 
-        val list: MutableList<DashboardResponseModel> = mutableListOf()
-        list.add(DashboardResponseModel(0,"কালেকশন এমাউন্ট", collectionAmount, 0, "positive", 0, ""))
+        val list: MutableList<DashboardData> = mutableListOf()
+        list.add(DashboardData(0,"কালেকশন এমাউন্ট", collectionAmount, 0, "positive", 0, ""))
 
 
         val dashboardAdapter = DashboardAdapter(context!!, list)

@@ -14,17 +14,6 @@
         android:background="#E1F3F3"
         >
 
-        <ImageView
-            android:id="@+id/item_view_dashboard_design"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/cd"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_dashboard_design_1" />
-
         <TextView
             android:id="@+id/item_view_dashboard_count_tv"
             android:layout_width="wrap_content"
@@ -43,7 +32,7 @@
             android:id="@+id/item_view_dashboard_msg_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black_70"
+            android:textColor="@color/black_80"
             android:textSize="@dimen/text_14"
             android:layout_marginStart="20dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +40,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="৯টি সার্ভিসের বিল" />
 
-        <ImageView
+        <!--<ImageView
             android:id="@+id/item_view_dashboard_icon"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -62,7 +51,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:src="@drawable/ic_payment_done"
-            />
+            />-->
+
+        <!-- <ImageView
+            android:id="@+id/item_view_dashboard_design"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/cd"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_dashboard_design_1" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

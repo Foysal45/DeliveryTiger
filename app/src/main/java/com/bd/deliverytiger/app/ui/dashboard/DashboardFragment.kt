@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.ui.dashboard
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
-import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponseModel
+import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
@@ -25,20 +26,29 @@ import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.DigitConverter.banglaMonth
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.android.ext.android.inject
+import java.text.SimpleDateFormat
 import java.util.*
 
+@SuppressLint("SetTextI18n")
 class DashboardFragment : Fragment() {
 
     private var binding: FragmentDashboardBinding? = null
 
     private lateinit var dashboardAdapter: DashboardAdapter
-    private val responseModelList: MutableList<DashboardResponseModel> = mutableListOf()
+    private val dataList: MutableList<DashboardData> = mutableListOf()
     private val viewModel: DashboardViewModel by inject()
+    private lateinit var monthSpinnerAdapter: CustomSpinnerAdapter
 
+    private val viewList: MutableList<String> = mutableListOf()
+    private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
     private var currentYear = 0
     private var selectedYear = 0
     private var selectedMonth = 0
+    private var selectedStartDate = ""
+    private var selectedEndDate = ""
+    private var currentDate = ""
     private var isLoading = false
 
     companion object {
@@ -87,14 +97,14 @@ class DashboardFragment : Fragment() {
 
     private fun setDashBoardAdapter() {
 
-        dashboardAdapter = DashboardAdapter(requireContext(), responseModelList)
+        dashboardAdapter = DashboardAdapter(requireContext(), dataList)
         val gridLayoutManager = GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                return if (responseModelList[position].dashboardSpanCount!! == 0 || responseModelList[position].dashboardSpanCount!! > 2) {
+                return if (dataList[position].dashboardSpanCount!! == 0 || dataList[position].dashboardSpanCount!! > 2) {
                     2
                 } else {
-                    responseModelList[position].dashboardSpanCount!!
+                    dataList[position].dashboardSpanCount!!
                 }
             }
         }
@@ -136,11 +146,39 @@ class DashboardFragment : Fragment() {
         }
 
         binding?.paymentInfoLayout?.setOnClickListener {
-            goToAllOrder("পেমেন্ট রেডি", "পেমেন্ট রেডি")
+            //goToAllOrder("পেমেন্ট রেডি", "পেমেন্ট রেডি")
         }
 
         binding?.paymentDoneLayout?.setOnClickListener {
             addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
+        }
+
+        binding?.orderBtn?.setOnClickListener {
+            addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
+        }
+
+        binding?.dateRangePicker?.setOnClickListener {
+
+            val builder = MaterialDatePicker.Builder.dateRangePicker()
+            builder.setTheme(R.style.CustomMaterialCalendarTheme)
+            builder.setTitleText("ডেট রেঞ্জ সিলেক্ট করুন")
+            val picker = builder.build()
+            picker.show(childFragmentManager, "Picker")
+            picker.addOnPositiveButtonClickListener {
+
+                selectedStartDate = sdf.format(it.first)
+                selectedEndDate = sdf.format(it.second)
+                selectedMonth = 0
+                selectedYear = 0
+
+                val sdf1 = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+                //context?.toast("$selectedStartDate $selectedEndDate")
+                viewList[0] = DigitConverter.toBanglaDigit("${sdf1.format(it.first)} - ${sdf1.format(it.second)}")
+                monthSpinnerAdapter.notifyDataSetChanged()
+                binding?.monthSpinner?.setSelection(0)
+
+                getDashBoardData(selectedMonth, selectedYear)
+            }
         }
 
     }
@@ -151,10 +189,14 @@ class DashboardFragment : Fragment() {
         val currentMonth = calender.get(Calendar.MONTH)
         selectedYear = currentYear
         selectedMonth = currentMonth + 1
+        currentDate = sdf.format(calender.timeInMillis)
+        selectedStartDate = currentDate
+        selectedEndDate = currentDate
         getDashBoardData(selectedMonth, selectedYear)
 
         val list: MutableList<MonthDataModel> = mutableListOf()
-        val viewList: MutableList<String> = mutableListOf()
+        viewList.clear()
+        viewList.add(getString(R.string.dashboard_spinner_temp))
         for (year in currentYear downTo 2019){
             //Timber.d("DashboardTag", "year: $year")
             var lastMonth = 11
@@ -170,34 +212,49 @@ class DashboardFragment : Fragment() {
             }
         }
 
-        val packagingAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, viewList)
-        binding?.monthSpinner?.adapter = packagingAdapter
+        monthSpinnerAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, viewList)
+        binding?.monthSpinner?.adapter = monthSpinnerAdapter
         binding?.monthSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
-
             }
 
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                if (!isLoading) {
-                    val model = list[p2]
-                    selectedYear = model.year
-                    selectedMonth = model.monthId
-                    getDashBoardData(model.monthId, model.year)
-                    Timber.d("DashboardTag", "${model.monthId} $currentYear")
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                if (position > 0) {
+                    if (!isLoading) {
+                        val model = list[position-1]
+                        selectedYear = model.year
+                        selectedMonth = model.monthId
+                        selectedStartDate = currentDate
+                        selectedEndDate = currentDate
+                        getDashBoardData(model.monthId, model.year)
+                        Timber.d("DashboardTag", "${model.monthId} $currentYear")
+                    }
                 }
             }
         }
-        //monthSpinner.setSelection(currentMonth)
+        binding?.monthSpinner?.setSelection(1)
     }
+
 
     private fun getDashBoardData(selectedMonth: Int, selectedYear: Int) {
 
-        val dashBoardReqBody = DashBoardReqBody(selectedMonth, selectedYear, SessionManager.courierUserId)
+        val dashBoardReqBody = DashBoardReqBody(selectedMonth, selectedYear, selectedStartDate, selectedEndDate, SessionManager.courierUserId)
         Timber.d("DashboardTag r ", dashBoardReqBody.toString())
-        viewModel.getDashboardStatusGroup(dashBoardReqBody).observe(viewLifecycleOwner, Observer {
-            responseModelList.clear()
-            responseModelList.addAll(it)
+        viewModel.getDashboardStatusGroup(dashBoardReqBody).observe(viewLifecycleOwner, Observer { model ->
+            dataList.clear()
+            dataList.addAll(model.orderDashboardViewModel)
             dashboardAdapter.notifyDataSetChanged()
+
+            if (model.paymentDashboardViewModel.isNotEmpty()) {
+
+                val paymentModel1 = model.paymentDashboardViewModel.first()
+                binding?.amount1?.text = "৳ ${DigitConverter.toBanglaDigit(paymentModel1.totalAmount.toInt().toString())}"
+                binding?.msg1?.text = "${DigitConverter.toBanglaDigit(paymentModel1.count)}টি ${paymentModel1.name}"
+
+                val paymentModel2 = model.paymentDashboardViewModel[1]
+                binding?.amount2?.text = paymentModel2.name
+            }
+
         })
     }
 

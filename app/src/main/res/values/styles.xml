@@ -61,4 +61,33 @@
         <item name="windowFixedWidthMinor">70%</item>
     </style>
 
+    <style name="CustomMaterialCalendarTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <!-- Header Layout -->
+        <!--<item name="materialCalendarHeaderLayout">@style/customHeaderLayout</item>-->
+        <!-- Header title -->
+        <item name="materialCalendarHeaderTitle">@style/customHeaderTitle</item>
+        <!-- Header selection title -->
+        <!--<item name="materialCalendarHeaderSelection">@style/CustomHeaderSelection</item>-->
+    </style>
+
+
+    <style name="customHeaderLayout" parent="@style/Widget.MaterialComponents.MaterialCalendar.HeaderLayout">
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="customHeaderTitle" parent="@style/Widget.MaterialComponents.MaterialCalendar.HeaderTitle">
+        <item name="android:textAppearance">@style/customTextAppearance</item>
+        <item name="autoSizeMaxTextSize">18sp</item>
+    </style>
+
+    <style name="customTextAppearance" parent="@style/TextAppearance.MaterialComponents.Overline">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black_100</item>
+    </style>
+
+    <style name="CustomHeaderSelection" parent="Widget.MaterialComponents.MaterialCalendar.HeaderSelection">
+        <item name="android:textSize">24sp</item>
+    </style>
+
 </resources>

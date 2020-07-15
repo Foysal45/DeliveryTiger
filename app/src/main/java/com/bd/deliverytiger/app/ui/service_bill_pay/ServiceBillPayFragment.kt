@@ -145,7 +145,6 @@ class ServiceBillPayFragment: Fragment() {
         fromDate = "$year-${monthIndex+1}-01"
         toDate = "$year-${monthIndex+1}-$lastDay"
 
-        // ToDo: remove
         val request = MonthlyReceivableRequest(SessionManager.courierUserId.toString(),fromDate, toDate)
         viewModel.getMerchantMonthlyReceivable(request).observe(viewLifecycleOwner, Observer {
             it.orderList?.let { list ->
@@ -155,11 +154,13 @@ class ServiceBillPayFragment: Fragment() {
                 if (list.isEmpty()) {
                     binding?.emptyView?.visibility = View.VISIBLE
                     binding?.payBtn?.visibility = View.GONE
+                    binding?.header?.parent?.visibility = View.GONE
                     binding?.header?.info1?.text = "মোট অর্ডার: ০ টি"
                     binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ০ ৳"
                 } else {
                     binding?.emptyView?.visibility = View.GONE
                     binding?.payBtn?.visibility = View.VISIBLE
+                    binding?.header?.parent?.visibility = View.VISIBLE
                     binding?.header?.info1?.text = "মোট অর্ডার: ${DigitConverter.toBanglaDigit(list.size)} টি"
                     binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ${DigitConverter.toBanglaDigit(it.totalAmount, true)} ৳"
                 }

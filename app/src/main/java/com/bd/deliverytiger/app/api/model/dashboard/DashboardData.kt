@@ -3,7 +3,7 @@ package com.bd.deliverytiger.app.api.model.dashboard
 
 import com.google.gson.annotations.SerializedName
 
-data class DashboardResponseModel(
+data class DashboardData(
     @SerializedName("statusGroupId")
     var statusGroupId: Int = 0,
     @SerializedName("name")

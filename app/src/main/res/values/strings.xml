@@ -37,6 +37,7 @@
     <string name="default_notification_channel_id">Promotion</string>
 
     <string name="waiting">অপেক্ষা করুন</string>
+    <string name="dashboard_spinner_temp">মাস অথবা ডেট রেঞ্জ সিলেক্ট করুন</string>
 
 
     <string-array name="features_list">

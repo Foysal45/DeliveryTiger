@@ -5,7 +5,7 @@ import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
-import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponseModel
+import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponse
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
@@ -26,8 +26,9 @@ interface ApiInterfaceCore {
     }
     //"https://adcore.ajkerdeal.com/"
 
-    @POST("api/Dashboard/GetOrderCountByStatusGroup")
-    fun getDashboardStatusGroup(@Body requestBody: DashBoardReqBody): Call<GenericResponse<List<DashboardResponseModel>>>
+
+    @POST("api/Dashboard/GetOrderCountByStatusGroupv2")
+    fun getDashboardStatusGroup(@Body requestBody: DashBoardReqBody): Call<GenericResponse<DashboardResponse>>
 
     @GET("api/Other/GetAllDistrictFromApi/{id}")
     fun getAllDistrictFromApi(@Path("id") id: Int): Call<DeliveryChargePayLoad>
