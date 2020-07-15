@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,6 +52,7 @@ class DashboardFragment : Fragment() {
     private var currentDate = ""
     private var isLoading = false
 
+
     companion object {
         fun newInstance(): DashboardFragment = DashboardFragment().apply {}
         val tag: String = DashboardFragment::class.java.name
@@ -68,11 +70,17 @@ class DashboardFragment : Fragment() {
         setDashBoardAdapter()
         setSpinner()
 
-        binding?.bannerImage?.visibility = View.VISIBLE
-        Glide.with(requireContext())
-            .load(AppConstant.TEST_BANNER)
-            .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
-            .into(binding?.bannerImage!!)
+        Handler().postDelayed({
+            if (SessionManager.isBannerShown) {
+                binding?.bannerImage?.visibility = View.VISIBLE
+                Glide.with(requireContext())
+                    .load(SessionManager.bannerImgUri)
+                    .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
+                    .into(binding?.bannerImage!!)
+            } else {
+                binding?.bannerImage?.visibility = View.GONE
+            }
+        }, 300L)
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -94,6 +102,8 @@ class DashboardFragment : Fragment() {
             }
         })
     }
+
+
 
     private fun setDashBoardAdapter() {
 
@@ -145,17 +155,17 @@ class DashboardFragment : Fragment() {
             }
         }
 
-        binding?.paymentInfoLayout?.setOnClickListener {
-            //goToAllOrder("পেমেন্ট রেডি", "পেমেন্ট রেডি")
-        }
-
         binding?.paymentDoneLayout?.setOnClickListener {
             addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
         }
 
         binding?.orderBtn?.setOnClickListener {
-            addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
+            addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
         }
+
+        /*binding?.collectionLayout?.setOnClickListener {
+            goToAllOrder("কালেকশন করা হয়েছে", "কালেকশন করা হয়েছে")
+        }*/
 
         binding?.dateRangePicker?.setOnClickListener {
 
@@ -192,7 +202,7 @@ class DashboardFragment : Fragment() {
         currentDate = sdf.format(calender.timeInMillis)
         selectedStartDate = currentDate
         selectedEndDate = currentDate
-        getDashBoardData(selectedMonth, selectedYear)
+        //getDashBoardData(selectedMonth, selectedYear)
 
         val list: MutableList<MonthDataModel> = mutableListOf()
         viewList.clear()
@@ -224,8 +234,13 @@ class DashboardFragment : Fragment() {
                         val model = list[position-1]
                         selectedYear = model.year
                         selectedMonth = model.monthId
-                        selectedStartDate = currentDate
-                        selectedEndDate = currentDate
+
+                        val calendar = Calendar.getInstance()
+                        calendar.set(selectedYear,selectedMonth-1,1)
+                        val lastDate = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+                        selectedStartDate = "$selectedYear-$selectedMonth-01"
+                        selectedEndDate = "$selectedYear-$selectedMonth-$lastDate"
+
                         getDashBoardData(model.monthId, model.year)
                         Timber.d("DashboardTag", "${model.monthId} $currentYear")
                     }
@@ -241,18 +256,31 @@ class DashboardFragment : Fragment() {
         val dashBoardReqBody = DashBoardReqBody(selectedMonth, selectedYear, selectedStartDate, selectedEndDate, SessionManager.courierUserId)
         Timber.d("DashboardTag r ", dashBoardReqBody.toString())
         viewModel.getDashboardStatusGroup(dashBoardReqBody).observe(viewLifecycleOwner, Observer { model ->
-            dataList.clear()
-            dataList.addAll(model.orderDashboardViewModel)
-            dashboardAdapter.notifyDataSetChanged()
 
-            if (model.paymentDashboardViewModel.isNotEmpty()) {
+            model.orderDashboardViewModel?.let {
+                dataList.clear()
+                dataList.addAll(it)
+                dashboardAdapter.notifyDataSetChanged()
+            }
 
-                val paymentModel1 = model.paymentDashboardViewModel.first()
+            if (model.paymentDashboardViewModel?.isNullOrEmpty() == false) {
+
+                val paymentModel1 = model.paymentDashboardViewModel!!.first()
                 binding?.amount1?.text = "৳ ${DigitConverter.toBanglaDigit(paymentModel1.totalAmount.toInt().toString())}"
                 binding?.msg1?.text = "${DigitConverter.toBanglaDigit(paymentModel1.count)}টি ${paymentModel1.name}"
 
-                val paymentModel2 = model.paymentDashboardViewModel[1]
-                binding?.amount2?.text = paymentModel2.name
+                if (model.paymentDashboardViewModel!!.size >= 2) {
+                    val paymentModel2 = model.paymentDashboardViewModel!![1]
+                    binding?.amount2?.text = paymentModel2.name
+                }
+            }
+
+            if (model.pickDashboardViewModel?.isNullOrEmpty() == false) {
+                val pickModel = model.pickDashboardViewModel!!.first()
+                binding?.amount3?.text = "${DigitConverter.toBanglaDigit(pickModel.count.toString())}টি"
+                binding?.msg3?.text = "${pickModel.name}"
+            } else {
+                binding?.collectionLayout?.visibility = View.GONE
             }
 
         })
@@ -267,14 +295,10 @@ class DashboardFragment : Fragment() {
 
     private fun goToAllOrder(statusGroupName: String, statusFilter: String) {
 
-        val calendar = Calendar.getInstance()
-        calendar.set(selectedYear,selectedMonth-1,1)
-        val lastDate = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-
         val bundle = Bundle()
         bundle.putString("statusGroup", statusGroupName)
-        bundle.putString("fromDate", "$selectedYear-$selectedMonth-01")
-        bundle.putString("toDate", "$selectedYear-$selectedMonth-$lastDate")
+        bundle.putString("fromDate", selectedStartDate)
+        bundle.putString("toDate", selectedEndDate)
         bundle.putString("dashboardStatusFilter", statusFilter)
 
         val fragment = AllOrdersFragment.newInstance(bundle)

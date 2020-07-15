@@ -8,6 +8,7 @@ import com.bd.deliverytiger.app.api.`interface`.ApiInterfaceCore
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.ui.add_order.AddOrderViewModel
 import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
+import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementViewModel
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailViewModel
 import com.bd.deliverytiger.app.ui.service_bill_pay.ServiceBillViewModel
@@ -24,6 +25,7 @@ val appModule = module {
     single { ApiInterfaceCore(get(named("adcore"))) }
     single { AppRepository(get(), get()) }
 
+    viewModel { HomeViewModel(get()) }
     viewModel { DashboardViewModel(get()) }
     viewModel { AddOrderViewModel(get()) }
     viewModel { ServiceBillViewModel(get()) }

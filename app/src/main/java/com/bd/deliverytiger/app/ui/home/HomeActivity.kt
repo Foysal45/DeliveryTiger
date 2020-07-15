@@ -7,7 +7,6 @@ import android.os.Handler
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -19,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
@@ -44,7 +44,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.messaging.FirebaseMessaging
+import org.koin.android.ext.android.inject
 import java.io.File
+import java.util.*
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -64,17 +66,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var separetor: View
     private lateinit var addOrderFab: FloatingActionButton
 
+    private val viewModel: HomeViewModel by inject()
     private var doubleBackToExitPressedOnce = false
     private var navId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-
-        System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl")
-        System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl")
-        System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl")
-
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -94,7 +92,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navView.setNavigationItemSelectedListener(this)
 
 
-        //moveFabBy(300f)
         /*val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
@@ -152,12 +149,34 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         onNewIntent(intent)
-        //showPopupDialog()
-
 
         addOrderFab.setOnClickListener {
             addOrderFragment()
         }
+
+        viewModel.getBannerInfo().observe(this, Observer { model ->
+
+            SessionManager.isBannerShown = model.showBanner
+            SessionManager.bannerImgUri = model.bannerUrl ?: ""
+
+            if (model.showPopupBanner) {
+                // No frequency show all time
+                if (model.popupFrequency == 0) {
+                    showPopupDialog(model.popupBannerUrl)
+                } else {
+                    val calender = Calendar.getInstance()
+                    val dayOfYear = calender.get(Calendar.DAY_OF_YEAR)
+                    if (SessionManager.popupDateOfYear != dayOfYear) {
+                        SessionManager.popupShowCount = 0
+                    }
+                    if (model.popupFrequency > SessionManager.popupShowCount) {
+                        SessionManager.popupShowCount = SessionManager.popupShowCount + 1
+                        SessionManager.popupDateOfYear = dayOfYear
+                        showPopupDialog(model.popupBannerUrl)
+                    }
+                }
+            }
+        })
     }
 
     override fun onStart() {
@@ -632,17 +651,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun showPopupDialog() {
-        val imageUrl = "https://static.ajkerdeal.com/images/merchant/image_200520.jpg"
+    private fun showPopupDialog(imageUrl: String?) {
         val tag = PopupDialog.tag
         val dialog = PopupDialog.newInstance(imageUrl)
         dialog.show(supportFragmentManager, tag)
     }
 
-    private fun moveFabBy(value: Float) {
+    /*private fun moveFabBy(value: Float) {
         timber.log.Timber.d("moveFabBy: $value")
         val param = addOrderFab.layoutParams as ViewGroup.MarginLayoutParams
         param.setMargins(0,0, this.dpToPx(24f), this.dpToPx(value))
         addOrderFab.layoutParams = param
-    }
+    }*/
 }

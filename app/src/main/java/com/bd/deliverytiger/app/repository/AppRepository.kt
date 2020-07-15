@@ -23,6 +23,8 @@ class AppRepository(private val apiInterfaceADM: ApiInterfaceADM, private val ap
 
     //******************** ADCORE ********************//
 
+    fun getBannerInfo() = apiInterfaceCore.getBannerInfo()
+
     fun getDashboardStatusGroup(requestBody: DashBoardReqBody) = apiInterfaceCore.getDashboardStatusGroup(requestBody)
 
     fun getAllDistrictFromApi(id: Int) = apiInterfaceCore.getAllDistrictFromApi(id)

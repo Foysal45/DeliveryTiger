@@ -17,6 +17,7 @@ class DashboardViewModel(private val repository: AppRepository) : ViewModel() {
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
     private val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
 
+
     fun getDashboardStatusGroup(requestBody: DashBoardReqBody): LiveData<DashboardResponse> {
 
         viewState.value = ViewState.ProgressState(true)

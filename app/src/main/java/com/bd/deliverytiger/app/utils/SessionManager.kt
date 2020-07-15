@@ -277,4 +277,43 @@ object SessionManager {
     }
 
 
+    var popupShowCount: Int
+        get() {
+            return pref.getInt("popupShowCount", 0)
+        }
+        set(value) {
+            pref.edit {
+                putInt("popupShowCount", value)
+            }
+        }
+
+    var popupDateOfYear: Int
+        get() {
+            return pref.getInt("popupDate", 0)
+        }
+        set(value) {
+            pref.edit {
+                putInt("popupDate", value)
+            }
+        }
+
+    var isBannerShown: Boolean
+        get() {
+            return pref.getBoolean("isBannerShown", false)
+        }
+        set(value) {
+            pref.edit {
+                putBoolean("isBannerShown", value)
+            }
+        }
+    var bannerImgUri: String
+        get() {
+            return pref.getString("bannerImgUri", "").toString()
+        }
+        set(value) {
+            pref.edit {
+                putString("bannerImgUri", value)
+            }
+        }
+
 }

@@ -25,6 +25,44 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:id="@+id/collectionLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/bg_stroke1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/amount3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="০টি"
+                        android:textColor="#F36E41"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/msg3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="কালেকশন করা হয়েছে"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
+
+                        />
+
+                </LinearLayout>
+
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_view_height"
@@ -48,17 +86,17 @@
                         android:id="@+id/monthSpinner"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
+                        android:layout_marginStart="60dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="12dp"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginStart="60dp"
                         android:background="@drawable/bg_solid3"
                         android:overlapAnchor="false"
                         android:spinnerMode="dropdown"
                         android:theme="@style/custom_spinner_style"
-                        app:layout_constraintStart_toEndOf="@id/dateRangePicker"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/dateRangePicker"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:entries="@array/arrayMonth" />
 
@@ -78,10 +116,10 @@
                     android:id="@+id/recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="200dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/bg_stroke2"
+                    android:minHeight="200dp"
                     android:overScrollMode="never"
                     android:padding="5dp"
 
@@ -124,12 +162,11 @@
                             android:id="@+id/msg1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:maxLines="2"
-                            android:ellipsize="end"
                             android:layout_marginStart="2dp"
                             android:layout_marginEnd="2dp"
-                            android:layout_marginTop="2dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:maxLines="2"
                             android:text="০ টি পেমেন্ট প্রসেসিং-এ আছে"
                             android:textColor="@color/black_80"
                             android:textSize="@dimen/text_14" />
@@ -150,20 +187,20 @@
                             android:id="@+id/amount2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:includeFontPadding="false"
                             android:text="পেমেন্ট দেয়া হয়েছে\n(স্টেটমেন্ট)"
                             android:textColor="@color/white"
                             android:textSize="14sp"
-                            android:gravity="center"
                             android:textStyle="normal" />
 
-                       <!-- <TextView
-                            android:id="@+id/msg2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="(স্টেটমেন্ট)"
-                            android:textColor="@color/white"
-                            android:textSize="14sp" />-->
+                        <!-- <TextView
+                             android:id="@+id/msg2"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:text="(স্টেটমেন্ট)"
+                             android:textColor="@color/white"
+                             android:textSize="14sp" />-->
 
                     </LinearLayout>
 
@@ -196,10 +233,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible"
-            app:layout_constraintVertical_bias="0.32"
-            />
-
+            app:layout_constraintVertical_bias="0.46"
+            tools:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/orderBtn"

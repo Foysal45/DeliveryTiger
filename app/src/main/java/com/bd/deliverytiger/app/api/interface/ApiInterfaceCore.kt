@@ -4,6 +4,7 @@ import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
+import com.bd.deliverytiger.app.api.model.config.BannerConfig
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponse
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
@@ -26,6 +27,8 @@ interface ApiInterfaceCore {
     }
     //"https://adcore.ajkerdeal.com/"
 
+    @GET("api/Dashboard/GetBanner")
+    fun getBannerInfo(): Call<GenericResponse<BannerConfig>>
 
     @POST("api/Dashboard/GetOrderCountByStatusGroupv2")
     fun getDashboardStatusGroup(@Body requestBody: DashBoardReqBody): Call<GenericResponse<DashboardResponse>>
