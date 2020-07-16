@@ -8,12 +8,14 @@ import com.bd.deliverytiger.app.api.model.config.BannerConfig
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponse
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
+import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
+import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.http.*
@@ -57,4 +59,6 @@ interface ApiInterfaceCore {
     @GET("api/Fetch/GetPickupLocations/{courierUserId}")
     fun getPickupLocations(@Path("courierUserId") courierUserId: Int): Call<GenericResponse<List<PickupLocation>>>
 
+    @PUT("api/Update/UpdateMerchantInformation/{courierOrdersId}")
+    fun updateMerchantInformation(@Path("courierOrdersId") courierOrdersId: Int, @Body requestBody: ProfileUpdateReqBody): Call<GenericResponse<LoginResponse>>
 }

@@ -903,7 +903,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             payBreakableCharge = 0.0
         }
 
-        totalTV.text = "সর্বমোটঃ ${DigitConverter.toBanglaDigit(total.toInt(), true)}৳"
+        totalTV.text = "${DigitConverter.toBanglaDigit(total.toInt(), true)} ৳"
 
     }
 

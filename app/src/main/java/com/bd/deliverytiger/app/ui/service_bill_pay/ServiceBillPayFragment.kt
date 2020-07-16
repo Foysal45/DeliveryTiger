@@ -189,7 +189,6 @@ class ServiceBillPayFragment: Fragment() {
             "requestBody" to model
         )
 
-        // ToDo: remove
         val courierId = SessionManager.courierUserId.toString() //6188
 
         val url = "${AppConstant.GATEWAY}?CourierID=$courierId&FromDate=$from&ToDate=$to"

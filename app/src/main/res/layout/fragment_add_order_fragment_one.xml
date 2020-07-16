@@ -511,14 +511,24 @@
                     app:srcCompat="@drawable/ic_arrow_down" />
 
                 <TextView
-                    android:id="@+id/tvAddOrderTotalOrder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="সর্বমোটঃ ০.০০৳"
+                    android:text="মোটঃ"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="normal"
                     android:layout_marginStart="2dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tvAddOrderTotalOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="০ ৳"
+                    android:textColor="#F36E41"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
                      />
 

@@ -1,8 +1,8 @@
 package com.bd.deliverytiger.app.ui.profile
 
 import android.Manifest.permission
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
-import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
@@ -11,226 +11,396 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.RetrofitSingleton
-import com.bd.deliverytiger.app.api.endpoint.ProfileUpdateInterface
-import com.bd.deliverytiger.app.api.model.GenericResponse
-import com.bd.deliverytiger.app.api.model.login.LoginResponse
+import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
+import com.bd.deliverytiger.app.api.model.district.ThanaPayLoad
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
+import com.bd.deliverytiger.app.databinding.FragmentProfileBinding
+import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
+import com.bd.deliverytiger.app.ui.district.v2.CustomModel
+import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
-import com.bd.deliverytiger.app.utils.SessionManager
-import com.bd.deliverytiger.app.utils.Timber
-import com.bd.deliverytiger.app.utils.Validator
-import com.bd.deliverytiger.app.utils.VariousTask
+import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.VariousTask.getCircularImage
 import com.bd.deliverytiger.app.utils.VariousTask.saveImage
 import com.bd.deliverytiger.app.utils.VariousTask.scaledBitmapImage
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import org.koin.android.ext.android.inject
 import java.io.File
 import java.io.InputStream
 
-
-/**
- * A simple [Fragment] subclass.
- */
+@SuppressLint("SetTextI18n")
 class ProfileFragment : Fragment() {
+
+    private var binding: FragmentProfileBinding? = null
+    private val viewModel: ProfileViewModel by inject()
+
+    private val districtList: ArrayList<DistrictDeliveryChargePayLoad> = ArrayList()
+    private val thanaOrAriaList: ArrayList<ThanaPayLoad> = ArrayList()
+    private val GALLERY_REQ_CODE = 101
+
+    private var districtId = 0
+    private var thanaId = 0
+    private var areaId = 0
+    private var isAriaAvailable: Boolean = false
+    private var districtName: String = ""
+    private var thanaName: String = ""
+    private var areaName: String = ""
+
+    private var companyName = ""
+    private var contactPersonName = ""
+    private var mobileNumber = ""
+    private var alternativeNumber = ""
+    private var bkashMobileNumber = ""
+    private var webLink = ""
+    private var fbLink = ""
+    private var collectionAddress = ""
+    private var emailAddress = ""
 
     companion object {
         fun newInstance(): ProfileFragment = ProfileFragment().apply { }
         val tag = ProfileFragment::class.java.name
     }
 
-    private lateinit var emailPassLay: LinearLayout
-    private lateinit var updateInfoLay: LinearLayout
-    private lateinit var etCustomerName: EditText
-    private lateinit var etAddOrderMobileNo: EditText
-    private lateinit var etAlternativeMobileNo: EditText
-    private lateinit var etBikashMobileNo: EditText
-    private lateinit var etEmailAddress: EditText
-    private lateinit var etProductCollectionAddress: EditText
-    private lateinit var checkSmsUpdate: CheckBox
-    private lateinit var btnSaveProfile: Button
-    private lateinit var ivProfileImage: ImageView
-    private lateinit var ivEditProfileImage: ImageView
-
-    private var customerName = ""
-    private var mobileNo = ""
-    private var alternativeMobileNo = ""
-    private var bikashMobileNo = ""
-
-    private var productCollectionAddress = ""
-    private var emailAddress = ""
-    private val GALLERY_REQ_CODE = 101
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return FragmentProfileBinding.inflate(inflater).also {
+            binding = it
+        }.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle("প্রোফাইল")
+    }
 
-        updateInfoLay = view.findViewById(R.id.updateInfoLay)
-        emailPassLay = view.findViewById(R.id.emailPassLay)
-        etCustomerName = view.findViewById(R.id.etCustomerName)
-        etAddOrderMobileNo = view.findViewById(R.id.etAddOrderMobileNo)
-        etAlternativeMobileNo = view.findViewById(R.id.etAlternativeMobileNo)
-        etBikashMobileNo = view.findViewById(R.id.etBikashMobileNo)
-        etEmailAddress = view.findViewById(R.id.etEmailAddress)
-        etProductCollectionAddress = view.findViewById(R.id.etProductCollectionAddress)
-        checkSmsUpdate = view.findViewById(R.id.checkSmsUpdate)
-        btnSaveProfile = view.findViewById(R.id.btnSaveProfile)
-        ivProfileImage = view.findViewById(R.id.ivProfileImage)
-        ivEditProfileImage = view.findViewById(R.id.ivEditProfileImage)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
+        setUpProfileFromSession()
 
-        sunSetUserStoredData()
-
-        btnSaveProfile.setOnClickListener {
+        binding?.profilePic?.setOnClickListener {
+            getImageFromDevice()
+        }
+        binding?.editProfilePic?.setOnClickListener {
+            binding?.profilePic?.performClick()
+        }
+        binding?.districtSelect?.setOnClickListener {
+            if (districtList.isEmpty()) {
+                getDistrictThanaOrAria(0, 1)
+            } else {
+                goToDistrict()
+            }
+        }
+        binding?.thanaSelect?.setOnClickListener {
+            if (districtId != 0) {
+                getDistrictThanaOrAria(districtId, 2)
+            } else {
+                context?.toast(getString(R.string.select_dist))
+            }
+        }
+        binding?.areaSelect?.setOnClickListener {
+            if (isAriaAvailable) {
+                if (thanaId != 0) {
+                    getDistrictThanaOrAria(thanaId, 3)
+                } else {
+                    context?.toast(getString(R.string.select_thana))
+                }
+            } else {
+                context?.toast(getString(R.string.no_aria))
+            }
+        }
+        binding?.saveBtn?.setOnClickListener {
             if (validate()) {
                 updateProfile()
             }
         }
 
-        ivEditProfileImage.setOnClickListener {
-            getImageFromDevice()
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is ViewState.ShowMessage -> {
+                    requireContext().toast(state.message)
+                }
+                is ViewState.KeyboardState -> {
+                    hideKeyboard()
+                }
+                is ViewState.ProgressState -> {
+                    if (state.isShow) {
+                        binding?.progressBar?.visibility = View.VISIBLE
+                    } else {
+                        binding?.progressBar?.visibility = View.GONE
+                    }
+                }
+            }
+        })
+    }
+
+    private fun getDistrictThanaOrAria(id: Int, track: Int) {
+        hideKeyboard()
+        //track = 1 district , track = 2 thana, track = 3 aria
+        val dialog = progressDialog()
+        dialog.show()
+        viewModel.getAllDistrictFromApi(id).observe(viewLifecycleOwner, Observer {
+            dialog.dismiss()
+            when (track) {
+                1 -> {
+                    districtList.clear()
+                    districtList.addAll(it)
+                    goToDistrict()
+                }
+                2 -> {
+                    thanaOrAriaList.clear()
+                    thanaOrAriaList.addAll(it[0].thanaHome!!)
+                    if (thanaOrAriaList.isNotEmpty()) {
+                        //customAlertDialog(thanaOrAriaList, 1)
+                        val mList: ArrayList<CustomModel> = ArrayList()
+                        for ((index, model) in thanaOrAriaList.withIndex()) {
+                            mList.add(CustomModel(model.thanaId, model.thanaBng + "", model.thana + "", index))
+                        }
+                        thanaAriaSelect(thanaOrAriaList, 2, mList, "থানা নির্বাচন করুন")
+                    }
+                }
+                3 -> {
+                    thanaOrAriaList.clear()
+                    thanaOrAriaList.addAll(it[0].thanaHome!!)
+                    if (thanaOrAriaList.isNotEmpty()) {
+                        // customAlertDialog(thanaOrAriaList, 2)
+                        val mList: ArrayList<CustomModel> = ArrayList()
+                        var temp = 0
+                        for ((index, model) in thanaOrAriaList.withIndex()) {
+                            temp = 0
+                            if (model.postalCode != null && model.postalCode?.isNotEmpty()!!) {
+                                temp = model.postalCode?.toInt()!!
+                            }
+                            mList.add(CustomModel(temp, model.thanaBng + "", model.thana + "", index))
+                        }
+                        thanaAriaSelect(thanaOrAriaList, 3, mList, "এরিয়া/পোস্ট অফিস নির্বাচন করুন")
+                    }
+                }
+            }
+        })
+    }
+
+    private fun goToDistrict() {
+
+        val distFrag = DistrictSelectFragment.newInstance(requireContext(), districtList)
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
+        ft?.add(R.id.mainActivityContainer, distFrag, DistrictSelectFragment.tag)
+        ft?.addToBackStack(DistrictSelectFragment.tag)
+        ft?.commit()
+
+        distFrag.setOnClick(object : DistrictSelectFragment.DistrictClick {
+            override fun onClick(position: Int, name: String, clickedID: Int) {
+
+                districtId = clickedID
+                thanaId = 0
+                areaId = 0
+                binding?.districtSelect?.setText(name)
+                districtName = name
+
+                binding?.thanaSelect?.setText("")
+                binding?.areaSelect?.setText("")
+                binding?.areaSelect?.visibility = View.GONE
+            }
+        })
+    }
+
+    private fun thanaAriaSelect(thanaOrAriaList: ArrayList<ThanaPayLoad>, track: Int, list: ArrayList<CustomModel>, title: String) {
+        //track = 1 district , track = 2 thana, track = 3 aria
+        val distFrag = DistrictThanaAriaSelectFragment.newInstance(requireContext(), list, title)
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
+        ft?.add(R.id.mainActivityContainer, distFrag, DistrictSelectFragment.tag)
+        ft?.addToBackStack(DistrictSelectFragment.tag)
+        ft?.commit()
+
+        distFrag.onItemClick = { adapterPosition: Int, name: String, id: Int, listPostion ->
+            //Timber.e("distFrag1", adapterPosition.toString()+" "+listPostion.toString() + " " + name + " " + id +" "+thanaOrAriaList[listPostion].postalCode+" s")
+
+            when (track) {
+                2 -> {
+                    val model = thanaOrAriaList[listPostion]
+                    thanaId = model.thanaId
+                    thanaName = model.thanaBng ?: ""
+                    areaId = 0
+                    isAriaAvailable = model.hasArea == 1
+                    binding?.thanaSelect?.setText(model.thanaBng)
+                    binding?.areaSelect?.setText("")
+                    if (isAriaAvailable) {
+                        binding?.areaSelect?.visibility = View.VISIBLE
+                    } else {
+                        binding?.areaSelect?.visibility = View.GONE
+                    }
+                }
+                3 -> {
+                    val model = thanaOrAriaList[listPostion]
+                    areaId = model.thanaId
+                    areaName = model.thanaBng ?: ""
+                    if (!model.postalCode.isNullOrEmpty()) {
+                        binding?.areaSelect?.setText("${model.thanaBng} (${DigitConverter.toBanglaDigit(model.postalCode)})")
+                    } else {
+                        binding?.areaSelect?.setText(model.thanaBng)
+                    }
+                }
+            }
+        }
+    }
+
+
+    private fun validate(): Boolean {
+        hideKeyboard()
+
+        companyName = binding?.companyName?.text?.trim().toString()
+        if (companyName.isEmpty()) {
+            context?.toast(getString(R.string.write_yr_name))
+            binding?.companyName?.requestFocus()
+            return false
+        }
+
+        contactPersonName = binding?.contactPersonName?.text?.trim().toString()
+        if (contactPersonName.isEmpty()) {
+            context?.toast("কন্টাক্ট পারসনের নাম লিখুন")
+            binding?.contactPersonName?.requestFocus()
+            return false
+        }
+
+        mobileNumber = binding?.mobileNumber?.text?.trim().toString()
+        if (mobileNumber.isEmpty()) {
+            context?.toast(getString(R.string.write_phone_number))
+            binding?.mobileNumber?.requestFocus()
+            return false
+        }
+        if (!Validator.isValidMobileNumber(mobileNumber) || mobileNumber.length < 11) {
+            context?.toast(getString(R.string.write_proper_phone_number_recharge))
+            binding?.mobileNumber?.requestFocus()
+            return false
+        }
+
+        alternativeNumber = binding?.alternateMobileNumber?.text?.trim().toString()
+        if (alternativeNumber.isNotEmpty() && alternativeNumber.length < 11) {
+            context?.toast("সঠিক বিকল্প ফোন নাম্বার লিখুন")
+            binding?.alternateMobileNumber?.requestFocus()
+            return false
+        }
+
+        bkashMobileNumber = binding?.bkashNumber?.text?.trim().toString()
+        if (bkashMobileNumber.isEmpty()) {
+            context?.toast("সঠিক বিকাশ নাম্বার লিখুন")
+            binding?.bkashNumber?.requestFocus()
+            return false
+        }
+        if (!Validator.isValidMobileNumber(bkashMobileNumber) || bkashMobileNumber.length < 11) {
+            context?.toast(getString(R.string.write_proper_phone_number_recharge))
+            binding?.bkashNumber?.requestFocus()
+            return false
+        }
+
+        emailAddress = binding?.emailAddress?.text?.trim().toString()
+        if (emailAddress.isEmpty()) {
+            context?.toast(getString(R.string.write_email_address))
+            binding?.emailAddress?.requestFocus()
+            return false
+        }
+
+        webLink = binding?.pageLink?.text?.trim().toString()
+        fbLink = binding?.fbLink?.text?.trim().toString()
+
+        if (districtId == 0) {
+            context?.toast(getString(R.string.select_dist))
+            return false
+        }
+        if (thanaId == 0) {
+            context?.toast(getString(R.string.select_thana))
+            return false
+        }
+        if (isAriaAvailable && areaId == 0) {
+            context?.toast(getString(R.string.select_aria))
+            return false
+        }
+
+        collectionAddress = binding?.collectionAddress?.text?.trim().toString()
+        if (collectionAddress.isEmpty()) {
+            context?.toast(getString(R.string.write_yr_address))
+            binding?.collectionAddress?.requestFocus()
+            return false
+        }
+
+        return true
+    }
+
+    private fun updateProfile() {
+
+        val requestBody = ProfileUpdateReqBody(
+            SessionManager.courierUserId,
+            companyName,
+            contactPersonName,
+            mobileNumber,
+            alternativeNumber,
+            emailAddress,
+            bkashMobileNumber,
+            collectionAddress,
+            binding?.checkSmsUpdate?.isChecked ?: true,
+            fbLink,
+            webLink,
+            districtId, thanaId, areaId,
+            districtName,
+            thanaName,
+            areaName
+        )
+
+        viewModel.updateMerchantInformation(SessionManager.courierUserId, requestBody)
+
+    }
+
+    private fun setUpProfileFromSession() {
+
+        val model = SessionManager.getSessionData()
+        binding?.companyName?.setText(model.companyName)
+        binding?.contactPersonName?.setText(model.userName)
+        binding?.mobileNumber?.setText(model.mobile)
+        binding?.alternateMobileNumber?.setText(model.alterMobile)
+        binding?.bkashNumber?.setText(model.bkashNumber)
+        binding?.emailAddress?.setText(model.emailAddress)
+        binding?.collectionAddress?.setText(model.address)
+        binding?.checkSmsUpdate?.isChecked = model.isSms!!
+        binding?.fbLink?.setText(model.fburl)
+        binding?.pageLink?.setText(model.webURL)
+
+        binding?.districtSelect?.setText(model.districtName)
+        binding?.thanaSelect?.setText(model.thanaName)
+        binding?.areaSelect?.setText(model.areaName)
+        districtId = model.districtId
+        thanaId = model.thanaId
+        areaId = model.areaId
+
+        if (!model.companyName.isNullOrEmpty()) {
+            binding?.companyName?.isClickable = false
+            binding?.companyName?.isFocusable = false
+        }
+        if (!model.emailAddress.isNullOrEmpty()) {
+            binding?.emailAddress?.isClickable = false
+            binding?.emailAddress?.isFocusable = false
+        }
+
+        if (areaId > 0) {
+            binding?.areaSelect?.visibility = View.VISIBLE
         }
 
         if (SessionManager.profileImgUri.isNotEmpty()) {
             setProfileImgUrl(SessionManager.profileImgUri)
         }
-
-    }
-
-
-    private fun validate(): Boolean {
-        var go = true
-        getAllViewData()
-        if (customerName.isEmpty()) {
-            VariousTask.showShortToast(context, getString(R.string.write_yr_name))
-            go = false
-            etCustomerName.requestFocus()
-        } else if (mobileNo.isEmpty()) {
-            VariousTask.showShortToast(context, getString(R.string.write_phone_number))
-            go = false
-            etAddOrderMobileNo.requestFocus()
-        } else if (!Validator.isValidMobileNumber(mobileNo) || mobileNo.length < 11) {
-            VariousTask.showShortToast(
-                context,
-                getString(R.string.write_proper_phone_number_recharge)
-            )
-            go = false
-            etAddOrderMobileNo.requestFocus()
-        } else if (bikashMobileNo.isEmpty()) {
-            VariousTask.showShortToast(context, getString(R.string.write_phone_number))
-            go = false
-            etBikashMobileNo.requestFocus()
-        } else if (!Validator.isValidMobileNumber(bikashMobileNo) || bikashMobileNo.length < 11) {
-            VariousTask.showShortToast(
-                context,
-                getString(R.string.write_proper_phone_number_recharge)
-            )
-            go = false
-            etBikashMobileNo.requestFocus()
-        } else if (emailAddress.isEmpty()) {
-            go = false
-            VariousTask.showShortToast(context!!, getString(R.string.write_email_address))
-            etEmailAddress.requestFocus()
-        } else if (productCollectionAddress.isEmpty()) {
-            go = false
-            VariousTask.showShortToast(context!!, getString(R.string.write_yr_address))
-            etProductCollectionAddress.requestFocus()
-        }
-        VariousTask.hideSoftKeyBoard(activity!!)
-        return go
-    }
-
-    private fun getAllViewData() {
-        customerName = etCustomerName.text.toString()
-        mobileNo = etAddOrderMobileNo.text.toString()
-        alternativeMobileNo = etAlternativeMobileNo.text.toString()
-        productCollectionAddress = etProductCollectionAddress.text.toString()
-        bikashMobileNo = etBikashMobileNo.text.toString()
-        emailAddress = etEmailAddress.text.toString()
-    }
-
-    private fun updateProfile() {
-
-        val progressDialog = ProgressDialog(context)
-        progressDialog.setMessage("অপেক্ষা করুন")
-        progressDialog.setCancelable(false)
-        progressDialog.show()
-
-        val profileUpdateInterface =
-            RetrofitSingleton.getInstance(context!!).create(ProfileUpdateInterface::class.java)
-
-        val proUpdateReqBody = ProfileUpdateReqBody(
-            SessionManager.courierUserId,
-            customerName,
-            mobileNo,
-            alternativeMobileNo,
-            emailAddress,
-            bikashMobileNo,
-            productCollectionAddress,
-            checkSmsUpdate.isChecked
-        )
-
-        profileUpdateInterface.updateMerchantInformation(
-            SessionManager.courierUserId,
-            proUpdateReqBody
-        ).enqueue(object :
-            Callback<GenericResponse<LoginResponse>> {
-            override fun onFailure(call: Call<GenericResponse<LoginResponse>>, t: Throwable) {
-                Timber.e("updateProfile f ", t.toString())
-                progressDialog.dismiss()
-            }
-
-            override fun onResponse(
-                call: Call<GenericResponse<LoginResponse>>,
-                response: Response<GenericResponse<LoginResponse>>
-            ) {
-                progressDialog.dismiss()
-                if (response.isSuccessful && response.body() != null && response.body()?.model != null) {
-                    Timber.e("updateProfile f ", response.body().toString())
-                    VariousTask.showShortToast(context, getString(R.string.update_success))
-                    SessionManager.updateSession(proUpdateReqBody)
-                    activity?.onBackPressed()
-                }
-            }
-
-        })
-
-    }
-
-    private fun sunSetUserStoredData() {
-
-        val model = SessionManager.getSessionData()
-        etCustomerName.setText(model.userName)
-        etAddOrderMobileNo.setText(model.mobile)
-        etAlternativeMobileNo.setText(model.alterMobile)
-        etProductCollectionAddress.setText(model.address)
-        etBikashMobileNo.setText(model.bkashNumber)
-        etEmailAddress.setText(model.emailAddress)
-
-        checkSmsUpdate.isChecked = model.isSms!!
     }
 
     private fun setProfileImgUrl(imageUri: String?) {
-        Timber.d("HomeActivityLog 1 ", SessionManager.profileImgUri)
+        //Timber.d("HomeActivityLog 1 ", SessionManager.profileImgUri)
         try {
             val imgFile = File(imageUri + "");
             if (imgFile.exists()) {
                 val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                ivProfileImage.setImageDrawable(getCircularImage(context, myBitmap))
+                binding?.profilePic?.setImageDrawable(getCircularImage(context, myBitmap))
                 //Timber.d("HomeActivityLog 2 ", myBitmap.allocationByteCount.toString()+" "+ myBitmap.byteCount.toString())
             }
         } catch (e: Exception) {
@@ -240,34 +410,19 @@ class ProfileFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == GALLERY_REQ_CODE) {
-            val imageStream: InputStream =
-                activity?.contentResolver?.openInputStream(Uri.parse(data?.data.toString()))!!
+            val imageStream: InputStream = activity?.contentResolver?.openInputStream(Uri.parse(data?.data.toString()))!!
             val scImg = scaledBitmapImage(BitmapFactory.decodeStream(imageStream))
-            ivProfileImage.setImageDrawable(getCircularImage(context, scImg))
+            binding?.profilePic?.setImageDrawable(getCircularImage(context, scImg))
 
             SessionManager.profileImgUri = saveImage(scImg)
         }
     }
 
     private fun getImageFromDevice() {
-        if (ContextCompat.checkSelfPermission(
-                activity!!,
-                permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED &&
-            ContextCompat.checkSelfPermission(
-                activity!!,
-                permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
+        if (ContextCompat.checkSelfPermission(requireContext(), permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(requireContext(), permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
         ) {
-
-            ActivityCompat.requestPermissions(
-                activity!!,
-                arrayOf<String?>(
-                    permission.READ_EXTERNAL_STORAGE,
-                    permission.WRITE_EXTERNAL_STORAGE
-                ),
-                102
-            )
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(permission.WRITE_EXTERNAL_STORAGE), 102)
         } else {
             val photoPickerIntent = Intent(Intent.ACTION_PICK)
             photoPickerIntent.type = "image/*"
@@ -275,8 +430,5 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as HomeActivity).setToolbarTitle("এডিট প্রোফাইল")
-    }
+
 }

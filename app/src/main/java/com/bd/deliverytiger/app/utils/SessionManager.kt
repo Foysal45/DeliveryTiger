@@ -49,6 +49,15 @@ object SessionManager {
             putFloat("smsCharge", model.smsCharge.toFloat())
             putFloat("mailCharge", model.mailCharge.toFloat())
             putFloat("maxCodCharge", model.maxCodCharge.toFloat())
+
+            putString("fbUrl", model.fburl)
+            putString("webUrl", model.webURL)
+            putInt("districtId", model.districtId)
+            putInt("thanaId", model.thanaId)
+            putInt("areaId", model.areaId)
+            putString("districtName", model.districtName)
+            putString("thanaName", model.thanaName)
+            putString("areaName", model.areaName)
         }
     }
 
@@ -258,13 +267,31 @@ object SessionManager {
         }
 
     fun getSessionData(): ProfileUpdateReqBody {
-        val model = ProfileUpdateReqBody(pref.getInt(Key_UserId,0), pref.getString(Key_UserName,""),pref.getString("mobile",""),pref.getString("alterMobile",""),pref.getString("emailAddress",""),
-            pref.getString("bkashNumber",""),pref.getString("address",""),pref.getBoolean("sms",false))
-        return model
+        return ProfileUpdateReqBody(
+            pref.getInt(Key_UserId, 0),
+            pref.getString("companyName", ""),
+            pref.getString(Key_UserName, ""),
+            pref.getString("mobile", ""),
+            pref.getString("alterMobile", ""),
+            pref.getString("emailAddress", ""),
+            pref.getString("bkashNumber", ""),
+            pref.getString("address", ""),
+            pref.getBoolean("sms", false),
+
+            pref.getString("fbUrl", ""),
+            pref.getString("webUrl", ""),
+            pref.getInt("districtId", 0),
+            pref.getInt("thanaId", 0),
+            pref.getInt("areaId", 0),
+            pref.getString("districtName", ""),
+            pref.getString("thanaName", ""),
+            pref.getString("areaName", "")
+        )
     }
 
     fun updateSession(model: ProfileUpdateReqBody) {
         pref.edit {
+            putString("companyName", model.companyName)
             putString(Key_UserName, model.userName)
             putString("mobile", model.mobile)
             putString("address", model.address)
@@ -273,6 +300,16 @@ object SessionManager {
             putString("alterMobile", model.alterMobile)
             putBoolean("sms", model.isSms!!)
             putString("emailAddress", model.emailAddress)
+
+
+            putString("fbUrl", model.fburl)
+            putString("webUrl", model.webURL)
+            putInt("districtId", model.districtId)
+            putInt("thanaId", model.thanaId)
+            putInt("areaId", model.areaId)
+            putString("districtName", model.districtName)
+            putString("thanaName", model.thanaName)
+            putString("areaName", model.areaName)
         }
     }
 

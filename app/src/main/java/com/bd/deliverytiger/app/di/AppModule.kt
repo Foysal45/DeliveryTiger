@@ -12,6 +12,7 @@ import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementViewModel
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailViewModel
+import com.bd.deliverytiger.app.ui.profile.ProfileViewModel
 import com.bd.deliverytiger.app.ui.service_bill_pay.ServiceBillViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -33,5 +34,6 @@ val appModule = module {
     viewModel { ServiceBillViewModel(get()) }
     viewModel { PaymentStatementViewModel(get()) }
     viewModel { PaymentStatementDetailViewModel(get()) }
+    viewModel { ProfileViewModel(get()) }
 
 }

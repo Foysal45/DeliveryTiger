@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/collectionLayout"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
@@ -34,57 +34,61 @@
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/bg_stroke1"
                     android:gravity="center"
-                    android:orientation="vertical"
+                    android:orientation="vertical">
 
-                    >
-
-                    <LinearLayout
-                        android:id="@+id/collectionCountLayout"
+                    <TextView
+                        android:id="@+id/msg3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:ellipsize="end"
                         android:gravity="center"
-                        android:orientation="horizontal"
-                        android:padding="5dp"
+                        android:maxLines="2"
+                        android:text="আজকে পার্সেল দিয়েছি"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
                         android:visibility="visible"
-                        tools:visibility="visible">
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:visibility="visible" />
 
-                        <TextView
-                            android:id="@+id/msg3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
-                            android:ellipsize="end"
-                            android:gravity="center"
-                            android:maxLines="2"
-                            android:text="আজকে পার্সেল দিয়েছি"
-                            android:textColor="@color/black_80"
-                            android:textSize="@dimen/text_14" />
+                    <TextView
+                        android:id="@+id/amount3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:includeFontPadding="false"
+                        android:text="০টি"
+                        android:textColor="#F36E41"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
 
-                        <TextView
-                            android:id="@+id/amount3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:includeFontPadding="false"
-                            android:text="০টি"
-                            android:textColor="#F36E41"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
 
-                    </LinearLayout>
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:visibility="visible" />
+
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/switchCollector"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="আজকে কালেক্টর আসেনি"
+                        android:text="আজকে এখনো কালেক্টর আসেনি"
                         android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
                         android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:switchPadding="12dp"
-                        tools:visibility="visible"
-                        />
+                        tools:visibility="gone" />
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout

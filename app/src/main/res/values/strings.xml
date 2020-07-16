@@ -6,13 +6,13 @@
     <string name="registration">Registration</string>
     <string name="login">Login</string>
     <string name="reset_password">Reset your password</string>
-    <string name="write_proper_phone_number_recharge">সঠিক ফোন নাম্বার লিখুন।</string>
+    <string name="write_proper_phone_number_recharge">সঠিক ফোন নাম্বার লিখুন</string>
     <string name="write_phone_number">মোবাইল নাম্বার লিখুন</string>
     <string name="write_alt_phone_number">বিকল্প মোবাইল নাম্বার লিখুন</string>
-    <string name="write_yr_name">কাস্টমারের নাম লিখুন</string>
+    <string name="write_yr_name">মার্চেন্ট/কোম্পানি নাম লিখুন</string>
     <string name="write_yr_address">বিস্তারিত ঠিকানা লিখুন (বাড়ি/রোড/গ্রাম/হোল্ডিং), ন্যূনতম ১৫ ডিজিট</string>
     <string name="write_email_address">আপনার ইমেইল এড্রেস লিখুন</string>
-    <string name="update_success">সফল ভাবে আপডেট হয়েছে</string>
+    <string name="update_success">সফলভাবে আপডেট হয়েছে</string>
 
     <string name="select_dist">জেলা নির্বাচন করুন</string>
     <string name="select_thana">থানা নির্বাচন করুন</string>

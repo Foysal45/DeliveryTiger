@@ -28,6 +28,8 @@ import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.dashboard.DashboardFragment
 import com.bd.deliverytiger.app.ui.dialog.PopupDialog
+import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
+import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
@@ -253,7 +255,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 setToolbarTitle("")
             }
             val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-            if (currentFragment is DashboardFragment || currentFragment is AddOrderFragmentOne || currentFragment is AddOrderFragmentTwo) {
+            if (currentFragment is DashboardFragment ||
+                currentFragment is AddOrderFragmentOne ||
+                currentFragment is AddOrderFragmentTwo ||
+                currentFragment is ProfileFragment ||
+                currentFragment is DistrictSelectFragment ||
+                currentFragment is DistrictThanaAriaSelectFragment) {
                 addProductBtnVisibility(false)
             } else {
                 addProductBtnVisibility(true)
@@ -283,7 +290,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else {
                 downloadTV.visibility = View.GONE
             }
-            if (currentFragment is DashboardFragment){
+            if (currentFragment is DashboardFragment) {
                 //logoIV.visibility = View.VISIBLE
                 searchIV.visibility = View.VISIBLE
                 separetor.visibility = View.VISIBLE
@@ -412,7 +419,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 } else {
                     //addFragment(DashboardFragment.newInstance(), DashboardFragment.tag)
                     if (supportFragmentManager.backStackEntryCount > 0) {
-                        val first= supportFragmentManager.getBackStackEntryAt(0)
+                        val first = supportFragmentManager.getBackStackEntryAt(0)
                         supportFragmentManager.popBackStack(first.id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     }
                 }

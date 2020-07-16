@@ -41,5 +41,23 @@ data class LoginResponse(
     @SerializedName("alterMobile")
     var alterMobile: String,
     @SerializedName("maxCodCharge")
-    var maxCodCharge: Double
+    var maxCodCharge: Double,
+    @SerializedName("credit")
+    var credit: Double,
+    @SerializedName("fburl")
+    var fburl: String,
+    @SerializedName("webURL")
+    var webURL: String,
+    @SerializedName("districtId")
+    var districtId: Int = 0,
+    @SerializedName("thanaId")
+    var thanaId: Int = 0,
+    @SerializedName("areaId")
+    var areaId: Int = 0,
+    @SerializedName("districtName")
+    var districtName: String? = "",
+    @SerializedName("thanaName")
+    var thanaName: String? = "",
+    @SerializedName("areaName")
+    var areaName: String? = ""
 )

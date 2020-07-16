@@ -287,11 +287,14 @@ class DashboardFragment : Fragment() {
                 binding?.amount3?.text = "${DigitConverter.toBanglaDigit(pickModel.count.toString())}টি"
 
                 if (pickModel.count == 0) {
-                    binding?.collectionCountLayout?.visibility = View.GONE
+                    // I already change this design 5 times, Do you think I care about view ID name any more?
+                    // If you judge me, Go fuck yourself!
+                    binding?.msg3?.visibility = View.GONE
+                    binding?.amount3?.visibility = View.GONE
                     binding?.switchCollector?.visibility = View.VISIBLE
                     binding?.switchCollector?.isChecked = SessionManager.isCollectorAttendance
 
-                    binding?.switchCollector?.setOnCheckedChangeListener { buttonView, isChecked ->
+                    binding?.switchCollector?.setOnCheckedChangeListener { _, isChecked ->
                         if (isChecked) {
                             val calender = Calendar.getInstance()
                             val dayOfYear = calender.get(Calendar.DAY_OF_YEAR)
@@ -308,6 +311,9 @@ class DashboardFragment : Fragment() {
                             }
                         }
                     }
+                } else {
+                    SessionManager.isCollectorAttendance = false
+                    SessionManager.collectorAttendanceDateOfYear = 0
                 }
             } else {
                 binding?.collectionLayout?.visibility = View.GONE
