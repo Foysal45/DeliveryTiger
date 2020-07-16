@@ -255,7 +255,7 @@ class ProfileFragment : Fragment() {
 
         companyName = binding?.companyName?.text?.trim().toString()
         if (companyName.isEmpty()) {
-            context?.toast(getString(R.string.write_yr_name))
+            context?.toast("মার্চেন্ট/কোম্পানি নাম লিখুন")
             binding?.companyName?.requestFocus()
             return false
         }
