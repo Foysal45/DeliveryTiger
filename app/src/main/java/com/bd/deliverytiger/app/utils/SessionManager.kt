@@ -297,6 +297,24 @@ object SessionManager {
             }
         }
 
+    var isCollectorAttendance: Boolean
+        get() {
+            return pref.getBoolean("collectorAttendance", false)
+        }
+        set(value) {
+            pref.edit {
+                putBoolean("collectorAttendance", value)
+            }
+        }
 
+    var collectorAttendanceDateOfYear: Int
+        get() {
+            return pref.getInt("AttendanceDateOfYear", 0)
+        }
+        set(value) {
+            pref.edit {
+                putInt("AttendanceDateOfYear", value)
+            }
+        }
 
 }

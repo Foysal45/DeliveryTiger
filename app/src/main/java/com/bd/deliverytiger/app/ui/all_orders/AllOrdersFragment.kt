@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
-import com.bd.deliverytiger.app.api.`interface`.AllOrderInterface
-import com.bd.deliverytiger.app.api.`interface`.PlaceOrderInterface
+import com.bd.deliverytiger.app.api.endpoint.AllOrderInterface
+import com.bd.deliverytiger.app.api.endpoint.PlaceOrderInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse

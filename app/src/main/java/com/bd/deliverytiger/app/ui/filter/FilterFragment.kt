@@ -14,7 +14,7 @@ import androidx.appcompat.widget.AppCompatSpinner
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
-import com.bd.deliverytiger.app.api.`interface`.OtherApiInterface
+import com.bd.deliverytiger.app.api.endpoint.OtherApiInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.status.StatusGroupModel
 import com.bd.deliverytiger.app.api.model.status.StatusModel

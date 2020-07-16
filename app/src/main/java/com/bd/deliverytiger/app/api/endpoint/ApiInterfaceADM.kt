@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.api.`interface`
+package com.bd.deliverytiger.app.api.endpoint
 
 import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentData

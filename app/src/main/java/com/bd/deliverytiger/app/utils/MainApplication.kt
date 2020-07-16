@@ -5,7 +5,7 @@ import android.app.Application
 import android.content.Intent
 import android.provider.Settings
 import com.bd.deliverytiger.app.api.RetrofitSingleton
-import com.bd.deliverytiger.app.api.`interface`.LoginInterface
+import com.bd.deliverytiger.app.api.endpoint.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.di.appModule

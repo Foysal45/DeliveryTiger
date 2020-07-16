@@ -279,9 +279,36 @@ class DashboardFragment : Fragment() {
             }
 
             if (model.pickDashboardViewModel?.isNullOrEmpty() == false) {
+
+                val sdf = SimpleDateFormat("dd MMM", Locale("bn","BD"))
+                val currentDate = sdf.format(Date())
                 val pickModel = model.pickDashboardViewModel!!.first()
+                binding?.msg3?.text = "আজকে ($currentDate) পার্সেল দিয়েছি"
                 binding?.amount3?.text = "${DigitConverter.toBanglaDigit(pickModel.count.toString())}টি"
-                binding?.msg3?.text = "${pickModel.name}"
+
+                if (pickModel.count == 0) {
+                    binding?.collectionCountLayout?.visibility = View.GONE
+                    binding?.switchCollector?.visibility = View.VISIBLE
+                    binding?.switchCollector?.isChecked = SessionManager.isCollectorAttendance
+
+                    binding?.switchCollector?.setOnCheckedChangeListener { buttonView, isChecked ->
+                        if (isChecked) {
+                            val calender = Calendar.getInstance()
+                            val dayOfYear = calender.get(Calendar.DAY_OF_YEAR)
+                            if (SessionManager.collectorAttendanceDateOfYear != dayOfYear) {
+                                viewModel.updateStatusLocation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {
+                                    if (it) {
+                                        context?.toast("সফলভাবে আপডেট হয়েছে")
+                                        SessionManager.isCollectorAttendance = true
+                                        SessionManager.collectorAttendanceDateOfYear = dayOfYear
+                                    }
+                                })
+                            } else {
+                                context?.toast("আপনি ইতিমধ্যে জানিয়েছেন")
+                            }
+                        }
+                    }
+                }
             } else {
                 binding?.collectionLayout?.visibility = View.GONE
             }

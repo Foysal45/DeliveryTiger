@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
-import com.bd.deliverytiger.app.api.`interface`.BillingServiceInterface
+import com.bd.deliverytiger.app.api.endpoint.BillingServiceInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceMainResponse
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody

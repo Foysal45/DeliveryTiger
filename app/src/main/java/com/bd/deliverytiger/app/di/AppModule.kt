@@ -1,10 +1,11 @@
 package com.bd.deliverytiger.app.di
 
 import com.bd.deliverytiger.app.api.RetrofitSingleton
-import com.bd.deliverytiger.app.api.RetrofitSingletonAD
 import com.bd.deliverytiger.app.api.RetrofitSingletonADM
-import com.bd.deliverytiger.app.api.`interface`.ApiInterfaceADM
-import com.bd.deliverytiger.app.api.`interface`.ApiInterfaceCore
+import com.bd.deliverytiger.app.api.RetrofitSingletonAPI
+import com.bd.deliverytiger.app.api.endpoint.ApiInterfaceADM
+import com.bd.deliverytiger.app.api.endpoint.ApiInterfaceAPI
+import com.bd.deliverytiger.app.api.endpoint.ApiInterfaceCore
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.ui.add_order.AddOrderViewModel
 import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
@@ -20,10 +21,11 @@ val appModule = module {
 
     single(named("adm")) { RetrofitSingletonADM.getInstance(get()) }
     single(named("adcore")) { RetrofitSingleton.getInstance(get()) }
-    single(named("api")) { RetrofitSingletonAD.getInstance(get()) }
+    single(named("api")) { RetrofitSingletonAPI.getInstance(get()) }
     single { ApiInterfaceADM(get(named("adm"))) }
     single { ApiInterfaceCore(get(named("adcore"))) }
-    single { AppRepository(get(), get()) }
+    single { ApiInterfaceAPI(get(named("api"))) }
+    single { AppRepository(get(), get(), get()) }
 
     viewModel { HomeViewModel(get()) }
     viewModel { DashboardViewModel(get()) }

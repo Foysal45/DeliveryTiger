@@ -22,8 +22,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
-import com.bd.deliverytiger.app.api.`interface`.DistrictInterface
-import com.bd.deliverytiger.app.api.`interface`.PlaceOrderInterface
+import com.bd.deliverytiger.app.api.endpoint.DistrictInterface
+import com.bd.deliverytiger.app.api.endpoint.PlaceOrderInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest

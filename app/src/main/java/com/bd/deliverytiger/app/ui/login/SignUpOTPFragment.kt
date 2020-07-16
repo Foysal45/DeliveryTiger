@@ -13,8 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
-import com.bd.deliverytiger.app.api.RetrofitSingletonAD
-import com.bd.deliverytiger.app.api.`interface`.LoginInterface
+import com.bd.deliverytiger.app.api.RetrofitSingletonAPI
+import com.bd.deliverytiger.app.api.endpoint.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.*
 import com.bd.deliverytiger.app.utils.Timber
@@ -72,7 +72,7 @@ class SignUpOTPFragment : Fragment() {
         backBtn = view.findViewById(R.id.singUp_back)
         submitBtn = view.findViewById(R.id.singUp_btnReset)
 
-        OTPInterface = RetrofitSingletonAD.getInstance(mContext).create(LoginInterface::class.java)
+        OTPInterface = RetrofitSingletonAPI.getInstance(mContext).create(LoginInterface::class.java)
         progressDialog = ProgressDialog(mContext)
         progressDialog?.setMessage("অপেক্ষা করুন")
         progressDialog?.setCancelable(false)

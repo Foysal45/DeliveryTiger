@@ -1,15 +1,21 @@
 package com.bd.deliverytiger.app.repository
 
-import com.bd.deliverytiger.app.api.`interface`.ApiInterfaceADM
-import com.bd.deliverytiger.app.api.`interface`.ApiInterfaceCore
+import com.bd.deliverytiger.app.api.endpoint.ApiInterfaceADM
+import com.bd.deliverytiger.app.api.endpoint.ApiInterfaceAPI
+import com.bd.deliverytiger.app.api.endpoint.ApiInterfaceCore
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
+import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
 
-class AppRepository(private val apiInterfaceADM: ApiInterfaceADM, private val apiInterfaceCore: ApiInterfaceCore) {
+class AppRepository(private val apiInterfaceADM: ApiInterfaceADM, private val apiInterfaceCore: ApiInterfaceCore, private val apiInterfaceAPI: ApiInterfaceAPI) {
+
+    //******************** API ********************//
+
+    fun updateCourierStatus(requestBody: StatusLocationRequest) = apiInterfaceAPI.updateCourierStatus(requestBody)
 
     //******************** ADM ********************//
 

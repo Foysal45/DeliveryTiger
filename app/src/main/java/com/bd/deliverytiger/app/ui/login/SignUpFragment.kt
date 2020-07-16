@@ -14,8 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
-import com.bd.deliverytiger.app.api.RetrofitSingletonAD
-import com.bd.deliverytiger.app.api.`interface`.LoginInterface
+import com.bd.deliverytiger.app.api.RetrofitSingletonAPI
+import com.bd.deliverytiger.app.api.endpoint.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
@@ -101,7 +101,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
         progressDialog?.show()
 
         val mobileNo = etSignUpMobileNo.text.toString()
-        val retrofit = RetrofitSingletonAD.getInstance(mContext)
+        val retrofit = RetrofitSingletonAPI.getInstance(mContext)
         val loginInterface = retrofit.create(LoginInterface::class.java)
         val requestBody = OTPRequestModel(mobileNo, mobileNo)
         loginInterface.sendOTP(requestBody).enqueue(object : Callback<OTPResponse> {

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
-import com.bd.deliverytiger.app.api.`interface`.OrderTrackInterface
+import com.bd.deliverytiger.app.api.endpoint.OrderTrackInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackMainResponse
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackReqBody

@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.api.`interface`
+package com.bd.deliverytiger.app.api.endpoint
 
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackMainResponse

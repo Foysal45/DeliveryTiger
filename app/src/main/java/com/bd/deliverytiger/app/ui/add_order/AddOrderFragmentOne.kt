@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.ui.add_order
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
 import android.os.Bundle
@@ -37,16 +38,15 @@ import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.utils.*
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import org.koin.android.ext.android.inject
 import java.util.*
 import kotlin.collections.ArrayList
 
+@SuppressLint("SetTextI18n")
 class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     //Step 1
-    private lateinit var paymentDetailsLayout: LinearLayout
     private lateinit var etCustomerName: EditText
     private lateinit var etAddOrderMobileNo: EditText
     private lateinit var etAlternativeMobileNo: EditText
@@ -72,12 +72,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
 
     private lateinit var totalTV: TextView
-    private lateinit var totalLayout: ConstraintLayout
+    private lateinit var totalLayout: LinearLayout
     private lateinit var deliveryDatePicker: TextView
     private lateinit var collectionDatePicker: TextView
     private lateinit var checkOfficeDrop: AppCompatCheckBox
     private lateinit var spinnerCollectionLocation: AppCompatSpinner
-    private lateinit var orderPlaceBtn: MaterialButton
+    private lateinit var orderPlaceBtn: TextView
 
     private lateinit var deliveryTypeAdapter: DeliveryTypeAdapter
     private var handler: Handler = Handler()
@@ -160,7 +160,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Step 1
-        paymentDetailsLayout = view.findViewById(R.id.payment_details)
         etCustomerName = view.findViewById(R.id.etCustomerName)
         etAddOrderMobileNo = view.findViewById(R.id.etAddOrderMobileNo)
         etAlternativeMobileNo = view.findViewById(R.id.etAlternativeMobileNo)
@@ -185,7 +184,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
 
         totalTV = view.findViewById(R.id.tvAddOrderTotalOrder)
-        totalLayout = view.findViewById(R.id.addOrderTopLay)
+        totalLayout = view.findViewById(R.id.payment_details)
         deliveryDatePicker = view.findViewById(R.id.deliveryDatePicker)
         collectionDatePicker = view.findViewById(R.id.collectionDatePicker)
         checkOfficeDrop = view.findViewById(R.id.checkOfficeDrop)
@@ -195,7 +194,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         etDistrict.setOnClickListener(this)
         etThana.setOnClickListener(this)
         etAriaPostOffice.setOnClickListener(this)
-        paymentDetailsLayout.setOnClickListener(this)
         orderPlaceBtn.setOnClickListener(this)
 
         getBreakableCharge()
@@ -420,11 +418,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     context?.toast(getString(R.string.no_aria))
                 }
             }
-            paymentDetailsLayout -> {
 
-                val detailsSheet = DetailsBottomSheet.newInstance(Bundle())
-                detailsSheet.show(childFragmentManager, DetailsBottomSheet.tag)
-            }
             orderPlaceBtn -> {
                 if (isMerchantCreditAvailable) {
                     submitOrder()
@@ -909,9 +903,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             payBreakableCharge = 0.0
         }
 
-        totalTV.text = "৳ ${DigitConverter.toBanglaDigit(total, true)}"
-
-        Timber.d("BigProductCharge : ", "12 " + bigProductCharge)
+        totalTV.text = "সর্বমোটঃ ${DigitConverter.toBanglaDigit(total.toInt(), true)}৳"
 
     }
 
