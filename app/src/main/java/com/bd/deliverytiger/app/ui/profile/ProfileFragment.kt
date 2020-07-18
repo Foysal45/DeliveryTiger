@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.ThanaPayLoad
+import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import com.bd.deliverytiger.app.databinding.FragmentProfileBinding
 import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
@@ -60,6 +62,10 @@ class ProfileFragment : Fragment() {
     private var collectionAddress = ""
     private var emailAddress = ""
 
+    private var isPickupLocationAvailable = false
+    private var isPickupLocationSelected = false
+    private var isAddingNewLocation = false
+
     companion object {
         fun newInstance(): ProfileFragment = ProfileFragment().apply { }
         val tag = ProfileFragment::class.java.name
@@ -80,20 +86,20 @@ class ProfileFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         setUpProfileFromSession()
-
+        getPickupLocation()
         binding?.profilePic?.setOnClickListener {
             getImageFromDevice()
         }
         binding?.editProfilePic?.setOnClickListener {
             binding?.profilePic?.performClick()
         }
-        binding?.districtSelect?.setOnClickListener {
+        /*binding?.districtSelect?.setOnClickListener {
             if (districtList.isEmpty()) {
                 getDistrictThanaOrAria(0, 1)
             } else {
                 goToDistrict()
             }
-        }
+        }*/
         binding?.thanaSelect?.setOnClickListener {
             if (districtId != 0) {
                 getDistrictThanaOrAria(districtId, 2)
@@ -117,6 +123,15 @@ class ProfileFragment : Fragment() {
                 updateProfile()
             }
         }
+        binding?.addLocation?.setOnClickListener {
+            if (isPickupLocationAvailable) {
+                binding?.spinnerCollectionLocation?.setSelection(0)
+                isAddingNewLocation = true
+            }
+            binding?.districtSelect?.visibility = View.VISIBLE
+            binding?.thanaSelect?.visibility = View.VISIBLE
+            binding?.collectionAddress?.text?.clear()
+        }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -132,6 +147,9 @@ class ProfileFragment : Fragment() {
                     } else {
                         binding?.progressBar?.visibility = View.GONE
                     }
+                }
+                is ViewState.NextState -> {
+                    activity?.onBackPressed()
                 }
             }
         })
@@ -178,6 +196,9 @@ class ProfileFragment : Fragment() {
                         }
                         thanaAriaSelect(thanaOrAriaList, 3, mList, "এরিয়া/পোস্ট অফিস নির্বাচন করুন")
                     }
+                }
+                4 -> {
+                    setUpCollectionSpinner(null, it.first().thanaHome, 2)
                 }
             }
         })
@@ -249,7 +270,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-
     private fun validate(): Boolean {
         hideKeyboard()
 
@@ -308,6 +328,18 @@ class ProfileFragment : Fragment() {
         webLink = binding?.pageLink?.text?.trim().toString()
         fbLink = binding?.fbLink?.text?.trim().toString()
 
+        if (!isAddingNewLocation && !isPickupLocationSelected) {
+            context?.toast("কালেকশন লোকেশন সিলেক্ট করুন")
+            return false
+        }
+
+        collectionAddress = binding?.collectionAddress?.text?.trim().toString()
+        if (collectionAddress.isEmpty() || collectionAddress.length < 15) {
+            context?.toast("বিস্তারিত কালেকশন ঠিকানা লিখুন, ন্যূনতম ১৫ ডিজিট")
+            binding?.collectionAddress?.requestFocus()
+            return false
+        }
+
         if (districtId == 0) {
             context?.toast(getString(R.string.select_dist))
             return false
@@ -318,13 +350,6 @@ class ProfileFragment : Fragment() {
         }
         if (isAriaAvailable && areaId == 0) {
             context?.toast(getString(R.string.select_aria))
-            return false
-        }
-
-        collectionAddress = binding?.collectionAddress?.text?.trim().toString()
-        if (collectionAddress.isEmpty()) {
-            context?.toast(getString(R.string.write_yr_address))
-            binding?.collectionAddress?.requestFocus()
             return false
         }
 
@@ -351,7 +376,9 @@ class ProfileFragment : Fragment() {
             areaName
         )
 
-        viewModel.updateMerchantInformation(SessionManager.courierUserId, requestBody)
+        viewModel.updateMerchantInformation(SessionManager.courierUserId, requestBody)/*.observe(viewLifecycleOwner, Observer {
+            SessionManager.createSession(it)
+        })*/
 
     }
 
@@ -364,17 +391,19 @@ class ProfileFragment : Fragment() {
         binding?.alternateMobileNumber?.setText(model.alterMobile)
         binding?.bkashNumber?.setText(model.bkashNumber)
         binding?.emailAddress?.setText(model.emailAddress)
-        binding?.collectionAddress?.setText(model.address)
+        //binding?.collectionAddress?.setText(model.address)
         binding?.checkSmsUpdate?.isChecked = model.isSms!!
         binding?.fbLink?.setText(model.fburl)
         binding?.pageLink?.setText(model.webURL)
 
-        binding?.districtSelect?.setText(model.districtName)
-        binding?.thanaSelect?.setText(model.thanaName)
-        binding?.areaSelect?.setText(model.areaName)
-        districtId = model.districtId
-        thanaId = model.thanaId
-        areaId = model.areaId
+        //binding?.districtSelect?.setText(model.districtName)
+        binding?.districtSelect?.setText("ঢাকা সিটি")
+        //binding?.thanaSelect?.setText(model.thanaName)
+        //binding?.areaSelect?.setText(model.areaName)
+        districtId = 14
+        //districtId = model.districtId // Now only in dhaka city available
+        //thanaId = model.thanaId
+        //areaId = model.areaId
 
         if (!model.companyName.isNullOrEmpty()) {
             binding?.companyName?.isClickable = false
@@ -385,9 +414,9 @@ class ProfileFragment : Fragment() {
             binding?.emailAddress?.isFocusable = false
         }
 
-        if (areaId > 0) {
+        /*if (areaId > 0) {
             binding?.areaSelect?.visibility = View.VISIBLE
-        }
+        }*/
 
         if (SessionManager.profileImgUri.isNotEmpty()) {
             setProfileImgUrl(SessionManager.profileImgUri)
@@ -430,5 +459,64 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun getPickupLocation() {
 
+        viewModel.getPickupLocations(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list ->
+            if (list.isNotEmpty()) {
+                setUpCollectionSpinner(list, null, 1)
+
+            } else {
+                getDistrictThanaOrAria(14, 4)
+            }
+        })
+    }
+
+    private fun setUpCollectionSpinner(pickupParentList: List<PickupLocation>?, thanaOrAriaList: List<ThanaPayLoad>?, optionFlag: Int) {
+
+        val pickupList: MutableList<String> = mutableListOf()
+        pickupList.add("কালেকশন লোকেশন")
+        if (optionFlag == 1) {
+            pickupParentList?.forEach {
+                pickupList.add(it.thanaName ?: "")
+            }
+        } else if (optionFlag == 2) {
+            thanaOrAriaList?.forEach {
+                pickupList.add(it.thanaBng ?: "")
+            }
+            binding?.addLocation?.visibility = View.GONE
+        }
+
+        val pickupAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, pickupList)
+        binding?.spinnerCollectionLocation?.adapter = pickupAdapter
+        binding?.spinnerCollectionLocation?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+                if (position != 0) {
+                    if (optionFlag == 1) {
+                        val model = pickupParentList!![position-1]
+                        collectionAddress = model.pickupAddress ?: ""
+                        binding?.collectionAddress?.setText(collectionAddress)
+                        //districtId = model.districtId
+                        districtId = 14
+                        thanaId = model.thanaId
+                    } else if (optionFlag == 2) {
+                        val model = thanaOrAriaList!![position-1]
+                        collectionAddress = ""
+                        binding?.collectionAddress?.setText(collectionAddress)
+                        districtId = 14
+                        thanaId = model.thanaId
+                    }
+                    isPickupLocationSelected = true
+                } else {
+                    isPickupLocationSelected = false
+                }
+            }
+        }
+        if (optionFlag == 1 && pickupList.size >= 2) {
+            binding?.spinnerCollectionLocation?.setSelection(1)
+        }
+        isPickupLocationAvailable = true
+
+    }
 }

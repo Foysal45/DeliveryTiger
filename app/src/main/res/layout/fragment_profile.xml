@@ -201,6 +201,52 @@
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14" />
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/fab_margin">
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/spinnerCollectionLocation"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/login_view_height"
+                        android:background="@drawable/bg_spinner"
+                        android:overlapAnchor="false"
+                        android:spinnerMode="dropdown"
+                        android:theme="@style/custom_spinner_style"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/addLocation"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginEnd="8dp"
+                        tools:entries="@array/spinner_array_collection_location" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:contentDescription="@string/cd"
+                        app:layout_constraintBottom_toBottomOf="@id/spinnerCollectionLocation"
+                        app:layout_constraintEnd_toEndOf="@id/spinnerCollectionLocation"
+                        app:layout_constraintTop_toTopOf="@id/spinnerCollectionLocation"
+                        app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+
+                    <ImageView
+                        android:id="@+id/addLocation"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_add"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:contentDescription="@string/cd"
+                        android:background="@drawable/bg_login_btn"
+                        android:padding="8dp"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <EditText
                     android:id="@+id/districtSelect"
                     android:layout_width="match_parent"
@@ -217,7 +263,10 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="8dp"
                     android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14" />
+                    android:textSize="@dimen/text_14"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    />
 
                 <EditText
                     android:id="@+id/thanaSelect"
@@ -235,7 +284,10 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="8dp"
                     android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14" />
+                    android:textSize="@dimen/text_14"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    />
 
                 <EditText
                     android:id="@+id/areaSelect"
@@ -255,7 +307,8 @@
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14"
                     android:visibility="gone"
-                    tools:visibility="visible" />
+                    tools:visibility="visible"
+                    />
 
                 <EditText
                     android:id="@+id/collectionAddress"
@@ -264,7 +317,7 @@
                     android:layout_marginTop="@dimen/fab_margin"
                     android:background="@drawable/bg_add_order_edit_text"
                     android:gravity="start|top"
-                    android:hint="আপনার পণ্য সরবরাহের ঠিকানা"
+                    android:hint="বিস্তারিত কালেকশন ঠিকানা (বাড়ি/রোড/হোল্ডিং)"
                     android:importantForAutofill="no"
                     android:minHeight="96dp"
                     android:paddingStart="16dp"

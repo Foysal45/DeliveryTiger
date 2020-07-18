@@ -81,7 +81,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     private lateinit var deliveryTypeAdapter: DeliveryTypeAdapter
     private var handler: Handler = Handler()
-    private var runnable: Runnable = Runnable {  }
+    private var runnable: Runnable = Runnable { }
 
     // Step 1
     private var customerName = ""
@@ -105,7 +105,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var codChargeMin: Int = 0
     private var breakableChargeApi: Double = 0.0
     private var bigProductCharge: Double = 0.0
-    private var isCheckBigProduct : Boolean = false
+    private var isCheckBigProduct: Boolean = false
 
     private var isCollection: Boolean = false
     private var isBreakable: Boolean = false
@@ -452,16 +452,16 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }*/
         else if (districtId == 0) {
             go = false
-            context?.toast( getString(R.string.select_dist))
+            context?.toast(getString(R.string.select_dist))
         } else if (thanaId == 0) {
             go = false
-            context?.toast( getString(R.string.select_thana))
+            context?.toast(getString(R.string.select_thana))
         } else if (isAriaAvailable && areaId == 0) {
             go = false
-            context?.toast( getString(R.string.select_aria))
+            context?.toast(getString(R.string.select_aria))
         } else if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
             go = false
-            context?.toast( getString(R.string.write_yr_address))
+            context?.toast(getString(R.string.write_yr_address))
             etCustomersAddress.requestFocus()
         }
         hideKeyboard()
@@ -496,10 +496,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 if (thanaOrAriaList.isNotEmpty()) {
                     //customAlertDialog(thanaOrAriaList, 1)
                     val mList: ArrayList<CustomModel> = ArrayList()
-                    for((index,model) in thanaOrAriaList.withIndex()){
-                        mList.add(CustomModel(model.thanaId,model.thanaBng+"",model.thana+"",index))
+                    for ((index, model) in thanaOrAriaList.withIndex()) {
+                        mList.add(CustomModel(model.thanaId, model.thanaBng + "", model.thana + "", index))
                     }
-                    thanaAriaSelect(thanaOrAriaList,2,mList,"থানা নির্বাচন করুন")
+                    thanaAriaSelect(thanaOrAriaList, 2, mList, "থানা নির্বাচন করুন")
                 }
             } else if (track == 3) {
                 thanaOrAriaList.clear()
@@ -508,14 +508,14 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     // customAlertDialog(thanaOrAriaList, 2)
                     val mList: ArrayList<CustomModel> = ArrayList()
                     var temp = 0
-                    for((index,model) in thanaOrAriaList.withIndex()){
+                    for ((index, model) in thanaOrAriaList.withIndex()) {
                         temp = 0
                         if (model.postalCode != null && model.postalCode?.isNotEmpty()!!) {
                             temp = model.postalCode?.toInt()!!
                         }
-                        mList.add(CustomModel(temp,model.thanaBng+"",model.thana+"",index))
+                        mList.add(CustomModel(temp, model.thanaBng + "", model.thana + "", index))
                     }
-                    thanaAriaSelect(thanaOrAriaList,3,mList, "এরিয়া/পোস্ট অফিস নির্বাচন করুন")
+                    thanaAriaSelect(thanaOrAriaList, 3, mList, "এরিয়া/পোস্ট অফিস নির্বাচন করুন")
                 }
             }
         })
@@ -545,9 +545,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         })
     }
 
-    private fun thanaAriaSelect(thanaOrAriaList: ArrayList<ThanaPayLoad>, track: Int, list: ArrayList<CustomModel> , title: String) {
+    private fun thanaAriaSelect(thanaOrAriaList: ArrayList<ThanaPayLoad>, track: Int, list: ArrayList<CustomModel>, title: String) {
         //track = 1 district , track = 2 thana, track = 3 aria
-        val distFrag = DistrictThanaAriaSelectFragment.newInstance(requireContext(), list,title)
+        val distFrag = DistrictThanaAriaSelectFragment.newInstance(requireContext(), list, title)
         val ft = activity?.supportFragmentManager?.beginTransaction()
         ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
         ft?.add(R.id.mainActivityContainer, distFrag, DistrictSelectFragment.tag)
@@ -555,7 +555,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         ft?.commit()
 
         distFrag.onItemClick = { adapterPosition: Int, name: String, id: Int, listPostion ->
-            Timber.e("distFrag1", adapterPosition.toString()+" "+listPostion.toString() + " " + name + " " + id +" "+thanaOrAriaList[listPostion].postalCode+" s")
+            Timber.e("distFrag1", adapterPosition.toString() + " " + listPostion.toString() + " " + name + " " + id + " " + thanaOrAriaList[listPostion].postalCode + " s")
 
             if (track == 1) {
 
@@ -578,65 +578,50 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                         etAriaPostOffice.setText(thanaOrAriaList[listPostion].thanaBng + " (" + thanaOrAriaList[listPostion].postalCode + ")")
                     } else {
                         areaId = 0
-                       // isAriaAvailable = false
-                        etAriaPostOffice.setText(thanaOrAriaList[listPostion].thanaBng )
+                        // isAriaAvailable = false
+                        etAriaPostOffice.setText(thanaOrAriaList[listPostion].thanaBng)
                     }
                 } else {
                     areaId = 0
-                    etAriaPostOffice.setText(thanaOrAriaList[listPostion].thanaBng )
+                    etAriaPostOffice.setText(thanaOrAriaList[listPostion].thanaBng)
                 }
             }
         }
-    }
-
-    private fun getBundle(): Bundle {
-        val bundle = Bundle()
-        bundle.putString(BundleFlag.CUSTOMER_NAME, customerName)
-        bundle.putString(BundleFlag.MOBILE_NUMBER, mobileNo)
-        bundle.putString(BundleFlag.ALT_MOBILE_NUMBER, alternativeMobileNo)
-        bundle.putInt(BundleFlag.DISTRICT_ID, districtId)
-        bundle.putInt(BundleFlag.THANA_ID, thanaId)
-        bundle.putInt(BundleFlag.ARIA_ID, areaId)
-        bundle.putString(BundleFlag.CUSTOMERS_ADDRESS, customersAddress)
-        bundle.putString(BundleFlag.ADDITIONAML_NOTE, additionalNote)
-
-        return bundle
     }
 
     private fun datePicker(dateTypeFlag: Int) {
 
         val calendar = Calendar.getInstance()
         var minDate = calendar.timeInMillis
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-        val month = calendar.get(Calendar.MONTH)
-        val year = calendar.get(Calendar.YEAR)
+        val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+        val currentMonth = calendar.get(Calendar.MONTH)
+        val currentYear = calendar.get(Calendar.YEAR)
         val hour24 = calendar.get(Calendar.HOUR_OF_DAY)
 
-        if (logicExpression.isNotEmpty()) {
-            if (dayAdvance.isNotEmpty()) {
-                try {
-                    val dayArray = dayAdvance.split(",")
-                    isSameDay = dayArray[1].toInt() == 0
+        if (dayAdvance.isNotEmpty()) {
+            try {
+                val dayArray = dayAdvance.split(",")
+                isSameDay = dayArray[1].toInt() == 0
 
-                    val flag = executeExpression("$hour24 $logicExpression")
-                    if (flag) {
-                        val advanceBy = dayArray[0].toInt()
-                        if (advanceBy != 0) {
-                            calendar.add(Calendar.DAY_OF_MONTH, advanceBy)
-                            minDate = calendar.timeInMillis
-                        }
-                    } else {
-                        val advanceBy = dayArray[1].toInt()
-                        if (advanceBy != 0) {
-                            calendar.add(Calendar.DAY_OF_MONTH, advanceBy)
-                            minDate = calendar.timeInMillis
-                        }
-                    }
-                } catch (e: Exception) {
-                    Timber.d("error", "Msg: ${e.message}")
+                var flag = false
+                if (logicExpression.isNotEmpty()) {
+                    flag = executeExpression("$hour24 $logicExpression")
                 }
-            } else {
-                isSameDay = false
+                if (flag) {
+                    val advanceBy = dayArray[0].toInt()
+                    if (advanceBy != 0) {
+                        calendar.add(Calendar.DAY_OF_MONTH, advanceBy)
+                        minDate = calendar.timeInMillis
+                    }
+                } else {
+                    val advanceBy = dayArray[1].toInt()
+                    if (advanceBy != 0) {
+                        calendar.add(Calendar.DAY_OF_MONTH, advanceBy)
+                        minDate = calendar.timeInMillis
+                    }
+                }
+            } catch (e: Exception) {
+                Timber.d("error", "Msg: ${e.message}")
             }
         } else {
             isSameDay = false
@@ -657,26 +642,26 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             }
         }*/
 
-        val datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+        val datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
 
             if (dateTypeFlag == 1) {
-                deliveryDate = "${month+1}/$dayOfMonth/$year"
+                deliveryDate = "${month + 1}/$dayOfMonth/$year"
                 deliveryDatePicker.text = DigitConverter.toBanglaDigit(deliveryDate)
                 collectionDatePicker.text = DigitConverter.toBanglaDigit(deliveryDate)
-
+                val monthBangla = DigitConverter.banglaMonth[month]
                 //${dayOfMonth-1}
                 if (alertMsg.isNotEmpty()) {
-                    val day = if (isSameDay) "$dayOfMonth" else "${dayOfMonth-1}"
+                    val day = if (isSameDay) "${DigitConverter.toBanglaDigit(dayOfMonth)} $monthBangla" else "${DigitConverter.toBanglaDigit(dayOfMonth - 1)} $monthBangla"
                     alertMsg = alertMsg.replace("dt-deliverydate", day, true)
                     alert("নির্দেশনা", alertMsg, false).show()
                 }
 
             } else if (dateTypeFlag == 2) {
-                collectionDate = "${month+1}/$dayOfMonth/$year"
+                collectionDate = "${month + 1}/$dayOfMonth/$year"
                 collectionDatePicker.text = DigitConverter.toBanglaDigit(collectionDate)
             }
 
-        },year,month,day)
+        }, currentYear, currentMonth, currentDay)
         datePicker.datePicker.minDate = minDate
         //datePicker.datePicker.maxDate = calendar.timeInMillis
         datePicker.show()
@@ -832,13 +817,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
                 if (position != 0) {
                     if (optionFlag == 1) {
-                        val model = pickupParentList!![position-1]
+                        val model = pickupParentList!![position - 1]
                         collectionAddress = model.pickupAddress ?: ""
                         collectionAddressET.setText(collectionAddress)
                         collectionDistrictId = model.districtId
                         collectionThanaId = model.thanaId
                     } else if (optionFlag == 2) {
-                        val model = thanaOrAriaList!![position-1]
+                        val model = thanaOrAriaList!![position - 1]
                         collectionAddress = ""
                         collectionAddressET.setText(collectionAddress)
                         collectionDistrictId = 14
@@ -864,12 +849,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     e.printStackTrace()
                 }
             }
-            payCODCharge = (payCollectionAmount/100.0) * codChargePercentage
-            if (payCODCharge < codChargeMin){
+            payCODCharge = (payCollectionAmount / 100.0) * codChargePercentage
+            if (payCODCharge < codChargeMin) {
                 payCODCharge = codChargeMin.toDouble()
             }
-            if (SessionManager.maxCodCharge != 0.0){
-                if (payCODCharge > SessionManager.maxCodCharge){
+            if (SessionManager.maxCodCharge != 0.0) {
+                if (payCODCharge > SessionManager.maxCodCharge) {
                     payCODCharge = SessionManager.maxCodCharge
                 }
             }
@@ -886,12 +871,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }
 
         //val payReturnCharge = SessionManager.returnCharge
-        if (isCheckBigProduct){
+        if (isCheckBigProduct) {
             total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge + bigProductCharge
         } else {
             total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge
         }
-
 
 
         //   total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge
@@ -923,7 +907,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             collectionAddress = SessionManager.address
         }
 
-        if(productType.equals("small")){
+        if (productType.equals("small")) {
             payShipmentCharge
         } else {
             payShipmentCharge = payShipmentCharge + bigProductCharge
@@ -931,12 +915,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
 
         val requestBody = OrderRequest(
-            customerName,mobileNo,alternativeMobileNo,customersAddress,districtId,thanaId,areaId,
-            deliveryType,orderType,weight,collectionName,
-            payCollectionAmount, payShipmentCharge,SessionManager.courierUserId,
-            payBreakableCharge, additionalNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge,packingName,
+            customerName, mobileNo, alternativeMobileNo, customersAddress, districtId, thanaId, areaId,
+            deliveryType, orderType, weight, collectionName,
+            payCollectionAmount, payShipmentCharge, SessionManager.courierUserId,
+            payBreakableCharge, additionalNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge, packingName,
             payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,
-            "android-${SessionManager.versionName}", true, collectionDistrictId,collectionThanaId,deliveryDate, collectionDate, isOfficeDrop)
+            "android-${SessionManager.versionName}", true, collectionDistrictId, collectionThanaId, deliveryDate, collectionDate, isOfficeDrop
+        )
 
 
         viewModel.placeOrder(requestBody).observe(viewLifecycleOwner, Observer { model ->
@@ -988,7 +973,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             context?.showToast("বিস্তারিত কালেকশন ঠিকানা লিখুন, ন্যূনতম ১৫ ডিজিট")
             return false
         }
-        if (deliveryType.isEmpty()){
+        if (deliveryType.isEmpty()) {
             context?.showToast("ডেলিভারি টাইপ নির্বাচন করুন")
             return false
         }
@@ -1017,7 +1002,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private fun showCreditLimitAlert() {
         alert("নির্দেশনা", "আপনার ক্রেডিট লিমিট শেষ হয়ে গিয়েছে। অনুগ্রহপূর্বক সাপোর্ট এর সাথে যোগাযোগ করুন।", false).show()
     }
-    
+
     private fun mockUserData() {
         customerName = "Test Customer Name"
         mobileNo = "01555555555"

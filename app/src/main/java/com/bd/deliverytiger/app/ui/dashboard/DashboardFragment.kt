@@ -41,8 +41,12 @@ class DashboardFragment : Fragment() {
     private val viewModel: DashboardViewModel by inject()
     private lateinit var monthSpinnerAdapter: CustomSpinnerAdapter
 
+    private val calenderNow = Calendar.getInstance()
     private val viewList: MutableList<String> = mutableListOf()
     private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+    private var dayOfYear = 0
+    private var today = 0
+    private var currentMonth = 0
     private var currentYear = 0
     private var selectedYear = 0
     private var selectedMonth = 0
@@ -197,12 +201,14 @@ class DashboardFragment : Fragment() {
     }
 
     private fun setSpinner() {
-        val calender = Calendar.getInstance()
-        currentYear = calender.get(Calendar.YEAR)
-        val currentMonth = calender.get(Calendar.MONTH)
+        //val calender = Calendar.getInstance()
+        currentYear = calenderNow.get(Calendar.YEAR)
+        dayOfYear = calenderNow.get(Calendar.DAY_OF_YEAR)
+        today = calenderNow.get(Calendar.DAY_OF_MONTH)
+        currentMonth = calenderNow.get(Calendar.MONTH)
         selectedYear = currentYear
         selectedMonth = currentMonth + 1
-        currentDate = sdf.format(calender.timeInMillis)
+        currentDate = sdf.format(calenderNow.timeInMillis)
         selectedStartDate = currentDate
         selectedEndDate = currentDate
         //getDashBoardData(selectedMonth, selectedYear)
@@ -280,8 +286,8 @@ class DashboardFragment : Fragment() {
 
             if (model.pickDashboardViewModel?.isNullOrEmpty() == false) {
 
-                val sdf = SimpleDateFormat("dd MMM", Locale("bn","BD"))
-                val currentDate = sdf.format(Date())
+                //val sdf = SimpleDateFormat("dd MMM", Locale("bn", "BD"))
+                val currentDate = "${DigitConverter.toBanglaDigit(today)} ${DigitConverter.banglaMonth[currentMonth]}"
                 val pickModel = model.pickDashboardViewModel!!.first()
                 binding?.msg3?.text = "আজকে ($currentDate) পার্সেল দিয়েছি"
                 binding?.amount3?.text = "${DigitConverter.toBanglaDigit(pickModel.count.toString())}টি"
@@ -292,23 +298,26 @@ class DashboardFragment : Fragment() {
                     binding?.msg3?.visibility = View.GONE
                     binding?.amount3?.visibility = View.GONE
                     binding?.switchCollector?.visibility = View.VISIBLE
-                    binding?.switchCollector?.isChecked = SessionManager.isCollectorAttendance
+
+                    if (SessionManager.collectorAttendanceDateOfYear != dayOfYear) {
+                        SessionManager.isCollectorAttendance = false
+                        SessionManager.collectorAttendanceDateOfYear = 0
+                    }
+                    if (SessionManager.isCollectorAttendance) {
+                        binding?.switchCollector?.isChecked = true
+                        binding?.switchCollector?.isEnabled = false
+                    }
 
                     binding?.switchCollector?.setOnCheckedChangeListener { _, isChecked ->
                         if (isChecked) {
-                            val calender = Calendar.getInstance()
-                            val dayOfYear = calender.get(Calendar.DAY_OF_YEAR)
-                            if (SessionManager.collectorAttendanceDateOfYear != dayOfYear) {
-                                viewModel.updateStatusLocation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {
-                                    if (it) {
-                                        context?.toast("সফলভাবে আপডেট হয়েছে")
-                                        SessionManager.isCollectorAttendance = true
-                                        SessionManager.collectorAttendanceDateOfYear = dayOfYear
-                                    }
-                                })
-                            } else {
-                                context?.toast("আপনি ইতিমধ্যে জানিয়েছেন")
-                            }
+                            viewModel.updateStatusLocation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {
+                                if (it) {
+                                    context?.toast("সফলভাবে আপডেট হয়েছে")
+                                    SessionManager.isCollectorAttendance = true
+                                    SessionManager.collectorAttendanceDateOfYear = dayOfYear
+                                    binding?.switchCollector?.isEnabled = false
+                                }
+                            })
                         }
                     }
                 } else {
