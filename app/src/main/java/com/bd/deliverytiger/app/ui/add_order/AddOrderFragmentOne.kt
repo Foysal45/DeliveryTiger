@@ -989,7 +989,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         collectionName = productNameET.text.toString()
         collectionAddress = collectionAddressET.text.toString()
         if (collectionName.isEmpty()) {
-            context?.showToast("প্রোডাক্টের নাম লিখুন")
+            context?.showToast("নিজস্ব রেফারেন্স নম্বর / ইনভয়েস লিখুন")
             return false
         }
         if (isCollection) {
