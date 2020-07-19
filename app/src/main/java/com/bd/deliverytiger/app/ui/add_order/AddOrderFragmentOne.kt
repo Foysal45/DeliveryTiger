@@ -292,6 +292,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     }
                     R.id.toggle_button_2 -> {
                         collectionAmountET.visibility = View.VISIBLE
+                        collectionAmountET.requestFocus()
                         isCollection = true
                         orderType = "Delivery Taka Collection"
                         calculateTotalPrice()
