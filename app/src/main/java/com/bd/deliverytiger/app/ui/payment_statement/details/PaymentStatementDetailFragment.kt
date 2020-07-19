@@ -69,7 +69,7 @@ class PaymentStatementDetailFragment : Fragment() {
             dialog.show(childFragmentManager, OrderChargeDetailsFragment.tag)
         }
 
-        viewModel.getPaymentHistoryDetails(transactionId).observe(viewLifecycleOwner, Observer { model ->
+        viewModel.getPaymentHistoryDetails(SessionManager.courierUserId, transactionId).observe(viewLifecycleOwner, Observer { model ->
             responseModel = model
             model?.orderList?.let { list ->
                 //dataAdapter.initLoad(list)

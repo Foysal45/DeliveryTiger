@@ -27,7 +27,7 @@ class AppRepository(private val apiInterfaceADM: ApiInterfaceADM, private val ap
 
     suspend fun getPaymentHistory(courierUserId: Int) = apiInterfaceADM.getPaymentHistory(courierUserId)
 
-    suspend fun getPaymentHistoryDetails(transactionId: String) = apiInterfaceADM.getPaymentHistoryDetails(transactionId)
+    suspend fun getPaymentHistoryDetails(courierUserId: Int, transactionId: String) = apiInterfaceADM.getPaymentHistoryDetails(courierUserId, transactionId)
 
     //******************** ADCORE ********************//
 

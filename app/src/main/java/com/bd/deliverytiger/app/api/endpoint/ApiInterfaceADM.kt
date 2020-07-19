@@ -32,7 +32,7 @@ interface ApiInterfaceADM {
     @GET("api/account/reports/GetDTMerchantPaidChequeList/{courierUserId}")
     suspend fun getPaymentHistory(@Path("courierUserId") courierUserId: Int): NetworkResponse<List<PaymentData>, ErrorResponse>
 
-    @GET("api/account/reports/GetDTMerchantPaidChequeDetails/{transactionId}")
-    suspend fun getPaymentHistoryDetails(@Path("transactionId") transactionId: String): NetworkResponse<List<PaymentDetailsResponse>, ErrorResponse>
+    @GET("api/account/reports/GetDTMerchantPaidChequeDetails/{courierUserId}/{transactionId}")
+    suspend fun getPaymentHistoryDetails(@Path("courierUserId") courierUserId: Int, @Path("transactionId") transactionId: String): NetworkResponse<List<PaymentDetailsResponse>, ErrorResponse>
 
 }

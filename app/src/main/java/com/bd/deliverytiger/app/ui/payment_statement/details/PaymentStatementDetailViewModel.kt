@@ -18,11 +18,11 @@ class PaymentStatementDetailViewModel(private val repository: AppRepository): Vi
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
 
-    fun getPaymentHistoryDetails(transactionId: String): LiveData<PaymentDetailsResponse> {
+    fun getPaymentHistoryDetails(courierUserId: Int, transactionId: String): LiveData<PaymentDetailsResponse> {
         viewState.value = ViewState.ProgressState(true)
         val responseBody = MutableLiveData<PaymentDetailsResponse>()
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getPaymentHistoryDetails(transactionId)
+            val response = repository.getPaymentHistoryDetails(courierUserId, transactionId)
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {
