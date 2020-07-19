@@ -413,7 +413,14 @@ class ProfileFragment : Fragment() {
             binding?.emailAddress?.isClickable = false
             binding?.emailAddress?.isFocusable = false
         }
-
+        if (!model.mobile.isNullOrEmpty()) {
+            binding?.mobileNumber?.isClickable = false
+            binding?.mobileNumber?.isFocusable = false
+        }
+        if (!model.bkashNumber.isNullOrEmpty()) {
+            binding?.bkashNumber?.isClickable = false
+            binding?.bkashNumber?.isFocusable = false
+        }
         /*if (areaId > 0) {
             binding?.areaSelect?.visibility = View.VISIBLE
         }*/

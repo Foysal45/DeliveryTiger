@@ -150,6 +150,7 @@
                     android:paddingBottom="8dp"
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14"
+                    android:maxLength="11"
                     android:drawableEnd="@drawable/ic_bkash"
                     />
 
@@ -243,6 +244,8 @@
                         android:contentDescription="@string/cd"
                         android:background="@drawable/bg_login_btn"
                         android:padding="8dp"
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

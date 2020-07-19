@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.ui.add_order
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
 import android.os.Bundle
@@ -37,6 +38,7 @@ import com.bd.deliverytiger.app.ui.district.v2.CustomModel
 import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
+import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButtonToggleGroup
 import org.koin.android.ext.android.inject
@@ -96,6 +98,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private val thanaOrAriaList: ArrayList<ThanaPayLoad> = ArrayList()
     private var isAriaAvailable = true
     private var isMerchantCreditAvailable: Boolean = false
+    private var isProfileComplete: Boolean = false
 
     // Step 2
     private val packagingDataList: MutableList<PackagingData> = mutableListOf()
@@ -360,6 +363,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        isProfileComplete = checkProfileData()
         viewModel.getMerchantCredit().observe(viewLifecycleOwner, Observer {
             isMerchantCreditAvailable = it
             if (!isMerchantCreditAvailable) {
@@ -383,6 +387,50 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 }
             }
         })
+    }
+
+    private fun checkProfileData(): Boolean {
+        val model = SessionManager.getSessionData()
+        var missingValues = "নতুন অর্ডার করার আগে প্রোফাইল-এ "
+        var isMissing = false
+        if (model.companyName.isNullOrEmpty()) {
+            if(!isMissing) isMissing = true
+            missingValues += "মার্চেন্ট/কোম্পানি নাম, "
+        }
+        if (model.mobile.isNullOrEmpty()) {
+            if(!isMissing) isMissing = true
+            missingValues += "মোবাইল নাম্বার, "
+        }
+        if (model.bkashNumber.isNullOrEmpty()) {
+            if(!isMissing) isMissing = true
+            missingValues += "বিকাশ নম্বর (পেমেন্ট গ্রহনের জন্য), "
+        }
+        if (model.address.isNullOrEmpty()) {
+            if(!isMissing) isMissing = true
+            missingValues += "বিস্তারিত কালেকশন ঠিকানা (বাড়ি/রোড/হোল্ডিং), "
+        }
+        if (model.emailAddress.isNullOrEmpty()) {
+            if(!isMissing) isMissing = true
+            missingValues += "ইমেইল "
+        }
+        missingValues += "যোগ করুন"
+        if (isMissing) {
+            alert("নির্দেশনা", missingValues, false) {
+                if (it == AlertDialog.BUTTON_POSITIVE) {
+                    addFragment(ProfileFragment.newInstance(), ProfileFragment.tag)
+                }
+            }.show()
+            timber.log.Timber.d("missingValues: $missingValues")
+        }
+
+        return !isMissing
+    }
+
+    private fun addFragment(fragment: Fragment, tag: String) {
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.mainActivityContainer, fragment, tag)
+        ft?.addToBackStack(tag)
+        ft?.commit()
     }
 
     override fun onResume() {
@@ -420,11 +468,14 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             }
 
             orderPlaceBtn -> {
-                if (isMerchantCreditAvailable) {
-                    submitOrder()
-                } else {
+                if (!isMerchantCreditAvailable) {
                     showCreditLimitAlert()
+                } else if(!isProfileComplete) {
+                    checkProfileData()
+                } else {
+                    submitOrder()
                 }
+
             }
 
         }
@@ -648,6 +699,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 deliveryDate = "${month + 1}/$dayOfMonth/$year"
                 deliveryDatePicker.text = DigitConverter.toBanglaDigit(deliveryDate)
                 collectionDatePicker.text = DigitConverter.toBanglaDigit(deliveryDate)
+                collectionDate = collectionDate
                 val monthBangla = DigitConverter.banglaMonth[month]
                 //${dayOfMonth-1}
                 if (alertMsg.isNotEmpty()) {

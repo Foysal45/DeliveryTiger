@@ -73,7 +73,9 @@ class DashboardFragment : Fragment() {
         setDashBoardAdapter()
         setSpinner()
 
-
+        binding?.swipeRefresh?.setOnRefreshListener {
+            getDashBoardData(selectedMonth, selectedYear)
+        }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -265,7 +267,7 @@ class DashboardFragment : Fragment() {
         val dashBoardReqBody = DashBoardReqBody(selectedMonth, selectedYear, selectedStartDate, selectedEndDate, SessionManager.courierUserId)
         Timber.d("DashboardTag r ", dashBoardReqBody.toString())
         viewModel.getDashboardStatusGroup(dashBoardReqBody).observe(viewLifecycleOwner, Observer { model ->
-
+            binding?.swipeRefresh?.isRefreshing = false
             model.orderDashboardViewModel?.let {
                 dataList.clear()
                 dataList.addAll(it)
