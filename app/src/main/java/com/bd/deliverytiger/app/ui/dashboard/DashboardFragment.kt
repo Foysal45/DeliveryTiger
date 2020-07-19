@@ -150,7 +150,7 @@ class DashboardFragment : Fragment() {
                         addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
                     }
                     "all-order" -> {
-                        goToAllOrder(model.name ?: "", model.dashboardStatusFilter)
+                        goToAllOrder(model.name ?: "", model.dashboardStatusFilter, selectedStartDate, selectedEndDate)
                     }
                     "cod-collection" -> {
                         addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
@@ -172,9 +172,9 @@ class DashboardFragment : Fragment() {
             addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
         }
 
-        /*binding?.collectionLayout?.setOnClickListener {
-            goToAllOrder("কালেকশন করা হয়েছে", "কালেকশন করা হয়েছে")
-        }*/
+        binding?.paymentInfoLayout?.setOnClickListener {
+            goToAllOrder("পেমেন্ট প্রসেসিং-এ আছে", "পেমেন্ট প্রসেসিং-এ আছে", "2019-08-01", currentDate)
+        }
 
         binding?.dateRangePicker?.setOnClickListener {
 
@@ -261,7 +261,6 @@ class DashboardFragment : Fragment() {
         binding?.monthSpinner?.setSelection(1)
     }
 
-
     private fun getDashBoardData(selectedMonth: Int, selectedYear: Int) {
 
         val dashBoardReqBody = DashBoardReqBody(selectedMonth, selectedYear, selectedStartDate, selectedEndDate, SessionManager.courierUserId)
@@ -277,7 +276,7 @@ class DashboardFragment : Fragment() {
             if (model.paymentDashboardViewModel?.isNullOrEmpty() == false) {
 
                 val paymentModel1 = model.paymentDashboardViewModel!!.first()
-                binding?.amount1?.text = "৳ ${DigitConverter.toBanglaDigit(paymentModel1.totalAmount.toInt().toString())}"
+                binding?.amount1?.text = "৳ ${DigitConverter.toBanglaDigit(paymentModel1.totalAmount.toInt(), true)}"
                 binding?.msg1?.text = "${DigitConverter.toBanglaDigit(paymentModel1.count)}টি ${paymentModel1.name}"
 
                 if (model.paymentDashboardViewModel!!.size >= 2) {
@@ -340,12 +339,12 @@ class DashboardFragment : Fragment() {
         ft?.commit()
     }
 
-    private fun goToAllOrder(statusGroupName: String, statusFilter: String) {
+    private fun goToAllOrder(statusGroupName: String, statusFilter: String, startDate: String, endDate: String) {
 
         val bundle = Bundle()
         bundle.putString("statusGroup", statusGroupName)
-        bundle.putString("fromDate", selectedStartDate)
-        bundle.putString("toDate", selectedEndDate)
+        bundle.putString("fromDate", startDate)
+        bundle.putString("toDate", endDate)
         bundle.putString("dashboardStatusFilter", statusFilter)
 
         val fragment = AllOrdersFragment.newInstance(bundle)
