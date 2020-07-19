@@ -700,7 +700,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 deliveryDate = "${month + 1}/$dayOfMonth/$year"
                 deliveryDatePicker.text = DigitConverter.toBanglaDigit(deliveryDate)
                 collectionDatePicker.text = DigitConverter.toBanglaDigit(deliveryDate)
-                collectionDate = collectionDate
+                collectionDate = deliveryDate
                 val monthBangla = DigitConverter.banglaMonth[month]
                 //${dayOfMonth-1}
                 if (alertMsg.isNotEmpty()) {
