@@ -222,7 +222,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:includeFontPadding="false"
-                                android:text="পেমেন্ট দেয়া হয়েছে\n(স্টেটমেন্ট)"
+                                android:text="পেমেন্ট স্টেটমেন্ট\n(পূর্বে)"
                                 android:textColor="@color/white"
                                 android:textSize="14sp"
                                 android:textStyle="normal" />

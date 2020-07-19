@@ -18,21 +18,15 @@
         <item
             android:id="@+id/nav_bill"
             android:icon="@drawable/ic_wallet"
-            android:title="সার্ভিসের বিল" />
-        <item
-            android:id="@+id/nav_bill_pay"
-            android:icon="@drawable/ic_wallet"
-            android:title="সার্ভিসের বিল পেমেন্ট" />
+            android:title="সার্ভিস চার্জ" />
         <item
             android:id="@+id/nav_cod_collection"
             android:icon="@drawable/ic_handout"
             android:title="COD কালেকশন" />
         <item
-            android:id="@+id/nav_order_tracking"
-            android:icon="@drawable/ic_tracking"
-            android:title="অর্ডার ট্র্যাকিং"
-            android:visible="false"
-            />
+            android:id="@+id/nav_bill_pay"
+            android:icon="@drawable/ic_transaction_history"
+            android:title="বিল পে" />
         <item
             android:id="@+id/nav_payment_history"
             android:icon="@drawable/ic_analytics"
@@ -41,8 +35,17 @@
         <item
             android:id="@+id/nav_shipment_change"
             android:icon="@drawable/ic_payment"
-            android:title="শিপমেন্ট চার্জ" />
-
+            android:title="চার্জ ক্যালকুলেটর" />
+        <item
+            android:id="@+id/nav_order_tracking"
+            android:icon="@drawable/ic_tracking"
+            android:title="অর্ডার ট্র্যাকিং"
+            android:visible="false"
+            />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_account"
+            android:title="প্রোফাইল আপডেট" />
         <item
             android:id="@+id/nav_privacy"
             android:icon="@drawable/ic_privacy"

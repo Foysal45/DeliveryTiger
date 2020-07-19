@@ -158,7 +158,7 @@ class BillingofServiceFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("সার্ভিসের বিল")
+        (activity as HomeActivity).setToolbarTitle("সার্ভিস চার্জ")
         courierOrderAmountDetailList?.clear()
         billingServiceAdapter.notifyDataSetChanged()
         getBillingAddress(0, 20)

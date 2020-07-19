@@ -119,7 +119,7 @@ class ShipmentChargeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("শিপমেন্ট চার্জ")
+        (activity as HomeActivity).setToolbarTitle("চার্জ ক্যালকুলেটর")
     }
 
 

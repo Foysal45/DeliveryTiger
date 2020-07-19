@@ -501,6 +501,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
                 }
             }
+            R.id.nav_profile -> {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is ProfileFragment) {
+                    Timber.d("tag", "ProfileFragment already exist")
+                } else {
+                    addFragment(ProfileFragment.newInstance(), ProfileFragment.tag)
+                }
+            }
             R.id.nav_privacy -> {
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)

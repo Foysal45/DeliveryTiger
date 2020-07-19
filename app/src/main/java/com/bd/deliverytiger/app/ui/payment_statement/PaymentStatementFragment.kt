@@ -46,11 +46,11 @@ class PaymentStatementFragment: Fragment() {
             adapter = dataAdapter
             //addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         }
-        dataAdapter.onItemClicked = {
+        /*dataAdapter.onItemClicked = {
             it.transactionNo?.let { id ->
                 goToDetails(id)
             }
-        }
+        }*/
 
 
         viewModel.getPaymentHistory(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {
