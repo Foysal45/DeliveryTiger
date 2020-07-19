@@ -65,6 +65,7 @@ class ProfileFragment : Fragment() {
     private var isPickupLocationAvailable = false
     private var isPickupLocationSelected = false
     private var isAddingNewLocation = false
+    private var selectedPickupLocation: PickupLocation? = null
 
     companion object {
         fun newInstance(): ProfileFragment = ProfileFragment().apply { }
@@ -380,6 +381,11 @@ class ProfileFragment : Fragment() {
             SessionManager.createSession(it)
         })*/
 
+        selectedPickupLocation?.let {
+            it.pickupAddress = collectionAddress
+            viewModel.updatePickupLocations(it)
+        }
+
     }
 
     private fun setUpProfileFromSession() {
@@ -507,6 +513,8 @@ class ProfileFragment : Fragment() {
                         //districtId = model.districtId
                         districtId = 14
                         thanaId = model.thanaId
+
+                        selectedPickupLocation = model
                     } else if (optionFlag == 2) {
                         val model = thanaOrAriaList!![position-1]
                         collectionAddress = ""

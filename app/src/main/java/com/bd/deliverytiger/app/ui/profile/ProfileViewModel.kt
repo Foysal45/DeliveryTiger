@@ -98,4 +98,20 @@ class ProfileViewModel(private val repository: AppRepository): ViewModel() {
         })
         return responseBody
     }
+
+    fun updatePickupLocations(requestBody: PickupLocation) {
+
+        repository.updatePickupLocations(requestBody.id, requestBody).enqueue(object : Callback<GenericResponse<PickupLocation>> {
+            override fun onFailure(call: Call<GenericResponse<PickupLocation>>, t: Throwable) {
+
+            }
+
+            override fun onResponse(call: Call<GenericResponse<PickupLocation>>, response: Response<GenericResponse<PickupLocation>>) {
+                if (response.isSuccessful && response.body() != null && response.body()?.model != null) {
+
+                }
+            }
+        })
+
+    }
 }
