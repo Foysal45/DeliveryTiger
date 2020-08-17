@@ -145,7 +145,7 @@ class ServiceBillPayFragment: Fragment() {
         fromDate = "$year-${monthIndex+1}-01"
         toDate = "$year-${monthIndex+1}-$lastDay"
 
-        val request = MonthlyReceivableRequest(SessionManager.courierUserId.toString(),fromDate, toDate)
+        val request = MonthlyReceivableRequest(SessionManager.courierUserId, fromDate, toDate)
         viewModel.getMerchantMonthlyReceivable(request).observe(viewLifecycleOwner, Observer {
             it.orderList?.let { list ->
                 dataAdapter.initLoad(list)
@@ -159,10 +159,16 @@ class ServiceBillPayFragment: Fragment() {
                     binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ০ ৳"
                 } else {
                     binding?.emptyView?.visibility = View.GONE
-                    binding?.payBtn?.visibility = View.VISIBLE
+                    if (it.totalAmount > 0) {
+                        binding?.payBtn?.visibility = View.VISIBLE
+                    } else {
+                        binding?.payBtn?.visibility = View.GONE
+                    }
                     binding?.header?.parent?.visibility = View.VISIBLE
                     binding?.header?.info1?.text = "মোট অর্ডার: ${DigitConverter.toBanglaDigit(list.size)} টি"
-                    binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ${DigitConverter.toBanglaDigit(it.totalAmount, true)} ৳"
+                    var totalSum = 0
+                    list.forEach { order -> totalSum += order.totalAmount }
+                    binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ${DigitConverter.toBanglaDigit(totalSum, true)} ৳"
                 }
             }
         })
@@ -181,9 +187,10 @@ class ServiceBillPayFragment: Fragment() {
         val date = sdf.format(System.currentTimeMillis())
         val dateTrans = sdfTrans.format(System.currentTimeMillis())
         val orderCodeList: MutableList<OrderCode> = mutableListOf()
-        orderList.forEach {
+        orderList.filter { it.isCashCollected == 0 }.forEach {
             orderCodeList.add(OrderCode(it.orderCode?: "DT-",it.totalAmount,"Bkash-$dateTrans"))
         }
+        Timber.d("orderCodeList count ${orderCodeList.size}")
         val model = MonthlyReceivableUpdateRequest(date,"",orderCodeList)
         val bundle = bundleOf(
             "requestBody" to model

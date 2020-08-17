@@ -16,8 +16,6 @@
         android:paddingTop="8dp"
         >
 
-
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/spinnerMonthLayout"
             android:layout_width="0dp"
@@ -122,6 +120,8 @@
             android:layout_height="40dp"
             app:layout_constraintBottom_toTopOf="@id/payBtn"
             layout="@layout/layout_header"
+            android:visibility="gone"
+            tools:visibility="visible"
             />
 
         <ProgressBar

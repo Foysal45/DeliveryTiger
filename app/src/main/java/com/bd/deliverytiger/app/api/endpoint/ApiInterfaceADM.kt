@@ -23,7 +23,7 @@ interface ApiInterfaceADM {
 
     //https://adm.ajkerdeal.com/
 
-    @POST("api/account/reports/GetMerchantMonthlyReceivableList")
+    @POST("api/account/reports/GetMerchantMonthlyReceivableList_V2")
     suspend fun getMerchantMonthlyReceivable(@Body requestBody: MonthlyReceivableRequest): NetworkResponse<MonthlyReceivableResponse, ErrorResponse>
 
     @POST("api/account/reports/BulkMerchantCashCollection")

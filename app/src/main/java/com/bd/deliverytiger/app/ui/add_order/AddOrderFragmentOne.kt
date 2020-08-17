@@ -108,6 +108,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var codChargeMin: Int = 0
     private var breakableChargeApi: Double = 0.0
     private var bigProductCharge: Double = 0.0
+    private var collectionChargeApi: Double = 0.0
     private var isCheckBigProduct: Boolean = false
 
     private var isCollection: Boolean = false
@@ -200,6 +201,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         orderPlaceBtn.setOnClickListener(this)
 
         getBreakableCharge()
+        getCollectionCharge()
         getPackagingCharge()
         getPickupLocation()
 
@@ -750,6 +752,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     }
 
+    private fun getCollectionCharge() {
+        viewModel.getCollectionCharge(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { charge ->
+            collectionChargeApi = charge.toDouble()
+        })
+    }
+
     private fun getPackagingCharge() {
 
         viewModel.getPackagingCharge().observe(viewLifecycleOwner, Observer { list ->
@@ -920,7 +928,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         if (isOfficeDrop) {
             payCollectionCharge = 0.0
         } else {
-            payCollectionCharge = SessionManager.collectionCharge
+            payCollectionCharge = collectionChargeApi
         }
 
         //val payReturnCharge = SessionManager.returnCharge

@@ -64,4 +64,7 @@ interface ApiInterfaceCore {
 
     @PUT("api/Update/UpdatePickupLocations/{id}")
     fun updatePickupLocations(@Path("id") id: Int, @Body requestBody: PickupLocation): Call<GenericResponse<PickupLocation>>
+
+    @GET("api/Fetch/GetMerchantCollectionCharge/{courierUserId}")
+    fun getCollectionCharge(@Path("courierUserId") courierUserId: Int): Call<GenericResponse<Int>>
 }

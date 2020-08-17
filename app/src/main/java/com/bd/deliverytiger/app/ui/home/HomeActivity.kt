@@ -45,6 +45,10 @@ import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 import org.koin.android.ext.android.inject
 import java.io.File
@@ -71,6 +75,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val viewModel: HomeViewModel by inject()
     private var doubleBackToExitPressedOnce = false
     private var navId: Int = 0
+
+    private lateinit var appUpdateManager: AppUpdateManager
+    private val requestCodeAppUpdate = 21720
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -180,6 +187,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
         })
+
+        appUpdateManager()
     }
 
     override fun onStart() {
@@ -192,6 +201,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             headerPic.setImageResource(R.drawable.ic_account)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkStalledUpdate()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -679,4 +693,22 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         param.setMargins(0,0, this.dpToPx(24f), this.dpToPx(value))
         addOrderFab.layoutParams = param
     }*/
+
+    private fun appUpdateManager() {
+        appUpdateManager = AppUpdateManagerFactory.create(this)
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE,this,requestCodeAppUpdate)
+            }
+        }
+    }
+
+    private fun checkStalledUpdate() {
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+            // For IMMEDIATE
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE,this,requestCodeAppUpdate)
+            }
+        }
+    }
 }

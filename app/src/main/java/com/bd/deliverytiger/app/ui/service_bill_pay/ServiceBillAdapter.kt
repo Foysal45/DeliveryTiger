@@ -3,6 +3,7 @@ package com.bd.deliverytiger.app.ui.service_bill_pay
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
@@ -26,7 +27,17 @@ class ServiceBillAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewModel) {
             val model = dataList[position]
-            holder.binding.orderCode.text = model.orderCode
+            var paidStatus = ""
+            if (model.isCashCollected == 0) {
+                paidStatus = "আনপেইড"
+                holder.binding.orderCode.setTextColor(ContextCompat.getColor(holder.binding.orderCode.context, R.color.black_90))
+                holder.binding.totalChange.setTextColor(ContextCompat.getColor(holder.binding.totalChange.context, R.color.black_90))
+            } else {
+                paidStatus = "পেইড"
+                holder.binding.orderCode.setTextColor(ContextCompat.getColor(holder.binding.orderCode.context, R.color.colorPrimary))
+                holder.binding.totalChange.setTextColor(ContextCompat.getColor(holder.binding.totalChange.context, R.color.colorPrimary))
+            }
+            holder.binding.orderCode.text =  "${model.orderCode} ($paidStatus)"
             holder.binding.totalChange.text = "${DigitConverter.toBanglaDigit(model.totalAmount)} ৳"
         }
     }

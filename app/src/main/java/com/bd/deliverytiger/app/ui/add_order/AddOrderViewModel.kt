@@ -209,4 +209,32 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
         return responseBody
     }
 
+    fun getCollectionCharge(courierUserId: Int): LiveData<Int> {
+
+        viewState.value = ViewState.ProgressState(true)
+        val responseBody = MutableLiveData<Int>()
+
+        repository.getCollectionCharge(courierUserId).enqueue(object : Callback<GenericResponse<Int>> {
+            override fun onFailure(call: Call<GenericResponse<Int>>, t: Throwable) {
+                viewState.value = ViewState.ProgressState(false)
+                viewState.value = ViewState.ShowMessage(message)
+            }
+
+            override fun onResponse(call: Call<GenericResponse<Int>>, response: Response<GenericResponse<Int>>) {
+                if (response.isSuccessful && response.body() != null){
+                    if (response.body()!!.model != null){
+                        responseBody.value = response.body()!!.model
+                    } else {
+                        viewState.value = ViewState.ProgressState(false)
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                } else {
+                    viewState.value = ViewState.ProgressState(false)
+                    viewState.value = ViewState.ShowMessage(message)
+                }
+            }
+        })
+        return responseBody
+    }
+
 }
