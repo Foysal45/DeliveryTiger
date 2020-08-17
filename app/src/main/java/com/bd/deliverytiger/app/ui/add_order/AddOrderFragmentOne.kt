@@ -595,6 +595,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 etAriaPostOffice.setText("")
                 etThana.setText("")
                 etAriaPostOffice.visibility = View.GONE
+
+                if (districtId == 14) {
+                    getDeliveryCharge(districtId, 10026) // Fetch data if any district selected
+                } else {
+                    getDeliveryCharge(1, 10137)
+                }
             }
         })
     }
@@ -624,7 +630,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 } else {
                     etAriaPostOffice.visibility = View.GONE
                 }
-                getDeliveryCharge()
+                getDeliveryCharge(districtId, thanaId)
             } else if (track == 3) {
                 if (thanaOrAriaList[listPostion].postalCode != null) {
                     if (thanaOrAriaList[listPostion].postalCode!!.isNotEmpty()) {
@@ -795,9 +801,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     }
 
-    private fun getDeliveryCharge() {
+    private fun getDeliveryCharge(districtId: Int, thanaId: Int) {
 
         viewModel.getDeliveryCharge(DeliveryChargeRequest(districtId, thanaId)).observe(viewLifecycleOwner, Observer { list ->
+
             val weightList: MutableList<String> = mutableListOf()
             weightList.add("ওজন (কেজি)")
             for (model1 in list) {
@@ -822,16 +829,20 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                         deliveryTypeList.addAll(model2.weightRangeWiseData)
                         deliveryTypeAdapter.notifyDataSetChanged()
                         isWeightSelected = true
+                        deliveryType = ""
                     } else {
                         isWeightSelected = false
-                        deliveryTypeAdapter.clearSelectedItemPosition()
-                        deliveryTypeList.clear()
-                        deliveryTypeAdapter.notifyDataSetChanged()
+                        deliveryType = ""
+                        if (list.isNotEmpty()) {
+                            deliveryTypeList.clear()
+                            deliveryTypeList.addAll(list.first().weightRangeWiseData)
+                            deliveryTypeAdapter.clearSelectedItemPosition()
+                            deliveryTypeAdapter.notifyDataSetChanged()
+                        }
                     }
                 }
             }
         })
-
 
     }
 
@@ -968,12 +979,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             collectionAddress = SessionManager.address
         }
 
-        if (productType.equals("small")) {
-            payShipmentCharge
-        } else {
-            payShipmentCharge = payShipmentCharge + bigProductCharge
+        if (productType != "small") {
+            payShipmentCharge += bigProductCharge
         }
-
 
         val requestBody = OrderRequest(
             customerName, mobileNo, alternativeMobileNo, customersAddress, districtId, thanaId, areaId,
