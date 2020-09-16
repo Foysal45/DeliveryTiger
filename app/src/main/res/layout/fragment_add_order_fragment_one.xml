@@ -236,6 +236,23 @@
                     android:visibility="gone"
                     tools:visibility="visible" />
 
+                <EditText
+                    android:id="@+id/actualPackageAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_add_order_edit_text"
+                    android:hint="অ্যাকচুয়াল প্যাকেজ প্রাইস"
+                    android:importantForAutofill="no"
+                    android:inputType="numberDecimal"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14"
+                     />
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

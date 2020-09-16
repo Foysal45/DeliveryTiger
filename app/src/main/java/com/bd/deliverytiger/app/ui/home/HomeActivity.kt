@@ -22,7 +22,6 @@ import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
-import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentTwo
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
@@ -271,7 +270,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
             if (currentFragment is DashboardFragment ||
                 currentFragment is AddOrderFragmentOne ||
-                currentFragment is AddOrderFragmentTwo ||
                 currentFragment is ProfileFragment ||
                 currentFragment is DistrictSelectFragment ||
                 currentFragment is DistrictThanaAriaSelectFragment) {
@@ -324,9 +322,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     currentFragment.onResume()
                 }
                 is AddOrderFragmentOne -> {
-                    currentFragment.onResume()
-                }
-                is AddOrderFragmentTwo -> {
                     currentFragment.onResume()
                 }
                 is BillingofServiceFragment -> {

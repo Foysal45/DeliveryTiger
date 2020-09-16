@@ -71,6 +71,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private lateinit var checkTermsTV: TextView
     private lateinit var deliveryTypeRV: RecyclerView
     private lateinit var toggleButtonGroup: MaterialButtonToggleGroup
+    private lateinit var actualPackageAmountET: EditText
 
 
     private lateinit var totalTV: TextView
@@ -122,6 +123,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var payBreakableCharge: Double = 0.0
     private var payCollectionCharge: Double = 0.0
     private var payPackagingCharge: Double = 0.0
+    private var payActualPackagePrice: Double = 0.0
     private var isOpenBoxCheck: Boolean = false
     private var isOfficeDrop: Boolean = false
     private var isCollectionLocationSelected: Boolean = false
@@ -185,6 +187,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         checkTermsTV = view.findViewById(R.id.check_terms_condition_text)
         deliveryTypeRV = view.findViewById(R.id.delivery_type_selection_rV)
         toggleButtonGroup = view.findViewById(R.id.toggle_button_group)
+        actualPackageAmountET = view.findViewById(R.id.actualPackageAmount)
 
 
         totalTV = view.findViewById(R.id.tvAddOrderTotalOrder)
@@ -989,7 +992,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             payCollectionAmount, payShipmentCharge, SessionManager.courierUserId,
             payBreakableCharge, additionalNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge, packingName,
             payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,
-            "android-${SessionManager.versionName}", true, collectionDistrictId, collectionThanaId, deliveryDate, collectionDate, isOfficeDrop
+            "android-${SessionManager.versionName}", true, collectionDistrictId, collectionThanaId, deliveryDate, collectionDate, isOfficeDrop,payActualPackagePrice
         )
 
 
@@ -1022,6 +1025,27 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 return false
             }
         }
+
+        val payActualPackagePriceText = actualPackageAmountET.text.toString().trim()
+        if (payActualPackagePriceText.isEmpty()) {
+            context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস লিখুন")
+            return false
+        } else {
+            try {
+                payActualPackagePrice = payActualPackagePriceText.toDouble()
+                if (isCollection) {
+                    if (payActualPackagePrice > payCollectionAmount) {
+                        context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস কালেকশন অ্যামাউন্ট থেকে বেশি হতে পারবে না")
+                        return false
+                    }
+                }
+            } catch (e: NumberFormatException) {
+                e.printStackTrace()
+                context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস লিখুন")
+                return false
+            }
+        }
+
         if (!isWeightSelected) {
             context?.showToast("প্যাকেজ এর ওজন নির্বাচন করুন")
             return false
