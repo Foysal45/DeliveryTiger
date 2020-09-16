@@ -372,9 +372,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         isProfileComplete = checkProfileData()
         viewModel.getMerchantCredit().observe(viewLifecycleOwner, Observer {
             isMerchantCreditAvailable = it
-            if (!isMerchantCreditAvailable) {
+            /*if (!isMerchantCreditAvailable) {
                 showCreditLimitAlert()
-            }
+            }*/
         })
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -472,18 +472,17 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     context?.toast(getString(R.string.no_aria))
                 }
             }
-
             orderPlaceBtn -> {
-                if (!isMerchantCreditAvailable) {
-                    showCreditLimitAlert()
-                } else if(!isProfileComplete) {
-                    checkProfileData()
-                } else {
-                    submitOrder()
-                }
-
+                orderPlaceProcess()
             }
+        }
+    }
 
+    private fun orderPlaceProcess() {
+        when {
+            !isCollection && !isMerchantCreditAvailable -> showCreditLimitAlert()
+            !isProfileComplete -> checkProfileData()
+            else -> submitOrder()
         }
     }
 
