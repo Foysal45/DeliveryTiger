@@ -1,10 +1,11 @@
 package com.bd.deliverytiger.app.api.endpoint
 
+import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
-import com.bd.deliverytiger.app.api.model.config.BannerConfig
+import com.bd.deliverytiger.app.api.model.config.BannerResponse
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponse
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
@@ -16,6 +17,7 @@ import com.bd.deliverytiger.app.api.model.order.UpdateOrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
+import com.haroldadmin.cnradapter.NetworkResponse
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.http.*
@@ -29,8 +31,8 @@ interface ApiInterfaceCore {
     }
     //"https://adcore.ajkerdeal.com/"
 
-    @GET("api/Dashboard/GetBanner")
-    fun getBannerInfo(): Call<GenericResponse<BannerConfig>>
+    @GET("api/Dashboard/GetAllBanners")
+    suspend fun getBannerInfo(): NetworkResponse<GenericResponse<BannerResponse>, ErrorResponse>
 
     @POST("api/Dashboard/GetOrderCountByStatusGroupv2")
     fun getDashboardStatusGroup(@Body requestBody: DashBoardReqBody): Call<GenericResponse<DashboardResponse>>

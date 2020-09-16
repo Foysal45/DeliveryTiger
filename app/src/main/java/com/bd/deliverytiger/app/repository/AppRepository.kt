@@ -31,7 +31,7 @@ class AppRepository(private val apiInterfaceADM: ApiInterfaceADM, private val ap
 
     //******************** ADCORE ********************//
 
-    fun getBannerInfo() = apiInterfaceCore.getBannerInfo()
+    suspend fun getBannerInfo() = apiInterfaceCore.getBannerInfo()
 
     fun getDashboardStatusGroup(requestBody: DashBoardReqBody) = apiInterfaceCore.getDashboardStatusGroup(requestBody)
 

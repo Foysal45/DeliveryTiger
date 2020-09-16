@@ -63,7 +63,11 @@ class MainApplication: Application() {
         return session!!
     }
 
-    private fun refreshToken(){
+    fun logResponse() {
+        Timber.d("interceptor","logResponse called from interceptor")
+    }
+
+    fun refreshToken(){
 
         Timber.d("applicationLog", "refreshToken called from Interceptor")
         val loginInterface = retrofit.create(LoginInterface::class.java)
