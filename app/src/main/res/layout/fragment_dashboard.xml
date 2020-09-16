@@ -239,17 +239,17 @@
 
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/bannerImage"
+                    <com.smarteist.autoimageslider.SliderView
+                        android:id="@+id/sliderView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="200dp"
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="18dp"
                         android:layout_marginBottom="60dp"
-                        android:adjustViewBounds="true"
-                        android:contentDescription="@string/cd"
-                        android:src="@drawable/ic_banner_place"
+
+                        app:sliderIndicatorMarginBottom="16dp"
+                        app:sliderIndicatorRadius="2dp"
                         android:visibility="gone"
                         tools:visibility="visible" />
 

@@ -1,7 +1,10 @@
 package com.bd.deliverytiger.app.ui.dashboard
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,21 +15,25 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.config.BannerModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
+import com.bd.deliverytiger.app.ui.banner.SliderAdapter
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
+import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.DigitConverter.banglaMonth
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
+import com.smarteist.autoimageslider.SliderAnimations
+import com.smarteist.autoimageslider.SliderView
 import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,6 +46,7 @@ class DashboardFragment : Fragment() {
     private lateinit var dashboardAdapter: DashboardAdapter
     private val dataList: MutableList<DashboardData> = mutableListOf()
     private val viewModel: DashboardViewModel by inject()
+    private val homeViewModel: HomeViewModel by inject()
     private lateinit var monthSpinnerAdapter: CustomSpinnerAdapter
 
     private val calenderNow = Calendar.getInstance()
@@ -54,6 +62,10 @@ class DashboardFragment : Fragment() {
     private var selectedEndDate = ""
     private var currentDate = ""
     private var isLoading = false
+
+    private var isBannerEnable: Boolean = false
+    private var worker: Runnable? = null
+    private var handler = Handler(Looper.getMainLooper())
 
 
     companion object {
@@ -77,6 +89,12 @@ class DashboardFragment : Fragment() {
             getDashBoardData(selectedMonth, selectedYear)
         }
 
+        homeViewModel.bannerInfo.observe(viewLifecycleOwner, Observer { model ->
+
+            val bannerModel = model.bannerModel
+            showBanner(bannerModel)
+        })
+
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
                 is ViewState.ShowMessage -> {
@@ -98,20 +116,64 @@ class DashboardFragment : Fragment() {
         })
     }
 
-    /**
-     * Called from Home Activity
-     */
-    fun showBanner(showBanner: Boolean, bannerImgUri: String?) {
-
-        if (showBanner) {
-            binding?.bannerImage?.visibility = View.VISIBLE
-            Glide.with(requireContext())
-                .load(bannerImgUri)
-                .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
-                .into(binding?.bannerImage!!)
-        } else {
-            binding?.bannerImage?.visibility = View.GONE
+    override fun onResume() {
+        super.onResume()
+        if (isBannerEnable) {
+            animateSlider()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        worker?.let {
+            handler.removeCallbacks(it)
+        }
+    }
+
+
+    private fun showBanner(bannerModel: BannerModel) {
+
+        isBannerEnable = bannerModel.showBanner
+        if (isBannerEnable) {
+            binding?.sliderView?.visibility = View.VISIBLE
+
+            val bannerList = bannerModel.bannerData.filter { it.isActive }
+            val bannerUrlList = bannerList.map { it.bannerUrl ?: "" }
+
+            val sliderAdapter = SliderAdapter()
+            sliderAdapter.initList(bannerUrlList)
+            binding?.sliderView?.setSliderAdapter(sliderAdapter)
+
+            binding?.sliderView?.let { view ->
+                with(view) {
+                    setIndicatorAnimation(IndicatorAnimationType.WORM)
+                    indicatorSelectedColor = Color.WHITE
+                    indicatorUnselectedColor = Color.GRAY
+                    setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
+                    scrollTimeInSec = 1
+                    autoCycleDirection = SliderView.AUTO_CYCLE_DIRECTION_RIGHT
+                    //startAutoCycle()
+                }
+            }
+
+            animateSlider()
+
+        } else {
+            binding?.sliderView?.visibility = View.GONE
+        }
+    }
+
+    private fun animateSlider() {
+        worker?.let {
+            handler.removeCallbacks(it)
+        }
+        worker = object : Runnable{
+            override fun run() {
+                binding?.sliderView?.slideToNextPosition()
+                handler.postDelayed(this, 2000L)
+            }
+        }
+        handler.postDelayed(worker!!, 2000L)
     }
 
     private fun setDashBoardAdapter() {

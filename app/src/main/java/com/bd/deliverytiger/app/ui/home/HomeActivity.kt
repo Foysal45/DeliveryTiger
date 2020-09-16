@@ -164,24 +164,21 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         viewModel.getBannerInfo().observe(this, Observer { model ->
 
-            val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-            if (currentFragment is DashboardFragment) {
-                currentFragment.showBanner(model.showBanner, model.bannerUrl)
-            }
-            if (model.showPopupBanner) {
+            val popupModel = model.popUpModel
+            if (popupModel.showPopUp) {
                 // No frequency show all time
-                if (model.popupFrequency == 0) {
-                    showPopupDialog(model.popupBannerUrl)
+                if (popupModel.popUpFrequency == 0) {
+                    showPopupDialog(popupModel.popUpUrl)
                 } else {
                     val calender = Calendar.getInstance()
                     val dayOfYear = calender.get(Calendar.DAY_OF_YEAR)
                     if (SessionManager.popupDateOfYear != dayOfYear) {
                         SessionManager.popupShowCount = 0
                     }
-                    if (model.popupFrequency > SessionManager.popupShowCount) {
+                    if (popupModel.popUpFrequency > SessionManager.popupShowCount) {
                         SessionManager.popupShowCount = SessionManager.popupShowCount + 1
                         SessionManager.popupDateOfYear = dayOfYear
-                        showPopupDialog(model.popupBannerUrl)
+                        showPopupDialog(popupModel.popUpUrl)
                     }
                 }
             }

@@ -18,7 +18,9 @@
         tools:ignore="GoogleAppIndexingWarning"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
-        tools:targetApi="q">
+        tools:targetApi="q"
+        tools:replace="android:allowBackup"
+        >
 
         <activity
             android:name=".ui.splash.SplashActivity"
