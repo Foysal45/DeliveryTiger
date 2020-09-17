@@ -111,6 +111,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var bigProductCharge: Double = 0.0
     private var collectionChargeApi: Double = 0.0
     private var isCheckBigProduct: Boolean = false
+    private var codChargePercentageInsideDhaka: Double = 0.0
+    private var codChargePercentageOutsideDhaka: Double = 0.0
 
     private var isCollection: Boolean = false
     private var isBreakable: Boolean = false
@@ -294,6 +296,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                         collectionAmountET.visibility = View.GONE
                         isCollection = false
                         orderType = "Only Delivery"
+                        calculateTotalPrice()
                     }
                     R.id.toggle_button_2 -> {
                         collectionAmountET.visibility = View.VISIBLE
@@ -600,9 +603,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
                 if (districtId == 14) {
                     getDeliveryCharge(districtId, 10026) // Fetch data if any district selected
+                    codChargePercentage = codChargePercentageInsideDhaka
                 } else {
                     getDeliveryCharge(1, 10137)
+                    codChargePercentage = codChargePercentageOutsideDhaka
                 }
+                calculateTotalPrice()
             }
         })
     }
@@ -753,9 +759,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         viewModel.getBreakableCharge().observe(viewLifecycleOwner, Observer { model ->
             breakableChargeApi = model.breakableCharge
-            codChargePercentage = model.codChargePercentage
             codChargeMin = model.codChargeMin
             bigProductCharge = model.bigProductCharge
+            codChargePercentageInsideDhaka = model.codChargeDhakaPercentage
+            codChargePercentageOutsideDhaka = model.codChargePercentage
         })
 
     }
