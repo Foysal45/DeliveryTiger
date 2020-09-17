@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -27,6 +28,7 @@ import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.district.v2.CustomModel
 import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
+import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.profile.pickup_address.PickUpLocationAdapter
 import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.VariousTask.getCircularImage
@@ -41,6 +43,7 @@ class ProfileFragment : Fragment() {
 
     private var binding: FragmentProfileBinding? = null
     private val viewModel: ProfileViewModel by inject()
+    private val homeViewModel: HomeViewModel by inject()
 
     private val districtList: ArrayList<DistrictDeliveryChargePayLoad> = ArrayList()
     private val thanaOrAriaList: ArrayList<ThanaPayLoad> = ArrayList()
@@ -63,6 +66,7 @@ class ProfileFragment : Fragment() {
     private var fbLink = ""
     private var collectionAddress = ""
     private var emailAddress = ""
+    private var newPickUpAddress: String = ""
 
     private var isPickupLocationAvailable = false
     private var isPickupLocationSelected = false
@@ -70,6 +74,10 @@ class ProfileFragment : Fragment() {
     private var selectedPickupLocation: PickupLocation? = null
 
     private lateinit var pickupAddressAdapter: PickUpLocationAdapter
+
+    private var isGPSRetry: Boolean = false
+    private var currentLatitude: Double = 0.0
+    private var currentLongitude: Double = 0.0
 
     companion object {
         fun newInstance(): ProfileFragment = ProfileFragment().apply { }
@@ -92,6 +100,7 @@ class ProfileFragment : Fragment() {
 
         setUpProfileFromSession()
         getPickupLocation()
+
         binding?.profilePic?.setOnClickListener {
             getImageFromDevice()
         }
@@ -128,11 +137,16 @@ class ProfileFragment : Fragment() {
                 updateProfile()
             }
         }
-
         binding?.addPickupBtn?.setOnClickListener {
-            context?.toast("Under Development")
+            addPickupAddress()
         }
-
+        binding?.gpsBtn?.setOnClickListener {
+            alert("নির্দেশনা", "আপনি কি এখন পিকআপ ঠিকানায় আছেন? যদি পিকআপ ঠিকানায় অবস্থান করেন তাহলে জিপিএস লোকেশন অ্যাড করুন অন্যথায় পিকআপ ঠিকানায় গিয়ে জিপিএস লোকেশন অ্যাড করুন", true,"পিকআপ ঠিকানায় আছি", "ক্যানসেল") {
+                if (it == AlertDialog.BUTTON_POSITIVE) {
+                    getGPSLocation()
+                }
+            }.show()
+        }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -153,6 +167,20 @@ class ProfileFragment : Fragment() {
                     activity?.onBackPressed()
                 }
             }
+        })
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun getGPSLocation() {
+        (activity as HomeActivity).fetchCurrentLocation()
+        homeViewModel.currentLocation.observe(viewLifecycleOwner, Observer { location ->
+            currentLatitude = location.latitude
+            currentLongitude = location.longitude
+            binding?.gpsLocation?.setText("$currentLatitude, $currentLongitude")
+            if (isGPSRetry) {
+                context?.toast("জিপিএস লোকেশন আপডেট হয়েছে")
+            }
+            isGPSRetry = true
         })
     }
 
@@ -341,20 +369,52 @@ class ProfileFragment : Fragment() {
             return false
         }*/
 
-        /*if (districtId == 0) {
-            context?.toast(getString(R.string.select_dist))
-            return false
-        }
-        if (thanaId == 0) {
-            context?.toast(getString(R.string.select_thana))
-            return false
-        }
+        /*
         if (isAriaAvailable && areaId == 0) {
             context?.toast(getString(R.string.select_aria))
             return false
         }*/
 
         return true
+    }
+
+    private fun addPickupAddress() {
+
+        if (districtId == 0) {
+            context?.toast(getString(R.string.select_dist))
+            return
+        }
+        if (thanaId == 0) {
+            context?.toast(getString(R.string.select_thana))
+            return
+        }
+
+        newPickUpAddress = binding?.pickupAddress?.text?.toString() ?: ""
+        if (newPickUpAddress.trim().isEmpty() || newPickUpAddress.length < 15) {
+            context?.toast("বিস্তারিত ঠিকানা লিখুন, ন্যূনতম ১৫ ডিজিট")
+            binding?.pickupAddress?.requestFocus()
+            return
+        }
+
+        val requestBody = PickupLocation().apply {
+            districtId = this@ProfileFragment.districtId
+            thanaId = this@ProfileFragment.thanaId
+            courierUserId = SessionManager.courierUserId
+            pickupAddress = newPickUpAddress
+            districtName = this@ProfileFragment.districtName
+            thanaName = this@ProfileFragment.thanaName
+            latitude = currentLatitude.toString()
+            longitude = currentLongitude.toString()
+        }
+        viewModel.addPickupLocations(requestBody).observe(viewLifecycleOwner, Observer { model ->
+            pickupAddressAdapter.addItem(requestBody)
+            context?.toast("পিকআপ লোকেশান অ্যাড হয়েছে")
+
+            binding?.spinnerPickUpDistrict?.setSelection(0)
+            binding?.pickupAddress?.text?.clear()
+            binding?.gpsLocation?.text?.clear()
+        })
+
     }
 
     private fun updateProfile() {
@@ -397,8 +457,8 @@ class ProfileFragment : Fragment() {
         binding?.alternateMobileNumber?.setText(model.alterMobile)
         binding?.bkashNumber?.setText(model.bkashNumber)
         binding?.emailAddress?.setText(model.emailAddress)
-        //binding?.collectionAddress?.setText(model.address)
-        binding?.checkSmsUpdate?.isChecked = model.isSms!!
+        binding?.collectionAddress?.setText(model.address)
+        binding?.checkSmsUpdate?.isChecked = model.isSms
         binding?.fbLink?.setText(model.fburl)
         binding?.pageLink?.setText(model.webURL)
 
@@ -439,6 +499,7 @@ class ProfileFragment : Fragment() {
         binding?.recyclerview?.let { view ->
             with(view) {
                 setHasFixedSize(false)
+                isNestedScrollingEnabled = false
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = pickupAddressAdapter
             }
@@ -489,8 +550,10 @@ class ProfileFragment : Fragment() {
             if (list.isNotEmpty()) {
                 //setUpCollectionSpinner(list, null, 1)
                 pickupAddressAdapter.initList(list)
+                binding?.emptyView?.visibility = View.GONE
             } else {
-                getDistrictThanaOrAria(14, 4)
+                //getDistrictThanaOrAria(14, 4)
+                binding?.emptyView?.visibility = View.VISIBLE
             }
         })
     }
@@ -499,8 +562,8 @@ class ProfileFragment : Fragment() {
 
         val pickupDistrictList: MutableList<String> = mutableListOf()
         pickupDistrictList.add("জেলা নির্বাচন করুন")
-        pickupDistrictList.add("ঢাকা")
-        pickupDistrictList.add("চট্টগ্রাম")
+        pickupDistrictList.add("ঢাকা সিটি")
+        pickupDistrictList.add("চট্টগ্রাম সিটি")
 
         val pickupDistrictAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, pickupDistrictList)
         binding?.spinnerPickUpDistrict?.adapter = pickupDistrictAdapter
@@ -508,9 +571,22 @@ class ProfileFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (position != 0) {
-                    districtId = if (position==1) 14 else if (position == 2) 80 else 0
+                    if (position==1) {
+                        districtId = 14
+                        districtName = "ঢাকা"
+                        binding?.thanaSelect?.setText("থানা/এরিয়া নির্বাচন করুন")
+                    } else if (position == 2) {
+                        districtId = 80
+                        districtName = "চট্টগ্রাম"
+                        binding?.thanaSelect?.setText("থানা/এরিয়া নির্বাচন করুন")
+                    } else {
+                        districtId = 0
+                        districtName = ""
+                    }
                 } else {
                     districtId = 0
+                    districtName = ""
+                    binding?.thanaSelect?.setText("থানা/এরিয়া নির্বাচন করুন")
                 }
             }
         }

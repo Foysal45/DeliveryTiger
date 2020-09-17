@@ -17,5 +17,9 @@ data class PickupLocation(
     @SerializedName("pickupAddress")
     var pickupAddress: String? = "",
     @SerializedName("courierUserId")
-    var courierUserId: Int = 0
+    var courierUserId: Int = 0,
+    @SerializedName("latitude")
+    var latitude: String = "0.0",
+    @SerializedName("longitude")
+    var longitude: String = "0.0"
 )

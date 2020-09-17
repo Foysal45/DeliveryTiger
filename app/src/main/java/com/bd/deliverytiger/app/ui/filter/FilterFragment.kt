@@ -95,7 +95,7 @@ class FilterFragment : Fragment() {
             searchET.setText(searchKey)
         }
 
-        otherApiInterface = RetrofitSingleton.getInstance(context!!).create(OtherApiInterface::class.java)
+        otherApiInterface = RetrofitSingleton.getInstance(requireContext()).create(OtherApiInterface::class.java)
         loadStatusGroup()
         if (filterType == 1){
             searchET.isFocusableInTouchMode = true
@@ -237,7 +237,7 @@ class FilterFragment : Fragment() {
 
         statusList.clear()
         statusList.add("সকল স্ট্যাটাস")
-        val statusAdapter = CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, statusList)
+        val statusAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, statusList)
         statusSpinner.adapter = statusAdapter
 
         otherApiInterface.loadStatusGroup().enqueue(object : Callback<GenericResponse<MutableList<StatusGroupModel>>> {

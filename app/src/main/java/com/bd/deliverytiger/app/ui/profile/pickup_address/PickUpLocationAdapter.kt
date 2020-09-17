@@ -41,4 +41,9 @@ class PickUpLocationAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyDataSetChanged()
     }
 
+    fun addItem(model: PickupLocation) {
+        dataList.add(model)
+        notifyItemInserted(dataList.lastIndex)
+    }
+
 }

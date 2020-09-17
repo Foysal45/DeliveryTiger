@@ -3,6 +3,7 @@ package com.bd.deliverytiger.app.utils
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.TypedValue
 import android.view.View
@@ -12,6 +13,7 @@ import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
@@ -116,8 +118,14 @@ fun Activity.alert(title: CharSequence? = null, message: CharSequence? = null, s
 }
 
 fun Context.toast(msg: String?, time: Int = Toast.LENGTH_SHORT) {
-    if (!msg.isNullOrEmpty())
-        Toast.makeText(this, msg, time).show()
+    if (!msg.isNullOrEmpty()) {
+        val toast = Toast.makeText(this, msg, time)
+        val view: View? = toast.view
+        view?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.black_100))
+        val textView: TextView? = view?.findViewById(android.R.id.message)
+        textView?.setTextColor(ContextCompat.getColor(this, R.color.white))
+        toast.show()
+    }
 }
 
 fun View.snackbar(message: String, length: Int = Snackbar.LENGTH_INDEFINITE){

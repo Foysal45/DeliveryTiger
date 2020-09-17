@@ -301,9 +301,23 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
                     android:background="@drawable/bg_pickup_address"
+                    android:overScrollMode="never"
 
                     tools:listitem="@layout/item_view_pickup_address"
                     tools:itemCount="3"
+                    />
+
+                <TextView
+                    android:id="@+id/emptyView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="পিকআপ লোকেশান অ্যাড করুন"
+                    android:textColor="@color/black_80"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:layout_gravity="center_horizontal"
                     />
 
                 <TextView
@@ -386,6 +400,49 @@
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14"
                     android:inputType="textMultiLine" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/fab_margin">
+
+                    <EditText
+                        android:id="@+id/gpsLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_view_height"
+                        android:background="@drawable/bg_add_order_edit_text"
+                        android:drawableEnd="@drawable/ic_arrow_drop_down"
+                        android:focusable="false"
+                        android:hint="জিপিএস লোকেশন"
+                        android:importantForAutofill="no"
+                        android:inputType="phone"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+                    <ImageView
+                        android:id="@+id/gpsBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:contentDescription="@string/cd"
+                        app:layout_constraintBottom_toBottomOf="@id/gpsLocation"
+                        app:layout_constraintEnd_toEndOf="@id/gpsLocation"
+                        app:layout_constraintTop_toTopOf="@id/gpsLocation"
+                        app:srcCompat="@drawable/ic_location"
+                        android:tint="#9ca5b4"
+                        />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/addPickupBtn"

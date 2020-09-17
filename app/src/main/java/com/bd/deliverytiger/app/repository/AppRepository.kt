@@ -55,5 +55,7 @@ class AppRepository(private val apiInterfaceADM: ApiInterfaceADM, private val ap
 
     fun updatePickupLocations(id: Int, requestBody: PickupLocation) = apiInterfaceCore.updatePickupLocations(id, requestBody)
 
+    suspend fun addPickupLocations(requestBody: PickupLocation) = apiInterfaceCore.addPickupLocations(requestBody)
+
     fun getCollectionCharge(courierUserId: Int) = apiInterfaceCore.getCollectionCharge(courierUserId)
 }

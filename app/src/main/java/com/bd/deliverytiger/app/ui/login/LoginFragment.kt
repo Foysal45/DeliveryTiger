@@ -23,10 +23,7 @@ import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.LoginBody
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.ui.home.HomeActivity
-import com.bd.deliverytiger.app.utils.SessionManager
-import com.bd.deliverytiger.app.utils.Timber
-import com.bd.deliverytiger.app.utils.Validator
-import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
+import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.iid.FirebaseInstanceId
 import retrofit2.Call
@@ -131,7 +128,7 @@ class LoginFragment: Fragment() {
 
     private fun login() {
 
-        hideSoftKeyBoard(activity)
+        hideKeyboard()
         if (!validate()) {
             return
         }
@@ -142,18 +139,15 @@ class LoginFragment: Fragment() {
         dialog.setMessage("অপেক্ষা করুন")
         dialog.setCancelable(false)
         dialog.show()
-        val loginInterface = RetrofitSingleton.getInstance(context!!).create(LoginInterface::class.java)
-        loginInterface.userLogin(LoginBody(mobile, password, SessionManager.firebaseToken)).enqueue(object :
-            Callback<GenericResponse<LoginResponse>> {
+        val loginInterface = RetrofitSingleton.getInstance(requireContext()).create(LoginInterface::class.java)
+        loginInterface.userLogin(LoginBody(mobile, password, SessionManager.firebaseToken)).enqueue(object : Callback<GenericResponse<LoginResponse>> {
+
             override fun onFailure(call: Call<GenericResponse<LoginResponse>>, t: Throwable) {
                 Timber.d(logTag, "${t.message}")
                 dialog.dismiss()
             }
 
-            override fun onResponse(
-                call: Call<GenericResponse<LoginResponse>>,
-                response: Response<GenericResponse<LoginResponse>>
-            ) {
+            override fun onResponse(call: Call<GenericResponse<LoginResponse>>, response: Response<GenericResponse<LoginResponse>>) {
                 Timber.d(logTag, "${response.code()} ${response.message()}")
                 dialog.dismiss()
                 if (response.isSuccessful && response.body() != null && isAdded) {
@@ -169,7 +163,11 @@ class LoginFragment: Fragment() {
                         Timber.d(logTag, "RefreshToken: ${SessionManager.refreshToken}")
                         saveAppVersion()
                         goToHomeActivity()
+                    } else {
+                        context?.toast("মোবাইল নম্বর অথবা পাসওয়ার্ড ভুল হয়েছে")
                     }
+                } else {
+                    context?.toast("মোবাইল নম্বর অথবা পাসওয়ার্ড ভুল হয়েছে")
                 }
             }
 
@@ -191,7 +189,7 @@ class LoginFragment: Fragment() {
             context?.showToast(getString(R.string.write_password))
             go = false
         }
-        hideSoftKeyBoard(activity!!)
+        hideKeyboard()
         return go
     }
 

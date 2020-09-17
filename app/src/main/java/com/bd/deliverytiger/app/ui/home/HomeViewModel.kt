@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.ui.home
 
+import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,6 +18,8 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
     val bannerInfo = MutableLiveData<BannerResponse>()
+
+    val currentLocation = MutableLiveData<Location>()
 
     fun getBannerInfo(): LiveData<BannerResponse> {
 

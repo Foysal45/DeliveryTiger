@@ -1,9 +1,17 @@
 package com.bd.deliverytiger.app.ui.home
 
-import android.content.Intent
+import android.Manifest
+import android.content.*
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.location.Location
+import android.net.ConnectivityManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.IBinder
+import android.provider.Settings
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
@@ -13,14 +21,20 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.broadcast.ConnectivityReceiver
 import com.bd.deliverytiger.app.fcm.FCMData
+import com.bd.deliverytiger.app.services.LocationUpdatesService
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
@@ -43,6 +57,7 @@ import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -54,7 +69,7 @@ import java.io.File
 import java.util.*
 
 
-class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ConnectivityReceiver.ConnectivityReceiverListener {
 
     private lateinit var toolbar: Toolbar
     private lateinit var drawerLayout: DrawerLayout
@@ -70,6 +85,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var headerPic: ImageView
     private lateinit var separetor: View
     private lateinit var addOrderFab: FloatingActionButton
+    private lateinit var parent: CoordinatorLayout
 
     private val viewModel: HomeViewModel by inject()
     private var doubleBackToExitPressedOnce = false
@@ -77,6 +93,22 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var appUpdateManager: AppUpdateManager
     private val requestCodeAppUpdate = 21720
+
+    //Connectivity
+    private var snackBar: Snackbar? = null
+    private lateinit var connectivityReceiver: ConnectivityReceiver
+
+    // Location
+    private val PERMISSION_REQUEST_CODE = 8620
+    private val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+    private lateinit var gpsUtils: GpsUtils
+    private var isGPS: Boolean = false
+
+    // Location Service
+    private lateinit var receiver: MyReceiver
+    private var foregroundService: LocationUpdatesService? = null
+    private var mBound: Boolean = false
+    private var currentLocation: Location? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,6 +129,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         downloadTV = findViewById(R.id.home_toolbar_download)
         separetor = findViewById(R.id.home_toolbar_separator)
         addOrderFab = findViewById(R.id.addOrderFab)
+        parent = findViewById(R.id.parent)
         navView.setNavigationItemSelectedListener(this)
 
 
@@ -184,24 +217,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
 
+        initService()
         appUpdateManager()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Timber.d("HomeActivityLog", "onStart Called!")
-
-        if (SessionManager.profileImgUri.isNotEmpty()) {
-            Timber.d("HomeActivityLog 1 ", SessionManager.profileImgUri)
-            setProfileImgUrl(SessionManager.profileImgUri)
-        } else {
-            headerPic.setImageResource(R.drawable.ic_account)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        checkStalledUpdate()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -703,4 +720,158 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        registerReceiver(connectivityReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+        ConnectivityReceiver.connectivityReceiverListener = this
+
+        Timber.d("HomeActivityLog", "onStart Called!")
+        if (SessionManager.profileImgUri.isNotEmpty()) {
+            Timber.d("HomeActivityLog 1 ", SessionManager.profileImgUri)
+            setProfileImgUrl(SessionManager.profileImgUri)
+        } else {
+            headerPic.setImageResource(R.drawable.ic_account)
+        }
+    }
+
+    override fun onStop() {
+        ConnectivityReceiver.connectivityReceiverListener = null
+        unregisterReceiver(connectivityReceiver)
+        super.onStop()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, IntentFilter(LocationUpdatesService.ACTION_BROADCAST))
+
+        checkStalledUpdate()
+    }
+
+    override fun onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver)
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        foregroundService?.removeLocationUpdates()
+        super.onDestroy()
+    }
+
+    //################################################## Location & Connectivity ########################################//
+
+    fun fetchCurrentLocation() {
+        if (isLocationPermission()) {
+            val intent = Intent(this, LocationUpdatesService::class.java)
+            bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+            timber.log.Timber.tag("LocationLog").d("fetchCurrentLocation")
+        }
+    }
+
+    private fun initService() {
+        gpsUtils = GpsUtils(this)
+        turnOnGPS()
+        connectivityReceiver = ConnectivityReceiver()
+        receiver = MyReceiver()
+    }
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as LocationUpdatesService.LocalBinder
+            foregroundService = binder.getServerInstance()
+            mBound = true
+            // fetch update
+            foregroundService?.setLocationInterval(20)
+            foregroundService?.setLocationDifference(20)
+            foregroundService?.requestLocationUpdates()
+            timber.log.Timber.tag("LocationLog").d("serviceConnection connected")
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            foregroundService = null
+            mBound = false
+            timber.log.Timber.tag("LocationLog").d("serviceConnection disconnected")
+        }
+    }
+
+    inner class MyReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val location: Location? = intent?.getParcelableExtra(LocationUpdatesService.EXTRA_LOCATION)
+            if (location != null) {
+                timber.log.Timber.tag("LocationLog").d("current location broadcast ${location.latitude},${location.longitude}")
+                currentLocation = location
+                viewModel.currentLocation.value = location
+                foregroundService?.removeLocationUpdates()
+                foregroundService = null
+                mBound = false
+
+                unbindService(serviceConnection)
+            }
+        }
+    }
+
+    override fun onNetworkConnectionChanged(isConnected: Boolean) {
+        if (!isConnected) {
+            snackBar = Snackbar.make(parent, "ইন্টারনেট সংযোগ নেই", Snackbar.LENGTH_LONG)
+            snackBar?.show()
+        } else {
+            snackBar?.dismiss()
+        }
+    }
+
+    private fun turnOnGPS() {
+
+        gpsUtils.turnGPSOn {
+            isGPS = it
+        }
+    }
+
+    private fun isLocationPermission(): Boolean {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val permission1 = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            return if (permission1 != PackageManager.PERMISSION_GRANTED) {
+                val permission1Rationale = ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                if (permission1Rationale) {
+                    ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE)
+                } else {
+                    ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE)
+                }
+                false
+            } else {
+                true
+            }
+        } else {
+            return true
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty()) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        fetchCurrentLocation()
+                    } else {
+                        val permission1Rationale = ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        if (permission1Rationale) {
+                            parent.snackbar("Location permission is needed for core functionality", actionName = "Ok") {
+                                ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE)
+                            }.show()
+                        } else {
+                            parent.snackbar("Permission was denied, but is needed for core functionality", actionName = "Settings") {
+                                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                    data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                }
+                                startActivity(intent)
+                            }.show()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
