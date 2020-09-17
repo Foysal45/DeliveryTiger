@@ -6,6 +6,7 @@ import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
 import com.bd.deliverytiger.app.api.model.config.BannerResponse
+import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponse
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
@@ -72,4 +73,7 @@ interface ApiInterfaceCore {
 
     @GET("api/Fetch/GetMerchantCollectionCharge/{courierUserId}")
     fun getCollectionCharge(@Path("courierUserId") courierUserId: Int): Call<GenericResponse<Int>>
+
+    @GET("api/Fetch/GetCourierUsersInformation/{courierUserId}")
+    suspend fun getCourierUsersInformation(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<CourierInfoModel>, ErrorResponse>
 }

@@ -62,7 +62,6 @@
         android:layout_marginStart="@dimen/left_right_margin"
         android:layout_marginTop="@dimen/left_right_margin"
         android:layout_marginEnd="@dimen/left_right_margin"
-        android:layout_marginBottom="@dimen/login_view_height"
         app:cardCornerRadius="4dp">
 
         <LinearLayout
@@ -91,6 +90,30 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/offerBtn"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="ডিসকাউন্ট অফার দেখুন"
+        android:layout_marginStart="@dimen/left_right_margin"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/left_right_margin"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        />
 
 </LinearLayout>
 

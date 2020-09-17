@@ -1,8 +1,11 @@
 package com.bd.deliverytiger.app.api.model.order
 
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class OrderResponse(
     @SerializedName("id")
     var id: Int? = 0,
@@ -86,4 +89,4 @@ data class OrderResponse(
     var weightRangeId: Int,
     @SerializedName("isOpenBox")
     var isOpenBox: Boolean
-)
+) : Parcelable

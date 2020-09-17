@@ -9,6 +9,7 @@ import com.bd.deliverytiger.app.api.endpoint.ApiInterfaceAPI
 import com.bd.deliverytiger.app.api.endpoint.ApiInterfaceCore
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.ui.add_order.AddOrderViewModel
+import com.bd.deliverytiger.app.ui.add_order.OrderSuccessViewModel
 import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementViewModel
@@ -44,5 +45,6 @@ val appModule = module {
     viewModel { PaymentStatementViewModel(get()) }
     viewModel { PaymentStatementDetailViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
+    viewModel { OrderSuccessViewModel(get()) }
 
 }

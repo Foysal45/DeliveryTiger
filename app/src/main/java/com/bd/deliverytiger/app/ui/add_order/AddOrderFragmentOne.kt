@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -1089,9 +1090,15 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     private fun addOrderSuccessFragment(orderResponse: OrderResponse?) {
+
+        val bundle = bundleOf(
+            "isCollection" to isCollection,
+            "orderResponse" to orderResponse
+        )
+
         activity?.onBackPressed()
         activity?.onBackPressed()
-        val fragment = OrderSuccessFragment.newInstance(orderResponse)
+        val fragment = OrderSuccessFragment.newInstance(bundle)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.mainActivityContainer, fragment, OrderSuccessFragment.tag)
         ft?.addToBackStack(OrderTrackingFragment.tag)

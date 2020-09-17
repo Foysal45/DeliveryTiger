@@ -41,7 +41,7 @@
 
     <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog">
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:navigationBarColor">@color/black_100</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
