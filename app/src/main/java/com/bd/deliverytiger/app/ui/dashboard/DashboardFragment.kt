@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
@@ -19,10 +18,8 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.config.BannerModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
-import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
-import com.bd.deliverytiger.app.ui.add_order.OrderSuccessFragment
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
@@ -234,10 +231,10 @@ class DashboardFragment : Fragment() {
         }
 
         binding?.orderBtn?.setOnClickListener {
-            //addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+            addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
 
             //ToDo: remove
-            val bundle = bundleOf(
+            /*val bundle = bundleOf(
                 "isCollection" to true,
                 "orderResponse" to OrderResponse().apply {
                     id = 179501
@@ -245,7 +242,7 @@ class DashboardFragment : Fragment() {
                     offerCode = "091920if89"
                 }
             )
-            addFragment(OrderSuccessFragment.newInstance(bundle), OrderSuccessFragment.tag)
+            addFragment(OrderSuccessFragment.newInstance(bundle), OrderSuccessFragment.tag)*/
         }
 
         binding?.paymentInfoLayout?.setOnClickListener {

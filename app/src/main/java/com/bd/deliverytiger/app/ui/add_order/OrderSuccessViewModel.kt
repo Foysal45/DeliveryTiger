@@ -56,9 +56,8 @@ class OrderSuccessViewModel(private val repository: AppRepository): ViewModel() 
         return responseData
     }
 
-    val onOfferUpdateResponse: MutableLiveData<OrderResponse> = MutableLiveData()
     fun updateOffer(orderId: Int, requestBody: OfferUpdateRequest): LiveData<OrderResponse> {
-
+        val onOfferUpdateResponse: MutableLiveData<OrderResponse> = MutableLiveData()
         viewState.value = ViewState.ProgressState(true)
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.updateOffer(orderId, requestBody)
@@ -89,9 +88,9 @@ class OrderSuccessViewModel(private val repository: AppRepository): ViewModel() 
         return onOfferUpdateResponse
     }
 
-    val onSMSResponse: MutableLiveData<SMSResponse> = MutableLiveData()
-    fun sendSMS(number: String, body: String):LiveData<SMSResponse>  {
 
+    fun sendSMS(number: String, body: String):LiveData<SMSResponse>  {
+        val onSMSResponse: MutableLiveData<SMSResponse> = MutableLiveData()
         val requestBody = SMSModel(listOf(number), body)
 
         viewState.value = ViewState.ProgressState(true)
