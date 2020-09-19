@@ -19,6 +19,7 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.config.BannerModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
+import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.add_order.OrderSuccessFragment
@@ -238,7 +239,11 @@ class DashboardFragment : Fragment() {
             //ToDo: remove
             val bundle = bundleOf(
                 "isCollection" to true,
-                "orderResponse" to null
+                "orderResponse" to OrderResponse().apply {
+                    id = 179501
+                    mobile = "01728959986"
+                    offerCode = "091920if89"
+                }
             )
             addFragment(OrderSuccessFragment.newInstance(bundle), OrderSuccessFragment.tag)
         }

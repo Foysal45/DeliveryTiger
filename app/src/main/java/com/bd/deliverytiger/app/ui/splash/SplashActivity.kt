@@ -9,7 +9,9 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.login.LoginActivity
+import com.bd.deliverytiger.app.utils.SessionManager
 
 class SplashActivity : AppCompatActivity() {
 
@@ -38,13 +40,13 @@ class SplashActivity : AppCompatActivity() {
 
             override fun onAnimationEnd(p0: Animator?) {
                 //Helper.showToast("Completed")
-                /*if (SessionManager.isLogin) {
+                if (SessionManager.isLogin) {
                     startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
                 } else {
                     startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
-                }*/
-                val intent = Intent(this@SplashActivity, LoginActivity::class.java)
-                startActivity(intent)
+                }
+                //val intent = Intent(this@SplashActivity, LoginActivity::class.java)
+                //startActivity(intent)
                 finish()
             }
 

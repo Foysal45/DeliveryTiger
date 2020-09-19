@@ -4,11 +4,10 @@ import com.bd.deliverytiger.app.api.RetrofitUtils.createCache
 import com.bd.deliverytiger.app.api.RetrofitUtils.createOkHttpClient
 import com.bd.deliverytiger.app.api.RetrofitUtils.getGson
 import com.bd.deliverytiger.app.api.RetrofitUtils.retrofitInstance
-import com.bd.deliverytiger.app.api.endpoint.ApiInterfaceADM
-import com.bd.deliverytiger.app.api.endpoint.ApiInterfaceAPI
-import com.bd.deliverytiger.app.api.endpoint.ApiInterfaceCore
+import com.bd.deliverytiger.app.api.endpoint.*
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.ui.add_order.AddOrderViewModel
+import com.bd.deliverytiger.app.ui.add_order.AddProductViewModel
 import com.bd.deliverytiger.app.ui.add_order.OrderSuccessViewModel
 import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
@@ -30,12 +29,16 @@ val appModule = module {
     single(named("adcore")) { retrofitInstance(AppConstant.BASE_URL_ADCORE, get(), get()) }
     single(named("adm")) { retrofitInstance(AppConstant.BASE_URL_ADM, get(), get()) }
     single(named("api")) { retrofitInstance(AppConstant.BASE_URL_API, get(), get()) }
+    single(named("bridge")) { retrofitInstance(AppConstant.BASE_URL_BRIDGE, get(), get()) }
+    single(named("lambda")) { retrofitInstance(AppConstant.BASE_URL_LAMBDA, get(), get()) }
 
     single { ApiInterfaceADM(get(named("adm"))) }
     single { ApiInterfaceCore(get(named("adcore"))) }
     single { ApiInterfaceAPI(get(named("api"))) }
+    single { ApiInterfaceBRIDGE(get(named("bridge"))) }
+    single { ApiInterfaceLambda(get(named("lambda"))) }
 
-    single { AppRepository(get(), get(), get()) }
+    single { AppRepository(get(), get(), get(), get(), get()) }
 
     single { HomeViewModel(get()) }
 
@@ -46,5 +49,6 @@ val appModule = module {
     viewModel { PaymentStatementDetailViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
     viewModel { OrderSuccessViewModel(get()) }
+    viewModel { AddProductViewModel(get()) }
 
 }

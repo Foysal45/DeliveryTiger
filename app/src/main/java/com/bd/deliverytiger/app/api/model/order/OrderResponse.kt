@@ -8,7 +8,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class OrderResponse(
     @SerializedName("id")
-    var id: Int? = 0,
+    var id: Int = 0,
     @SerializedName("customerName")
     var customerName: String? = "",
     @SerializedName("mobile")
@@ -18,7 +18,7 @@ data class OrderResponse(
     @SerializedName("address")
     var address: String? = "",
     @SerializedName("districtId")
-    var districtId: Int? = 0,
+    var districtId: Int = 0,
     @SerializedName("thanaId")
     var thanaId: Int? = 0,
     @SerializedName("areaId")
@@ -82,11 +82,26 @@ data class OrderResponse(
     @SerializedName("hubName")
     var hubName: String? = "",
     @SerializedName("productType")
-    var productType: String,
+    var productType: String = "",
     @SerializedName("deliveryRangeId")
-    var deliveryRangeId: Int,
+    var deliveryRangeId: Int = 0,
     @SerializedName("weightRangeId")
-    var weightRangeId: Int,
+    var weightRangeId: Int = 0,
     @SerializedName("isOpenBox")
-    var isOpenBox: Boolean
+    var isOpenBox: Boolean = false,
+
+
+    @SerializedName("offerCode")
+    var offerCode: String = "",
+    @SerializedName("offerCodDiscount")
+    var offerCodDiscount: Double = 0.0,
+    @SerializedName("offerBkashDiscount")
+    var offerBkashDiscount: Double = 0.0,
+    @SerializedName("isOfferCodActive")
+    var isOfferCodActive: Boolean = false,
+    @SerializedName("isOfferBkashActive")
+    var isOfferBkashActive: Boolean = false,
+    @SerializedName("classifiedId")
+    var classifiedId: Int = 0
+
 ) : Parcelable

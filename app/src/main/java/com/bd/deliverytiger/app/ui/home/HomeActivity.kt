@@ -380,7 +380,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun drawerListener() {
 
-
         drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {
 
@@ -530,6 +529,19 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     Timber.d("tag", "ProfileFragment already exist")
                 } else {
                     addFragment(ProfileFragment.newInstance(), ProfileFragment.tag)
+                }
+            }
+            R.id.nav_change_calculator -> {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is WebViewFragment) {
+                    Timber.d("tag", "WebViewFragment already exist")
+                } else {
+                    try {
+                        val fragment = WebViewFragment.newInstance(AppConstant.CHARGE_CALCULATOR, "ডেলিভারি চার্জ ক্যালকুলেটর")
+                        addFragment(fragment, WebViewFragment.tag)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
             }
             R.id.nav_privacy -> {

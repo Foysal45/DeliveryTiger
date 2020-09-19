@@ -23,8 +23,9 @@ class OfferBottomSheet: BottomSheetDialogFragment() {
     private var bundle: Bundle? = null
     private var offerType = 0
     private var offerCodDiscount = 0
-    private var offerBkashDiscountDhaka = 0
-    private var offerBkashDiscountOutSideDhaka = 0
+    private var offerBkashDiscount = 0
+    private var offerBkashClaimed = false
+    private var offerCodClaimed = false
 
 
     companion object {
@@ -78,24 +79,42 @@ class OfferBottomSheet: BottomSheetDialogFragment() {
 
         offerType = bundle?.getInt("offerType", 0) ?: 0
         offerCodDiscount = bundle?.getInt("offerCodDiscount", 0) ?: 0
-        offerBkashDiscountDhaka = bundle?.getInt("offerBkashDiscountDhaka", 0) ?: 0
-        offerBkashDiscountOutSideDhaka = bundle?.getInt("offerBkashDiscountOutSideDhaka", 0) ?: 0
+        offerBkashDiscount = bundle?.getInt("offerBkashDiscount", 0) ?: 0
+        offerBkashClaimed = bundle?.getBoolean("offerBkashClaimed") ?: false
+        offerCodClaimed = bundle?.getBoolean("offerCodClaimed") ?: false
 
         binding?.bodyTV?.text = "আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে। আপনার জন্য রয়েছে ডিসকাউন্ট অফার।"
 
         when (offerType) {
             // COD
             1 -> {
-                codLayout()
+                if (!offerCodClaimed) {
+                    codLayout()
+                } else {
+                    codClaimLayout()
+                }
             }
             // bkash
             2 -> {
-                advanceLayout()
+                if (!offerBkashClaimed) {
+                    advanceLayout()
+                } else {
+                    advanceClaimLayout()
+                }
             }
             // All
             3 -> {
-                codLayout()
-                advanceLayout()
+                if (!offerCodClaimed) {
+                    codLayout()
+                } else {
+                    codClaimLayout()
+                }
+
+                if (!offerBkashClaimed) {
+                    advanceLayout()
+                }else {
+                    advanceClaimLayout()
+                }
             }
         }
 
@@ -113,12 +132,24 @@ class OfferBottomSheet: BottomSheetDialogFragment() {
 
     private fun advanceLayout() {
         binding?.advanceLayout?.visibility = View.VISIBLE
-        binding?.advanceTitle?.text = "কাস্টমার কালেকশনের টাকা বিকাশ এর মাধ্যমে ডেলিভারি টাইগারকে প্রদান করলে ${DigitConverter.toBanglaDigit(offerCodDiscount)} টাকা ছাড়।"
-        binding?.advanceOfferBtn?.text = "${DigitConverter.toBanglaDigit(offerCodDiscount)} টাকা ছাড় নিন"
+        binding?.advanceTitle?.text = "কাস্টমার কালেকশনের টাকা বিকাশ এর মাধ্যমে ডেলিভারি টাইগারকে প্রদান করলে ${DigitConverter.toBanglaDigit(offerBkashDiscount)} টাকা ছাড়।"
+        binding?.advanceOfferBtn?.text = "${DigitConverter.toBanglaDigit(offerBkashDiscount)} টাকা ছাড় নিন"
         binding?.advanceOfferBtn?.setOnClickListener {
             onOfferSelected?.invoke(2)
         }
     }
 
+    private fun codClaimLayout() {
+        binding?.codClaimedLayout?.visibility = View.VISIBLE
+        binding?.codClaimTitle?.text = "আপনার প্রোডাক্টটি আজকেরডিল মার্কেটপ্লেসে যুক্ত হয়েছে এবং আপনি ${DigitConverter.toBanglaDigit(offerCodDiscount)} টাকা ছাড় পেয়েছেন।"
+    }
 
+    private fun advanceClaimLayout() {
+        binding?.advanceClaimedLayout?.visibility = View.VISIBLE
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
+    }
 }

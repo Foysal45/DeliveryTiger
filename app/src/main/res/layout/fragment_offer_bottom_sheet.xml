@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:id="@+id/parent"
     >
 
@@ -17,6 +18,7 @@
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_16"
         android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -78,6 +80,33 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/codClaimedLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/codLayout"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bg_offer"
+        android:padding="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+        <TextView
+            android:id="@+id/codClaimTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="আপনার প্রোডাক্টটি আজকেরডিল মার্কেটপ্লেসে যুক্ত হয়েছে এবং আপনি 0 টাকা ছাড় পেয়েছেন।"
+            android:textSize="16sp"
+            android:textColor="@color/black_90"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/advanceLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -115,6 +144,33 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/advanceClaimedLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/codLayout"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bg_offer"
+        android:padding="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+        <TextView
+            android:id="@+id/advanceClaimTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="আপনাকে পেমেন্ট লিংক সহ একটি এসএমএস ও ইমেইল করা হয়েছে। এটি আপনার কাস্টমারের সাথে শেয়ার করুন। পেমেন্ট লিংক ব্যাবহার করে কাস্টমার পেমেন্ট সম্পন্ন করলেই আপনার কাছ থেকে প্রোডাক্ট ডেলিভারির জন্য কালেক্ট করা হবে।"
+            android:textSize="16sp"
+            android:textColor="@color/black_90"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
     <View
         android:id="@+id/view2"
         android:layout_width="match_parent"
@@ -122,4 +178,4 @@
         app:layout_constraintTop_toBottomOf="@id/advanceLayout"
         />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

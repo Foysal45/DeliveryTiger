@@ -1,23 +1,40 @@
 package com.bd.deliverytiger.app.repository
 
-import com.bd.deliverytiger.app.api.endpoint.ApiInterfaceADM
-import com.bd.deliverytiger.app.api.endpoint.ApiInterfaceAPI
-import com.bd.deliverytiger.app.api.endpoint.ApiInterfaceCore
+import com.bd.deliverytiger.app.api.endpoint.*
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
+import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
+import com.bd.deliverytiger.app.api.model.sms.SMSModel
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
-class AppRepository(private val apiInterfaceADM: ApiInterfaceADM, private val apiInterfaceCore: ApiInterfaceCore, private val apiInterfaceAPI: ApiInterfaceAPI) {
+class AppRepository(
+    private val apiInterfaceADM: ApiInterfaceADM,
+    private val apiInterfaceCore: ApiInterfaceCore,
+    private val apiInterfaceAPI: ApiInterfaceAPI,
+    private val apiInterfaceBridge: ApiInterfaceBRIDGE,
+    private val apiInterfaceLambda: ApiInterfaceLambda
+) {
 
     //******************** API ********************//
 
     fun updateCourierStatus(requestBody: StatusLocationRequest) = apiInterfaceAPI.updateCourierStatus(requestBody)
+    suspend fun uploadProductInfo(ProductUploadReqBody: RequestBody) = apiInterfaceAPI.uploadProductInfo(ProductUploadReqBody)
+
+    //******************** BRIDGE ********************//
+
+    suspend fun sendSMS(requestBody: List<SMSModel>) = apiInterfaceBridge.sendSMS(requestBody)
+
+    //******************** LAMBDA ********************//
+
+    suspend fun uploadProductImage(location: String, file: MultipartBody.Part) = apiInterfaceLambda.uploadProductImage(location = location, file = file)
 
     //******************** ADM ********************//
 
@@ -47,7 +64,7 @@ class AppRepository(private val apiInterfaceADM: ApiInterfaceADM, private val ap
 
     fun placeOrder(requestBody: OrderRequest) = apiInterfaceCore.placeOrder(requestBody)
 
-    fun placeOrderUpdate(courierOrdersId: String, requestBody: UpdateOrderReqBody) = apiInterfaceCore.placeOrderUpdate(courierOrdersId,requestBody)
+    fun placeOrderUpdate(courierOrdersId: String, requestBody: UpdateOrderReqBody) = apiInterfaceCore.placeOrderUpdate(courierOrdersId, requestBody)
 
     fun getPickupLocations(courierUserId: Int) = apiInterfaceCore.getPickupLocations(courierUserId)
 
@@ -60,4 +77,8 @@ class AppRepository(private val apiInterfaceADM: ApiInterfaceADM, private val ap
     fun getCollectionCharge(courierUserId: Int) = apiInterfaceCore.getCollectionCharge(courierUserId)
 
     suspend fun getCourierUsersInformation(courierUserId: Int) = apiInterfaceCore.getCourierUsersInformation(courierUserId)
+
+    suspend fun updateOffer(orderId: Int, requestBody: OfferUpdateRequest) = apiInterfaceCore.updateOffer(orderId, requestBody)
+
+
 }

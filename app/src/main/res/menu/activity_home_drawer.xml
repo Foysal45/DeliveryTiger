@@ -47,6 +47,10 @@
             android:icon="@drawable/ic_account"
             android:title="প্রোফাইল আপডেট" />
         <item
+            android:id="@+id/nav_change_calculator"
+            android:icon="@drawable/ic_calculator"
+            android:title="ডেলিভারি চার্জ ক্যালকুলেটর" />
+        <item
             android:id="@+id/nav_privacy"
             android:icon="@drawable/ic_privacy"
             android:title="প্রাইভেসি পলিসি" />
