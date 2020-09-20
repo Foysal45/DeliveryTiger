@@ -11,6 +11,7 @@ import com.bd.deliverytiger.app.ui.add_order.AddProductViewModel
 import com.bd.deliverytiger.app.ui.add_order.OrderSuccessViewModel
 import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
+import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingViewModel
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementViewModel
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailViewModel
 import com.bd.deliverytiger.app.ui.profile.ProfileViewModel
@@ -50,5 +51,6 @@ val appModule = module {
     viewModel { ProfileViewModel(get()) }
     viewModel { OrderSuccessViewModel(get()) }
     viewModel { AddProductViewModel(get()) }
+    viewModel { OrderTrackingViewModel(get()) }
 
 }

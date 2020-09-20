@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
         android:gravity="center"
         android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/fab_margin"
+        >
 
         <ImageView
             app:srcCompat="@drawable/order_track_circle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/cd"
+            />
 
         <View
             android:id="@+id/verticalView"
@@ -29,7 +34,7 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:orientation="vertical"
         android:layout_marginTop="1dp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
@@ -37,7 +42,7 @@
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delivered to Customer"
+            tools:text="Delivered to Customer"
             android:textColor="@color/black_80"
             android:textSize="@dimen/login_sign_up_tv_size"
             />
@@ -45,8 +50,8 @@
             android:id="@+id/orderTrackDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="9 April, 2019"
-            android:textColor="@color/gray_500"
+            tools:text="9 April, 2019"
+            android:textColor="@color/black_80"
             android:textSize="@dimen/login_sign_up_tv_size"
             />
 

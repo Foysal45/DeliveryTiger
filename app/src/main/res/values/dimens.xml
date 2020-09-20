@@ -22,4 +22,5 @@
     <dimen name="order_info_value_size">14sp</dimen>
     <dimen name="list_bottom_padding">120dp</dimen>
     <dimen name="mtrl_calendar_title_baseline_to_top">40dp</dimen>
+    <dimen name="order_tracking_start_end">16dp</dimen>
 </resources>

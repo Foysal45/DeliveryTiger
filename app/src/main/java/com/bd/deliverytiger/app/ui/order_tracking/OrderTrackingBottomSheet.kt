@@ -10,10 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackMainResponse
 import com.bd.deliverytiger.app.utils.DigitConverter
-import com.bd.deliverytiger.app.utils.Timber
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class OrderTrackingBottomSheet : BottomSheetDialogFragment() {
+
+    private lateinit var orderTrackMainResponse: OrderTrackMainResponse
+    private lateinit var rvOrderTrackDetails: RecyclerView
+    private lateinit var tvOrderTrackStatusDetails: TextView
+    private lateinit var tvOrderTrackDateDetails: TextView
+
     companion object {
         fun newInstance(orderTrackMainResponse: OrderTrackMainResponse): OrderTrackingBottomSheet {
             val fragment = OrderTrackingBottomSheet()
@@ -21,20 +26,7 @@ class OrderTrackingBottomSheet : BottomSheetDialogFragment() {
             return fragment
         }
 
-        val tag = OrderTrackingBottomSheet::class.java.name
-    }
-
-    private lateinit var orderTrackMainResponse: OrderTrackMainResponse
-    private lateinit var rvOrderTrackDetails: RecyclerView
-    private lateinit var tvOrderTrackStatusDetails: TextView
-    private lateinit var tvOrderTrackDateDetails: TextView
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_order_tracking_bottom_sheet, container, false)
+        val tag: String = OrderTrackingBottomSheet::class.java.name
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +34,9 @@ class OrderTrackingBottomSheet : BottomSheetDialogFragment() {
         setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme)
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_order_tracking_bottom_sheet, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,8 +50,7 @@ class OrderTrackingBottomSheet : BottomSheetDialogFragment() {
             DigitConverter.toBanglaDate(orderTrackMainResponse?.dateTime, "yyyy-MM-dd'T'HH:mm:ss")
         tvOrderTrackDateDetails.text = formattedDate
 
-        val orderTrackingSubAdapter =
-            OrderTrackingSubAdapter(context!!, orderTrackMainResponse.status)
+        val orderTrackingSubAdapter = OrderTrackingSubAdapter(requireContext(), orderTrackMainResponse.status)
 
         rvOrderTrackDetails.apply {
             layoutManager = LinearLayoutManager(context)

@@ -32,7 +32,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/iv_tracking_back"
+                    android:id="@+id/backBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
@@ -44,19 +44,19 @@
                     app:srcCompat="@drawable/ic_arrow_back" />
 
                 <TextView
-                    android:id="@+id/tracking_toolbar_title"
+                    android:id="@+id/toolbarTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:textColor="@color/black_80"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/iv_tracking_back"
+                    app:layout_constraintStart_toEndOf="@id/backBtn"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Test" />
+                    tools:text="Order Tracking" />
 
                 <ImageView
-                    android:id="@+id/iv_tracking_destroy"
+                    android:id="@+id/turnOff"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
@@ -83,15 +83,14 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".ui.order_tracking.OrderTrackingFragment">
 
-
         <TextView
             android:id="@+id/tvLoginSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/left_right_margin"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="@dimen/left_right_margin"
-            android:text="কনসাইনমেন্ট নাম্বার/অর্ডার আইডি লিখে ট্র্যাক করুন"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="@dimen/order_tracking_start_end"
+            android:layout_marginEnd="@dimen/order_tracking_start_end"
+            android:text="অর্ডার আইডি/মোবাইল নম্বর লিখে ট্র্যাক করুন"
             android:textColor="@color/black_80"
             android:textSize="@dimen/login_sign_up_tv_size" />
 
@@ -99,44 +98,67 @@
             android:id="@+id/etOrderTrackId"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginStart="@dimen/left_right_margin"
+            android:layout_marginStart="@dimen/order_tracking_start_end"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="@dimen/left_right_margin"
+            android:layout_marginEnd="@dimen/order_tracking_start_end"
             android:background="@drawable/bg_add_order_edit_text"
-            android:hint="অর্ডার আইডি লিখুন"
+            android:hint="DT-xxxxx / 01xxxxxxxxx"
             android:paddingStart="16dp"
             android:textColor="@color/black_80"
-            android:textSize="@dimen/login_sign_up_tv_size" />
+            android:textSize="@dimen/login_sign_up_tv_size"
+            android:importantForAutofill="no"
+            android:inputType="text" />
 
-
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/orderTrackClickedLay"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginStart="@dimen/left_right_margin"
+            android:layout_height="45dp"
+            android:layout_marginStart="@dimen/order_tracking_start_end"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="@dimen/left_right_margin"
+            android:layout_marginEnd="@dimen/order_tracking_start_end"
             android:background="@drawable/bg_login_btn"
             android:gravity="center"
             android:orientation="horizontal">
 
+            <ProgressBar
+                android:id="@+id/rvOrderTrackProgress"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:indeterminateTint="@color/white"
+                android:layout_marginStart="8dp"
+                />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
-                app:srcCompat="@drawable/order_track_search" />
-
+                app:srcCompat="@drawable/order_track_search"
+                android:contentDescription="@string/cd"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/trackText"
+                />
 
             <TextView
-
+                android:id="@+id/trackText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="অর্ডার ট্র্যাক করুন"
                 android:textColor="@color/white"
-                android:textSize="@dimen/login_sign_up_tv_size" />
+                android:textSize="15sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:includeFontPadding="false"
+                />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvOrderTrack"
@@ -144,22 +166,19 @@
             android:layout_height="match_parent"
             android:layout_gravity="top"
             android:layout_marginTop="@dimen/fab_margin"
-            android:paddingStart="@dimen/left_right_margin"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:paddingEnd="@dimen/left_right_margin"
-            android:paddingBottom="@dimen/nav_header_vertical_spacing"
-            android:visibility="gone"
+            android:overScrollMode="never"
+            android:background="@color/background"
+            android:layout_marginStart="@dimen/order_tracking_start_end"
+            android:paddingTop="@dimen/order_tracking_start_end"
+            android:layout_marginEnd="@dimen/order_tracking_start_end"
+            android:paddingBottom="65dp"
+            android:clipToPadding="false"
+            android:layout_marginBottom="16dp"
+
+
             tools:itemCount="5"
             tools:listitem="@layout/item_track_order"
             tools:visibility="visible" />
-
-        <ProgressBar
-            android:id="@+id/rvOrderTrackProgress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/fab_margin"
-            android:visibility="gone" />
 
     </LinearLayout>
 

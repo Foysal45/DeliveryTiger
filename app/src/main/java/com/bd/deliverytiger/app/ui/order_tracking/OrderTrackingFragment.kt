@@ -4,109 +4,112 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.RetrofitSingleton
-import com.bd.deliverytiger.app.api.endpoint.OrderTrackInterface
-import com.bd.deliverytiger.app.api.model.GenericResponse
-import com.bd.deliverytiger.app.api.model.order_track.OrderTrackMainResponse
-import com.bd.deliverytiger.app.api.model.order_track.OrderTrackReqBody
 import com.bd.deliverytiger.app.ui.home.HomeActivity
-import com.bd.deliverytiger.app.utils.Timber
-import com.bd.deliverytiger.app.utils.VariousTask
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.bd.deliverytiger.app.utils.ViewState
+import com.bd.deliverytiger.app.utils.hideKeyboard
+import com.bd.deliverytiger.app.utils.toast
+import org.koin.android.ext.android.inject
 
-/**
- * A simple [Fragment] subclass.
- */
 class OrderTrackingFragment : Fragment() {
 
-    companion object {
-        fun newInstance(orderID: String): OrderTrackingFragment {
-            val fragment = OrderTrackingFragment()
-            fragment.orderID = orderID
-            return fragment
-        }
+    private lateinit var toolbarTracking: Toolbar
+    private lateinit var backBtn: ImageView
+    private lateinit var turnOff: ImageView
+    private lateinit var toolbarTitle: TextView
+    private lateinit var etOrderTrackId: EditText
+    private lateinit var trackBtn: ConstraintLayout
+    private lateinit var progressBar: ProgressBar
+    private lateinit var recyclerView: RecyclerView
 
-        val tag = OrderTrackingFragment::class.java.name
-    }
+    private lateinit var dataAdapter: OrderTrackingAdapter
+    private lateinit var customerOrderAdapter: CustomerOrderAdapter
 
     private var orderID = ""
-    private lateinit var rvOrderTrack: RecyclerView
-    private lateinit var rvOrderTrackProgress: ProgressBar
-    private lateinit var orderTrackClickedLay: LinearLayout
-    private lateinit var etOrderTrackId: EditText
-    private lateinit var toolbarTracking: Toolbar
-    private lateinit var iv_tracking_back: ImageView
-    private lateinit var iv_tracking_destroy: ImageView
-    private lateinit var tracking_toolbar_title: TextView
 
+    private val viewModel: OrderTrackingViewModel by inject()
 
-    private lateinit var mLinerLayoutManager: LinearLayoutManager
-    private lateinit var orderTrackingAdapter: OrderTrackingAdapter
-    private lateinit var orderTrackInterface: OrderTrackInterface
-    private lateinit var orderTrackStatusList: ArrayList<OrderTrackMainResponse>
+    companion object {
+        fun newInstance(orderID: String): OrderTrackingFragment = OrderTrackingFragment().apply {
+            this.orderID = orderID
+        }
+        val tag: String = OrderTrackingFragment::class.java.name
+    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_order_tracking, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rvOrderTrack = view.findViewById(R.id.rvOrderTrack)
-        rvOrderTrackProgress = view.findViewById(R.id.rvOrderTrackProgress)
-        orderTrackClickedLay = view.findViewById(R.id.orderTrackClickedLay)
-        etOrderTrackId = view.findViewById(R.id.etOrderTrackId)
         toolbarTracking = view.findViewById(R.id.toolbarTracking)
-        iv_tracking_back = view.findViewById(R.id.iv_tracking_back)
-        iv_tracking_destroy = view.findViewById(R.id.iv_tracking_destroy)
-        tracking_toolbar_title = view.findViewById(R.id.tracking_toolbar_title)
+        toolbarTitle = view.findViewById(R.id.toolbarTitle)
+        backBtn = view.findViewById(R.id.backBtn)
+        turnOff = view.findViewById(R.id.turnOff)
+        etOrderTrackId = view.findViewById(R.id.etOrderTrackId)
+        trackBtn = view.findViewById(R.id.orderTrackClickedLay)
+        progressBar = view.findViewById(R.id.rvOrderTrackProgress)
+        recyclerView = view.findViewById(R.id.rvOrderTrack)
 
-        orderTrackInterface =
-            RetrofitSingleton.getInstance(context!!).create(OrderTrackInterface::class.java)
-
-        orderTrackStatusList = ArrayList()
-        mLinerLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        orderTrackingAdapter = OrderTrackingAdapter(context!!, orderTrackStatusList)
-
-        orderTrackingAdapter.onItemClick = { position ->
-            OrderTrackingBottomSheet.newInstance(orderTrackStatusList[position]).show(childFragmentManager,OrderTrackingBottomSheet.tag)
-        }
-
-        rvOrderTrack.apply {
+        dataAdapter = OrderTrackingAdapter()
+        customerOrderAdapter = CustomerOrderAdapter()
+        with(recyclerView) {
             setHasFixedSize(true)
-            layoutManager = mLinerLayoutManager
-            adapter = orderTrackingAdapter
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = dataAdapter
         }
 
-        orderTrackClickedLay.setOnClickListener {
-            if (etOrderTrackId.text.toString().isNotEmpty()) {
-                if (etOrderTrackId.text.toString() != orderID) {
-                    orderID = etOrderTrackId.text.toString().trim()
-                    getOrderTrackingList(orderID, "private")
-                }
-            } else {
-                etOrderTrackId.requestFocus()
-                VariousTask.showShortToast(context, getString(R.string.give_order_id))
-            }
+        dataAdapter.onItemClick = { model, position ->
+            val tag = OrderTrackingBottomSheet.tag
+            val dialog = OrderTrackingBottomSheet.newInstance(model)
+            dialog.show(childFragmentManager, tag)
+        }
+        customerOrderAdapter.onItemClick = { model, position ->
+            orderID = model.courierOrdersId ?: ""
+            recyclerView.adapter = dataAdapter
+            getOrderTrackingList(orderID)
+        }
+
+        trackBtn.setOnClickListener {
+            trackOrder()
         }
 
         if (orderID.isNotEmpty()) {
-            getOrderTrackingList(orderID, "private")
+            getOrderTrackingList(orderID)
             etOrderTrackId.setText(orderID)
         }
 
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is ViewState.ShowMessage -> {
+                    context?.toast(state.message)
+                }
+                is ViewState.KeyboardState -> {
+                    hideKeyboard()
+                }
+                is ViewState.ProgressState -> {
+                    if (state.isShow) {
+                        progressBar.visibility = View.VISIBLE
+                    } else {
+                        progressBar.visibility = View.GONE
+                    }
+                }
+            }
+        })
+
+        // Test
+        //etOrderTrackId.setText("01715269261") //DT-12222
     }
 
     override fun onResume() {
@@ -114,57 +117,65 @@ class OrderTrackingFragment : Fragment() {
         if (activity is HomeActivity) {
             toolbarTracking.visibility = View.GONE
             (activity as HomeActivity).setToolbarTitle("অর্ডার ট্র্যাকিং")
-        }else{
+        } else {
             toolbarTracking.visibility = View.VISIBLE
-            tracking_toolbar_title.text = "অর্ডার ট্র্যাকিং"
-            iv_tracking_back.setOnClickListener {
+            toolbarTitle.text = "অর্ডার ট্র্যাকিং"
+            backBtn.setOnClickListener {
                 activity?.onBackPressed()
             }
-            iv_tracking_destroy.setOnClickListener {
+            turnOff.setOnClickListener {
                 activity?.moveTaskToBack(true)
                 activity?.finish()
             }
         }
     }
 
-    private fun getOrderTrackingList(orderId: String, flag: String) {
-        VariousTask.hideSoftKeyBoard(activity!!)
-        rvOrderTrackProgress.visibility = View.VISIBLE
-        rvOrderTrack.visibility = View.GONE
-        val orderTrackReqBody = OrderTrackReqBody(orderId)
-        orderTrackInterface.getOrderTrackingList(flag, orderTrackReqBody)
-            .enqueue(object : Callback<GenericResponse<List<OrderTrackMainResponse>>> {
-                override fun onFailure(
-                    call: Call<GenericResponse<List<OrderTrackMainResponse>>>,
-                    t: Throwable
-                ) {
-                    Timber.e("getOrderTrackingList f ", t.toString())
-                    rvOrderTrackProgress.visibility = View.GONE
-                }
+    private fun trackOrder() {
 
-                override fun onResponse(
-                    call: Call<GenericResponse<List<OrderTrackMainResponse>>>,
-                    response: Response<GenericResponse<List<OrderTrackMainResponse>>>
-                ) {
-                    rvOrderTrackProgress.visibility = View.GONE
-                    if (response.isSuccessful && response.body() != null && response.body()!!.model.isNotEmpty()) {
-                        orderTrackStatusList.clear()
-                        rvOrderTrack.visibility = View.VISIBLE
-                        orderTrackStatusList.addAll(response.body()!!.model.reversed())
-                        orderTrackingAdapter.notifyDataSetChanged()
-                        // rvOrderTrack.scrollToPosition(5)
-                        /*mLinerLayoutManager.scrollToPositionWithOffset(
-                            orderTrackStatusList.size - 1,
-                            0
-                        );*/
-                        Timber.e("getOrderTrackingList s ", response.body()!!.toString())
-                    } else {
-                        VariousTask.showShortToast(context, getString(R.string.give_right_order_id))
-                        Timber.e("getOrderTrackingList s ", "null")
-                    }
-                }
+        val searchKey = etOrderTrackId.text.toString()
+        if (searchKey.trim().isEmpty()) {
+            etOrderTrackId.requestFocus()
+            context?.toast(getString(R.string.give_order_id))
+            return
+        }
 
-            })
+        hideKeyboard()
+        if (searchKey != orderID) {
+            orderID = searchKey
+            if (searchKey.length == 11 && searchKey.startsWith("01")) {
+                recyclerView.adapter = customerOrderAdapter
+                fetchCustomerOrder(searchKey)
+            } else {
+                recyclerView.adapter = dataAdapter
+                getOrderTrackingList(orderID)
+            }
+        }
+    }
+
+    private fun getOrderTrackingList(orderId: String) {
+
+        dataAdapter.clear()
+        viewModel.fetchOrderTrackingList(orderId).observe(viewLifecycleOwner, Observer { list ->
+            if (list.isNotEmpty()) {
+                dataAdapter.initLoad(list.reversed())
+            } else {
+                context?.toast(getString(R.string.give_right_order_id))
+            }
+        })
+    }
+
+    private fun fetchCustomerOrder(mobileNumber: String) {
+
+        customerOrderAdapter.clear()
+        viewModel.fetchCustomerOrder(mobileNumber).observe(viewLifecycleOwner, Observer { model ->
+
+            if (!model.courierOrderViewModel.isNullOrEmpty()) {
+                customerOrderAdapter.initLoad(model.courierOrderViewModel!!)
+            } else {
+                context?.toast("সঠিক মোবাইল নম্বর দিয়ে সার্চ করুন")
+            }
+
+        })
     }
 
 
