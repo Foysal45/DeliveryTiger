@@ -89,6 +89,10 @@
             </intent-filter>
         </receiver>
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_api_key"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.bd.deliverytiger.app.fileprovider"

@@ -234,6 +234,7 @@ class DashboardFragment : Fragment() {
             addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
 
             //ToDo: remove
+            //addFragment(MapFragment.newInstance(), MapFragment.tag)
             /*val bundle = bundleOf(
                 "isCollection" to true,
                 "orderResponse" to OrderResponse().apply {

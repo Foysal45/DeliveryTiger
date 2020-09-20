@@ -62,6 +62,7 @@ class WebViewFragment : Fragment() {
             setLayerType(View.LAYER_TYPE_HARDWARE, null)
             clearHistory()
             isHorizontalScrollBarEnabled = false
+            isVerticalScrollBarEnabled = false
             addJavascriptInterface(WebAppInterface(requireContext(), repository, bundle), "Android")
             webViewClient = Callback()
             //clearCache(true)

@@ -51,6 +51,10 @@
             android:icon="@drawable/ic_calculator"
             android:title="ডেলিভারি চার্জ ক্যালকুলেটর" />
         <item
+            android:id="@+id/nav_map"
+            android:icon="@drawable/ic_map"
+            android:title="কালেক্টর ম্যাপ" />
+        <item
             android:id="@+id/nav_privacy"
             android:icon="@drawable/ic_privacy"
             android:title="প্রাইভেসি পলিসি" />

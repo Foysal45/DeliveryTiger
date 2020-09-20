@@ -21,7 +21,8 @@ class AppRepository(
     private val apiInterfaceCore: ApiInterfaceCore,
     private val apiInterfaceAPI: ApiInterfaceAPI,
     private val apiInterfaceBridge: ApiInterfaceBRIDGE,
-    private val apiInterfaceLambda: ApiInterfaceLambda
+    private val apiInterfaceLambda: ApiInterfaceLambda,
+    private val apiInterfaceBariKoi: ApiInterfaceBariKoi
 ) {
 
     //******************** API ********************//
@@ -36,6 +37,10 @@ class AppRepository(
     //******************** LAMBDA ********************//
 
     suspend fun uploadProductImage(location: String, file: MultipartBody.Part) = apiInterfaceLambda.uploadProductImage(location = location, file = file)
+
+    //******************** Bari Koi ********************//
+
+    suspend fun getRoutingDetails(startLngLat: String, endLngLat: String) = apiInterfaceBariKoi.getRoutingDetails(startLngLat, endLngLat)
 
     //******************** ADM ********************//
 

@@ -10,6 +10,7 @@ import com.bd.deliverytiger.app.ui.add_order.AddOrderViewModel
 import com.bd.deliverytiger.app.ui.add_order.AddProductViewModel
 import com.bd.deliverytiger.app.ui.add_order.OrderSuccessViewModel
 import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
+import com.bd.deliverytiger.app.ui.google_map.MapViewModel
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingViewModel
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementViewModel
@@ -32,14 +33,16 @@ val appModule = module {
     single(named("api")) { retrofitInstance(AppConstant.BASE_URL_API, get(), get()) }
     single(named("bridge")) { retrofitInstance(AppConstant.BASE_URL_BRIDGE, get(), get()) }
     single(named("lambda")) { retrofitInstance(AppConstant.BASE_URL_LAMBDA, get(), get()) }
+    single(named("bariKoi")) { retrofitInstance(AppConstant.BASE_BARI_KOI, get(), get()) }
 
     single { ApiInterfaceADM(get(named("adm"))) }
     single { ApiInterfaceCore(get(named("adcore"))) }
     single { ApiInterfaceAPI(get(named("api"))) }
     single { ApiInterfaceBRIDGE(get(named("bridge"))) }
     single { ApiInterfaceLambda(get(named("lambda"))) }
+    single { ApiInterfaceBariKoi(get(named("bariKoi"))) }
 
-    single { AppRepository(get(), get(), get(), get(), get()) }
+    single { AppRepository(get(), get(), get(), get(), get(), get()) }
 
     single { HomeViewModel(get()) }
 
@@ -52,5 +55,6 @@ val appModule = module {
     viewModel { OrderSuccessViewModel(get()) }
     viewModel { AddProductViewModel(get()) }
     viewModel { OrderTrackingViewModel(get()) }
+    viewModel { MapViewModel(get()) }
 
 }

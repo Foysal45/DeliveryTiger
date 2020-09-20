@@ -1,41 +1,33 @@
 package com.bd.deliverytiger.app.ui.login
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
+import android.webkit.WebView
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
+import com.bd.deliverytiger.app.utils.AppConstant
 import com.bd.deliverytiger.app.utils.SessionManager
-import com.bd.deliverytiger.app.utils.Timber
 
-
-/**
- * A simple [Fragment] subclass.
- */
 class UserRoleSelectionFragment : Fragment() {
-
-    private val TAG = "UserRoleSelectionFragment"
 
     private lateinit var layoutUserMerchant: LinearLayout
     private lateinit var layoutUserCustomer: LinearLayout
+    private lateinit var webView: WebView
 
     companion object {
-        fun newInstance(): UserRoleSelectionFragment = UserRoleSelectionFragment().apply {
-
-        }
+        fun newInstance(): UserRoleSelectionFragment = UserRoleSelectionFragment()
         val tag: String = UserRoleSelectionFragment::class.java.name
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_user_role_selection, container, false)
     }
 
@@ -44,16 +36,44 @@ class UserRoleSelectionFragment : Fragment() {
 
         layoutUserCustomer = view.findViewById(R.id.layout_user_customer)
         layoutUserMerchant = view.findViewById(R.id.layout_user_merchant)
+        webView = view.findViewById(R.id.webView)
+
+        initWebView()
 
         layoutUserMerchant.setOnClickListener {
-            Timber.d("UserRoleSelection", "layoutUserMerchant clicked")
             goToUserRoleMerchant()
         }
 
         layoutUserCustomer.setOnClickListener {
-            Timber.d("UserRoleSelection", "layoutUserCustomer clicked")
             goToOrderTrackingFragment()
         }
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun initWebView() {
+
+        webView.settings.apply {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            allowFileAccess = true
+            setSupportZoom(true)
+            builtInZoomControls = true
+            displayZoomControls = false
+            mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
+            //loadWithOverviewMode = true
+            //useWideViewPort = true
+        }
+        with(webView) {
+            setLayerType(View.LAYER_TYPE_HARDWARE, null)
+            clearHistory()
+            isHorizontalScrollBarEnabled = false
+            isVerticalScrollBarEnabled = false
+            //addJavascriptInterface(WebAppInterface(requireContext(), repository, bundle), "Android")
+            //webViewClient = Callback()
+            //clearCache(true)
+        }
+
+        webView.loadUrl(AppConstant.CHARGE_CALCULATOR)
     }
 
     private fun goToUserRoleMerchant(){

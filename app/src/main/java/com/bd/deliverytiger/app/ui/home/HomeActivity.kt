@@ -44,6 +44,7 @@ import com.bd.deliverytiger.app.ui.dialog.PopupDialog
 import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
+import com.bd.deliverytiger.app.ui.google_map.MapFragment
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment
@@ -286,7 +287,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 currentFragment is AddOrderFragmentOne ||
                 currentFragment is ProfileFragment ||
                 currentFragment is DistrictSelectFragment ||
-                currentFragment is DistrictThanaAriaSelectFragment) {
+                currentFragment is DistrictThanaAriaSelectFragment ||
+                currentFragment is MapFragment) {
                 addProductBtnVisibility(false)
             } else {
                 addProductBtnVisibility(true)
@@ -363,6 +365,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     currentFragment.onResume()
                 }
                 is NotificationPreviewFragment -> {
+                    currentFragment.onResume()
+                }
+                is MapFragment -> {
                     currentFragment.onResume()
                 }
             }
@@ -542,6 +547,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
+                }
+            }
+            R.id.nav_map -> {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is MapFragment) {
+                    Timber.d("tag", "MapFragment already exist")
+                } else {
+                    addFragment(MapFragment.newInstance(), MapFragment.tag)
                 }
             }
             R.id.nav_privacy -> {
