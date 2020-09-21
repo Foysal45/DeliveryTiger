@@ -53,6 +53,7 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
 
             if (model.statusId == 60) {
                 holder.binding.hubLocationBtn.visibility = View.VISIBLE
+                holder.binding.hubName.text = "${model.hubViewModel?.name}-এ আছে"
             } else {
                 holder.binding.hubLocationBtn.visibility = View.GONE
             }

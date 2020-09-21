@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@id/separator"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -58,7 +58,7 @@
                     android:gravity="center"
                     android:background="@drawable/bg_hub_location"
                     android:paddingStart="4dp"
-                    android:paddingEnd="4dp"
+                    android:paddingEnd="6dp"
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
                     >
@@ -72,13 +72,14 @@
                         />
 
                     <TextView
+                        android:id="@+id/hubName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:textColor="@color/colorPrimary"
                         android:textSize="14sp"
-                        android:text="হাব লোকেশন"
+                        tools:text="Main Hub-এ আছে"
                         android:includeFontPadding="false"
                         android:layout_marginStart="2dp"
                         />
@@ -102,9 +103,9 @@
                 android:id="@+id/separator"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="8dp"
                 android:background="@color/separator"
-                app:layout_constraintTop_toBottomOf="@id/actionLayout" />
+                app:layout_constraintTop_toBottomOf="@id/orderId" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier"
