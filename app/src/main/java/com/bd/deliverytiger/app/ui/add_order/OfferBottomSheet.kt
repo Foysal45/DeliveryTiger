@@ -26,6 +26,7 @@ class OfferBottomSheet: BottomSheetDialogFragment() {
     private var offerBkashDiscount = 0
     private var offerBkashClaimed = false
     private var offerCodClaimed = false
+    private var isCollection = false
 
 
     companion object {
@@ -82,6 +83,8 @@ class OfferBottomSheet: BottomSheetDialogFragment() {
         offerBkashDiscount = bundle?.getInt("offerBkashDiscount", 0) ?: 0
         offerBkashClaimed = bundle?.getBoolean("offerBkashClaimed") ?: false
         offerCodClaimed = bundle?.getBoolean("offerCodClaimed") ?: false
+        isCollection = bundle?.getBoolean("isCollection") ?: false
+
 
         binding?.bodyTV?.text = "আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে। আপনার জন্য রয়েছে ডিসকাউন্ট অফার।"
 
@@ -96,10 +99,12 @@ class OfferBottomSheet: BottomSheetDialogFragment() {
             }
             // bkash
             2 -> {
-                if (!offerBkashClaimed) {
-                    advanceLayout()
-                } else {
-                    advanceClaimLayout()
+                if (isCollection) {
+                    if (!offerBkashClaimed) {
+                        advanceLayout()
+                    } else {
+                        advanceClaimLayout()
+                    }
                 }
             }
             // All
@@ -110,10 +115,12 @@ class OfferBottomSheet: BottomSheetDialogFragment() {
                     codClaimLayout()
                 }
 
-                if (!offerBkashClaimed) {
-                    advanceLayout()
-                }else {
-                    advanceClaimLayout()
+                if (isCollection) {
+                    if (!offerBkashClaimed) {
+                        advanceLayout()
+                    }else {
+                        advanceClaimLayout()
+                    }
                 }
             }
         }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bd.deliverytiger.app.api.model.image_upload.ImageUploadResponse
 import com.bd.deliverytiger.app.api.model.product_upload.ProductUploadResponse
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
@@ -11,7 +12,6 @@ import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import timber.log.Timber
 
@@ -53,15 +53,15 @@ class AddProductViewModel(private val repository: AppRepository) : ViewModel() {
         return responseData
     }
 
-    suspend fun uploadProductImage(location: String, file: MultipartBody.Part): LiveData<ProductUploadResponse> {
-        val responseData: MutableLiveData<ProductUploadResponse> = MutableLiveData()
+    suspend fun uploadProductImage(location: String, file: RequestBody): LiveData<ImageUploadResponse> {
+        val responseData: MutableLiveData<ImageUploadResponse> = MutableLiveData()
 
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.uploadProductImage(location, file)
             when (response) {
                 is NetworkResponse.Success -> {
-                    if (response.body.data != null) {
-                        responseData.value = response.body.data
+                    if (response.body != null) {
+                        responseData.postValue(response.body)
                     }
                 }
                 is NetworkResponse.ServerError -> {

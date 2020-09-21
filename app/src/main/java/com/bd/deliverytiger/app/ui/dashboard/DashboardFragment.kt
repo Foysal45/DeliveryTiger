@@ -241,6 +241,7 @@ class DashboardFragment : Fragment() {
                     id = 179501
                     mobile = "01728959986"
                     offerCode = "091920if89"
+                    districtId = 80
                 }
             )
             addFragment(OrderSuccessFragment.newInstance(bundle), OrderSuccessFragment.tag)*/

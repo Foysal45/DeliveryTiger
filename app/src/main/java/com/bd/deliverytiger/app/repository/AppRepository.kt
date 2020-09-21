@@ -13,7 +13,6 @@ import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 class AppRepository(
@@ -36,7 +35,7 @@ class AppRepository(
 
     //******************** LAMBDA ********************//
 
-    suspend fun uploadProductImage(location: String, file: MultipartBody.Part) = apiInterfaceLambda.uploadProductImage(location = location, file = file)
+    suspend fun uploadProductImage(location: String, file: RequestBody) = apiInterfaceLambda.uploadProductImage(location = location, file = file)
 
     //******************** Bari Koi ********************//
 

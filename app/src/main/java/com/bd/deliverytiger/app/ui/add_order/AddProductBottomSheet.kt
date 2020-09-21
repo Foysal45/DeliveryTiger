@@ -29,8 +29,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.koin.android.ext.android.inject
 import java.io.File
@@ -46,6 +44,7 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
 
     private val mediaTypeText = "text/plain".toMediaTypeOrNull()
     private val mediaTypeMultipart = "multipart/form-data".toMediaTypeOrNull()
+    private val mediaTypeOctet = "application/octet".toMediaTypeOrNull()
     private val gson: Gson by inject()
     private val viewModel: AddProductViewModel by inject()
 
@@ -115,8 +114,9 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
                     if (imageFile.exists()) {
                         lifecycleScope.launch(Dispatchers.IO) {
                             val compressedFile = Compressor.compress(requireContext(), imageFile)
-                            val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
-                            val body = MultipartBody.Part.createFormData("file", compressedFile.name, requestFile)
+                            val body = compressedFile.readBytes().toRequestBody(mediaTypeOctet)
+                            //val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
+                            //val body = MultipartBody.Part.createFormData("file", compressedFile.name, requestFile)
                             viewModel.uploadProductImage(uploadLocation, body)//.observe(viewLifecycleOwner, Observer {})
                             withContext(Dispatchers.Main) {
                                 binding?.uploadBtn?.isEnabled = true
