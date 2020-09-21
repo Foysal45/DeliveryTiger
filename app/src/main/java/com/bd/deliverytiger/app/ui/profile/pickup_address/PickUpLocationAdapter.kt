@@ -10,6 +10,7 @@ import com.bd.deliverytiger.app.databinding.ItemViewPickupAddressBinding
 class PickUpLocationAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList: MutableList<PickupLocation> = mutableListOf()
+    var onItemClicked: ((model: PickupLocation) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ItemViewPickupAddressBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -32,7 +33,13 @@ class PickUpLocationAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int = dataList.size
 
     inner class ViewModel(val binding: ItemViewPickupAddressBinding): RecyclerView.ViewHolder(binding.root) {
-
+        init {
+            binding.root.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onItemClicked?.invoke(dataList[adapterPosition])
+                }
+            }
+        }
     }
 
     fun initList(list: List<PickupLocation>) {

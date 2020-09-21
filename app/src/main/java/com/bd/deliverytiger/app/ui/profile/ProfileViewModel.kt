@@ -30,27 +30,35 @@ class ProfileViewModel(private val repository: AppRepository): ViewModel() {
     fun getPickupLocations(courierUserId: Int): LiveData<List<PickupLocation>> {
 
         viewState.value = ViewState.ProgressState(true)
-        val responseBody = MutableLiveData<List<PickupLocation>>()
+        val responseData = MutableLiveData<List<PickupLocation>>()
 
-        repository.getPickupLocations(courierUserId).enqueue(object : Callback<GenericResponse<List<PickupLocation>>> {
-            override fun onFailure(call: Call<GenericResponse<List<PickupLocation>>>, t: Throwable) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getPickupLocations(courierUserId)
+            withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
-                viewState.value = ViewState.ShowMessage(message)
-            }
-            override fun onResponse(call: Call<GenericResponse<List<PickupLocation>>>, response: Response<GenericResponse<List<PickupLocation>>>) {
-                viewState.value = ViewState.ProgressState(false)
-                if (response.isSuccessful && response.body() != null) {
-                    if (response.body()!!.model != null) {
-                        responseBody.value = response.body()!!.model
-                    } else {
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
                         viewState.value = ViewState.ShowMessage(message)
                     }
-                } else {
-                    viewState.value = ViewState.ShowMessage(message)
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
                 }
             }
-        })
-        return responseBody
+        }
+        return responseData
     }
 
     fun getAllDistrictFromApi(districtId: Int): LiveData<List<DistrictDeliveryChargePayLoad>> {

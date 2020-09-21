@@ -29,6 +29,7 @@
     <color name="neutral">#E1F3F3</color>
     <color name="red">#E84545</color>
     <color name="header_layout_color">#FFE284</color>
+    <color name="marker">#000000</color>
 
 
 </resources>

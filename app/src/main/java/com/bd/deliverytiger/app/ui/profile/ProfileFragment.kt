@@ -174,6 +174,7 @@ class ProfileFragment : Fragment() {
     private fun getGPSLocation() {
         (activity as HomeActivity).fetchCurrentLocation()
         homeViewModel.currentLocation.observe(viewLifecycleOwner, Observer { location ->
+            location ?: return@Observer
             currentLatitude = location.latitude
             currentLongitude = location.longitude
             binding?.gpsLocation?.setText("$currentLatitude, $currentLongitude")
@@ -181,6 +182,7 @@ class ProfileFragment : Fragment() {
                 context?.toast("জিপিএস লোকেশন আপডেট হয়েছে")
             }
             isGPSRetry = true
+            homeViewModel.currentLocation.value = null
         })
     }
 

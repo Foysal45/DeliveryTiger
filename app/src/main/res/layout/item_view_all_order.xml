@@ -297,6 +297,65 @@
                 app:layout_constraintTop_toBottomOf="@id/collectionAmount"
                 tools:text="status" />
 
+            <!--<TextView
+                android:id="@+id/remarks"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:gravity="end"
+                android:maxLines="2"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/order_info_value_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/barrier"
+                app:layout_constraintTop_toBottomOf="@id/status"
+                tools:text="status"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />-->
+
+            <LinearLayout
+                android:id="@+id/hubLocationBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/status"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:background="@drawable/bg_hub_location"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                >
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:contentDescription="@string/cd"
+                    android:src="@drawable/ic_location1"
+                    android:tint="@color/colorPrimary"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    android:text="হাব লোকেশন"
+                    android:includeFontPadding="false"
+                    android:layout_marginStart="2dp"
+                    />
+
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

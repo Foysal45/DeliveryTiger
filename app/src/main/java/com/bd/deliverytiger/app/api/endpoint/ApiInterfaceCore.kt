@@ -64,7 +64,7 @@ interface ApiInterfaceCore {
     fun placeOrderUpdate(@Path("courierOrdersId") courierOrdersId: String, @Body requestBody: UpdateOrderReqBody): Call<GenericResponse<UpdateOrderResponse>>
 
     @GET("api/Fetch/GetPickupLocations/{courierUserId}")
-    fun getPickupLocations(@Path("courierUserId") courierUserId: Int): Call<GenericResponse<List<PickupLocation>>>
+    suspend fun getPickupLocations(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<List<PickupLocation>>, ErrorResponse>
 
     @PUT("api/Update/UpdateMerchantInformation/{courierOrdersId}")
     fun updateMerchantInformation(@Path("courierOrdersId") courierOrdersId: Int, @Body requestBody: ProfileUpdateReqBody): Call<GenericResponse<LoginResponse>>

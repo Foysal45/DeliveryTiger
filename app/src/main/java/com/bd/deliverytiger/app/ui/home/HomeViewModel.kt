@@ -19,7 +19,7 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
     val bannerInfo = MutableLiveData<BannerResponse>()
 
-    val currentLocation = MutableLiveData<Location>()
+    val currentLocation = MutableLiveData<Location?>(null)
 
     fun getBannerInfo(): LiveData<BannerResponse> {
 

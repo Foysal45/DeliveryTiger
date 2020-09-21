@@ -16,6 +16,7 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
 
     var onOrderItemClick: ((position: Int) -> Unit)? = null
     var onEditItemClick: ((position: Int) -> Unit)? = null
+    var onLocationBtnClick: ((model: CourierOrderViewModel, position: Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding: ItemViewAllOrderBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_view_all_order, parent, false)
@@ -50,10 +51,16 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
             holder.binding.collectionAmount.text = "${DigitConverter.toBanglaDigit(model?.courierPrice?.collectionAmount)} ৳"
             holder.binding.status.text = model?.status
 
-            if (model?.buttonFlag == true) {
+            if (model.buttonFlag) {
                 holder.binding.editBtn.visibility = View.VISIBLE
             } else {
                 holder.binding.editBtn.visibility = View.GONE
+            }
+
+            if (model.statusId == 60) {
+                holder.binding.hubLocationBtn.visibility = View.VISIBLE
+            } else {
+                holder.binding.hubLocationBtn.visibility = View.GONE
             }
         }
 
@@ -67,6 +74,11 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
             }
             binding.editBtn.setOnClickListener {
                 onEditItemClick?.invoke(adapterPosition)
+            }
+            binding.hubLocationBtn.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onLocationBtnClick?.invoke(dataList[adapterPosition], adapterPosition)
+                }
             }
         }
     }
