@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.databinding.FragmentMapBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
@@ -49,6 +50,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private var bundle: Bundle? = null
     private var isHubView: Boolean = false
+    private var hubModel: HubInfo? = null
     private var mobileNumber: String = ""
 
     private val homeViewModel: HomeViewModel by inject()
@@ -78,6 +80,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
         isHubView = bundle?.getBoolean("hubView", false) ?: false
+        hubModel = bundle?.getParcelable("hubModel")
 
         initMap()
 
@@ -142,23 +145,39 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun manageHubLocation() {
 
-        val hubLatLng = collectorLatLng
-        mobileNumber = "01555555555"
-        map?.addMarker(
-            MarkerOptions()
-                .position(hubLatLng)
-                .title("hub name here")
-                .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_home_circle))
-        )
-        binding?.callBtn?.visibility = View.VISIBLE
+        hubModel ?: return
 
-        val bound = LatLngBounds.builder()
-            .include(currentLatLng)
-            .include(hubLatLng)
-        val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 100)
-        map?.moveCamera(cameraUpdateBounds)
+        mobileNumber = hubModel?.hubMobile ?: ""
+        val hubName = hubModel?.name ?: "DT Hub"
+        val address = hubModel?.hubAddress ?: ""
+        val hubAddress = "$hubName\n$address"
+        var hubLatLng: LatLng? = null
+        if (!hubModel?.latitude.isNullOrEmpty() && !hubModel?.longitude.isNullOrEmpty()) {
+            hubLatLng = LatLng(hubModel?.latitude?.toDouble() ?: 0.0, hubModel?.longitude?.toDouble() ?: 0.0)
+        }
 
-        fetchRoutingDetails("$currentLongitude,$currentLatitude", "${hubLatLng.longitude},${hubLatLng.latitude}")
+        if (mobileNumber.trim().isNotEmpty()) {
+            binding?.callBtn?.visibility = View.VISIBLE
+        }
+
+        if (hubLatLng != null) {
+            val hubMarker = map?.addMarker(
+                MarkerOptions()
+                    .position(hubLatLng)
+                    .title(hubAddress)
+                    .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_home_circle))
+            )
+            hubMarker?.showInfoWindow()
+
+            val bound = LatLngBounds.builder()
+                .include(currentLatLng)
+                .include(hubLatLng)
+            val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 100)
+            map?.moveCamera(cameraUpdateBounds)
+
+            fetchRoutingDetails("$currentLongitude,$currentLatitude", "${hubLatLng.longitude},${hubLatLng.latitude}")
+        }
+
     }
 
     private fun fetchPickUpLocation() {

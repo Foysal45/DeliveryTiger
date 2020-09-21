@@ -43,12 +43,6 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
                 mobile += ",${model?.courierAddressContactInfo?.otherMobile}"
             }
             holder.binding.customerPhone.text = mobile
-            holder.binding.address.text = model?.courierAddressContactInfo?.address
-            val district = "${model?.courierAddressContactInfo?.thanaName},${model?.courierAddressContactInfo?.districtName}"
-            holder.binding.district.text = district
-
-            holder.binding.serviceCharge.text = "${DigitConverter.toBanglaDigit(model?.courierPrice?.totalServiceCharge)} ৳"
-            holder.binding.collectionAmount.text = "${DigitConverter.toBanglaDigit(model?.courierPrice?.collectionAmount)} ৳"
             holder.binding.status.text = model?.status
 
             if (model.buttonFlag) {
@@ -62,6 +56,14 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
             } else {
                 holder.binding.hubLocationBtn.visibility = View.GONE
             }
+
+            //holder.binding.address.text = model?.courierAddressContactInfo?.address
+            //val district = "${model?.courierAddressContactInfo?.thanaName},${model?.courierAddressContactInfo?.districtName}"
+            //holder.binding.district.text = district
+
+            //holder.binding.serviceCharge.text = "${DigitConverter.toBanglaDigit(model?.courierPrice?.totalServiceCharge)} ৳"
+            //holder.binding.collectionAmount.text = "${DigitConverter.toBanglaDigit(model?.courierPrice?.collectionAmount)} ৳"
+
         }
 
     }
@@ -69,9 +71,9 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
     inner class ViewHolder(val binding: ItemViewAllOrderBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.trackBtn.setOnClickListener {
+            /*binding.trackBtn.setOnClickListener {
                 onOrderItemClick?.invoke(adapterPosition)
-            }
+            }*/
             binding.editBtn.setOnClickListener {
                 onEditItemClick?.invoke(adapterPosition)
             }

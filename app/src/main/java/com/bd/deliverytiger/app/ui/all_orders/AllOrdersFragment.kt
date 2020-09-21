@@ -20,6 +20,7 @@ import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
+import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderResponse
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
@@ -169,7 +170,10 @@ class AllOrdersFragment : Fragment() {
 
         allOrdersAdapter.onLocationBtnClick = { model, position ->
 
-            goToMap()
+            if (model.hubViewModel != null) {
+                goToMap(model.hubViewModel!!)
+            }
+
         }
 
         allOrderFilterLay.setOnClickListener {
@@ -481,10 +485,11 @@ class AllOrdersFragment : Fragment() {
         })
     }
 
-    private fun goToMap() {
+    private fun goToMap(hubModel: HubInfo) {
 
         val bundle = bundleOf(
-            "hubView" to true
+            "hubView" to true,
+            "hubModel" to hubModel
         )
 
         val fragment = MapFragment.newInstance(bundle)

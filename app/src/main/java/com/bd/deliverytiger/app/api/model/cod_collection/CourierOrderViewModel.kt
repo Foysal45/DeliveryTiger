@@ -51,5 +51,7 @@ data class CourierOrderViewModel(
     @SerializedName("paidUnpaidColor")
     var paidUnpaidColor: String? = null,
     @SerializedName("buttonFlag")
-    var buttonFlag: Boolean = false
+    var buttonFlag: Boolean = false,
+    @SerializedName("hubViewModel")
+    var hubViewModel: HubInfo? = null
 )

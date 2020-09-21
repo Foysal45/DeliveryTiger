@@ -38,13 +38,53 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
+                <!--<ImageView
                     android:id="@+id/trackBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="24dp"
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/cd"
-                    app:srcCompat="@drawable/ic_tracking_text" />
+                    app:srcCompat="@drawable/ic_tracking_text" />-->
+
+                <LinearLayout
+                    android:id="@+id/hubLocationBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/status"
+                    android:gravity="center"
+                    android:background="@drawable/bg_hub_location"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:contentDescription="@string/cd"
+                        android:src="@drawable/ic_location1"
+                        android:tint="@color/colorPrimary"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="14sp"
+                        android:text="হাব লোকেশন"
+                        android:includeFontPadding="false"
+                        android:layout_marginStart="2dp"
+                        />
+
+
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/editBtn"
@@ -71,7 +111,7 @@
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 app:barrierDirection="end"
-                app:constraint_referenced_ids="key1,key2,key3,key4,key5,key6,key7,key8,key9" />
+                app:constraint_referenced_ids="key1,key2,key3,key6,key7" />
 
             <TextView
                 android:id="@+id/key1"
@@ -173,106 +213,6 @@
                 tools:text="01722486102, 01903598036" />
 
             <TextView
-                android:id="@+id/key8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ঠিকানা"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/order_info_value_size"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/key7" />
-
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:ellipsize="end"
-                android:gravity="end"
-                android:maxLines="1"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/order_info_value_size"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/barrier"
-                app:layout_constraintTop_toBottomOf="@id/customerPhone"
-                tools:text="23F/A, Ashkona" />
-
-            <TextView
-                android:id="@+id/key9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="জেলা/থানা/এরিয়া"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/order_info_value_size"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/key8" />
-
-            <TextView
-                android:id="@+id/district"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:ellipsize="end"
-                android:gravity="end"
-                android:maxLines="1"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/order_info_value_size"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/barrier"
-                app:layout_constraintTop_toBottomOf="@id/address"
-                tools:text="Dakshinkhan, Airport, Dhaka-1200" />
-
-
-            <TextView
-                android:id="@+id/key4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="সার্ভিস চার্জ"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/order_info_value_size"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/key9" />
-
-            <TextView
-                android:id="@+id/serviceCharge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:ellipsize="end"
-                android:gravity="end"
-                android:maxLines="1"
-
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/order_info_value_size"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/district"
-                tools:text="৳ 400" />
-
-            <TextView
-                android:id="@+id/key5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="কালেকশন"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/order_info_value_size"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/key4" />
-
-            <TextView
-                android:id="@+id/collectionAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:ellipsize="end"
-                android:gravity="end"
-                android:maxLines="1"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/order_info_value_size"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/serviceCharge"
-                tools:text="500 ৳" />
-
-            <TextView
                 android:id="@+id/key6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -280,7 +220,7 @@
                 android:textColor="@color/black_90"
                 android:textSize="@dimen/order_info_value_size"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/key5" />
+                app:layout_constraintTop_toBottomOf="@id/key7" />
 
             <TextView
                 android:id="@+id/status"
@@ -294,7 +234,7 @@
                 android:textSize="@dimen/order_info_value_size"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/barrier"
-                app:layout_constraintTop_toBottomOf="@id/collectionAmount"
+                app:layout_constraintTop_toBottomOf="@id/customerPhone"
                 tools:text="status" />
 
             <!--<TextView
@@ -316,46 +256,7 @@
                 tools:visibility="visible"
                 />-->
 
-            <LinearLayout
-                android:id="@+id/hubLocationBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                tools:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/status"
-                android:layout_marginTop="5dp"
-                android:gravity="center"
-                android:background="@drawable/bg_hub_location"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"
-                >
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:contentDescription="@string/cd"
-                    android:src="@drawable/ic_location1"
-                    android:tint="@color/colorPrimary"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp"
-                    android:text="হাব লোকেশন"
-                    android:includeFontPadding="false"
-                    android:layout_marginStart="2dp"
-                    />
-
-
-            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
