@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.core.os.bundleOf
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
@@ -24,6 +26,7 @@ import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
+import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
@@ -94,6 +97,17 @@ class DashboardFragment : Fragment() {
             val bannerModel = model.bannerModel
             showBanner(bannerModel)
         })
+
+        binding?.collectorTrackBtn?.setOnClickListener {
+            addFragment(MapFragment.newInstance(null), MapFragment.tag)
+        }
+
+        binding?.nearByHubBtn?.setOnClickListener {
+            val bundle = bundleOf(
+                "isNearByHubView" to true
+            )
+            addFragment(MapFragment.newInstance(bundle), MapFragment.tag)
+        }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -354,6 +368,10 @@ class DashboardFragment : Fragment() {
                 binding?.amount1?.text = "৳ ${DigitConverter.toBanglaDigit(paymentModel1.totalAmount.toInt(), true)}"
                 binding?.msg1?.text = "${DigitConverter.toBanglaDigit(paymentModel1.count)}টি ${paymentModel1.name}"
 
+                val weekPayment = 0
+                val weeklyMsg = "( <font color='#fbf405'>৳ ${DigitConverter.toBanglaDigit(weekPayment, true)}</font> এই সপ্তাহের পেমেন্ট )"
+                binding?.weekPaymentTV?.text = HtmlCompat.fromHtml(weeklyMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
                 if (model.paymentDashboardViewModel!!.size >= 2) {
                     val paymentModel2 = model.paymentDashboardViewModel!![1]
                     binding?.amount2?.text = paymentModel2.name
@@ -362,18 +380,17 @@ class DashboardFragment : Fragment() {
 
             if (model.pickDashboardViewModel?.isNullOrEmpty() == false) {
 
-                //val sdf = SimpleDateFormat("dd MMM", Locale("bn", "BD"))
-                val currentDate = "${DigitConverter.toBanglaDigit(today)} ${DigitConverter.banglaMonth[currentMonth]}"
+                //val currentDate = "${DigitConverter.toBanglaDigit(today)} ${DigitConverter.banglaMonth[currentMonth]}"
                 val pickModel = model.pickDashboardViewModel!!.first()
-                binding?.msg3?.text = "আজকে ($currentDate) পার্সেল দিয়েছি"
+                binding?.msg3?.text = "আজকে পার্সেল দিয়েছি"
                 binding?.amount3?.text = "${DigitConverter.toBanglaDigit(pickModel.count.toString())}টি"
-
+                //ToDo: remove
+                pickModel.count = 1
                 if (pickModel.count == 0) {
                     // I already change this design 5 times, Do you think I care about view ID name any more?
                     // If you judge me, Go fuck yourself!
-                    binding?.msg3?.visibility = View.GONE
-                    binding?.amount3?.visibility = View.GONE
-                    binding?.switchCollector?.visibility = View.VISIBLE
+                    binding?.collectionLayout?.visibility = View.GONE
+                    binding?.collectorPresentLayout?.visibility = View.VISIBLE
 
                     if (SessionManager.collectorAttendanceDateOfYear != dayOfYear) {
                         SessionManager.isCollectorAttendance = false
@@ -401,7 +418,7 @@ class DashboardFragment : Fragment() {
                     SessionManager.collectorAttendanceDateOfYear = 0
                 }
             } else {
-                binding?.collectionLayout?.visibility = View.GONE
+                binding?.collectorLayout?.visibility = View.GONE
             }
 
         })

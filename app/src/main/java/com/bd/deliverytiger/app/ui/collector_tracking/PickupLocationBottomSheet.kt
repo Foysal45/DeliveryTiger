@@ -55,8 +55,8 @@ class PickupLocationBottomSheet: BottomSheetDialogFragment() {
             }
             with(BottomSheetBehavior.from(bottomSheet)) {
                 //state = BottomSheetBehavior.STATE_COLLAPSED
-                skipCollapsed = true
-                isHideable = true
+                skipCollapsed = false
+                isHideable = false
 
             }
         }

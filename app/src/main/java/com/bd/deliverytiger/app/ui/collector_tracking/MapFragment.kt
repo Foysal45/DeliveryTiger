@@ -50,6 +50,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private var bundle: Bundle? = null
     private var isHubView: Boolean = false
+    private var isNearByHubView: Boolean = false
     private var hubModel: HubInfo? = null
     private var mobileNumber: String = ""
 
@@ -80,6 +81,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
         isHubView = bundle?.getBoolean("hubView", false) ?: false
+        isNearByHubView = bundle?.getBoolean("isNearByHubView", false) ?: false
         hubModel = bundle?.getParcelable("hubModel")
 
         initMap()
@@ -99,10 +101,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             val cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLatLng, 13.0f)
             map?.moveCamera(cameraUpdate)
 
-            if (!isHubView) {
-                fetchPickUpLocation()
-            } else {
-                manageHubLocation()
+            when {
+                isHubView -> showHubLocation()
+                isNearByHubView -> showNearbyHubs()
+                else -> fetchPickUpLocation()
             }
 
             homeViewModel.currentLocation.value = null
@@ -143,7 +145,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun manageHubLocation() {
+    private fun showHubLocation() {
 
         hubModel ?: return
 
@@ -164,7 +166,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             val hubMarker = map?.addMarker(
                 MarkerOptions()
                     .position(hubLatLng)
-                    .title(hubAddress)
+                    .title(hubName)
+                    .snippet(address)
                     .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_home_circle))
             )
             hubMarker?.showInfoWindow()
@@ -177,6 +180,38 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
             fetchRoutingDetails("$currentLongitude,$currentLatitude", "${hubLatLng.longitude},${hubLatLng.latitude}")
         }
+
+    }
+
+    private fun showNearbyHubs() {
+
+        viewModel.fetchAllHubInfo().observe(viewLifecycleOwner, Observer { list ->
+
+            val bound = LatLngBounds.builder().include(currentLatLng)
+            list.forEach {hubModel ->
+                val hubName = hubModel?.name ?: "DT Hub"
+                val address = hubModel?.hubAddress ?: ""
+                val hubAddress = "$hubName\n$address"
+                var hubLatLng: LatLng? = null
+                if (!hubModel?.latitude.isNullOrEmpty() && !hubModel?.longitude.isNullOrEmpty()) {
+                    hubLatLng = LatLng(hubModel.latitude?.toDouble() ?: 0.0, hubModel?.longitude?.toDouble() ?: 0.0)
+                }
+                if (hubLatLng != null) {
+                    val hubMarker = map?.addMarker(
+                        MarkerOptions()
+                            .position(hubLatLng)
+                            .title(hubName)
+                            .snippet(address)
+                            .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_home_circle))
+                    )
+                    hubMarker?.showInfoWindow()
+                    bound.include(hubLatLng)
+                }
+            }
+
+            val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 100)
+            map?.moveCamera(cameraUpdateBounds)
+        })
 
     }
 

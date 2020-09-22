@@ -89,4 +89,6 @@ class AppRepository(
 
     suspend fun fetchCustomerOrder(mobileNumber: String) = apiInterfaceCore.fetchCustomerOrder(mobileNumber)
 
+    suspend fun fetchAllHubInfo() = apiInterfaceCore.fetchAllHubInfo()
+
 }
