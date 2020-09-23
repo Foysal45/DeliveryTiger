@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bd.deliverytiger.app.api.model.ResponseHeader
+import com.bd.deliverytiger.app.api.model.accounts.AccountsData
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
@@ -72,6 +73,41 @@ class DashboardViewModel(private val repository: AppRepository) : ViewModel() {
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
                             responseBody.value = response.body.model
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+
+        return responseBody
+    }
+
+    fun fetchAccountsData(courierUserId: Int): LiveData<AccountsData> {
+
+        viewState.value = ViewState.ProgressState(true)
+        val responseBody = MutableLiveData<AccountsData>()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.fetchFreezeAmountData(courierUserId)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body != null) {
+                            responseBody.value = response.body
                         }
                     }
                     is NetworkResponse.ServerError -> {

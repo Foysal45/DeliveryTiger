@@ -277,7 +277,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 bound.include(hubLatLng)
             }
 
-            val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 100)
+            val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 200)
             map?.moveCamera(cameraUpdateBounds)
         })
 
@@ -337,6 +337,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 collectorLatLng = LatLng(firstModel.latitude?.toDouble() ?: 0.0, firstModel?.longitude?.toDouble() ?: 0.0)
             }
             fetchRoutingDetails("$currentLongitude,$currentLatitude", "${collectorLatLng.longitude},${collectorLatLng.latitude}")
+        } else {
+            context?.toast("এই মুহূর্তে কোনো কালেক্টর নিযুক্ত করা হয়নি")
         }
 
     }

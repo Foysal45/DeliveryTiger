@@ -183,7 +183,7 @@ class DashboardFragment : Fragment() {
         worker?.let {
             handler.removeCallbacks(it)
         }
-        worker = object : Runnable{
+        worker = object : Runnable {
             override fun run() {
                 binding?.sliderView?.slideToNextPosition()
                 handler.postDelayed(this, 2000L)
@@ -395,9 +395,20 @@ class DashboardFragment : Fragment() {
         })
     }
 
+    private fun fetchAccountsData() {
+
+        viewModel.fetchAccountsData(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+
+            binding?.amount1?.text = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}"
+            binding?.msg1?.text = "${DigitConverter.toBanglaDigit(model.count)}টি ${model.name}"
+
+        })
+    }
+
     private fun getDashBoardData(selectedMonth: Int, selectedYear: Int) {
 
         fetchCollection()
+        fetchAccountsData()
 
         val dashBoardReqBody = DashBoardReqBody(selectedMonth, selectedYear, selectedStartDate, selectedEndDate, SessionManager.courierUserId)
         Timber.d("DashboardTag r ", dashBoardReqBody.toString())
@@ -407,23 +418,6 @@ class DashboardFragment : Fragment() {
             dataList.clear()
             dataList.addAll(list.filter { it.statusGroupId != 12 })
             dashboardAdapter.notifyDataSetChanged()
-
-
-            /*if (model.paymentDashboardViewModel?.isNullOrEmpty() == false) {
-
-                val paymentModel1 = model.paymentDashboardViewModel!!.first()
-                binding?.amount1?.text = "৳ ${DigitConverter.toBanglaDigit(paymentModel1.totalAmount.toInt(), true)}"
-                binding?.msg1?.text = "${DigitConverter.toBanglaDigit(paymentModel1.count)}টি ${paymentModel1.name}"
-
-                val weekPayment = 0
-                val weeklyMsg = "( <font color='#fbf405'>৳ ${DigitConverter.toBanglaDigit(weekPayment, true)}</font> এই সপ্তাহের পেমেন্ট )"
-                binding?.weekPaymentTV?.text = HtmlCompat.fromHtml(weeklyMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
-
-                if (model.paymentDashboardViewModel!!.size >= 2) {
-                    val paymentModel2 = model.paymentDashboardViewModel!![1]
-                    binding?.amount2?.text = paymentModel2.name
-                }
-            }*/
 
         })
     }

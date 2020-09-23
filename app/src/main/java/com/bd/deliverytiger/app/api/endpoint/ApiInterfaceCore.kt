@@ -103,4 +103,5 @@ interface ApiInterfaceCore {
 
     @POST("api/Fetch/GetAcceptedRiders")
     suspend fun fetchRiderByPickupLocation(@Body requestBody: PickupLocation): NetworkResponse<GenericResponse<List<RiderInfo>>, ErrorResponse>
+
 }
