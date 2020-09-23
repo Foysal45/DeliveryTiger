@@ -380,17 +380,17 @@ class DashboardFragment : Fragment() {
 
             if (model.pickDashboardViewModel?.isNullOrEmpty() == false) {
 
-                //val currentDate = "${DigitConverter.toBanglaDigit(today)} ${DigitConverter.banglaMonth[currentMonth]}"
+                val currentDate = "${DigitConverter.toBanglaDigit(today)} ${DigitConverter.banglaMonth[currentMonth]}"
                 val pickModel = model.pickDashboardViewModel!!.first()
-                binding?.msg3?.text = "আজকে পার্সেল দিয়েছি"
+                binding?.msg3?.text = "আজকে ($currentDate) পার্সেল দিয়েছি"
                 binding?.amount3?.text = "${DigitConverter.toBanglaDigit(pickModel.count.toString())}টি"
                 //ToDo: remove
-                pickModel.count = 1
+                //pickModel.count = 1
                 if (pickModel.count == 0) {
                     // I already change this design 5 times, Do you think I care about view ID name any more?
                     // If you judge me, Go fuck yourself!
                     binding?.collectionLayout?.visibility = View.GONE
-                    binding?.collectorPresentLayout?.visibility = View.VISIBLE
+                    binding?.collectorLayout?.visibility = View.VISIBLE
 
                     if (SessionManager.collectorAttendanceDateOfYear != dayOfYear) {
                         SessionManager.isCollectorAttendance = false
