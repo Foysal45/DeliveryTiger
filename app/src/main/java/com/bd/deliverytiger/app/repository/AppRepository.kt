@@ -55,7 +55,7 @@ class AppRepository(
 
     suspend fun getBannerInfo() = apiInterfaceCore.getBannerInfo()
 
-    fun getDashboardStatusGroup(requestBody: DashBoardReqBody) = apiInterfaceCore.getDashboardStatusGroup(requestBody)
+    suspend fun getDashboardStatusGroup(requestBody: DashBoardReqBody) = apiInterfaceCore.getDashboardStatusGroup(requestBody)
 
     fun getAllDistrictFromApi(id: Int) = apiInterfaceCore.getAllDistrictFromApi(id)
 
@@ -92,4 +92,8 @@ class AppRepository(
     suspend fun fetchAllHubInfo() = apiInterfaceCore.fetchAllHubInfo()
 
     suspend fun fetchHubByPickupLocation(requestBody: PickupLocation) = apiInterfaceCore.fetchHubByPickupLocation(requestBody)
+
+    suspend fun fetchRiderByPickupLocation(requestBody: PickupLocation) = apiInterfaceCore.fetchRiderByPickupLocation(requestBody)
+
+    suspend fun fetchCollection(courierUserId: Int) = apiInterfaceCore.fetchCollection(courierUserId)
 }

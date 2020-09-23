@@ -44,22 +44,19 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
 
             val model = dataList[position]
 
-
             var countMsg = "0"
             var titleMsg = ""
-            when {
-                model.dashboardCountSumView == "countsum" -> {
-                    countMsg = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt())}"
+            when (model.dashboardCountSumView) {
+                "countsum" -> {
+                    countMsg = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}"
                     titleMsg = "<font color='#CC000000'><b>${DigitConverter.toBanglaDigit(model.count)}</b></font> টি ${model.name}"
                 }
-
-                model.dashboardCountSumView == "count" -> {
+                "count" -> {
                     countMsg = DigitConverter.toBanglaDigit(model.count)
                     titleMsg = "${model.name}"
                 }
-
-                model.dashboardCountSumView == "sum" -> {
-                    countMsg = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt())}"
+                "sum" -> {
+                    countMsg = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}"
                     titleMsg = "${model.name}"
                 }
             }

@@ -5,6 +5,9 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -152,4 +155,26 @@ val <T> T.exhaustive: T
 
 fun Context.dpToPx(value: Float): Int {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, this.resources.displayMetrics).toInt()
+}
+
+fun Context.isConnectedToNetwork(): Boolean {
+    var isConnected = false
+    val connectivityManager = this.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        connectivityManager?.let {
+            val networkCapabilities = it.activeNetwork ?: return false
+            val activeNetwork = it.getNetworkCapabilities(networkCapabilities) ?: return false
+            isConnected = activeNetwork.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            /*activeNetwork.apply {
+                isConnected = when{
+                    hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                    hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                    else -> false
+                }
+            }*/
+        }
+    } else {
+        isConnected = connectivityManager?.activeNetworkInfo?.isConnectedOrConnecting == true
+    }
+    return isConnected
 }

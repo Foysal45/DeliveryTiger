@@ -18,6 +18,7 @@ import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
+import com.bd.deliverytiger.app.api.model.rider.RiderInfo
 import com.bd.deliverytiger.app.databinding.FragmentMapBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
@@ -46,7 +47,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private val polyDecoder = PloyDecoder()
 
     private val pickUpLocationList: MutableList<PickupLocation> = mutableListOf()
-    private val collectorList: MutableList<LatLng> = mutableListOf(LatLng(23.7945821, 90.3451037), LatLng(23.7569087, 90.3904403), LatLng(23.7388383, 90.3957391), LatLng(23.7323596, 90.4046096))
+    //private val collectorList: MutableList<LatLng> = mutableListOf(LatLng(23.7945821, 90.3451037), LatLng(23.7569087, 90.3904403), LatLng(23.7388383, 90.3957391), LatLng(23.7323596, 90.4046096))
 
     private var bundle: Bundle? = null
     private var isHubView: Boolean = false
@@ -283,29 +284,61 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun fetchCollectorListForPickUp(pickUpModel: PickupLocation) {
-        showCollectorsInMap(collectorList)
+
+        //ToDo: Test
+        /*pickUpModel.apply {
+            districtId = 14
+            thanaId = 15945
+            courierUserId = 31517
+        }*/
+        viewModel.fetchRiderByPickupLocation(pickUpModel).observe(viewLifecycleOwner, Observer { list ->
+            showCollectorsInMap(list)
+        })
+
     }
 
-    private fun showCollectorsInMap(list: List<LatLng>) {
+    private fun showCollectorsInMap(list: List<RiderInfo>) {
 
         val bound = LatLngBounds.builder()
             .include(currentLatLng)
-        list.forEach { latLan ->
-            bound.include(latLan)
-            map?.addMarker(
-                MarkerOptions()
-                    .position(latLan)
-                    .title("কালেক্টর")
-                    .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_bike))
-            )
+        list.forEach { model ->
+
+            val name = model?.name ?: "Collector"
+            val mobile = model?.mobile ?: ""
+            var hubLatLng: LatLng? = null
+            if (!model?.latitude.isNullOrEmpty() && !model?.longitude.isNullOrEmpty()) {
+                hubLatLng = LatLng(model.latitude?.toDouble() ?: 0.0, model?.longitude?.toDouble() ?: 0.0)
+            }
+            if (hubLatLng != null) {
+                val hubMarker = map?.addMarker(
+                    MarkerOptions()
+                        .position(hubLatLng)
+                        .title(name)
+                        .snippet(mobile)
+                        .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_bike))
+                )
+                hubMarker?.showInfoWindow()
+                bound.include(hubLatLng)
+            }
         }
 
         val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 100)
         map?.moveCamera(cameraUpdateBounds)
         //val cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLatLng, 13.0f)
 
-        collectorLatLng = list.first()
-        fetchRoutingDetails("$currentLongitude,$currentLatitude", "${collectorLatLng.longitude},${collectorLatLng.latitude}")
+        if (list.isNotEmpty()) {
+
+            val firstModel = list.first()
+            mobileNumber = firstModel.mobile ?: ""
+            if (mobileNumber.trim().isNotEmpty()) {
+                binding?.callBtn?.visibility = View.VISIBLE
+            }
+            if (!firstModel?.latitude.isNullOrEmpty() && !firstModel?.longitude.isNullOrEmpty()) {
+                collectorLatLng = LatLng(firstModel.latitude?.toDouble() ?: 0.0, firstModel?.longitude?.toDouble() ?: 0.0)
+            }
+            fetchRoutingDetails("$currentLongitude,$currentLatitude", "${collectorLatLng.longitude},${collectorLatLng.latitude}")
+        }
+
     }
 
     private fun callNumber(number: String) {

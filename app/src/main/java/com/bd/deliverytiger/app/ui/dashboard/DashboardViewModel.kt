@@ -4,51 +4,92 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.ResponseHeader
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
-import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponse
+import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
+import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 
 class DashboardViewModel(private val repository: AppRepository) : ViewModel() {
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
-    private val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+    val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
 
-
-    fun getDashboardStatusGroup(requestBody: DashBoardReqBody): LiveData<DashboardResponse> {
+    fun getDashboardStatusGroup(requestBody: DashBoardReqBody): LiveData<List<DashboardData>> {
 
         viewState.value = ViewState.ProgressState(true)
-        val responseBody = MutableLiveData<DashboardResponse>()
+        val responseBody = MutableLiveData<List<DashboardData>>()
 
-        repository.getDashboardStatusGroup(requestBody).enqueue(object : Callback<GenericResponse<DashboardResponse>> {
-            override fun onFailure(call: Call<GenericResponse<DashboardResponse>>, t: Throwable) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getDashboardStatusGroup(requestBody)
+            withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
-                viewState.value = ViewState.ShowMessage(message)
-            }
-
-            override fun onResponse(call: Call<GenericResponse<DashboardResponse>>, response: Response<GenericResponse<DashboardResponse>>) {
-                viewState.value = ViewState.ProgressState(false)
-                if (response.isSuccessful && response.body() != null) {
-                    if (response.body()!!.model != null) {
-                        responseBody.value = response.body()!!.model
-                    } else {
-                        viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseBody.value = response.body.model
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
                         viewState.value = ViewState.ShowMessage(message)
                     }
-                } else {
-                    viewState.value = ViewState.ProgressState(false)
-                    viewState.value = ViewState.ShowMessage(message)
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
                 }
             }
-        })
+        }
+
+        return responseBody
+    }
+
+    fun fetchCollection(courierUserId: Int): LiveData<DashboardData> {
+
+        viewState.value = ViewState.ProgressState(true)
+        val responseBody = MutableLiveData<DashboardData>()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.fetchCollection(courierUserId)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseBody.value = response.body.model
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
 
         return responseBody
     }
@@ -85,8 +126,8 @@ class DashboardViewModel(private val repository: AppRepository) : ViewModel() {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {
                     is NetworkResponse.Success -> {
-                        if (response.body.data != null) {
-                            responseData.value = response.body.data!!
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model!!
                         }
                     }
                     is NetworkResponse.ServerError -> {

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.bd.deliverytiger.app.api.model.barikoi.RouteResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
+import com.bd.deliverytiger.app.api.model.rider.RiderInfo
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -129,6 +130,40 @@ class MapViewModel(private val repository: AppRepository): ViewModel() {
 
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.fetchHubByPickupLocation(requestBody)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
+    }
+
+    fun fetchRiderByPickupLocation(requestBody: PickupLocation): LiveData<List<RiderInfo>> {
+
+        viewState.value = ViewState.ProgressState(true)
+        val responseData = MutableLiveData<List<RiderInfo>>()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.fetchRiderByPickupLocation(requestBody)
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {

@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.core.os.bundleOf
-import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
@@ -90,6 +89,7 @@ class DashboardFragment : Fragment() {
 
         binding?.swipeRefresh?.setOnRefreshListener {
             getDashBoardData(selectedMonth, selectedYear)
+            fetchCollection()
         }
 
         homeViewModel.bannerInfo.observe(viewLifecycleOwner, Observer { model ->
@@ -128,6 +128,8 @@ class DashboardFragment : Fragment() {
                 }
             }
         })
+
+
     }
 
     override fun onResume() {
@@ -350,19 +352,64 @@ class DashboardFragment : Fragment() {
         binding?.monthSpinner?.setSelection(1)
     }
 
+    private fun fetchCollection() {
+
+        viewModel.fetchCollection(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+
+            val currentDate = "${DigitConverter.toBanglaDigit(today)} ${DigitConverter.banglaMonth[currentMonth]}"
+            binding?.msg3?.text = "আজকে ($currentDate) পার্সেল দিয়েছি"
+            binding?.amount3?.text = "${DigitConverter.toBanglaDigit(model.count.toString())}টি"
+            //ToDo: remove
+            //model.count = 0
+            if (model.count == 0) {
+                // I already change this design 5 times, Do you think I care about view ID name any more?
+                // If you judge me, Go fuck yourself!
+                binding?.collectionLayout?.visibility = View.GONE
+                binding?.collectorLayout?.visibility = View.VISIBLE
+
+                if (SessionManager.collectorAttendanceDateOfYear != dayOfYear) {
+                    SessionManager.isCollectorAttendance = false
+                    SessionManager.collectorAttendanceDateOfYear = 0
+                }
+                if (SessionManager.isCollectorAttendance) {
+                    binding?.switchCollector?.isChecked = true
+                    binding?.switchCollector?.isEnabled = false
+                }
+
+                binding?.switchCollector?.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        viewModel.updateStatusLocation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {
+                            if (it) {
+                                context?.toast("সফলভাবে আপডেট হয়েছে")
+                                SessionManager.isCollectorAttendance = true
+                                SessionManager.collectorAttendanceDateOfYear = dayOfYear
+                                binding?.switchCollector?.isEnabled = false
+                            }
+                        })
+                    }
+                }
+            } else {
+                SessionManager.isCollectorAttendance = false
+                SessionManager.collectorAttendanceDateOfYear = 0
+            }
+        })
+    }
+
     private fun getDashBoardData(selectedMonth: Int, selectedYear: Int) {
+
+        fetchCollection()
 
         val dashBoardReqBody = DashBoardReqBody(selectedMonth, selectedYear, selectedStartDate, selectedEndDate, SessionManager.courierUserId)
         Timber.d("DashboardTag r ", dashBoardReqBody.toString())
-        viewModel.getDashboardStatusGroup(dashBoardReqBody).observe(viewLifecycleOwner, Observer { model ->
-            binding?.swipeRefresh?.isRefreshing = false
-            model.orderDashboardViewModel?.let {
-                dataList.clear()
-                dataList.addAll(it)
-                dashboardAdapter.notifyDataSetChanged()
-            }
+        viewModel.getDashboardStatusGroup(dashBoardReqBody).observe(viewLifecycleOwner, Observer { list ->
 
-            if (model.paymentDashboardViewModel?.isNullOrEmpty() == false) {
+            binding?.swipeRefresh?.isRefreshing = false
+            dataList.clear()
+            dataList.addAll(list.filter { it.statusGroupId != 12 })
+            dashboardAdapter.notifyDataSetChanged()
+
+
+            /*if (model.paymentDashboardViewModel?.isNullOrEmpty() == false) {
 
                 val paymentModel1 = model.paymentDashboardViewModel!!.first()
                 binding?.amount1?.text = "৳ ${DigitConverter.toBanglaDigit(paymentModel1.totalAmount.toInt(), true)}"
@@ -376,50 +423,7 @@ class DashboardFragment : Fragment() {
                     val paymentModel2 = model.paymentDashboardViewModel!![1]
                     binding?.amount2?.text = paymentModel2.name
                 }
-            }
-
-            if (model.pickDashboardViewModel?.isNullOrEmpty() == false) {
-
-                val currentDate = "${DigitConverter.toBanglaDigit(today)} ${DigitConverter.banglaMonth[currentMonth]}"
-                val pickModel = model.pickDashboardViewModel!!.first()
-                binding?.msg3?.text = "আজকে ($currentDate) পার্সেল দিয়েছি"
-                binding?.amount3?.text = "${DigitConverter.toBanglaDigit(pickModel.count.toString())}টি"
-                //ToDo: remove
-                //pickModel.count = 1
-                if (pickModel.count == 0) {
-                    // I already change this design 5 times, Do you think I care about view ID name any more?
-                    // If you judge me, Go fuck yourself!
-                    binding?.collectionLayout?.visibility = View.GONE
-                    binding?.collectorLayout?.visibility = View.VISIBLE
-
-                    if (SessionManager.collectorAttendanceDateOfYear != dayOfYear) {
-                        SessionManager.isCollectorAttendance = false
-                        SessionManager.collectorAttendanceDateOfYear = 0
-                    }
-                    if (SessionManager.isCollectorAttendance) {
-                        binding?.switchCollector?.isChecked = true
-                        binding?.switchCollector?.isEnabled = false
-                    }
-
-                    binding?.switchCollector?.setOnCheckedChangeListener { _, isChecked ->
-                        if (isChecked) {
-                            viewModel.updateStatusLocation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {
-                                if (it) {
-                                    context?.toast("সফলভাবে আপডেট হয়েছে")
-                                    SessionManager.isCollectorAttendance = true
-                                    SessionManager.collectorAttendanceDateOfYear = dayOfYear
-                                    binding?.switchCollector?.isEnabled = false
-                                }
-                            })
-                        }
-                    }
-                } else {
-                    SessionManager.isCollectorAttendance = false
-                    SessionManager.collectorAttendanceDateOfYear = 0
-                }
-            } else {
-                binding?.collectorLayout?.visibility = View.GONE
-            }
+            }*/
 
         })
     }

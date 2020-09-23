@@ -10,7 +10,7 @@ import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.config.BannerResponse
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
-import com.bd.deliverytiger.app.api.model.dashboard.DashboardResponse
+import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
@@ -23,6 +23,7 @@ import com.bd.deliverytiger.app.api.model.order_track.OrderTrackReqBody
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
+import com.bd.deliverytiger.app.api.model.rider.RiderInfo
 import com.haroldadmin.cnradapter.NetworkResponse
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -40,8 +41,11 @@ interface ApiInterfaceCore {
     @GET("api/Dashboard/GetAllBanners")
     suspend fun getBannerInfo(): NetworkResponse<GenericResponse<BannerResponse>, ErrorResponse>
 
-    @POST("api/Dashboard/GetOrderCountByStatusGroupv2")
-    fun getDashboardStatusGroup(@Body requestBody: DashBoardReqBody): Call<GenericResponse<DashboardResponse>>
+    @POST("api/Dashboard/GetOrderCountByStatusGroup")
+    suspend fun getDashboardStatusGroup(@Body requestBody: DashBoardReqBody): NetworkResponse<GenericResponse<List<DashboardData>>, ErrorResponse>
+
+    @GET("api/Dashboard/GetCollection/{courierUserId}")
+    suspend fun fetchCollection(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<DashboardData>, ErrorResponse>
 
     @GET("api/Other/GetAllDistrictFromApi/{id}")
     fun getAllDistrictFromApi(@Path("id") id: Int): Call<DeliveryChargePayLoad>
@@ -97,4 +101,6 @@ interface ApiInterfaceCore {
     @POST("api/Fetch/GetHubsByPickupLocation")
     suspend fun fetchHubByPickupLocation(@Body requestBody: PickupLocation): NetworkResponse<GenericResponse<HubInfo>, ErrorResponse>
 
+    @POST("api/Fetch/GetAcceptedRiders")
+    suspend fun fetchRiderByPickupLocation(@Body requestBody: PickupLocation): NetworkResponse<GenericResponse<List<RiderInfo>>, ErrorResponse>
 }
