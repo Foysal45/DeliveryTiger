@@ -91,4 +91,5 @@ class AppRepository(
 
     suspend fun fetchAllHubInfo() = apiInterfaceCore.fetchAllHubInfo()
 
+    suspend fun fetchHubByPickupLocation(requestBody: PickupLocation) = apiInterfaceCore.fetchHubByPickupLocation(requestBody)
 }

@@ -94,4 +94,7 @@ interface ApiInterfaceCore {
     @GET("api/Fetch/GetAllHubs")
     suspend fun fetchAllHubInfo(): NetworkResponse<GenericResponse<List<HubInfo>>, ErrorResponse>
 
+    @POST("api/Fetch/GetHubsByPickupLocation")
+    suspend fun fetchHubByPickupLocation(@Body requestBody: PickupLocation): NetworkResponse<GenericResponse<HubInfo>, ErrorResponse>
+
 }

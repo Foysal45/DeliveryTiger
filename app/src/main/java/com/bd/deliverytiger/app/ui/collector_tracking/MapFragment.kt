@@ -103,7 +103,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
             when {
                 isHubView -> showHubLocation()
-                isNearByHubView -> showNearbyHubs()
+                isNearByHubView -> fetchPickUpLocation()
                 else -> fetchPickUpLocation()
             }
 
@@ -183,56 +183,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     }
 
-    private fun showNearbyHubs() {
-
-        viewModel.fetchAllHubInfo().observe(viewLifecycleOwner, Observer { list ->
-
-            val bound = LatLngBounds.builder().include(currentLatLng)
-            list.forEach {hubModel ->
-                val hubName = hubModel?.name ?: "DT Hub"
-                val address = hubModel?.hubAddress ?: ""
-                val hubAddress = "$hubName\n$address"
-                var hubLatLng: LatLng? = null
-                if (!hubModel?.latitude.isNullOrEmpty() && !hubModel?.longitude.isNullOrEmpty()) {
-                    hubLatLng = LatLng(hubModel.latitude?.toDouble() ?: 0.0, hubModel?.longitude?.toDouble() ?: 0.0)
-                }
-                if (hubLatLng != null) {
-                    val hubMarker = map?.addMarker(
-                        MarkerOptions()
-                            .position(hubLatLng)
-                            .title(hubName)
-                            .snippet(address)
-                            .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_home_circle))
-                    )
-                    hubMarker?.showInfoWindow()
-                    bound.include(hubLatLng)
-                }
-            }
-
-            val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 100)
-            map?.moveCamera(cameraUpdateBounds)
-        })
-
-    }
-
-    private fun fetchPickUpLocation() {
-
-        viewModel.getPickupLocations(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list ->
-            if (list.isNotEmpty()) {
-                pickUpLocationList.clear()
-                pickUpLocationList.addAll(list)
-                if (pickUpLocationList.size > 1) {
-                    choosePickupLocation(pickUpLocationList)
-                    binding?.pickUpBtn?.visibility = View.VISIBLE
-                } else {
-                    fetchCollectorListForPickUp()
-                }
-            } else {
-                context?.toast("প্রোফাইলে পিকআপ লোকেশান অ্যাড করুন")
-            }
-        })
-    }
-
     private fun fetchRoutingDetails(startLngLat: String, endLngLat: String) {
 
         viewModel.fetchRoutingDetails(startLngLat, endLngLat).observe(viewLifecycleOwner, Observer { model ->
@@ -266,6 +216,24 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    private fun fetchPickUpLocation() {
+
+        viewModel.getPickupLocations(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list ->
+            if (list.isNotEmpty()) {
+                pickUpLocationList.clear()
+                pickUpLocationList.addAll(list)
+                if (pickUpLocationList.size > 1) {
+                    choosePickupLocation(pickUpLocationList)
+                    binding?.pickUpBtn?.visibility = View.VISIBLE
+                } else {
+                    onPickUpLocation(list.first())
+                }
+            } else {
+                context?.toast("প্রোফাইলে পিকআপ লোকেশান অ্যাড করুন")
+            }
+        })
+    }
+
     private fun choosePickupLocation(list: List<PickupLocation>) {
 
         val tag = PickupLocationBottomSheet.tag
@@ -273,11 +241,48 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         dialog.show(childFragmentManager, tag)
         dialog.onItemClicked = { model ->
             dialog.dismiss()
-            fetchCollectorListForPickUp()
+            onPickUpLocation(model)
         }
     }
 
-    private fun fetchCollectorListForPickUp() {
+    private fun onPickUpLocation(pickUpModel: PickupLocation) {
+        if (isNearByHubView) {
+            showNearbyHubs(pickUpModel)
+        } else {
+            fetchCollectorListForPickUp(pickUpModel)
+        }
+    }
+
+    private fun showNearbyHubs(pickUpModel: PickupLocation) {
+
+        viewModel.fetchHubByPickupLocation(pickUpModel).observe(viewLifecycleOwner, Observer { hubModel ->
+
+            val bound = LatLngBounds.builder().include(currentLatLng)
+            val hubName = hubModel?.name ?: "DT Hub"
+            val address = hubModel?.hubAddress ?: ""
+            var hubLatLng: LatLng? = null
+            if (!hubModel?.latitude.isNullOrEmpty() && !hubModel?.longitude.isNullOrEmpty()) {
+                hubLatLng = LatLng(hubModel.latitude?.toDouble() ?: 0.0, hubModel?.longitude?.toDouble() ?: 0.0)
+            }
+            if (hubLatLng != null) {
+                val hubMarker = map?.addMarker(
+                    MarkerOptions()
+                        .position(hubLatLng)
+                        .title(hubName)
+                        .snippet(address)
+                        .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_home_circle))
+                )
+                hubMarker?.showInfoWindow()
+                bound.include(hubLatLng)
+            }
+
+            val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 100)
+            map?.moveCamera(cameraUpdateBounds)
+        })
+
+    }
+
+    private fun fetchCollectorListForPickUp(pickUpModel: PickupLocation) {
         showCollectorsInMap(collectorList)
     }
 
