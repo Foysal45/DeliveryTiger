@@ -49,6 +49,7 @@ import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
+import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
@@ -368,6 +369,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     currentFragment.onResume()
                 }
                 is MapFragment -> {
+                    currentFragment.onResume()
+                }
+                is PaymentDetailsFragment -> {
                     currentFragment.onResume()
                 }
             }

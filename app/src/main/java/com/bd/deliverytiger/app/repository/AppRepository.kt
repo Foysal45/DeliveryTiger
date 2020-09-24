@@ -51,6 +51,10 @@ class AppRepository(
 
     suspend fun getPaymentHistoryDetails(courierUserId: Int, transactionId: String) = apiInterfaceADM.getPaymentHistoryDetails(courierUserId, transactionId)
 
+    suspend fun fetchFreezeAmountData(courierUserId: Int) = apiInterfaceADM.fetchFreezeAmountData(courierUserId)
+
+    suspend fun fetchFreezeAmountDetails(courierUserId: Int) = apiInterfaceADM.fetchFreezeAmountDetails(courierUserId)
+
     //******************** ADCORE ********************//
 
     suspend fun getBannerInfo() = apiInterfaceCore.getBannerInfo()
@@ -96,8 +100,6 @@ class AppRepository(
     suspend fun fetchRiderByPickupLocation(requestBody: PickupLocation) = apiInterfaceCore.fetchRiderByPickupLocation(requestBody)
 
     suspend fun fetchCollection(courierUserId: Int) = apiInterfaceCore.fetchCollection(courierUserId)
-
-    suspend fun fetchFreezeAmountData(courierUserId: Int) = apiInterfaceADM.fetchFreezeAmountData(courierUserId)
 
 
 }

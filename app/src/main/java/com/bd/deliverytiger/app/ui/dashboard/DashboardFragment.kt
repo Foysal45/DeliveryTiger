@@ -28,6 +28,7 @@ import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
+import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.utils.*
@@ -264,7 +265,8 @@ class DashboardFragment : Fragment() {
         }
 
         binding?.paymentInfoLayout?.setOnClickListener {
-            goToAllOrder("পেমেন্ট প্রসেসিং-এ আছে", "পেমেন্ট প্রসেসিং-এ আছে", "2019-08-01", currentDate)
+            //goToAllOrder("পেমেন্ট প্রসেসিং-এ আছে", "পেমেন্ট প্রসেসিং-এ আছে", "2019-08-01", currentDate)
+            goToPaymentDetails()
         }
 
         binding?.dateRangePicker?.setOnClickListener {
@@ -441,6 +443,16 @@ class DashboardFragment : Fragment() {
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, AllOrdersFragment.tag)
         ft?.addToBackStack(AllOrdersFragment.tag)
+        ft?.commit()
+    }
+
+    private fun goToPaymentDetails() {
+
+        val tag = PaymentDetailsFragment.tag
+        val fragment = PaymentDetailsFragment.newInstance()
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.mainActivityContainer, fragment, tag)
+        ft?.addToBackStack(tag)
         ft?.commit()
     }
 

@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.api.endpoint
 
 import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.accounts.AccountsData
+import com.bd.deliverytiger.app.api.model.accounts.AccountsDetailsData
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentData
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsResponse
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
@@ -38,5 +39,8 @@ interface ApiInterfaceADM {
 
     @GET("api/account/reports/GetDTMerchantFreezeAmountInfo/{courierUserId}")
     suspend fun fetchFreezeAmountData(@Path("courierUserId") courierUserId: Int): NetworkResponse<AccountsData, ErrorResponse>
+
+    @GET("api/account/reports/GetDTMerchantFreezeAmountDetails/{courierUserId}")
+    suspend fun fetchFreezeAmountDetails(@Path("courierUserId") courierUserId: Int): NetworkResponse<List<AccountsDetailsData>, ErrorResponse>
 
 }
