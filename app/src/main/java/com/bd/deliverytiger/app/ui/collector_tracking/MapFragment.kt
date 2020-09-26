@@ -73,8 +73,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
+        val title = when {
+            isHubView -> "হাব ট্র্যাকিং"
+            isNearByHubView -> "হাব ট্র্যাকিং"
+            else -> "কালেক্টর ট্র্যাকিং"
+        }
         if (activity is HomeActivity) {
-            (activity as HomeActivity).setToolbarTitle("কালেক্টর ট্র্যাকিং")
+            (activity as HomeActivity).setToolbarTitle(title)
         }
     }
 
