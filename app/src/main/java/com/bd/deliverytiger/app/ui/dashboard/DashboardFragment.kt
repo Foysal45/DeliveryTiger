@@ -243,9 +243,6 @@ class DashboardFragment : Fragment() {
             }
         }
 
-        binding?.paymentDoneLayout?.setOnClickListener {
-            addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
-        }
 
         binding?.orderBtn?.setOnClickListener {
             addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
@@ -403,6 +400,12 @@ class DashboardFragment : Fragment() {
 
             binding?.amount1?.text = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}"
             binding?.msg1?.text = "${model.name}"
+
+            if (model.totalAmount.toInt() > 0) {
+                binding?.paymentDoneLayout?.setOnClickListener {
+                    addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
+                }
+            }
         })
     }
 

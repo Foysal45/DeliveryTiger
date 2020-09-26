@@ -261,6 +261,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             val bound = LatLngBounds.builder().include(currentLatLng)
             val hubName = hubModel?.name ?: "DT Hub"
             val address = hubModel?.hubAddress ?: ""
+            mobileNumber = hubModel.hubMobile ?: ""
+            if (mobileNumber.trim().isNotEmpty()) {
+                binding?.callBtn?.visibility = View.VISIBLE
+            }
+
             var hubLatLng: LatLng? = null
             if (!hubModel?.latitude.isNullOrEmpty() && !hubModel?.longitude.isNullOrEmpty()) {
                 hubLatLng = LatLng(hubModel.latitude?.toDouble() ?: 0.0, hubModel?.longitude?.toDouble() ?: 0.0)

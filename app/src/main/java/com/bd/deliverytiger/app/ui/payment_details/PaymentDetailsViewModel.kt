@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bd.deliverytiger.app.api.model.accounts.AccountsDetailsData
+import com.bd.deliverytiger.app.api.model.accounts.AccountDetailsResponse
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
 import com.bd.deliverytiger.app.utils.exhaustive
@@ -18,9 +18,9 @@ class PaymentDetailsViewModel(private val repository: AppRepository): ViewModel(
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
 
-    fun getPaymentHistoryDetails(courierUserId: Int): LiveData<List<AccountsDetailsData>> {
+    fun getPaymentHistoryDetails(courierUserId: Int): LiveData<AccountDetailsResponse> {
         viewState.value = ViewState.ProgressState(true)
-        val responseBody = MutableLiveData<List<AccountsDetailsData>>()
+        val responseBody = MutableLiveData<AccountDetailsResponse>()
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.fetchFreezeAmountDetails(courierUserId)
             withContext(Dispatchers.Main) {
@@ -30,7 +30,7 @@ class PaymentDetailsViewModel(private val repository: AppRepository): ViewModel(
                         if (response.body != null) {
                             responseBody.value = response.body
                         } else {
-                            responseBody.value = listOf()
+                            responseBody.value = AccountDetailsResponse()
                         }
                     }
                     is NetworkResponse.ServerError -> {

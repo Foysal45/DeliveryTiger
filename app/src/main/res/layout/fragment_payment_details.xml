@@ -31,7 +31,7 @@
                 android:id="@+id/key1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="পেমেন্ট"
+                android:text="পেমেন্ট সামারি"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/text_14"
                 android:textStyle="bold"
@@ -47,7 +47,27 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="টাকা" />
+                android:text="" />
+
+            <TextView
+                android:id="@+id/key5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="অর্ডার সংখ্যা"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/key1" />
+
+            <TextView
+                android:id="@+id/orderCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/transactionNo"
+                tools:text="৯৯৯" />
 
             <TextView
                 android:id="@+id/key2"
@@ -57,7 +77,7 @@
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/key1" />
+                app:layout_constraintTop_toBottomOf="@id/key5" />
 
             <TextView
                 android:id="@+id/merchantPayment"
@@ -66,7 +86,7 @@
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/transactionNo"
+                app:layout_constraintTop_toBottomOf="@id/orderCount"
                 tools:text="৯৯৯ ৳" />
 
             <TextView
@@ -87,7 +107,7 @@
                 android:textSize="@dimen/text_14"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/merchantPayment"
-                tools:text="৯৯৯ ৳" />
+                tools:text="- ৯৯৯ ৳" />
 
             <TextView
                 android:id="@+id/key4"
@@ -115,6 +135,32 @@
 
     </androidx.cardview.widget.CardView>
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/filterTab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/statementCard"
+        android:layout_margin="8dp"
+        app:tabMode="fixed"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:tabIndicatorColor="@color/red"
+        app:tabSelectedTextColor="@color/red"
+        >
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="মার্চেন্ট পেমেন্ট"
+            />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="একাউন্ট রিসিভ"
+            />
+
+    </com.google.android.material.tabs.TabLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
@@ -123,8 +169,8 @@
         android:overScrollMode="never"
         android:paddingTop="3dp"
         android:paddingBottom="@dimen/list_bottom_padding"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/statementCard"
+        android:layout_marginTop="2dp"
+        app:layout_constraintTop_toBottomOf="@id/filterTab"
         app:layout_constraintBottom_toBottomOf="parent"
 
 
