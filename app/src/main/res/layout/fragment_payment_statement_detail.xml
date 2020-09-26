@@ -10,6 +10,7 @@
         android:background="@color/background"
         android:clickable="true"
         android:focusable="true"
+        android:id="@+id/parent"
         >
 
         <androidx.cardview.widget.CardView

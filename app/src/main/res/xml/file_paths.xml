@@ -7,4 +7,6 @@
 
     <external-path name="external_images" path="Pictures/Camera" />
     <external-files-path name="external_files_images" path="Pictures/Camera" />
+
+    <external-path name="external_downloads" path="Download/Delivery Tiger" />
 </paths>

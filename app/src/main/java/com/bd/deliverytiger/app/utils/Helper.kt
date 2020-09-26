@@ -11,6 +11,7 @@ import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.webkit.MimeTypeMap
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.ColorRes
@@ -22,6 +23,7 @@ import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import java.io.File
 
 fun Context.showToast(msg: String) =
     Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
@@ -177,4 +179,13 @@ fun Context.isConnectedToNetwork(): Boolean {
         isConnected = connectivityManager?.activeNetworkInfo?.isConnectedOrConnecting == true
     }
     return isConnected
+}
+
+fun getFileContentType(filePath: String): String? {
+    val file = File(filePath)
+    val map = MimeTypeMap.getSingleton()
+    val ext = MimeTypeMap.getFileExtensionFromUrl(file.name)
+    var type = map.getMimeTypeFromExtension(ext)
+    if (type == null) type = "*/*"
+    return type
 }

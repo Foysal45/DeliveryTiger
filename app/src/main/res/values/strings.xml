@@ -72,4 +72,6 @@
         <item>Aria/Post Office</item>
     </string-array>
 
+    <string name="file_provider_authority" translatable="false">com.bd.deliverytiger.app.fileprovider</string>
+
 </resources>

@@ -16,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.endpoint.LoginInterface
@@ -77,10 +78,11 @@ class LoginFragment: Fragment() {
         signUpTV = view.findViewById(R.id.tvLoginSignUp)
         //checkRememberMe = view.findViewById(R.id.login_checkBox_remember_me)
 
-        /*if (BuildConfig.DEBUG){
-            mobileET.setText("01844172323")
-            passwordET.setText("01844172323")
-        }*/
+        //ToDo: remove
+        if (BuildConfig.DEBUG){
+            mobileET.setText("01777717798")
+            passwordET.setText("Rawnation_2020")
+        }
 
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
                 val token = it.token

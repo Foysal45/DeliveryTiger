@@ -1,10 +1,13 @@
 package com.bd.deliverytiger.app.ui.payment_statement.excel_generator
 
+import android.content.ContentValues
 import android.content.Context
+import android.os.Build
 import android.os.Environment
-import android.widget.Toast
+import android.provider.MediaStore
+import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsResponse
-import com.bd.deliverytiger.app.utils.toast
+import com.bd.deliverytiger.app.utils.FileUtils
 import org.apache.poi.hssf.usermodel.HSSFFont
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.CellStyle
@@ -12,14 +15,12 @@ import org.apache.poi.ss.usermodel.IndexedColors
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
-import java.text.SimpleDateFormat
-import java.util.*
 
 class ExcelGenerator(private val context: Context) {
 
     private var filePath: String = ""
 
-    fun writeExcel(model: PaymentDetailsResponse?) {
+    fun writeExcel(model: PaymentDetailsResponse?): String {
         val workBook = HSSFWorkbook()
         val sheet = workBook.createSheet("TransactionNo_${model?.transactionNo}")
         val font1 = workBook.createFont().apply {
@@ -257,18 +258,52 @@ class ExcelGenerator(private val context: Context) {
             }
         }
 
-        try {
+        /*try {
             val outputStream = FileOutputStream(createNewFile(model?.transactionNo ?: "statement"))
             workBook.write(outputStream)
             outputStream.close()
             context?.toast("আপনি সফলভাবে এক্সেল শীটে সেভ করেছেন\n$filePath", Toast.LENGTH_LONG)
         } catch (e: Exception) {
             Timber.d(e)
+        }*/
+
+        var filePath = ""
+        val fileName = "${model?.transactionNo}"
+        val outputStream = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            val directory = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), context.getString(R.string.app_name))
+            if (!directory.exists()) {
+                directory.mkdirs()
+            }
+            val file = File(directory, fileName)
+            filePath = file.absolutePath
+            FileOutputStream(file)
+        } else {
+            val resolver = context.contentResolver
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+                put(MediaStore.MediaColumns.MIME_TYPE, "application/vnd.ms-excel")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/" + context.getString(R.string.app_name))
+            }
+            resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)?.let { uri ->
+                Timber.d("writeExcel Uri $uri")
+                filePath = FileUtils(context).getPath(uri)
+                Timber.d("writeExcel filePath $filePath")
+                //val fileUri = FileProvider.getUriForFile(context, context.getString(R.string.file_provider_authority), File(uri.path ?: ""))
+                //Timber.d("writeExcel fileUri $fileUri")
+                resolver.openOutputStream(uri)
+            }
         }
+        outputStream?.use { stream ->
+            workBook.write(stream)
+        }
+        Timber.d("writeExcel $filePath")
+        //context.toast("আপনি সফলভাবে এক্সেল শীটে সেভ করেছেন\n$filePath", Toast.LENGTH_LONG)
+
+        return filePath
 
     }
 
-    private fun createNewFile(name: String): File? {
+    /*private fun createNewFile(name: String): File? {
         return try {
             val timeStamp: String = SimpleDateFormat("yyyyMMdd", Locale.US).format(Date())
             val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
@@ -280,6 +315,6 @@ class ExcelGenerator(private val context: Context) {
             Timber.d(e)
             null
         }
-    }
+    }*/
 
 }

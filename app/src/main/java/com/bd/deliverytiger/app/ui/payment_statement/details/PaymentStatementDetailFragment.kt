@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -14,18 +15,22 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.payment_statement.OrderHistoryData
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsResponse
 import com.bd.deliverytiger.app.databinding.FragmentPaymentStatementDetailBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.payment_statement.excel_generator.ExcelGenerator
 import com.bd.deliverytiger.app.utils.*
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import org.koin.android.ext.android.inject
 import timber.log.Timber
+import java.io.File
 
 class PaymentStatementDetailFragment : Fragment() {
 
@@ -226,11 +231,43 @@ class PaymentStatementDetailFragment : Fragment() {
 
         if (responseModel != null) {
             val generator = ExcelGenerator(requireContext())
-            generator.writeExcel(responseModel)
+            val filePath = generator.writeExcel(responseModel)
+            Timber.d("generateExcel $filePath")
+            if (filePath.isNotEmpty()) {
+                binding?.parent?.snackbar("আপনি সফলভাবে এক্সেল শীটে সেভ করেছেন\nSDCard/Download/${getString(R.string.app_name)}", Snackbar.LENGTH_INDEFINITE, "ওপেন") {
+                    openFile(filePath)
+                }?.show()
+            }
         } else {
             context?.toast("কোনো তথ্য নেই")
         }
 
+    }
+
+    private fun openFile(filePath: String) {
+        try {
+            val fileName = Uri.parse(filePath).lastPathSegment
+            val directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
+            val fileDir = "${requireContext().getString(R.string.app_name)}/$fileName"
+            val filePath = "$directoryPath/$fileDir"
+
+            val file = File(filePath)
+            if (file.exists()) {
+                val fileUri = FileProvider.getUriForFile(requireContext(), getString(R.string.file_provider_authority), file)
+                Intent(Intent.ACTION_VIEW).apply {
+                    putExtra(Intent.EXTRA_STREAM, fileUri)
+                    setDataAndType(fileUri, getFileContentType(filePath))
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+                }.also {
+                    startActivity(it)
+                }
+            } else {
+                binding?.parent?.snackbar("Unable to open file", Snackbar.LENGTH_SHORT)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            binding?.parent?.snackbar("Unable to open file", Snackbar.LENGTH_SHORT)
+        }
     }
 
 }
