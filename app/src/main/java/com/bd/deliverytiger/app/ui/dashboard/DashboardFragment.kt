@@ -361,7 +361,7 @@ class DashboardFragment : Fragment() {
             val currentDate = "${DigitConverter.toBanglaDigit(today)} ${DigitConverter.banglaMonth[currentMonth]}"
             binding?.msg3?.text = "আজকে ($currentDate) পার্সেল দিয়েছি"
             binding?.amount3?.text = "${DigitConverter.toBanglaDigit(model.count.toString())}টি"
-            //ToDo: remove
+
             //model.count = 0
             if (model.count == 0) {
                 // I already change this design 5 times, Do you think I care about view ID name any more?
@@ -402,8 +402,7 @@ class DashboardFragment : Fragment() {
         viewModel.fetchAccountsData(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
 
             binding?.amount1?.text = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}"
-            binding?.msg1?.text = "${DigitConverter.toBanglaDigit(model.count)}টি ${model.name}"
-
+            binding?.msg1?.text = "${model.name}"
         })
     }
 

@@ -121,7 +121,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var isWeightSelected: Boolean = false
     private var isPackagingSelected: Boolean = false
     private var payCollectionAmount: Double = 0.0
+    private var payDeliveryCharge: Double = 0.0
     private var payShipmentCharge: Double = 0.0
+    private var cityDeliveryCharge: Double = 0.0
     private var payCODCharge: Double = 0.0
     private var payBreakableCharge: Double = 0.0
     private var payCollectionCharge: Double = 0.0
@@ -223,6 +225,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         deliveryTypeAdapter.onItemClick = { position, model ->
             //deliveryTypeRV.requestFocus()
             payShipmentCharge = model.chargeAmount
+            cityDeliveryCharge = model.cityDeliveryCharge
+
             deliveryType = "${model.deliveryType} ${model.days}"
             deliveryRangeId = model.deliveryRangeId
             weightRangeId = model.weightRangeId
@@ -345,7 +349,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
             val bundle = Bundle()
             with(bundle) {
-                putDouble("payShipmentCharge", payShipmentCharge)
+                putDouble("payShipmentCharge", payDeliveryCharge)
                 putDouble("payCODCharge", payCODCharge)
                 putDouble("payBreakableCharge", payBreakableCharge)
                 putDouble("payCollectionCharge", payCollectionCharge)
@@ -592,7 +596,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         distFrag.setOnClick(object : DistrictSelectFragment.DistrictClick {
             override fun onClick(position: Int, name: String, clickedID: Int) {
-                Timber.e("etDistrictSearch 6 - ", name + " " + clickedID.toString())
+                Timber.e("etDistrictSearch 6 - ", "$name $clickedID")
                 etDistrict.setText(name)
                 districtId = clickedID
 
@@ -912,6 +916,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                         collectionThanaId = model.thanaId
                     }
                     isCollectionLocationSelected = true
+                    calculateTotalPrice()
                 } else {
                     isCollectionLocationSelected = false
                 }
@@ -920,6 +925,16 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     private fun calculateTotalPrice() {
+
+        payDeliveryCharge = if (districtId == collectionDistrictId) {
+            if (cityDeliveryCharge > 0.0) {
+                cityDeliveryCharge
+            } else {
+                payShipmentCharge
+            }
+        } else {
+            payShipmentCharge
+        }
 
         // Total = Shipment + cod + breakable + collection + packaging
         if (isCollection) {
@@ -954,13 +969,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         //val payReturnCharge = SessionManager.returnCharge
         if (isCheckBigProduct) {
-            total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge + bigProductCharge
+            total = payDeliveryCharge + payCODCharge + payCollectionCharge + payPackagingCharge + bigProductCharge
         } else {
-            total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge
+            total = payDeliveryCharge + payCODCharge + payCollectionCharge + payPackagingCharge
         }
 
 
-        //   total = payShipmentCharge + payCODCharge + payCollectionCharge + payPackagingCharge
+        //   total = payDeliveryCharge + payCODCharge + payCollectionCharge + payPackagingCharge
 
         if (isBreakable) {
             payBreakableCharge = breakableChargeApi
@@ -990,13 +1005,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }
 
         if (productType != "small") {
-            payShipmentCharge += bigProductCharge
+            payDeliveryCharge += bigProductCharge
         }
 
         val requestBody = OrderRequest(
             customerName, mobileNo, alternativeMobileNo, customersAddress, districtId, thanaId, areaId,
             deliveryType, orderType, weight, collectionName,
-            payCollectionAmount, payShipmentCharge, SessionManager.courierUserId,
+            payCollectionAmount, payDeliveryCharge, SessionManager.courierUserId,
             payBreakableCharge, additionalNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge, packingName,
             payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,
             "android-${SessionManager.versionName}", true, collectionDistrictId, collectionThanaId, deliveryDate, collectionDate, isOfficeDrop,payActualPackagePrice
