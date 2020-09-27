@@ -55,6 +55,10 @@
             android:icon="@drawable/ic_map"
             android:title="কালেক্টর ট্র্যাকিং" />
         <item
+            android:id="@+id/nav_complain"
+            android:icon="@drawable/ic_headset_mic"
+            android:title="কমপ্লেইন" />
+        <item
             android:id="@+id/nav_privacy"
             android:icon="@drawable/ic_privacy"
             android:title="প্রাইভেসি পলিসি" />

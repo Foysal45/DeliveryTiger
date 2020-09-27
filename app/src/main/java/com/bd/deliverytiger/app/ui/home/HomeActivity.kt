@@ -40,6 +40,7 @@ import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
+import com.bd.deliverytiger.app.ui.complain.ComplainFragment
 import com.bd.deliverytiger.app.ui.dashboard.DashboardFragment
 import com.bd.deliverytiger.app.ui.dialog.PopupDialog
 import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
@@ -375,6 +376,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 is PaymentDetailsFragment -> {
                     currentFragment.onResume()
                 }
+                is ComplainFragment -> {
+                    currentFragment.onResume()
+                }
             }
 
         }
@@ -560,6 +564,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     Timber.d("tag", "MapFragment already exist")
                 } else {
                     addFragment(MapFragment.newInstance(null), MapFragment.tag)
+                }
+            }
+            R.id.nav_complain -> {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is MapFragment) {
+                    Timber.d("tag", "ComplainFragment already exist")
+                } else {
+                    addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
                 }
             }
             R.id.nav_privacy -> {
