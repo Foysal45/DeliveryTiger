@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="ট্রানজেকশন নম্বর"
+                android:text="রেফারেন্স / চেক"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintStart_toStartOf="parent"
@@ -74,6 +74,32 @@
                 tools:text="5301745" />
 
             <TextView
+                android:id="@+id/key5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="বিকাশ ট্রান্সসেকশন আইডি"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/key1"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+
+            <TextView
+                android:id="@+id/bkashTransactionNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/transactionNo"
+                tools:text="ID9856325"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+
+            <TextView
                 android:id="@+id/key2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,7 +107,7 @@
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/key1" />
+                app:layout_constraintTop_toBottomOf="@id/key5" />
 
             <TextView
                 android:id="@+id/paymentMedium"
@@ -90,7 +116,7 @@
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/transactionNo"
+                app:layout_constraintTop_toBottomOf="@id/bkashTransactionNo"
                 tools:text="EFT / Cheque" />
 
             <TextView

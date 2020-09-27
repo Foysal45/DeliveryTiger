@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.ui.payment_statement.details
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,8 @@ import com.bd.deliverytiger.app.utils.DigitConverter
 class PaymentStatementDetailsAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList: MutableList<OrderHistoryData> = mutableListOf()
-    var onItemClicked: ((model: OrderHistoryData) -> Unit)? = null
+    var onItemClicked: ((model: OrderHistoryData, isOnlyDelivery: Boolean) -> Unit)? = null
+    var isOnlyDelivery: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding: ItemViewPaymentHistoryDetailsBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_view_payment_history_details, parent, false)
@@ -26,10 +28,26 @@ class PaymentStatementDetailsAdapter() : RecyclerView.Adapter<RecyclerView.ViewH
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewModel) {
             val model = dataList[position]
-            holder.binding.orderCode.text = model.orderCode
-            holder.binding.collectedAmount.text = "${DigitConverter.toBanglaDigit(model.collectedAmount)} ৳"
-            holder.binding.totalCharge.text = "- ${DigitConverter.toBanglaDigit(model.totalCharge)} ৳"
-            holder.binding.netAmount.text = "${DigitConverter.toBanglaDigit(model.amount)} ৳"
+            val binding = holder.binding
+
+            binding.orderCode.text = model.orderCode
+            binding.totalCharge.text = "- ${DigitConverter.toBanglaDigit(model.totalCharge)} ৳"
+
+            if (isOnlyDelivery) {
+                binding.collectedAmount.visibility = View.GONE
+                binding.netAmount.visibility = View.GONE
+                binding.key2.visibility = View.GONE
+                binding.key4.visibility = View.GONE
+            } else {
+                binding.collectedAmount.visibility = View.VISIBLE
+                binding.netAmount.visibility = View.VISIBLE
+                binding.key2.visibility = View.VISIBLE
+                binding.key4.visibility = View.VISIBLE
+
+                binding.collectedAmount.text = "${DigitConverter.toBanglaDigit(model.collectedAmount, true)} ৳"
+                binding.netAmount.text = "${DigitConverter.toBanglaDigit(model.amount, true)} ৳"
+            }
+
         }
     }
 
@@ -37,7 +55,7 @@ class PaymentStatementDetailsAdapter() : RecyclerView.Adapter<RecyclerView.ViewH
 
         init {
             binding.root.setOnClickListener {
-                onItemClicked?.invoke(dataList[adapterPosition])
+                onItemClicked?.invoke(dataList[adapterPosition], isOnlyDelivery)
             }
         }
     }

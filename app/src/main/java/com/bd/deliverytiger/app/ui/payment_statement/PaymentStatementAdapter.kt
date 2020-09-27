@@ -26,11 +26,24 @@ class PaymentStatementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewModel) {
             val model = dataList[position]
-            holder.binding.transactionNo.text = model.transactionNo
-            holder.binding.date.text = model.transactionDate
-            holder.binding.paymentMedium.text = model.modeOfPayment
-            holder.binding.orderCount.text = "${DigitConverter.toBanglaDigit(model.orderCount)} টি"
-            holder.binding.totalAmount.text = "${DigitConverter.toBanglaDigit(model.netPaidAmount)} ৳"
+            val binding = holder.binding
+
+            binding.transactionNo.text = model.transactionNo
+            binding.date.text = model.transactionDate
+            binding.paymentMedium.text = model.modeOfPayment
+            binding.orderCount.text = "${DigitConverter.toBanglaDigit(model.orderCount)} টি"
+            binding.totalAmount.text = "${DigitConverter.toBanglaDigit(model.netPaidAmount)} ৳"
+
+            /*if () {
+                binding.key5.visibility = View.VISIBLE
+                binding.bkashTransactionNo.visibility = View.VISIBLE
+
+                binding.bkashTransactionNo.text = ""
+            } else {
+                binding.key5.visibility = View.GONE
+                binding.bkashTransactionNo.visibility = View.GONE
+            }*/
+
         }
     }
 

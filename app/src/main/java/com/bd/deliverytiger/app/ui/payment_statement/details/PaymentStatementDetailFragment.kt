@@ -69,8 +69,8 @@ class PaymentStatementDetailFragment : Fragment() {
             adapter = dataAdapter
             //addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         }
-        dataAdapter.onItemClicked = {
-            val dialog = OrderChargeDetailsFragment.newInstance(it)
+        dataAdapter.onItemClicked = { model, isOnlyDelivery ->
+            val dialog = OrderChargeDetailsFragment.newInstance(model, isOnlyDelivery)
             dialog.show(childFragmentManager, OrderChargeDetailsFragment.tag)
         }
 
@@ -101,8 +101,8 @@ class PaymentStatementDetailFragment : Fragment() {
             binding?.totalAdjustment?.text = "- ${DigitConverter.toBanglaDigit(model?.netAdjustedAmount.toString())} ৳"
             binding?.totalPayment?.text = "${DigitConverter.toBanglaDigit(model?.netPaidAmount.toString())} ৳"
 
-            binding?.filterTab?.getTabAt(0)?.text = "পেইড (${DigitConverter.toBanglaDigit(model?.totalCrOrderCount.toString())})"
-            binding?.filterTab?.getTabAt(1)?.text = "এডজাস্টেড (${DigitConverter.toBanglaDigit(model?.totalAdOrderCount.toString())})"
+            binding?.filterTab?.getTabAt(0)?.text = "COD (${model?.totalCrOrderCount.toString()})"
+            binding?.filterTab?.getTabAt(1)?.text = "Only Delivery & Adjustment (${model?.totalAdOrderCount.toString()})"
 
             filterOrderList(model?.orderList, "CR")
             binding?.filterTab?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -114,9 +114,11 @@ class PaymentStatementDetailFragment : Fragment() {
                     when (tab?.position) {
                         0 -> {
                             Timber.d("Tab selected 0")
+                            dataAdapter.isOnlyDelivery = false
                             filterOrderList(model?.orderList, "CR")
                         }
                         1 -> {
+                            dataAdapter.isOnlyDelivery = true
                             filterOrderList(model?.orderList, "CC")
                         }
                     }
@@ -159,7 +161,7 @@ class PaymentStatementDetailFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("স্টেটমেন্ট ডিটেলস")
+        (activity as HomeActivity).setToolbarTitle("স্টেটমেন্ট ডিটেইলস")
     }
 
     override fun onDestroyView() {

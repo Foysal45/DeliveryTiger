@@ -40,23 +40,33 @@ class OrderChargeDetailsFragment: BottomSheetDialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        binding?.orderCode?.text = model?.orderCode
         if (isOnlyDelivery) {
             binding?.key2?.visibility = View.GONE
             binding?.collectedAmount?.visibility = View.GONE
             binding?.key3?.text = "সর্বমোট সার্ভিস চার্জ"
             binding?.netAmount?.text = "${DigitConverter.toBanglaDigit(model?.totalCharge.toString())} ৳"
+
+            binding?.shipmentsCharge?.text = "${DigitConverter.toBanglaDigit(model?.deliveryCharge.toString())} ৳"
+            binding?.CODCharge?.text = "${DigitConverter.toBanglaDigit(model?.CODCharge.toString())} ৳"
+            binding?.breakingCharge?.text = "${DigitConverter.toBanglaDigit(model?.breakableCharge.toString())} ৳"
+            binding?.collectionCharge?.text = "${DigitConverter.toBanglaDigit(model?.collectionCharge.toString())} ৳"
+            binding?.returnCharge?.text = "${DigitConverter.toBanglaDigit(model?.returnCharge.toString())} ৳"
+            binding?.packagingCharge?.text = "${DigitConverter.toBanglaDigit(model?.packagingCharge.toString())} ৳"
+
         } else {
             binding?.collectedAmount?.text = "${DigitConverter.toBanglaDigit(model?.collectedAmount.toString())} ৳"
             binding?.netAmount?.text = "${DigitConverter.toBanglaDigit(model?.amount.toString())} ৳"
+
+            binding?.shipmentsCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.deliveryCharge.toString())} ৳"
+            binding?.CODCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.CODCharge.toString())} ৳"
+            binding?.breakingCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.breakableCharge.toString())} ৳"
+            binding?.collectionCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.collectionCharge.toString())} ৳"
+            binding?.returnCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.returnCharge.toString())} ৳"
+            binding?.packagingCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.packagingCharge.toString())} ৳"
         }
 
-        binding?.orderCode?.text = model?.orderCode
-        binding?.shipmentsCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.deliveryCharge.toString())} ৳"
-        binding?.CODCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.CODCharge.toString())} ৳"
-        binding?.breakingCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.breakableCharge.toString())} ৳"
-        binding?.collectionCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.collectionCharge.toString())} ৳"
-        binding?.returnCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.returnCharge.toString())} ৳"
-        binding?.packagingCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.packagingCharge.toString())} ৳"
+
 
     }
 
