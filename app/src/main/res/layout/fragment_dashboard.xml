@@ -122,11 +122,9 @@
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:id="@+id/switchCollector"
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="4dp"
-                                android:layout_marginEnd="4dp"
-                                android:layout_weight="1"
+                                android:layout_marginStart="6dp"
                                 android:textColor="@color/black_80"
                                 android:textSize="@dimen/text_14"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -248,7 +246,7 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/paymentInfoLayout"
                             android:layout_width="0dp"
-                            android:layout_height="80dp"
+                            android:layout_height="85dp"
                             android:layout_marginEnd="5dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_stroke1"
@@ -278,21 +276,40 @@
                                 android:layout_marginEnd="2dp"
                                 android:ellipsize="end"
                                 android:gravity="center"
+                                android:includeFontPadding="false"
                                 android:maxLines="1"
                                 android:text="এই সপ্তাহের পেমেন্ট"
+                                android:textColor="@color/black_80"
+                                android:textSize="@dimen/text_14"
+                                app:layout_constraintBottom_toTopOf="@id/msg2"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/amount1" />
+
+                            <TextView
+                                android:id="@+id/msg2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="2dp"
+                                android:layout_marginEnd="2dp"
+                                android:ellipsize="end"
+                                android:gravity="center"
+                                android:includeFontPadding="false"
+                                android:maxLines="1"
                                 android:textColor="@color/black_80"
                                 android:textSize="@dimen/text_14"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/amount1" />
+                                app:layout_constraintTop_toBottomOf="@id/msg1"
+                                tools:text="31/12/2020" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <LinearLayout
                             android:id="@+id/paymentDoneLayout"
                             android:layout_width="0dp"
-                            android:layout_height="80dp"
+                            android:layout_height="85dp"
                             android:layout_marginStart="5dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_solid1"

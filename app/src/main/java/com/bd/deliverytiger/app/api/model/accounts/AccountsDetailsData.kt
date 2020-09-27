@@ -15,7 +15,7 @@ data class AccountsDetailsData(
     @SerializedName("BreakableCharge")
     var breakableCharge: Int = 0,
     @SerializedName("CODCharge")
-    var cODCharge: Int = 0,
+    var CODCharge: Int = 0,
     @SerializedName("DeliveryCharge")
     var deliveryCharge: Int = 0,
     @SerializedName("CollectedAmount")

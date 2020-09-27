@@ -14,8 +14,13 @@ data class AccountDetailsResponse(
     var totalOrderCount: Int = 0,
     @SerializedName("TotalMerchantReceivable")
     var totalMerchantReceivable: Int = 0,
+    @SerializedName("TotalCodServiceCharge")
+    var totalCodServiceCharge: Int = 0,
+    @SerializedName("TotalCollectedAmount")
+    var totalCollectedAmount: Int = 0,
     @SerializedName("TotalMerchantPayable")
     var totalMerchantPayable: Int = 0,
+
     @SerializedName("PayableOrders")
     var payableOrders: List<AccountsDetailsData> = listOf(),
     @SerializedName("ReceivableOrders")

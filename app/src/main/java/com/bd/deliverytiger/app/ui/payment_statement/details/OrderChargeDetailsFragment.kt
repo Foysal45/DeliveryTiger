@@ -15,10 +15,12 @@ class OrderChargeDetailsFragment: BottomSheetDialogFragment() {
 
     private var model: OrderHistoryData? = null
     private var binding: DialogOrderChangeDetailsBinding? = null
+    private var isOnlyDelivery: Boolean = false
 
     companion object {
-        fun newInstance(orderHistoryData: OrderHistoryData?): OrderChargeDetailsFragment = OrderChargeDetailsFragment().apply {
+        fun newInstance(orderHistoryData: OrderHistoryData?, isOnlyDelivery: Boolean = false): OrderChargeDetailsFragment = OrderChargeDetailsFragment().apply {
             this.model = orderHistoryData
+            this.isOnlyDelivery = isOnlyDelivery
         }
         val tag: String = OrderChargeDetailsFragment::class.java.name
     }
@@ -38,15 +40,24 @@ class OrderChargeDetailsFragment: BottomSheetDialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        if (isOnlyDelivery) {
+            binding?.key2?.visibility = View.GONE
+            binding?.collectedAmount?.visibility = View.GONE
+            binding?.key3?.text = "সর্বমোট সার্ভিস চার্জ"
+            binding?.netAmount?.text = "${DigitConverter.toBanglaDigit(model?.totalCharge.toString())} ৳"
+        } else {
+            binding?.collectedAmount?.text = "${DigitConverter.toBanglaDigit(model?.collectedAmount.toString())} ৳"
+            binding?.netAmount?.text = "${DigitConverter.toBanglaDigit(model?.amount.toString())} ৳"
+        }
+
         binding?.orderCode?.text = model?.orderCode
-        binding?.collectedAmount?.text = "${DigitConverter.toBanglaDigit(model?.collectedAmount.toString())} ৳"
         binding?.shipmentsCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.deliveryCharge.toString())} ৳"
         binding?.CODCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.CODCharge.toString())} ৳"
         binding?.breakingCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.breakableCharge.toString())} ৳"
         binding?.collectionCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.collectionCharge.toString())} ৳"
         binding?.returnCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.returnCharge.toString())} ৳"
         binding?.packagingCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.packagingCharge.toString())} ৳"
-        binding?.netAmount?.text = "${DigitConverter.toBanglaDigit(model?.amount.toString())} ৳"
+
     }
 
     override fun onDestroyView() {

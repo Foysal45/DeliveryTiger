@@ -398,6 +398,10 @@ class DashboardFragment : Fragment() {
 
         viewModel.fetchAccountsData(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
 
+            if (!model.paymentDate.isNullOrEmpty()) {
+                val banglaDate = DigitConverter.toBanglaDate(model.paymentDate!!,"MM/dd/yyyy")
+                binding?.msg2?.text = "($banglaDate)"
+            }
             binding?.amount1?.text = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}"
             binding?.msg1?.text = "${model.name}"
 

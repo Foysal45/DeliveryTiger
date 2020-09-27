@@ -9,5 +9,10 @@ data class AccountsData(
     @SerializedName("Count")
     var count: Int,
     @SerializedName("TotalAmount")
-    var totalAmount: Double
+    var totalAmount: Double,
+    @SerializedName("PaymentDate")
+    var paymentDate: String?,
+    @SerializedName("FreezeDate")
+    var freezeDate: String?
+
 )

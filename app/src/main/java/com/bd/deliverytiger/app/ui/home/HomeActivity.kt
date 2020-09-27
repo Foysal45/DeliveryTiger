@@ -93,6 +93,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var doubleBackToExitPressedOnce = false
     private var navId: Int = 0
 
+    //AppUpdateManager
     private lateinit var appUpdateManager: AppUpdateManager
     private val requestCodeAppUpdate = 21720
 
@@ -731,6 +732,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         param.setMargins(0,0, this.dpToPx(24f), this.dpToPx(value))
         addOrderFab.layoutParams = param
     }*/
+
+    //################################################## App Update Manager ########################################//
 
     private fun appUpdateManager() {
         appUpdateManager = AppUpdateManagerFactory.create(this)

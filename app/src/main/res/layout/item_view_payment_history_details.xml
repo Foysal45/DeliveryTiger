@@ -22,12 +22,12 @@
                 android:id="@+id/key1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="অর্ডার কোড"
                 android:textColor="@color/red"
                 android:textSize="@dimen/text_14"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="অর্ডার কোড" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/orderCode"
@@ -39,8 +39,7 @@
                 app:layout_constraintBottom_toTopOf="@id/separator"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="DT-38954"
-                 />
+                tools:text="DT-38954" />
 
 
             <View
@@ -51,28 +50,31 @@
                 android:background="@color/separator"
                 app:layout_constraintTop_toBottomOf="@id/orderCode" />
 
-
+            <Space
+                android:id="@+id/space"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                app:layout_constraintTop_toBottomOf="@id/separator"
+                />
 
             <TextView
                 android:id="@+id/key2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:text="কালেক্টেড অ্যামাউন্ট"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/separator" />
+                app:layout_constraintTop_toBottomOf="@id/space" />
 
             <TextView
                 android:id="@+id/collectedAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/separator"
+                app:layout_constraintTop_toBottomOf="@id/space"
                 tools:text="৯৯৯ ৳" />
 
             <TextView
@@ -89,19 +91,20 @@
                 android:id="@+id/totalCharge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black_80"
+                android:textColor="@color/red"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/collectedAmount"
-                tools:text="৯৯৯ ৳" />
+                tools:text="- ৯৯৯ ৳" />
 
             <TextView
                 android:id="@+id/key4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="সর্বমোট পেমেন্ট"
+                android:text="প্রদেয় পেমেন্ট"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/key3" />
 
@@ -111,11 +114,10 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/totalCharge"
                 tools:text="৯৯৯ ৳" />
-
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
