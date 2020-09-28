@@ -28,6 +28,13 @@ class PaymentStatementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val model = dataList[position]
             val binding = holder.binding
 
+            val transName = when (model.modeOfPayment) {
+                "Bkash" -> "বিকাশ ট্রান্সসেকশন নং"
+                "Cheque" -> "চেক নং"
+                else -> "রেফারেন্স নং"
+            }
+
+            binding.key1.text = transName
             binding.transactionNo.text = model.transactionNo
             binding.date.text = model.transactionDate
             binding.paymentMedium.text = model.modeOfPayment

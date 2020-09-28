@@ -93,6 +93,13 @@ class PaymentStatementDetailFragment : Fragment() {
                 }
             }
 
+            val transName = when (model.modeOfPayment) {
+                "Bkash" -> "বিকাশ ট্রান্সসেকশন নং"
+                "Cheque" -> "চেক নং"
+                else -> "রেফারেন্স নং"
+            }
+
+            binding?.key1?.text = transName
             binding?.transactionNo?.text = model?.transactionNo
             binding?.paymentMedium?.text = model?.modeOfPayment
             binding?.orderCount?.text = "${DigitConverter.toBanglaDigit(model?.totalOrderCount.toString())} টি"
