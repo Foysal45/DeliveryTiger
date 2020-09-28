@@ -252,6 +252,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun onPickUpLocation(pickUpModel: PickupLocation) {
+
+        //Test
+        /*pickUpModel.apply {
+            //districtId = 14
+            //thanaId = 15945
+            //courierUserId = 31517
+            latitude = "23.7501826"
+            longitude = "90.3905834"
+        }*/
         if (isNearByHubView) {
             showNearbyHubs(pickUpModel)
         } else {
@@ -271,8 +280,21 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 binding?.callBtn?.visibility = View.VISIBLE
             }
 
+            if (isValidCoordinate(pickUpModel.latitude) && isValidCoordinate(pickUpModel.longitude)) {
+                val pickupLatLng = LatLng(pickUpModel.latitude.toDouble(), pickUpModel.longitude.toDouble())
+                val pickupMarker = map?.addMarker(
+                    MarkerOptions()
+                        .position(pickupLatLng)
+                        .title(pickUpModel.pickupAddress)
+                        .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_location1))
+                )
+                bound.include(pickupLatLng)
+            } else {
+                context?.toast("প্রোফাইলে পিকআপ জিপিএস লোকেশান অ্যাড করুন")
+            }
+
             var hubLatLng: LatLng? = null
-            if (!hubModel?.latitude.isNullOrEmpty() && !hubModel?.longitude.isNullOrEmpty()) {
+            if (isValidCoordinate(hubModel?.latitude) && isValidCoordinate(hubModel?.longitude)) {
                 hubLatLng = LatLng(hubModel.latitude?.toDouble() ?: 0.0, hubModel?.longitude?.toDouble() ?: 0.0)
             }
             if (hubLatLng != null) {
@@ -285,39 +307,49 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 )
                 hubMarker?.showInfoWindow()
                 bound.include(hubLatLng)
+
+                if (isValidCoordinate(pickUpModel.longitude) && isValidCoordinate(pickUpModel.latitude)) {
+                    fetchRoutingDetails("${pickUpModel.longitude},${pickUpModel.latitude}", "${hubLatLng.longitude},${hubLatLng.latitude}")
+                }
             }
 
             val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 200)
             map?.moveCamera(cameraUpdateBounds)
+
         })
 
     }
 
     private fun fetchCollectorListForPickUp(pickUpModel: PickupLocation) {
 
-        //ToDo: Test
-        /*pickUpModel.apply {
-            districtId = 14
-            thanaId = 15945
-            courierUserId = 31517
-        }*/
         viewModel.fetchRiderByPickupLocation(pickUpModel).observe(viewLifecycleOwner, Observer { list ->
-            showCollectorsInMap(list)
+            showCollectorsInMap(list, pickUpModel)
         })
-
     }
 
-    private fun showCollectorsInMap(list: List<RiderInfo>) {
+    private fun showCollectorsInMap(list: List<RiderInfo>, pickUpModel: PickupLocation) {
 
-        val bound = LatLngBounds.builder()
-            .include(currentLatLng)
+        val bound = LatLngBounds.builder().include(currentLatLng)
+        if (isValidCoordinate(pickUpModel.latitude) && isValidCoordinate(pickUpModel.longitude)) {
+            val pickupLatLng = LatLng(pickUpModel.latitude.toDouble(), pickUpModel.longitude.toDouble())
+            val pickupMarker = map?.addMarker(
+                MarkerOptions()
+                    .position(pickupLatLng)
+                    .title(pickUpModel.pickupAddress)
+                    .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_home_circle))
+            )
+            bound.include(pickupLatLng)
+        } else {
+            context?.toast("প্রোফাইলে পিকআপ জিপিএস লোকেশান অ্যাড করুন")
+        }
+
         list.forEach { model ->
 
             val name = model?.name ?: "Collector"
             val mobile = model?.mobile ?: ""
             var hubLatLng: LatLng? = null
-            if (!model?.latitude.isNullOrEmpty() && !model?.longitude.isNullOrEmpty()) {
-                hubLatLng = LatLng(model.latitude?.toDouble() ?: 0.0, model?.longitude?.toDouble() ?: 0.0)
+            if (isValidCoordinate(model.latitude) && isValidCoordinate(model.longitude)) {
+                hubLatLng = LatLng(model.latitude?.toDouble() ?: 0.0, model.longitude?.toDouble() ?: 0.0)
             }
             if (hubLatLng != null) {
                 val hubMarker = map?.addMarker(
@@ -337,16 +369,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         //val cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLatLng, 13.0f)
 
         if (list.isNotEmpty()) {
-
             val firstModel = list.first()
             mobileNumber = firstModel.mobile ?: ""
             if (mobileNumber.trim().isNotEmpty()) {
                 binding?.callBtn?.visibility = View.VISIBLE
             }
-            if (!firstModel?.latitude.isNullOrEmpty() && !firstModel?.longitude.isNullOrEmpty()) {
-                collectorLatLng = LatLng(firstModel.latitude?.toDouble() ?: 0.0, firstModel?.longitude?.toDouble() ?: 0.0)
+            if (isValidCoordinate(firstModel.latitude) && isValidCoordinate(firstModel.longitude)) {
+                collectorLatLng = LatLng(firstModel.latitude?.toDouble() ?: 0.0, firstModel.longitude?.toDouble() ?: 0.0)
+
+                if (isValidCoordinate(pickUpModel.longitude) && isValidCoordinate(pickUpModel.latitude)) {
+                    fetchRoutingDetails("${pickUpModel.longitude},${pickUpModel.latitude}", "${collectorLatLng.longitude},${collectorLatLng.latitude}")
+                }
             }
-            fetchRoutingDetails("$currentLongitude,$currentLatitude", "${collectorLatLng.longitude},${collectorLatLng.latitude}")
+
         } else {
             context?.toast("এই মুহূর্তে কোনো কালেক্টর নিযুক্ত করা হয়নি")
         }
@@ -361,6 +396,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         } catch (e: Exception) {
             requireContext().toast("Could not find an activity to place the call")
         }
+    }
+
+    private fun isValidCoordinate(coordinate: String?): Boolean {
+        if (coordinate.isNullOrEmpty()) return false
+        if (coordinate.trim().isEmpty()) return false
+        if (coordinate == "0.0") return false
+        return true
     }
 
 }

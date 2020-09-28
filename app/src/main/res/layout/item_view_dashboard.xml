@@ -29,6 +29,18 @@
             tools:text="৳ 783" />
 
         <TextView
+            android:id="@+id/countText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/black_80"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/item_view_dashboard_count_tv"
+            app:layout_constraintBottom_toBottomOf="@id/item_view_dashboard_count_tv"
+            tools:text="ডেলিভারি হয়েছে" />
+
+        <TextView
             android:id="@+id/item_view_dashboard_msg_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

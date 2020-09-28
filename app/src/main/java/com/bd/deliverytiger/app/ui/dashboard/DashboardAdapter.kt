@@ -46,10 +46,15 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
 
             var countMsg = "0"
             var titleMsg = ""
+            var countText = ""
             when (model.dashboardCountSumView) {
                 "countsum" -> {
-                    countMsg = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}"
-                    titleMsg = "<font color='#CC000000'><b>${DigitConverter.toBanglaDigit(model.count)}</b></font> টি ${model.name}"
+                    countMsg = DigitConverter.toBanglaDigit(model.count)
+                    titleMsg = "<font color='#CC000000'><b>৳${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}</b></font> ${model.name}"
+                    if (model.statusGroupId == 6) {
+                        countText = "${model.name}"
+                        titleMsg = "<font color='#CC000000'><b>৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}</b></font> কালেক্ট হয়েছে"
+                    }
                 }
                 "count" -> {
                     countMsg = DigitConverter.toBanglaDigit(model.count)
@@ -62,6 +67,7 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             }
             holder.countTV.text = countMsg
             holder.titleTV.text = HtmlCompat.fromHtml(titleMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            holder.countText.text = countText
 
 
             when(model.dashboardViewColorType) {
@@ -101,6 +107,7 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
         internal val countTV: TextView = view.findViewById(R.id.item_view_dashboard_count_tv)
         internal val titleTV: TextView = view.findViewById(R.id.item_view_dashboard_msg_tv)
         //internal val iconIV: ImageView = view.findViewById(R.id.item_view_dashboard_icon)
+        internal val countText: TextView = view.findViewById(R.id.countText)
 
         init {
             itemView.setOnClickListener {
