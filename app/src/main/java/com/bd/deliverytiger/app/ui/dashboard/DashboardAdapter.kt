@@ -53,7 +53,7 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
                     titleMsg = "<font color='#CC000000'><b>৳${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}</b></font> ${model.name}"
                     if (model.statusGroupId == 6) {
                         countText = "${model.name}"
-                        titleMsg = "<font color='#CC000000'><b>৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}</b></font> কালেক্ট হয়েছে"
+                        titleMsg = "(৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)} কালেক্ট হয়েছে)"
                     }
                 }
                 "count" -> {

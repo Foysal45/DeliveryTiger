@@ -272,7 +272,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.fetchHubByPickupLocation(pickUpModel).observe(viewLifecycleOwner, Observer { hubModel ->
 
-            val bound = LatLngBounds.builder().include(currentLatLng)
+            val bound = LatLngBounds.builder()//.include(currentLatLng)
             val hubName = hubModel?.name ?: "DT Hub"
             val address = hubModel?.hubAddress ?: ""
             mobileNumber = hubModel.hubMobile ?: ""
@@ -329,7 +329,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun showCollectorsInMap(list: List<RiderInfo>, pickUpModel: PickupLocation) {
 
-        val bound = LatLngBounds.builder().include(currentLatLng)
+        val bound = LatLngBounds.builder()//.include(currentLatLng)
         if (isValidCoordinate(pickUpModel.latitude) && isValidCoordinate(pickUpModel.longitude)) {
             val pickupLatLng = LatLng(pickUpModel.latitude.toDouble(), pickUpModel.longitude.toDouble())
             val pickupMarker = map?.addMarker(
@@ -364,7 +364,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 100)
+        val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 200)
         map?.moveCamera(cameraUpdateBounds)
         //val cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLatLng, 13.0f)
 
@@ -374,13 +374,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             if (mobileNumber.trim().isNotEmpty()) {
                 binding?.callBtn?.visibility = View.VISIBLE
             }
-            if (isValidCoordinate(firstModel.latitude) && isValidCoordinate(firstModel.longitude)) {
+            /*if (isValidCoordinate(firstModel.latitude) && isValidCoordinate(firstModel.longitude)) {
                 collectorLatLng = LatLng(firstModel.latitude?.toDouble() ?: 0.0, firstModel.longitude?.toDouble() ?: 0.0)
-
                 if (isValidCoordinate(pickUpModel.longitude) && isValidCoordinate(pickUpModel.latitude)) {
                     fetchRoutingDetails("${pickUpModel.longitude},${pickUpModel.latitude}", "${collectorLatLng.longitude},${collectorLatLng.latitude}")
                 }
-            }
+            }*/
 
         } else {
             context?.toast("এই মুহূর্তে কোনো কালেক্টর নিযুক্ত করা হয়নি")
