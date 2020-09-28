@@ -79,9 +79,13 @@ class ProfileFragment : Fragment() {
     private var currentLatitude: Double = 0.0
     private var currentLongitude: Double = 0.0
 
+    private var isPickupLocation: Boolean = false
+
     companion object {
-        fun newInstance(): ProfileFragment = ProfileFragment().apply { }
-        val tag = ProfileFragment::class.java.name
+        fun newInstance(isPickupLocation: Boolean = false): ProfileFragment = ProfileFragment().apply {
+            this.isPickupLocation = isPickupLocation
+        }
+        val tag: String = ProfileFragment::class.java.name
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -556,6 +560,10 @@ class ProfileFragment : Fragment() {
             } else {
                 //getDistrictThanaOrAria(14, 4)
                 binding?.emptyView?.visibility = View.VISIBLE
+            }
+
+            if (isPickupLocation) {
+                binding?.nestedScrollView?.fullScroll(View.FOCUS_DOWN)
             }
         })
     }

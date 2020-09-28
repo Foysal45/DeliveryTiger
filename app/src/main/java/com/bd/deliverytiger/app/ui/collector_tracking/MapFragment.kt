@@ -181,8 +181,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             val bound = LatLngBounds.builder()
                 .include(currentLatLng)
                 .include(hubLatLng)
-            val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 100)
-            map?.moveCamera(cameraUpdateBounds)
+
+            try {
+                val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 200)
+                map?.moveCamera(cameraUpdateBounds)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
 
             fetchRoutingDetails("$currentLongitude,$currentLatitude", "${hubLatLng.longitude},${hubLatLng.latitude}")
         }
@@ -313,8 +318,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 }
             }
 
-            val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 200)
-            map?.moveCamera(cameraUpdateBounds)
+            try {
+                val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 200)
+                map?.moveCamera(cameraUpdateBounds)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
 
         })
 
@@ -364,8 +373,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 200)
-        map?.moveCamera(cameraUpdateBounds)
+        try {
+            val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 200)
+            map?.moveCamera(cameraUpdateBounds)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
         //val cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLatLng, 13.0f)
 
         if (list.isNotEmpty()) {
@@ -380,7 +394,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     fetchRoutingDetails("${pickUpModel.longitude},${pickUpModel.latitude}", "${collectorLatLng.longitude},${collectorLatLng.latitude}")
                 }
             }*/
-
         } else {
             context?.toast("এই মুহূর্তে কোনো কালেক্টর নিযুক্ত করা হয়নি")
         }

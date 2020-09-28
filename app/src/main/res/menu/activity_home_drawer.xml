@@ -47,6 +47,10 @@
             android:icon="@drawable/ic_account"
             android:title="প্রোফাইল আপডেট" />
         <item
+            android:id="@+id/nav_pickup"
+            android:icon="@drawable/ic_location1"
+            android:title="অ্যাড পিকআপ লোকেশান" />
+        <item
             android:id="@+id/nav_change_calculator"
             android:icon="@drawable/ic_calculator"
             android:title="ডেলিভারি চার্জ ক্যালকুলেটর" />

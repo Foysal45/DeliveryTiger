@@ -105,13 +105,12 @@ class BillingofServiceFragment : Fragment() {
         filterStatusTag = view.findViewById(R.id.filter_tag_status)
         filterSearchKeyTag = view.findViewById(R.id.filter_tag_searchKey)
 
-        billingServiceInterface =
-            RetrofitSingleton.getInstance(context!!).create(BillingServiceInterface::class.java)
+        billingServiceInterface = RetrofitSingleton.getInstance(requireContext()).create(BillingServiceInterface::class.java)
 
         courierOrderAmountDetailList = ArrayList()
         linearLayoutManager = LinearLayoutManager(context)
 
-        billingServiceAdapter = BillingServiceAdapter(context!!, courierOrderAmountDetailList)
+        billingServiceAdapter = BillingServiceAdapter(requireContext(), courierOrderAmountDetailList)
         rvBillingService.apply {
             layoutManager = linearLayoutManager
             adapter = billingServiceAdapter
@@ -135,17 +134,11 @@ class BillingofServiceFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 layoutPosition = linearLayoutManager.findLastVisibleItemPosition()
-                Timber.e(
-                    "layoutPosition",
-                    layoutPosition.toString() + " " + totalLoadedData + " " + isLoading + " " + totalCount + " " + isMoreDataAvailable
-                )
+                Timber.e("layoutPosition", "$layoutPosition $totalLoadedData $isLoading $totalCount $isMoreDataAvailable")
                 if (dy > 0) {
                     if (layoutPosition >= (totalLoadedData - 2) && !isLoading && layoutPosition < totalCount && isMoreDataAvailable) {
                         getBillingAddress(totalLoadedData, 20)
-                        Timber.e(
-                            "layoutPosition loadMoreCalled ",
-                            layoutPosition.toString() + " " + totalLoadedData + " " + isLoading + " " + totalCount
-                        )
+                        Timber.e("layoutPosition loadMoreCalled ", "$layoutPosition $totalLoadedData $isLoading $totalCount")
                     }
                 }
             }
@@ -210,7 +203,8 @@ class BillingofServiceFragment : Fragment() {
 
                         if (index < 20) {
                             totalCount = response.body()!!.model.totalDataCount!!.toInt()
-                            val msg = "মোট অর্ডারঃ <font color='#CC000000'><b>${DigitConverter.toBanglaDigit(totalCount)}</b></font> টি"
+                            val totalAmount = response.body()!!.model.totalAmount.toInt()
+                            val msg = "মোট অর্ডারঃ <font color='#CC000000'><b>${DigitConverter.toBanglaDigit(totalCount)}</b></font> টি (${DigitConverter.toBanglaDigit(totalAmount, true)} ৳)"
                             tvTotalOrder.text = HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY)
                         }
 

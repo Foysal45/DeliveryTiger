@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:overScrollMode="never"
         android:fillViewport="true"
+        android:id="@+id/nestedScrollView"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -321,6 +322,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/addPickUpTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"

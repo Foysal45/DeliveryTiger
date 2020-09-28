@@ -19,6 +19,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -188,4 +189,16 @@ fun getFileContentType(filePath: String): String? {
     var type = map.getMimeTypeFromExtension(ext)
     if (type == null) type = "*/*"
     return type
+}
+
+fun NestedScrollView.smoothScrollTo(view: View) {
+    var distance = view.top
+    var viewParent = view.parent
+    //traverses 10 times
+    for (i in 0..9) {
+        if ((viewParent as View) === this) break
+        distance += (viewParent as View).top
+        viewParent = viewParent.getParent()
+    }
+    smoothScrollTo(0, distance)
 }

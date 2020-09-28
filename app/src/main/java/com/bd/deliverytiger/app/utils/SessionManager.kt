@@ -58,6 +58,7 @@ object SessionManager {
             putString("districtName", model.districtName)
             putString("thanaName", model.thanaName)
             putString("areaName", model.areaName)
+            putInt("credit", model.credit.toInt())
         }
     }
 
@@ -224,6 +225,16 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString("mobile", value)
+            }
+        }
+
+    var credit: Int
+        get() {
+            return pref.getInt("credit", 0)
+        }
+        set(value) {
+            pref.edit {
+                putInt("credit", value)
             }
         }
 

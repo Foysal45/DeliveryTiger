@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.ui.home
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
@@ -114,6 +115,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var mBound: Boolean = false
     private var currentLocation: Location? = null
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -160,8 +162,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val headerUserNameTV: TextView = headerView.findViewById(R.id.nav_header_title)
         val headerDesignationTV: TextView = headerView.findViewById(R.id.nav_header_sub_title)
         val profileEdit: ImageView = headerView.findViewById(R.id.nav_header_profile_edit)
+        val merchantCredit: TextView = headerView.findViewById(R.id.merchantCredit)
         headerUserNameTV.text = SessionManager.companyName
         headerDesignationTV.text = SessionManager.mobile
+        merchantCredit.text = "ক্রেডিট লিমিট: ৳ ${DigitConverter.toBanglaDigit(SessionManager.credit, true)}"
 
         profileEdit.setOnClickListener {
             navId = R.id.nav_header_profile_edit
@@ -543,6 +547,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     Timber.d("tag", "ProfileFragment already exist")
                 } else {
                     addFragment(ProfileFragment.newInstance(), ProfileFragment.tag)
+                }
+            }
+            R.id.nav_pickup -> {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is ProfileFragment) {
+                    Timber.d("tag", "ProfileFragment already exist")
+                } else {
+                    addFragment(ProfileFragment.newInstance(true), ProfileFragment.tag)
                 }
             }
             R.id.nav_change_calculator -> {
