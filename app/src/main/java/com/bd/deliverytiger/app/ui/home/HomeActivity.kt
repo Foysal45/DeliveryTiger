@@ -39,6 +39,7 @@ import com.bd.deliverytiger.app.services.LocationUpdatesService
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
+import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.complain.ComplainFragment
@@ -383,6 +384,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 is ComplainFragment -> {
                     currentFragment.onResume()
                 }
+                is DeliveryChargeCalculatorFragment -> {
+                    currentFragment.onResume()
+                }
             }
 
         }
@@ -558,7 +562,15 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
             R.id.nav_change_calculator -> {
+
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is DeliveryChargeCalculatorFragment) {
+                    Timber.d("tag", "DeliveryChargeCalculatorFragment already exist")
+                } else {
+                    addFragment(DeliveryChargeCalculatorFragment.newInstance(), DeliveryChargeCalculatorFragment.tag)
+                }
+
+                /*val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is WebViewFragment) {
                     Timber.d("tag", "WebViewFragment already exist")
                 } else {
@@ -568,7 +580,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
-                }
+                }*/
             }
             R.id.nav_map -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)

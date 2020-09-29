@@ -108,5 +108,6 @@ class AppRepository(
 
     suspend fun fetchCollection(courierUserId: Int) = apiInterfaceCore.fetchCollection(courierUserId)
 
+    suspend fun fetchPriceList(districtId: Int, deliveryRangeId: Int) = apiInterfaceCore.fetchPriceList(districtId, deliveryRangeId)
 
 }
