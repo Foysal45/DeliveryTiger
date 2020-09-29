@@ -100,10 +100,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             currentLatLng = LatLng(currentLatitude, currentLongitude)
             Timber.d("debugMap currentLocation $currentLatitude $currentLongitude")
             map?.clear()
-            map?.addMarker(
-                MarkerOptions().position(currentLatLng)
-                    .title("আপনার বর্তমান অবস্থান").icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_marker_person))
-            )
+            showCurrentMarker()
             val cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLatLng, 13.0f)
             map?.moveCamera(cameraUpdate)
 
@@ -277,6 +274,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.fetchHubByPickupLocation(pickUpModel).observe(viewLifecycleOwner, Observer { hubModel ->
 
+            map?.clear()
+            showCurrentMarker()
             val bound = LatLngBounds.builder()//.include(currentLatLng)
             val hubName = hubModel?.name ?: "DT Hub"
             val address = hubModel?.hubAddress ?: ""
@@ -339,6 +338,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun showCollectorsInMap(list: List<RiderInfo>, pickUpModel: PickupLocation) {
 
         val bound = LatLngBounds.builder()//.include(currentLatLng)
+        map?.clear()
+        showCurrentMarker()
         if (isValidCoordinate(pickUpModel.latitude) && isValidCoordinate(pickUpModel.longitude)) {
             val pickupLatLng = LatLng(pickUpModel.latitude.toDouble(), pickUpModel.longitude.toDouble())
             val pickupMarker = map?.addMarker(
@@ -398,6 +399,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             context?.toast("এই মুহূর্তে কোনো কালেক্টর নিযুক্ত করা হয়নি")
         }
 
+    }
+
+    private fun showCurrentMarker() {
+        map?.addMarker(
+            MarkerOptions().position(currentLatLng)
+                .title("আপনার বর্তমান অবস্থান").icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_marker_person))
+        )
     }
 
     private fun callNumber(number: String) {

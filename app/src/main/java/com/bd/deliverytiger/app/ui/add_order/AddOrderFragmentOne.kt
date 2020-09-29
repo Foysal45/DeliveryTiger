@@ -225,7 +225,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         deliveryTypeAdapter.onItemClick = { position, model ->
             //deliveryTypeRV.requestFocus()
             payShipmentCharge = model.chargeAmount
-            cityDeliveryCharge = model.cityDeliveryCharge
+            //cityDeliveryCharge = model.cityDeliveryCharge
 
             deliveryType = "${model.deliveryType} ${model.days}"
             deliveryRangeId = model.deliveryRangeId
@@ -926,7 +926,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     private fun calculateTotalPrice() {
 
-        payDeliveryCharge = if (districtId == collectionDistrictId) {
+        /*payDeliveryCharge = if (districtId == collectionDistrictId) {
             if (cityDeliveryCharge > 0.0) {
                 cityDeliveryCharge
             } else {
@@ -934,7 +934,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             }
         } else {
             payShipmentCharge
-        }
+        }*/
+        payDeliveryCharge = payShipmentCharge
+
 
         // Total = Shipment + cod + breakable + collection + packaging
         if (isCollection) {
