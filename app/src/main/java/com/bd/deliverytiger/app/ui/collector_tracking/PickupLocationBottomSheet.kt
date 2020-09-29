@@ -23,11 +23,13 @@ class PickupLocationBottomSheet: BottomSheetDialogFragment() {
     var onItemClicked: ((model: PickupLocation) -> Unit)? = null
 
     private lateinit var pickUpList: List<PickupLocation>
+    private var isHub: Boolean = false
 
     companion object {
 
-        fun newInstance(pickUpList: List<PickupLocation>): PickupLocationBottomSheet = PickupLocationBottomSheet().apply {
+        fun newInstance(pickUpList: List<PickupLocation>, isHub: Boolean = false): PickupLocationBottomSheet = PickupLocationBottomSheet().apply {
             this.pickUpList = pickUpList
+            this.isHub = isHub
         }
         val tag: String = PickupLocationBottomSheet::class.java.name
     }
@@ -72,7 +74,15 @@ class PickupLocationBottomSheet: BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val pickupAddressAdapter = PickUpLocationAdapter()
-        pickupAddressAdapter.initList(pickUpList)
+        if (isHub) {
+            pickupAddressAdapter.showCount = false
+            pickupAddressAdapter.initList(pickUpList)
+        } else {
+            pickupAddressAdapter.showCount = true
+            val filterList = pickUpList.filter { it.acceptedOrderCount > 0 }
+            pickupAddressAdapter.initList(filterList)
+        }
+
         binding?.recyclerview?.let { view ->
             with(view) {
                 setHasFixedSize(false)

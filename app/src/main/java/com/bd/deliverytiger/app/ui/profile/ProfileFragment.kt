@@ -30,6 +30,7 @@ import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.profile.pickup_address.PickUpLocationAdapter
+import com.bd.deliverytiger.app.ui.profile.pickup_address.UpdatePickupLocationBottomSheet
 import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.VariousTask.getCircularImage
 import com.bd.deliverytiger.app.utils.VariousTask.saveImage
@@ -413,7 +414,8 @@ class ProfileFragment : Fragment() {
             longitude = currentLongitude.toString()
         }
         viewModel.addPickupLocations(requestBody).observe(viewLifecycleOwner, Observer { model ->
-            pickupAddressAdapter.addItem(requestBody)
+            //pickupAddressAdapter.addItem(requestBody)
+            getPickupLocation()
             context?.toast("পিকআপ লোকেশান অ্যাড হয়েছে")
 
             binding?.spinnerPickUpDistrict?.setSelection(0)
@@ -446,11 +448,6 @@ class ProfileFragment : Fragment() {
         viewModel.updateMerchantInformation(SessionManager.courierUserId, requestBody)/*.observe(viewLifecycleOwner, Observer {
             SessionManager.createSession(it)
         })*/
-
-        selectedPickupLocation?.let {
-            it.pickupAddress = collectionAddress
-            viewModel.updatePickupLocations(it)
-        }
 
     }
 
@@ -502,6 +499,7 @@ class ProfileFragment : Fragment() {
         }
 
         pickupAddressAdapter = PickUpLocationAdapter()
+        pickupAddressAdapter.showEdit = true
         binding?.recyclerview?.let { view ->
             with(view) {
                 setHasFixedSize(false)
@@ -509,6 +507,27 @@ class ProfileFragment : Fragment() {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = pickupAddressAdapter
             }
+        }
+        pickupAddressAdapter.onEditClicked = {model ->
+            val tag = UpdatePickupLocationBottomSheet.tag
+            val dialog = UpdatePickupLocationBottomSheet.newInstance(model)
+            dialog.show(childFragmentManager, tag)
+            dialog.onUpdateClicked = { model ->
+                dialog.dismiss()
+
+            }
+        }
+        pickupAddressAdapter.onDeleteClicked = { model ->
+            alert("নির্দেশনা", "পিকআপ লোকেশান ডিলিট করতে চান?", true,"হ্যাঁ, ডিলিট করবো", "ক্যানসেল") {
+                if (it == AlertDialog.BUTTON_POSITIVE) {
+                    viewModel.deletePickupLocations(model).observe(viewLifecycleOwner, Observer {
+                        if (it) {
+                            context?.toast("সফলভাবে ডিলিট হয়েছে")
+                            getPickupLocation()
+                        }
+                    })
+                }
+            }.show()
         }
 
         setUpPickupDistrict()

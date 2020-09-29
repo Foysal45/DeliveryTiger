@@ -230,6 +230,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             if (list.isNotEmpty()) {
                 pickUpLocationList.clear()
                 pickUpLocationList.addAll(list)
+                if (!isNearByHubView) {
+                    val filterList = pickUpLocationList.filter { it.acceptedOrderCount > 0 }
+                    if (filterList.isNullOrEmpty()) {
+                        context?.toast("এই মুহূর্তে কোনো কালেক্টর নিযুক্ত করা হয়নি")
+                        return@Observer
+                    }
+                }
                 if (pickUpLocationList.size > 1) {
                     choosePickupLocation(pickUpLocationList)
                     binding?.pickUpBtn?.visibility = View.VISIBLE
@@ -245,7 +252,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun choosePickupLocation(list: List<PickupLocation>) {
 
         val tag = PickupLocationBottomSheet.tag
-        val dialog = PickupLocationBottomSheet.newInstance(list)
+        val dialog = PickupLocationBottomSheet.newInstance(list, isNearByHubView)
         dialog.show(childFragmentManager, tag)
         dialog.onItemClicked = { model ->
             dialog.dismiss()

@@ -71,6 +71,9 @@ interface ApiInterfaceCore {
     @GET("api/Fetch/GetPickupLocations/{courierUserId}")
     suspend fun getPickupLocations(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<List<PickupLocation>>, ErrorResponse>
 
+    @GET("api/Fetch/GetPickupLocationsWithAcceptedOrderCount/{courierUserId}")
+    suspend fun fetchPickupLocationsWithAcceptedOrderCount(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<List<PickupLocation>>, ErrorResponse>
+
     @PUT("api/Update/UpdateMerchantInformation/{courierOrdersId}")
     fun updateMerchantInformation(@Path("courierOrdersId") courierOrdersId: Int, @Body requestBody: ProfileUpdateReqBody): Call<GenericResponse<LoginResponse>>
 
@@ -78,7 +81,10 @@ interface ApiInterfaceCore {
     suspend fun addPickupLocations(@Body requestBody: PickupLocation): NetworkResponse<GenericResponse<PickupLocation>, ErrorResponse>
 
     @PUT("api/Update/UpdatePickupLocations/{id}")
-    fun updatePickupLocations(@Path("id") id: Int, @Body requestBody: PickupLocation): Call<GenericResponse<PickupLocation>>
+    suspend fun  updatePickupLocations(@Path("id") id: Int, @Body requestBody: PickupLocation): NetworkResponse<GenericResponse<PickupLocation>, ErrorResponse>
+
+    @DELETE("api/Delete/DeletePickupLocations/{id}")
+    suspend fun  deletePickupLocations(@Path("id") id: Int): NetworkResponse<GenericResponse<Int>, ErrorResponse>
 
     @GET("api/Fetch/GetMerchantCollectionCharge/{courierUserId}")
     fun getCollectionCharge(@Path("courierUserId") courierUserId: Int): Call<GenericResponse<Int>>

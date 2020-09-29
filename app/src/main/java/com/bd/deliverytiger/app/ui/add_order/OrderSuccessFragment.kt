@@ -79,6 +79,7 @@ class OrderSuccessFragment : Fragment() {
 
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
             courierInfoModel = model
+            SessionManager.credit = courierInfoModel?.credit?.toInt() ?: 0
             offerBkashDiscount = if (orderResponse?.districtId == 14) {
                 courierInfoModel?.offerBkashDiscountDhaka?.toInt() ?: 0
             } else {

@@ -61,7 +61,7 @@ class MapViewModel(private val repository: AppRepository): ViewModel() {
         val responseData = MutableLiveData<List<PickupLocation>>()
 
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getPickupLocations(courierUserId)
+            val response = repository.fetchPickupLocationsWithAcceptedOrderCount(courierUserId)
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {

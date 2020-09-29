@@ -113,17 +113,70 @@ class ProfileViewModel(private val repository: AppRepository): ViewModel() {
         return responseBody
     }
 
-    fun updatePickupLocations(requestBody: PickupLocation) {
+    fun updatePickupLocations(requestBody: PickupLocation): LiveData<PickupLocation> {
 
-        repository.updatePickupLocations(requestBody.id, requestBody).enqueue(object : Callback<GenericResponse<PickupLocation>> {
-            override fun onFailure(call: Call<GenericResponse<PickupLocation>>, t: Throwable) {}
-
-            override fun onResponse(call: Call<GenericResponse<PickupLocation>>, response: Response<GenericResponse<PickupLocation>>) {
-                if (response.isSuccessful && response.body() != null && response.body()?.model != null) {
-
+        viewState.value = ViewState.ProgressState(true)
+        val responseData = MutableLiveData<PickupLocation>()
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.updatePickupLocations(requestBody.id, requestBody)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
                 }
             }
-        })
+        }
+        return responseData
+    }
+
+    fun deletePickupLocations(requestBody: PickupLocation): LiveData<Boolean> {
+
+        viewState.value = ViewState.ProgressState(true)
+        val responseData = MutableLiveData<Boolean>()
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.deletePickupLocations(requestBody.id)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model == 1
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
     }
 
     fun addPickupLocations(requestBody: PickupLocation): LiveData<PickupLocation> {
