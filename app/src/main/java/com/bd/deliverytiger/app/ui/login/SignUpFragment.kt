@@ -142,7 +142,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
                     sendOTP()
                 } else {
                     progressDialog?.dismiss()
-                    showShortToast(context, "এই মোবাইল নম্বর দিয়ে ইতিমধ্যে রেজিস্টেশন করা হয়েছে")
+                    showShortToast(context, "এই মোবাইল নম্বর দিয়ে ইতিমধ্যে রেজিস্ট্রেশন করা হয়েছে")
                 }
             }
 

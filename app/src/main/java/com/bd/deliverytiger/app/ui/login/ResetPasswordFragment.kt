@@ -88,7 +88,7 @@ class ResetPasswordFragment : Fragment(), View.OnClickListener {
                 hideSoftKeyBoard(activity)
                 if (!Validator.isValidMobileNumber(etResetMobileNo.text.toString()) || etResetMobileNo.text.toString().length < 11) {
                     showShortToast(context, getString(R.string.write_proper_phone_number_recharge))
-                    hideSoftKeyBoard(activity!!)
+                    hideSoftKeyBoard(requireActivity())
                     etResetMobileNo.requestFocus()
                 } else {
 
@@ -123,7 +123,7 @@ class ResetPasswordFragment : Fragment(), View.OnClickListener {
 
                 if (response.code() == 404) {
                     progressDialog?.dismiss()
-                    showShortToast(context, "এই মোবাইল নম্বর দিয়ে রেজিস্টেশন করা হয়নি")
+                    showShortToast(context, "এই মোবাইল নম্বর দিয়ে রেজিস্ট্রেশন করা হয়নি")
                 } else {
                     sendOTP()
                 }

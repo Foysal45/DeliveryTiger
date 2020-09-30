@@ -21,13 +21,12 @@ class LoginActivity : AppCompatActivity() {
         onBackStackChangeListener()
 
         val isSessionOut = intent.getBooleanExtra("isSessionOut", false)
-        intent.removeExtra("isSessionOut")
         if (isSessionOut) {
             addLoginFragment(isSessionOut)
         } else {
             addUserRoleFragment()
         }
-
+        intent.removeExtra("isSessionOut")
     }
 
     override fun onNewIntent(intent: Intent?) {

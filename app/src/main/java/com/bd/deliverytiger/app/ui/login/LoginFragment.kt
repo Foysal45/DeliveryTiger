@@ -103,8 +103,8 @@ class LoginFragment: Fragment() {
 
         if (sendOTP){
 
-            val registationMsg = "রেজিস্টেশন সফল হয়েছে! এখন আপনার লগইন তথ্য দিয়ে লগইন করতে পারেন"
-            alertMsgTV.text = registationMsg
+            val registrationMsg = "রেজিস্ট্রেশন সফল হয়েছে! এখন আপনার লগইন তথ্য দিয়ে লগইন করতে পারেন"
+            alertMsgTV.text = registrationMsg
             alertLayout.visibility = View.VISIBLE
         } else {
             alertLayout.visibility = View.GONE

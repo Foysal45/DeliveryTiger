@@ -83,7 +83,7 @@ class SignUpOTPFragment : Fragment() {
         }
         backBtn.setOnClickListener {
             VariousTask.hideSoftKeyBoard(activity)
-            addLoginFragment()
+            addLoginFragment(false)
         }
         submitBtn.setOnClickListener {
             VariousTask.hideSoftKeyBoard(activity)
@@ -159,7 +159,7 @@ class SignUpOTPFragment : Fragment() {
                 if (response.isSuccessful && response.body() != null) {
                     Timber.e("userUserRegister", response.body().toString())
                     VariousTask.showShortToast(context, getString(R.string.success_in_signin))
-                    addLoginFragment()
+                    addLoginFragment(true)
                 } else {
                     if (response.body() != null) {
                         VariousTask.showShortToast(context, response.body()!!.errorMessage)
@@ -172,8 +172,8 @@ class SignUpOTPFragment : Fragment() {
 
     }
 
-    private fun addLoginFragment() {
-        val fragment = LoginFragment.newInstance(true)
+    private fun addLoginFragment(flag: Boolean) {
+        val fragment = LoginFragment.newInstance(flag)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, LoginFragment.tag)
         ft?.commit()
