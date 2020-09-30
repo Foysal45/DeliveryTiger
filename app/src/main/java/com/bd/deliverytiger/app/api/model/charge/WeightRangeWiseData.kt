@@ -5,15 +5,15 @@ import com.google.gson.annotations.SerializedName
 
 data class WeightRangeWiseData(
     @SerializedName("deliveryRangeId")
-    var deliveryRangeId: Int,
+    var deliveryRangeId: Int = 0,
     @SerializedName("deliveryType")
-    var deliveryType: String,
+    var deliveryType: String = "",
     @SerializedName("weightRangeId")
-    var weightRangeId: Int,
+    var weightRangeId: Int = 0,
     @SerializedName("chargeAmount")
-    var chargeAmount: Double,
+    var chargeAmount: Double = 0.0,
     @SerializedName("days")
-    var days: String,
+    var days: String = "",
     @SerializedName("dayType")
     var dayType: String? = "",
     @SerializedName("onImageLink")
@@ -29,5 +29,5 @@ data class WeightRangeWiseData(
     @SerializedName("dateAdvance")
     var dateAdvance: String? = "",
     @SerializedName("cityDeliveryCharge")
-    var cityDeliveryCharge: Double
+    var cityDeliveryCharge: Double = 0.0
 )

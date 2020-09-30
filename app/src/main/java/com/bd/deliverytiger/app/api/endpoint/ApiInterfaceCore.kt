@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.api.endpoint
 
 import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.GenericResponse
+import com.bd.deliverytiger.app.api.model.calculator.DeliveryChargeInfo
 import com.bd.deliverytiger.app.api.model.calculator.WeightPrice
 import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
@@ -110,6 +111,9 @@ interface ApiInterfaceCore {
 
     @POST("api/Fetch/GetAcceptedRiders")
     suspend fun fetchRiderByPickupLocation(@Body requestBody: PickupLocation): NetworkResponse<GenericResponse<List<RiderInfo>>, ErrorResponse>
+
+    @GET("api/Dashboard/GetDeliveryChargeCalInfo")
+    suspend fun fetchDeliveryChargeCalculationInfo(): NetworkResponse<GenericResponse<DeliveryChargeInfo>, ErrorResponse>
 
     @GET("api/Fetch/GetPriceList/{districtId}/{deliveryRangeId}")
     suspend fun fetchPriceList(@Path("districtId") districtId: Int, @Path("deliveryRangeId") deliveryRangeId: Int): NetworkResponse<GenericResponse<List<WeightPrice>>, ErrorResponse>

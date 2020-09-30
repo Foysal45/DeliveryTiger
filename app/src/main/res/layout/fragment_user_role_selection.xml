@@ -51,7 +51,7 @@
             app:contentPadding="1dp">
 
             <LinearLayout
-                android:id="@+id/layout_user_merchant"
+                android:id="@+id/merchantBtn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"
@@ -90,7 +90,7 @@
             app:contentPadding="1dp">
 
             <LinearLayout
-                android:id="@+id/layout_user_customer"
+                android:id="@+id/customerBtn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"
@@ -121,12 +121,11 @@
 
     </LinearLayout>
 
-    <WebView
-        android:id="@+id/webView"
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="24dp"
-        android:scrollbars="none"
         />
 
 </LinearLayout>

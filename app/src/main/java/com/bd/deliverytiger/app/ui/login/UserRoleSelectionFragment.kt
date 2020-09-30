@@ -1,26 +1,21 @@
 package com.bd.deliverytiger.app.ui.login
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.databinding.FragmentUserRoleSelectionBinding
+import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
-import com.bd.deliverytiger.app.utils.AppConstant
 import com.bd.deliverytiger.app.utils.SessionManager
 
 class UserRoleSelectionFragment : Fragment() {
 
-    private lateinit var layoutUserMerchant: LinearLayout
-    private lateinit var layoutUserCustomer: LinearLayout
-    private lateinit var webView: WebView
+    private var binding: FragmentUserRoleSelectionBinding? = null
 
     companion object {
         fun newInstance(): UserRoleSelectionFragment = UserRoleSelectionFragment()
@@ -28,52 +23,30 @@ class UserRoleSelectionFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_user_role_selection, container, false)
+        return FragmentUserRoleSelectionBinding.inflate(inflater, container, false).also {
+            binding = it
+        }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        layoutUserCustomer = view.findViewById(R.id.layout_user_customer)
-        layoutUserMerchant = view.findViewById(R.id.layout_user_merchant)
-        webView = view.findViewById(R.id.webView)
+        showDeliveryChargeCalculator()
 
-        initWebView()
-
-        layoutUserMerchant.setOnClickListener {
+        binding?.merchantBtn?.setOnClickListener {
             goToUserRoleMerchant()
         }
-
-        layoutUserCustomer.setOnClickListener {
+        binding?.customerBtn?.setOnClickListener {
             goToOrderTrackingFragment()
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    private fun initWebView() {
-
-        webView.settings.apply {
-            javaScriptEnabled = true
-            domStorageEnabled = true
-            allowFileAccess = true
-            setSupportZoom(true)
-            builtInZoomControls = true
-            displayZoomControls = false
-            mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
-            //loadWithOverviewMode = true
-            //useWideViewPort = true
+    private fun showDeliveryChargeCalculator() {
+        val tag = DeliveryChargeCalculatorFragment.tag
+        val fragment = DeliveryChargeCalculatorFragment.newInstance()
+        binding?.container?.let { container ->
+            childFragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit()
         }
-        with(webView) {
-            setLayerType(View.LAYER_TYPE_HARDWARE, null)
-            clearHistory()
-            isHorizontalScrollBarEnabled = false
-            isVerticalScrollBarEnabled = false
-            //addJavascriptInterface(WebAppInterface(requireContext(), repository, bundle), "Android")
-            //webViewClient = Callback()
-            //clearCache(true)
-        }
-
-        webView.loadUrl(AppConstant.CHARGE_CALCULATOR)
     }
 
     private fun goToUserRoleMerchant(){
@@ -103,5 +76,10 @@ class UserRoleSelectionFragment : Fragment() {
         ft?.replace(R.id.loginActivityContainer, fragment, LoginFragment.tag)
         ft?.addToBackStack(LoginFragment.tag)
         ft?.commit()
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 }

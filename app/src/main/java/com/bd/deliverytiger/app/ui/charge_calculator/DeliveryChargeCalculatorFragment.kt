@@ -1,12 +1,17 @@
 package com.bd.deliverytiger.app.ui.charge_calculator
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
+import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.calculator.DeliveryInfo
 import com.bd.deliverytiger.app.api.model.calculator.WeightPrice
 import com.bd.deliverytiger.app.databinding.FragmentDeliveryChargeCalculatorBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
@@ -25,8 +30,16 @@ class DeliveryChargeCalculatorFragment: Fragment() {
     private var binding: FragmentDeliveryChargeCalculatorBinding? = null
     private val viewModel: DeliveryChargeViewModel by inject()
 
+    private lateinit var dataAdapter: ChargeDeliveryTypeAdapter
+
     private val weightPriceList: MutableList<WeightPrice> = mutableListOf()
     private var showTitle: Boolean = false
+
+    private var codPercent: String = ""
+    private var codPercentBangla: String = ""
+    private var insideDhakaData: DeliveryInfo? = null
+    private var outsideDhakaData: DeliveryInfo? = null
+    private var districtId: Int = 0
 
     companion object {
         fun newInstance(showTitle: Boolean = false): DeliveryChargeCalculatorFragment = DeliveryChargeCalculatorFragment().apply {
@@ -51,33 +64,48 @@ class DeliveryChargeCalculatorFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        viewModel.getDashboardStatusGroup(14, 2).observe(viewLifecycleOwner, Observer { list ->
-            weightPriceList.clear()
-            weightPriceList.addAll(list)
-
-            calculate(list.first().courierDeliveryCharge)
-            binding?.indicatorSeekBar?.let { view ->
-                with(view) {
-                    min = list.first().weightNumber.toFloat()
-                    max = list.last().weightNumber.toFloat()
-                    tickCount = list.size
-                }
+        dataAdapter = ChargeDeliveryTypeAdapter()
+        binding?.recyclerView?.let { view1 ->
+            with(view1) {
+                setHasFixedSize(true)
+                layoutManager = GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
+                adapter = dataAdapter
+                layoutAnimation = null
+                itemAnimator = null
             }
-        })
-        binding?.indicatorSeekBar?.onSeekChangeListener = object : OnSeekChangeListener {
-            @SuppressLint("SetTextI18n")
-            override fun onSeeking(seekParams: SeekParams?) {
+        }
+        dataAdapter.onItemClick = { position, model ->
+            fetchWeightData(districtId, model.daliveryRangeId)
+        }
 
+        viewModel.fetchDeliveryChargeCalculationInfo().observe(viewLifecycleOwner, Observer { model ->
+            codPercent = model.codCharge ?: ""
+            codPercentBangla = DigitConverter.toBanglaDigit(codPercent)
+            insideDhakaData = model.inSideDhaka
+            outsideDhakaData = model.outSideDhaka
+            initDeliveryType(insideDhakaData)
+        })
+
+        changeSelectionColor(1)
+
+        binding?.insideDhakaBtn?.setOnClickListener {
+            changeSelectionColor(1)
+            initDeliveryType(insideDhakaData)
+        }
+
+        binding?.outsideDhakaBtn?.setOnClickListener {
+            changeSelectionColor(2)
+            initDeliveryType(outsideDhakaData)
+        }
+
+        binding?.indicatorSeekBar?.onSeekChangeListener = object : OnSeekChangeListener {
+            override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {}
+            override fun onSeeking(seekParams: SeekParams?) {
                 val position = seekParams?.thumbPosition ?: 0
                 val model = weightPriceList[position]
                 calculate(model.courierDeliveryCharge)
             }
-
-            override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {}
-
-            override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {}
-
         }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
@@ -99,9 +127,57 @@ class DeliveryChargeCalculatorFragment: Fragment() {
         })
     }
 
+    private fun initDeliveryType(deliveryInfo: DeliveryInfo?) {
+        deliveryInfo ?: return
+        districtId = deliveryInfo.districtId
+        dataAdapter.initLoad(deliveryInfo.deliveryRange)
+        val model = deliveryInfo.deliveryRange.first()
+        fetchWeightData(districtId, model.daliveryRangeId)
+    }
+
+    private fun fetchWeightData(districtId: Int, deliveryRangeId: Int) {
+
+        viewModel.fetchWeightData(districtId, deliveryRangeId).observe(viewLifecycleOwner, Observer { list ->
+            weightPriceList.clear()
+            weightPriceList.addAll(list)
+
+            val firstModel= list.first()
+            val lastModel = list.last()
+
+            val minValue = firstModel.weightNumber.toFloat()
+            val maxValue = lastModel.weightNumber.toFloat()
+            val weightList = list.map { DigitConverter.toBanglaDigit(it.weightNumber)}
+
+            binding?.indicatorSeekBar?.let { view ->
+                with(view) {
+                    min = minValue
+                    max = maxValue
+                    tickCount = list.size
+                    customTickTexts(weightList.toTypedArray())
+                    setProgress(minValue)
+                }
+            }
+
+            calculate(firstModel.courierDeliveryCharge)
+        })
+    }
+
+    private fun changeSelectionColor(flag: Int) {
+
+        when (flag) {
+            1 -> {
+                binding?.insideDhakaBtn?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+                binding?.outsideDhakaBtn?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.charge_unselect_color))
+            }
+            2 -> {
+                binding?.insideDhakaBtn?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.charge_unselect_color))
+                binding?.outsideDhakaBtn?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+            }
+        }
+    }
 
     private fun calculate(charge: Int) {
-        binding?.changeTV?.text = "আপনার ডেলিভারি চার্জ ৳ ${DigitConverter.toBanglaDigit(charge, true)} + ১.৫% COD চার্জ মাত্র"
+        binding?.changeTV?.text = "ডেলিভারি চার্জ ৳ ${DigitConverter.toBanglaDigit(charge, true)} + $codPercentBangla% COD চার্জ মাত্র"
     }
 
     override fun onDestroyView() {
