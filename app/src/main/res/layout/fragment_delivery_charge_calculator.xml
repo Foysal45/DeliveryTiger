@@ -15,7 +15,9 @@
         android:background="@drawable/bg_white_curve"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="1dp"
+        >
 
         <TextView
             android:id="@+id/title"
@@ -24,7 +26,7 @@
             android:layout_marginTop="24dp"
             android:text="ডেলিভারি চার্জ ক্যালকুলেটর"
             android:textColor="@color/charge_title_color"
-            android:textSize="20sp"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -94,7 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="18dp"
-            android:text="পার্সেলের ওজন"
+            android:text="পার্সেলের ওজন (কেজি)"
             android:textColor="@color/black_80"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -152,15 +154,15 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:background="@color/charge_calculation_color"
+            android:background="@color/black_5"
             android:gravity="center"
             android:includeFontPadding="false"
             android:paddingStart="5dp"
             android:paddingTop="10dp"
             android:paddingEnd="5dp"
             android:paddingBottom="10dp"
-            android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textColor="@color/black_90"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/indicatorSeekBar"
             tools:text="ডেলিভারি চার্জ ৳ ২৫ + ১.৫% COD চার্জ মাত্র" />

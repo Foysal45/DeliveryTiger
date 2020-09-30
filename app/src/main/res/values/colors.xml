@@ -35,6 +35,7 @@
     <color name="charge_unselect_color">#949599</color>
     <color name="charge_title_color">#cd282f</color>
     <color name="charge_calculation_color">#e11f27</color>
+    <color name="charge_back_color">#d4e1f4</color>
 
 
 </resources>

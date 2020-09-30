@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -177,7 +178,8 @@ class DeliveryChargeCalculatorFragment: Fragment() {
     }
 
     private fun calculate(charge: Int) {
-        binding?.changeTV?.text = "ডেলিভারি চার্জ ৳ ${DigitConverter.toBanglaDigit(charge, true)} + $codPercentBangla% COD চার্জ মাত্র"
+        val msg = "ডেলিভারি চার্জ <font color='#e11f27'>৳ ${DigitConverter.toBanglaDigit(charge, true)}</font> + <font color='#e11f27'>$codPercentBangla%</font> COD চার্জ মাত্র"
+        binding?.changeTV?.text = HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
     override fun onDestroyView() {
