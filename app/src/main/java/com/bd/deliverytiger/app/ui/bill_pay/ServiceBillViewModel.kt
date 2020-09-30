@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.ui.service_bill_pay
+package com.bd.deliverytiger.app.ui.bill_pay
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

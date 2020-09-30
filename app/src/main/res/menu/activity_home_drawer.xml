@@ -28,6 +28,10 @@
             android:icon="@drawable/ic_transaction_history"
             android:title="বিল পে" />
         <item
+            android:id="@+id/nav_bill_pay_history"
+            android:icon="@drawable/ic_transaction_history"
+            android:title="বিল পে হিস্টোরি" />
+        <item
             android:id="@+id/nav_payment_history"
             android:icon="@drawable/ic_analytics"
             android:title="পেমেন্ট স্টেটমেন্ট"

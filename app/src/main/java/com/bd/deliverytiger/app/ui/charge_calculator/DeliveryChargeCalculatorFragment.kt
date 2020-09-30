@@ -19,21 +19,27 @@ import com.warkiz.widget.OnSeekChangeListener
 import com.warkiz.widget.SeekParams
 import org.koin.android.ext.android.inject
 
+@SuppressLint("SetTextI18n")
 class DeliveryChargeCalculatorFragment: Fragment() {
 
     private var binding: FragmentDeliveryChargeCalculatorBinding? = null
     private val viewModel: DeliveryChargeViewModel by inject()
 
     private val weightPriceList: MutableList<WeightPrice> = mutableListOf()
+    private var showTitle: Boolean = false
 
     companion object {
-        fun newInstance(): DeliveryChargeCalculatorFragment = DeliveryChargeCalculatorFragment().apply {  }
+        fun newInstance(showTitle: Boolean = false): DeliveryChargeCalculatorFragment = DeliveryChargeCalculatorFragment().apply {
+            this.showTitle = showTitle
+        }
         val tag: String = DeliveryChargeCalculatorFragment::class.java.name
     }
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("ডেলিভারি চার্জ ক্যালকুলেটর")
+        if (showTitle) {
+            (activity as HomeActivity).setToolbarTitle("ডেলিভারি চার্জ ক্যালকুলেটর")
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -92,6 +98,7 @@ class DeliveryChargeCalculatorFragment: Fragment() {
             }
         })
     }
+
 
     private fun calculate(charge: Int) {
         binding?.changeTV?.text = "আপনার ডেলিভারি চার্জ ৳ ${DigitConverter.toBanglaDigit(charge, true)} + ১.৫% COD চার্জ মাত্র"

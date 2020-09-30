@@ -3,6 +3,7 @@ package com.bd.deliverytiger.app.api.endpoint
 import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.accounts.AccountDetailsResponse
 import com.bd.deliverytiger.app.api.model.accounts.AccountsData
+import com.bd.deliverytiger.app.api.model.bill_pay_history.BillPayHistoryResponse
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentData
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsResponse
@@ -46,4 +47,8 @@ interface ApiInterfaceADM {
 
     @POST("api/ComplainInsert/InsertDTComplain")
     suspend fun submitComplain(@Body requestBody: ComplainRequest): NetworkResponse<Int, ErrorResponse>
+
+    @GET("api/account/reports/GetDTCollectedFromMerchantData/{courierUserId}")
+    suspend fun fetchBillPayHistory(@Path("courierUserId") courierUserId: Int): NetworkResponse<List<BillPayHistoryResponse>, ErrorResponse>
+
 }

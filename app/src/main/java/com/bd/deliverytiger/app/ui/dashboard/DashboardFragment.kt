@@ -96,13 +96,16 @@ class DashboardFragment : Fragment() {
         }
 
         homeViewModel.bannerInfo.observe(viewLifecycleOwner, Observer { model ->
-
             val bannerModel = model.bannerModel
             showBanner(bannerModel)
         })
 
         binding?.collectorTrackBtn?.setOnClickListener {
             addFragment(MapFragment.newInstance(null), MapFragment.tag)
+        }
+
+        binding?.paymentDoneLayout?.setOnClickListener {
+            addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
         }
 
         binding?.nearByHubBtn?.setOnClickListener {
@@ -268,11 +271,6 @@ class DashboardFragment : Fragment() {
             addFragment(OrderSuccessFragment.newInstance(bundle), OrderSuccessFragment.tag)*/
         }
 
-        binding?.paymentInfoLayout?.setOnClickListener {
-            //goToAllOrder("পেমেন্ট প্রসেসিং-এ আছে", "পেমেন্ট প্রসেসিং-এ আছে", "2019-08-01", currentDate)
-            goToPaymentDetails()
-        }
-
         binding?.dateRangePicker?.setOnClickListener {
 
             val builder = MaterialDatePicker.Builder.dateRangePicker()
@@ -412,9 +410,12 @@ class DashboardFragment : Fragment() {
             binding?.amount1?.text = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}"
             binding?.msg1?.text = "${model.name}"
 
-            if (model.totalAmount.toInt() > 0) {
-                binding?.paymentDoneLayout?.setOnClickListener {
-                    addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
+
+            binding?.paymentInfoLayout?.setOnClickListener {
+                if (model.totalAmount.toInt() > 0) {
+                    goToPaymentDetails()
+                } else {
+                    context?.toast("পর্যাপ্ত তথ্য নেই")
                 }
             }
         })

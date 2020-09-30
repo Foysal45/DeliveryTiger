@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.ui.service_bill_pay
+package com.bd.deliverytiger.app.ui.bill_pay
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -38,7 +38,7 @@ class ServiceBillAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 holder.binding.totalChange.setTextColor(ContextCompat.getColor(holder.binding.totalChange.context, R.color.colorPrimary))
             }
             holder.binding.orderCode.text =  "${model.orderCode} ($paidStatus)"
-            holder.binding.totalChange.text = "${DigitConverter.toBanglaDigit(model.totalAmount)} ৳"
+            holder.binding.totalChange.text = "${DigitConverter.toBanglaDigit(model.totalAmount, true)} ৳"
         }
     }
 

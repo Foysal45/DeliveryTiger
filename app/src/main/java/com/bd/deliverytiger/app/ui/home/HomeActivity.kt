@@ -38,6 +38,8 @@ import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.services.LocationUpdatesService
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
+import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillPayFragment
+import com.bd.deliverytiger.app.ui.bill_pay_history.ServiceBillPayHistoryFragment
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
@@ -56,7 +58,6 @@ import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
-import com.bd.deliverytiger.app.ui.service_bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
@@ -294,9 +295,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (currentFragment is DashboardFragment ||
                 currentFragment is AddOrderFragmentOne ||
                 currentFragment is ProfileFragment ||
-                currentFragment is DistrictSelectFragment ||
-                currentFragment is DistrictThanaAriaSelectFragment ||
-                currentFragment is MapFragment) {
+                currentFragment is DistrictSelectFragment || currentFragment is DistrictThanaAriaSelectFragment ||
+                currentFragment is MapFragment ||
+                currentFragment is ServiceBillPayFragment || currentFragment is ServiceBillPayHistoryFragment ||
+                currentFragment is PaymentStatementFragment || currentFragment is PaymentStatementDetailFragment) {
                 addProductBtnVisibility(false)
             } else {
                 addProductBtnVisibility(true)
@@ -318,9 +320,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 separetor.visibility = View.GONE
                 addProductBtnVisibility(false)
             }
-            if (currentFragment is ServiceBillPayFragment) {
+            /*if (currentFragment is ServiceBillPayFragment) {
                 addOrderFab.hide()
-            }
+            }*/
             if (currentFragment is PaymentStatementDetailFragment) {
                 downloadTV.visibility = View.VISIBLE
             } else {
@@ -385,6 +387,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     currentFragment.onResume()
                 }
                 is DeliveryChargeCalculatorFragment -> {
+                    currentFragment.onResume()
+                }
+                is ServiceBillPayHistoryFragment -> {
                     currentFragment.onResume()
                 }
             }
@@ -504,6 +509,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     addFragment(ServiceBillPayFragment.newInstance(), ServiceBillPayFragment.tag)
                 }
             }
+            R.id.nav_bill_pay_history -> {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is ServiceBillPayHistoryFragment) {
+                    Timber.d("tag", "ServiceBillPayHistoryFragment already exist")
+                } else {
+                    addFragment(ServiceBillPayHistoryFragment.newInstance(), ServiceBillPayHistoryFragment.tag)
+                }
+            }
             R.id.nav_cod_collection -> {
 
                 val currentFragment =
@@ -567,7 +580,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (currentFragment is DeliveryChargeCalculatorFragment) {
                     Timber.d("tag", "DeliveryChargeCalculatorFragment already exist")
                 } else {
-                    addFragment(DeliveryChargeCalculatorFragment.newInstance(), DeliveryChargeCalculatorFragment.tag)
+                    addFragment(DeliveryChargeCalculatorFragment.newInstance(true), DeliveryChargeCalculatorFragment.tag)
                 }
 
                 /*val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
@@ -592,7 +605,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_complain -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-                if (currentFragment is MapFragment) {
+                if (currentFragment is ComplainFragment) {
                     Timber.d("tag", "ComplainFragment already exist")
                 } else {
                     addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)

@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.ui.collector_tracking
+package com.bd.deliverytiger.app.ui.bill_pay_history.details
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -6,32 +6,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
-import com.bd.deliverytiger.app.databinding.FragmentPickupLocationBottomSheetBinding
-import com.bd.deliverytiger.app.ui.profile.pickup_address.PickUpLocationAdapter
+import com.bd.deliverytiger.app.api.model.bill_pay_history.BillPayHistoryResponse
+import com.bd.deliverytiger.app.databinding.FragmentBillHistoryDetailsBottomSheetBinding
+import com.bd.deliverytiger.app.utils.DigitConverter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlin.concurrent.thread
 
 @SuppressLint("SetTextI18n")
-class PickupLocationBottomSheet: BottomSheetDialogFragment() {
+class BillHistoryDetailsBottomSheet: BottomSheetDialogFragment() {
 
-    private var binding: FragmentPickupLocationBottomSheetBinding? = null
-    var onItemClicked: ((model: PickupLocation) -> Unit)? = null
+    private var binding: FragmentBillHistoryDetailsBottomSheetBinding? = null
+    var onItemClicked: ((model: BillPayHistoryResponse) -> Unit)? = null
 
-    private lateinit var pickUpList: List<PickupLocation>
-    private var isHub: Boolean = false
+    private lateinit var model: BillPayHistoryResponse
 
     companion object {
 
-        fun newInstance(pickUpList: List<PickupLocation>, isHub: Boolean = false): PickupLocationBottomSheet = PickupLocationBottomSheet().apply {
-            this.pickUpList = pickUpList
-            this.isHub = isHub
+        fun newInstance(model: BillPayHistoryResponse): BillHistoryDetailsBottomSheet = BillHistoryDetailsBottomSheet().apply {
+            this.model = model
         }
-        val tag: String = PickupLocationBottomSheet::class.java.name
+        val tag: String = BillHistoryDetailsBottomSheet::class.java.name
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +64,7 @@ class PickupLocationBottomSheet: BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentPickupLocationBottomSheetBinding.inflate(inflater, container, false).also {
+        return FragmentBillHistoryDetailsBottomSheetBinding.inflate(inflater, container, false).also {
             binding = it
         }.root
     }
@@ -73,27 +72,19 @@ class PickupLocationBottomSheet: BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pickupAddressAdapter = PickUpLocationAdapter()
-        if (isHub) {
-            pickupAddressAdapter.showCount = false
-            pickupAddressAdapter.initList(pickUpList)
-        } else {
-            pickupAddressAdapter.showCount = true
-            val filterList = pickUpList.filter { it.acceptedOrderCount > 0 }
-            pickupAddressAdapter.initList(filterList)
-        }
-
+        val dataAdapter = BillHistoryDetailsAdapter()
+        dataAdapter.initLoad(model.orderList)
         binding?.recyclerview?.let { view1 ->
             with(view1) {
                 setHasFixedSize(false)
                 layoutManager = LinearLayoutManager(requireContext())
-                adapter = pickupAddressAdapter
+                adapter = dataAdapter
+                addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
             }
         }
-        pickupAddressAdapter.onItemClicked = { model ->
-            onItemClicked?.invoke(model)
-        }
 
+        binding?.header?.info1?.text = "মোট অর্ডার: ${DigitConverter.toBanglaDigit(model.orderList.size)} টি"
+        binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ${DigitConverter.toBanglaDigit(model.netPaidAmount, true)} ৳"
     }
 
     override fun onDestroyView() {

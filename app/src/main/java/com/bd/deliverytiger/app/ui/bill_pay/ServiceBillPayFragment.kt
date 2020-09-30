@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.ui.service_bill_pay
+package com.bd.deliverytiger.app.ui.bill_pay
 
 import android.annotation.SuppressLint
 import android.os.Bundle

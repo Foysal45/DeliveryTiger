@@ -80,11 +80,10 @@
                 android:text="বিকাশ ট্রান্সসেকশন আইডি"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/key1"
-                android:visibility="gone"
-                tools:visibility="visible"
-                />
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/bkashTransactionNo"
@@ -92,12 +91,11 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/transactionNo"
                 tools:text="ID9856325"
-                android:visibility="gone"
-                tools:visibility="visible"
-                />
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/key2"
@@ -146,6 +144,7 @@
                 android:text="অ্যামাউন্ট"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/key3" />
 
