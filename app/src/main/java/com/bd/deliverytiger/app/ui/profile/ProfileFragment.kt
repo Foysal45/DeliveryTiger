@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -369,8 +368,8 @@ class ProfileFragment : Fragment() {
             return false
         }*/
 
-        /*collectionAddress = binding?.collectionAddress?.text?.trim().toString()
-        if (collectionAddress.isEmpty() || collectionAddress.length < 15) {
+        collectionAddress = binding?.collectionAddress?.text?.trim().toString()
+        /*if (collectionAddress.isEmpty() || collectionAddress.length < 15) {
             context?.toast("বিস্তারিত কালেকশন ঠিকানা লিখুন, ন্যূনতম ১৫ ডিজিট")
             binding?.collectionAddress?.requestFocus()
             return false
@@ -460,6 +459,7 @@ class ProfileFragment : Fragment() {
         binding?.alternateMobileNumber?.setText(model.alterMobile)
         binding?.bkashNumber?.setText(model.bkashNumber)
         binding?.emailAddress?.setText(model.emailAddress)
+        collectionAddress = model.address ?: ""
         binding?.collectionAddress?.setText(model.address)
         binding?.checkSmsUpdate?.isChecked = model.isSms
         binding?.fbLink?.setText(model.fburl)
@@ -558,15 +558,26 @@ class ProfileFragment : Fragment() {
     }
 
     private fun getImageFromDevice() {
-        if (ContextCompat.checkSelfPermission(requireContext(), permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-            ContextCompat.checkSelfPermission(requireContext(), permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(permission.WRITE_EXTERNAL_STORAGE), 102)
+        if (ContextCompat.checkSelfPermission(requireContext(), permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(permission.WRITE_EXTERNAL_STORAGE), 102)
         } else {
-            val photoPickerIntent = Intent(Intent.ACTION_PICK)
-            photoPickerIntent.type = "image/*"
-            startActivityForResult(photoPickerIntent, GALLERY_REQ_CODE)
+            pickupGallery()
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 102) {
+            if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED) {
+                pickupGallery()
+            }
+        }
+    }
+
+    private fun pickupGallery() {
+        val photoPickerIntent = Intent(Intent.ACTION_PICK)
+        photoPickerIntent.type = "image/*"
+        startActivityForResult(photoPickerIntent, GALLERY_REQ_CODE)
     }
 
     private fun getPickupLocation() {

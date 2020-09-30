@@ -35,7 +35,8 @@ class OrderTrackingViewModel(private val repository: AppRepository): ViewModel()
                         }
                     }
                     is NetworkResponse.ServerError -> {
-                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        //val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        val message = "সঠিক অর্ডার আইডি / মোবাইল নম্বর লিখুন"
                         viewState.value = ViewState.ShowMessage(message)
                     }
                     is NetworkResponse.NetworkError -> {

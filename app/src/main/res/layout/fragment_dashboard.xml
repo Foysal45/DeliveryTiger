@@ -354,13 +354,12 @@
 
                     <LinearLayout
                         android:id="@+id/nearByHubBtn"
-                        android:layout_width="150dp"
+                        android:layout_width="220dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="18dp"
-                        android:layout_marginBottom="40dp"
                         android:background="@drawable/bg_nearby_hub"
                         android:gravity="center"
                         android:orientation="horizontal"
@@ -383,6 +382,16 @@
                             android:textSize="16sp" />
 
                     </LinearLayout>
+
+                    <FrameLayout
+                        android:id="@+id/container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="18dp"
+                        android:layout_marginBottom="40dp"
+                        />
 
 
                 </LinearLayout>

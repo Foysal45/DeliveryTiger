@@ -24,6 +24,7 @@ import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
 import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
+import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
@@ -87,6 +88,7 @@ class DashboardFragment : Fragment() {
 
         setDashBoardAdapter()
         setSpinner()
+        showDeliveryChargeCalculator()
 
         binding?.swipeRefresh?.setOnRefreshListener {
             getDashBoardData(selectedMonth, selectedYear)
@@ -129,8 +131,6 @@ class DashboardFragment : Fragment() {
                 }
             }
         })
-
-
     }
 
     override fun onResume() {
@@ -147,6 +147,13 @@ class DashboardFragment : Fragment() {
         }
     }
 
+    private fun showDeliveryChargeCalculator() {
+        val tag = DeliveryChargeCalculatorFragment.tag
+        val fragment = DeliveryChargeCalculatorFragment.newInstance()
+        binding?.container?.let { container ->
+            childFragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit()
+        }
+    }
 
     private fun showBanner(bannerModel: BannerModel) {
 
