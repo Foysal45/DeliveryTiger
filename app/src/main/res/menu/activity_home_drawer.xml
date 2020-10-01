@@ -29,7 +29,7 @@
             android:title="বিল পে" />
         <item
             android:id="@+id/nav_bill_pay_history"
-            android:icon="@drawable/ic_transaction_history"
+            android:icon="@drawable/ic_history"
             android:title="বিল পে হিস্টোরি" />
         <item
             android:id="@+id/nav_payment_history"
@@ -53,7 +53,7 @@
         <item
             android:id="@+id/nav_pickup"
             android:icon="@drawable/ic_location1"
-            android:title="অ্যাড পিকআপ লোকেশান" />
+            android:title="অ্যাড পিকআপ লোকেশন" />
         <item
             android:id="@+id/nav_change_calculator"
             android:icon="@drawable/ic_calculator"

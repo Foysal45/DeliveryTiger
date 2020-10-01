@@ -244,7 +244,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     onPickUpLocation(list.first())
                 }
             } else {
-                context?.toast("প্রোফাইলে পিকআপ লোকেশান অ্যাড করুন")
+                context?.toast("প্রোফাইলে পিকআপ লোকেশন অ্যাড করুন")
             }
         })
     }
@@ -301,7 +301,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 )
                 bound.include(pickupLatLng)
             } else {
-                context?.toast("প্রোফাইলে পিকআপ জিপিএস লোকেশান অ্যাড করুন")
+                context?.toast("প্রোফাইলে পিকআপ জিপিএস লোকেশন অ্যাড করুন")
             }
 
             var hubLatLng: LatLng? = null
@@ -357,7 +357,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             )
             bound.include(pickupLatLng)
         } else {
-            context?.toast("প্রোফাইলে পিকআপ জিপিএস লোকেশান অ্যাড করুন")
+            context?.toast("প্রোফাইলে পিকআপ জিপিএস লোকেশন অ্যাড করুন")
         }
 
         list.forEach { model ->

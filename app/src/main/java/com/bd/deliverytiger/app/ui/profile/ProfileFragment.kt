@@ -415,7 +415,7 @@ class ProfileFragment : Fragment() {
         viewModel.addPickupLocations(requestBody).observe(viewLifecycleOwner, Observer { model ->
             //pickupAddressAdapter.addItem(requestBody)
             getPickupLocation()
-            context?.toast("পিকআপ লোকেশান অ্যাড হয়েছে")
+            context?.toast("পিকআপ লোকেশন অ্যাড হয়েছে")
 
             binding?.spinnerPickUpDistrict?.setSelection(0)
             binding?.pickupAddress?.text?.clear()
@@ -514,11 +514,11 @@ class ProfileFragment : Fragment() {
             dialog.show(childFragmentManager, tag)
             dialog.onUpdateClicked = { model ->
                 dialog.dismiss()
-
+                context?.toast("সফলভাবে পিকআপ লোকেশন আপডেট হয়েছে")
             }
         }
         pickupAddressAdapter.onDeleteClicked = { model ->
-            alert("নির্দেশনা", "পিকআপ লোকেশান ডিলিট করতে চান?", true,"হ্যাঁ, ডিলিট করবো", "ক্যানসেল") {
+            alert("নির্দেশনা", "পিকআপ লোকেশন ডিলিট করতে চান?", true,"হ্যাঁ, ডিলিট করবো", "ক্যানসেল") {
                 if (it == AlertDialog.BUTTON_POSITIVE) {
                     viewModel.deletePickupLocations(model).observe(viewLifecycleOwner, Observer {
                         if (it) {
