@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        android:text="Clear"
+        android:text="ক্লিয়ার"
         android:textStyle="normal"
         android:textColor="@color/red"
         android:textSize="@dimen/text_16"
@@ -52,26 +52,56 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <TextView
+                android:id="@+id/title1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="অর্ডার আইডি / মোবাইল / রেফারেন্স / ইনভয়েস"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="5dp"
+                />
             <EditText
                 android:id="@+id/filter_search_key"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_view_height"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/bg_add_order_edit_text"
-                android:hint="অর্ডার আইডি/ফোন নম্বর দিয়ে সার্চ করুন"
-                android:paddingStart="20dp"
+                android:hint="DT-xxxxxx / 01xxxxxxxxx / রেফারেন্স"
+                android:paddingStart="16dp"
                 android:paddingEnd="8dp"
                 android:paddingTop="14dp"
                 android:paddingBottom="14dp"
                 android:textColor="@color/black_80"
                 android:textColorHint="@color/gray_500"
                 android:textSize="@dimen/text_14"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title1"
                 android:importantForAutofill="no"
                 android:inputType="text"
                 android:imeOptions="actionDone"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                />
+
+
+            <TextView
+                android:id="@+id/title2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="শুরু তারিখ"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintTop_toBottomOf="@id/filter_search_key"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="18dp"
                 />
 
 
@@ -80,61 +110,96 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_view_height"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/bg_add_order_edit_text"
                 android:drawableEnd="@drawable/ic_date"
                 android:hint="শুরু তারিখ"
-                android:paddingStart="20dp"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:paddingEnd="8dp"
                 android:paddingBottom="16dp"
                 android:textColor="@color/black_80"
                 android:textColorHint="@color/gray_500"
                 android:textSize="@dimen/text_14"
-                app:layout_constraintTop_toBottomOf="@id/filter_search_key"
+                app:layout_constraintTop_toBottomOf="@id/title2"
                 tools:text="27/04/19" />
 
             <TextView
                 android:id="@+id/filter_from_tv"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:text="থেকে"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
-                app:layout_constraintTop_toBottomOf="@id/filter_date_from" />
+                app:layout_constraintTop_toBottomOf="@id/filter_date_from"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
 
+
+
+            <TextView
+                android:id="@+id/title3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="শেষ তারিখ"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintTop_toBottomOf="@id/filter_from_tv"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="18dp"
+                />
 
             <TextView
                 android:id="@+id/filter_date_to"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_view_height"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/bg_add_order_edit_text"
                 android:drawableEnd="@drawable/ic_date"
                 android:hint="শেষ তারিখ"
-                android:paddingStart="20dp"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:paddingEnd="8dp"
                 android:paddingBottom="16dp"
+
                 android:textColor="@color/black_80"
                 android:textColorHint="@color/gray_500"
                 android:textSize="@dimen/text_14"
-                app:layout_constraintTop_toBottomOf="@id/filter_from_tv"
+                app:layout_constraintTop_toBottomOf="@id/title3"
                 tools:text="27/04/19" />
 
+
+            <TextView
+                android:id="@+id/title4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="স্ট্যাটাস ফিল্টার"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintTop_toBottomOf="@id/filter_date_to"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="18dp"
+                />
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/filter_status_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="@dimen/fab_margin"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/filter_date_to">
+                app:layout_constraintTop_toBottomOf="@id/title4">
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/filter_status_spinner"
@@ -167,7 +232,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="APPLY"
+                android:text="এপ্লাই"
+                android:textSize="18sp"
                 android:textAllCaps="false"
                 app:layout_constraintTop_toBottomOf="@id/filter_status_layout"
                 android:backgroundTint="@color/colorPrimary"

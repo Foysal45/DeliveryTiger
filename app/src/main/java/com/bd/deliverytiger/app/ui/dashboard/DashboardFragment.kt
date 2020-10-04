@@ -23,7 +23,6 @@ import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
-import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
@@ -31,6 +30,7 @@ import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
+import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.DigitConverter.banglaMonth
@@ -66,10 +66,12 @@ class DashboardFragment : Fragment() {
     private var selectedEndDate = ""
     private var currentDate = ""
     private var isLoading = false
+    private var freezeDate = ""
 
     private var isBannerEnable: Boolean = false
     private var worker: Runnable? = null
     private var handler = Handler(Looper.getMainLooper())
+    private var paymentDashboardModel: DashboardData = DashboardData(dashboardSpanCount = 1, viewType = 1)
 
 
     companion object {
@@ -89,6 +91,9 @@ class DashboardFragment : Fragment() {
         setDashBoardAdapter()
         setSpinner()
         showDeliveryChargeCalculator()
+
+        fetchAccountsData()
+        fetchCollection()
 
         binding?.swipeRefresh?.setOnRefreshListener {
             getDashBoardData(selectedMonth, selectedYear)
@@ -113,6 +118,14 @@ class DashboardFragment : Fragment() {
                 "isNearByHubView" to true
             )
             addFragment(MapFragment.newInstance(bundle), MapFragment.tag)
+        }
+
+        binding?.unpaidLayout?.setOnClickListener {
+            goToAllOrder("ডেলিভারি হয়েছে", "ডেলিভারি হয়েছে", selectedStartDate, selectedEndDate)
+        }
+
+        binding?.balanceLoadLayout?.setOnClickListener {
+            context?.toast("Under Development")
         }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
@@ -230,7 +243,7 @@ class DashboardFragment : Fragment() {
                         addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
                     }
                     "billing-service" -> {
-                        addFragment(BillingofServiceFragment.newInstance(), BillingofServiceFragment.tag)
+                        addFragment(ServiceChargeFragment.newInstance(), ServiceChargeFragment.tag)
                     }
                     "order-tracking" -> {
                         addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
@@ -253,6 +266,13 @@ class DashboardFragment : Fragment() {
             }
         }
 
+        dashboardAdapter.onPayDetailsClick = { position, model ->
+            if (model.totalAmount.toInt() > 0) {
+                goToPaymentDetails()
+            } else {
+                context?.toast("পর্যাপ্ত তথ্য নেই")
+            }
+        }
 
         binding?.orderBtn?.setOnClickListener {
             addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
@@ -353,7 +373,10 @@ class DashboardFragment : Fragment() {
                 }
             }
         }
-        binding?.monthSpinner?.setSelection(1)
+
+        handler.postDelayed({
+            binding?.monthSpinner?.setSelection(1)
+        }, 300L)
     }
 
     private fun fetchCollection() {
@@ -403,28 +426,39 @@ class DashboardFragment : Fragment() {
 
         viewModel.fetchAccountsData(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
 
-            if (!model.paymentDate.isNullOrEmpty()) {
+            /*if (!model.paymentDate.isNullOrEmpty()) {
                 val banglaDate = DigitConverter.toBanglaDate(model.paymentDate!!,"MM/dd/yyyy")
                 binding?.msg2?.text = "($banglaDate)"
+                freezeDate = DigitConverter.formatDate(model.freezeDate!!, "MM/dd/yyyy", "yyyy-MM-dd")
             }
             binding?.amount1?.text = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}"
-            binding?.msg1?.text = "${model.name}"
+            binding?.msg1?.text = "${model.name}"*/
 
-
-            binding?.paymentInfoLayout?.setOnClickListener {
+            /*binding?.paymentInfoLayout?.setOnClickListener {
                 if (model.totalAmount.toInt() > 0) {
                     goToPaymentDetails()
                 } else {
                     context?.toast("পর্যাপ্ত তথ্য নেই")
                 }
+            }*/
+
+            paymentDashboardModel.apply {
+                this.name = model.name
+                this.paymentDate = model.paymentDate ?: ""
+                this.totalAmount = model.totalAmount
+            }
+            if (dataList.isNotEmpty()) {
+                dataList.last().apply {
+                    this.name = model.name
+                    this.paymentDate = model.paymentDate ?: ""
+                    this.totalAmount = model.totalAmount
+                }
+                dashboardAdapter.notifyItemChanged(dataList.lastIndex)
             }
         })
     }
 
     private fun getDashBoardData(selectedMonth: Int, selectedYear: Int) {
-
-        fetchCollection()
-        fetchAccountsData()
 
         val dashBoardReqBody = DashBoardReqBody(selectedMonth, selectedYear, selectedStartDate, selectedEndDate, SessionManager.courierUserId)
         Timber.d("DashboardTag r ", dashBoardReqBody.toString())
@@ -433,6 +467,7 @@ class DashboardFragment : Fragment() {
             binding?.swipeRefresh?.isRefreshing = false
             dataList.clear()
             dataList.addAll(list.filter { it.statusGroupId != 12 })
+            dataList.add(paymentDashboardModel)
             dashboardAdapter.notifyDataSetChanged()
 
         })

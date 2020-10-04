@@ -45,12 +45,13 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
             holder.binding.customerPhone.text = mobile
             holder.binding.status.text = model?.status
 
+            /*
             holder.binding.address.text = model?.courierAddressContactInfo?.address
             val district = "${model?.courierAddressContactInfo?.thanaName},${model?.courierAddressContactInfo?.districtName}"
             holder.binding.district.text = district
-
             holder.binding.serviceCharge.text = "${DigitConverter.toBanglaDigit(model?.courierPrice?.totalServiceCharge)} ৳"
             holder.binding.collectionAmount.text = "${DigitConverter.toBanglaDigit(model?.courierPrice?.collectionAmount)} ৳"
+            */
 
             if (model.buttonFlag) {
                 holder.binding.editBtn.visibility = View.VISIBLE
@@ -58,34 +59,42 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
                 holder.binding.editBtn.visibility = View.GONE
             }
 
-            if (model.statusId == 60 || model.statusId == 19) {
-                holder.binding.hubLocationBtn.visibility = View.VISIBLE
-                holder.binding.hubName.text = "${model.hubViewModel?.name}-এ আছে"
+            if (model.statusId == 60 || model.statusId == 19 || model.statusId == 15) {
 
-                holder.binding.trackBtn.visibility = View.GONE
-                holder.binding.address.visibility = View.GONE
+                if (model.statusId == 60 || model.statusId == 19) {
+                    holder.binding.hubLocationBtn.visibility = View.VISIBLE
+                    holder.binding.hubName.text = "${model.hubViewModel?.name}-এ আছে"
+                    holder.binding.trackBtn.visibility = View.GONE
+                }
+                if (model.statusId == 15) {
+                    holder.binding.key1.text = "ডেলিভারি তারিখ"
+                    val formattedDate1 = DigitConverter.toBanglaDate(model?.courierOrderDateDetails?.updatedOnDate, "MM-dd-yyyy HH:mm:ss")
+                    holder.binding.date.text = formattedDate1
+                }
+
+                /*holder.binding.address.visibility = View.GONE
                 holder.binding.district.visibility = View.GONE
                 holder.binding.serviceCharge.visibility = View.GONE
                 holder.binding.collectionAmount.visibility = View.GONE
-
                 holder.binding.key8.visibility = View.GONE
                 holder.binding.key9.visibility = View.GONE
                 holder.binding.key4.visibility = View.GONE
-                holder.binding.key5.visibility = View.GONE
+                holder.binding.key5.visibility = View.GONE*/
 
             } else {
                 holder.binding.hubLocationBtn.visibility = View.GONE
-
                 holder.binding.trackBtn.visibility = View.VISIBLE
-                holder.binding.address.visibility = View.VISIBLE
+                holder.binding.key1.text = "তারিখ"
+
+
+                /*holder.binding.address.visibility = View.VISIBLE
                 holder.binding.district.visibility = View.VISIBLE
                 holder.binding.serviceCharge.visibility = View.VISIBLE
                 holder.binding.collectionAmount.visibility = View.VISIBLE
-
                 holder.binding.key8.visibility = View.VISIBLE
                 holder.binding.key9.visibility = View.VISIBLE
                 holder.binding.key4.visibility = View.VISIBLE
-                holder.binding.key5.visibility = View.VISIBLE
+                holder.binding.key5.visibility = View.VISIBLE*/
             }
 
         }

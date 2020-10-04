@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.ui.dashboard
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -11,33 +12,33 @@ import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
+import com.bd.deliverytiger.app.databinding.ItemViewDashboardPaymentBinding
 import com.bd.deliverytiger.app.utils.DigitConverter
 
 
 class DashboardAdapter(private val mContext: Context?, private var dataList: MutableList<DashboardData>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
-    var onItemClick: ((position: Int, data: DashboardData?) -> Unit)? = null
+    var onItemClick: ((position: Int, model: DashboardData) -> Unit)? = null
+    var onPayDetailsClick: ((position: Int, model: DashboardData) -> Unit)? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_view_dashboard,
-                parent,
-                false
-            )
-        )
+    override fun getItemViewType(position: Int): Int {
+        return dataList[position].viewType
     }
 
-    /**
-     * getItemCount
-     */
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == 0) {
+            ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_view_dashboard, parent, false))
+        } else {
+            val binding: ItemViewDashboardPaymentBinding = ItemViewDashboardPaymentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ViewModel1(binding)
+        }
+    }
+
     override fun getItemCount(): Int {
         return dataList.size
     }
 
-    /**
-     * onBindViewHolder
-     */
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         if (holder is ViewHolder) {
@@ -97,6 +98,18 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
                 .load(model.dashboardImageUrl)
                 .into(holder.iconIV)*/
 
+        } else if (holder is ViewModel1) {
+
+            val model = dataList[position]
+            val binding = holder.binding
+
+            if (model.paymentDate.isNotEmpty()) {
+                val banglaDate = DigitConverter.toBanglaDate(model.paymentDate,"MM/dd/yyyy")
+                binding.msg2.text = "($banglaDate)"
+            }
+            binding.amount.text = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}"
+            binding.msg1.text = "${model.name}"
+
         }
     }
 
@@ -112,6 +125,16 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
         init {
             itemView.setOnClickListener {
                 onItemClick?.invoke(adapterPosition, dataList[adapterPosition])
+            }
+        }
+    }
+
+    internal inner class ViewModel1(val binding: ItemViewDashboardPaymentBinding): RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.root.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onPayDetailsClick?.invoke(adapterPosition, dataList[adapterPosition])
+                }
             }
         }
     }

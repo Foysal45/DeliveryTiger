@@ -17,13 +17,25 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/fab_margin"
         android:layout_marginTop="4dp"
-        android:text="মোট অর্ডার : ০"
+        android:text="মোট পার্সেলঃ ০ টি (০ ৳)"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/allOrderFilterLay"
         app:layout_constraintBottom_toBottomOf="@id/allOrderFilterLay"
+        />
+    <TextView
+        android:id="@+id/totalAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/fab_margin"
+        tools:text="০ ৳"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalOrder"
+        android:visibility="gone"
+        tools:visibility="visible"
         />
 
     <LinearLayout
@@ -67,7 +79,7 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/allOrderFilterLay"
+        app:layout_constraintTop_toBottomOf="@id/totalAmount"
         android:scrollbars="none"
         android:layout_marginTop="8dp"
         >

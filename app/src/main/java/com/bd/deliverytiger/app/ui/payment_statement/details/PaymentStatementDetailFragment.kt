@@ -82,13 +82,13 @@ class PaymentStatementDetailFragment : Fragment() {
                     binding?.emptyView?.visibility = View.VISIBLE
                     binding?.statementCard?.visibility = View.GONE
                     binding?.filterTab?.visibility = View.GONE
-                    //binding?.header?.info1?.text = "মোট অর্ডার: ০ টি"
+                    //binding?.header?.info1?.text = "মোট পার্সেলঃ ০ টি"
                     //binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ০ ৳"
                 } else {
                     binding?.emptyView?.visibility = View.GONE
                     binding?.statementCard?.visibility = View.VISIBLE
                     binding?.filterTab?.visibility = View.VISIBLE
-                    //binding?.header?.info1?.text = "মোট অর্ডার: ${DigitConverter.toBanglaDigit(list.size)} টি"
+                    //binding?.header?.info1?.text = "মোট পার্সেলঃ ${DigitConverter.toBanglaDigit(list.size)} টি"
                     //binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ${DigitConverter.toBanglaDigit(it.netPaidAmount)} ৳"
                 }
             }

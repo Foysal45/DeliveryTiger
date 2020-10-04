@@ -80,4 +80,19 @@ object DigitConverter {
         return decimalFormat?.format(digits) ?: digits.toString()
     }
 
+    fun formatDate(inputDate: String, patternInput: String, patternOutput: String): String {
+        try {
+            val sdf1 = SimpleDateFormat(patternInput, Locale.US)
+            val sdf2 = SimpleDateFormat(patternOutput, Locale.US)
+            val date = sdf1.parse(inputDate)
+            if (date != null) {
+                return sdf2.format(date)
+            }
+            return inputDate
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return inputDate
+        }
+    }
+
 }

@@ -83,7 +83,7 @@ class BillHistoryDetailsBottomSheet: BottomSheetDialogFragment() {
             }
         }
 
-        binding?.header?.info1?.text = "মোট অর্ডার: ${DigitConverter.toBanglaDigit(model.orderList.size)} টি"
+        binding?.header?.info1?.text = "মোট পার্সেলঃ ${DigitConverter.toBanglaDigit(model.orderList.size)} টি"
         binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ${DigitConverter.toBanglaDigit(model.netPaidAmount, true)} ৳"
     }
 

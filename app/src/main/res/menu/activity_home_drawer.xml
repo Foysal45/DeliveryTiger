@@ -26,10 +26,10 @@
         <item
             android:id="@+id/nav_bill_pay"
             android:icon="@drawable/ic_transaction_history"
-            android:title="বিল পে" />
+            android:title="বিল পে (Only Delivery)" />
         <item
             android:id="@+id/nav_bill_pay_history"
-            android:icon="@drawable/ic_history"
+            android:icon="@drawable/ic_bill_pay_history"
             android:title="বিল পে হিস্টোরি" />
         <item
             android:id="@+id/nav_payment_history"

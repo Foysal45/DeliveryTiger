@@ -243,30 +243,15 @@
                         android:baselineAligned="false"
                         android:orientation="horizontal">
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/paymentInfoLayout"
+
+                        <LinearLayout
+                            android:id="@+id/balanceLoadLayout"
                             android:layout_width="0dp"
-                            android:layout_height="85dp"
-                            android:layout_marginEnd="5dp"
+                            android:layout_height="@dimen/dashboard_btn_height"
                             android:layout_weight="1"
-                            android:background="@drawable/bg_stroke1"
+                            android:background="@drawable/bg_solid1"
                             android:gravity="center"
                             android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/amount1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:includeFontPadding="false"
-                                android:text="৳ ০"
-                                android:textColor="#F36E41"
-                                android:textSize="24sp"
-                                android:textStyle="bold"
-                                app:layout_constraintBottom_toTopOf="@id/msg1"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_chainStyle="packed" />
 
                             <TextView
                                 android:id="@+id/msg1"
@@ -277,39 +262,47 @@
                                 android:ellipsize="end"
                                 android:gravity="center"
                                 android:includeFontPadding="false"
-                                android:maxLines="1"
-                                android:text="এই সপ্তাহের পেমেন্ট"
-                                android:textColor="@color/black_80"
-                                android:textSize="@dimen/text_14"
-                                app:layout_constraintBottom_toTopOf="@id/msg2"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/amount1" />
+                                android:maxLines="2"
+                                android:text="ব্যালেন্স লোড"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_14" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/unpaidLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/dashboard_btn_height"
+                            android:layout_marginStart="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_solid1"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/msg2"
+                                android:id="@+id/unpaidAmount"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="2dp"
-                                android:layout_marginEnd="2dp"
+                                android:background="@drawable/bg_payment_unpaid"
                                 android:ellipsize="end"
                                 android:gravity="center"
                                 android:includeFontPadding="false"
                                 android:maxLines="1"
-                                android:textColor="@color/black_80"
+                                android:paddingTop="4dp"
+                                android:paddingBottom="4dp"
+                                android:text="আনপেইড"
+                                android:textColor="@color/white"
                                 android:textSize="@dimen/text_14"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/msg1"
-                                tools:text="31/12/2020" />
+                                app:layout_constraintStart_toStartOf="parent" />
 
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/paymentDoneLayout"
                             android:layout_width="0dp"
-                            android:layout_height="85dp"
+                            android:layout_height="@dimen/dashboard_btn_height"
                             android:layout_marginStart="5dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_solid1"
@@ -322,7 +315,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:includeFontPadding="false"
-                                android:text="পেমেন্ট স্টেটমেন্ট\n(পূর্বের সকল পেমেন্ট)"
+                                android:text="পেমেন্ট স্টেটমেন্ট"
                                 android:textColor="@color/white"
                                 android:textSize="14sp"
                                 android:textStyle="normal" />
@@ -387,8 +380,7 @@
                         android:id="@+id/container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        />
+                        android:layout_marginTop="16dp" />
 
 
                 </LinearLayout>

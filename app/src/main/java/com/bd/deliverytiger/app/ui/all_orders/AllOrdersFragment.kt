@@ -238,7 +238,7 @@ class AllOrdersFragment : Fragment() {
 
                         if (index < 20) {
                             totalCount = response.body()!!.model.totalCount!!.toInt()
-                            val msg = "মোট অর্ডারঃ <font color='#CC000000'><b>${DigitConverter.toBanglaDigit(totalCount)}</b></font> টি"
+                            val msg = "মোট পার্সেলঃ <font color='#CC000000'><b>${DigitConverter.toBanglaDigit(totalCount)}</b></font> টি"
                             tvTotalOrder.text = HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY)
                         }
 

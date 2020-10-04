@@ -25,5 +25,9 @@ data class DashboardData(
     @SerializedName("dashboardStatusFilter")
     var dashboardStatusFilter: String = "",
     @SerializedName("dashboardImageUrl")
-    var dashboardImageUrl: String = ""
+    var dashboardImageUrl: String = "",
+
+    var viewType: Int = 0,
+    var paymentDate: String = "",
+
 )

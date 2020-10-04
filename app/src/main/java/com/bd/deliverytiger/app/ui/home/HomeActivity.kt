@@ -40,7 +40,6 @@ import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.bill_pay_history.ServiceBillPayHistoryFragment
-import com.bd.deliverytiger.app.ui.billing_of_service.BillingofServiceFragment
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
@@ -58,6 +57,7 @@ import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
+import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
@@ -238,7 +238,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (model != null) {
                 val fragment = NotificationPreviewFragment.newInstance(model)
                 val tag = NotificationPreviewFragment.fragmentTag
-
                 val ft = supportFragmentManager.beginTransaction()
                 ft.add(R.id.mainActivityContainer, fragment, tag)
                 ft.addToBackStack(tag)
@@ -350,7 +349,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 is AddOrderFragmentOne -> {
                     currentFragment.onResume()
                 }
-                is BillingofServiceFragment -> {
+                is ServiceChargeFragment -> {
                     currentFragment.onResume()
                 }
                 is ServiceBillPayFragment -> {
@@ -495,10 +494,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_bill -> {
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-                if (currentFragment is BillingofServiceFragment) {
+                if (currentFragment is ServiceChargeFragment) {
                     Timber.d("tag", "BillingofServiceFragment already exist")
                 } else {
-                    addFragment(BillingofServiceFragment.newInstance(), BillingofServiceFragment.tag)
+                    addFragment(ServiceChargeFragment.newInstance(), ServiceChargeFragment.tag)
                 }
             }
             R.id.nav_bill_pay -> {

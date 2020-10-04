@@ -28,6 +28,20 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="DT-3421" />
 
+        <TextView
+            android:id="@+id/orderType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black_80"
+            android:textSize="13sp"
+            android:textStyle="normal"
+            app:layout_constraintTop_toTopOf="@id/tvBillingOrderId"
+            app:layout_constraintStart_toEndOf="@id/tvBillingOrderId"
+            app:layout_constraintBottom_toBottomOf="@id/tvBillingOrderId"
+            android:layout_marginStart="8dp"
+            android:includeFontPadding="false"
+            tools:text="(COD)" />
+
         <ImageView
             android:id="@+id/track"
             android:layout_width="wrap_content"

@@ -1,6 +1,6 @@
-package com.bd.deliverytiger.app.ui.billing_of_service
+package com.bd.deliverytiger.app.ui.service_charge
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,38 +12,40 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.billing_service.CourierOrderAmountDetail
 import com.bd.deliverytiger.app.utils.DigitConverter
 
-class BillingServiceAdapter(var context: Context, var courierOrderAmountDetailList: ArrayList<CourierOrderAmountDetail?>?) : RecyclerView.Adapter<BillingServiceAdapter.myViewHolder>() {
+class ServiceChargeAdapter : RecyclerView.Adapter<ServiceChargeAdapter.myViewHolder>() {
 
-    var onItemClick: ((position: Int) -> Unit)? = null
-    var onPaymentClick: ((position: Int) -> Unit)? = null
+    private val dataList: MutableList<CourierOrderAmountDetail> = mutableListOf()
+    var onItemClick: ((model: CourierOrderAmountDetail, position: Int) -> Unit)? = null
+    var onPaymentClick: ((model: CourierOrderAmountDetail, position: Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
-        return myViewHolder(LayoutInflater.from(context).inflate(
-                R.layout.item_view_service_bill,//R.layout.item_view_billing_collection,
-                parent, false)
-        )
+        return myViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_view_service_bill, parent, false))
     }
 
-    override fun getItemCount(): Int {
-        return courierOrderAmountDetailList!!.size
-    }
+    override fun getItemCount(): Int = dataList.size
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: myViewHolder, position: Int) {
 
-
+        val model = dataList[position]
         //holder.tvBillingCounter.text = DigitConverter.toBanglaDigit(position + 1)
-        holder.tvBillingOrderId.text = courierOrderAmountDetailList?.get(position)?.courierOrdersId.toString()
-
-        holder.tvBillingShipmentsCharge.text = "${DigitConverter.toBanglaDigit(courierOrderAmountDetailList?.get(position)?.deliveryCharge)} ৳"
-        holder.tvBillingCODCharge.text = "${DigitConverter.toBanglaDigit(courierOrderAmountDetailList?.get(position)?.codCharge)} ৳"
-        holder.tvBillingFragileItemCharge.text = "${DigitConverter.toBanglaDigit(courierOrderAmountDetailList?.get(position)?.breakableCharge)} ৳"
-        holder.tvBillingCollectionCharge.text = "${DigitConverter.toBanglaDigit(courierOrderAmountDetailList?.get(position)?.collectionCharge)} ৳"
-        holder.tvBillingReturnCharge.text = "${DigitConverter.toBanglaDigit(courierOrderAmountDetailList?.get(position)?.returnCharge)} ৳"
-        holder.tvBillingTotalServiceCharge.text = "${DigitConverter.toBanglaDigit(courierOrderAmountDetailList?.get(position)?.totalAmount)} ৳"
-        holder.tvBillingPaymentStatus.text = courierOrderAmountDetailList?.get(position)?.serviceBillingStatus
+        holder.tvBillingOrderId.text = model.courierOrdersId.toString()
+        val orderType = if (model.collectionAmount > 0.0) {
+            "COD"
+        } else {
+            "Only Delivery"
+        }
+        holder.orderTypeTV.text = "($orderType)"
+        holder.tvBillingShipmentsCharge.text = "${DigitConverter.toBanglaDigit(model.deliveryCharge)} ৳"
+        holder.tvBillingCODCharge.text = "${DigitConverter.toBanglaDigit(model.codCharge)} ৳"
+        holder.tvBillingFragileItemCharge.text = "${DigitConverter.toBanglaDigit(model.breakableCharge)} ৳"
+        holder.tvBillingCollectionCharge.text = "${DigitConverter.toBanglaDigit(model.collectionCharge)} ৳"
+        holder.tvBillingReturnCharge.text = "${DigitConverter.toBanglaDigit(model.returnCharge)} ৳"
+        holder.tvBillingTotalServiceCharge.text = "${DigitConverter.toBanglaDigit(model.totalAmount)} ৳"
+        holder.tvBillingPaymentStatus.text = model.serviceBillingStatus
         //holder.paymentStatus.text = courierOrderAmountDetailList?.get(position)?.serviceBillingStatus
 
-        if (courierOrderAmountDetailList?.get(position)?.serviceBillingStatus.equals("Received")) {
+        if (model.serviceBillingStatus.equals("Received")) {
             //holder.billingItemMainLay.setBackgroundColor(Color.parseColor("#E8F5E9"))
             holder.tvBillingPaymentStatus.setTextColor(ContextCompat.getColor(holder.tvBillingPaymentStatus.context, R.color.colorPrimary))
             //holder.paymentBtn.visibility = View.GONE
@@ -61,6 +63,7 @@ class BillingServiceAdapter(var context: Context, var courierOrderAmountDetailLi
         //val billingItemMainLay: LinearLayout = itemView.findViewById(R.id.billingItemMainLay)
         //val tvBillingCounter: TextView = itemView.findViewById(R.id.tvBillingCounter)
         internal val tvBillingOrderId: TextView = itemView.findViewById(R.id.tvBillingOrderId)
+        internal val orderTypeTV: TextView = itemView.findViewById(R.id.orderType)
         //val tvBillingOrderDate: TextView = itemView.findViewById(R.id.tvBillingOrderDate)
         internal val tvBillingShipmentsCharge: TextView = itemView.findViewById(R.id.tvBillingShipmentsCharge)
         internal val tvBillingCODCharge: TextView = itemView.findViewById(R.id.tvBillingCODCharge)
@@ -76,15 +79,29 @@ class BillingServiceAdapter(var context: Context, var courierOrderAmountDetailLi
         internal val track: ImageView = itemView.findViewById(R.id.track)
         //internal val paymentBtn: TextView = itemView.findViewById(R.id.payment)
 
-
         init {
             track.setOnClickListener {
-                onItemClick?.invoke(adapterPosition)
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onItemClick?.invoke(dataList[adapterPosition], adapterPosition)
+                }
             }
             /*paymentBtn.setOnClickListener {
-                onPaymentClick?.invoke(adapterPosition)
+                onPaymentClick?.invoke(dataList[adapterPosition], adapterPosition)
             }*/
         }
+    }
+
+    fun initLoad(list: List<CourierOrderAmountDetail>) {
+        dataList.clear()
+        dataList.addAll(list)
+        notifyDataSetChanged()
+    }
+
+    fun pagingLoad(list: List<CourierOrderAmountDetail>) {
+        val currentIndex = dataList.size
+        val newDataCount = list.size
+        dataList.addAll(list)
+        notifyItemRangeInserted(currentIndex, newDataCount)
     }
 
 }

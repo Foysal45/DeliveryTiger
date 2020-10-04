@@ -85,10 +85,12 @@ class FilterFragment : Fragment() {
         if (gotFromDate != "2001-01-01"){
             val formattedDate = DigitConverter.toBanglaDate(gotFromDate, "yyyy-MM-dd")
             fromDateTV.text = formattedDate
+            isFromDateSelected = true
         }
         if (gotToDate != "2001-01-01"){
             val formattedDate = DigitConverter.toBanglaDate(gotToDate, "yyyy-MM-dd")
             toDateTV.text = formattedDate
+            isToDateSelected = true
         }
 
         if (searchKey.isNotEmpty()){

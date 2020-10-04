@@ -2,6 +2,8 @@ package com.bd.deliverytiger.app.api.endpoint
 
 import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.GenericResponse
+import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceMainResponse
+import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody
 import com.bd.deliverytiger.app.api.model.calculator.DeliveryChargeInfo
 import com.bd.deliverytiger.app.api.model.calculator.WeightPrice
 import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
@@ -117,4 +119,8 @@ interface ApiInterfaceCore {
 
     @GET("api/Fetch/GetPriceList/{districtId}/{deliveryRangeId}")
     suspend fun fetchPriceList(@Path("districtId") districtId: Int, @Path("deliveryRangeId") deliveryRangeId: Int): NetworkResponse<GenericResponse<List<WeightPrice>>, ErrorResponse>
+
+    @POST("api/Fetch/LoadCourierOrderAmountDetailsV2")
+     suspend fun fetchServiceBillDetails(@Body body: BillingServiceReqBody): NetworkResponse<GenericResponse<BillingServiceMainResponse>, ErrorResponse>
+    
 }

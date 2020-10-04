@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -201,4 +202,10 @@ fun NestedScrollView.smoothScrollTo(view: View) {
         viewParent = viewParent.getParent()
     }
     smoothScrollTo(0, distance)
+}
+
+fun Bundle.bundleToString(): String {
+    return this.keySet().joinToString(", ", "{", "}") { key ->
+        "$key=${this[key]}"
+    }
 }

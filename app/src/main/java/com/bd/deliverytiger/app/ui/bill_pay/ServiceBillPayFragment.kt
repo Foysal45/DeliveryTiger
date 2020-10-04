@@ -155,7 +155,7 @@ class ServiceBillPayFragment: Fragment() {
                     binding?.emptyView?.visibility = View.VISIBLE
                     binding?.payBtn?.visibility = View.GONE
                     binding?.header?.parent?.visibility = View.GONE
-                    binding?.header?.info1?.text = "মোট অর্ডার: ০ টি"
+                    binding?.header?.info1?.text = "মোট পার্সেলঃ ০ টি"
                     binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ০ ৳"
                 } else {
                     binding?.emptyView?.visibility = View.GONE
@@ -165,7 +165,7 @@ class ServiceBillPayFragment: Fragment() {
                         binding?.payBtn?.visibility = View.GONE
                     }
                     binding?.header?.parent?.visibility = View.VISIBLE
-                    binding?.header?.info1?.text = "মোট অর্ডার: ${DigitConverter.toBanglaDigit(list.size)} টি"
+                    binding?.header?.info1?.text = "মোট পার্সেলঃ ${DigitConverter.toBanglaDigit(list.size)} টি"
                     var totalSum = 0
                     list.forEach { order -> totalSum += order.totalAmount }
                     binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ${DigitConverter.toBanglaDigit(totalSum, true)} ৳"
@@ -176,7 +176,7 @@ class ServiceBillPayFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("বিল পে")
+        (activity as HomeActivity).setToolbarTitle("বিল পে (Only Delivery)")
         fetchMerchantMonthlyReceivable(selectedYear, selectedMonthIndex)
     }
 

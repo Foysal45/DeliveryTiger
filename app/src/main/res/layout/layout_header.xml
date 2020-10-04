@@ -19,7 +19,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="মোট অর্ডার: ০ টি" />
+            android:text="মোট পার্সেলঃ ০ টি" />
 
         <TextView
             android:id="@+id/info2"
