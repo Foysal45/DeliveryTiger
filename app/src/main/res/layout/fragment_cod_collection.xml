@@ -108,30 +108,27 @@
 
     </LinearLayout>
 
-    <include
-        android:id="@+id/viewID"
-        layout="@layout/view_cod_collection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dateLayout"
-        android:layout_marginTop="5dp"
-        />
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCODCollection"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewID"
-        app:layout_constraintVertical_weight="1"
-        tools:listitem="@layout/item_view_cod_collection" />
+        app:layout_constraintTop_toBottomOf="@id/dateLayout"
+        android:background="@color/background"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingTop="5dp"
+        android:paddingBottom="@dimen/list_bottom_padding"
+        android:layout_marginTop="5dp"
+
+        tools:listitem="@layout/item_view_cod_collection_new"
+        tools:itemCount="3"
+        />
 
     <ImageView
-        android:id="@+id/ivEmpty"
+        android:id="@+id/emptyView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/cd"
@@ -139,25 +136,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewID"
+        app:layout_constraintTop_toBottomOf="@id/dateLayout"
         app:srcCompat="@drawable/ic_empty_sad" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/cd"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/cod_collection_show_stat">
-
-    </ImageView>
-
     <ProgressBar
-        android:id="@+id/codProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

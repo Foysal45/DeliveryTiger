@@ -120,8 +120,8 @@
         android:layout_marginTop="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dateLayout"
-        tools:itemCount="3"
 
+        tools:itemCount="3"
         tools:listitem="@layout/item_view_service_bill" />
 
 

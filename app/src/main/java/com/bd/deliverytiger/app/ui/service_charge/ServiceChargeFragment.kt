@@ -174,7 +174,7 @@ class ServiceChargeFragment : Fragment() {
                 if (dy > 0) {
                     val currentItemCount = recyclerView.layoutManager?.itemCount ?: 0
                     val lastVisibleItem = (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                    if (!isLoading && currentItemCount <= lastVisibleItem + visibleThreshold /*&& currentItemCount < totalCount*/) {
+                    if (!isLoading && currentItemCount <= lastVisibleItem + visibleThreshold && currentItemCount < totalCount) {
                         isLoading = true
                         fetchServiceBillDetails(currentItemCount, 20)
                     }

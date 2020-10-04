@@ -8,72 +8,43 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.RetrofitSingleton
-import com.bd.deliverytiger.app.api.endpoint.CODCollectionInterface
-import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
-import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse
-import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.databinding.FragmentCodCollectionBinding
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
-import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
-import com.bd.deliverytiger.app.utils.DigitConverter
-import com.bd.deliverytiger.app.utils.SessionManager
-import com.bd.deliverytiger.app.utils.Timber
+import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import org.koin.android.ext.android.inject
 import java.util.*
-import kotlin.collections.ArrayList
 
-
-/**
- * A simple [Fragment] subclass.
- */
 class CODCollectionFragment : Fragment() {
-
-    companion object {
-        fun newInstance(): CODCollectionFragment {
-            val fragment = CODCollectionFragment()
-            return fragment
-        }
-
-        val tag = CODCollectionFragment::class.java.name
-    }
 
     private var binding: FragmentCodCollectionBinding? = null
 
-    private lateinit var rvCODCollection: RecyclerView
+    private lateinit var recyclerView: RecyclerView
     private lateinit var tvTotalOrder: TextView
-    private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var dataAdapter: CODCollectionAdapter
-    private lateinit var codCollectionInterface: CODCollectionInterface
-    private lateinit var codProgressBar: ProgressBar
+    private lateinit var progressBar: ProgressBar
     private lateinit var filterLayout: LinearLayout
-    private lateinit var viewID: ConstraintLayout
-    private lateinit var ivEmpty: ImageView
+    private lateinit var emptyView: ImageView
     private lateinit var filterGroup: ChipGroup
     private lateinit var filterDateTag: Chip
     private lateinit var filterStatusTag: Chip
     private lateinit var filterSearchKeyTag: Chip
 
     private var isLoading = false
-    private var totalLoadedData = 0
-    private var layoutPosition = 0
+    private val visibleThreshold = 6
     private var totalCount = 0
-    private var courierOrderViewModelList: ArrayList<CourierOrderViewModel?>? = null
+
     private var defaultDate = "2001-01-01"
     private var fromDate = "2001-01-01"
     private var toDate = "2001-01-01"
@@ -91,27 +62,37 @@ class CODCollectionFragment : Fragment() {
     private var selectedMonthIndex: Int = 0
     private var selectedYear: Int = 0
 
+    private val viewModel: CODCollectionViewModel by inject()
+
+    companion object {
+        fun newInstance(): CODCollectionFragment = CODCollectionFragment()
+        val tag: String = CODCollectionFragment::class.java.name
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentCodCollectionBinding.inflate(inflater, container, false).also {
             binding = it
         }.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle("COD কালেকশন")
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rvCODCollection = view.findViewById(R.id.rvCODCollection)
-        codProgressBar = view.findViewById(R.id.codProgressBar)
+        recyclerView = view.findViewById(R.id.recyclerView)
+        progressBar = view.findViewById(R.id.progressBar)
         filterLayout = view.findViewById(R.id.allOrderFilterLay)
         tvTotalOrder = view.findViewById(R.id.tvTotalOrder)
-        viewID = view.findViewById(R.id.viewID)
-        ivEmpty = view.findViewById(R.id.ivEmpty)
+        emptyView = view.findViewById(R.id.emptyView)
         filterGroup = view.findViewById(R.id.filter_tag_group)
         filterDateTag = view.findViewById(R.id.filter_tag_date)
         filterStatusTag = view.findViewById(R.id.filter_tag_status)
         filterSearchKeyTag = view.findViewById(R.id.filter_tag_searchKey)
 
-        courierOrderViewModelList = ArrayList()
         // fromDate = getCurrentDateTime().toString()
         // toDate = getPreviousDateTime(-1).toString()
 
@@ -149,9 +130,7 @@ class CODCollectionFragment : Fragment() {
                     if (view != null) {
                         selectedMonthIndex = position
                         generateDateRange(selectedYear, selectedMonthIndex)
-                        courierOrderViewModelList?.clear()
-                        dataAdapter.notifyDataSetChanged()
-                        getAllCODCollection(0, 20)
+                        fetchCODCollectionDetails(0, 20)
                         Timber.d("serviceChargeLog","selectedMonthIndex $selectedMonthIndex")
                     }
                 }
@@ -161,39 +140,50 @@ class CODCollectionFragment : Fragment() {
                 override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, p3: Long) {
                     if (view != null) {
                         selectedYear = yearList[position].toInt()
-                        courierOrderViewModelList?.clear()
-                        dataAdapter.notifyDataSetChanged()
-                        getAllCODCollection(0, 20)
+                        fetchCODCollectionDetails(0, 20)
                         Timber.d("serviceChargeLog","selectedYear $selectedYear")
                     }
                 }
             }
         },300L)
 
-
-        codCollectionInterface = RetrofitSingleton.getInstance(requireContext()).create(CODCollectionInterface::class.java)
-
-        linearLayoutManager = LinearLayoutManager(context)
         manageAdapter()
+        fetchCODCollectionDetails(0, 20)
 
+        viewModel.pagingState.observe(viewLifecycleOwner, Observer { model ->
+            isLoading = false
+            if (model.isInitLoad) {
+                dataAdapter.initLoad(model.dataList)
+                totalCount = model.totalCount
+                val totalAmount = model.totalAmount
 
-        getAllCODCollection(0, 20)
+                val msg = "মোট পার্সেলঃ <font color='#CC000000'><b>${DigitConverter.toBanglaDigit(totalCount)}</b></font> টি"
+                tvTotalOrder.text = HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-        rvCODCollection.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                //val amountMsg = "COD: <font color='#CC000000'><b>৳ ${DigitConverter.toBanglaDigit(model.totalAmountDeliveryTakaCollection)}</b></font> | Only Delivery: <font color='#CC000000'><b>৳ ${DigitConverter.toBanglaDigit(model.totalAmountOnlyDelivery)}</b></font>"
+                //binding?.includeFilter?.totalAmount?.text = HtmlCompat.fromHtml(amountMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                //binding?.includeFilter?.totalAmount?.visibility = View.VISIBLE
+
+                if (model.dataList.isEmpty()) {
+                    emptyView.visibility = View.VISIBLE
+                } else {
+                    emptyView.visibility = View.GONE
+                }
+            } else {
+                dataAdapter.pagingLoad(model.dataList)
+            }
+        })
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                layoutPosition = linearLayoutManager.findLastVisibleItemPosition()
-                Timber.e(
-                    "layoutPosition",
-                    layoutPosition.toString() + " " + totalLoadedData + " " + isLoading + " " + totalCount
-                )
+                //Timber.e("layoutPosition", "$layoutPosition $totalLoadedData $isLoading $totalCount $isMoreDataAvailable")
                 if (dy > 0) {
-                    if (layoutPosition >= (totalLoadedData - 2) && !isLoading && layoutPosition < totalCount && isMoreDataAvailable) {
-                        getAllCODCollection(totalLoadedData, 20)
-                        Timber.e(
-                            "layoutPosition loadMoreCalled ",
-                            layoutPosition.toString() + " " + totalLoadedData + " " + isLoading + " " + totalCount
-                        )
+                    val currentItemCount = recyclerView.layoutManager?.itemCount ?: 0
+                    val lastVisibleItem = (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    if (!isLoading && currentItemCount <= lastVisibleItem + visibleThreshold && currentItemCount < totalCount) {
+                        isLoading = true
+                        fetchCODCollectionDetails(currentItemCount, 20)
                     }
                 }
             }
@@ -202,6 +192,24 @@ class CODCollectionFragment : Fragment() {
         filterLayout.setOnClickListener {
             goToFilter()
         }
+
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is ViewState.ShowMessage -> {
+                    requireContext().toast(state.message)
+                }
+                is ViewState.KeyboardState -> {
+                    hideKeyboard()
+                }
+                is ViewState.ProgressState -> {
+                    if (state.isShow) {
+                        binding?.progressBar?.visibility = View.VISIBLE
+                    } else {
+                        binding?.progressBar?.visibility = View.GONE
+                    }
+                }
+            }
+        })
     }
 
     private fun generateDateRange(year: Int, monthIndex: Int) {
@@ -215,90 +223,26 @@ class CODCollectionFragment : Fragment() {
         toDate = "$year-${monthIndex+1}-$lastDay"
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as HomeActivity).setToolbarTitle("COD কালেকশন")
-    }
-
     private fun manageAdapter() {
-        dataAdapter = CODCollectionAdapter(requireContext(), courierOrderViewModelList)
-        rvCODCollection.apply {
-            layoutManager = linearLayoutManager
+        dataAdapter = CODCollectionAdapter()
+        recyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = dataAdapter
-            addItemDecoration(
-                DividerItemDecoration(
-                    rvCODCollection.getContext(),
-                    DividerItemDecoration.VERTICAL
-                )
-            )
         }
 
-        dataAdapter.onItemClick = { position ->
-
-            addOrderTrackFragment(courierOrderViewModelList?.get(position)?.courierOrdersId.toString())
+        dataAdapter.onTrackClicked = { model, position ->
+            addOrderTrackFragment(model.courierOrdersId.toString())
         }
     }
 
-    private fun getAllCODCollection(index: Int, count: Int) {
-        isLoading = true
-        codProgressBar.visibility = View.VISIBLE
-        val reqModel = CODReqBody(
+    private fun fetchCODCollectionDetails(index: Int, count: Int) {
+
+        val requestBody = CODReqBody(
             status, statusList, statusGroupList, fromDate, toDate, SessionManager.courierUserId,
             "", orderId, collectionName, mobileNumber, index, count
-        )  // text model
-
-        Timber.e("getAllCODCollectionReq", reqModel.toString())
-
-        codCollectionInterface.getAllCODCollection(reqModel)
-            .enqueue(object : Callback<GenericResponse<CODResponse>> {
-                override fun onFailure(
-                    call: Call<GenericResponse<CODResponse>>,
-                    t: Throwable
-                ) {
-                    isLoading = false
-                    Timber.e("getAllCODCollectionResponse", " f " + t.toString())
-                    if (codProgressBar.visibility == View.VISIBLE) {
-                        codProgressBar.visibility = View.GONE
-                    }
-
-                }
-
-                override fun onResponse(
-                    call: Call<GenericResponse<CODResponse>>,
-                    response: Response<GenericResponse<CODResponse>>
-                ) {
-                    if (codProgressBar.visibility == View.VISIBLE) {
-                        codProgressBar.visibility = View.GONE
-                    }
-                    isLoading = false
-                    if (response.isSuccessful && response.body() != null && response.body()!!.model != null) {
-                        courierOrderViewModelList?.addAll(response.body()!!.model.courierOrderViewModel!!)
-                        totalLoadedData = courierOrderViewModelList!!.size
-
-                        dataAdapter.notifyDataSetChanged()
-                        isMoreDataAvailable =
-                            response.body()!!.model.courierOrderViewModel!!.size >= count - 2
-                        Timber.e("getAllCODCollectionResponse", " s " + response.body().toString())
-
-                        if (index < 20) {
-                            totalCount = response.body()!!.model.totalCount!!.toInt()
-                            val msg = "মোট পার্সেলঃ <font color='#CC000000'><b>${DigitConverter.toBanglaDigit(totalCount)}</b></font> টি"
-                            tvTotalOrder.text = HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY)
-                        }
-
-                        if(totalLoadedData == 0){
-                            viewID.visibility = View.GONE
-                            ivEmpty.visibility = View.VISIBLE
-                        } else {
-                            viewID.visibility = View.VISIBLE
-                            ivEmpty.visibility = View.GONE
-                        }
-                    } else {
-                        Timber.e("getAllCODCollectionResponse", " s null")
-                    }
-                }
-
-            })
+        )
+        viewModel.fetchCODCollectionDetails(requestBody, index)
     }
 
     private fun addOrderTrackFragment(orderID: String) {
@@ -352,16 +296,16 @@ class CODCollectionFragment : Fragment() {
                     }
                 }
 
-                if (fromDate1 != defaultDate){
-                    val msg = "${DigitConverter.toBanglaDate(fromDate1, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate1, "yyyy-MM-dd")}"
-                    filterDateTag.text = msg
-                    filterDateTag.visibility = View.VISIBLE
+                val msg = "${DigitConverter.toBanglaDate(fromDate1, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate1, "yyyy-MM-dd")}"
+                filterDateTag.text = msg
+                filterDateTag.visibility = View.VISIBLE
+                /*if (fromDate1 != defaultDate){
+
                 } else {
                     filterDateTag.text = ""
                     filterDateTag.visibility = View.GONE
-                    fromDate = defaultDate
-                    toDate = defaultDate
-                }
+                    generateDateRange(selectedYear, selectedMonthIndex)
+                }*/
 
                 if (statusGroup != "-1"){
                     filterStatusTag.text = statusGroup1
@@ -387,12 +331,8 @@ class CODCollectionFragment : Fragment() {
                 filterDateTag.setOnClickListener {
                     filterDateTag.text = ""
                     filterDateTag.visibility = View.GONE
-                    fromDate = defaultDate
-                    toDate = defaultDate
-
-                    courierOrderViewModelList?.clear()
-                    dataAdapter.notifyDataSetChanged()
-                    getAllCODCollection(0, 20)
+                    generateDateRange(selectedYear, selectedMonthIndex)
+                    fetchCODCollectionDetails(0, 20)
                 }
 
                 filterStatusTag.setOnClickListener {
@@ -403,9 +343,7 @@ class CODCollectionFragment : Fragment() {
                     statusGroupList.clear()
                     statusGroupList.add(statusGroup)
 
-                    courierOrderViewModelList?.clear()
-                    dataAdapter.notifyDataSetChanged()
-                    getAllCODCollection(0, 20)
+                    fetchCODCollectionDetails(0, 20)
                 }
 
                 filterDateTag.setOnCloseIconClickListener {
@@ -419,8 +357,7 @@ class CODCollectionFragment : Fragment() {
                 filterSearchKeyTag.setOnClickListener {
                     filterSearchKeyTag.text = ""
                     filterSearchKeyTag.visibility = View.GONE
-                    fromDate = defaultDate
-                    toDate = defaultDate
+                    generateDateRange(selectedYear, selectedMonthIndex)
                     status = -1
                     statusGroup = "-1"
                     statusGroupList.clear()
@@ -431,19 +368,14 @@ class CODCollectionFragment : Fragment() {
                     searchKeys = ""
                     searchTypes = 0
 
-                    courierOrderViewModelList?.clear()
-                    dataAdapter.notifyDataSetChanged()
-                    getAllCODCollection(0, 20)
+                    fetchCODCollectionDetails(0, 20)
                 }
 
                 filterSearchKeyTag.setOnCloseIconClickListener {
                     filterSearchKeyTag.performClick()
                 }
 
-                courierOrderViewModelList?.clear()
-                dataAdapter.notifyDataSetChanged()
-                getAllCODCollection(0, 20)
-
+                fetchCODCollectionDetails(0, 20)
                 activity?.onBackPressed()
             }
         })

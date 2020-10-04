@@ -3,6 +3,7 @@ package com.bd.deliverytiger.app.repository
 import com.bd.deliverytiger.app.api.endpoint.*
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
+import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
@@ -116,5 +117,7 @@ class AppRepository(
     suspend fun fetchPriceList(districtId: Int, deliveryRangeId: Int) = apiInterfaceCore.fetchPriceList(districtId, deliveryRangeId)
 
     suspend fun fetchServiceBillDetails(requestBody: BillingServiceReqBody) = apiInterfaceCore.fetchServiceBillDetails(requestBody)
+
+    suspend fun fetchCODCollectionDetails(requestBody: CODReqBody) = apiInterfaceCore.fetchCODCollectionDetails(requestBody)
 
 }

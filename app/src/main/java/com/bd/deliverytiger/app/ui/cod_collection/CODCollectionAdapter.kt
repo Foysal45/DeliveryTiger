@@ -1,75 +1,72 @@
 package com.bd.deliverytiger.app.ui.cod_collection
 
-import android.content.Context
-import android.graphics.Color
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
+import com.bd.deliverytiger.app.databinding.ItemViewCodCollectionNewBinding
 import com.bd.deliverytiger.app.utils.DigitConverter
 
-class CODCollectionAdapter(
-    var context: Context,
-    var courierOrderViewModelList: ArrayList<CourierOrderViewModel?>?
-) :
-    RecyclerView.Adapter<CODCollectionAdapter.myViewHolder>() {
-    private var formattedDate = ""
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
-        return myViewHolder(
-            LayoutInflater.from(context).inflate(
-                R.layout.item_view_cod_collection,
-                parent,
-                false
-            )
-        )
+class CODCollectionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private val dataList: MutableList<CourierOrderViewModel> = mutableListOf()
+    var onTrackClicked: ((model: CourierOrderViewModel, position: Int) -> Unit)? = null
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val binding: ItemViewCodCollectionNewBinding = ItemViewCodCollectionNewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int {
-        return courierOrderViewModelList!!.size
-    }
+    override fun getItemCount(): Int = dataList.size
 
-    override fun onBindViewHolder(holder: myViewHolder, position: Int) {
+    @SuppressLint("SetTextI18n")
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        formattedDate =
-            DigitConverter.toBanglaDate(courierOrderViewModelList?.get(position)?.courierOrderDateDetails?.confirmationDate.toString(),
-                "MM-dd-yyyy HH:mm:ss")
+        if (holder is ViewHolder) {
+            val model = dataList[position]
+            val binding = holder.binding
 
-        holder.tvCodItemCount.text = DigitConverter.toBanglaDigit(position + 1)
-        holder.tvCodOrderId.text =
-            courierOrderViewModelList?.get(position)?.courierOrdersId.toString()
-        holder.tvCodOrderDate.text = formattedDate
+            val formattedDate = DigitConverter.toBanglaDate(model.courierOrderDateDetails?.confirmationDate.toString(), "MM-dd-yyyy HH:mm:ss")
+            binding.key0.text = model.courierOrdersId.toString()
+            binding.date.text = formattedDate
 
-        holder.tvCodCollectionAmount.text =
-            "৳ " + DigitConverter.toBanglaDigit(courierOrderViewModelList?.get(position)?.courierPrice?.collectionAmount)
-        holder.tvCodPaymentStatus.text = courierOrderViewModelList?.get(position)?.statusType
+            binding.codCollection.text = "${DigitConverter.toBanglaDigit(model.courierPrice?.collectionAmount, true)} ৳"
+            binding.statusName.text = model.statusType
 
-        if (courierOrderViewModelList?.get(position)?.statusType.equals("Paid")) {
-            holder.itemMainLay.setBackgroundColor(Color.parseColor("#E8F5E9"))
-        } else {
-            holder.itemMainLay.setBackgroundColor(Color.parseColor("#FFFFFF"))
-        }
-    }
-
-
-    inner class myViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvCodItemCount: TextView = itemView.findViewById(R.id.tvCodItemCount)
-        val tvCodOrderId: TextView = itemView.findViewById(R.id.tvCodOrderId)
-        val tvCodOrderDate: TextView = itemView.findViewById(R.id.tvCodOrderDate)
-        val tvCodCollectionAmount: TextView = itemView.findViewById(R.id.tvCodCollectionAmount)
-        val tvCodPaymentStatus: TextView = itemView.findViewById(R.id.tvCodPaymentStatus)
-        val codOrderInfoLay: LinearLayout = itemView.findViewById(R.id.codOrderInfoLay)
-        val itemMainLay: LinearLayout = itemView.findViewById(R.id.itemMainLay)
-
-        init {
-            codOrderInfoLay.setOnClickListener {
-                onItemClick?.invoke(adapterPosition)
+            if (model.statusType == "Paid" || model.statusType == "পেইড") {
+                binding.statusName.setTextColor(ContextCompat.getColor(binding.statusName.context, R.color.colorPrimary))
+            } else {
+                binding.statusName.setTextColor(ContextCompat.getColor(binding.statusName.context, R.color.black_90))
             }
         }
     }
 
-    var onItemClick: ((position: Int) -> Unit)? = null
+    inner class ViewHolder(val binding: ItemViewCodCollectionNewBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.track.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onTrackClicked?.invoke(dataList[adapterPosition], adapterPosition)
+                }
+            }
+        }
+    }
+
+    fun initLoad(list: List<CourierOrderViewModel>) {
+        dataList.clear()
+        dataList.addAll(list)
+        notifyDataSetChanged()
+    }
+
+    fun pagingLoad(list: List<CourierOrderViewModel>) {
+        val currentIndex = dataList.size
+        val newDataCount = list.size
+        dataList.addAll(list)
+        notifyItemRangeInserted(currentIndex, newDataCount)
+    }
+
+
 }

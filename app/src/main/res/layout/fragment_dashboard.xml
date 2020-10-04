@@ -263,7 +263,7 @@
                                 android:gravity="center"
                                 android:includeFontPadding="false"
                                 android:maxLines="2"
-                                android:text="ব্যালেন্স লোড"
+                                android:text="ব্যালেন্স লোড করুন"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_14" />
 
@@ -290,7 +290,7 @@
                                 android:maxLines="1"
                                 android:paddingTop="4dp"
                                 android:paddingBottom="4dp"
-                                android:text="আনপেইড"
+                                android:text="আনপেইড COD"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_14"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -315,7 +315,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:includeFontPadding="false"
-                                android:text="পেমেন্ট স্টেটমেন্ট"
+                                android:text="পেমেন্ট স্টেটমেন্ট\n(পূর্বের)"
                                 android:textColor="@color/white"
                                 android:textSize="14sp"
                                 android:textStyle="normal" />
