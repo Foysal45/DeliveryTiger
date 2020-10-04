@@ -14,6 +14,8 @@ data class CourierOrderViewModel(
     var status: String? = null,
     @SerializedName("statusType")
     var statusType: String? = null,
+    @SerializedName("statusTypeName")
+    var statusTypeName: String? = null,
     @SerializedName("statusEng")
     var statusEng: String? = null,
     @SerializedName("statusId")

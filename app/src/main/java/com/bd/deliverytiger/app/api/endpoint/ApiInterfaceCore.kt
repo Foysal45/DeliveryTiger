@@ -124,6 +124,6 @@ interface ApiInterfaceCore {
     @POST("api/Fetch/LoadCourierOrderAmountDetailsV2")
      suspend fun fetchServiceBillDetails(@Body requestBody: BillingServiceReqBody): NetworkResponse<GenericResponse<BillingServiceMainResponse>, ErrorResponse>
 
-    @POST("api/Fetch/LoadCourierOrder")
+    @POST("api/Fetch/GetCodCollections")
     suspend fun fetchCODCollectionDetails(@Body requestBody: CODReqBody): NetworkResponse<GenericResponse<CODResponse>, ErrorResponse>
 }
