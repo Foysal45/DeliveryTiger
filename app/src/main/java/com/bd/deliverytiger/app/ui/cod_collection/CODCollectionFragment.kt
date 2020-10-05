@@ -61,11 +61,14 @@ class CODCollectionFragment : Fragment() {
 
     private var selectedMonthIndex: Int = 0
     private var selectedYear: Int = 0
+    private var isUnpaidCOD: Boolean = false
 
     private val viewModel: CODCollectionViewModel by inject()
 
     companion object {
-        fun newInstance(): CODCollectionFragment = CODCollectionFragment()
+        fun newInstance(isUnpaidCOD: Boolean = false): CODCollectionFragment = CODCollectionFragment().apply {
+            this.isUnpaidCOD = isUnpaidCOD
+        }
         val tag: String = CODCollectionFragment::class.java.name
     }
 
@@ -96,56 +99,63 @@ class CODCollectionFragment : Fragment() {
         // fromDate = getCurrentDateTime().toString()
         // toDate = getPreviousDateTime(-1).toString()
 
-        val calender = Calendar.getInstance()
-        val currentYear = calender.get(Calendar.YEAR)
+        if (isUnpaidCOD) {
+            binding?.dateLayout?.visibility = View.GONE
+            binding?.includeFilter?.allOrderFilterLay?.visibility = View.INVISIBLE
+            status = 15
 
-        val monthList: MutableList<String> = mutableListOf()
-        val yearList: MutableList<String> = mutableListOf()
-        for (year in currentYear downTo 2019) {
-            yearList.add(DigitConverter.toBanglaDigit(year))
-        }
-        for (monthIndex in 0..11) {
-            monthList.add(DigitConverter.banglaMonth[monthIndex])
-        }
+        } else {
+            val calender = Calendar.getInstance()
+            val currentYear = calender.get(Calendar.YEAR)
 
-        //calender.add(Calendar.MONTH, -1)
-        val previousMonth = calender.get(Calendar.MONTH)
-        selectedYear = calender.get(Calendar.YEAR)
-        selectedMonthIndex = previousMonth
-        generateDateRange(selectedYear, selectedMonthIndex)
-        timber.log.Timber.d("selectedYear $selectedYear, selectedMonthIndex $selectedMonthIndex")
+            val monthList: MutableList<String> = mutableListOf()
+            val yearList: MutableList<String> = mutableListOf()
+            for (year in currentYear downTo 2019) {
+                yearList.add(DigitConverter.toBanglaDigit(year))
+            }
+            for (monthIndex in 0..11) {
+                monthList.add(DigitConverter.banglaMonth[monthIndex])
+            }
 
-        val monthAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, monthList)
-        binding?.spinnerMonth?.adapter = monthAdapter
-        binding?.spinnerMonth?.setSelection(selectedMonthIndex)
+            //calender.add(Calendar.MONTH, -1)
+            val previousMonth = calender.get(Calendar.MONTH)
+            selectedYear = calender.get(Calendar.YEAR)
+            selectedMonthIndex = previousMonth
+            generateDateRange(selectedYear, selectedMonthIndex)
+            timber.log.Timber.d("selectedYear $selectedYear, selectedMonthIndex $selectedMonthIndex")
 
-        val yearAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, yearList)
-        binding?.spinnerYear?.adapter = yearAdapter
-        binding?.spinnerYear?.setSelection(yearList.indexOf(selectedYear.toString()))
+            val monthAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, monthList)
+            binding?.spinnerMonth?.adapter = monthAdapter
+            binding?.spinnerMonth?.setSelection(selectedMonthIndex)
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            binding?.spinnerMonth?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(p0: AdapterView<*>?) {}
-                override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, p3: Long) {
-                    if (view != null) {
-                        selectedMonthIndex = position
-                        generateDateRange(selectedYear, selectedMonthIndex)
-                        fetchCODCollectionDetails(0, 20)
-                        Timber.d("serviceChargeLog","selectedMonthIndex $selectedMonthIndex")
+            val yearAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, yearList)
+            binding?.spinnerYear?.adapter = yearAdapter
+            binding?.spinnerYear?.setSelection(yearList.indexOf(selectedYear.toString()))
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding?.spinnerMonth?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(p0: AdapterView<*>?) {}
+                    override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, p3: Long) {
+                        if (view != null) {
+                            selectedMonthIndex = position
+                            generateDateRange(selectedYear, selectedMonthIndex)
+                            fetchCODCollectionDetails(0, 20)
+                            Timber.d("serviceChargeLog","selectedMonthIndex $selectedMonthIndex")
+                        }
                     }
                 }
-            }
-            binding?.spinnerYear?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(p0: AdapterView<*>?) {}
-                override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, p3: Long) {
-                    if (view != null) {
-                        selectedYear = yearList[position].toInt()
-                        fetchCODCollectionDetails(0, 20)
-                        Timber.d("serviceChargeLog","selectedYear $selectedYear")
+                binding?.spinnerYear?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(p0: AdapterView<*>?) {}
+                    override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, p3: Long) {
+                        if (view != null) {
+                            selectedYear = yearList[position].toInt()
+                            fetchCODCollectionDetails(0, 20)
+                            Timber.d("serviceChargeLog","selectedYear $selectedYear")
+                        }
                     }
                 }
-            }
-        },300L)
+            },300L)
+        }
 
         manageAdapter()
         fetchCODCollectionDetails(0, 20)

@@ -4,16 +4,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
-import com.bd.deliverytiger.app.databinding.ItemViewShipmentChargeBinding
+import com.bd.deliverytiger.app.api.model.charge.DeliveryTypeModel
+import com.bd.deliverytiger.app.databinding.ItemViewShipmentChargeDeliveryTypeBinding
 
-class ShipmentChargeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ShipmentChargeDeliveyTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val dataList: MutableList<DeliveryChargeResponse> = mutableListOf()
+    private val dataList: MutableList<DeliveryTypeModel> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        val binding: ItemViewShipmentChargeBinding = ItemViewShipmentChargeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding: ItemViewShipmentChargeDeliveryTypeBinding = ItemViewShipmentChargeDeliveryTypeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -25,10 +25,9 @@ class ShipmentChargeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         if (holder is ViewHolder) {
             val model = dataList[position]
             val binding = holder.binding
-            binding.weightTV.text = model.weight
 
-            val dataAdapter = ShipmentChargeDeliveyTypeAdapter()
-            dataAdapter.initLoad(model.deliveryTypeModel)
+            binding.deliveryType.text = model.deliveryType
+            val dataAdapter = ShipmentDeliveryAdapter(binding.recyclerView.context, model.deliveryDayChargeModel)
             with(binding.recyclerView) {
                 setHasFixedSize(false)
                 layoutManager = LinearLayoutManager(binding.recyclerView.context)
@@ -39,17 +38,17 @@ class ShipmentChargeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
 
-    internal inner class ViewHolder(val binding: ItemViewShipmentChargeBinding) : RecyclerView.ViewHolder(binding.root) {
+    internal inner class ViewHolder(val binding: ItemViewShipmentChargeDeliveryTypeBinding) : RecyclerView.ViewHolder(binding.root) {
 
     }
 
-    fun initLoad(list: List<DeliveryChargeResponse>) {
+    fun initLoad(list: List<DeliveryTypeModel>) {
         dataList.clear()
         dataList.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun pagingLoad(list: List<DeliveryChargeResponse>) {
+    fun pagingLoad(list: List<DeliveryTypeModel>) {
         val currentIndex = dataList.size
         val newDataCount = list.size
         dataList.addAll(list)

@@ -53,11 +53,13 @@ class ShipmentChargeFragment : Fragment() {
     private var ariaPostOffice = 0
     private var isAriaAvailable = true
 
+    private lateinit var dataAdapter: ShipmentChargeAdapter
 
-    companion object{
+    companion object {
         fun newInstance(): ShipmentChargeFragment = ShipmentChargeFragment().apply {
 
         }
+
         val tag = ShipmentChargeFragment::class.java.name
     }
 
@@ -65,6 +67,7 @@ class ShipmentChargeFragment : Fragment() {
         super.onAttach(context)
         this.mContext = context
     }
+
     private lateinit var mContext: Context
 
     override fun onCreateView(
@@ -86,9 +89,16 @@ class ShipmentChargeFragment : Fragment() {
 
         placeOrderInterface = RetrofitSingleton.getInstance(mContext).create(PlaceOrderInterface::class.java)
 
+        dataAdapter = ShipmentChargeAdapter()
+        with(chargeRV) {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(mContext, RecyclerView.VERTICAL, false)
+            adapter = dataAdapter
+        }
+
         districtTV.setOnClickListener {
             if (districtList.isEmpty()) {
-                getDistrictThanaOrAria(0,1)
+                getDistrictThanaOrAria(0, 1)
             } else {
                 goToDistrict()
             }
@@ -96,20 +106,20 @@ class ShipmentChargeFragment : Fragment() {
 
         thanaTV.setOnClickListener {
             if (district != 0) {
-                getDistrictThanaOrAria(district,2)
+                getDistrictThanaOrAria(district, 2)
             } else {
-                VariousTask.showShortToast(context!!, getString(R.string.select_dist))
+                VariousTask.showShortToast(requireContext(), getString(R.string.select_dist))
             }
         }
 
         calculateBtn.setOnClickListener {
 
-            if(district == 0){
-                showShortToast(context!!, getString(R.string.select_dist))
+            if (district == 0) {
+                showShortToast(requireContext(), getString(R.string.select_dist))
                 return@setOnClickListener
             }
-            if(thana == 0){
-                showShortToast(context!!, getString(R.string.select_thana))
+            if (thana == 0) {
+                showShortToast(requireContext(), getString(R.string.select_thana))
                 return@setOnClickListener
             }
             getDeliveryCharge()
@@ -119,13 +129,12 @@ class ShipmentChargeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("চার্জ ক্যালকুলেটর")
+        (activity as HomeActivity).setToolbarTitle("শিপমেন্ট চার্জ")
     }
 
 
-
-    private fun getDistrictThanaOrAria(id: Int, track: Int){
-        VariousTask.hideSoftKeyBoard(activity!!)
+    private fun getDistrictThanaOrAria(id: Int, track: Int) {
+        VariousTask.hideSoftKeyBoard(requireActivity())
         //track = 1 district , track = 2 thana, track = 3 aria
         val pd = ProgressDialog(context)
         pd.setMessage("Loading")
@@ -134,7 +143,7 @@ class ShipmentChargeFragment : Fragment() {
         val getDistrictThanaOrAria = RetrofitSingleton.getInstance(mContext).create(DistrictInterface::class.java)
         getDistrictThanaOrAria.getAllDistrictFromApi(id).enqueue(object : Callback<DeliveryChargePayLoad> {
             override fun onFailure(call: Call<DeliveryChargePayLoad>, t: Throwable) {
-                Timber.e("districtThanaOrAria_f-",t.toString())
+                Timber.e("districtThanaOrAria_f-", t.toString())
                 pd.dismiss()
             }
 
@@ -143,35 +152,34 @@ class ShipmentChargeFragment : Fragment() {
                 response: Response<DeliveryChargePayLoad>
             ) {
                 pd.dismiss()
-                if(response.isSuccessful && response.body() != null && response.body()!!.data!!.districtInfo != null){
-                    Timber.e("districtThanaOrAria_s-",response.body().toString())
+                if (response.isSuccessful && response.body() != null && response.body()!!.data!!.districtInfo != null) {
+                    Timber.e("districtThanaOrAria_s-", response.body().toString())
 
                     if (track == 1) {
                         districtList.addAll(response.body()!!.data!!.districtInfo!!)
                         goToDistrict()
 
-                    } else if(track == 2){
+                    } else if (track == 2) {
                         thanaOrAriaList.clear()
                         thanaOrAriaList.addAll(response.body()!!.data!!.districtInfo!![0].thanaHome!!)
                         if (thanaOrAriaList.isNotEmpty()) {
                             //customAlertDialog(thanaOrAriaList, 1)
                             val mList: ArrayList<CustomModel> = ArrayList()
-                            for((index,model) in thanaOrAriaList.withIndex()){
-                                mList.add(CustomModel(model.thanaId,model.thanaBng+"",model.thana+"",index))
+                            for ((index, model) in thanaOrAriaList.withIndex()) {
+                                mList.add(CustomModel(model.thanaId, model.thanaBng + "", model.thana + "", index))
                             }
                             thanaAriaSelect(thanaOrAriaList, 2, mList, "থানা নির্বাচন করুন")
                         }
 
 
-
-                    }else if(track == 3){
+                    } else if (track == 3) {
                         thanaOrAriaList.clear()
                         thanaOrAriaList.addAll(response.body()!!.data!!.districtInfo!![0].thanaHome!!)
                         if (thanaOrAriaList.isNotEmpty()) {
                             //customAlertDialog(thanaOrAriaList, 2)
                             val mList: ArrayList<CustomModel> = ArrayList()
-                            for((index,model) in thanaOrAriaList.withIndex()){
-                                mList.add(CustomModel(model.thanaId,model.thanaBng+"",model.thana+"",index))
+                            for ((index, model) in thanaOrAriaList.withIndex()) {
+                                mList.add(CustomModel(model.thanaId, model.thanaBng + "", model.thana + "", index))
                             }
                             thanaAriaSelect(thanaOrAriaList, 3, mList, "এরিয়া/পোস্ট অফিস নির্বাচন করুন")
                         }
@@ -210,7 +218,7 @@ class ShipmentChargeFragment : Fragment() {
         list: ArrayList<CustomModel>, title: String
     ) {
         //track = 1 district , track = 2 thana, track = 3 aria
-        val distFrag = DistrictThanaAriaSelectFragment.newInstance(mContext, list,title)
+        val distFrag = DistrictThanaAriaSelectFragment.newInstance(mContext, list, title)
         val ft = activity?.supportFragmentManager?.beginTransaction()
         ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
         ft?.add(R.id.mainActivityContainer, distFrag, DistrictSelectFragment.tag)
@@ -218,7 +226,7 @@ class ShipmentChargeFragment : Fragment() {
         ft?.commit()
 
         distFrag.onItemClick = { adapterPosition: Int, name: String, id: Int, listPostion ->
-            Timber.e("distFrag1", adapterPosition.toString()+" "+listPostion.toString() + " " + name + " " + id +" "+thanaOrAriaList[listPostion].postalCode+" s")
+            Timber.e("distFrag1", adapterPosition.toString() + " " + listPostion.toString() + " " + name + " " + id + " " + thanaOrAriaList[listPostion].postalCode + " s")
 
             if (track == 1) {
                 thanaTV.text = districtList[listPostion].districtBng
@@ -319,7 +327,7 @@ class ShipmentChargeFragment : Fragment() {
 
         placeOrderInterface.getDeliveryCharge(DeliveryChargeRequest(district, thana)).enqueue(object : Callback<GenericResponse<List<DeliveryChargeResponse>>> {
             override fun onFailure(call: Call<GenericResponse<List<DeliveryChargeResponse>>>, t: Throwable) {
-                if (isAdded){
+                if (isAdded) {
                     progressBar.visibility = View.GONE
                     calculateBtn.isEnabled = true
                 }
@@ -329,21 +337,14 @@ class ShipmentChargeFragment : Fragment() {
                 call: Call<GenericResponse<List<DeliveryChargeResponse>>>,
                 response: Response<GenericResponse<List<DeliveryChargeResponse>>>
             ) {
-                if (isAdded){
+                if (isAdded) {
                     progressBar.visibility = View.GONE
                     calculateBtn.isEnabled = true
                 }
                 if (response.isSuccessful && response.body() != null && isAdded) {
                     if (response.body()!!.model != null) {
-
                         val model = response.body()!!.model
-                        val shipmentAdapter = ShipmentChargeAdapter(mContext, model)
-                        with(chargeRV){
-                            setHasFixedSize(true)
-                            layoutManager = LinearLayoutManager(mContext, RecyclerView.VERTICAL, false)
-                            adapter = shipmentAdapter
-                        }
-
+                        dataAdapter.initLoad(model)
                     }
                 }
             }

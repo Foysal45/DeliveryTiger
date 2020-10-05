@@ -99,6 +99,9 @@ class DashboardFragment : Fragment() {
             getDashBoardData(selectedMonth, selectedYear)
             fetchCollection()
         }
+        binding?.retryBtn?.setOnClickListener {
+            getDashBoardData(selectedMonth, selectedYear)
+        }
 
         homeViewModel.bannerInfo.observe(viewLifecycleOwner, Observer { model ->
             val bannerModel = model.bannerModel
@@ -121,7 +124,8 @@ class DashboardFragment : Fragment() {
         }
 
         binding?.unpaidLayout?.setOnClickListener {
-            goToAllOrder("ডেলিভারি হয়েছে", "ডেলিভারি হয়েছে", selectedStartDate, selectedEndDate)
+            //goToAllOrder("ডেলিভারি হয়েছে", "ডেলিভারি হয়েছে", selectedStartDate, selectedEndDate)
+            addFragment(CODCollectionFragment.newInstance(true), CODCollectionFragment.tag)
         }
 
         binding?.balanceLoadLayout?.setOnClickListener {
@@ -462,6 +466,7 @@ class DashboardFragment : Fragment() {
 
         val dashBoardReqBody = DashBoardReqBody(selectedMonth, selectedYear, selectedStartDate, selectedEndDate, SessionManager.courierUserId)
         Timber.d("DashboardTag r ", dashBoardReqBody.toString())
+
         viewModel.getDashboardStatusGroup(dashBoardReqBody).observe(viewLifecycleOwner, Observer { list ->
 
             binding?.swipeRefresh?.isRefreshing = false
@@ -469,6 +474,12 @@ class DashboardFragment : Fragment() {
             dataList.addAll(list.filter { it.statusGroupId != 12 })
             dataList.add(paymentDashboardModel)
             dashboardAdapter.notifyDataSetChanged()
+
+            if (list.isEmpty()) {
+                binding?.retryBtn?.visibility = View.VISIBLE
+            } else {
+                binding?.retryBtn?.visibility = View.GONE
+            }
 
         })
     }

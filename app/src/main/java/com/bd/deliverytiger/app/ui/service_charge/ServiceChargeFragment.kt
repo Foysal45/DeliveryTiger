@@ -28,6 +28,7 @@ import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.tabs.TabLayout
 import org.koin.android.ext.android.inject
 import java.util.*
 
@@ -71,6 +72,9 @@ class ServiceChargeFragment : Fragment() {
 
     private var selectedMonthIndex: Int = 0
     private var selectedYear: Int = 0
+
+    private var currentFilter: Int = 1
+    private val dataList: MutableList<CourierOrderAmountDetail> = mutableListOf()
 
     private val viewModel: ServiceChargeViewModel by inject()
 
@@ -167,12 +171,15 @@ class ServiceChargeFragment : Fragment() {
             }
         }
 
+
+
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 //Timber.e("layoutPosition", "$layoutPosition $totalLoadedData $isLoading $totalCount $isMoreDataAvailable")
                 if (dy > 0) {
-                    val currentItemCount = recyclerView.layoutManager?.itemCount ?: 0
+                    //val currentItemCount = recyclerView.layoutManager?.itemCount ?: 0
+                    val currentItemCount = dataList.size
                     val lastVisibleItem = (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     if (!isLoading && currentItemCount <= lastVisibleItem + visibleThreshold && currentItemCount < totalCount) {
                         isLoading = true
@@ -189,24 +196,43 @@ class ServiceChargeFragment : Fragment() {
         viewModel.pagingState.observe(viewLifecycleOwner, Observer { model ->
             isLoading = false
             if (model.isInitLoad) {
-                dataChargeAdapter.initLoad(model.dataList)
                 totalCount = model.totalCount
                 val totalAmount = model.totalAmount
 
                 val msg = "মোট পার্সেলঃ <font color='#CC000000'><b>${DigitConverter.toBanglaDigit(totalCount)}</b></font> টি"
                 tvTotalOrder.text = HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-                val amountMsg = "COD: <font color='#CC000000'><b>৳ ${DigitConverter.toBanglaDigit(model.totalAmountDeliveryTakaCollection)}</b></font> | Only Delivery: <font color='#CC000000'><b>৳ ${DigitConverter.toBanglaDigit(model.totalAmountOnlyDelivery)}</b></font>"
-                binding?.includeFilter?.totalAmount?.text = HtmlCompat.fromHtml(amountMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
-                binding?.includeFilter?.totalAmount?.visibility = View.VISIBLE
+                //val amountMsg = "COD: <font color='#E6000000'><b>৳ ${DigitConverter.toBanglaDigit(model.totalAmountDeliveryTakaCollection)}</b></font> | Only Delivery: <font color='#E6000000'><b>৳ ${DigitConverter.toBanglaDigit(model.totalAmountOnlyDelivery)}</b></font>"
+                ///binding?.includeFilter?.totalAmount?.text = HtmlCompat.fromHtml(amountMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                //binding?.includeFilter?.totalAmount?.visibility = View.VISIBLE
+                dataList.clear()
+                dataList.addAll(model.dataList)
+                filterData(dataList, currentFilter)
 
-                if (model.dataList.isEmpty()) {
-                    emptyView.visibility = View.VISIBLE
-                } else {
-                    emptyView.visibility = View.GONE
-                }
+                binding?.filterTab?.getTabAt(0)?.text = "COD (৳ ${DigitConverter.toBanglaDigit(model.totalAmountDeliveryTakaCollection)})"
+                binding?.filterTab?.getTabAt(1)?.text = "Only Delivery (৳ ${DigitConverter.toBanglaDigit(model.totalAmountOnlyDelivery)})"
+
             } else {
-                dataChargeAdapter.pagingLoad(model.dataList)
+                dataList.addAll(model.dataList)
+                filterData(model.dataList, currentFilter, true)
+                //dataChargeAdapter.pagingLoad(model.dataList)
+            }
+        })
+
+        binding?.filterTab?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> {
+                        currentFilter = 1
+                        filterData(dataList, currentFilter)
+                    }
+                    1 -> {
+                        currentFilter = 2
+                        filterData(dataList, currentFilter)
+                    }
+                }
             }
         })
 
@@ -227,6 +253,26 @@ class ServiceChargeFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun filterData(list: List<CourierOrderAmountDetail>, flag: Int, isLazyLoad: Boolean = false) {
+        var filterList: List<CourierOrderAmountDetail> = listOf()
+        if (flag == 1) {
+            filterList = list.filter { it.collectionAmount > 0.0 }
+        } else if (flag == 2) {
+            filterList = list.filter { it.collectionAmount == 0.0 }
+        }
+        if (isLazyLoad) {
+            dataChargeAdapter.pagingLoad(filterList)
+        } else {
+            if (filterList.isEmpty()) {
+                binding?.emptyView?.visibility = View.VISIBLE
+                dataChargeAdapter.clear()
+            } else {
+                binding?.emptyView?.visibility = View.GONE
+                dataChargeAdapter.initLoad(filterList)
+            }
+        }
     }
 
     private fun generateDateRange(year: Int, monthIndex: Int) {

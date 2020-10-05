@@ -8,6 +8,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface AllOrderInterface {
-    @POST("api/Fetch/LoadCourierOrder")
+    @POST("api/Fetch/GetAllOrders")
     fun getAllOrder(@Body body: CODReqBody): Call<GenericResponse<CODResponse>>
 }

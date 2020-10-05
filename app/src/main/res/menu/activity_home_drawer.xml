@@ -39,7 +39,7 @@
         <item
             android:id="@+id/nav_shipment_change"
             android:icon="@drawable/ic_payment"
-            android:title="চার্জ ক্যালকুলেটর" />
+            android:title="শিপমেন্ট চার্জ" />
         <item
             android:id="@+id/nav_order_tracking"
             android:icon="@drawable/ic_tracking"

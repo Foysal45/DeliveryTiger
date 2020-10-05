@@ -217,21 +217,45 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerview"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:background="@drawable/bg_stroke2"
-                        android:minHeight="200dp"
-                        android:overScrollMode="never"
-                        android:padding="5dp"
+                        android:layout_marginEnd="16dp">
 
-                        tools:itemCount="4"
-                        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                        tools:listitem="@layout/item_view_dashboard"
-                        tools:spanCount="2" />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_stroke2"
+                            android:minHeight="200dp"
+                            android:overScrollMode="never"
+                            android:padding="5dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+
+                            tools:itemCount="4"
+                            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                            tools:listitem="@layout/item_view_dashboard"
+                            tools:spanCount="2" />
+
+                        <ImageView
+                            android:id="@+id/retryBtn"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:contentDescription="@string/cd"
+                            android:src="@drawable/ic_reload"
+                            android:tint="@color/colorPrimary"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:visibility="visible" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                     <LinearLayout
                         android:id="@+id/paymentLayout"

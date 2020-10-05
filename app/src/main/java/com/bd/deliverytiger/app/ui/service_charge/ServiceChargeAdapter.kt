@@ -104,4 +104,9 @@ class ServiceChargeAdapter : RecyclerView.Adapter<ServiceChargeAdapter.myViewHol
         notifyItemRangeInserted(currentIndex, newDataCount)
     }
 
+    fun clear() {
+        dataList.clear()
+        notifyDataSetChanged()
+    }
+
 }
