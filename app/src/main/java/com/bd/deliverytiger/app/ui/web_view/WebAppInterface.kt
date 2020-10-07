@@ -76,4 +76,10 @@ class WebAppInterface(private val context: Context?, private val repository: App
         }
     }
 
+    @JavascriptInterface
+    fun goToAppForAdvancePayment(id : String?, message: String?, TransactionId: String?) {
+        context?.toast(message)
+        //(context as HomeActivity).onBackPressed()
+    }
+
 }

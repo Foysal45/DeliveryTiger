@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingStart="@dimen/left_right_margin"
+    android:paddingTop="@dimen/left_right_margin"
+    android:paddingEnd="@dimen/left_right_margin">
+
+    <EditText
+        android:id="@+id/amountET"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_view_height"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_add_order_edit_text"
+        android:hint="টাকার অ্যামাউন্ট"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/payBtn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="বিকাশে ব্যালেন্স লোড"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/amountET" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

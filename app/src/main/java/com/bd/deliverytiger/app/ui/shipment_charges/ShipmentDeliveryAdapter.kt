@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.ui.shipment_charges
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -14,13 +15,7 @@ class ShipmentDeliveryAdapter(private val mContext: Context?, private var dataLi
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_view_shipment_delivery,
-                parent,
-                false
-            )
-        )
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_view_shipment_delivery, parent, false))
     }
 
     /**
@@ -33,23 +28,22 @@ class ShipmentDeliveryAdapter(private val mContext: Context?, private var dataLi
     /**
      * onBindViewHolder
      */
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         if (holder is ViewHolder) {
 
             val model = dataList[position]
-            holder.deliveryTV.text = "${model.days} দিনে"
+            holder.deliveryTV.text = "${model.days} ${model.dayType}"
             holder.priceTV.text = "৳ ${DigitConverter.toBanglaDigit(model.chargeAmount, true)}"
         }
     }
-
 
 
     internal inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         internal val deliveryTV: TextView = view.findViewById(R.id.item_view_shipment_delivery_time)
         internal val priceTV: TextView = view.findViewById(R.id.item_view_shipment_delivery_price)
-
 
         init {
             view.setOnClickListener {

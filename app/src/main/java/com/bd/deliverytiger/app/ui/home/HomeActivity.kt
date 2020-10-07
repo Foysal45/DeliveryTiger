@@ -38,6 +38,7 @@ import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.services.LocationUpdatesService
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
+import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadFragment
 import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.bill_pay_history.ServiceBillPayHistoryFragment
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
@@ -297,7 +298,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 currentFragment is DistrictSelectFragment || currentFragment is DistrictThanaAriaSelectFragment ||
                 currentFragment is MapFragment ||
                 currentFragment is ServiceBillPayFragment || currentFragment is ServiceBillPayHistoryFragment ||
-                currentFragment is PaymentStatementFragment || currentFragment is PaymentStatementDetailFragment) {
+                currentFragment is PaymentStatementFragment || currentFragment is PaymentStatementDetailFragment ||
+                currentFragment is BalanceLoadFragment) {
                 addProductBtnVisibility(false)
             } else {
                 addProductBtnVisibility(true)
@@ -389,6 +391,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     currentFragment.onResume()
                 }
                 is ServiceBillPayHistoryFragment -> {
+                    currentFragment.onResume()
+                }
+                is BalanceLoadFragment -> {
                     currentFragment.onResume()
                 }
             }

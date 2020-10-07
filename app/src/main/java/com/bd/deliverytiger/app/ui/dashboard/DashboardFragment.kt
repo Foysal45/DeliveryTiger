@@ -22,6 +22,7 @@ import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
+import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadFragment
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
@@ -129,7 +130,7 @@ class DashboardFragment : Fragment() {
         }
 
         binding?.balanceLoadLayout?.setOnClickListener {
-            context?.toast("Under Development")
+            addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
         }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->

@@ -16,6 +16,7 @@ object AppConstant {
     const val GATEWAY = "https://m.ajkerdeal.com/MSingleOrder/bkashpaymentofdeliverytigerforapp.aspx"//?CourierID=4376&FromDate=2020-06-01&ToDate=2020-06-30
     const val TEST_BANNER = "https://static.ajkerdeal.com/images/merchant/same_day_delivery.jpg"
     const val CHARGE_CALCULATOR = "https://deliverytiger.com.bd/price-calculator-for-app"
+    const val BALANCE_LOAD_GATEWAY = "https://m.ajkerdeal.com/MSingleOrder/AdvanceBalanceGivenByMerchant.aspx"//?CourierID=1111&Amount=10
 
     const val GPS_REQUEST = 1001
 }

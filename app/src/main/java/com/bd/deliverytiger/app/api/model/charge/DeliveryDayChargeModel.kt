@@ -5,11 +5,13 @@ import com.google.gson.annotations.SerializedName
 
 data class DeliveryDayChargeModel(
     @SerializedName("weightRangeId")
-    var weightRangeId: Int,
+    var weightRangeId: Int = 0,
     @SerializedName("deliveryType")
-    var deliveryType: String,
+    var deliveryType: String = "",
     @SerializedName("chargeAmount")
-    var chargeAmount: Double,
+    var chargeAmount: Double = 0.0,
     @SerializedName("days")
-    var days: String
+    var days: String = "",
+    @SerializedName("dayType")
+    var dayType: String = ""
 )
