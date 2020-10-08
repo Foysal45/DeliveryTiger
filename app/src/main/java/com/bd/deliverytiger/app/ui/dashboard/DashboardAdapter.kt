@@ -103,13 +103,17 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             val model = dataList[position]
             val binding = holder.binding
 
-            if (model.paymentDate.isNotEmpty()) {
-                val banglaDate = DigitConverter.toBanglaDate(model.paymentDate,"MM/dd/yyyy")
-                binding.msg2.text = "($banglaDate)"
-            }
             binding.amount.text = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}"
             binding.msg1.text = "${model.name}"
-
+            if (model.totalAmount.toInt() > 0) {
+                binding.msg2.visibility = View.VISIBLE
+                if (model.paymentDate.isNotEmpty()) {
+                    val banglaDate = DigitConverter.toBanglaDate(model.paymentDate,"MM/dd/yyyy")
+                    binding.msg2.text = "($banglaDate)"
+                }
+            } else {
+                binding.msg2.visibility = View.GONE
+            }
         }
     }
 
