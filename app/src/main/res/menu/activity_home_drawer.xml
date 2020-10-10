@@ -67,7 +67,7 @@
         <item
             android:id="@+id/nav_complain"
             android:icon="@drawable/ic_headset_mic"
-            android:title="কমপ্লেইন" />
+            android:title="অভিযোগ" />
         <item
             android:id="@+id/nav_privacy"
             android:icon="@drawable/ic_privacy"
