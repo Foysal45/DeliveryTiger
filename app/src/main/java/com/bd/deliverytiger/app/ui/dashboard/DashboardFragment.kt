@@ -325,11 +325,12 @@ class DashboardFragment : Fragment() {
         dayOfYear = calenderNow.get(Calendar.DAY_OF_YEAR)
         today = calenderNow.get(Calendar.DAY_OF_MONTH)
         currentMonth = calenderNow.get(Calendar.MONTH)
+        val lastActualDay = calenderNow.getActualMaximum(Calendar.DAY_OF_MONTH)
+        currentDate = sdf.format(calenderNow.timeInMillis)
         selectedYear = currentYear
         selectedMonth = currentMonth + 1
-        currentDate = sdf.format(calenderNow.timeInMillis)
-        selectedStartDate = currentDate
-        selectedEndDate = currentDate
+        selectedStartDate = "$selectedYear-$selectedMonth-01"
+        selectedEndDate = "$selectedYear-$selectedMonth-$lastActualDay"
 
         getDashBoardData(selectedMonth, selectedYear)
         Timber.d("DashboardTag", "fetchDashBoard $selectedMonth $selectedYear")

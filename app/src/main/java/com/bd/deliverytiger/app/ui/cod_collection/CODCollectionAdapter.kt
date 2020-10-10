@@ -14,6 +14,7 @@ class CODCollectionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList: MutableList<CourierOrderViewModel> = mutableListOf()
     var onTrackClicked: ((model: CourierOrderViewModel, position: Int) -> Unit)? = null
+    var isUnpaidCOD: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding: ItemViewCodCollectionNewBinding = ItemViewCodCollectionNewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -29,7 +30,11 @@ class CODCollectionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val model = dataList[position]
             val binding = holder.binding
 
-            val formattedDate = DigitConverter.toBanglaDate(model.courierOrderDateDetails?.confirmationDate.toString(), "MM-dd-yyyy HH:mm:ss")
+            val formattedDate = if (isUnpaidCOD) {
+                DigitConverter.toBanglaDate(model.courierOrderDateDetails?.updatedOnDate.toString(), "MM-dd-yyyy HH:mm:ss")
+            } else {
+                DigitConverter.toBanglaDate(model.courierOrderDateDetails?.confirmationDate.toString(), "MM-dd-yyyy HH:mm:ss")
+            }
             binding.key0.text = model.courierOrdersId.toString()
             binding.date.text = formattedDate
 

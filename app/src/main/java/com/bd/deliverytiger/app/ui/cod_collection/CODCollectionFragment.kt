@@ -80,7 +80,11 @@ class CODCollectionFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("COD কালেকশন")
+        if (isUnpaidCOD) {
+            (activity as HomeActivity).setToolbarTitle("আনপেইড COD কালেকশন")
+        } else {
+            (activity as HomeActivity).setToolbarTitle("COD কালেকশন")
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -235,6 +239,7 @@ class CODCollectionFragment : Fragment() {
 
     private fun manageAdapter() {
         dataAdapter = CODCollectionAdapter()
+        dataAdapter.isUnpaidCOD = isUnpaidCOD
         recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
