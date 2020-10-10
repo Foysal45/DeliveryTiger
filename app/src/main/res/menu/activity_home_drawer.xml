@@ -39,7 +39,9 @@
         <item
             android:id="@+id/nav_shipment_change"
             android:icon="@drawable/ic_payment"
-            android:title="শিপমেন্ট চার্জ" />
+            android:title="শিপমেন্ট চার্জ"
+            android:visible="false"
+            />
         <item
             android:id="@+id/nav_order_tracking"
             android:icon="@drawable/ic_tracking"

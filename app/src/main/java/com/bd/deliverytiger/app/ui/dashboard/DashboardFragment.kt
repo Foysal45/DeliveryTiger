@@ -66,7 +66,6 @@ class DashboardFragment : Fragment() {
     private var selectedStartDate = ""
     private var selectedEndDate = ""
     private var currentDate = ""
-    private var isLoading = false
     private var freezeDate = ""
 
     private var isBannerEnable: Boolean = false
@@ -144,10 +143,8 @@ class DashboardFragment : Fragment() {
                 is ViewState.ProgressState -> {
                     if (state.isShow) {
                         binding?.progressBar?.visibility = View.VISIBLE
-                        isLoading = true
                     } else {
                         binding?.progressBar?.visibility = View.GONE
-                        isLoading = false
                     }
                 }
             }
@@ -333,7 +330,9 @@ class DashboardFragment : Fragment() {
         currentDate = sdf.format(calenderNow.timeInMillis)
         selectedStartDate = currentDate
         selectedEndDate = currentDate
-        //getDashBoardData(selectedMonth, selectedYear)
+
+        getDashBoardData(selectedMonth, selectedYear)
+        Timber.d("DashboardTag", "fetchDashBoard $selectedMonth $selectedYear")
 
         val list: MutableList<MonthDataModel> = mutableListOf()
         viewList.clear()
@@ -361,8 +360,8 @@ class DashboardFragment : Fragment() {
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
                 if (position > 0) {
-                    if (!isLoading) {
-                        val model = list[position - 1]
+                    val model = list[position - 1]
+                    if (selectedMonth != model.monthId) {
                         selectedYear = model.year
                         selectedMonth = model.monthId
 
@@ -373,12 +372,11 @@ class DashboardFragment : Fragment() {
                         selectedEndDate = "$selectedYear-$selectedMonth-$lastDate"
 
                         getDashBoardData(model.monthId, model.year)
-                        Timber.d("DashboardTag", "${model.monthId} $currentYear")
+                        Timber.d("DashboardTag", "fetchDashBoard ${model.monthId} $currentYear")
                     }
                 }
             }
         }
-
         handler.postDelayed({
             binding?.monthSpinner?.setSelection(1)
         }, 300L)
