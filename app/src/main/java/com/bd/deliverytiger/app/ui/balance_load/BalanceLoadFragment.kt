@@ -6,18 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentBalanceLoadBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
+import org.koin.android.ext.android.inject
 
 class BalanceLoadFragment: Fragment() {
 
     private var binding: FragmentBalanceLoadBinding? = null
 
+    private val viewModel: BalanceLoadViewModel by inject()
+
     private var amountTaka: Int = 0
-    private var minimumAmount: Int = 1000
+    private var minimumAmount: Int = 100
     private var maximumAmount: Int = 50000
 
     companion object {
@@ -47,6 +51,29 @@ class BalanceLoadFragment: Fragment() {
                 paymentGateway(amountTaka)
             }
         }
+
+        viewModel.fetchBalanceLimit(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            minimumAmount = model.minAmount
+            maximumAmount = model.maxAmount
+        })
+
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is ViewState.ShowMessage -> {
+                    context?.toast(state.message)
+                }
+                is ViewState.KeyboardState -> {
+                    hideKeyboard()
+                }
+                is ViewState.ProgressState -> {
+                    if (state.isShow) {
+                        binding?.progressBar?.visibility = View.VISIBLE
+                    } else {
+                        binding?.progressBar?.visibility = View.GONE
+                    }
+                }
+            }
+        })
     }
 
     private fun validate(): Boolean {

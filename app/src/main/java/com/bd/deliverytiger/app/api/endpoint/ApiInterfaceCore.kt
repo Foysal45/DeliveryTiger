@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.api.endpoint
 
 import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.GenericResponse
+import com.bd.deliverytiger.app.api.model.balance_load.BalanceLimitResponse
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceMainResponse
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody
 import com.bd.deliverytiger.app.api.model.calculator.DeliveryChargeInfo
@@ -126,4 +127,8 @@ interface ApiInterfaceCore {
 
     @POST("api/Fetch/GetCodCollections")
     suspend fun fetchCODCollectionDetails(@Body requestBody: CODReqBody): NetworkResponse<GenericResponse<CODResponse>, ErrorResponse>
+
+    @GET("api/Fetch/GetBalanceLoadLimit/{merchantId}")
+    suspend fun fetchBalanceLimit(@Path("merchantId") merchantId: Int): NetworkResponse<GenericResponse<BalanceLimitResponse>, ErrorResponse>
+
 }

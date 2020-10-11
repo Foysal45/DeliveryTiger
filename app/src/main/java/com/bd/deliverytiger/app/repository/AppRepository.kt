@@ -120,4 +120,6 @@ class AppRepository(
 
     suspend fun fetchCODCollectionDetails(requestBody: CODReqBody) = apiInterfaceCore.fetchCODCollectionDetails(requestBody)
 
+    suspend fun fetchBalanceLimit(merchantId: Int) = apiInterfaceCore.fetchBalanceLimit(merchantId)
+
 }

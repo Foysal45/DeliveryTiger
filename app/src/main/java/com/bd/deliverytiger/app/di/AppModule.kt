@@ -9,6 +9,7 @@ import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.ui.add_order.AddOrderViewModel
 import com.bd.deliverytiger.app.ui.add_order.AddProductViewModel
 import com.bd.deliverytiger.app.ui.add_order.OrderSuccessViewModel
+import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadViewModel
 import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillViewModel
 import com.bd.deliverytiger.app.ui.bill_pay_history.ServiceBillHistoryViewModel
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeViewModel
@@ -68,5 +69,6 @@ val appModule = module {
     viewModel { DeliveryChargeViewModel(get()) }
     viewModel { ServiceChargeViewModel(get()) }
     viewModel { CODCollectionViewModel(get()) }
+    viewModel { BalanceLoadViewModel(get()) }
 
 }
