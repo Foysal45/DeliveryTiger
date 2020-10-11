@@ -39,7 +39,7 @@ class CODCollectionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.date.text = formattedDate
 
             binding.codCollection.text = "${DigitConverter.toBanglaDigit(model.courierPrice?.collectionAmount, true)} ৳"
-            binding.statusName.text = model.statusTypeName
+            binding.statusName.text = model.statusTypeName + " (COD কালেকশন)"
 
             if (model.statusType == "Paid" || model.statusType == "পেইড") {
                 binding.statusName.setTextColor(ContextCompat.getColor(binding.statusName.context, R.color.colorPrimary))

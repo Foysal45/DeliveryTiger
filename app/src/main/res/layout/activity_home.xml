@@ -22,7 +22,9 @@
         app:itemTextColor="@color/black_80"
         app:itemIconTint="@color/drawer_icon_color"
         app:headerLayout="@layout/nav_header_home"
-        app:menu="@menu/activity_home_drawer" />
+        app:menu="@menu/activity_home_drawer"
+        app:itemMaxLines="2"
+        />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view_2"

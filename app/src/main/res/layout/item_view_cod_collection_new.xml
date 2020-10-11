@@ -74,7 +74,7 @@
             android:id="@+id/key2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="COD কালেকশন"
+            android:text="COD অ্যামাউন্ট"
             android:textColor="@color/black_80"
             android:textSize="@dimen/text_14"
             app:layout_constraintStart_toStartOf="parent"

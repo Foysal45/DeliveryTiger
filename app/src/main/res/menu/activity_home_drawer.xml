@@ -7,75 +7,98 @@
             android:id="@+id/nav_dashboard"
             android:icon="@drawable/ic_dashboard"
             android:title="ড্যাশবোর্ড" />
-        <item
-            android:id="@+id/nav_new_order"
-            android:icon="@drawable/ic_add_box"
-            android:title="নতুন অর্ডার" />
+
         <item
             android:id="@+id/nav_orders"
             android:icon="@drawable/ic_list"
             android:title="সব অর্ডার" />
+
         <item
             android:id="@+id/nav_bill"
             android:icon="@drawable/ic_wallet"
             android:title="সার্ভিস চার্জ" />
+
         <item
             android:id="@+id/nav_cod_collection"
             android:icon="@drawable/ic_handout"
-            android:title="COD কালেকশন" />
+            android:title="COD কালেকশন\nপেইড ও আনপেইড" />
+
+        <item
+            android:id="@+id/nav_payment_history"
+            android:icon="@drawable/ic_analytics"
+            android:title="পেমেন্ট স্টেটমেন্ট" />
+
         <item
             android:id="@+id/nav_bill_pay"
             android:icon="@drawable/ic_transaction_history"
             android:title="বিল পে (Only Delivery)" />
+
         <item
             android:id="@+id/nav_bill_pay_history"
             android:icon="@drawable/ic_bill_pay_history"
             android:title="বিল পে হিস্টোরি" />
-        <item
-            android:id="@+id/nav_payment_history"
-            android:icon="@drawable/ic_analytics"
-            android:title="পেমেন্ট স্টেটমেন্ট"
-            />
-        <item
-            android:id="@+id/nav_shipment_change"
-            android:icon="@drawable/ic_payment"
-            android:title="শিপমেন্ট চার্জ"
-            android:visible="false"
-            />
-        <item
-            android:id="@+id/nav_order_tracking"
-            android:icon="@drawable/ic_tracking"
-            android:title="অর্ডার ট্র্যাকিং"
-            android:visible="false"
-            />
+
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_account"
             android:title="প্রোফাইল আপডেট" />
+
         <item
             android:id="@+id/nav_pickup"
             android:icon="@drawable/ic_location1"
             android:title="অ্যাড পিকআপ লোকেশন" />
+
         <item
             android:id="@+id/nav_change_calculator"
             android:icon="@drawable/ic_calculator"
             android:title="ডেলিভারি চার্জ ক্যালকুলেটর" />
-        <item
-            android:id="@+id/nav_map"
-            android:icon="@drawable/ic_map"
-            android:title="কালেক্টর ট্র্যাকিং" />
+
         <item
             android:id="@+id/nav_complain"
             android:icon="@drawable/ic_complain"
             android:title="ডেলিভারি কমপ্লেইন" />
+
         <item
             android:id="@+id/nav_privacy"
             android:icon="@drawable/ic_privacy"
             android:title="প্রাইভেসি পলিসি" />
+
+        <item
+            android:id="@+id/nav_communication"
+            android:icon="@drawable/ic_headset_mic"
+            android:title="যোগাযোগ" />
+
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout"
             android:title="লগ আউট" />
+
+        <!--Disabled Menu Items-->
+
+        <item
+            android:id="@+id/nav_new_order"
+            android:icon="@drawable/ic_add_box"
+            android:title="নতুন অর্ডার"
+            android:visible="false" />
+
+        <item
+            android:id="@+id/nav_shipment_change"
+            android:icon="@drawable/ic_payment"
+            android:title="শিপমেন্ট চার্জ"
+            android:visible="false" />
+
+        <item
+            android:id="@+id/nav_order_tracking"
+            android:icon="@drawable/ic_tracking"
+            android:title="অর্ডার ট্র্যাকিং"
+            android:visible="false" />
+
+        <item
+            android:id="@+id/nav_map"
+            android:icon="@drawable/ic_map"
+            android:title="কালেক্টর ট্র্যাকিং"
+            android:visible="false" />
+
     </group>
 
 

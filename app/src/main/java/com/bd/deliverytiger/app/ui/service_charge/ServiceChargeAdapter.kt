@@ -42,7 +42,7 @@ class ServiceChargeAdapter : RecyclerView.Adapter<ServiceChargeAdapter.myViewHol
         holder.tvBillingCollectionCharge.text = "${DigitConverter.toBanglaDigit(model.collectionCharge)} ৳"
         holder.tvBillingReturnCharge.text = "${DigitConverter.toBanglaDigit(model.returnCharge)} ৳"
         holder.tvBillingTotalServiceCharge.text = "${DigitConverter.toBanglaDigit(model.totalAmount)} ৳"
-        holder.tvBillingPaymentStatus.text = model.serviceBillingStatus
+        holder.tvBillingPaymentStatus.text = model.serviceBillingStatus + " (সার্ভিস চার্জ)"
         //holder.paymentStatus.text = courierOrderAmountDetailList?.get(position)?.serviceBillingStatus
 
         if (model.serviceBillingStatus.equals("Received")) {

@@ -189,7 +189,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="পেমেন্ট স্ট্যাটাস"
+            android:text="স্ট্যাটাস"
             android:textColor="@color/black_90"
             android:textSize="@dimen/text_14"
             app:layout_constraintStart_toStartOf="parent"

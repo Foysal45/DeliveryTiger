@@ -299,7 +299,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 currentFragment is MapFragment ||
                 currentFragment is ServiceBillPayFragment || currentFragment is ServiceBillPayHistoryFragment ||
                 currentFragment is PaymentStatementFragment || currentFragment is PaymentStatementDetailFragment ||
-                currentFragment is BalanceLoadFragment) {
+                currentFragment is BalanceLoadFragment ||
+                currentFragment is ComplainFragment) {
                 addProductBtnVisibility(false)
             } else {
                 addProductBtnVisibility(true)
@@ -624,6 +625,19 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                     try {
                         val fragment = WebViewFragment.newInstance(AppConstant.POLICY_URL, "প্রাইভেসি পলিসি")
+                        addFragment(fragment, WebViewFragment.tag)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+            R.id.nav_communication -> {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is WebViewFragment) {
+                    Timber.d("tag", "WebViewFragment already exist")
+                } else {
+                    try {
+                        val fragment = WebViewFragment.newInstance(AppConstant.COMMUNICATION_URL, "যোগাযোগ")
                         addFragment(fragment, WebViewFragment.tag)
                     } catch (e: Exception) {
                         e.printStackTrace()
