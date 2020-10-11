@@ -287,7 +287,7 @@
                                 android:gravity="center"
                                 android:includeFontPadding="false"
                                 android:maxLines="2"
-                                android:text="ব্যালেন্স লোড করুন"
+                                android:text="ব্যালেন্স লোড\nকরুন"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_14" />
 
@@ -311,10 +311,10 @@
                                 android:ellipsize="end"
                                 android:gravity="center"
                                 android:includeFontPadding="false"
-                                android:maxLines="1"
+                                android:maxLines="2"
                                 android:paddingTop="4dp"
                                 android:paddingBottom="4dp"
-                                android:text="আনপেইড COD"
+                                android:text="আনপেইড\nCOD"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_14"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -370,33 +370,74 @@
                         tools:visibility="visible" />
 
                     <LinearLayout
-                        android:id="@+id/nearByHubBtn"
-                        android:layout_width="220dp"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="18dp"
-                        android:background="@drawable/bg_nearby_hub"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        tools:ignore="UselessParent">
+                        >
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:contentDescription="@string/cd"
-                            android:src="@drawable/ic_hub" />
+                        <LinearLayout
+                            android:id="@+id/nearByHubBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@drawable/bg_nearby_hub"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            tools:ignore="UselessParent">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="নিকটস্থ হাব"
-                            android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:contentDescription="@string/cd"
+                                android:src="@drawable/ic_hub" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="নিকটস্থ হাব"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/complainBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@drawable/bg_nearby_hub"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            tools:ignore="UselessParent"
+                            android:layout_marginStart="8dp"
+                            >
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:contentDescription="@string/cd"
+                                android:src="@drawable/ic_headset_mic" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="অভিযোগ"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -405,7 +446,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp" />
-
 
                 </LinearLayout>
 

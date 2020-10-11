@@ -27,6 +27,7 @@ import com.bd.deliverytiger.app.ui.banner.SliderAdapter
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
+import com.bd.deliverytiger.app.ui.complain.ComplainFragment
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
@@ -121,6 +122,10 @@ class DashboardFragment : Fragment() {
                 "isNearByHubView" to true
             )
             addFragment(MapFragment.newInstance(bundle), MapFragment.tag)
+        }
+
+        binding?.complainBtn?.setOnClickListener {
+            addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
         }
 
         binding?.unpaidLayout?.setOnClickListener {
