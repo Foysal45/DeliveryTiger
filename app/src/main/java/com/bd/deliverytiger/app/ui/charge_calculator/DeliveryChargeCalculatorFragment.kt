@@ -178,7 +178,7 @@ class DeliveryChargeCalculatorFragment: Fragment() {
     }
 
     private fun calculate(charge: Int) {
-        val msg = "ডেলিভারি চার্জ <font color='#e11f27'>৳ ${DigitConverter.toBanglaDigit(charge, true)}</font> + <font color='#e11f27'>$codPercentBangla%</font> COD চার্জ মাত্র"
+        val msg = "ডেলিভারি চার্জ <font color='#e11f27'>৳ ${DigitConverter.toBanglaDigit(charge, true)}</font> + <font color='#e11f27'>$codPercentBangla%</font> COD চার্জ"
         binding?.changeTV?.text = HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 

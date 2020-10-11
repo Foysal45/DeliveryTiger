@@ -39,7 +39,43 @@
                 android:paddingEnd="16dp"
                 android:paddingBottom="8dp"
                 android:textColor="@color/black_80"
-                android:textSize="@dimen/text_14" />
+                android:textSize="@dimen/text_14"
+
+                />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                >
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spinnerComplainType"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/login_view_height"
+                    android:background="@drawable/bg_spinner"
+                    android:overlapAnchor="false"
+                    android:spinnerMode="dropdown"
+                    android:theme="@style/custom_spinner_style"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:entries="@array/spinner_array_collection_location" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@string/cd"
+                    app:layout_constraintBottom_toBottomOf="@id/spinnerComplainType"
+                    app:layout_constraintEnd_toEndOf="@id/spinnerComplainType"
+                    app:layout_constraintTop_toTopOf="@id/spinnerComplainType"
+                    app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <EditText
                 android:id="@+id/complainTV"
@@ -57,7 +93,10 @@
                 android:paddingEnd="16dp"
                 android:paddingBottom="8dp"
                 android:textColor="@color/black_80"
-                android:textSize="@dimen/text_14" />
+                android:textSize="@dimen/text_14"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
 
         </LinearLayout>
 
