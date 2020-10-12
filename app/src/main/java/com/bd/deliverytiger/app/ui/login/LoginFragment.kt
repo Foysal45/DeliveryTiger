@@ -78,7 +78,6 @@ class LoginFragment: Fragment() {
         signUpTV = view.findViewById(R.id.tvLoginSignUp)
         //checkRememberMe = view.findViewById(R.id.login_checkBox_remember_me)
 
-        //ToDo: remove
         if (BuildConfig.DEBUG){
             mobileET.setText("01777717798")
             passwordET.setText("Rawnation_2020")
