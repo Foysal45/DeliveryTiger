@@ -173,7 +173,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         profileEdit.setOnClickListener {
             navId = R.id.nav_header_profile_edit
             drawerLayout.closeDrawer(GravityCompat.START)
-
+        }
+        headerPic.setOnClickListener {
+            navId = R.id.nav_header_profile_edit
+            drawerLayout.closeDrawer(GravityCompat.START)
         }
 
         FirebaseMessaging.getInstance().subscribeToTopic("DeliveryTigerTopic")
