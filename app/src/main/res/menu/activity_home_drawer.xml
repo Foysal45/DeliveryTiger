@@ -59,6 +59,12 @@
             android:title="ডেলিভারি কমপ্লেইন" />
 
         <item
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/ic_chat"
+            android:title="চ্যাট"
+             />
+
+        <item
             android:id="@+id/nav_privacy"
             android:icon="@drawable/ic_privacy"
             android:title="প্রাইভেসি পলিসি" />

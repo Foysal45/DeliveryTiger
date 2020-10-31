@@ -209,3 +209,15 @@ fun Bundle.bundleToString(): String {
         "$key=${this[key]}"
     }
 }
+
+fun generateNameInitial(name: String?): String {
+    if (name.isNullOrEmpty()) return ""
+    var initial: String = ""
+    val array = name.trim().split(" ")
+    array.forEach {
+        if (it.isNotEmpty()) {
+            initial += it[0]
+        }
+    }
+    return  initial
+}

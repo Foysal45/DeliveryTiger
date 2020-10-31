@@ -42,6 +42,7 @@ import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadFragment
 import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.bill_pay_history.ServiceBillPayHistoryFragment
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
+import com.bd.deliverytiger.app.ui.chat.ChatActivity
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.complain.ComplainFragment
@@ -646,6 +647,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         e.printStackTrace()
                     }
                 }
+            }
+            R.id.nav_chat -> {
+                startActivity(Intent(this, ChatActivity::class.java))
             }
             R.id.nav_logout -> {
 

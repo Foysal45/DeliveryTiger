@@ -123,6 +123,8 @@
 -keep class com.google.firebase.crashlytics.** { *; }
 -dontwarn com.google.firebase.crashlytics.**
 
+-keepclassmembers class com.bd.deliverytiger.app.ui.chat.model.* { *; }
+
 -keep class org.openxmlformats.** { *; }
 -keep class schemaorg_apache_xmlbeans.* { *; }
 -keep class schemasMicrosoftComOfficeExcel.* { *; }
