@@ -1,18 +1,14 @@
-package com.bd.deliverytiger.app.ui.chat.history
+package com.bd.deliverytiger.app.ui.chat.compose
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.databinding.FragmentChatHistoryBinding
-import com.bd.deliverytiger.app.ui.chat.compose.ChatFragment
-import com.bd.deliverytiger.app.ui.chat.model.ChatHistoryData
+import com.bd.deliverytiger.app.databinding.FragmentChatBinding
+import com.bd.deliverytiger.app.ui.chat.model.ChatData
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -22,11 +18,11 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
-class ChatHistoryFragment(): Fragment() {
+class ChatFragment(): Fragment() {
 
-    private var binding: FragmentChatHistoryBinding? = null
-    private lateinit var historyReference: DatabaseReference
-    private lateinit var dataAdapter: ChatHistoryAdapter
+    private var binding: FragmentChatBinding? = null
+    private lateinit var chatRoomReference: DatabaseReference
+    private lateinit var dataAdapter: ChatAdapter
 
     private lateinit var valueEventListener: ValueEventListener
 
@@ -35,13 +31,18 @@ class ChatHistoryFragment(): Fragment() {
     private var totalCount = 0
     private val queryLimit = 15
 
+    private var bundle: Bundle? = null
+    private var agentId = 0
+
     companion object {
-        fun newInstance(): ChatHistoryFragment = ChatHistoryFragment().apply {  }
-        val tag: String = ChatHistoryFragment::class.java.name
+        fun newInstance(bundle: Bundle): ChatFragment = ChatFragment().apply {
+            this.bundle = bundle
+        }
+        val tag: String = ChatFragment::class.java.name
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentChatHistoryBinding.inflate(inflater, container, false).also {
+        return FragmentChatBinding.inflate(inflater, container, false).also {
             binding = it
         }.root
     }
@@ -49,51 +50,48 @@ class ChatHistoryFragment(): Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        dataAdapter = ChatHistoryAdapter()
+        agentId = bundle?.getInt("agentId", 0) ?: 0
+
+        dataAdapter = ChatAdapter()
         with(binding?.recyclerview!!) {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
             adapter = dataAdapter
-            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
-        }
-        dataAdapter.onItemClicked = { model ->
-            val bundle = bundleOf(
-                "agentId" to 328702
-            )
-            goToChatCompose(bundle)
         }
 
         binding?.progressBar?.visibility = View.VISIBLE
         val userId = SessionManager.courierUserId
-        historyReference = Firebase.database.getReference("DeliveryTiger")
+        val agentId = 328702
+        chatRoomReference = Firebase.database.getReference("DeliveryTiger")
             .child("chat")
-            .child("agentHistory")
+            .child("merchantMsg")
             .child(userId.toString())
-        Timber.tag("chatDebug").d("Reference $historyReference")
-        historyReference.orderByKey().limitToLast(queryLimit).addListenerForSingleValueEvent(object : ValueEventListener {
+            .child(userId.toString()+agentId)
+        Timber.tag("chatDebug").d("Reference $chatRoomReference")
+        chatRoomReference.orderByKey().limitToLast(queryLimit).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 binding?.progressBar?.visibility = View.GONE
                 if (snapshot.exists()) {
                     Timber.tag("chatDebug").d(snapshot.toString())
-                    val historyList: MutableList<ChatHistoryData> = mutableListOf()
+                    val historyList: MutableList<ChatData> = mutableListOf()
                     snapshot.children.forEach { dataSnapshot ->
-                        val model = dataSnapshot.getValue(ChatHistoryData::class.java)
+                        val model = dataSnapshot.getValue(ChatData::class.java)
                         model?.let {
                             historyList.add(it)
                         }
                     }
-                    historyList.reverse()
+                    //historyList.reverse()
                     dataAdapter.initLoad(historyList)
 
                 } else {
                     binding?.emptyView?.visibility = View.VISIBLE
-                    Timber.tag("chatDebug").d("agentHistory $snapshot")
+                    Timber.tag("chatDebug").d("chatRoomReference $snapshot")
                 }
             }
             override fun onCancelled(error: DatabaseError) {
                 binding?.progressBar?.visibility = View.GONE
                 binding?.emptyView?.visibility = View.VISIBLE
-                Timber.tag("chatDebug").d("agentHistory ${error.message}")
+                Timber.tag("chatDebug").d("chatRoomReference ${error.message}")
             }
         })
 
@@ -120,19 +118,19 @@ class ChatHistoryFragment(): Fragment() {
 
     private fun fetchMoreHistory(endKey: String?) {
         binding?.progressBar?.visibility = View.VISIBLE
-        historyReference.orderByKey().endAt(endKey).limitToLast(queryLimit).addListenerForSingleValueEvent(object : ValueEventListener{
+        chatRoomReference.orderByKey().endAt(endKey).limitToLast(queryLimit).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     isLoading = false
                     Timber.tag("chatDebug").d(snapshot.toString())
-                    val historyList: MutableList<ChatHistoryData> = mutableListOf()
+                    val historyList: MutableList<ChatData> = mutableListOf()
                     snapshot.children.forEach { dataSnapshot ->
-                        val model = dataSnapshot.getValue(ChatHistoryData::class.java)
+                        val model = dataSnapshot.getValue(ChatData::class.java)
                         model?.let {
                             historyList.add(it)
                         }
                     }
-                    historyList.reverse()
+                    //historyList.reverse()
                     dataAdapter.pagingLoad(historyList)
                     if (historyList.size < queryLimit - 1) {
                         isLoading = true
@@ -154,18 +152,18 @@ class ChatHistoryFragment(): Fragment() {
 
     private fun valueEventLister() {
 
-        valueEventListener = historyReference.orderByKey().limitToLast(1).addValueEventListener(object : ValueEventListener {
+        valueEventListener = chatRoomReference.orderByKey().limitToLast(1).addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 Timber.tag("chatDebug").d(snapshot.toString())
-                val historyList: MutableList<ChatHistoryData> = mutableListOf()
+                val historyList: MutableList<ChatData> = mutableListOf()
                 snapshot.children.forEach { dataSnapshot ->
-                    val model = dataSnapshot.getValue(ChatHistoryData::class.java)
+                    val model = dataSnapshot.getValue(ChatData::class.java)
                     model?.let {
                         historyList.add(it)
                     }
                 }
-                historyList.reverse()
+                //historyList.reverse()
                 dataAdapter.addNewData(historyList)
             }
 
@@ -176,19 +174,8 @@ class ChatHistoryFragment(): Fragment() {
 
     }
 
-    private fun goToChatCompose(bundle: Bundle) {
-        val fragment = ChatFragment.newInstance(bundle)
-        val tag = ChatHistoryFragment.tag
-        requireActivity().supportFragmentManager.beginTransaction().apply {
-            add(R.id.containerChat, fragment, tag)
-            addToBackStack(tag)
-            commit()
-        }
-    }
-
     override fun onDestroyView() {
         binding = null
-        historyReference.removeEventListener(valueEventListener)
         super.onDestroyView()
     }
 

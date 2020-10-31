@@ -27,14 +27,18 @@ class ChatActivity: AppCompatActivity() {
         val fragment = ChatHistoryFragment.newInstance()
         val tag = ChatHistoryFragment.tag
         supportFragmentManager.beginTransaction().apply {
-            add(R.id.containerChat, fragment, tag)
+            replace(R.id.containerChat, fragment, tag)
             commit()
         }
-
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressed()
+        }
+
     }
 
 }

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll"
+
+        tools:itemCount="4"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_view_chat_history"
+        tools:orientation="vertical"
+        tools:spanCount="2"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/emptyView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="কোনো তথ্য পাওয়া যায়নি"
+        android:textColor="@color/black_90"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/composeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/bg_chat_action"
+        android:padding="4dp"
+        >
+
+        <LinearLayout
+            android:id="@+id/actionLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+            <ImageView
+                android:id="@+id/cameraBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_camera_white"
+                app:tint="@color/colorPrimary"
+                android:contentDescription="@string/cd"
+                android:layout_marginEnd="4dp"
+                />
+            <ImageView
+                android:id="@+id/galleryBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_image"
+                app:tint="@color/colorPrimary"
+                android:contentDescription="@string/cd"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                />
+            <ImageView
+                android:id="@+id/audioBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_mic"
+                app:tint="@color/colorPrimary"
+                android:contentDescription="@string/cd"
+                android:layout_marginStart="4dp"
+                />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/composeET"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_chat_compose"
+            android:hint="Aa"
+            android:maxLines="4"
+
+            android:paddingStart="10dp"
+            android:paddingTop="7dp"
+            android:paddingEnd="25dp"
+            android:paddingBottom="7dp"
+            android:textColor="#424242"
+            android:textColorHint="#BDBDBD"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/actionLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/likeBtn"
+
+            />
+
+        <ImageView
+            android:id="@+id/likeBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_thumb_up"
+            app:tint="@color/colorPrimary"
+            android:contentDescription="@string/cd"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
