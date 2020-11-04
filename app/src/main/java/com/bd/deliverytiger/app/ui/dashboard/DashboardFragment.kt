@@ -34,6 +34,7 @@ import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
+import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
 import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.DigitConverter.banglaMonth
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -130,7 +131,7 @@ class DashboardFragment : Fragment() {
 
         binding?.unpaidLayout?.setOnClickListener {
             //goToAllOrder("ডেলিভারি হয়েছে", "ডেলিভারি হয়েছে", selectedStartDate, selectedEndDate)
-            addFragment(CODCollectionFragment.newInstance(true), CODCollectionFragment.tag)
+            addFragment(UnpaidCODFragment.newInstance(), UnpaidCODFragment.tag)
         }
 
         binding?.balanceLoadLayout?.setOnClickListener {

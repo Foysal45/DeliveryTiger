@@ -10,6 +10,7 @@ import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsRespon
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableResponse
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
+import com.bd.deliverytiger.app.api.model.unpaid_cod.UnpaidCODResponse
 import com.haroldadmin.cnradapter.NetworkResponse
 import retrofit2.Retrofit
 import retrofit2.http.Body
@@ -50,5 +51,11 @@ interface ApiInterfaceADM {
 
     @GET("api/account/reports/GetDTCollectedFromMerchantData/{courierUserId}")
     suspend fun fetchBillPayHistory(@Path("courierUserId") courierUserId: Int): NetworkResponse<List<BillPayHistoryResponse>, ErrorResponse>
+
+    @GET("api/account/reports/GetDtAllDeliveredOrdersAccounting/{courierUserId}")
+    suspend fun fetchUnpaidCOD(@Path("courierUserId") courierUserId: Int): NetworkResponse<UnpaidCODResponse, ErrorResponse>
+
+    @GET("api/account/reports/UpdateInstantPaymentRequestFlag/{courierUserId}")
+    suspend fun updateInstantPaymentRequest(@Path("courierUserId") courierUserId: Int): NetworkResponse<Boolean, ErrorResponse>
 
 }

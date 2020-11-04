@@ -61,6 +61,7 @@ import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDet
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
+import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -304,7 +305,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 currentFragment is ServiceBillPayFragment || currentFragment is ServiceBillPayHistoryFragment ||
                 currentFragment is PaymentStatementFragment || currentFragment is PaymentStatementDetailFragment ||
                 currentFragment is BalanceLoadFragment ||
-                currentFragment is ComplainFragment) {
+                currentFragment is ComplainFragment ||
+                currentFragment is UnpaidCODFragment
+            ) {
                 addProductBtnVisibility(false)
             } else {
                 addProductBtnVisibility(true)
@@ -813,7 +816,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         appUpdateManager = AppUpdateManagerFactory.create(this)
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
-                appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE,this,requestCodeAppUpdate)
+                appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE, this, requestCodeAppUpdate)
             }
         }
     }
@@ -822,7 +825,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
             // For IMMEDIATE
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE,this,requestCodeAppUpdate)
+                appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, requestCodeAppUpdate)
             }
         }
     }

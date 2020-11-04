@@ -62,6 +62,11 @@ class AppRepository(
 
     suspend fun fetchBillPayHistory(courierUserId: Int) = apiInterfaceADM.fetchBillPayHistory(courierUserId)
 
+    suspend fun fetchUnpaidCOD(courierUserId: Int) = apiInterfaceADM.fetchUnpaidCOD(courierUserId)
+
+    suspend fun updateInstantPaymentRequest(courierUserId: Int) = apiInterfaceADM.updateInstantPaymentRequest(courierUserId)
+
+
     //******************** ADCORE ********************//
 
     suspend fun getBannerInfo() = apiInterfaceCore.getBannerInfo()
