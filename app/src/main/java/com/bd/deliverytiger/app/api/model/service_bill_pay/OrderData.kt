@@ -10,6 +10,8 @@ data class OrderData(
     var totalAmount: Int = 0,
     @SerializedName("Name")
     var name: String? = "",
+    @SerializedName("MonthName")
+    var monthName: String? = "",
     @SerializedName("OrderCode")
     var orderCode: String? = ""
 )

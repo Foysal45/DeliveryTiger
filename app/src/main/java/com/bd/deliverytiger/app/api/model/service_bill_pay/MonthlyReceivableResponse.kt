@@ -6,6 +6,6 @@ import com.google.gson.annotations.SerializedName
 data class MonthlyReceivableResponse(
     @SerializedName("TotalAmount")
     var totalAmount: Int = 0,
-    @SerializedName("OrderList")
-    var orderList: List<OrderData>? = listOf()
+    @SerializedName("MonthList")
+    var monthList: List<MonthData> = listOf()
 )

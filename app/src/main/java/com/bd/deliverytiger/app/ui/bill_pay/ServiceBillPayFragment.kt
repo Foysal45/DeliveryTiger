@@ -2,11 +2,9 @@ package com.bd.deliverytiger.app.ui.bill_pay
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -14,7 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
+import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableResponse
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
 import com.bd.deliverytiger.app.api.model.service_bill_pay.OrderCode
 import com.bd.deliverytiger.app.api.model.service_bill_pay.OrderData
@@ -26,18 +24,20 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+
 @SuppressLint("SetTextI18n")
 class ServiceBillPayFragment: Fragment() {
 
     private val viewModel: ServiceBillViewModel by inject()
     private var binding: FragmentServiceBillPayBinding? = null
 
-    private lateinit var dataAdapter: ServiceBillAdapter
+    private lateinit var dataAdapter: ServiceBillMonthAdapter
     private var selectedMonthIndex: Int = 0
     private var selectedYear: Int = 0
     private var fromDate: String = ""
     private var toDate: String = ""
     private val orderList: MutableList<OrderData> = mutableListOf()
+    private var responseModel: MonthlyReceivableResponse? = null
 
     companion object {
         fun newInstance(): ServiceBillPayFragment = ServiceBillPayFragment()
@@ -50,8 +50,145 @@ class ServiceBillPayFragment: Fragment() {
         }.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //generateDateRange()
+
+        dataAdapter = ServiceBillMonthAdapter()
+        with(binding?.recyclerview!!) {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = dataAdapter
+            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        }
+        dataAdapter.onItemClick = { model ->
+            val tag = ServiceBillPayDetailsBottomSheet.tag
+            val dialog = ServiceBillPayDetailsBottomSheet.newInstance(model)
+            dialog.show(childFragmentManager, tag)
+        }
+        dataAdapter.onPaymentClick = { model ->
+            paymentGateway(model.orderList)
+        }
+
+        //fetchMerchantMonthlyReceivable(selectedYear, selectedMonthIndex) on Resume
+
+        binding?.payBtn?.setOnClickListener {
+            binding?.payBtn?.isEnabled = false
+            if (responseModel != null) {
+                orderList.clear()
+                responseModel!!.monthList.forEach { model ->
+                    orderList.addAll(model.orderList)
+                }
+                paymentGateway(orderList)
+            }
+            binding?.payBtn?.isEnabled = true
+        }
+
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is ViewState.ShowMessage -> {
+                    requireContext().toast(state.message)
+                }
+                is ViewState.KeyboardState -> {
+                    hideKeyboard()
+                }
+                is ViewState.ProgressState -> {
+                    if (state.isShow) {
+                        binding?.progressBar?.visibility = View.VISIBLE
+                    } else {
+                        binding?.progressBar?.visibility = View.GONE
+                    }
+                }
+            }
+        })
+
+    }
+
+    private fun fetchMerchantMonthlyReceivable(year: Int, monthIndex: Int) {
+
+        /*val calender = Calendar.getInstance()
+        calender.set(Calendar.YEAR, year)
+        calender.set(Calendar.MONTH, monthIndex)
+        val lastDay = calender.getActualMaximum(Calendar.DAY_OF_MONTH)
+        fromDate = "$year-${monthIndex+1}-01"
+        toDate = "$year-${monthIndex+1}-$lastDay"
+        val request = MonthlyReceivableRequest(SessionManager.courierUserId, fromDate, toDate)*/
+
+        viewModel.fetchMerchantReceivableList(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { response ->
+            responseModel = response
+            response.monthList.let { list ->
+                dataAdapter.initLoad(list)
+                if (list.isEmpty()) {
+                    binding?.emptyView?.visibility = View.VISIBLE
+                    binding?.payBtn?.visibility = View.GONE
+                    binding?.header?.parent?.visibility = View.GONE
+                    binding?.header?.info1?.text = "মোট পার্সেলঃ ০ টি"
+                    binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ০ ৳"
+                } else {
+                    binding?.emptyView?.visibility = View.GONE
+                    if (response.totalAmount > 0) {
+                        binding?.payBtn?.visibility = View.VISIBLE
+                    } else {
+                        binding?.payBtn?.visibility = View.GONE
+                    }
+
+                    binding?.header?.parent?.visibility = View.VISIBLE
+                    var parcelCount = 0
+                    list.forEach() { data ->
+                        parcelCount += data.orderList.size
+                    }
+                    binding?.header?.info1?.text = "মোট পার্সেলঃ ${DigitConverter.toBanglaDigit(parcelCount)} টি"
+                    val totalSum = response.totalAmount
+                    binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ${DigitConverter.toBanglaDigit(totalSum, true)} ৳"
+                }
+            }
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle("বিল পে (Only Delivery)")
+        fetchMerchantMonthlyReceivable(selectedYear, selectedMonthIndex)
+    }
+
+    private fun paymentGateway(orderList: List<OrderData>) {
+
+        val from = ""
+        val to = ""
+        val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+        val sdfTrans = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+        val date = sdf.format(System.currentTimeMillis())
+        val dateTrans = sdfTrans.format(System.currentTimeMillis())
+        val orderCodeList: MutableList<OrderCode> = mutableListOf()
+        orderList.filter { it.isCashCollected == 0 }.forEach {
+            orderCodeList.add(OrderCode(it.orderCode?: "DT-",it.totalAmount,"Bkash-$dateTrans"))
+        }
+        Timber.d("orderCodeList count ${orderCodeList.size}")
+        val model = MonthlyReceivableUpdateRequest(date,"",orderCodeList)
+        val bundle = bundleOf(
+            "requestBody" to model
+        )
+
+        val courierId = SessionManager.courierUserId.toString() //6188
+
+        val url = "${AppConstant.GATEWAY}?CourierID=$courierId&FromDate=$from&ToDate=$to"
+        val fragment = WebViewFragment.newInstance(url, "পেমেন্ট", bundle)
+        val tag = WebViewFragment.tag
+
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.mainActivityContainer, fragment, tag)
+        ft?.addToBackStack(tag)
+        ft?.commit()
+    }
+
+    override fun onDestroyView() {
+        binding?.unbind()
+        binding = null
+        super.onDestroyView()
+    }
+
+    /*private fun generateDateRange() {
 
         val calender = Calendar.getInstance()
         val currentYear = calender.get(Calendar.YEAR)
@@ -99,119 +236,6 @@ class ServiceBillPayFragment: Fragment() {
                 }
             }
         },300L)
-
-        dataAdapter = ServiceBillAdapter()
-        with(binding?.recyclerview!!) {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = dataAdapter
-            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
-        }
-
-        //fetchMerchantMonthlyReceivable(selectedYear, selectedMonthIndex) on Resume
-
-        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
-            when (state) {
-                is ViewState.ShowMessage -> {
-                    requireContext().toast(state.message)
-                }
-                is ViewState.KeyboardState -> {
-                    hideKeyboard()
-                }
-                is ViewState.ProgressState -> {
-                    if (state.isShow) {
-                        binding?.progressBar?.visibility = View.VISIBLE
-                    } else {
-                        binding?.progressBar?.visibility = View.GONE
-                    }
-                }
-            }
-        })
-
-        binding?.payBtn?.setOnClickListener {
-
-            paymentGateway(fromDate, toDate)
-        }
-    }
-
-
-    private fun fetchMerchantMonthlyReceivable(year: Int, monthIndex: Int) {
-
-        val calender = Calendar.getInstance()
-        calender.set(Calendar.YEAR, year)
-        calender.set(Calendar.MONTH, monthIndex)
-        val lastDay = calender.getActualMaximum(Calendar.DAY_OF_MONTH)
-
-        fromDate = "$year-${monthIndex+1}-01"
-        toDate = "$year-${monthIndex+1}-$lastDay"
-
-        val request = MonthlyReceivableRequest(SessionManager.courierUserId, fromDate, toDate)
-        viewModel.getMerchantMonthlyReceivable(request).observe(viewLifecycleOwner, Observer {
-            it.orderList?.let { list ->
-                dataAdapter.initLoad(list)
-                orderList.clear()
-                orderList.addAll(list)
-                if (list.isEmpty()) {
-                    binding?.emptyView?.visibility = View.VISIBLE
-                    binding?.payBtn?.visibility = View.GONE
-                    binding?.header?.parent?.visibility = View.GONE
-                    binding?.header?.info1?.text = "মোট পার্সেলঃ ০ টি"
-                    binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ০ ৳"
-                } else {
-                    binding?.emptyView?.visibility = View.GONE
-                    if (it.totalAmount > 0) {
-                        binding?.payBtn?.visibility = View.VISIBLE
-                    } else {
-                        binding?.payBtn?.visibility = View.GONE
-                    }
-                    binding?.header?.parent?.visibility = View.VISIBLE
-                    binding?.header?.info1?.text = "মোট পার্সেলঃ ${DigitConverter.toBanglaDigit(list.size)} টি"
-                    var totalSum = 0
-                    list.forEach { order -> totalSum += order.totalAmount }
-                    binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ${DigitConverter.toBanglaDigit(totalSum, true)} ৳"
-                }
-            }
-        })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        (activity as HomeActivity).setToolbarTitle("বিল পে (Only Delivery)")
-        fetchMerchantMonthlyReceivable(selectedYear, selectedMonthIndex)
-    }
-
-    private fun paymentGateway(from: String, to: String) {
-
-        val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.US)
-        val sdfTrans = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-        val date = sdf.format(System.currentTimeMillis())
-        val dateTrans = sdfTrans.format(System.currentTimeMillis())
-        val orderCodeList: MutableList<OrderCode> = mutableListOf()
-        orderList.filter { it.isCashCollected == 0 }.forEach {
-            orderCodeList.add(OrderCode(it.orderCode?: "DT-",it.totalAmount,"Bkash-$dateTrans"))
-        }
-        Timber.d("orderCodeList count ${orderCodeList.size}")
-        val model = MonthlyReceivableUpdateRequest(date,"",orderCodeList)
-        val bundle = bundleOf(
-            "requestBody" to model
-        )
-
-        val courierId = SessionManager.courierUserId.toString() //6188
-
-        val url = "${AppConstant.GATEWAY}?CourierID=$courierId&FromDate=$from&ToDate=$to"
-        val fragment = WebViewFragment.newInstance(url, "পেমেন্ট", bundle)
-        val tag = WebViewFragment.tag
-
-        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.mainActivityContainer, fragment, tag)
-        ft?.addToBackStack(tag)
-        ft?.commit()
-    }
-
-    override fun onDestroyView() {
-        binding?.unbind()
-        binding = null
-        super.onDestroyView()
-    }
+    }*/
 
 }

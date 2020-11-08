@@ -31,6 +31,9 @@ interface ApiInterfaceADM {
     @POST("api/account/reports/GetMerchantMonthlyReceivableList_V2")
     suspend fun getMerchantMonthlyReceivable(@Body requestBody: MonthlyReceivableRequest): NetworkResponse<MonthlyReceivableResponse, ErrorResponse>
 
+    @GET("api/account/reports/GetMerchantReceivableList/{courierUserId}")
+    suspend fun fetchMerchantReceivableList(@Path("courierUserId") courierUserId: Int): NetworkResponse<MonthlyReceivableResponse, ErrorResponse>
+
     @POST("api/account/reports/BulkMerchantCashCollection")
     suspend fun bulkMerchantCashCollection(@Body requestBody: MonthlyReceivableUpdateRequest): NetworkResponse<String, ErrorResponse>
 

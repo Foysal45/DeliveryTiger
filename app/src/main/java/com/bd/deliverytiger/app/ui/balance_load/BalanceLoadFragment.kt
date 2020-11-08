@@ -52,6 +52,10 @@ class BalanceLoadFragment: Fragment() {
             }
         }
 
+        viewModel.fetchMerchantReceivableList(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            binding?.amountET?.setText("${model.totalAmount}")
+        })
+
         viewModel.fetchBalanceLimit(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
             minimumAmount = model.minAmount
             maximumAmount = model.maxAmount

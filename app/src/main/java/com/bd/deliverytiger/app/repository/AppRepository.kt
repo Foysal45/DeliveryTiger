@@ -48,6 +48,8 @@ class AppRepository(
 
     suspend fun getMerchantMonthlyReceivable(requestBody: MonthlyReceivableRequest) = apiInterfaceADM.getMerchantMonthlyReceivable(requestBody)
 
+    suspend fun fetchMerchantReceivableList(courierUserId: Int) = apiInterfaceADM.fetchMerchantReceivableList(courierUserId)
+
     suspend fun bulkMerchantCashCollection(requestBody: MonthlyReceivableUpdateRequest) = apiInterfaceADM.bulkMerchantCashCollection(requestBody)
 
     suspend fun getPaymentHistory(courierUserId: Int) = apiInterfaceADM.getPaymentHistory(courierUserId)
