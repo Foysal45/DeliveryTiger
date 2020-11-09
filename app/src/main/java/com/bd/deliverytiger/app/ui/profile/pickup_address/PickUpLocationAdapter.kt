@@ -29,9 +29,16 @@ class PickUpLocationAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val model = dataList[position]
             val binding = holder.binding
 
-            binding.district.text = "জেলা: ${model.districtName}"
-            binding.thana.text = "থানা: ${model.thanaName}"
-            binding.address.text = "পিকআপ ঠিকানা: ${model.pickupAddress}"
+            if (model.id == 0) {
+                binding.district.text = "${model.districtName}"
+                binding.thana.text = "${model.thanaName}"
+                binding.address.text = ""
+            } else {
+                binding.district.text = "জেলা: ${model.districtName}"
+                binding.thana.text = "থানা: ${model.thanaName}"
+                binding.address.text = "পিকআপ ঠিকানা: ${model.pickupAddress}"
+            }
+
 
             if (showCount) {
                 binding.orderCount.visibility = View.VISIBLE

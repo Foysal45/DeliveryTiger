@@ -19,6 +19,7 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.rider.RiderInfo
+import com.bd.deliverytiger.app.api.model.tracking.DistanceMapping
 import com.bd.deliverytiger.app.databinding.FragmentMapBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
@@ -237,6 +238,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         return@Observer
                     }
                 }
+                if (isNearByHubView) {
+                    pickUpLocationList.add(0,
+                        PickupLocation(districtName = "বর্তমান ঠিকানা",
+                            thanaName = "বর্তমান ঠিকানা থেকে নিকটস্থ হাব",
+                            latitude = currentLatitude.toString(),
+                            longitude = currentLongitude.toString()))
+                }
                 if (pickUpLocationList.size > 1) {
                     choosePickupLocation(pickUpLocationList)
                     binding?.pickUpBtn?.visibility = View.VISIBLE
@@ -279,60 +287,80 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun showNearbyHubs(pickUpModel: PickupLocation) {
 
-        viewModel.fetchHubByPickupLocation(pickUpModel).observe(viewLifecycleOwner, Observer { hubModel ->
+        if (pickUpModel.id == 0) {
+            viewModel.fetchAllHubInfo().observe(viewLifecycleOwner, Observer { list ->
 
-            map?.clear()
-            showCurrentMarker()
-            val bound = LatLngBounds.builder()//.include(currentLatLng)
-            val hubName = hubModel?.name ?: "DT Hub"
-            val address = hubModel?.hubAddress ?: ""
-            mobileNumber = hubModel.hubMobile ?: ""
-            if (mobileNumber.trim().isNotEmpty()) {
-                binding?.callBtn?.visibility = View.VISIBLE
-            }
-
-            if (isValidCoordinate(pickUpModel.latitude) && isValidCoordinate(pickUpModel.longitude)) {
-                val pickupLatLng = LatLng(pickUpModel.latitude.toDouble(), pickUpModel.longitude.toDouble())
-                val pickupMarker = map?.addMarker(
-                    MarkerOptions()
-                        .position(pickupLatLng)
-                        .title(pickUpModel.pickupAddress)
-                        .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_location1))
-                )
-                bound.include(pickupLatLng)
-            } else {
-                context?.toast("প্রোফাইলে পিকআপ জিপিএস লোকেশন অ্যাড করুন")
-            }
-
-            var hubLatLng: LatLng? = null
-            if (isValidCoordinate(hubModel?.latitude) && isValidCoordinate(hubModel?.longitude)) {
-                hubLatLng = LatLng(hubModel.latitude?.toDouble() ?: 0.0, hubModel?.longitude?.toDouble() ?: 0.0)
-            }
-            if (hubLatLng != null) {
-                val hubMarker = map?.addMarker(
-                    MarkerOptions()
-                        .position(hubLatLng)
-                        .title(hubName)
-                        .snippet(address)
-                        .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_home_circle))
-                )
-                hubMarker?.showInfoWindow()
-                bound.include(hubLatLng)
-
-                if (isValidCoordinate(pickUpModel.longitude) && isValidCoordinate(pickUpModel.latitude)) {
-                    fetchRoutingDetails("${pickUpModel.longitude},${pickUpModel.latitude}", "${hubLatLng.longitude},${hubLatLng.latitude}")
+                val distanceList: MutableList<DistanceMapping> = mutableListOf()
+                list.forEach { hubInfo ->
+                    val distance = floatArrayOf(0.0f)
+                    Location.distanceBetween(currentLatitude, currentLongitude, hubInfo.latitude?.toDoubleOrNull() ?: 0.0, hubInfo.longitude?.toDoubleOrNull() ?: 0.0, distance)
+                    if (distance.isNotEmpty() && distance.first() > 10.0) {
+                        distanceList.add(DistanceMapping(distance.first(), hubInfo))
+                    }
                 }
+                distanceList.sortBy { it.distance }
+                if (distanceList.isNotEmpty()) {
+                    drawHubLocationOnMap(pickUpModel, distanceList.first().hubModel)
+                }
+            })
+        } else {
+            viewModel.fetchHubByPickupLocation(pickUpModel).observe(viewLifecycleOwner, Observer { hubModel ->
+                drawHubLocationOnMap(pickUpModel, hubModel)
+            })
+        }
+
+    }
+
+    private fun drawHubLocationOnMap(pickUpModel: PickupLocation, hubModel: HubInfo) {
+        map?.clear()
+        showCurrentMarker()
+        val bound = LatLngBounds.builder()//.include(currentLatLng)
+        val hubName = hubModel?.name ?: "DT Hub"
+        val address = hubModel?.hubAddress ?: ""
+        mobileNumber = hubModel.hubMobile ?: ""
+        if (mobileNumber.trim().isNotEmpty()) {
+            binding?.callBtn?.visibility = View.VISIBLE
+        }
+
+        if (isValidCoordinate(pickUpModel.latitude) && isValidCoordinate(pickUpModel.longitude)) {
+            val pickupLatLng = LatLng(pickUpModel.latitude.toDouble(), pickUpModel.longitude.toDouble())
+            val pickupMarker = map?.addMarker(
+                MarkerOptions()
+                    .position(pickupLatLng)
+                    .title(pickUpModel.pickupAddress)
+                    .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_location1))
+            )
+            bound.include(pickupLatLng)
+        } else {
+            context?.toast("প্রোফাইলে পিকআপ জিপিএস লোকেশন অ্যাড করুন")
+        }
+
+        var hubLatLng: LatLng? = null
+        if (isValidCoordinate(hubModel?.latitude) && isValidCoordinate(hubModel?.longitude)) {
+            hubLatLng = LatLng(hubModel.latitude?.toDouble() ?: 0.0, hubModel?.longitude?.toDouble() ?: 0.0)
+        }
+        if (hubLatLng != null) {
+            val hubMarker = map?.addMarker(
+                MarkerOptions()
+                    .position(hubLatLng)
+                    .title(hubName)
+                    .snippet(address)
+                    .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_home_circle))
+            )
+            hubMarker?.showInfoWindow()
+            bound.include(hubLatLng)
+
+            if (isValidCoordinate(pickUpModel.longitude) && isValidCoordinate(pickUpModel.latitude)) {
+                fetchRoutingDetails("${pickUpModel.longitude},${pickUpModel.latitude}", "${hubLatLng.longitude},${hubLatLng.latitude}")
             }
+        }
 
-            try {
-                val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 200)
-                map?.moveCamera(cameraUpdateBounds)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-        })
-
+        try {
+            val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 200)
+            map?.moveCamera(cameraUpdateBounds)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun fetchCollectorListForPickUp(pickUpModel: PickupLocation) {
