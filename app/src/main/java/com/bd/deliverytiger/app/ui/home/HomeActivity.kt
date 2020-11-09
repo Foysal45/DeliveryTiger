@@ -170,7 +170,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val merchantCredit: TextView = headerView.findViewById(R.id.merchantCredit)
         headerUserNameTV.text = SessionManager.companyName
         headerDesignationTV.text = SessionManager.mobile
-        merchantCredit.text = "ক্রেডিট লিমিট: ৳ ${DigitConverter.toBanglaDigit(SessionManager.credit, true)}"
+        merchantCredit.text = "অ্যাডভান্স পেমেন্ট: ৳ ${DigitConverter.toBanglaDigit(SessionManager.credit, true)}"
 
         profileEdit.setOnClickListener {
             navId = R.id.nav_header_profile_edit
