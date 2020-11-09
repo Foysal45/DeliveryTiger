@@ -68,7 +68,7 @@ class ServiceBillPayFragment: Fragment() {
             dialog.show(childFragmentManager, tag)
         }
         dataAdapter.onPaymentClick = { model ->
-            paymentGateway(model.orderList)
+            paymentGateway(model.orderList, model.totalAmount)
         }
 
         //fetchMerchantMonthlyReceivable(selectedYear, selectedMonthIndex) on Resume
@@ -77,10 +77,12 @@ class ServiceBillPayFragment: Fragment() {
             binding?.payBtn?.isEnabled = false
             if (responseModel != null) {
                 orderList.clear()
+                var totalAmount = 0
                 responseModel!!.monthList.forEach { model ->
                     orderList.addAll(model.orderList)
+                    totalAmount += model.totalAmount
                 }
-                paymentGateway(orderList)
+                paymentGateway(orderList, totalAmount)
             }
             binding?.payBtn?.isEnabled = true
         }
@@ -152,10 +154,8 @@ class ServiceBillPayFragment: Fragment() {
         fetchMerchantMonthlyReceivable(selectedYear, selectedMonthIndex)
     }
 
-    private fun paymentGateway(orderList: List<OrderData>) {
+    private fun paymentGateway(orderList: List<OrderData>, totalAmount: Int) {
 
-        val from = ""
-        val to = ""
         val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.US)
         val sdfTrans = SimpleDateFormat("dd/MM/yyyy", Locale.US)
         val date = sdf.format(System.currentTimeMillis())
@@ -172,7 +172,7 @@ class ServiceBillPayFragment: Fragment() {
 
         val courierId = SessionManager.courierUserId.toString() //6188
 
-        val url = "${AppConstant.GATEWAY}?CourierID=$courierId&FromDate=$from&ToDate=$to"
+        val url = "${AppConstant.GATEWAY}?CourierID=$courierId&Amount=$totalAmount"
         val fragment = WebViewFragment.newInstance(url, "পেমেন্ট", bundle)
         val tag = WebViewFragment.tag
 
