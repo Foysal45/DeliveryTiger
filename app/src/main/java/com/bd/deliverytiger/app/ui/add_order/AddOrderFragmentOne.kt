@@ -34,6 +34,7 @@ import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
+import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.district.v2.CustomModel
 import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
@@ -43,6 +44,7 @@ import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButtonToggleGroup
 import org.koin.android.ext.android.inject
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -73,6 +75,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private lateinit var deliveryTypeRV: RecyclerView
     private lateinit var toggleButtonGroup: MaterialButtonToggleGroup
     private lateinit var actualPackageAmountET: EditText
+    private lateinit var collectionSlotDatePicker: TextView
+    private lateinit var collectionTimeSlotSpinner: AppCompatSpinner
 
 
     private lateinit var totalTV: TextView
@@ -132,6 +136,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var isOpenBoxCheck: Boolean = false
     private var isOfficeDrop: Boolean = false
     private var isCollectionLocationSelected: Boolean = false
+    private var collectionAmountLimit: Double = 0.0
+    private var actualPackagePriceLimit: Double = 0.0
 
     private var total: Double = 0.0
 
@@ -156,6 +162,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var collectionDate: String = ""
     private var collectionDistrictId: Int = 0
     private var collectionThanaId: Int = 0
+    private var collectionSlotDate: String = ""
+    private var selectedCollectionSlotDate: String = ""
+    private var timeSlotId: Int = 0
 
     private val viewModel: AddOrderViewModel by inject()
 
@@ -194,6 +203,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         toggleButtonGroup = view.findViewById(R.id.toggle_button_group)
         actualPackageAmountET = view.findViewById(R.id.actualPackageAmount)
 
+        collectionSlotDatePicker = view.findViewById(R.id.collectionSlotDatePicker)
+        collectionTimeSlotSpinner = view.findViewById(R.id.collectionTimeSlotSpinner)
 
         totalTV = view.findViewById(R.id.tvAddOrderTotalOrder)
         totalLayout = view.findViewById(R.id.payment_details)
@@ -212,6 +223,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         getCollectionCharge()
         getPackagingCharge()
         getPickupLocation()
+        fetchDTOrderGenericLimit()
+        fetchCollectionTimeSlot()
 
 
         deliveryTypeAdapter = DeliveryTypeAdapter(requireContext(), deliveryTypeList)
@@ -272,6 +285,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             }
 
             calculateTotalPrice()
+
+            if (model.deliveryType.contains("Postal", true)) {
+                alert("নির্দেশনা", "এই জায়গায় কাস্টমারকে কালেকশন পয়েন্ট থেকে পার্সেল কালেক্ট করতে হবে। অনিবার্য কারণ বশত ডেলিভারি সময় সর্বোচ্চ ৭ দিন হতে পারে") {
+                }.show()
+            }
 
         }
 
@@ -371,6 +389,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }
         collectionDatePicker.setOnClickListener {
             datePicker(2)
+        }
+        collectionSlotDatePicker.setOnClickListener {
+            datePicker(3)
         }
     }
 
@@ -715,7 +736,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             }
         }*/
 
-        val datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+        val datePicker = DatePickerDialog(requireContext(), { _, year, month, dayOfMonth ->
 
             if (dateTypeFlag == 1) {
                 deliveryDate = "${month + 1}/$dayOfMonth/$year"
@@ -733,6 +754,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             } else if (dateTypeFlag == 2) {
                 collectionDate = "${month + 1}/$dayOfMonth/$year"
                 collectionDatePicker.text = DigitConverter.toBanglaDigit(collectionDate)
+            } else if (dateTypeFlag == 3) {
+                collectionSlotDate = "${month + 1}/$dayOfMonth/$year"
+                collectionSlotDatePicker.text = DigitConverter.toBanglaDigit(collectionSlotDate)
             }
 
         }, currentYear, currentMonth, currentDay)
@@ -871,6 +895,48 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 collectionAddressET.visibility = View.VISIBLE
             }
         })
+    }
+
+    private fun fetchDTOrderGenericLimit() {
+        viewModel.fetchDTOrderGenericLimit().observe(viewLifecycleOwner, Observer { model ->
+            collectionAmountLimit = model.collectionAmount
+            actualPackagePriceLimit = model.actualPackagePrice
+        })
+    }
+
+    private fun fetchCollectionTimeSlot() {
+        viewModel.fetchCollectionTimeSlot().observe(viewLifecycleOwner, Observer { list ->
+            setUpCollectionSlotSpinner(list)
+        })
+    }
+
+    private fun setUpCollectionSlotSpinner(list: List<TimeSlotData>) {
+
+        val slotList: MutableList<String> = mutableListOf()
+        slotList.add("সিলেক্ট কালেকশন টাইম")
+        val sdf24 = SimpleDateFormat("HH:mm:ss", Locale.US)
+        val sdf12 = SimpleDateFormat("hh:mm a", Locale.US)
+        list.forEach { data ->
+            try {
+                val startTime = sdf12.format(sdf24.parse(data.startTime))
+                val endTime = sdf12.format(sdf24.parse(data.endTime))
+                slotList.add("$startTime - $endTime")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        val collectionSlotAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, slotList)
+        collectionTimeSlotSpinner.adapter = collectionSlotAdapter
+        collectionTimeSlotSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                if (p2 != 0) {
+                    val model = list[p2 - 1]
+                    timeSlotId = model.collectionTimeSlotId
+                    selectedCollectionSlotDate = "$collectionSlotDate ${model.endTime}"
+                }
+            }
+        }
     }
 
     private fun getDistrictThanaOrAria(districtId: Int) {
@@ -1016,7 +1082,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             payCollectionAmount, payDeliveryCharge, SessionManager.courierUserId,
             payBreakableCharge, additionalNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge, packingName,
             payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,
-            "android-${SessionManager.versionName}", true, collectionDistrictId, collectionThanaId, deliveryDate, collectionDate, isOfficeDrop,payActualPackagePrice
+            "android-${SessionManager.versionName}", true, collectionDistrictId, collectionThanaId,
+            deliveryDate, collectionDate, isOfficeDrop,payActualPackagePrice, timeSlotId, selectedCollectionSlotDate
         )
 
 
@@ -1048,6 +1115,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 context?.showToast("কালেকশন অ্যামাউন্ট লিখুন")
                 return false
             }
+            if (payCollectionAmount > collectionAmountLimit) {
+                context?.showToast("কালেকশন অ্যামাউন্ট ${DigitConverter.toBanglaDigit(collectionAmountLimit.toInt())} টাকার থেকে বেশি হতে পারবে না")
+                return false
+            }
         }
 
         val payActualPackagePriceText = actualPackageAmountET.text.toString().trim()
@@ -1060,6 +1131,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 if (isCollection) {
                     if (payActualPackagePrice > payCollectionAmount) {
                         context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস কালেকশন অ্যামাউন্ট থেকে বেশি হতে পারবে না")
+                        return false
+                    }
+                } else {
+                    if (payActualPackagePrice > actualPackagePriceLimit) {
+                        context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস ${DigitConverter.toBanglaDigit(actualPackagePriceLimit.toInt())} টাকার থেকে বেশি হতে পারবে না")
                         return false
                     }
                 }
@@ -1092,6 +1168,14 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }
         if (deliveryType.isEmpty()) {
             context?.showToast("ডেলিভারি টাইপ নির্বাচন করুন")
+            return false
+        }
+        if (collectionSlotDate.isEmpty()) {
+            context?.showToast("কালেকশন তারিখ নির্বাচন করুন")
+            return false
+        }
+        if (timeSlotId == 0) {
+            context?.showToast("কালেকশন টাইম স্লট নির্বাচন করুন")
             return false
         }
         if (deliveryDatePicker.visibility == View.VISIBLE && deliveryDate.isEmpty()) {

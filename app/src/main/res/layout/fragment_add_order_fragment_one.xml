@@ -400,6 +400,52 @@
                     tools:visibility="visible" />
 
                 <TextView
+                    android:id="@+id/collectionSlotDatePicker"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:background="@drawable/bg_spinner"
+                    android:drawableStart="@drawable/ic_date"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:hint="কালেকশন তারিখ"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14"
+                    tools:visibility="visible" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/fab_margin">
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/collectionTimeSlotSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_view_height"
+                        android:background="@drawable/bg_spinner"
+                        android:overlapAnchor="false"
+                        android:spinnerMode="dropdown"
+                        android:theme="@style/custom_spinner_style"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:entries="@array/spinner_array_weight" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:contentDescription="@string/cd"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
                     android:id="@+id/deliveryDatePicker"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_view_height"

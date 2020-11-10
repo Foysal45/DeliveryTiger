@@ -73,6 +73,9 @@ data class OrderRequest(
     @SerializedName("officeDrop")
     var officeDrop: Boolean = false,
     @SerializedName("actualPackagePrice")
-    var actualPackagePrice: Double
-
+    var actualPackagePrice: Double,
+    @SerializedName("collectionTimeSlotId")
+    var collectionTimeSlotId: Int,
+    @SerializedName("collectionTime")
+    var collectionTime: String = ""
 )

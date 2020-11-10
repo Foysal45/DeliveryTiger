@@ -18,6 +18,7 @@ import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
+import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
@@ -30,6 +31,7 @@ import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import com.bd.deliverytiger.app.api.model.rider.RiderInfo
+import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.haroldadmin.cnradapter.NetworkResponse
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -73,6 +75,13 @@ interface ApiInterfaceCore {
 
     @PUT("api/Update/UpdateCourierOrders/{courierOrdersId}")
     fun placeOrderUpdate(@Path("courierOrdersId") courierOrdersId: String, @Body requestBody: UpdateOrderReqBody): Call<GenericResponse<UpdateOrderResponse>>
+
+    @GET("api/Fetch/GetCollectionTimeSlot")
+    suspend fun fetchCollectionTimeSlot(): NetworkResponse<GenericResponse<List<TimeSlotData>>, ErrorResponse>
+    //fun fetchCollectionTimeSlot(): Call<GenericResponse<List<TimeSlotData>>>
+
+    @GET("api/Fetch/GetDTOrderGenericLimit")
+    suspend fun fetchDTOrderGenericLimit(): NetworkResponse<GenericResponse<GenericLimitData>, ErrorResponse>
 
     @GET("api/Fetch/GetPickupLocations/{courierUserId}")
     suspend fun getPickupLocations(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<List<PickupLocation>>, ErrorResponse>

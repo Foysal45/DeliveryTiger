@@ -10,10 +10,12 @@ import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
+import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
+import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.ViewState
@@ -249,6 +251,102 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
             }
         })
         return responseBody
+    }
+
+    /*fun fetchCollectionTimeSlot(): LiveData<Int> {
+
+        viewState.value = ViewState.ProgressState(true)
+        val responseBody = MutableLiveData<Int>()
+
+        repository.fetchCollectionTimeSlot().enqueue(object : Callback<GenericResponse<List<TimeSlotData>> {
+            override fun onFailure(call: Call<GenericResponse<List<TimeSlotData>>, t: Throwable) {
+                viewState.value = ViewState.ProgressState(false)
+                viewState.value = ViewState.ShowMessage(message)
+            }
+
+            override fun onResponse(call: Call<GenericResponse<List<TimeSlotData>>, response: Response<GenericResponse<List<TimeSlotData>>) {
+                if (response.isSuccessful && response.body() != null){
+                    if (response.body()!!.model != null){
+                        responseBody.value = response.body()!!.model
+                    } else {
+                        viewState.value = ViewState.ProgressState(false)
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                } else {
+                    viewState.value = ViewState.ProgressState(false)
+                    viewState.value = ViewState.ShowMessage(message)
+                }
+            }
+        })
+        return responseBody
+    }*/
+
+    fun fetchCollectionTimeSlot(): LiveData<List<TimeSlotData>> {
+
+        val responseData: MutableLiveData<List<TimeSlotData>> = MutableLiveData()
+
+        viewState.value = ViewState.ProgressState(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.fetchCollectionTimeSlot()
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
+    }
+
+    fun fetchDTOrderGenericLimit(): LiveData<GenericLimitData> {
+
+        val responseData: MutableLiveData<GenericLimitData> = MutableLiveData()
+
+        viewState.value = ViewState.ProgressState(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.fetchDTOrderGenericLimit()
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
     }
 
 }
