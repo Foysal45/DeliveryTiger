@@ -32,6 +32,7 @@ import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
+import com.bd.deliverytiger.app.ui.quick_order.QuickOrderFragment
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
@@ -41,7 +42,6 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
-import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -284,6 +284,10 @@ class DashboardFragment : Fragment() {
 
         binding?.orderBtn?.setOnClickListener {
             addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+        }
+
+        binding?.quickOrderBtn?.setOnClickListener {
+            addFragment(QuickOrderFragment.newInstance(), QuickOrderFragment.tag)
         }
 
         binding?.dateRangePicker?.setOnClickListener {

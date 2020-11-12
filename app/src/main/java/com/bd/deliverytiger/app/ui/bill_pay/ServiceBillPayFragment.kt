@@ -20,7 +20,6 @@ import com.bd.deliverytiger.app.databinding.FragmentServiceBillPayBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
-import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -172,7 +171,7 @@ class ServiceBillPayFragment: Fragment() {
 
         val courierId = SessionManager.courierUserId.toString() //6188
 
-        val url = "${AppConstant.GATEWAY}?CourierID=$courierId&Amount=$totalAmount"
+        val url = "${AppConstant.SERVICE_BILL_PAY_GATEWAY}?CourierID=$courierId&Amount=$totalAmount"
         val fragment = WebViewFragment.newInstance(url, "পেমেন্ট", bundle)
         val tag = WebViewFragment.tag
 

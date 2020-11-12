@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.databinding.FragmentWebViewBinding
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.ui.home.HomeActivity
-import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class WebViewFragment : Fragment() {
@@ -78,15 +77,18 @@ class WebViewFragment : Fragment() {
 
     inner class Callback : WebViewClient() {
 
-        /*override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-            return super.shouldOverrideUrlLoading(view, request)
+        override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+            //return super.shouldOverrideUrlLoading(view, request)
+            val url = request?.url
+            view?.loadUrl(url.toString())
+            return true
             // Url base logic here
-            *//*val url = request?.url?.path
+            /*val url = request?.url?.path
             if (url?.startsWith("intent://scan/") == true) {
                 // Do Stuff
                 return true
-            }*//*
-        }*/
+            }*/
+        }
 
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)

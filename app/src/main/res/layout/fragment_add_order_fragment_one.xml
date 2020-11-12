@@ -569,7 +569,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:contentDescription="@string/cd"
-                    android:tint="@color/black_90"
+                    app:tint="@color/black_90"
                     android:rotation="180"
                     app:srcCompat="@drawable/ic_arrow_down" />
 

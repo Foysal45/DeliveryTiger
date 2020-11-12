@@ -59,6 +59,7 @@ import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
+import com.bd.deliverytiger.app.ui.quick_order.QuickOrderFragment
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
@@ -73,12 +74,13 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.messaging.FirebaseMessaging
-import org.koin.android.ext.android.inject
 import java.io.File
 import java.util.*
 
 
-class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ConnectivityReceiver.ConnectivityReceiverListener {
+class HomeActivity : AppCompatActivity(),
+    NavigationView.OnNavigationItemSelectedListener,
+    ConnectivityReceiver.ConnectivityReceiverListener {
 
     private lateinit var toolbar: Toolbar
     private lateinit var drawerLayout: DrawerLayout
@@ -299,6 +301,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
             if (currentFragment is DashboardFragment ||
                 currentFragment is AddOrderFragmentOne ||
+                currentFragment is QuickOrderFragment ||
                 currentFragment is ProfileFragment ||
                 currentFragment is DistrictSelectFragment || currentFragment is DistrictThanaAriaSelectFragment ||
                 currentFragment is MapFragment ||

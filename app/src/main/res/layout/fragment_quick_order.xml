@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:id="@+id/parent"
+    >
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/paymentOverViewLayout"
+        >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:paddingBottom="24dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvCustomerDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="কাস্টমারের তথ্য"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_16"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etAddOrderMobileNo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_view_height"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:hint="মোবাইল নাম্বার"
+            android:importantForAutofill="no"
+            android:inputType="phone"
+            android:maxLength="11"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
+
+        <EditText
+            android:id="@+id/etDistrict"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_view_height"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:drawableEnd="@drawable/ic_arrow_drop_down"
+            android:focusable="false"
+            android:hint="জেলা নির্বাচন করুন"
+            android:importantForAutofill="no"
+            android:inputType="phone"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
+
+        <EditText
+            android:id="@+id/etCustomersAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:gravity="start|top"
+            android:hint="বিস্তারিত ঠিকানা লিখুন (বাড়ি/রোড/গ্রাম/হোল্ডিং)"
+            android:importantForAutofill="no"
+            android:inputType="textPostalAddress"
+            android:minHeight="96dp"
+            android:paddingStart="16dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
+
+        <TextView
+            android:id="@+id/tvCustomerDetails1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="প্যাকেজ ও কালেকশনের তথ্য"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_16"
+            android:textStyle="bold" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggle_button_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:checkedButton="@id/toggle_button_1"
+            app:singleSelection="true"
+
+            >
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/toggle_button_1"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:text="শুধু ডেলিভারি"
+                android:textAllCaps="false" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/toggle_button_2"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:text="ডেলিভারি+টাকা কালেকশন"
+                android:textAllCaps="false" />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <EditText
+            android:id="@+id/collectionAmount"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_view_height"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:hint="কালেকশন অ্যামাউন্ট"
+            android:importantForAutofill="no"
+            android:inputType="numberDecimal"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <EditText
+            android:id="@+id/actualPackageAmount"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_view_height"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:hint="অ্যাকচুয়াল প্যাকেজ প্রাইস"
+            android:importantForAutofill="no"
+            android:inputType="numberDecimal"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fab_margin">
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinnerCollectionLocation"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_view_height"
+                android:background="@drawable/bg_spinner"
+                android:overlapAnchor="false"
+                android:spinnerMode="dropdown"
+                android:theme="@style/custom_spinner_style"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:entries="@array/spinner_array_collection_location" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/cd"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/delivery_type_selection_rV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+
+            tools:itemCount="4"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/item_view_delivery_type"
+            tools:orientation="vertical"
+            tools:spanCount="2"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/check_terms_condition"
+                android:layout_width="26dp"
+                android:layout_height="wrap_content"
+                android:text="@null"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                />
+
+            <TextView
+                android:id="@+id/check_terms_condition_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:text="আমি শর্তাবলী মেনে নিলাম"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+    <LinearLayout
+        android:id="@+id/paymentOverViewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:weightSum="1"
+        >
+
+        <LinearLayout
+            android:id="@+id/payment_details"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="0.4"
+            android:gravity="center"
+            android:background="@drawable/bg_stroke3"
+            >
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/cd"
+                app:tint="@color/black_90"
+                android:rotation="180"
+                app:srcCompat="@drawable/ic_arrow_down" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="মোটঃ"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:layout_marginStart="2dp"
+                />
+
+            <TextView
+                android:id="@+id/tvAddOrderTotalOrder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="০ ৳"
+                android:textColor="#F36E41"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/orderPlaceBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:text="অর্ডার দিন"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_weight="0.6"
+            />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
