@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.api.model.payment_statement.OrderHistoryData
 import com.bd.deliverytiger.app.databinding.FragmentUnpaidCodBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
@@ -24,6 +25,7 @@ class UnpaidCODFragment: Fragment() {
 
     private lateinit var dataAdapter: UnpaidCODAdapter
 
+    private var netAmount: Int = 0
 
     companion object {
         fun newInstance(): UnpaidCODFragment = UnpaidCODFragment().apply {  }
@@ -72,11 +74,13 @@ class UnpaidCODFragment: Fragment() {
         fetchCODData()
 
         binding?.paymentRequestBtn?.setOnClickListener {
-            viewModel.updateInstantPaymentRequest(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { flag ->
-                if (flag) {
-                    fetchCODData()
+            if (netAmount > 0) {
+                if (netAmount > 5000) {
+                    sendOTP()
+                } else {
+                    requestPayment()
                 }
-            })
+            }
         }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
@@ -94,6 +98,29 @@ class UnpaidCODFragment: Fragment() {
                         binding?.progressBar?.visibility = View.GONE
                     }
                 }
+            }
+        })
+    }
+
+    private fun sendOTP() {
+        viewModel.sendOTP(OTPRequestModel(SessionManager.courierUserId.toString(), SessionManager.mobile)).observe(viewLifecycleOwner, Observer { msg -> {
+
+        } })
+    }
+
+    private fun verifyOTP(otpCode: String) {
+
+        viewModel.checkOTP(SessionManager.mobile, otpCode).observe(viewLifecycleOwner, Observer { flag ->
+            if (flag) {
+                requestPayment()
+            }
+        })
+    }
+
+    private fun requestPayment() {
+        viewModel.updateInstantPaymentRequest(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { flag ->
+            if (flag) {
+                fetchCODData()
             }
         })
     }
@@ -120,6 +147,7 @@ class UnpaidCODFragment: Fragment() {
             binding?.codServiceCharge?.text = "- ${DigitConverter.toBanglaDigit(model.totalCodServiceCharge, true)} ৳"
             binding?.deliveryServiceCharge?.text = "- ${DigitConverter.toBanglaDigit(model.totalMerchantReceivable, true)} ৳"
             binding?.netPayment?.text = "${DigitConverter.toBanglaDigit(model.netAdjustedAmount, true)} ৳"
+            netAmount = model.netAdjustedAmount
 
             binding?.filterTab?.visibility = View.VISIBLE
             binding?.filterTab?.getTabAt(0)?.text = "COD (${model.payableOrderCount})"

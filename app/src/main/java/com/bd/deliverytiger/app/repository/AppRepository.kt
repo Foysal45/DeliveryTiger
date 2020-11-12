@@ -7,6 +7,7 @@ import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
+import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
@@ -70,6 +71,10 @@ class AppRepository(
 
 
     //******************** ADCORE ********************//
+
+    suspend fun sendOTP(requestBody: OTPRequestModel) = apiInterfaceCore.sendOTP(requestBody)
+
+    suspend fun checkOTP(mobileNo: String, OPTCode: String) = apiInterfaceCore.checkOTP(mobileNo, OPTCode)
 
     suspend fun getBannerInfo() = apiInterfaceCore.getBannerInfo()
 
