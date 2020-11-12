@@ -108,7 +108,7 @@
                                 android:layout_marginStart="8dp"
                                 android:contentDescription="@string/cd"
                                 android:src="@drawable/ic_collector"
-                                android:tint="@color/collector" />
+                                app:tint="@color/collector" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -152,7 +152,7 @@
                                 android:layout_height="24dp"
                                 android:contentDescription="@string/cd"
                                 android:src="@drawable/ic_track"
-                                android:tint="@color/colorPrimary" />
+                                app:tint="@color/colorPrimary" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -246,7 +246,7 @@
                             android:layout_height="36dp"
                             android:contentDescription="@string/cd"
                             android:src="@drawable/ic_reload"
-                            android:tint="@color/colorPrimary"
+                            app:tint="@color/colorPrimary"
                             android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -463,51 +463,15 @@
                 app:layout_constraintVertical_bias="0.46"
                 tools:visibility="visible" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                >
-
-                <LinearLayout
-                    android:id="@+id/quickOrderBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimary"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_marginEnd="2dp"
-                    >
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:contentDescription="@string/cd"
-                        android:src="@drawable/ic_add" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="কুইক অর্ডার"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-
-                </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/orderBtn"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_weight="1"
                     android:background="@color/colorPrimary"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:layout_marginStart="2dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     >
 
                     <ImageView
@@ -527,9 +491,6 @@
 
 
                 </LinearLayout>
-
-            </LinearLayout>
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

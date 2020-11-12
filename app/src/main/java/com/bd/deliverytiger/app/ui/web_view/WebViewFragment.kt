@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.databinding.FragmentWebViewBinding
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.ui.home.HomeActivity
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class WebViewFragment : Fragment() {

@@ -33,6 +33,7 @@ import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.utils.*
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class QuickOrderFragment(): Fragment() {
@@ -138,7 +139,12 @@ class QuickOrderFragment(): Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        getCollectionCharge()
+        getBreakableCharge()
+        getMerchantCredit()
         getPickupLocation()
+        fetchDTOrderGenericLimit()
+        isProfileComplete = checkProfileData()
         clickListens()
     }
 
@@ -262,6 +268,15 @@ class QuickOrderFragment(): Fragment() {
         }
     }
 
+    private fun getMerchantCredit() {
+        viewModel.getMerchantCredit().observe(viewLifecycleOwner, Observer {
+            isMerchantCreditAvailable = it
+            /*if (!isMerchantCreditAvailable) {
+                showCreditLimitAlert()
+            }*/
+        })
+    }
+
     private fun orderPlaceProcess() {
         when {
             !isCollection && !isMerchantCreditAvailable -> showCreditLimitAlert()
@@ -381,6 +396,32 @@ class QuickOrderFragment(): Fragment() {
                //collectionAddressET.visibility = View.VISIBLE
             }
         })
+    }
+
+    private fun fetchDTOrderGenericLimit() {
+        viewModel.fetchDTOrderGenericLimit().observe(viewLifecycleOwner, Observer { model ->
+            collectionAmountLimit = model.collectionAmount
+            actualPackagePriceLimit = model.actualPackagePrice
+        })
+    }
+
+    private fun getCollectionCharge() {
+        viewModel.getCollectionCharge(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { charge ->
+            collectionChargeApi = charge.toDouble()
+            calculateTotalPrice()
+        })
+    }
+
+    private fun getBreakableCharge() {
+
+        viewModel.getBreakableCharge().observe(viewLifecycleOwner, Observer { model ->
+            breakableChargeApi = model.breakableCharge
+            codChargeMin = model.codChargeMin
+            bigProductCharge = model.bigProductCharge
+            codChargePercentageInsideDhaka = model.codChargeDhakaPercentage
+            codChargePercentageOutsideDhaka = model.codChargePercentage
+        })
+
     }
 
     private fun setUpCollectionSpinner(pickupParentList: List<PickupLocation>?, thanaOrAriaList: List<ThanaPayLoad>?, optionFlag: Int) {
@@ -531,45 +572,88 @@ class QuickOrderFragment(): Fragment() {
     }
 
     private fun validate(): Boolean {
-        var go = true
 
-        if (customerName.isEmpty()) {
-            context?.toast(getString(R.string.write_yr_name))
-            go = false
-            etCustomerName.requestFocus()
-        } else if (mobileNo.isEmpty()) {
-            context?.toast(getString(R.string.write_phone_number))
-            go = false
-            etAddOrderMobileNo.requestFocus()
-        } else if (!Validator.isValidMobileNumber(mobileNo) || mobileNo.length < 11) {
-            context?.toast(getString(R.string.write_proper_phone_number_recharge))
-            go = false
-            etAddOrderMobileNo.requestFocus()
-        }/* else if(alternativeMobileNo.isEmpty()){
-            go = false
-            context?.toast(context!!, getString(R.string.write_alt_phone_number))
-            etAlternativeMobileNo.requestFocus()
-        }*/
-        else if (districtId == 0) {
-            go = false
-            context?.toast(getString(R.string.select_dist))
-        } else if (thanaId == 0) {
-            go = false
-            context?.toast(getString(R.string.select_thana))
-        } else if (isAriaAvailable && areaId == 0) {
-            go = false
-            context?.toast(getString(R.string.select_aria))
-        } else if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
-            go = false
-            context?.toast(getString(R.string.write_yr_address))
-            etCustomersAddress.requestFocus()
-        }
         hideKeyboard()
+        mobileNo = binding?.etAddOrderMobileNo?.text?.toString()?.trim() ?: ""
+        customersAddress = binding?.etCustomersAddress?.text?.toString()?.trim() ?: ""
+        if (mobileNo.isEmpty()) {
+            context?.toast(getString(R.string.write_phone_number))
+            binding?.etAddOrderMobileNo?.requestFocus()
+            return false
+        }
+        if (!Validator.isValidMobileNumber(mobileNo) || mobileNo.length < 11) {
+            context?.toast(getString(R.string.write_proper_phone_number_recharge))
+            binding?.etAddOrderMobileNo?.requestFocus()
+            return false
+        }
+        if (districtId == 0) {
+            context?.toast(getString(R.string.select_dist))
+            return false
+        }
+        if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
+            context?.toast(getString(R.string.write_yr_address))
+            binding?.etCustomersAddress?.requestFocus()
+            return false
+        }
+        if (isCollection) {
+            val collectionAmount = binding?.collectionAmount?.text?.toString() ?: ""
+            if (collectionAmount.isEmpty()) {
+                context?.showToast("কালেকশন অ্যামাউন্ট লিখুন")
+                return false
+            }
+            try {
+                payCollectionAmount = collectionAmount.toDouble()
+            } catch (e: NumberFormatException) {
+                e.printStackTrace()
+                context?.showToast("কালেকশন অ্যামাউন্ট লিখুন")
+                return false
+            }
+            if (payCollectionAmount > collectionAmountLimit) {
+                context?.showToast("কালেকশন অ্যামাউন্ট ${DigitConverter.toBanglaDigit(collectionAmountLimit.toInt())} টাকার থেকে বেশি হতে পারবে না")
+                return false
+            }
+        }
 
-        //mockUserData()
-        //go = true
+        val payActualPackagePriceText = binding?.actualPackageAmount?.text?.toString()?.trim() ?: ""
+        if (payActualPackagePriceText.isEmpty()) {
+            context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস লিখুন")
+            return false
+        } else {
+            try {
+                payActualPackagePrice = payActualPackagePriceText.toDouble()
+                if (isCollection) {
+                    if (payActualPackagePrice > payCollectionAmount) {
+                        context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস কালেকশন অ্যামাউন্ট থেকে বেশি হতে পারবে না")
+                        return false
+                    }
+                } else {
+                    if (payActualPackagePrice > actualPackagePriceLimit) {
+                        context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস ${DigitConverter.toBanglaDigit(actualPackagePriceLimit.toInt())} টাকার থেকে বেশি হতে পারবে না")
+                        return false
+                    }
+                }
+            } catch (e: NumberFormatException) {
+                e.printStackTrace()
+                context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস লিখুন")
+                return false
+            }
+        }
 
-        return go
+        if (!isCollectionLocationSelected) {
+            context?.showToast("কালেকশন লোকেশন নির্বাচন করুন")
+            return false
+        }
+
+        if (deliveryType.isEmpty()) {
+            context?.showToast("ডেলিভারি টাইপ নির্বাচন করুন")
+            return false
+        }
+
+        if (!isAgreeTerms) {
+            context?.showToast("শর্তাবলী মেনে অর্ডার দিন")
+            return false
+        }
+        return true
     }
 
     private fun submitOrder() {

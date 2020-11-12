@@ -38,10 +38,13 @@ import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
 import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.DigitConverter.banglaMonth
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
+import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -283,11 +286,8 @@ class DashboardFragment : Fragment() {
         }
 
         binding?.orderBtn?.setOnClickListener {
-            addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
-        }
 
-        binding?.quickOrderBtn?.setOnClickListener {
-            addFragment(QuickOrderFragment.newInstance(), QuickOrderFragment.tag)
+            orderDialog()
         }
 
         binding?.dateRangePicker?.setOnClickListener {
@@ -479,6 +479,25 @@ class DashboardFragment : Fragment() {
             }
 
         })
+    }
+
+    private fun orderDialog() {
+
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_order_type,null)
+        builder.setView(view)
+        val button1: MaterialButton = view.findViewById(R.id.button1)
+        val button2: MaterialButton = view.findViewById(R.id.button2)
+        val dialog = builder.create()
+        dialog.show()
+        button1.setOnClickListener {
+            dialog.dismiss()
+            addFragment(QuickOrderFragment.newInstance(), QuickOrderFragment.tag)
+        }
+        button2.setOnClickListener {
+            dialog.dismiss()
+            addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+        }
     }
 
     private fun addFragment(fragment: Fragment, tag: String) {
