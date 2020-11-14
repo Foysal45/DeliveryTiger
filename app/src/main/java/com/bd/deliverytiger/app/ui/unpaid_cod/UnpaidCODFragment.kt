@@ -14,6 +14,7 @@ import com.bd.deliverytiger.app.databinding.FragmentUnpaidCodBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.payment_statement.details.OrderChargeDetailsFragment
 import com.bd.deliverytiger.app.utils.*
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import org.koin.android.ext.android.inject
 
@@ -83,6 +84,13 @@ class UnpaidCODFragment: Fragment() {
             }
         }
 
+        binding?.OTPCheckBtn?.setOnClickListener {
+            if (validation()) {
+                val otpCode = binding?.OTPCodeET?.text?.toString()?.trim() ?: ""
+                verifyOTP(otpCode)
+            }
+        }
+
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
                 is ViewState.ShowMessage -> {
@@ -103,16 +111,41 @@ class UnpaidCODFragment: Fragment() {
     }
 
     private fun sendOTP() {
-        viewModel.sendOTP(OTPRequestModel(SessionManager.courierUserId.toString(), SessionManager.mobile)).observe(viewLifecycleOwner, Observer { msg -> {
+        binding?.paymentRequestBtn?.isEnabled = false
+        val mobileNumber = SessionManager.mobile
+        viewModel.sendOTP(OTPRequestModel(mobileNumber, mobileNumber)).observe(viewLifecycleOwner, Observer { msg ->
+            binding?.paymentRequestBtn?.isEnabled = true
+            binding?.paymentRequestBtn?.visibility = View.GONE
+            binding?.OTPCodeET?.visibility = View.VISIBLE
+            binding?.OTPCheckBtn?.visibility = View.VISIBLE
+            binding?.parent?.snackbar("আপনার ডেলিভারি টাইগারের অ্যাকাউন্ট OTP কোড: ${SessionManager.mobile} এই মোবাইল নাম্বার এ পাঠানো হয়েছে", Snackbar.LENGTH_INDEFINITE, "ঠিক আছে") {
 
-        } })
+            }?.show()
+         })
+    }
+
+    private fun validation(): Boolean {
+
+        val otpCode = binding?.OTPCodeET?.text?.toString()?.trim() ?: ""
+        if (otpCode.isEmpty()) {
+            context?.toast("সঠিক OTP কোড লিখুন")
+            return false
+        }
+        return true
     }
 
     private fun verifyOTP(otpCode: String) {
-
-        viewModel.checkOTP(SessionManager.mobile, otpCode).observe(viewLifecycleOwner, Observer { flag ->
+        binding?.OTPCheckBtn?.isEnabled = false
+        val mobileNumber = SessionManager.mobile
+        viewModel.checkOTP(mobileNumber, otpCode).observe(viewLifecycleOwner, Observer { flag ->
+            binding?.OTPCheckBtn?.isEnabled = true
             if (flag) {
+                context?.toast("OTP কোড ভেরিফাইড")
+                binding?.OTPCodeET?.visibility = View.GONE
+                binding?.OTPCheckBtn?.visibility = View.GONE
                 requestPayment()
+            } else {
+                context?.toast("OTP কোড সঠিক নয়")
             }
         })
     }
@@ -120,6 +153,7 @@ class UnpaidCODFragment: Fragment() {
     private fun requestPayment() {
         viewModel.updateInstantPaymentRequest(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { flag ->
             if (flag) {
+                context?.toast("পেমেন্ট রিকোয়েস্ট সফল হয়েছে")
                 fetchCODData()
             }
         })

@@ -29,8 +29,12 @@ class AppRepository(
 ) {
 
     //******************** API ********************//
+    suspend fun sendOTP(requestBody: OTPRequestModel) = apiInterfaceAPI.sendOTP(requestBody)
+
+    suspend fun checkOTP(mobileNo: String, OPTCode: String) = apiInterfaceAPI.checkOTP(mobileNo, OPTCode)
 
     fun updateCourierStatus(requestBody: StatusLocationRequest) = apiInterfaceAPI.updateCourierStatus(requestBody)
+
     suspend fun uploadProductInfo(ProductUploadReqBody: RequestBody) = apiInterfaceAPI.uploadProductInfo(ProductUploadReqBody)
 
     //******************** BRIDGE ********************//
@@ -71,10 +75,6 @@ class AppRepository(
 
 
     //******************** ADCORE ********************//
-
-    suspend fun sendOTP(requestBody: OTPRequestModel) = apiInterfaceCore.sendOTP(requestBody)
-
-    suspend fun checkOTP(mobileNo: String, OPTCode: String) = apiInterfaceCore.checkOTP(mobileNo, OPTCode)
 
     suspend fun getBannerInfo() = apiInterfaceCore.getBannerInfo()
 

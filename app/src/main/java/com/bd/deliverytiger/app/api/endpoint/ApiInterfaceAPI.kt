@@ -3,15 +3,15 @@ package com.bd.deliverytiger.app.api.endpoint
 import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.ResponseHeader
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
+import com.bd.deliverytiger.app.api.model.login.OTPCheckResponse
+import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
+import com.bd.deliverytiger.app.api.model.login.OTPResponse
 import com.bd.deliverytiger.app.api.model.product_upload.ProductUploadResponse
 import com.haroldadmin.cnradapter.NetworkResponse
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Retrofit
-import retrofit2.http.Body
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.Part
+import retrofit2.http.*
 
 interface ApiInterfaceAPI {
 
@@ -22,6 +22,12 @@ interface ApiInterfaceAPI {
     }
 
     //"https://api.ajkerdeal.com/"
+
+    @POST("Recover/RetrivePassword/deliverytiger")
+    suspend fun sendOTP(@Body requestBody: OTPRequestModel): NetworkResponse<OTPResponse, ErrorResponse>
+
+    @GET("Recover/CheckOTP/{mobileNo}/{OTP}")
+    suspend fun checkOTP(@Path("mobileNo") mobileNo: String, @Path("OTP") OPTCode: String): NetworkResponse<OTPCheckResponse, ErrorResponse>
 
     @POST("api/SelfDelivery/AddLatLag")
     fun updateCourierStatus(@Body requestBody: StatusLocationRequest): Call<ResponseHeader<Int>>

@@ -20,9 +20,6 @@ import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
-import com.bd.deliverytiger.app.api.model.login.OTPCheckResponse
-import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
-import com.bd.deliverytiger.app.api.model.login.OTPResponse
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
@@ -48,12 +45,6 @@ interface ApiInterfaceCore {
         }
     }
     //"https://adcore.ajkerdeal.com/"
-
-    @POST("Recover/RetrivePassword/deliverytiger")
-    suspend fun sendOTP(@Body requestBody: OTPRequestModel): NetworkResponse<OTPResponse, ErrorResponse>
-
-    @GET("Recover/CheckOTP/{mobileNo}/{OTP}")
-    suspend fun checkOTP(@Path("mobileNo") mobileNo: String, @Path("OTP") OPTCode: String): NetworkResponse<OTPCheckResponse, ErrorResponse>
 
     @GET("api/Dashboard/GetAllBanners")
     suspend fun getBannerInfo(): NetworkResponse<GenericResponse<BannerResponse>, ErrorResponse>

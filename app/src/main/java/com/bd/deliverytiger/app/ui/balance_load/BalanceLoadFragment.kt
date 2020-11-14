@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.ui.balance_load
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
 import org.koin.android.ext.android.inject
 
+@SuppressLint("SetTextI18n")
 class BalanceLoadFragment: Fragment() {
 
     private var binding: FragmentBalanceLoadBinding? = null
@@ -42,6 +44,7 @@ class BalanceLoadFragment: Fragment() {
         }.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -53,7 +56,11 @@ class BalanceLoadFragment: Fragment() {
         }
 
         viewModel.fetchMerchantReceivableList(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
-            binding?.amountET?.setText("${model.totalAmount}")
+            if (model.totalAmount > 0) {
+                binding?.serviceChargeAmount?.text = "সার্ভিস চার্জ ডিউ: ${DigitConverter.toBanglaDigit(model.totalAmount, true)}৳"
+                binding?.serviceChargeAmount?.visibility = View.VISIBLE
+                binding?.amountET?.setText("${model.totalAmount}")
+            }
         })
 
         viewModel.fetchBalanceLimit(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->

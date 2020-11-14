@@ -14,14 +14,9 @@
             android:title="সব অর্ডার" />
 
         <item
-            android:id="@+id/nav_bill"
-            android:icon="@drawable/ic_wallet"
-            android:title="সার্ভিস চার্জ" />
-
-        <item
             android:id="@+id/nav_cod_collection"
             android:icon="@drawable/ic_handout"
-            android:title="COD কালেকশন\nপেইড ও আনপেইড" />
+            android:title="পরিশোধিত COD" />
 
         <item
             android:id="@+id/nav_payment_history"
@@ -31,7 +26,7 @@
         <item
             android:id="@+id/nav_bill_pay"
             android:icon="@drawable/ic_transaction_history"
-            android:title="বিল পে (Only Delivery)" />
+            android:title="সার্ভিস চার্জ (পেইড)" />
 
         <item
             android:id="@+id/nav_bill_pay_history"
@@ -80,6 +75,13 @@
             android:title="লগ আউট" />
 
         <!--Disabled Menu Items-->
+
+        <item
+            android:id="@+id/nav_bill"
+            android:icon="@drawable/ic_wallet"
+            android:title="সার্ভিস চার্জ"
+            android:visible="false"
+            />
 
         <item
             android:id="@+id/nav_new_order"

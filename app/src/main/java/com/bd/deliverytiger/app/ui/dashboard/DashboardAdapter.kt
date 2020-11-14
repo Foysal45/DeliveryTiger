@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.databinding.ItemViewDashboardPaymentBinding
+import com.bd.deliverytiger.app.databinding.ItemViewDashboardUnpaidCodBinding
 import com.bd.deliverytiger.app.utils.DigitConverter
 
 
@@ -20,6 +21,7 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
 
     var onItemClick: ((position: Int, model: DashboardData) -> Unit)? = null
     var onPayDetailsClick: ((position: Int, model: DashboardData) -> Unit)? = null
+    var onCODCollectionClick: ((position: Int, model: DashboardData) -> Unit)? = null
 
     override fun getItemViewType(position: Int): Int {
         return dataList[position].viewType
@@ -29,8 +31,8 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
         return if (viewType == 0) {
             ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_view_dashboard, parent, false))
         } else {
-            val binding: ItemViewDashboardPaymentBinding = ItemViewDashboardPaymentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            ViewModel1(binding)
+            val binding: ItemViewDashboardUnpaidCodBinding = ItemViewDashboardUnpaidCodBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ViewModel2(binding)
         }
     }
 
@@ -116,6 +118,11 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
                 binding.parent.visibility = View.GONE
                 binding.msg2.visibility = View.GONE
             }
+        } else if (holder is ViewModel2) {
+            val model = dataList[position]
+            val binding = holder.binding
+            val amount = model.totalAmount.toInt()
+            binding.countTV.text = "৳ ${DigitConverter.toBanglaDigit(amount, true)}"
         }
     }
 
@@ -140,6 +147,16 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             binding.root.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     onPayDetailsClick?.invoke(adapterPosition, dataList[adapterPosition])
+                }
+            }
+        }
+    }
+
+    internal inner class ViewModel2(val binding: ItemViewDashboardUnpaidCodBinding): RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.root.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onCODCollectionClick?.invoke(adapterPosition, dataList[adapterPosition])
                 }
             }
         }

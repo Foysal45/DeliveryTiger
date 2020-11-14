@@ -11,6 +11,19 @@
     android:paddingTop="@dimen/left_right_margin"
     android:paddingEnd="@dimen/left_right_margin">
 
+    <TextView
+        android:id="@+id/serviceChargeAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16sp"
+        android:text="সার্ভিস চার্জ ডিউ:"
+        android:textColor="@color/black_80"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
     <EditText
         android:id="@+id/amountET"
         android:layout_width="match_parent"
@@ -27,7 +40,7 @@
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
         android:maxLength="8"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/serviceChargeAmount" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/payBtn"
