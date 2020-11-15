@@ -188,14 +188,13 @@
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14" />
 
-                <com.google.android.material.button.MaterialButtonToggleGroup
+                <com.bd.deliverytiger.app.utils.CustomMaterialButtonToggleGroup
                     android:id="@+id/toggle_button_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     app:checkedButton="@id/toggle_button_1"
                     app:singleSelection="true"
-
                     >
 
                     <com.google.android.material.button.MaterialButton
@@ -204,8 +203,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="56dp"
                         android:layout_weight="1"
-                        android:text="শুধু ডেলিভারি"
-                        android:textAllCaps="false" />
+                        android:text="@string/orderType1"
+                        android:maxLines="2"
+                        android:textAllCaps="false"
+                        android:padding="5dp"
+                        />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/toggle_button_2"
@@ -213,10 +215,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="56dp"
                         android:layout_weight="1"
-                        android:text="ডেলিভারি+টাকা কালেকশন"
-                        android:textAllCaps="false" />
+                        android:maxLines="2"
+                        android:text="@string/orderType2"
+                        android:textAllCaps="false"
+                        android:padding="5dp"
+                        />
 
-                </com.google.android.material.button.MaterialButtonToggleGroup>
+                </com.bd.deliverytiger.app.utils.CustomMaterialButtonToggleGroup>
 
                 <EditText
                     android:id="@+id/collectionAmount"

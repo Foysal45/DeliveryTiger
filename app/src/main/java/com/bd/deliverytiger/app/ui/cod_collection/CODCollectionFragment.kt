@@ -83,7 +83,7 @@ class CODCollectionFragment : Fragment() {
         if (isUnpaidCOD) {
             (activity as HomeActivity).setToolbarTitle("আনপেইড COD কালেকশন")
         } else {
-            (activity as HomeActivity).setToolbarTitle("COD কালেকশন")
+            (activity as HomeActivity).setToolbarTitle(getString(R.string.cod_collection))
         }
     }
 

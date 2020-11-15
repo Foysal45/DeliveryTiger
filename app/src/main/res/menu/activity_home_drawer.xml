@@ -16,7 +16,7 @@
         <item
             android:id="@+id/nav_cod_collection"
             android:icon="@drawable/ic_handout"
-            android:title="পরিশোধিত COD" />
+            android:title="@string/cod_collection" />
 
         <item
             android:id="@+id/nav_payment_history"
@@ -26,7 +26,7 @@
         <item
             android:id="@+id/nav_bill_pay"
             android:icon="@drawable/ic_transaction_history"
-            android:title="সার্ভিস চার্জ (পেইড)" />
+            android:title="@string/service_bill_pay" />
 
         <item
             android:id="@+id/nav_bill_pay_history"

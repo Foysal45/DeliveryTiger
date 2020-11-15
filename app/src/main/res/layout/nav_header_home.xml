@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_12"
         android:textColor="@color/white"
-        android:text="dtuser@example.com"
+        android:text="user@google.com"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/merchantCredit"
         />
@@ -46,7 +46,18 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_12"
         android:textColor="@color/white"
-        tools:text="5000"
+        tools:text="ক্রেডিট লিমিট: ৳ 5,000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/merchantAdvancePayment"
+        />
+
+    <TextView
+        android:id="@+id/merchantAdvancePayment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_12"
+        android:textColor="@color/white"
+        tools:text="অ্যাডভান্স পেমেন্ট: ৳ 5,000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />
@@ -58,7 +69,7 @@
         android:adjustViewBounds="true"
         android:padding="8dp"
         app:srcCompat="@drawable/all_order_edit"
-        android:tint="@color/white"
+        app:tint="@color/white"
         android:contentDescription="@string/cd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

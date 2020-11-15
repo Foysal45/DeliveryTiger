@@ -3,6 +3,7 @@ package com.bd.deliverytiger.app.api.endpoint
 import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.accounts.AccountDetailsResponse
 import com.bd.deliverytiger.app.api.model.accounts.AccountsData
+import com.bd.deliverytiger.app.api.model.accounts.AdvanceBalanceData
 import com.bd.deliverytiger.app.api.model.bill_pay_history.BillPayHistoryResponse
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentData
@@ -60,5 +61,8 @@ interface ApiInterfaceADM {
 
     @GET("api/account/reports/UpdateInstantPaymentRequestFlag/{courierUserId}")
     suspend fun updateInstantPaymentRequest(@Path("courierUserId") courierUserId: Int): NetworkResponse<Boolean, ErrorResponse>
+
+    @GET("api/account/reports/GetMerchantCurrentAdvanceBalance/{courierUserId}")
+    suspend fun fetchMerchantCurrentAdvanceBalance(@Path("courierUserId") courierUserId: Int): NetworkResponse<AdvanceBalanceData, ErrorResponse>
 
 }

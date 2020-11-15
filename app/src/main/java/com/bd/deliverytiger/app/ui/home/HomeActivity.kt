@@ -171,9 +171,11 @@ class HomeActivity : AppCompatActivity(),
         val headerDesignationTV: TextView = headerView.findViewById(R.id.nav_header_sub_title)
         val profileEdit: ImageView = headerView.findViewById(R.id.nav_header_profile_edit)
         val merchantCredit: TextView = headerView.findViewById(R.id.merchantCredit)
+        val merchantAdvancePayment: TextView = headerView.findViewById(R.id.merchantAdvancePayment)
         headerUserNameTV.text = SessionManager.companyName
         headerDesignationTV.text = SessionManager.mobile
-        merchantCredit.text = "অ্যাডভান্স পেমেন্ট: ৳ ${DigitConverter.toBanglaDigit(SessionManager.credit, true)}"
+        merchantCredit.text = "ক্রেডিট লিমিট: ৳ ${DigitConverter.toBanglaDigit(SessionManager.credit, true)}"
+        merchantAdvancePayment.text = "অ্যাডভান্স পেমেন্ট: ৳ ${DigitConverter.toBanglaDigit(0, true)}"
 
         profileEdit.setOnClickListener {
             navId = R.id.nav_header_profile_edit

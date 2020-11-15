@@ -39,6 +39,22 @@
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/etCustomerName"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_view_height"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:hint="কাস্টমারের নাম"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14" />
+
+        <EditText
             android:id="@+id/etAddOrderMobileNo"
             android:layout_width="match_parent"
             android:layout_height="@dimen/login_view_height"
@@ -101,7 +117,7 @@
             android:textSize="@dimen/text_16"
             android:textStyle="bold" />
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
+        <com.bd.deliverytiger.app.utils.CustomMaterialButtonToggleGroup
             android:id="@+id/toggle_button_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -117,8 +133,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="56dp"
                 android:layout_weight="1"
-                android:text="শুধু ডেলিভারি"
-                android:textAllCaps="false" />
+                android:text="@string/orderType1"
+                android:textAllCaps="false"
+                android:padding="5dp"
+                android:maxLines="2"
+                />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/toggle_button_2"
@@ -126,10 +145,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="56dp"
                 android:layout_weight="1"
-                android:text="ডেলিভারি+টাকা কালেকশন"
-                android:textAllCaps="false" />
+                android:text="@string/orderType2"
+                android:textAllCaps="false"
+                android:padding="5dp"
+                android:maxLines="2"
+                />
 
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+        </com.bd.deliverytiger.app.utils.CustomMaterialButtonToggleGroup>
 
         <EditText
             android:id="@+id/collectionAmount"

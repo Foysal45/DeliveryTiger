@@ -27,9 +27,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-/**
- * A simple [Fragment] subclass.
- */
 class FilterFragment : Fragment() {
 
     private lateinit var searchET: EditText

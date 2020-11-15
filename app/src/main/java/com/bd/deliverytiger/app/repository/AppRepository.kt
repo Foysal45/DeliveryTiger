@@ -73,6 +73,8 @@ class AppRepository(
 
     suspend fun updateInstantPaymentRequest(courierUserId: Int) = apiInterfaceADM.updateInstantPaymentRequest(courierUserId)
 
+    suspend fun fetchMerchantCurrentAdvanceBalance(courierUserId: Int) = apiInterfaceADM.fetchMerchantCurrentAdvanceBalance(courierUserId)
+
 
     //******************** ADCORE ********************//
 

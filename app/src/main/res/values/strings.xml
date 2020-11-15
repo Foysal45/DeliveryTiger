@@ -74,4 +74,9 @@
 
     <string name="file_provider_authority" translatable="false">com.bd.deliverytiger.app.fileprovider</string>
 
+    <string name="cod_collection">পরিশোধিত COD</string>
+    <string name="service_bill_pay">সার্ভিস চার্জ (পেইড)</string>
+    <string name="orderType1">শুধু ডেলিভারি\n(Pre-Paid)</string>
+    <string name="orderType2">ডেলিভারি+টাকা কালেকশন\n(COD)</string>
+
 </resources>

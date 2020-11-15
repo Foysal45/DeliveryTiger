@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.calculator.DeliveryInfo
 import com.bd.deliverytiger.app.api.model.calculator.WeightPrice
@@ -31,7 +30,7 @@ class DeliveryChargeCalculatorFragment: Fragment() {
     private var binding: FragmentDeliveryChargeCalculatorBinding? = null
     private val viewModel: DeliveryChargeViewModel by inject()
 
-    private lateinit var dataAdapter: ChargeDeliveryTypeAdapter
+    //private lateinit var dataAdapter: ChargeDeliveryTypeAdapter
 
     private val weightPriceList: MutableList<WeightPrice> = mutableListOf()
     private var showTitle: Boolean = false
@@ -65,8 +64,8 @@ class DeliveryChargeCalculatorFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        dataAdapter = ChargeDeliveryTypeAdapter()
-        binding?.recyclerView?.let { view1 ->
+        //dataAdapter = ChargeDeliveryTypeAdapter()
+        /*binding?.recyclerView?.let { view1 ->
             with(view1) {
                 setHasFixedSize(true)
                 layoutManager = GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
@@ -74,10 +73,10 @@ class DeliveryChargeCalculatorFragment: Fragment() {
                 layoutAnimation = null
                 itemAnimator = null
             }
-        }
-        dataAdapter.onItemClick = { position, model ->
+        }*/
+        /*dataAdapter.onItemClick = { position, model ->
             fetchWeightData(districtId, model.daliveryRangeId)
-        }
+        }*/
 
         viewModel.fetchDeliveryChargeCalculationInfo().observe(viewLifecycleOwner, Observer { model ->
             codPercent = model.codCharge ?: ""
@@ -104,8 +103,10 @@ class DeliveryChargeCalculatorFragment: Fragment() {
             override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {}
             override fun onSeeking(seekParams: SeekParams?) {
                 val position = seekParams?.thumbPosition ?: 0
-                val model = weightPriceList[position]
-                calculate(model.courierDeliveryCharge)
+                if (weightPriceList.isNotEmpty()) {
+                    val model = weightPriceList[position]
+                    calculate(model.courierDeliveryCharge)
+                }
             }
         }
 
@@ -131,7 +132,7 @@ class DeliveryChargeCalculatorFragment: Fragment() {
     private fun initDeliveryType(deliveryInfo: DeliveryInfo?) {
         deliveryInfo ?: return
         districtId = deliveryInfo.districtId
-        dataAdapter.initLoad(deliveryInfo.deliveryRange)
+        //dataAdapter.initLoad(deliveryInfo.deliveryRange)
         val model = deliveryInfo.deliveryRange.first()
         fetchWeightData(districtId, model.daliveryRangeId)
     }

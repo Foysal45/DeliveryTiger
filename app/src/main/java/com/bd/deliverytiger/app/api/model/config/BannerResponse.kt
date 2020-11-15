@@ -7,5 +7,7 @@ data class BannerResponse(
     @SerializedName("popUp")
     var popUpModel: PopupModel = PopupModel(),
     @SerializedName("bannerList")
-    var bannerModel: BannerModel = BannerModel()
+    var bannerModel: BannerModel = BannerModel(),
+    @SerializedName("dashboardDataDuration")
+    var dashboardDataDuration: Int = 12
 )

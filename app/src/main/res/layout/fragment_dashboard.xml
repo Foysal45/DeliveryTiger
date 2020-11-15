@@ -168,9 +168,9 @@
 
                     </LinearLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <!--<androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/login_view_height"
+                        android:layout_height="24dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
@@ -215,11 +215,12 @@
                             app:layout_constraintTop_toTopOf="@id/monthSpinner"
                             app:srcCompat="@drawable/ic_arrow_drop_down" />
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp">
 
@@ -413,11 +414,11 @@
                         tools:visibility="visible" />
 
 
-                    <FrameLayout
+                    <!--<FrameLayout
                         android:id="@+id/container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp" />
+                        android:layout_marginTop="16dp" />-->
 
                 </LinearLayout>
 
@@ -448,7 +449,7 @@
                     android:layout_width="0dp"
                     android:layout_height="60dp"
                     android:layout_weight="1"
-                    android:background="#6D929F"
+                    android:background="@color/orange"
                     android:gravity="center"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent">

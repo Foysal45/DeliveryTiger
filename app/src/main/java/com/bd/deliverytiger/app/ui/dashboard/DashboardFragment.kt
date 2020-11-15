@@ -8,7 +8,6 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -24,7 +23,6 @@ import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadFragment
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
-import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.complain.ComplainFragment
@@ -36,9 +34,7 @@ import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
 import com.bd.deliverytiger.app.utils.*
-import com.bd.deliverytiger.app.utils.DigitConverter.banglaMonth
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
@@ -56,7 +52,7 @@ class DashboardFragment : Fragment() {
     private val dataList: MutableList<DashboardData> = mutableListOf()
     private val viewModel: DashboardViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
-    private lateinit var monthSpinnerAdapter: CustomSpinnerAdapter
+    //private lateinit var monthSpinnerAdapter: CustomSpinnerAdapter
 
     private val calenderNow = Calendar.getInstance()
     private val viewList: MutableList<String> = mutableListOf()
@@ -77,7 +73,6 @@ class DashboardFragment : Fragment() {
     private var handler = Handler(Looper.getMainLooper())
     private var paymentDashboardModel: DashboardData = DashboardData(dashboardSpanCount = 2, viewType = 1)
 
-
     companion object {
         fun newInstance(): DashboardFragment = DashboardFragment().apply {}
         val tag: String = DashboardFragment::class.java.name
@@ -89,17 +84,42 @@ class DashboardFragment : Fragment() {
         }.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        setDashBoardAdapter()
-        setSpinner()
-        showDeliveryChargeCalculator()
-
+        initDashboard()
+        fetchBannerData()
         fetchCODData()
-        //fetchAccountsData()
         fetchCollection()
+        initClickLister()
+        //showDeliveryChargeCalculator()
+        //fetchAccountsData()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        if (isBannerEnable) {
+            animateSlider()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        worker?.let {
+            handler.removeCallbacks(it)
+        }
+    }
+
+    private fun fetchBannerData() {
+
+        homeViewModel.bannerInfo.observe(viewLifecycleOwner, Observer { model ->
+            val bannerModel = model.bannerModel
+            showBanner(bannerModel)
+            setSpinner(model.dashboardDataDuration)
+        })
+    }
+
+    private fun initClickLister() {
         binding?.swipeRefresh?.setOnRefreshListener {
             getDashBoardData(selectedMonth, selectedYear)
             fetchCollection()
@@ -107,39 +127,95 @@ class DashboardFragment : Fragment() {
         binding?.retryBtn?.setOnClickListener {
             getDashBoardData(selectedMonth, selectedYear)
         }
-
-        homeViewModel.bannerInfo.observe(viewLifecycleOwner, Observer { model ->
-            val bannerModel = model.bannerModel
-            showBanner(bannerModel)
-        })
-
         binding?.collectorTrackBtn?.setOnClickListener {
             addFragment(MapFragment.newInstance(null), MapFragment.tag)
         }
-
-        /*binding?.paymentDoneLayout?.setOnClickListener {
-            addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
-        }*/
-
         binding?.nearByHubBtn?.setOnClickListener {
             val bundle = bundleOf(
                 "isNearByHubView" to true
             )
             addFragment(MapFragment.newInstance(bundle), MapFragment.tag)
         }
-
         binding?.complainBtn?.setOnClickListener {
             addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
         }
+        binding?.balanceLoadLayout?.setOnClickListener {
+            addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
+        }
+        binding?.orderBtn?.setOnClickListener {
+            orderDialog()
+        }
+        dashboardAdapter.onItemClick = { _, model ->
+            //dashBoardClickEvent(model?.dashboardRouteUrl!!)
+            if (model?.count != 0) {
+                when (model?.dashboardRouteUrl) {
+                    "add-order" -> {
+                        addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+                    }
+                    "billing-service" -> {
+                        addFragment(ServiceChargeFragment.newInstance(), ServiceChargeFragment.tag)
+                    }
+                    "order-tracking" -> {
+                        addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
+                    }
+                    "shipment-charge" -> {
+                        addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
+                    }
+                    "all-order" -> {
+                        goToAllOrder(model.name ?: "", model.dashboardStatusFilter, selectedStartDate, selectedEndDate)
+                    }
+                    "cod-collection" -> {
+                        addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
+                    }
+                    else -> {
+                        addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
+                    }
+                }
+            } else {
+                VariousTask.showShortToast(context, "পর্যাপ্ত তথ্য নেই")
+            }
+        }
+        dashboardAdapter.onPayDetailsClick = { position, model ->
+            if (model.totalAmount.toInt() > 0) {
+                goToPaymentDetails()
+            } else {
+                context?.toast("পর্যাপ্ত তথ্য নেই")
+            }
+        }
+        dashboardAdapter.onCODCollectionClick = { position, model ->
+            addFragment(UnpaidCODFragment.newInstance(), UnpaidCODFragment.tag)
+        }
 
+       /* binding?.dateRangePicker?.setOnClickListener {
+            val builder = MaterialDatePicker.Builder.dateRangePicker()
+            builder.setTheme(R.style.CustomMaterialCalendarTheme)
+            builder.setTitleText("ডেট রেঞ্জ সিলেক্ট করুন")
+            val picker = builder.build()
+            picker.show(childFragmentManager, "Picker")
+            picker.addOnPositiveButtonClickListener {
+
+                selectedStartDate = sdf.format(it.first)
+                selectedEndDate = sdf.format(it.second)
+                selectedMonth = 0
+                selectedYear = 0
+
+                val sdf1 = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+                //context?.toast("$selectedStartDate $selectedEndDate")
+                viewList[0] = DigitConverter.toBanglaDigit("${sdf1.format(it.first)} - ${sdf1.format(it.second)}")
+                monthSpinnerAdapter.notifyDataSetChanged()
+                binding?.monthSpinner?.setSelection(0)
+
+                getDashBoardData(selectedMonth, selectedYear)
+            }
+        }*/
+
+        /*binding?.paymentDoneLayout?.setOnClickListener {
+            addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
+        }*/
         /*binding?.unpaidLayout?.setOnClickListener {
             //goToAllOrder("ডেলিভারি হয়েছে", "ডেলিভারি হয়েছে", selectedStartDate, selectedEndDate)
             addFragment(UnpaidCODFragment.newInstance(), UnpaidCODFragment.tag)
         }*/
-
-        binding?.balanceLoadLayout?.setOnClickListener {
-            addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
-        }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -158,28 +234,6 @@ class DashboardFragment : Fragment() {
                 }
             }
         })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (isBannerEnable) {
-            animateSlider()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        worker?.let {
-            handler.removeCallbacks(it)
-        }
-    }
-
-    private fun showDeliveryChargeCalculator() {
-        val tag = DeliveryChargeCalculatorFragment.tag
-        val fragment = DeliveryChargeCalculatorFragment.newInstance()
-        binding?.container?.let { container ->
-            childFragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit()
-        }
     }
 
     private fun showBanner(bannerModel: BannerModel) {
@@ -227,7 +281,7 @@ class DashboardFragment : Fragment() {
         handler.postDelayed(worker!!, 2000L)
     }
 
-    private fun setDashBoardAdapter() {
+    private fun initDashboard() {
 
         dashboardAdapter = DashboardAdapter(requireContext(), dataList)
         val gridLayoutManager = GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
@@ -245,82 +299,9 @@ class DashboardFragment : Fragment() {
             layoutManager = gridLayoutManager
             adapter = dashboardAdapter
         }
-
-        dashboardAdapter.onItemClick = { _, model ->
-            //dashBoardClickEvent(model?.dashboardRouteUrl!!)
-            if (model?.count != 0) {
-                when (model?.dashboardRouteUrl) {
-                    "add-order" -> {
-                        addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
-                    }
-                    "billing-service" -> {
-                        addFragment(ServiceChargeFragment.newInstance(), ServiceChargeFragment.tag)
-                    }
-                    "order-tracking" -> {
-                        addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
-                    }
-                    "shipment-charge" -> {
-                        addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
-                    }
-                    "all-order" -> {
-                        goToAllOrder(model.name ?: "", model.dashboardStatusFilter, selectedStartDate, selectedEndDate)
-                    }
-                    "cod-collection" -> {
-                        addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
-                    }
-                    else -> {
-                        addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
-                    }
-                }
-            } else {
-                VariousTask.showShortToast(context, "পর্যাপ্ত তথ্য নেই")
-            }
-        }
-
-        dashboardAdapter.onPayDetailsClick = { position, model ->
-            if (model.totalAmount.toInt() > 0) {
-                goToPaymentDetails()
-            } else {
-                context?.toast("পর্যাপ্ত তথ্য নেই")
-            }
-        }
-
-        dashboardAdapter.onCODCollectionClick = { position, model ->
-            addFragment(UnpaidCODFragment.newInstance(), UnpaidCODFragment.tag)
-        }
-
-        binding?.orderBtn?.setOnClickListener {
-
-            orderDialog()
-        }
-
-        binding?.dateRangePicker?.setOnClickListener {
-
-            val builder = MaterialDatePicker.Builder.dateRangePicker()
-            builder.setTheme(R.style.CustomMaterialCalendarTheme)
-            builder.setTitleText("ডেট রেঞ্জ সিলেক্ট করুন")
-            val picker = builder.build()
-            picker.show(childFragmentManager, "Picker")
-            picker.addOnPositiveButtonClickListener {
-
-                selectedStartDate = sdf.format(it.first)
-                selectedEndDate = sdf.format(it.second)
-                selectedMonth = 0
-                selectedYear = 0
-
-                val sdf1 = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-                //context?.toast("$selectedStartDate $selectedEndDate")
-                viewList[0] = DigitConverter.toBanglaDigit("${sdf1.format(it.first)} - ${sdf1.format(it.second)}")
-                monthSpinnerAdapter.notifyDataSetChanged()
-                binding?.monthSpinner?.setSelection(0)
-
-                getDashBoardData(selectedMonth, selectedYear)
-            }
-        }
-
     }
 
-    private fun setSpinner() {
+    private fun setSpinner(monthDuration: Int) {
         //val calender = Calendar.getInstance()
         currentYear = calenderNow.get(Calendar.YEAR)
         dayOfYear = calenderNow.get(Calendar.DAY_OF_YEAR)
@@ -328,15 +309,22 @@ class DashboardFragment : Fragment() {
         currentMonth = calenderNow.get(Calendar.MONTH)
         val lastActualDay = calenderNow.getActualMaximum(Calendar.DAY_OF_MONTH)
         currentDate = sdf.format(calenderNow.timeInMillis)
+
         selectedYear = currentYear
         selectedMonth = currentMonth + 1
-        selectedStartDate = "$selectedYear-$selectedMonth-01"
-        selectedEndDate = "$selectedYear-$selectedMonth-$lastActualDay"
+
+        selectedEndDate = "$selectedYear-$selectedMonth-$today"
+
+        val calendarStart =  Calendar.getInstance()
+        calendarStart.add(Calendar.MONTH, monthDuration * -1)
+        val startYear = calendarStart.get(Calendar.YEAR)
+        val startMonth = calendarStart.get(Calendar.MONTH)
+        selectedStartDate = "$startYear-$startMonth-01"
 
         getDashBoardData(selectedMonth, selectedYear)
         Timber.d("DashboardTag", "fetchDashBoard $selectedMonth $selectedYear")
 
-        val list: MutableList<MonthDataModel> = mutableListOf()
+        /*val list: MutableList<MonthDataModel> = mutableListOf()
         viewList.clear()
         viewList.add(getString(R.string.dashboard_spinner_temp))
         for (year in currentYear downTo 2019) {
@@ -352,8 +340,9 @@ class DashboardFragment : Fragment() {
                 list.add(MonthDataModel(monthIndex + 1, year))
                 viewList.add("${banglaMonth[monthIndex]}, ${DigitConverter.toBanglaDigit(year)}")
             }
-        }
+        }*/
 
+        /*
         monthSpinnerAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, viewList)
         binding?.monthSpinner?.adapter = monthSpinnerAdapter
         binding?.monthSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -382,6 +371,7 @@ class DashboardFragment : Fragment() {
         handler.postDelayed({
             binding?.monthSpinner?.setSelection(1)
         }, 300L)
+        */
     }
 
     private fun fetchCollection() {
@@ -423,42 +413,6 @@ class DashboardFragment : Fragment() {
             } else {
                 SessionManager.isCollectorAttendance = false
                 SessionManager.collectorAttendanceDateOfYear = 0
-            }
-        })
-    }
-
-    private fun fetchAccountsData() {
-
-        viewModel.fetchAccountsData(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
-
-            /*if (!model.paymentDate.isNullOrEmpty()) {
-                val banglaDate = DigitConverter.toBanglaDate(model.paymentDate!!,"MM/dd/yyyy")
-                binding?.msg2?.text = "($banglaDate)"
-                freezeDate = DigitConverter.formatDate(model.freezeDate!!, "MM/dd/yyyy", "yyyy-MM-dd")
-            }
-            binding?.amount1?.text = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}"
-            binding?.msg1?.text = "${model.name}"*/
-
-            /*binding?.paymentInfoLayout?.setOnClickListener {
-                if (model.totalAmount.toInt() > 0) {
-                    goToPaymentDetails()
-                } else {
-                    context?.toast("পর্যাপ্ত তথ্য নেই")
-                }
-            }*/
-
-            paymentDashboardModel.apply {
-                this.name = model.name
-                this.paymentDate = model.paymentDate ?: ""
-                this.totalAmount = model.totalAmount
-            }
-            if (dataList.isNotEmpty()) {
-                dataList.last().apply {
-                    this.name = model.name
-                    this.paymentDate = model.paymentDate ?: ""
-                    this.totalAmount = model.totalAmount
-                }
-                dashboardAdapter.notifyItemChanged(dataList.lastIndex)
             }
         })
     }
@@ -558,6 +512,50 @@ class DashboardFragment : Fragment() {
         ft?.addToBackStack(tag)
         ft?.commit()
     }
+
+    private fun fetchAccountsData() {
+
+        viewModel.fetchAccountsData(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+
+            /*if (!model.paymentDate.isNullOrEmpty()) {
+                val banglaDate = DigitConverter.toBanglaDate(model.paymentDate!!,"MM/dd/yyyy")
+                binding?.msg2?.text = "($banglaDate)"
+                freezeDate = DigitConverter.formatDate(model.freezeDate!!, "MM/dd/yyyy", "yyyy-MM-dd")
+            }
+            binding?.amount1?.text = "৳ ${DigitConverter.toBanglaDigit(model.totalAmount.toInt(), true)}"
+            binding?.msg1?.text = "${model.name}"*/
+
+            /*binding?.paymentInfoLayout?.setOnClickListener {
+                if (model.totalAmount.toInt() > 0) {
+                    goToPaymentDetails()
+                } else {
+                    context?.toast("পর্যাপ্ত তথ্য নেই")
+                }
+            }*/
+
+            paymentDashboardModel.apply {
+                this.name = model.name
+                this.paymentDate = model.paymentDate ?: ""
+                this.totalAmount = model.totalAmount
+            }
+            if (dataList.isNotEmpty()) {
+                dataList.last().apply {
+                    this.name = model.name
+                    this.paymentDate = model.paymentDate ?: ""
+                    this.totalAmount = model.totalAmount
+                }
+                dashboardAdapter.notifyItemChanged(dataList.lastIndex)
+            }
+        })
+    }
+
+    /*private fun showDeliveryChargeCalculator() {
+        val tag = DeliveryChargeCalculatorFragment.tag
+        val fragment = DeliveryChargeCalculatorFragment.newInstance()
+        binding?.container?.let { container ->
+            childFragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit()
+        }
+    }*/
 
     override fun onDestroyView() {
         binding?.unbind()

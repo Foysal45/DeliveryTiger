@@ -574,8 +574,15 @@ class QuickOrderFragment(): Fragment() {
     private fun validate(): Boolean {
 
         hideKeyboard()
+        customerName = binding?.etCustomerName?.text?.toString()?.trim() ?: ""
         mobileNo = binding?.etAddOrderMobileNo?.text?.toString()?.trim() ?: ""
         customersAddress = binding?.etCustomersAddress?.text?.toString()?.trim() ?: ""
+        collectionName = mobileNo
+        if (customerName.isEmpty()) {
+            context?.toast(getString(R.string.write_yr_name))
+            binding?.etCustomerName?.requestFocus()
+            return false
+        }
         if (mobileNo.isEmpty()) {
             context?.toast(getString(R.string.write_phone_number))
             binding?.etAddOrderMobileNo?.requestFocus()

@@ -8,14 +8,14 @@
     android:layout_margin="5dp"
     android:padding="1dp"
     android:id="@+id/parent"
-    android:background="#6D929F"
+    android:background="@drawable/bg_cod_collection"
     >
 
     <TextView
         android:id="@+id/titleTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
         android:layout_marginStart="21dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:textColor="@color/white"
+        android:textColor="@color/orange"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,20 +37,30 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:text="৳ 783" />
 
-
     <TextView
         android:id="@+id/actionTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="@color/colorPrimary"
         android:textSize="@dimen/text_14"
-        android:gravity="end"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/arrow"
+        android:layout_marginEnd="4dp"
+        android:text="পেমেন্ট রিকোয়েস্ট" />
 
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_arrow_right"
+        android:contentDescription="@string/cd"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="21dp"
-        android:text="পেমেন্ট রিকোয়েস্ট\nকরুন" />
+        app:tint="@color/colorPrimary"
+        android:layout_marginEnd="16dp"
+        />
 
 
 

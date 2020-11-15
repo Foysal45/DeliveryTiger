@@ -150,7 +150,7 @@ class ServiceBillPayFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("বিল পে (Only Delivery)")
+        (activity as HomeActivity).setToolbarTitle(getString(R.string.service_bill_pay))
         fetchMerchantMonthlyReceivable(selectedYear, selectedMonthIndex)
     }
 

@@ -24,6 +24,7 @@ import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderResponse
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
+import com.bd.deliverytiger.app.ui.filter.DatePickerDialogCustom
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
@@ -47,6 +48,11 @@ class AllOrdersFragment : Fragment() {
     private lateinit var filterDateTag: Chip
     private lateinit var filterStatusTag: Chip
     private lateinit var filterSearchKeyTag: Chip
+
+    private lateinit var fromDateTV: TextView
+    private lateinit var toDateTV: TextView
+    private lateinit var filterBtn: ImageView
+    private lateinit var clearBtn: ImageView
 
 
     private lateinit var allOrdersAdapter: AllOrdersAdapter
@@ -110,6 +116,11 @@ class AllOrdersFragment : Fragment() {
         filterDateTag = view.findViewById(R.id.filter_tag_date)
         filterStatusTag = view.findViewById(R.id.filter_tag_status)
         filterSearchKeyTag = view.findViewById(R.id.filter_tag_searchKey)
+
+        fromDateTV = view.findViewById(R.id.fromDate)
+        toDateTV = view.findViewById(R.id.toDate)
+        filterBtn = view.findViewById(R.id.filterBtn)
+        clearBtn = view.findViewById(R.id.clearBtn)
 
         if (!bundle.isEmpty){
             statusGroup = bundle.getString("statusGroup", "-1")
@@ -180,11 +191,60 @@ class AllOrdersFragment : Fragment() {
             goToFilter()
         }
 
-
-
         if (shouldOpenFilter) {
             goToFilter(1)
         }
+
+        fromDateTV.setOnClickListener {
+            val date = if (fromDate != "2001-01-01") fromDate else ""
+            val fromDateDialog = DatePickerDialogCustom.newInstance(1, date)
+            activity?.supportFragmentManager?.let {
+                    it1 -> fromDateDialog.show(it1, "")
+            }
+            fromDateDialog.setDate(object : DatePickerDialogCustom.PassDateInterface2 {
+                override fun gotDate2(date: String, flag: Int) {
+                    //val formattedDate = DigitConverter.toBanglaDate(date, "yyyy-MM-dd")
+                    fromDateTV.text = date
+                    fromDate = date
+                }
+            })
+        }
+
+        toDateTV.setOnClickListener {
+            val date = if (toDate != "2001-01-01") toDate else ""
+            val toDateDialog = DatePickerDialogCustom.newInstance(2, date)
+            activity?.supportFragmentManager?.let {
+                    it1 -> toDateDialog.show(it1, "")
+            }
+            toDateDialog.setDate(object : DatePickerDialogCustom.PassDateInterface2 {
+                override fun gotDate2(date: String, flag: Int) {
+                    //val formattedDate = DigitConverter.toBanglaDate(date, "yyyy-MM-dd")
+                    toDateTV.text = date
+                    toDate = date
+                }
+            })
+        }
+
+        filterBtn.setOnClickListener {
+            if (fromDate == "2001-01-01") {
+                context?.toast("শুরুর তারিখ দিন")
+            } else if (toDate == "2001-01-01") {
+                context?.toast("শেষের তারিখ দিন")
+            } else {
+                courierOrderViewModelList.clear()
+                allOrdersAdapter.notifyDataSetChanged()
+                getAllOrders(0, 20)
+            }
+        }
+
+        clearBtn.setOnClickListener {
+            fromDate = defaultDate
+            toDate = defaultDate
+            fromDateTV.text = ""
+            toDateTV.text = ""
+            getAllOrders(0, 20)
+        }
+
     }
 
     private fun getAllOrders(index: Int, count: Int) {
