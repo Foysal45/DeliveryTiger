@@ -19,6 +19,7 @@ import com.bd.deliverytiger.app.api.model.config.BannerModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
+import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadFragment
@@ -91,6 +92,7 @@ class DashboardFragment : Fragment() {
         fetchBannerData()
         fetchCODData()
         fetchCollection()
+        fetchCurrentBalance()
         initClickLister()
         //showDeliveryChargeCalculator()
         //fetchAccountsData()
@@ -108,6 +110,18 @@ class DashboardFragment : Fragment() {
         worker?.let {
             handler.removeCallbacks(it)
         }
+    }
+
+    private fun fetchCurrentBalance() {
+        viewModel.fetchMerchantCurrentAdvanceBalance(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { accoutBalance ->
+            val balance = accoutBalance.balance
+            if (balance > 0) {
+                viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, balance).observe(viewLifecycleOwner, Observer { balanceinfo ->
+                    val adjustBalance = balanceinfo.adjustBalance
+                    binding?.accountBalance?.text = "(৳ ${DigitConverter.toBanglaDigit(adjustBalance, true)})"
+                })
+            }
+        })
     }
 
     private fun fetchBannerData() {
@@ -474,10 +488,12 @@ class DashboardFragment : Fragment() {
         button1.setOnClickListener {
             dialog.dismiss()
             addFragment(QuickOrderFragment.newInstance(), QuickOrderFragment.tag)
+            UserLogger.logGenie("NormalOrder")
         }
         button2.setOnClickListener {
             dialog.dismiss()
             addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+            UserLogger.logGenie("DetailOrder")
         }
     }
 

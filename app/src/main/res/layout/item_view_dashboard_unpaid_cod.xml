@@ -42,11 +42,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/text_14"
+        android:textSize="16sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/arrow"
         android:layout_marginEnd="4dp"
+        android:textStyle="bold"
         android:text="পেমেন্ট রিকোয়েস্ট" />
 
     <ImageView

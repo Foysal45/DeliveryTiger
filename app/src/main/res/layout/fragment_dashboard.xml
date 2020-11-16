@@ -451,7 +451,7 @@
                     android:layout_weight="1"
                     android:background="@color/orange"
                     android:gravity="center"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent">
 
                     <TextView
@@ -461,7 +461,19 @@
                         android:text="ব্যালেন্স লোড করুন"
                         android:textColor="@color/white"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:includeFontPadding="false"
+                        />
+                    <TextView
+                        android:id="@+id/accountBalance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="(৳ ০)"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:includeFontPadding="false"
+                         />
 
                 </LinearLayout>
 

@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.api.endpoint
 
 import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.GenericResponse
+import com.bd.deliverytiger.app.api.model.accounts.BalanceInfo
 import com.bd.deliverytiger.app.api.model.balance_load.BalanceLimitResponse
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceMainResponse
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody
@@ -139,5 +140,8 @@ interface ApiInterfaceCore {
 
     @GET("api/Fetch/GetBalanceLoadLimit/{merchantId}")
     suspend fun fetchBalanceLimit(@Path("merchantId") merchantId: Int): NetworkResponse<GenericResponse<BalanceLimitResponse>, ErrorResponse>
+
+    @GET("api/Dashboard/GetMerchantBalanceInfo/{courierUserId}/{amount}")
+    suspend fun fetchMerchantBalanceInfo(@Path("courierUserId") courierUserId: Int, @Path("amount") amount: Int): NetworkResponse<GenericResponse<List<BalanceInfo>>, ErrorResponse>
 
 }

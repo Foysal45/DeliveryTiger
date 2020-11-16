@@ -365,4 +365,24 @@ object SessionManager {
             }
         }
 
+    var orderSource: String
+        get() {
+            return pref.getString("orderSource", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("orderSource", value)
+            }
+        }
+
+    var totalAmount: Int
+        get() {
+            return pref.getInt("totalAmount", 0)
+        }
+        set(value) {
+            pref.edit {
+                putInt("totalAmount", value)
+            }
+        }
+
 }

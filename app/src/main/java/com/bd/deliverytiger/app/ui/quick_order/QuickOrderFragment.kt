@@ -146,6 +146,8 @@ class QuickOrderFragment(): Fragment() {
         fetchDTOrderGenericLimit()
         isProfileComplete = checkProfileData()
         clickListens()
+
+        SessionManager.orderSource = "NormalOrder"
     }
 
     private fun initViews() {
@@ -696,6 +698,7 @@ class QuickOrderFragment(): Fragment() {
 
         viewModel.placeOrder(requestBody).observe(viewLifecycleOwner, Observer { model ->
             dialog?.hide()
+            SessionManager.totalAmount = total.toInt()
             addOrderSuccessFragment(model)
         })
 

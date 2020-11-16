@@ -23,6 +23,7 @@ import com.bd.deliverytiger.app.api.endpoint.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.LoginBody
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
+import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButton
@@ -165,6 +166,7 @@ class LoginFragment: Fragment() {
                         Timber.d(logTag, "Token: ${SessionManager.accessToken}")
                         Timber.d(logTag, "RefreshToken: ${SessionManager.refreshToken}")
                         saveAppVersion()
+                        UserLogger.logLogIn()
                         goToHomeActivity()
                     } else {
                         context?.toast("মোবাইল নম্বর অথবা পাসওয়ার্ড ভুল হয়েছে")

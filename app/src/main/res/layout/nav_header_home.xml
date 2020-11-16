@@ -49,6 +49,7 @@
         tools:text="ক্রেডিট লিমিট: ৳ 5,000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/merchantAdvancePayment"
+        android:visibility="gone"
         />
 
     <TextView
@@ -60,6 +61,7 @@
         tools:text="অ্যাডভান্স পেমেন্ট: ৳ 5,000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
         />
 
     <ImageView

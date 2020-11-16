@@ -17,6 +17,7 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
+import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButton
@@ -135,6 +136,8 @@ class OrderSuccessFragment : Fragment() {
                 }
             }
         })
+
+        UserLogger.logPurchase(SessionManager.totalAmount)
     }
 
     private fun offerBottomSheet(model: CourierInfoModel?) {

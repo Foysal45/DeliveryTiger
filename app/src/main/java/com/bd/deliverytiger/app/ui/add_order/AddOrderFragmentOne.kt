@@ -393,6 +393,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         collectionSlotDatePicker.setOnClickListener {
             datePicker(3)
         }
+
+        SessionManager.orderSource = "DetailOrder"
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -1089,6 +1091,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         viewModel.placeOrder(requestBody).observe(viewLifecycleOwner, Observer { model ->
             dialog?.hide()
+            SessionManager.totalAmount = total.toInt()
             addOrderSuccessFragment(model)
         })
 

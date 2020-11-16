@@ -140,4 +140,6 @@ class AppRepository(
 
     suspend fun fetchBalanceLimit(merchantId: Int) = apiInterfaceCore.fetchBalanceLimit(merchantId)
 
+    suspend fun fetchMerchantBalanceInfo(courierUserId: Int, amount: Int) = apiInterfaceCore.fetchMerchantBalanceInfo(courierUserId, amount)
+
 }

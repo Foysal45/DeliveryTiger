@@ -35,6 +35,7 @@ import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.broadcast.ConnectivityReceiver
 import com.bd.deliverytiger.app.fcm.FCMData
+import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.services.LocationUpdatesService
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
@@ -170,12 +171,12 @@ class HomeActivity : AppCompatActivity(),
         val headerUserNameTV: TextView = headerView.findViewById(R.id.nav_header_title)
         val headerDesignationTV: TextView = headerView.findViewById(R.id.nav_header_sub_title)
         val profileEdit: ImageView = headerView.findViewById(R.id.nav_header_profile_edit)
-        val merchantCredit: TextView = headerView.findViewById(R.id.merchantCredit)
-        val merchantAdvancePayment: TextView = headerView.findViewById(R.id.merchantAdvancePayment)
+        //val merchantCredit: TextView = headerView.findViewById(R.id.merchantCredit)
+        //val merchantAdvancePayment: TextView = headerView.findViewById(R.id.merchantAdvancePayment)
         headerUserNameTV.text = SessionManager.companyName
         headerDesignationTV.text = SessionManager.mobile
-        merchantCredit.text = "ক্রেডিট লিমিট: ৳ ${DigitConverter.toBanglaDigit(SessionManager.credit, true)}"
-        merchantAdvancePayment.text = "অ্যাডভান্স পেমেন্ট: ৳ ${DigitConverter.toBanglaDigit(0, true)}"
+        //merchantCredit.text = "ক্রেডিট লিমিট: ৳ ${DigitConverter.toBanglaDigit(SessionManager.credit, true)}"
+        //merchantAdvancePayment.text = "অ্যাডভান্স পেমেন্ট: ৳ ${DigitConverter.toBanglaDigit(0, true)}"
 
         profileEdit.setOnClickListener {
             navId = R.id.nav_header_profile_edit
@@ -240,6 +241,7 @@ class HomeActivity : AppCompatActivity(),
 
         initService()
         appUpdateManager()
+        UserLogger.logAppOpen()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -735,6 +737,7 @@ class HomeActivity : AppCompatActivity(),
 
     private fun addOrderFragment() {
 
+        UserLogger.logGenie("DetailOrder")
         val fragment = AddOrderFragmentOne.newInstance()
         val ft = supportFragmentManager.beginTransaction()
         ft.add(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
