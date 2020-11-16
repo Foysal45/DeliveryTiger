@@ -142,6 +142,6 @@ interface ApiInterfaceCore {
     suspend fun fetchBalanceLimit(@Path("merchantId") merchantId: Int): NetworkResponse<GenericResponse<BalanceLimitResponse>, ErrorResponse>
 
     @GET("api/Dashboard/GetMerchantBalanceInfo/{courierUserId}/{amount}")
-    suspend fun fetchMerchantBalanceInfo(@Path("courierUserId") courierUserId: Int, @Path("amount") amount: Int): NetworkResponse<GenericResponse<List<BalanceInfo>>, ErrorResponse>
+    suspend fun fetchMerchantBalanceInfo(@Path("courierUserId") courierUserId: Int, @Path("amount") amount: Int): NetworkResponse<GenericResponse<BalanceInfo>, ErrorResponse>
 
 }

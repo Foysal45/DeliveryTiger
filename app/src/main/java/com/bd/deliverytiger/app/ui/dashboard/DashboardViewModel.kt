@@ -236,7 +236,7 @@ class DashboardViewModel(private val repository: AppRepository) : ViewModel() {
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
-                            responseBody.value = response.body.model.first()
+                            responseBody.value = response.body.model
                         } else {
 
                         }

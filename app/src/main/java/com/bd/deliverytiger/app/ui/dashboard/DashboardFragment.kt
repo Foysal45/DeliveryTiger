@@ -137,6 +137,7 @@ class DashboardFragment : Fragment() {
         binding?.swipeRefresh?.setOnRefreshListener {
             getDashBoardData(selectedMonth, selectedYear)
             fetchCollection()
+            fetchCurrentBalance()
         }
         binding?.retryBtn?.setOnClickListener {
             getDashBoardData(selectedMonth, selectedYear)
