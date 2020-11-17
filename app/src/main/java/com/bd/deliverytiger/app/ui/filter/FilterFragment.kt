@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatSpinner
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
@@ -33,8 +34,12 @@ class FilterFragment : Fragment() {
     private lateinit var clearFilter: TextView
     private lateinit var fromDateTV: TextView
     private lateinit var toDateTV: TextView
-    private lateinit var statusSpinner: AppCompatSpinner
+
     private lateinit var applyBtn: MaterialButton
+
+    private lateinit var statusTV: TextView
+    private lateinit var statusLayout: ConstraintLayout
+    private lateinit var statusSpinner: AppCompatSpinner
 
     private lateinit var otherApiInterface: OtherApiInterface
 
@@ -76,8 +81,12 @@ class FilterFragment : Fragment() {
         clearFilter = view.findViewById(R.id.filter_clear_tv)
         fromDateTV = view.findViewById(R.id.filter_date_from)
         toDateTV = view.findViewById(R.id.filter_date_to)
-        statusSpinner = view.findViewById(R.id.filter_status_spinner)
+
         applyBtn = view.findViewById(R.id.filter_apply)
+
+        statusTV = view.findViewById(R.id.title4)
+        statusLayout = view.findViewById(R.id.filter_status_layout)
+        statusSpinner = view.findViewById(R.id.filter_status_spinner)
 
         if (gotFromDate != "2001-01-01"){
             val formattedDate = DigitConverter.toBanglaDate(gotFromDate, "yyyy-MM-dd")
@@ -95,13 +104,18 @@ class FilterFragment : Fragment() {
         }
 
         otherApiInterface = RetrofitSingleton.getInstance(requireContext()).create(OtherApiInterface::class.java)
-        loadStatusGroup()
         if (filterType == 1){
             searchET.isFocusableInTouchMode = true
             searchET.requestFocus()
             Handler().postDelayed({
                 VariousTask.showKeyboard(activity)
             }, 300L)
+            loadStatusGroup()
+        } else if (filterType == 2) {
+            statusLayout.visibility = View.GONE
+            statusTV.visibility = View.GONE
+        } else {
+            loadStatusGroup()
         }
 
         /*searchET.onFocusChangeListener = object : View.OnFocusChangeListener{

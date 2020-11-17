@@ -451,7 +451,7 @@ class DashboardFragment : Fragment() {
 
     private fun getDashBoardData(selectedMonth: Int, selectedYear: Int) {
 
-        val dashBoardReqBody = DashBoardReqBody(selectedMonth, selectedYear, selectedStartDate, selectedEndDate, SessionManager.courierUserId)
+        val dashBoardReqBody = DashBoardReqBody(0, 0, selectedStartDate, selectedEndDate, SessionManager.courierUserId)
         Timber.d("DashboardTag r ", dashBoardReqBody.toString())
 
         viewModel.getDashboardStatusGroup(dashBoardReqBody).observe(viewLifecycleOwner, Observer { list ->

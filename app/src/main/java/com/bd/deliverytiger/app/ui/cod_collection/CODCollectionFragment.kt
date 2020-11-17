@@ -109,6 +109,7 @@ class CODCollectionFragment : Fragment() {
             status = 15
 
         } else {
+            status = 25
             val calender = Calendar.getInstance()
             val currentYear = calender.get(Calendar.YEAR)
 
@@ -274,7 +275,7 @@ class CODCollectionFragment : Fragment() {
             (activity as HomeActivity).openRightDrawer()
         }
 
-        val fragment = FilterFragment.newInstance(fromDate, toDate, status, statusGroup, searchKeys)
+        val fragment = FilterFragment.newInstance(fromDate, toDate, status, statusGroup, searchKeys, 2)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.container_drawer, fragment, FilterFragment.tag)
         //ft?.addToBackStack(FilterFragment.tag)
