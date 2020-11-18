@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="none">
-
+    <group
+        android:id="@+id/orderGroup"
+        android:checkableBehavior="none">
         <item
             android:id="@+id/nav_dashboard"
             android:icon="@drawable/ic_dashboard"
@@ -20,8 +21,8 @@
 
         <item
             android:id="@+id/nav_payment_history"
-            android:icon="@drawable/ic_analytics"
-            android:title="পেমেন্ট স্টেটমেন্ট" />
+            android:icon="@drawable/ic_taka"
+            android:title="@string/payment_statement" />
 
         <item
             android:id="@+id/nav_bill_pay"
@@ -31,7 +32,13 @@
         <item
             android:id="@+id/nav_bill_pay_history"
             android:icon="@drawable/ic_bill_pay_history"
-            android:title="বিল পে হিস্টোরি" />
+            android:title="@string/bill_pay_history" />
+
+    </group>
+
+    <group
+        android:id="@+id/settingGroup"
+        android:checkableBehavior="none">
 
         <item
             android:id="@+id/nav_profile"
@@ -54,12 +61,6 @@
             android:title="ডেলিভারি কমপ্লেইন" />
 
         <item
-            android:id="@+id/nav_chat"
-            android:icon="@drawable/ic_chat"
-            android:title="চ্যাট"
-             />
-
-        <item
             android:id="@+id/nav_privacy"
             android:icon="@drawable/ic_privacy"
             android:title="প্রাইভেসি পলিসি" />
@@ -74,14 +75,26 @@
             android:icon="@drawable/ic_logout"
             android:title="লগ আউট" />
 
-        <!--Disabled Menu Items-->
+    </group>
+
+    <!--Disabled Menu Items-->
+
+    <group
+        android:id="@+id/disableGroup"
+        android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/ic_chat"
+            android:title="চ্যাট"
+            android:visible="false"
+            />
 
         <item
             android:id="@+id/nav_bill"
             android:icon="@drawable/ic_wallet"
             android:title="সার্ভিস চার্জ"
-            android:visible="false"
-            />
+            android:visible="false" />
 
         <item
             android:id="@+id/nav_new_order"

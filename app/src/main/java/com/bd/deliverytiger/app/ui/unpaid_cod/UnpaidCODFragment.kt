@@ -8,13 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.api.model.payment_statement.OrderHistoryData
 import com.bd.deliverytiger.app.databinding.FragmentUnpaidCodBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.payment_statement.details.OrderChargeDetailsFragment
 import com.bd.deliverytiger.app.utils.*
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import org.koin.android.ext.android.inject
 
@@ -74,22 +72,7 @@ class UnpaidCODFragment: Fragment() {
 
         fetchCODData()
 
-        binding?.paymentRequestBtn?.setOnClickListener {
-            if (netAmount > 0) {
-                if (netAmount > 5000) {
-                    sendOTP()
-                } else {
-                    requestPayment()
-                }
-            }
-        }
 
-        binding?.OTPCheckBtn?.setOnClickListener {
-            if (validation()) {
-                val otpCode = binding?.OTPCodeET?.text?.toString()?.trim() ?: ""
-                verifyOTP(otpCode)
-            }
-        }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -110,55 +93,6 @@ class UnpaidCODFragment: Fragment() {
         })
     }
 
-    private fun sendOTP() {
-        binding?.paymentRequestBtn?.isEnabled = false
-        val mobileNumber = SessionManager.mobile
-        viewModel.sendOTP(OTPRequestModel(mobileNumber, mobileNumber)).observe(viewLifecycleOwner, Observer { msg ->
-            binding?.paymentRequestBtn?.isEnabled = true
-            binding?.paymentRequestBtn?.visibility = View.GONE
-            binding?.OTPCodeET?.visibility = View.VISIBLE
-            binding?.OTPCheckBtn?.visibility = View.VISIBLE
-            binding?.parent?.snackbar("আপনার ডেলিভারি টাইগারের অ্যাকাউন্ট OTP কোড: ${SessionManager.mobile} এই মোবাইল নাম্বার এ পাঠানো হয়েছে", Snackbar.LENGTH_INDEFINITE, "ঠিক আছে") {
-
-            }?.show()
-         })
-    }
-
-    private fun validation(): Boolean {
-
-        val otpCode = binding?.OTPCodeET?.text?.toString()?.trim() ?: ""
-        if (otpCode.isEmpty()) {
-            context?.toast("সঠিক OTP কোড লিখুন")
-            return false
-        }
-        return true
-    }
-
-    private fun verifyOTP(otpCode: String) {
-        binding?.OTPCheckBtn?.isEnabled = false
-        val mobileNumber = SessionManager.mobile
-        viewModel.checkOTP(mobileNumber, otpCode).observe(viewLifecycleOwner, Observer { flag ->
-            binding?.OTPCheckBtn?.isEnabled = true
-            if (flag) {
-                context?.toast("OTP কোড ভেরিফাইড")
-                binding?.OTPCodeET?.visibility = View.GONE
-                binding?.OTPCheckBtn?.visibility = View.GONE
-                requestPayment()
-            } else {
-                context?.toast("OTP কোড সঠিক নয়")
-            }
-        })
-    }
-
-    private fun requestPayment() {
-        viewModel.updateInstantPaymentRequest(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { flag ->
-            if (flag) {
-                context?.toast("পেমেন্ট রিকোয়েস্ট সফল হয়েছে")
-                fetchCODData()
-            }
-        })
-    }
-
     private fun fetchCODData() {
         viewModel.fetchUnpaidCOD(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
             //responseModel = model
@@ -169,11 +103,11 @@ class UnpaidCODFragment: Fragment() {
                 dataAdapter.initLoad(model.payableOrders)
             }
 
-            if (model.availability) {
+            /*if (model.availability) {
                 binding?.paymentRequestBtn?.visibility = View.VISIBLE
             } else {
                 binding?.paymentRequestBtn?.visibility = View.GONE
-            }
+            }*/
 
 
             binding?.statementCard?.visibility = View.VISIBLE
@@ -183,9 +117,12 @@ class UnpaidCODFragment: Fragment() {
             binding?.netPayment?.text = "${DigitConverter.toBanglaDigit(model.netAdjustedAmount, true)} ৳"
             netAmount = model.netAdjustedAmount
 
+            binding?.key3?.text = "(-) সার্ভিস চার্জ - COD (${DigitConverter.toBanglaDigit(model.payableOrderCount)})"
+            binding?.key4?.text = "(-) সার্ভিস চার্জ - প্রি-পেইড (${DigitConverter.toBanglaDigit(model.receivableOrderCount)})"
+
             binding?.filterTab?.visibility = View.VISIBLE
             binding?.filterTab?.getTabAt(0)?.text = "COD (${model.payableOrderCount})"
-            binding?.filterTab?.getTabAt(1)?.text = "Only Delivery (${model.receivableOrderCount})"
+            binding?.filterTab?.getTabAt(1)?.text = "প্রি-পেইড (${model.receivableOrderCount})"
             binding?.filterTab?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabReselected(tab: TabLayout.Tab?) {}
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}

@@ -10,18 +10,6 @@
     >
 
     <TextView
-        android:id="@+id/district"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black_90"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="জেলা:"
-        />
-
-    <TextView
         android:id="@+id/orderCount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -42,11 +30,10 @@
         android:contentDescription="@string/cd"
         app:layout_constraintEnd_toStartOf="@id/editBtn"
         app:layout_constraintTop_toTopOf="parent"
-        android:tint="@color/colorPrimary"
         android:visibility="gone"
         tools:visibility="visible"
         android:layout_marginEnd="5dp"
-        />
+        app:tint="@color/colorPrimary" />
 
     <ImageView
         android:id="@+id/editBtn"
@@ -56,10 +43,9 @@
         android:contentDescription="@string/cd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:tint="@color/colorPrimary"
         android:visibility="gone"
         tools:visibility="visible"
-        />
+        app:tint="@color/colorPrimary" />
 
     <TextView
         android:id="@+id/thana"
@@ -69,7 +55,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/district"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Dhaka" />
 
     <TextView

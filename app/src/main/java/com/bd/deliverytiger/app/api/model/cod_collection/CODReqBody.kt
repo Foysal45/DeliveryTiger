@@ -14,6 +14,8 @@ data class CODReqBody(
     var fromDate: String? = "",
     @SerializedName("toDate")
     var toDate: String? = "",
+    @SerializedName("orderType")
+    var orderType: String = "",
     @SerializedName("courierUserId")
     var courierUserId: Int? = 0,
     @SerializedName("podNumber")

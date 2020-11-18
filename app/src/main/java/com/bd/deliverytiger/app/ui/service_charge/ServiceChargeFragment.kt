@@ -335,7 +335,7 @@ class ServiceChargeFragment : Fragment() {
         ft?.commit()
 
         fragment.setFilterListener(object : FilterFragment.FilterListener {
-            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup1: String, searchKey: String, searchType: Int) {
+            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup1: String, searchKey: String, searchType: Int, orderType: String) {
                 fromDate = fromDate1
                 toDate = toDate1
                 status = status1

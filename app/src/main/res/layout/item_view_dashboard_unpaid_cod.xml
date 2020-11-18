@@ -35,7 +35,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleTV"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bodyTV"
+        android:includeFontPadding="false"
         tools:text="৳ 783" />
+
+    <TextView
+        android:id="@+id/bodyTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        android:layout_marginStart="21dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/countTV"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="(নেট প্রদেয়)" />
 
     <TextView
         android:id="@+id/actionTV"
@@ -47,6 +61,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/arrow"
         android:layout_marginEnd="4dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:textStyle="bold"
         android:text="পেমেন্ট রিকোয়েস্ট" />
 
@@ -62,8 +78,5 @@
         app:tint="@color/colorPrimary"
         android:layout_marginEnd="16dp"
         />
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

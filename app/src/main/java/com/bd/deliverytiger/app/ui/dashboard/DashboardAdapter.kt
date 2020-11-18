@@ -22,6 +22,7 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
     var onItemClick: ((position: Int, model: DashboardData) -> Unit)? = null
     var onPayDetailsClick: ((position: Int, model: DashboardData) -> Unit)? = null
     var onCODCollectionClick: ((position: Int, model: DashboardData) -> Unit)? = null
+    var onPaymentRequestClick: ((position: Int, model: DashboardData) -> Unit)? = null
 
     override fun getItemViewType(position: Int): Int {
         return dataList[position].viewType
@@ -157,6 +158,11 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             binding.root.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     onCODCollectionClick?.invoke(adapterPosition, dataList[adapterPosition])
+                }
+            }
+            binding.actionTV.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onPaymentRequestClick?.invoke(adapterPosition, dataList[adapterPosition])
                 }
             }
         }

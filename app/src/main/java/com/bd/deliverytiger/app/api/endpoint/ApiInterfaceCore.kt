@@ -50,7 +50,7 @@ interface ApiInterfaceCore {
     @GET("api/Dashboard/GetAllBanners")
     suspend fun getBannerInfo(): NetworkResponse<GenericResponse<BannerResponse>, ErrorResponse>
 
-    @POST("api/Dashboard/GetOrderCountByStatusGroup")
+    @POST("api/Dashboard/GetOrderCountByStatusGroupV3")
     suspend fun getDashboardStatusGroup(@Body requestBody: DashBoardReqBody): NetworkResponse<GenericResponse<List<DashboardData>>, ErrorResponse>
 
     @GET("api/Dashboard/GetCollection/{courierUserId}")

@@ -9,5 +9,7 @@ data class BannerResponse(
     @SerializedName("bannerList")
     var bannerModel: BannerModel = BannerModel(),
     @SerializedName("dashboardDataDuration")
-    var dashboardDataDuration: Int = 12
+    var dashboardDataDuration: Int = 12,
+    @SerializedName("showOrderPopup")
+    var showOrderPopup: Boolean = false
 )

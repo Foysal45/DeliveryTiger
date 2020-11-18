@@ -24,16 +24,18 @@ import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderResponse
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
-import com.bd.deliverytiger.app.ui.filter.DatePickerDialogCustom
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.datepicker.MaterialDatePicker
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AllOrdersFragment : Fragment() {
 
@@ -48,11 +50,9 @@ class AllOrdersFragment : Fragment() {
     private lateinit var filterDateTag: Chip
     private lateinit var filterStatusTag: Chip
     private lateinit var filterSearchKeyTag: Chip
+    private lateinit var filterOrderTypeTag: Chip
 
-    private lateinit var fromDateTV: TextView
-    private lateinit var toDateTV: TextView
-    private lateinit var filterBtn: ImageView
-    private lateinit var clearBtn: ImageView
+    private lateinit var dateRangePicker: TextView
 
 
     private lateinit var allOrdersAdapter: AllOrdersAdapter
@@ -73,6 +73,7 @@ class AllOrdersFragment : Fragment() {
     private var collectionName = ""
     private var searchKeys = ""
     private var searchTypes = 0
+    private var orderTypeFilter = ""
     private var isMoreDataAvailable = true
     private val statusList: MutableList<Int> = mutableListOf(-1)
     private val statusGroupList: MutableList<String> = mutableListOf("-1")
@@ -82,6 +83,8 @@ class AllOrdersFragment : Fragment() {
     private var paymentInProcessing = 0
     private var paymentPaid = 0
     private var paymentReady = 0
+
+    private var sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
     companion object {
         fun newInstance(shouldOpenFilter: Boolean = false): AllOrdersFragment = AllOrdersFragment().apply {
@@ -116,11 +119,9 @@ class AllOrdersFragment : Fragment() {
         filterDateTag = view.findViewById(R.id.filter_tag_date)
         filterStatusTag = view.findViewById(R.id.filter_tag_status)
         filterSearchKeyTag = view.findViewById(R.id.filter_tag_searchKey)
+        filterOrderTypeTag = view.findViewById(R.id.filter_tag_orderType)
 
-        fromDateTV = view.findViewById(R.id.fromDate)
-        toDateTV = view.findViewById(R.id.toDate)
-        filterBtn = view.findViewById(R.id.filterBtn)
-        clearBtn = view.findViewById(R.id.clearBtn)
+        dateRangePicker = view.findViewById(R.id.dateRangePicker)
 
         if (!bundle.isEmpty){
             statusGroup = bundle.getString("statusGroup", "-1")
@@ -188,63 +189,36 @@ class AllOrdersFragment : Fragment() {
         }
 
         allOrderFilterLay.setOnClickListener {
-            goToFilter()
+            goToFilter(3)
         }
 
         if (shouldOpenFilter) {
             goToFilter(1)
         }
 
-        fromDateTV.setOnClickListener {
-            val date = if (fromDate != "2001-01-01") fromDate else ""
-            val fromDateDialog = DatePickerDialogCustom.newInstance(1, date)
-            activity?.supportFragmentManager?.let {
-                    it1 -> fromDateDialog.show(it1, "")
-            }
-            fromDateDialog.setDate(object : DatePickerDialogCustom.PassDateInterface2 {
-                override fun gotDate2(date: String, flag: Int) {
-                    //val formattedDate = DigitConverter.toBanglaDate(date, "yyyy-MM-dd")
-                    fromDateTV.text = date
-                    fromDate = date
-                }
-            })
+        dateRangePicker.setOnClickListener {
+            dateRangePicker()
         }
 
-        toDateTV.setOnClickListener {
-            val date = if (toDate != "2001-01-01") toDate else ""
-            val toDateDialog = DatePickerDialogCustom.newInstance(2, date)
-            activity?.supportFragmentManager?.let {
-                    it1 -> toDateDialog.show(it1, "")
-            }
-            toDateDialog.setDate(object : DatePickerDialogCustom.PassDateInterface2 {
-                override fun gotDate2(date: String, flag: Int) {
-                    //val formattedDate = DigitConverter.toBanglaDate(date, "yyyy-MM-dd")
-                    toDateTV.text = date
-                    toDate = date
-                }
-            })
-        }
+    }
 
-        filterBtn.setOnClickListener {
-            if (fromDate == "2001-01-01") {
-                context?.toast("শুরুর তারিখ দিন")
-            } else if (toDate == "2001-01-01") {
-                context?.toast("শেষের তারিখ দিন")
-            } else {
-                courierOrderViewModelList.clear()
-                allOrdersAdapter.notifyDataSetChanged()
-                getAllOrders(0, 20)
-            }
-        }
+    private fun dateRangePicker() {
+        val builder = MaterialDatePicker.Builder.dateRangePicker()
+        builder.setTheme(R.style.CustomMaterialCalendarTheme)
+        builder.setTitleText("ডেট রেঞ্জ সিলেক্ট করুন")
+        val picker = builder.build()
+        picker.show(childFragmentManager, "Picker")
+        picker.addOnPositiveButtonClickListener {
 
-        clearBtn.setOnClickListener {
-            fromDate = defaultDate
-            toDate = defaultDate
-            fromDateTV.text = ""
-            toDateTV.text = ""
+            fromDate = sdf.format(it.first)
+            toDate = sdf.format(it.second)
+
+            activeFilter()
+            courierOrderViewModelList.clear()
+            allOrdersAdapter.notifyDataSetChanged()
             getAllOrders(0, 20)
-        }
 
+        }
     }
 
     private fun getAllOrders(index: Int, count: Int) {
@@ -252,7 +226,7 @@ class AllOrdersFragment : Fragment() {
         isLoading = true
         allOrderProgressBar.visibility = View.VISIBLE
         val reqModel = CODReqBody(
-            status, statusList, statusGroupList, fromDate, toDate, SessionManager.courierUserId,
+            status, statusList, statusGroupList, fromDate, toDate, orderTypeFilter, SessionManager.courierUserId,
             "", orderId, collectionName, mobileNumber, index, count
         )
 
@@ -339,7 +313,7 @@ class AllOrdersFragment : Fragment() {
         ft?.commit()
 
         fragment.setFilterListener(object : FilterFragment.FilterListener {
-            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup1: String, searchKey: String, searchType: Int) {
+            override fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup1: String, searchKey: String, searchType: Int, orderType: String) {
                 fromDate = fromDate1
                 toDate = toDate1
                 status = status1
@@ -348,6 +322,7 @@ class AllOrdersFragment : Fragment() {
                 statusGroupList.add(statusGroup1)
                 searchKeys = searchKey
                 searchTypes = searchType
+                orderTypeFilter = orderType
 
                 Timber.d("filterTag", "$searchKey $searchType")
 
@@ -411,7 +386,21 @@ class AllOrdersFragment : Fragment() {
         } else {
             filterSearchKeyTag.text = ""
             filterSearchKeyTag.visibility = View.GONE
+        }
 
+        when(orderTypeFilter) {
+            "onlydelivery" -> {
+                filterOrderTypeTag.text = "শুধু ডেলিভারি (Pre-Paid)"
+                filterOrderTypeTag.visibility = View.VISIBLE
+            }
+            "takadelivery" -> {
+                filterOrderTypeTag.text = "ডেলিভারি + টাকা কালেকশন (COD)"
+                filterOrderTypeTag.visibility = View.VISIBLE
+            }
+            else -> {
+                filterOrderTypeTag.text = ""
+                filterOrderTypeTag.visibility = View.GONE
+            }
         }
 
         filterDateTag.setOnClickListener {
@@ -469,6 +458,20 @@ class AllOrdersFragment : Fragment() {
         filterSearchKeyTag.setOnCloseIconClickListener {
             filterSearchKeyTag.performClick()
         }
+
+        filterOrderTypeTag.setOnClickListener {
+            orderTypeFilter = ""
+            filterOrderTypeTag.text = ""
+            filterOrderTypeTag.visibility = View.GONE
+
+            courierOrderViewModelList?.clear()
+            allOrdersAdapter.notifyDataSetChanged()
+            getAllOrders(0, 20)
+        }
+        filterOrderTypeTag.setOnCloseIconClickListener {
+            filterOrderTypeTag.performClick()
+        }
+
     }
 
     private fun editOrder(orderId: String,updateOrderReqBody: UpdateOrderReqBody, indexPosition: Int) {

@@ -9,7 +9,6 @@
     android:focusable="true"
     tools:context=".ui.filter.FilterFragment">
 
-
     <TextView
         android:id="@+id/filter_title"
         android:layout_width="match_parent"
@@ -91,139 +90,214 @@
                 />
 
 
-            <TextView
-                android:id="@+id/title2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="শুরু তারিখ"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/text_14"
-                app:layout_constraintTop_toBottomOf="@id/filter_search_key"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="18dp"
-                />
-
-
-            <TextView
-                android:id="@+id/filter_date_from"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_view_height"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/bg_add_order_edit_text"
-                android:drawableEnd="@drawable/ic_date"
-                android:hint="শুরু তারিখ"
-                android:gravity="center_vertical"
-                android:includeFontPadding="false"
-                android:paddingStart="16dp"
-                android:paddingTop="16dp"
-                android:paddingEnd="8dp"
-                android:paddingBottom="16dp"
-                android:textColor="@color/black_80"
-                android:textColorHint="@color/gray_500"
-                android:textSize="@dimen/text_14"
-                app:layout_constraintTop_toBottomOf="@id/title2"
-                tools:text="27/04/19" />
-
-            <TextView
-                android:id="@+id/filter_from_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text="থেকে"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/text_14"
-                app:layout_constraintTop_toBottomOf="@id/filter_date_from"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
-
-
-
-            <TextView
-                android:id="@+id/title3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="শেষ তারিখ"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/text_14"
-                app:layout_constraintTop_toBottomOf="@id/filter_from_tv"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="18dp"
-                />
-
-            <TextView
-                android:id="@+id/filter_date_to"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_view_height"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/bg_add_order_edit_text"
-                android:drawableEnd="@drawable/ic_date"
-                android:hint="শেষ তারিখ"
-                android:gravity="center_vertical"
-                android:includeFontPadding="false"
-                android:paddingStart="16dp"
-                android:paddingTop="16dp"
-                android:paddingEnd="8dp"
-                android:paddingBottom="16dp"
-
-                android:textColor="@color/black_80"
-                android:textColorHint="@color/gray_500"
-                android:textSize="@dimen/text_14"
-                app:layout_constraintTop_toBottomOf="@id/title3"
-                tools:text="27/04/19" />
-
-
-            <TextView
-                android:id="@+id/title4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="স্ট্যাটাস ফিল্টার"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/text_14"
-                app:layout_constraintTop_toBottomOf="@id/filter_date_to"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="18dp"
-                />
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/filter_status_layout"
+                android:id="@+id/dateFilterLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/title4">
+                app:layout_constraintTop_toBottomOf="@id/filter_search_key"
+                android:layout_marginTop="16dp"
+                >
 
-                <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/filter_status_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/login_view_height"
-                    android:background="@drawable/bg_spinner"
-                    android:overlapAnchor="false"
-                    android:spinnerMode="dropdown"
-                    android:theme="@style/custom_spinner_style"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:entries="@array/spinner_array_weight" />
-
-                <ImageView
+                <TextView
+                    android:id="@+id/title2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:contentDescription="@string/cd"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="শুরু তারিখ"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_arrow_drop_down"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="18dp"
                     />
 
+                <TextView
+                    android:id="@+id/filter_date_from"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/bg_add_order_edit_text"
+                    android:drawableEnd="@drawable/ic_date"
+                    android:hint="শুরু তারিখ"
+                    android:gravity="center_vertical"
+                    android:includeFontPadding="false"
+                    android:paddingStart="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="16dp"
+                    android:textColor="@color/black_80"
+                    android:textColorHint="@color/gray_500"
+                    android:textSize="@dimen/text_14"
+                    app:layout_constraintTop_toBottomOf="@id/title2"
+                    tools:text="27/04/19" />
+
+                <TextView
+                    android:id="@+id/filter_from_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="থেকে"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14"
+                    app:layout_constraintTop_toBottomOf="@id/filter_date_from"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/title3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="শেষ তারিখ"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14"
+                    app:layout_constraintTop_toBottomOf="@id/filter_from_tv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="18dp"
+                    />
+
+                <TextView
+                    android:id="@+id/filter_date_to"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/bg_add_order_edit_text"
+                    android:drawableEnd="@drawable/ic_date"
+                    android:hint="শেষ তারিখ"
+                    android:gravity="center_vertical"
+                    android:includeFontPadding="false"
+                    android:paddingStart="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="16dp"
+                    android:textColor="@color/black_80"
+                    android:textColorHint="@color/gray_500"
+                    android:textSize="@dimen/text_14"
+                    app:layout_constraintTop_toBottomOf="@id/title3"
+                    tools:text="27/04/19" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <LinearLayout
+                android:id="@+id/statusFilterLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/dateFilterLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
+                >
+
+                <TextView
+                    android:id="@+id/title4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="স্ট্যাটাস ফিল্টার"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14"
+                    app:layout_constraintTop_toBottomOf="@id/dateLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="18dp"
+                    />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/filter_status_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/title4">
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/filter_status_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_view_height"
+                        android:background="@drawable/bg_spinner"
+                        android:overlapAnchor="false"
+                        android:spinnerMode="dropdown"
+                        android:theme="@style/custom_spinner_style"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:entries="@array/spinner_array_weight" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:contentDescription="@string/cd"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_arrow_drop_down"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/orderFilterLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/statusFilterLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="অর্ডার টাইপ ফিল্টার"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14"
+                    app:layout_constraintTop_toBottomOf="@id/dateLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="18dp"
+                    />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/filterOrderLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/title4">
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/filterOrderSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_view_height"
+                        android:background="@drawable/bg_spinner"
+                        android:overlapAnchor="false"
+                        android:spinnerMode="dropdown"
+                        android:theme="@style/custom_spinner_style"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:entries="@array/orderType" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:contentDescription="@string/cd"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_arrow_drop_down"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/filter_apply"
@@ -235,7 +309,7 @@
                 android:text="এপ্লাই"
                 android:textSize="18sp"
                 android:textAllCaps="false"
-                app:layout_constraintTop_toBottomOf="@id/filter_status_layout"
+                app:layout_constraintTop_toBottomOf="@id/orderFilterLayout"
                 android:backgroundTint="@color/colorPrimary"
                 />
 

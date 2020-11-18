@@ -22,71 +22,28 @@
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/include_filter"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="5dp"
         >
 
         <TextView
-            android:id="@+id/fromDate"
+            android:id="@+id/dateRangePicker"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:layout_marginEnd="4dp"
             android:background="@drawable/bg_add_order_edit_text"
-            android:drawableEnd="@drawable/ic_date"
-            android:hint="শুরু তারিখ"
+            android:hint="ডেট রেঞ্জ সিলেক্ট"
             android:gravity="center_vertical"
             android:includeFontPadding="false"
-            android:paddingStart="8dp"
+            android:paddingStart="16dp"
             android:paddingTop="8dp"
-            android:paddingEnd="8dp"
+            android:paddingEnd="16dp"
             android:paddingBottom="8dp"
             android:textColor="@color/black_80"
             android:textColorHint="@color/gray_500"
             android:textSize="@dimen/text_14"
-            app:layout_constraintTop_toBottomOf="@id/title2"
-             />
+            app:drawableEndCompat="@drawable/ic_date" />
 
-        <TextView
-            android:id="@+id/toDate"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:background="@drawable/bg_add_order_edit_text"
-            android:drawableEnd="@drawable/ic_date"
-            android:hint="শেষ তারিখ"
-            android:gravity="center_vertical"
-            android:includeFontPadding="false"
-            android:paddingStart="8dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="8dp"
-            android:paddingBottom="8dp"
-            android:textColor="@color/black_80"
-            android:textColorHint="@color/gray_500"
-            android:textSize="@dimen/text_14"
-            app:layout_constraintTop_toBottomOf="@id/title3"
-             />
-
-        <ImageView
-            android:id="@+id/filterBtn"
-            android:layout_width="30dp"
-            android:layout_height="40dp"
-            android:padding="0dp"
-            android:src="@drawable/cod_collection_filter"
-            android:contentDescription="@string/cd"
-            />
-        <ImageView
-            android:id="@+id/clearBtn"
-            android:layout_width="30dp"
-            android:layout_height="40dp"
-            android:padding="0dp"
-            android:layout_marginEnd="4dp"
-            android:src="@drawable/ic_close_white_24dp"
-            android:contentDescription="@string/cd"
-            app:tint="@color/black_90"
-
-            />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

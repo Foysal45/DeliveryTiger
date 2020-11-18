@@ -27,7 +27,7 @@ class ServiceBillMonthAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val model = dataList[position]
             val binding = holder.binding
 
-            binding.monthName.text =  "${model.monthName},${model.yearOrder}"
+            binding.monthName.text =  "${model.monthName},${model.yearOrder} (${DigitConverter.toBanglaDigit(model.orderList.size)}টি)"
             binding.totalChangeMonthly.text = "${DigitConverter.toBanglaDigit(model.totalAmount, true)} ৳"
 
         }

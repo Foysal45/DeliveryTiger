@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/background"
     android:clickable="true"
     android:focusable="true"
@@ -11,18 +11,34 @@
     android:paddingTop="@dimen/left_right_margin"
     android:paddingEnd="@dimen/left_right_margin">
 
-    <TextView
-        android:id="@+id/serviceChargeAmount"
+    <LinearLayout
+        android:id="@+id/serviceChargeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="16sp"
-        android:text="সার্ভিস চার্জ ডিউ:"
-        android:textColor="@color/black_80"
+        android:orientation="horizontal"
         android:visibility="gone"
-        tools:visibility="visible"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="বকেয়া সার্ভিস চার্জ (আজ পর্যন্ত):"
+            android:textColor="@color/black_80"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/serviceChargeAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/orange"
+            android:textSize="16sp"
+            tools:text="৯,৯৯৯৳" />
+
+    </LinearLayout>
+
 
     <EditText
         android:id="@+id/amountET"
@@ -33,23 +49,22 @@
         android:hint="টাকার অ্যামাউন্ট"
         android:importantForAutofill="no"
         android:inputType="number"
+        android:maxLength="8"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
         android:paddingEnd="16dp"
         android:paddingBottom="8dp"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
-        android:maxLength="8"
-        app:layout_constraintTop_toBottomOf="@id/serviceChargeAmount" />
+        app:layout_constraintTop_toBottomOf="@id/serviceChargeLayout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/payBtn"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="24dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:text="বিকাশে ব্যালেন্স লোড"
+        android:backgroundTint="@color/orange"
+        android:text="বিকাশের মাধ্যমে ব্যালেন্স লোড করুন"
         android:textColor="@color/white"
         android:textSize="@dimen/text_14"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,12 +76,11 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:visibility="gone"
-        tools:visibility="visible"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

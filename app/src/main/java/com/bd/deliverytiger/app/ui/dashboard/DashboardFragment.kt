@@ -13,11 +13,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.config.BannerModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
+import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
@@ -37,6 +39,7 @@ import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
@@ -51,6 +54,7 @@ class DashboardFragment : Fragment() {
 
     private lateinit var dashboardAdapter: DashboardAdapter
     private val dataList: MutableList<DashboardData> = mutableListOf()
+    private val returnDataList: MutableList<DashboardData> = mutableListOf()
     private val viewModel: DashboardViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
     //private lateinit var monthSpinnerAdapter: CustomSpinnerAdapter
@@ -68,6 +72,12 @@ class DashboardFragment : Fragment() {
     private var selectedEndDate = ""
     private var currentDate = ""
     private var freezeDate = ""
+
+    private var showOrderPopup: Boolean = false
+    private var isOTPRequested: Boolean = false
+    private var netAmount: Int = 0
+    private var availability: Boolean = false
+    private var availabilityMessage: String = ""
 
     private var isBannerEnable: Boolean = false
     private var worker: Runnable? = null
@@ -127,6 +137,7 @@ class DashboardFragment : Fragment() {
     private fun fetchBannerData() {
 
         homeViewModel.bannerInfo.observe(viewLifecycleOwner, Observer { model ->
+            showOrderPopup = model.showOrderPopup
             val bannerModel = model.bannerModel
             showBanner(bannerModel)
             setSpinner(model.dashboardDataDuration)
@@ -158,7 +169,11 @@ class DashboardFragment : Fragment() {
             addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
         }
         binding?.orderBtn?.setOnClickListener {
-            orderDialog()
+            if (showOrderPopup) {
+                orderDialog()
+            } else {
+                addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+            }
         }
         dashboardAdapter.onItemClick = { _, model ->
             //dashBoardClickEvent(model?.dashboardRouteUrl!!)
@@ -182,6 +197,9 @@ class DashboardFragment : Fragment() {
                     "cod-collection" -> {
                         addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
                     }
+                    "return" -> {
+                        returnDialog()
+                    }
                     else -> {
                         addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
                     }
@@ -199,6 +217,20 @@ class DashboardFragment : Fragment() {
         }
         dashboardAdapter.onCODCollectionClick = { position, model ->
             addFragment(UnpaidCODFragment.newInstance(), UnpaidCODFragment.tag)
+        }
+        dashboardAdapter.onPaymentRequestClick = { position, model ->
+
+            if (availability && netAmount > 0) {
+                if (netAmount > 5000) {
+                    if (!isOTPRequested) {
+                        sendOTP()
+                    }
+                } else {
+                    requestPayment()
+                }
+            } else {
+                binding?.swipeRefresh?.snackbar(availabilityMessage, Snackbar.LENGTH_INDEFINITE, "ঠিক আছে"){}?.show()
+            }
         }
 
        /* binding?.dateRangePicker?.setOnClickListener {
@@ -435,6 +467,12 @@ class DashboardFragment : Fragment() {
     private fun fetchCODData() {
         viewModel.fetchUnpaidCOD(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
 
+            netAmount = model.netAdjustedAmount
+            availability = model.availability
+            availabilityMessage = model.availabilityMessage
+            //netAmount = 6000
+            //availability = true
+
             paymentDashboardModel.apply {
                 this.name = "COD কালেকশন"
                 this.totalAmount = model.netAdjustedAmount.toDouble()
@@ -457,14 +495,30 @@ class DashboardFragment : Fragment() {
         viewModel.getDashboardStatusGroup(dashBoardReqBody).observe(viewLifecycleOwner, Observer { list ->
 
             binding?.swipeRefresh?.isRefreshing = false
+            returnDataList.clear()
+            val dashboardList: MutableList<DashboardData> = mutableListOf()
+            var returnCount = 0
+            list.forEach() {model ->
+                if (model.statusGroupId == 4) {
+                    dashboardList.add(model)
+                }
+                if (model.statusGroupId == 9 || model.statusGroupId == 10 || model.statusGroupId == 11) {
+                    returnCount += model.count ?: 0
+                    returnDataList.add(model)
+                }
+            }
+            val returnData = DashboardData(
+                name = "রিটার্নে আছে",
+                dashboardSpanCount = 1,
+                count = returnCount,
+                dashboardViewColorType = "negative",
+                dashboardRouteUrl = "return",
+                dashboardCountSumView = "count"
+            )
+            dashboardList.add(returnData)
+
             dataList.clear()
-            list.indexOfFirst { it.statusGroupId == 12 }.also {
-                list.removeAt(it)
-            }
-            list.indexOfFirst { it.statusGroupId == 6 }.also {
-                list.removeAt(it)
-            }
-            dataList.addAll(list)
+            dataList.addAll(dashboardList)
             dataList.add(paymentDashboardModel)
             dashboardAdapter.notifyDataSetChanged()
 
@@ -496,6 +550,28 @@ class DashboardFragment : Fragment() {
             addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
             UserLogger.logGenie("DetailOrder")
         }
+    }
+
+    private fun returnDialog() {
+
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_return_type,null)
+        builder.setView(view)
+        val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
+        val dataAdapter = ReturnAdapter()
+        with(recyclerView) {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = dataAdapter
+        }
+        dataAdapter.initData(returnDataList)
+        val dialog = builder.create()
+        dialog.show()
+        dataAdapter.onItemClick = { position, model ->
+            dialog.dismiss()
+            goToAllOrder(model.name ?: "", model.dashboardStatusFilter, selectedStartDate, selectedEndDate)
+        }
+
     }
 
     private fun addFragment(fragment: Fragment, tag: String) {
@@ -564,6 +640,54 @@ class DashboardFragment : Fragment() {
                 dashboardAdapter.notifyItemChanged(dataList.lastIndex)
             }
         })
+    }
+
+    private fun requestPayment() {
+        Timber.d("appLog", "InstantPaymentRequest called")
+        viewModel.updateInstantPaymentRequest(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { flag ->
+            if (flag) {
+                context?.toast("পেমেন্ট রিকোয়েস্ট সফল হয়েছে")
+            }
+        })
+    }
+
+    private fun sendOTP() {
+        isOTPRequested = true
+        val mobileNumber = SessionManager.mobile
+        //val mobileNumber = "01728959986"
+        viewModel.sendOTP(OTPRequestModel(mobileNumber, mobileNumber)).observe(viewLifecycleOwner, Observer { msg ->
+            isOTPRequested = false
+            binding?.swipeRefresh?.snackbar("আপনার ডেলিভারি টাইগারের অ্যাকাউন্ট OTP কোড: ${SessionManager.mobile} এই মোবাইল নাম্বার এ পাঠানো হয়েছে", Snackbar.LENGTH_INDEFINITE, "ভেরিফাই") {
+                showOTPVerify()
+            }?.show()
+        })
+    }
+
+    private fun verifyOTP(otpCode: String) {
+
+        val mobileNumber = SessionManager.mobile
+        //val mobileNumber = "01728959986"
+        viewModel.checkOTP(mobileNumber, otpCode).observe(viewLifecycleOwner, Observer { flag ->
+            if (flag) {
+                context?.toast("OTP কোড ভেরিফাইড")
+                requestPayment()
+            } else {
+                context?.toast("OTP কোড সঠিক নয়")
+            }
+        })
+    }
+
+    private fun showOTPVerify() {
+
+        val dialog = OTPBottomSheet.newInstance()
+        val tag = OTPBottomSheet.tag
+        dialog.show(childFragmentManager, tag)
+        dialog.onItemClicked = { message ->
+            dialog.dismiss()
+            timber.log.Timber.d(message)
+            hideKeyboard()
+            verifyOTP(message)
+        }
     }
 
     /*private fun showDeliveryChargeCalculator() {

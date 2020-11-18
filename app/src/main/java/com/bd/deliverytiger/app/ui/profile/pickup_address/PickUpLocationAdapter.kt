@@ -30,11 +30,9 @@ class PickUpLocationAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val binding = holder.binding
 
             if (model.id == 0) {
-                binding.district.text = "${model.districtName}"
                 binding.thana.text = "${model.thanaName}"
-                binding.address.text = ""
+                binding.address.text = model.pickupAddress
             } else {
-                binding.district.text = "জেলা: ${model.districtName}"
                 binding.thana.text = "থানা: ${model.thanaName}"
                 binding.address.text = "পিকআপ ঠিকানা: ${model.pickupAddress}"
             }

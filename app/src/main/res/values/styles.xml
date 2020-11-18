@@ -26,7 +26,7 @@
 
         <item name="android:paddingStart">4dp</item>
         <item name="android:paddingEnd">0dp</item>
-        <item name="android:textColor">@color/hint</item>
+        <item name="android:textColor">@color/black_80</item>
         <item name="android:textSize">14sp</item>
     </style>
 
@@ -44,6 +44,18 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@color/black_100</item>
         <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="BaseBottomSheetDialog1" parent="@style/Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateVisible</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme1" parent="BaseBottomSheetDialog1">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/black_100</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 

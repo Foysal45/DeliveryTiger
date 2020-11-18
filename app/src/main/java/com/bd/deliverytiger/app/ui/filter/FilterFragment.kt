@@ -6,10 +6,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -18,7 +15,6 @@ import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.endpoint.OtherApiInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.status.StatusGroupModel
-import com.bd.deliverytiger.app.api.model.status.StatusModel
 import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
 import com.bd.deliverytiger.app.utils.DigitConverter
 import com.bd.deliverytiger.app.utils.Validator
@@ -32,14 +28,20 @@ class FilterFragment : Fragment() {
 
     private lateinit var searchET: EditText
     private lateinit var clearFilter: TextView
+
+    private lateinit var dateFilterLayout: ConstraintLayout
     private lateinit var fromDateTV: TextView
     private lateinit var toDateTV: TextView
 
-    private lateinit var applyBtn: MaterialButton
-
+    private lateinit var statusFilterLayout: LinearLayout
     private lateinit var statusTV: TextView
     private lateinit var statusLayout: ConstraintLayout
     private lateinit var statusSpinner: AppCompatSpinner
+
+    private lateinit var orderFilterLayout: LinearLayout
+    private lateinit var filterOrderSpinner: AppCompatSpinner
+
+    private lateinit var applyBtn: MaterialButton
 
     private lateinit var otherApiInterface: OtherApiInterface
 
@@ -53,6 +55,7 @@ class FilterFragment : Fragment() {
     private val statusList: MutableList<String> = mutableListOf()
     private var searchKey = ""
     private var searchType = 0
+    private var orderType: String = ""
 
     companion object{
         fun newInstance(fromDate: String = "2001-01-01", toDate: String = "2001-01-01", status: Int = -1, statusGroup: String = "-1", searchKey: String = "", filterType: Int = 0): FilterFragment = FilterFragment().apply {
@@ -79,14 +82,20 @@ class FilterFragment : Fragment() {
 
         searchET = view.findViewById(R.id.filter_search_key)
         clearFilter = view.findViewById(R.id.filter_clear_tv)
+
+        dateFilterLayout = view.findViewById(R.id.dateFilterLayout)
         fromDateTV = view.findViewById(R.id.filter_date_from)
         toDateTV = view.findViewById(R.id.filter_date_to)
 
-        applyBtn = view.findViewById(R.id.filter_apply)
-
+        statusFilterLayout = view.findViewById(R.id.statusFilterLayout)
         statusTV = view.findViewById(R.id.title4)
         statusLayout = view.findViewById(R.id.filter_status_layout)
         statusSpinner = view.findViewById(R.id.filter_status_spinner)
+
+        orderFilterLayout = view.findViewById(R.id.orderFilterLayout)
+        filterOrderSpinner = view.findViewById(R.id.filterOrderSpinner)
+
+        applyBtn = view.findViewById(R.id.filter_apply)
 
         if (gotFromDate != "2001-01-01"){
             val formattedDate = DigitConverter.toBanglaDate(gotFromDate, "yyyy-MM-dd")
@@ -112,11 +121,16 @@ class FilterFragment : Fragment() {
             }, 300L)
             loadStatusGroup()
         } else if (filterType == 2) {
-            statusLayout.visibility = View.GONE
-            statusTV.visibility = View.GONE
+            statusFilterLayout.visibility = View.GONE
+        } else if(filterType == 3) {
+            dateFilterLayout.visibility = View.GONE
+            orderFilterLayout.visibility = View.VISIBLE
+            initOrderTypeFilter()
+            loadStatusGroup()
         } else {
             loadStatusGroup()
         }
+
 
         /*searchET.onFocusChangeListener = object : View.OnFocusChangeListener{
             override fun onFocusChange(p0: View?, p1: Boolean) {
@@ -175,14 +189,14 @@ class FilterFragment : Fragment() {
             }
 
             if (!isFromDateSelected && !isToDateSelected){
-                listener?.selectedDate(gotFromDate, gotToDate, statusId, statusGroup, searchKey, searchType)
+                listener?.selectedDate(gotFromDate, gotToDate, statusId, statusGroup, searchKey, searchType, orderType)
             } else {
                 if (isFromDateSelected && !isToDateSelected) {
                     Toast.makeText(activity, "শেষের তারিখ দিন", Toast.LENGTH_SHORT).show()
                 } else if (isToDateSelected && !isFromDateSelected) {
                     Toast.makeText(activity, "শুরুর তারিখ দিন", Toast.LENGTH_SHORT).show()
                 } else if (isFromDateSelected && isToDateSelected) {
-                    listener?.selectedDate(gotFromDate, gotToDate, statusId, statusGroup, searchKey, searchType)
+                    listener?.selectedDate(gotFromDate, gotToDate, statusId, statusGroup, searchKey, searchType, orderType)
                 }
             }
 
@@ -199,51 +213,12 @@ class FilterFragment : Fragment() {
             searchType = 0
             searchKey = ""
             searchET.text.clear()
+            orderType = ""
         }
     }
 
     fun forceHideKeyboard(){
         VariousTask.hideSoftKeyBoard(activity)
-    }
-
-    private fun loadOrderStatus(){
-        otherApiInterface.loadCourierOrderStatus().enqueue(object : Callback<GenericResponse<MutableList<StatusModel>>> {
-            override fun onFailure(call: Call<GenericResponse<MutableList<StatusModel>>>, t: Throwable) {
-
-            }
-
-            override fun onResponse(call: Call<GenericResponse<MutableList<StatusModel>>>, response: Response<GenericResponse<MutableList<StatusModel>>>) {
-                if (response.isSuccessful && response.body() != null){
-                    if (response.body()!!.model != null && response.body()!!.model.isNotEmpty()) {
-
-                        val statusList: MutableList<String> = mutableListOf()
-                        var preSelectedIndex = 0
-                        for ((index,model) in response.body()!!.model.withIndex()) {
-                            statusList.add(model.statusNameBng ?: "")
-                            if (model.statusId == statusId) {
-                                preSelectedIndex = index
-                            }
-                        }
-                        val packagingAdapter = CustomSpinnerAdapter(context!!, R.layout.item_view_spinner_item, statusList)
-                        statusSpinner.adapter = packagingAdapter
-                        statusSpinner.setSelection(preSelectedIndex)
-
-
-                        statusSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                            }
-
-                            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                                val model2 = response.body()!!.model[p2]
-                                statusId = model2.statusId
-                            }
-
-                        }
-                    }
-                }
-            }
-        })
     }
 
     private fun loadStatusGroup() {
@@ -300,6 +275,22 @@ class FilterFragment : Fragment() {
         })
     }
 
+    private fun initOrderTypeFilter() {
+
+        filterOrderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                orderType = when (p2) {
+                    0 -> ""
+                    1 -> "onlydelivery"
+                    2 -> "takadelivery"
+                    else -> ""
+                }
+            }
+        }
+    }
+
     private var listener: FilterListener? = null
 
     fun setFilterListener(listener: FilterListener) {
@@ -307,6 +298,6 @@ class FilterFragment : Fragment() {
     }
 
     interface FilterListener {
-        fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup: String, searchKey: String, searchType: Int)
+        fun selectedDate(fromDate1: String, toDate1: String, status1: Int, statusGroup: String, searchKey: String, searchType: Int, orderType: String)
     }
 }

@@ -164,6 +164,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         if (mobileNumber.trim().isNotEmpty()) {
             binding?.callBtn?.visibility = View.VISIBLE
+            binding?.msg?.text = "কালেকশন হাবে\nফোন করুন"
         }
 
         if (hubLatLng != null) {
@@ -240,8 +241,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 }
                 if (isNearByHubView) {
                     pickUpLocationList.add(0,
-                        PickupLocation(districtName = "বর্তমান ঠিকানা",
-                            thanaName = "বর্তমান ঠিকানা থেকে নিকটস্থ হাব",
+                        PickupLocation(thanaName = "আপনার বর্তমান অবস্থান",
+                            pickupAddress = "আপনার বর্তমান অবস্থান থেকে নিকটস্থ হাব",
                             latitude = currentLatitude.toString(),
                             longitude = currentLongitude.toString()))
                 }
@@ -320,6 +321,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mobileNumber = hubModel.hubMobile ?: ""
         if (mobileNumber.trim().isNotEmpty()) {
             binding?.callBtn?.visibility = View.VISIBLE
+            binding?.msg?.text = "কালেকশন হাবে\nফোন করুন"
         }
 
         if (isValidCoordinate(pickUpModel.latitude) && isValidCoordinate(pickUpModel.longitude)) {
@@ -423,6 +425,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             mobileNumber = firstModel.mobile ?: ""
             if (mobileNumber.trim().isNotEmpty()) {
                 binding?.callBtn?.visibility = View.VISIBLE
+                binding?.msg?.text = "কালেক্টরকে\nফোন করুন"
             }
             /*if (isValidCoordinate(firstModel.latitude) && isValidCoordinate(firstModel.longitude)) {
                 collectorLatLng = LatLng(firstModel.latitude?.toDouble() ?: 0.0, firstModel.longitude?.toDouble() ?: 0.0)

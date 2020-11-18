@@ -442,13 +442,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:weightSum="1"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:id="@+id/balanceLoadLayout"
                     android:layout_width="0dp"
                     android:layout_height="60dp"
-                    android:layout_weight="1"
+                    android:layout_weight="0.40"
                     android:background="@color/orange"
                     android:gravity="center"
                     android:orientation="vertical"
@@ -481,7 +483,7 @@
                     android:id="@+id/orderBtn"
                     android:layout_width="0dp"
                     android:layout_height="60dp"
-                    android:layout_weight="1"
+                    android:layout_weight="0.60"
                     android:background="@color/colorPrimary"
                     android:gravity="center"
                     android:orientation="horizontal"

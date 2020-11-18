@@ -108,9 +108,10 @@ class ComplainFragment: Fragment() {
 
         val pickupDistrictList: MutableList<String> = mutableListOf()
         pickupDistrictList.add("কমপ্লেইন টাইপ সিলেক্ট করুন")
-        pickupDistrictList.add("কাস্টমার এখনো প্রোডাক্ট ডেলিভারি পায় নাই")
-        pickupDistrictList.add("রিটার্ন প্রোডাক্ট এখনো বুঝে পাই নাই")
+        pickupDistrictList.add("কাস্টমার এখনো পার্সেল ডেলিভারি পায় নাই")
+        pickupDistrictList.add("রিটার্ন পার্সেল এখনো বুঝে পাই নাই")
         pickupDistrictList.add("COD পেমেন্ট এখনো পাই নাই")
+        pickupDistrictList.add("পার্সেল এখনো কালেকশন হয় নাই")
         pickupDistrictList.add("অন্য কমপ্লেইন")
 
         val spinnerAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, pickupDistrictList)

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentServiceBillPayHistoryBinding
 import com.bd.deliverytiger.app.ui.bill_pay_history.details.BillHistoryDetailsBottomSheet
 import com.bd.deliverytiger.app.ui.home.HomeActivity
@@ -30,7 +31,7 @@ class ServiceBillPayHistoryFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("বিল পে হিস্টোরি")
+        (activity as HomeActivity).setToolbarTitle(getString(R.string.bill_pay_history))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

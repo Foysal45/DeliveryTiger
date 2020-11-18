@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentBalanceLoadBinding
+import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
@@ -48,17 +49,12 @@ class BalanceLoadFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.payBtn?.setOnClickListener {
-            hideKeyboard()
-            if (validate()) {
-                paymentGateway(amountTaka)
-            }
-        }
+
 
         viewModel.fetchMerchantReceivableList(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
             if (model.totalAmount > 0) {
-                binding?.serviceChargeAmount?.text = "সার্ভিস চার্জ ডিউ: ${DigitConverter.toBanglaDigit(model.totalAmount, true)}৳"
-                binding?.serviceChargeAmount?.visibility = View.VISIBLE
+                binding?.serviceChargeLayout?.visibility = View.VISIBLE
+                binding?.serviceChargeAmount?.text = "${DigitConverter.toBanglaDigit(model.totalAmount, true)}৳"
                 binding?.amountET?.setText("${model.totalAmount}")
             }
         })
@@ -67,6 +63,19 @@ class BalanceLoadFragment: Fragment() {
             minimumAmount = model.minAmount
             maximumAmount = model.maxAmount
         })
+
+        binding?.payBtn?.setOnClickListener {
+            hideKeyboard()
+            if (validate()) {
+                paymentGateway(amountTaka)
+            }
+        }
+
+        binding?.serviceChargeLayout?.setOnClickListener {
+            val tag = ServiceBillPayFragment.tag
+            val fragment = ServiceBillPayFragment.newInstance()
+            addFragment(fragment, tag)
+        }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -123,6 +132,13 @@ class BalanceLoadFragment: Fragment() {
     override fun onDestroyView() {
         binding = null
         super.onDestroyView()
+    }
+
+    private fun addFragment(fragment: Fragment, tag: String) {
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.mainActivityContainer, fragment, tag)
+        ft?.addToBackStack(tag)
+        ft?.commit()
     }
 
 }

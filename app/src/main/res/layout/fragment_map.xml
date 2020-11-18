@@ -20,13 +20,13 @@
         android:layout_height="30dp"
         android:text="পিকআপ লোকেশন"
         app:icon="@drawable/ic_location1"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="8dp"
         android:textColor="@color/white"
         android:insetTop="0dp"
         android:insetBottom="0dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:textSize="12sp"
         app:iconSize="16dp"
         android:visibility="gone"
@@ -50,6 +50,21 @@
         tools:visibility="visible"
         android:layout_marginBottom="60dp"
         android:layout_marginEnd="16dp"
+        android:contentDescription="@string/cd"
+        />
+
+    <TextView
+        android:id="@+id/msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="কালেকশন হাবে\nফোন করুন"
+        android:textSize="12sp"
+        android:textColor="@color/black_90"
+        app:layout_constraintStart_toStartOf="@id/callBtn"
+        app:layout_constraintEnd_toEndOf="@id/callBtn"
+        app:layout_constraintTop_toBottomOf="@id/callBtn"
+        android:layout_marginTop="2dp"
+        android:gravity="center"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
