@@ -9,7 +9,7 @@ data class DashboardData(
     @SerializedName("name")
     var name: String? = "",
     @SerializedName("count")
-    var count: Int? = 0,
+    var count: Int = 0,
     @SerializedName("dashboardSpanCount")
     var dashboardSpanCount: Int? = 0,
     @SerializedName("dashboardViewColorType")

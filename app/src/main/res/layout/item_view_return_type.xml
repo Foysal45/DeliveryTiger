@@ -2,14 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="horizontal"
+    android:weightSum="1"
+    android:id="@+id/parent"
+    >
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:minHeight="50dp"
+        android:layout_weight="0.8"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:padding="5dp"
         android:textColor="@color/white"
         android:textSize="14sp"
-        tools:text="নরমাল অর্ডার" />
+        android:ellipsize="end"
+        tools:text="রিটার্ন পার্সেল ডেলিভারি টাইগারের লালমাটিয়া ওয়্যার হাউসে আছে" />
+
+    <TextView
+        android:id="@+id/countTV"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:minHeight="50dp"
+        android:layout_weight="0.2"
+        android:background="@drawable/bg_return_dialog"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp"
+        tools:text="99"
+        />
 
 </LinearLayout>

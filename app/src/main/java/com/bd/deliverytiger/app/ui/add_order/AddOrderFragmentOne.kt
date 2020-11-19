@@ -1173,14 +1173,14 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             context?.showToast("ডেলিভারি টাইপ নির্বাচন করুন")
             return false
         }
-        if (collectionSlotDate.isEmpty()) {
+        /*if (collectionSlotDate.isEmpty()) {
             context?.showToast("কালেকশন তারিখ নির্বাচন করুন")
             return false
         }
         if (timeSlotId == 0) {
             context?.showToast("কালেকশন টাইম স্লট নির্বাচন করুন")
             return false
-        }
+        }*/
         if (deliveryDatePicker.visibility == View.VISIBLE && deliveryDate.isEmpty()) {
             context?.showToast("ডেলিভারি তারিখ নির্বাচন করুন")
             return false

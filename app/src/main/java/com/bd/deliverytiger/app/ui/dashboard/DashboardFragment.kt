@@ -229,6 +229,9 @@ class DashboardFragment : Fragment() {
                     requestPayment()
                 }
             } else {
+                if (availabilityMessage.isEmpty()) {
+                    availabilityMessage = "পর্যাপ্ত তথ্য নেই"
+                }
                 binding?.swipeRefresh?.snackbar(availabilityMessage, Snackbar.LENGTH_INDEFINITE, "ঠিক আছে"){}?.show()
             }
         }
@@ -569,7 +572,11 @@ class DashboardFragment : Fragment() {
         dialog.show()
         dataAdapter.onItemClick = { position, model ->
             dialog.dismiss()
-            goToAllOrder(model.name ?: "", model.dashboardStatusFilter, selectedStartDate, selectedEndDate)
+            if (model.count > 0) {
+                goToAllOrder(model.name ?: "", model.dashboardStatusFilter, selectedStartDate, selectedEndDate)
+            } else {
+                context?.toast("পর্যাপ্ত তথ্য নেই")
+            }
         }
 
     }

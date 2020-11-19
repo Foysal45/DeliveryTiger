@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.databinding.ItemViewReturnTypeBinding
+import com.bd.deliverytiger.app.utils.DigitConverter
 
 class ReturnAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -22,13 +23,14 @@ class ReturnAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         if (holder is ViewModel) {
             val model = dataList[position]
             val binding = holder.binding
-            binding.button.text = model.name
+            binding.title.text = model.name
+            binding.countTV.text = DigitConverter.toBanglaDigit(model.count)
         }
     }
 
     internal inner class ViewModel(val binding: ItemViewReturnTypeBinding): RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.button.setOnClickListener {
+            binding.root.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     onItemClick?.invoke(adapterPosition, dataList[adapterPosition])
                 }

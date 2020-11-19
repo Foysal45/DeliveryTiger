@@ -177,7 +177,7 @@
             android:layout_height="@dimen/login_view_height"
             android:layout_marginTop="12dp"
             android:background="@drawable/bg_add_order_edit_text"
-            android:hint="অ্যাকচুয়াল প্যাকেজ প্রাইস"
+            android:hint="প্যাকেজ দাম"
             android:importantForAutofill="no"
             android:inputType="numberDecimal"
             android:paddingStart="16dp"

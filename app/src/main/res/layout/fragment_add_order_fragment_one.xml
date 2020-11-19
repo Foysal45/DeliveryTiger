@@ -247,7 +247,7 @@
                     android:layout_height="@dimen/login_view_height"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_add_order_edit_text"
-                    android:hint="অ্যাকচুয়াল প্যাকেজ প্রাইস"
+                    android:hint="প্যাকেজ দাম"
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal"
                     android:paddingStart="16dp"
@@ -420,12 +420,16 @@
                     android:paddingBottom="8dp"
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14"
+                    android:visibility="gone"
                     tools:visibility="visible" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/fab_margin">
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    >
 
                     <androidx.appcompat.widget.AppCompatSpinner
                         android:id="@+id/collectionTimeSlotSpinner"
