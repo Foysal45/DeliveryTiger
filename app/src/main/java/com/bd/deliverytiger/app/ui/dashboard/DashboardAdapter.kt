@@ -124,6 +124,12 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             val binding = holder.binding
             val amount = model.totalAmount.toInt()
             binding.countTV.text = "৳ ${DigitConverter.toBanglaDigit(amount, true)}"
+
+            if (!model.availability && model.availabilityMessage == "Unavailable") {
+                binding.actionLayout.visibility = View.GONE
+            } else {
+                binding.actionLayout.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -160,7 +166,7 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
                     onCODCollectionClick?.invoke(adapterPosition, dataList[adapterPosition])
                 }
             }
-            binding.actionTV.setOnClickListener {
+            binding.actionLayout.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     onPaymentRequestClick?.invoke(adapterPosition, dataList[adapterPosition])
                 }

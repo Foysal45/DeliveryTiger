@@ -29,5 +29,7 @@ data class DashboardData(
 
     var viewType: Int = 0,
     var paymentDate: String = "",
+    var availability: Boolean = false,
+    var availabilityMessage: String = ""
 
 )

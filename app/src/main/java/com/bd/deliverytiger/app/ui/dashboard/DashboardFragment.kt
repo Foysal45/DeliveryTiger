@@ -8,12 +8,12 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.config.BannerModel
@@ -216,7 +216,11 @@ class DashboardFragment : Fragment() {
             }
         }
         dashboardAdapter.onCODCollectionClick = { position, model ->
-            addFragment(UnpaidCODFragment.newInstance(), UnpaidCODFragment.tag)
+            if (netAmount > 0) {
+                addFragment(UnpaidCODFragment.newInstance(), UnpaidCODFragment.tag)
+            } else {
+                context?.toast("পর্যাপ্ত তথ্য নেই")
+            }
         }
         dashboardAdapter.onPaymentRequestClick = { position, model ->
 
@@ -232,7 +236,12 @@ class DashboardFragment : Fragment() {
                 if (availabilityMessage.isEmpty()) {
                     availabilityMessage = "পর্যাপ্ত তথ্য নেই"
                 }
-                binding?.swipeRefresh?.snackbar(availabilityMessage, Snackbar.LENGTH_INDEFINITE, "ঠিক আছে"){}?.show()
+                alert("নির্দেশনা", availabilityMessage, true, "ঠিক আছে", "ক্যানসেল") {
+                    if (it == AlertDialog.BUTTON_POSITIVE) {
+
+                    }
+                }.show()
+                //binding?.swipeRefresh?.snackbar(availabilityMessage, Snackbar.LENGTH_INDEFINITE, "ঠিক আছে"){}?.show()
             }
         }
 
@@ -479,11 +488,15 @@ class DashboardFragment : Fragment() {
             paymentDashboardModel.apply {
                 this.name = "COD কালেকশন"
                 this.totalAmount = model.netAdjustedAmount.toDouble()
+                this.availability = model.availability
+                this.availabilityMessage = model.availabilityMessage
             }
             if (dataList.isNotEmpty()) {
                 dataList.last().apply {
                     this.name = "COD কালেকশন"
                     this.totalAmount = model.netAdjustedAmount.toDouble()
+                    this.availability = model.availability
+                    this.availabilityMessage = model.availabilityMessage
                 }
                 dashboardAdapter.notifyItemChanged(dataList.lastIndex)
             }
@@ -557,7 +570,19 @@ class DashboardFragment : Fragment() {
 
     private fun returnDialog() {
 
-        val builder = MaterialAlertDialogBuilder(requireContext())
+        val tag = StatusBreakDownBottomSheet.tag
+        val dialog = StatusBreakDownBottomSheet.newInstance(returnDataList)
+        dialog.show(childFragmentManager, tag)
+        dialog.onItemClicked = { model, position ->
+            dialog.dismiss()
+            if (model.count > 0) {
+                goToAllOrder(model.name ?: "", model.dashboardStatusFilter, selectedStartDate, selectedEndDate)
+            } else {
+                context?.toast("পর্যাপ্ত তথ্য নেই")
+            }
+        }
+
+        /*val builder = MaterialAlertDialogBuilder(requireContext())
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_return_type,null)
         builder.setView(view)
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
@@ -577,7 +602,7 @@ class DashboardFragment : Fragment() {
             } else {
                 context?.toast("পর্যাপ্ত তথ্য নেই")
             }
-        }
+        }*/
 
     }
 
