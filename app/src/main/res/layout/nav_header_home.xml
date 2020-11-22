@@ -1,80 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/nav_header_height"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_height"
+    android:background="@color/colorPrimary"
     android:gravity="bottom"
-    android:padding="16dp"
-    android:background="@color/colorPrimary">
+    android:padding="12dp">
 
     <ImageView
         android:id="@+id/nav_header_image"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:contentDescription="@string/cd"
         android:src="@drawable/ic_account"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/nav_header_title"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/nav_header_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="DT User"
-        android:textSize="@dimen/text_14"
         android:textColor="@color/white"
+        android:textSize="@dimen/text_14"
         app:layout_constraintBottom_toTopOf="@id/nav_header_sub_title"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/nav_header_sub_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_12"
-        android:textColor="@color/white"
         android:text="user@google.com"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/merchantCredit"
-        />
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_12"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@id/referralLayout"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/merchantCredit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_12"
         android:textColor="@color/white"
-        tools:text="ক্রেডিট লিমিট: ৳ 5,000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/merchantAdvancePayment"
+        android:textSize="@dimen/text_12"
         android:visibility="gone"
-        />
+        app:layout_constraintBottom_toTopOf="@id/merchantAdvancePayment"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="ক্রেডিট লিমিট: ৳ 5,000" />
 
     <TextView
         android:id="@+id/merchantAdvancePayment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_12"
         android:textColor="@color/white"
-        tools:text="অ্যাডভান্স পেমেন্ট: ৳ 5,000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="@dimen/text_12"
         android:visibility="gone"
-        />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="অ্যাডভান্স পেমেন্ট: ৳ 5,000" />
 
     <ImageView
         android:id="@+id/nav_header_profile_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:padding="8dp"
-        app:srcCompat="@drawable/all_order_edit"
-        app:tint="@color/white"
         android:contentDescription="@string/cd"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@id/referralLayout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/all_order_edit"
+        app:tint="@color/white" />
+
+    <LinearLayout
+        android:id="@+id/referralLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        >
+
+        <EditText
+            android:id="@+id/referralET"
+            android:layout_width="0dp"
+            android:layout_height="34dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_referral"
+            android:hint="রেফার কোড"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:maxLength="8"
+            android:textColor="@color/black_80"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/referralApply"
+            android:layout_width="30dp"
+            android:layout_height="34dp"
+            android:background="@drawable/bg_referral_arrow"
+            android:contentDescription="@string/cd"
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_arrow_right" />
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

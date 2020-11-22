@@ -133,6 +133,29 @@
                 app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo"
                 android:importantForAutofill="no" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/login_title_color" />
+
+            <EditText
+                android:id="@+id/referCodeET"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_view_height"
+                android:background="@drawable/bg_login_bottom_edit_text"
+                android:hint="রেফার কোড (অপশনাল)"
+                android:paddingStart="16dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp"
+                android:textSize="@dimen/text_14"
+                android:textColor="@color/black_80"
+                android:inputType="text"
+                android:maxLength="8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo"
+                android:importantForAutofill="no" />
         </LinearLayout>
         </androidx.cardview.widget.CardView>
 

@@ -47,6 +47,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
     private lateinit var etSignUpMobileNo: EditText
     private lateinit var etSignUpPassword: EditText
     private lateinit var etSignUpConfirmPassword: EditText
+    private lateinit var referCodeET: EditText
     private lateinit var btnSignUp: Button
     private lateinit var tvLogin: TextView
 
@@ -66,6 +67,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
         etSignUpMobileNo = view.findViewById(R.id.etSignUpMobileNo)
         etSignUpPassword = view.findViewById(R.id.etSignUpPassword)
         etSignUpConfirmPassword = view.findViewById(R.id.etSignUpConfirmPassword)
+        referCodeET = view.findViewById(R.id.referCodeET)
         btnSignUp = view.findViewById(R.id.btnSignUp)
         tvLogin = view.findViewById(R.id.tvLogin)
 
@@ -166,7 +168,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
             showShortToast(context, getString(R.string.match_pass))
             go = false
         }
-        hideSoftKeyBoard(activity!!)
+        hideSoftKeyBoard(requireActivity())
         return go
     }
 
@@ -174,8 +176,9 @@ class SignUpFragment : Fragment(), View.OnClickListener {
 
         val mobile = etSignUpMobileNo.text.toString()
         val password = etSignUpPassword.text.toString()
+        val referCode = referCodeET.text.toString()
 
-        val fragment = SignUpOTPFragment.newInstance(mobile, password)
+        val fragment = SignUpOTPFragment.newInstance(mobile, password, referCode)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpOTPFragment.tag)
         ft?.commit()

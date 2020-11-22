@@ -41,11 +41,13 @@ class SignUpOTPFragment : Fragment() {
 
     private var userMobile: String = ""
     private var userPassword: String = ""
+    private var referCode: String = ""
 
     companion object {
-        fun newInstance(userMobile: String, userPassword: String): SignUpOTPFragment = SignUpOTPFragment().apply {
+        fun newInstance(userMobile: String, userPassword: String, referCode: String): SignUpOTPFragment = SignUpOTPFragment().apply {
             this.userMobile = userMobile
             this.userPassword = userPassword
+            this.referCode = referCode
         }
 
         val tag = SignUpOTPFragment::class.java.name

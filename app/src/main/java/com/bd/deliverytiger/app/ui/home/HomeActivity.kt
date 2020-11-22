@@ -171,6 +171,8 @@ class HomeActivity : AppCompatActivity(),
         val headerUserNameTV: TextView = headerView.findViewById(R.id.nav_header_title)
         val headerDesignationTV: TextView = headerView.findViewById(R.id.nav_header_sub_title)
         val profileEdit: ImageView = headerView.findViewById(R.id.nav_header_profile_edit)
+        val referralET: EditText = headerView.findViewById(R.id.referralET)
+        val referralApply: ImageView = headerView.findViewById(R.id.referralApply)
         //val merchantCredit: TextView = headerView.findViewById(R.id.merchantCredit)
         //val merchantAdvancePayment: TextView = headerView.findViewById(R.id.merchantAdvancePayment)
         headerUserNameTV.text = SessionManager.companyName
@@ -185,6 +187,15 @@ class HomeActivity : AppCompatActivity(),
         headerPic.setOnClickListener {
             navId = R.id.nav_header_profile_edit
             drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        referralApply.setOnClickListener {
+            hideKeyboard()
+            val referCode = referralET.text.toString().trim()
+            if (referCode.isNotEmpty()) {
+                timber.log.Timber.d("Refer code: $referCode ")
+            } else {
+                this.toast("রেফার কোড লিখুন")
+            }
         }
 
         FirebaseMessaging.getInstance().subscribeToTopic("DeliveryTigerTopic")
