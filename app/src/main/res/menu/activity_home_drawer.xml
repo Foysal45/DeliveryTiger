@@ -52,6 +52,11 @@
             android:title="ডেলিভারি চার্জ ক্যালকুলেটর" />
 
         <item
+            android:id="@+id/nav_referral"
+            android:icon="@drawable/ic_chat"
+            android:title="@string/referral" />
+
+        <item
             android:id="@+id/nav_express_service"
             android:icon="@drawable/ic_express"
             android:title="@string/expressService" />

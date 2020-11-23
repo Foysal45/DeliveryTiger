@@ -61,6 +61,7 @@ import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.ui.quick_order.QuickOrderFragment
+import com.bd.deliverytiger.app.ui.referral.ReferralFragment
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
@@ -325,7 +326,8 @@ class HomeActivity : AppCompatActivity(),
                 currentFragment is PaymentStatementFragment || currentFragment is PaymentStatementDetailFragment ||
                 currentFragment is BalanceLoadFragment ||
                 currentFragment is ComplainFragment ||
-                currentFragment is UnpaidCODFragment
+                currentFragment is UnpaidCODFragment ||
+                currentFragment is ReferralFragment
             ) {
                 addProductBtnVisibility(false)
             } else {
@@ -421,6 +423,9 @@ class HomeActivity : AppCompatActivity(),
                     currentFragment.onResume()
                 }
                 is BalanceLoadFragment -> {
+                    currentFragment.onResume()
+                }
+                is ReferralFragment -> {
                     currentFragment.onResume()
                 }
             }
@@ -640,6 +645,14 @@ class HomeActivity : AppCompatActivity(),
                     Timber.d("tag", "ComplainFragment already exist")
                 } else {
                     addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
+                }
+            }
+            R.id.nav_referral -> {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is ReferralFragment) {
+                    Timber.d("tag", "ComplainFragment already exist")
+                } else {
+                    addFragment(ReferralFragment.newInstance(), ReferralFragment.tag)
                 }
             }
             R.id.nav_express_service -> {
