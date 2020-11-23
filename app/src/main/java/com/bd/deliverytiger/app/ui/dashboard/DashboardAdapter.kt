@@ -125,7 +125,7 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             val amount = model.totalAmount.toInt()
             binding.countTV.text = "৳ ${DigitConverter.toBanglaDigit(amount, true)}"
 
-            if (!model.availability && model.availabilityMessage == "Unavailable") {
+            if ((!model.availability && model.availabilityMessage == "Unavailable") || amount <= 0) {
                 binding.actionLayout.visibility = View.GONE
             } else {
                 binding.actionLayout.visibility = View.VISIBLE

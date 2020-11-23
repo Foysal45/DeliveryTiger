@@ -228,6 +228,16 @@ object SessionManager {
             }
         }
 
+    var bkashNumber: String
+        get() {
+            return pref.getString("bkashNumber", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("bkashNumber", value)
+            }
+        }
+
     var credit: Int
         get() {
             return pref.getInt("credit", 0)

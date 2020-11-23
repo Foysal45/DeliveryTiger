@@ -63,7 +63,7 @@ class TermsConditionBottomSheet : BottomSheetDialogFragment() {
         agreeBtn = view.findViewById(R.id.terms_sheet_condition_agree)
         disagreeBtn = view.findViewById(R.id.terms_sheet_condition_disagree)
 
-        otherApiInterface = RetrofitSingleton.getInstance(context!!).create(OtherApiInterface::class.java)
+        otherApiInterface = RetrofitSingleton.getInstance(requireContext()).create(OtherApiInterface::class.java)
         loadTerms()
 
         agreeBtn.setOnClickListener {

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="50dp"
     android:paddingStart="4dp"
     android:paddingEnd="4dp"
     >
@@ -18,10 +18,26 @@
         android:textStyle="bold"
         android:maxLines="1"
         android:ellipsize="end"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/date"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="September,2020 (৯৯৯টি)" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_80"
+        android:textSize="12sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        app:layout_constraintTop_toBottomOf="@id/monthName"
+        app:layout_constraintStart_toStartOf="@id/monthName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:text="23/11/2020" />
 
     <TextView
         android:id="@+id/totalChangeMonthly"

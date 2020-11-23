@@ -26,6 +26,7 @@ import retrofit2.Response
 
 class FilterFragment : Fragment() {
 
+    private lateinit var titleTV: TextView
     private lateinit var searchET: EditText
     private lateinit var clearFilter: TextView
 
@@ -80,6 +81,7 @@ class FilterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        titleTV = view.findViewById(R.id.filter_title)
         searchET = view.findViewById(R.id.filter_search_key)
         clearFilter = view.findViewById(R.id.filter_clear_tv)
 
@@ -96,6 +98,8 @@ class FilterFragment : Fragment() {
         filterOrderSpinner = view.findViewById(R.id.filterOrderSpinner)
 
         applyBtn = view.findViewById(R.id.filter_apply)
+
+
 
         if (gotFromDate != "2001-01-01"){
             val formattedDate = DigitConverter.toBanglaDate(gotFromDate, "yyyy-MM-dd")
@@ -127,6 +131,11 @@ class FilterFragment : Fragment() {
             orderFilterLayout.visibility = View.VISIBLE
             initOrderTypeFilter()
             loadStatusGroup()
+        } else if (filterType == 4) {
+            dateFilterLayout.visibility = View.GONE
+            statusFilterLayout.visibility = View.GONE
+            titleTV.text = "সার্চ"
+            applyBtn.text = "সার্চ"
         } else {
             loadStatusGroup()
         }

@@ -19,6 +19,7 @@ class OTPBottomSheet(): BottomSheetDialogFragment() {
 
     private var binding: FragmentOtpBottomSheetBinding? = null
     var onItemClicked: ((message: String) -> Unit)? = null
+    var onCancel: ((dialog: DialogInterface) -> Unit)? = null
 
     companion object {
         fun newInstance(): OTPBottomSheet = OTPBottomSheet().apply {
@@ -60,6 +61,7 @@ class OTPBottomSheet(): BottomSheetDialogFragment() {
     override fun onCancel(dialog: DialogInterface) {
         hideKeyboard()
         super.onCancel(dialog)
+        onCancel?.invoke(dialog)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

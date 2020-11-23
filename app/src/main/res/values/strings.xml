@@ -74,17 +74,19 @@
 
     <string-array name="orderType">
         <item>সকল অর্ডার টাইপ</item>
-        <item>শুধু ডেলিভারি (Pre-Paid)</item>
+        <item>শুধু ডেলিভারি (প্রি-পেইড)</item>
         <item>ডেলিভারি + টাকা কালেকশন (COD)</item>
     </string-array>
 
     <string name="file_provider_authority" translatable="false">com.bd.deliverytiger.app.fileprovider</string>
 
     <string name="cod_collection">পরিশোধিত COD</string>
-    <string name="service_bill_pay">সার্ভিস চার্জ (প্রি-পেইড)</string>
+    <string name="service_bill_pay">বকেয়া সার্ভিস চার্জ (প্রি-পেইড)</string>
     <string name="payment_statement">COD পেমেন্ট স্টেটমেন্ট</string>
-    <string name="bill_pay_history">বিল পে (সার্ভিস চার্জ) হিস্টোরি</string>
-    <string name="orderType1">শুধু ডেলিভারি\n(Pre-Paid)</string>
+    <string name="bill_pay_history">পরিশোধিত সার্ভিস চার্জ</string>
+    <string name="termsCondition">সার্ভিস শর্তাবলী</string>
+    <string name="expressService">এক্সপ্রেস সার্ভিস</string>
+    <string name="orderType1">শুধু ডেলিভারি\n(প্রি-পেইড)</string>
     <string name="orderType2">ডেলিভারি+টাকা কালেকশন\n(COD)</string>
 
 

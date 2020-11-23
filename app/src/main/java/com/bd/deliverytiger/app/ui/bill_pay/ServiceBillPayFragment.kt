@@ -124,9 +124,9 @@ class ServiceBillPayFragment: Fragment() {
                 if (list.isEmpty()) {
                     binding?.emptyView?.visibility = View.VISIBLE
                     binding?.payBtn?.visibility = View.GONE
-                    binding?.header?.parent?.visibility = View.GONE
-                    binding?.header?.info1?.text = "মোট পার্সেলঃ ০ টি"
-                    binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ০ ৳"
+                    binding?.countLayout?.visibility = View.GONE
+                    binding?.totalCount?.text = "পার্সেলঃ ০ টি"
+                    binding?.totalAmount?.text = "মোট অ্যামাউন্ট: ০ ৳"
                 } else {
                     binding?.emptyView?.visibility = View.GONE
                     if (response.totalAmount > 0) {
@@ -135,14 +135,14 @@ class ServiceBillPayFragment: Fragment() {
                         binding?.payBtn?.visibility = View.GONE
                     }
 
-                    binding?.header?.parent?.visibility = View.VISIBLE
+                    binding?.countLayout?.visibility = View.VISIBLE
                     var parcelCount = 0
                     list.forEach() { data ->
                         parcelCount += data.orderList.size
                     }
-                    binding?.header?.info1?.text = "মোট পার্সেলঃ ${DigitConverter.toBanglaDigit(parcelCount)} টি"
+                    binding?.totalCount?.text = "পার্সেলঃ ${DigitConverter.toBanglaDigit(parcelCount)} টি"
                     val totalSum = response.totalAmount
-                    binding?.header?.info2?.text = "মোট অ্যামাউন্ট: ${DigitConverter.toBanglaDigit(totalSum, true)} ৳"
+                    binding?.totalAmount?.text = "মোট অ্যামাউন্ট: ${DigitConverter.toBanglaDigit(totalSum, true)} ৳"
                 }
             }
         })

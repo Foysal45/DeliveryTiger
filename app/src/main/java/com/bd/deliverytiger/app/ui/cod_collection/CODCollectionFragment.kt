@@ -275,7 +275,7 @@ class CODCollectionFragment : Fragment() {
             (activity as HomeActivity).openRightDrawer()
         }
 
-        val fragment = FilterFragment.newInstance(fromDate, toDate, status, statusGroup, searchKeys, 2)
+        val fragment = FilterFragment.newInstance(fromDate, toDate, status, statusGroup, searchKeys, 4)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.container_drawer, fragment, FilterFragment.tag)
         //ft?.addToBackStack(FilterFragment.tag)

@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentBalanceLoadBinding
-import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
@@ -49,8 +48,6 @@ class BalanceLoadFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         viewModel.fetchMerchantReceivableList(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
             if (model.totalAmount > 0) {
                 binding?.serviceChargeLayout?.visibility = View.VISIBLE
@@ -71,11 +68,11 @@ class BalanceLoadFragment: Fragment() {
             }
         }
 
-        binding?.serviceChargeLayout?.setOnClickListener {
+        /*binding?.serviceChargeLayout?.setOnClickListener {
             val tag = ServiceBillPayFragment.tag
             val fragment = ServiceBillPayFragment.newInstance()
             addFragment(fragment, tag)
-        }
+        }*/
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {

@@ -70,11 +70,11 @@ class OrderTrackingFragment : Fragment() {
             adapter = dataAdapter
         }
 
-        dataAdapter.onItemClick = { model, position ->
+        /*dataAdapter.onItemClick = { model, position ->
             val tag = OrderTrackingBottomSheet.tag
             val dialog = OrderTrackingBottomSheet.newInstance(model)
             dialog.show(childFragmentManager, tag)
-        }
+        }*/
         customerOrderAdapter.onItemClick = { model, position ->
             orderID = model.courierOrdersId ?: ""
             recyclerView.adapter = dataAdapter

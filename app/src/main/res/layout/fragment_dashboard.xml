@@ -302,7 +302,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginStart="8dp"
                             android:layout_weight="1"
-                            android:background="@drawable/bg_nearby_hub"
+                            android:background="@drawable/bg_complain"
                             android:gravity="center"
                             android:orientation="horizontal"
                             tools:ignore="UselessParent">
@@ -319,7 +319,7 @@
                                 android:layout_marginStart="8dp"
                                 android:ellipsize="end"
                                 android:maxLines="1"
-                                android:text="ডেলিভারি কমপ্লেইন"
+                                android:text="কমপ্লেইন"
                                 android:textColor="@color/white"
                                 android:textSize="16sp" />
 
@@ -450,7 +450,7 @@
                     android:id="@+id/balanceLoadLayout"
                     android:layout_width="0dp"
                     android:layout_height="60dp"
-                    android:layout_weight="0.40"
+                    android:layout_weight="0.45"
                     android:background="@color/orange"
                     android:gravity="center"
                     android:orientation="vertical"
@@ -483,7 +483,7 @@
                     android:id="@+id/orderBtn"
                     android:layout_width="0dp"
                     android:layout_height="60dp"
-                    android:layout_weight="0.60"
+                    android:layout_weight="0.55"
                     android:background="@color/colorPrimary"
                     android:gravity="center"
                     android:orientation="horizontal"

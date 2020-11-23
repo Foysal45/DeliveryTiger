@@ -8,8 +8,13 @@ data class BannerResponse(
     var popUpModel: PopupModel = PopupModel(),
     @SerializedName("bannerList")
     var bannerModel: BannerModel = BannerModel(),
+
     @SerializedName("dashboardDataDuration")
     var dashboardDataDuration: Int = 12,
     @SerializedName("showOrderPopup")
-    var showOrderPopup: Boolean = false
+    var showOrderPopup: Boolean = false,
+    @SerializedName("instantPaymentOTPLimit")
+    var instantPaymentOTPLimit: Int = 5000,
+    @SerializedName("instantPaymentHourLimit")
+    var instantPaymentHourLimit: Int = 12
 )

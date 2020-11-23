@@ -24,7 +24,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="বকেয়া সার্ভিস চার্জ (আজ পর্যন্ত):"
+            android:text="সাজেস্টেড অ্যাডভান্স পেমেন্ট:"
             android:textColor="@color/black_80"
             android:textSize="16sp" />
 

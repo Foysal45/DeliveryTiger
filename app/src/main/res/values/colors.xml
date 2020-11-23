@@ -38,5 +38,9 @@
     <color name="charge_back_color">#d4e1f4</color>
     <color name="orange">#f05a2b</color>
 
+    <color name="return_state_1">#7FB545</color>
+    <color name="return_state_2">#5E9C47</color>
+    <color name="return_state_3">#00844A</color>
+
 
 </resources>

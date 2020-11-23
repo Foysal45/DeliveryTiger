@@ -59,6 +59,8 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
                 holder.binding.editBtn.visibility = View.GONE
             }
 
+            // 19 LP থেকে ফেরতকৃত প্রোডাক্টটি DT হেড অফিস গ্রহন করেছে
+            // 60 রিটার্ন প্রোডাক্ট হাব থেকে সংগ্রহ করুন
             if (model.statusId == 60 || model.statusId == 19 || model.statusId == 15) {
 
                 if (model.statusId == 60 || model.statusId == 19) {

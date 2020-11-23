@@ -11,115 +11,26 @@
         android:background="@color/white"
         android:clickable="true"
         android:focusable="true"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:paddingTop="8dp"
         >
-
-        <!--<androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/spinnerMonthLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="4dp"
-            app:layout_constraintEnd_toStartOf="@id/spinnerYearLayout"
-            android:layout_marginEnd="4dp"
-
-            >
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spinnerMonth"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:background="@drawable/bg_spinner"
-                android:overlapAnchor="false"
-                android:spinnerMode="dropdown"
-                android:theme="@style/custom_spinner_style"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:entries="@array/arrayMonth"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_margin="1dp"
-                />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:contentDescription="@string/cd"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_arrow_drop_down" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-        <!--<androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/spinnerYearLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/spinnerMonthLayout"
-            android:layout_marginStart="4dp"
-
-            >
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spinnerYear"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:background="@drawable/bg_spinner"
-                android:overlapAnchor="false"
-                android:spinnerMode="dropdown"
-                android:theme="@style/custom_spinner_style"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:entries="@array/arrayYear"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_margin="1dp"
-                />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:contentDescription="@string/cd"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_arrow_drop_down" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/header"
+            app:layout_constraintBottom_toTopOf="@id/countLayout"
             android:clipToPadding="false"
             android:overScrollMode="never"
             android:paddingBottom="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
 
             tools:itemCount="16"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_view_service_bill_pay"
             tools:orientation="vertical"
             tools:spanCount="2"
-            tools:visibility="visible"
-            />
-
-        <include android:id="@+id/header"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            app:layout_constraintBottom_toTopOf="@id/payBtn"
-            layout="@layout/layout_header"
-            android:visibility="gone"
             tools:visibility="visible"
             />
 
@@ -148,20 +59,64 @@
             tools:visibility="visible"
             />
 
+        <LinearLayout
+            android:id="@+id/countLayout"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:orientation="vertical"
+            android:background="@color/header_layout_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/payBtn"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:id="@+id/totalAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textColor="@color/black_90"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="মোট অ্যামাউন্ট: ০ ৳" />
+
+            <TextView
+                android:id="@+id/totalCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textColor="@color/black_90"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="মোট পার্সেলঃ ০ টি" />
+
+
+        </LinearLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/payBtn"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="56dp"
-            android:text="সকল বকেয়া একসাথে পে করুন"
+            android:text="পে করুন"
             android:textAllCaps="false"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textColor="@color/white"
             android:backgroundTint="@color/colorPrimary"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:cornerRadius="0dp"
+            app:layout_constraintStart_toEndOf="@id/countLayout"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="gone"
             tools:visibility="visible"
             />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

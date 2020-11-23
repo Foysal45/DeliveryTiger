@@ -171,8 +171,8 @@ class HomeActivity : AppCompatActivity(),
         val headerUserNameTV: TextView = headerView.findViewById(R.id.nav_header_title)
         val headerDesignationTV: TextView = headerView.findViewById(R.id.nav_header_sub_title)
         val profileEdit: ImageView = headerView.findViewById(R.id.nav_header_profile_edit)
-        val referralET: EditText = headerView.findViewById(R.id.referralET)
-        val referralApply: ImageView = headerView.findViewById(R.id.referralApply)
+        //val referralET: EditText = headerView.findViewById(R.id.referralET)
+        //val referralApply: ImageView = headerView.findViewById(R.id.referralApply)
         //val merchantCredit: TextView = headerView.findViewById(R.id.merchantCredit)
         //val merchantAdvancePayment: TextView = headerView.findViewById(R.id.merchantAdvancePayment)
         headerUserNameTV.text = SessionManager.companyName
@@ -188,7 +188,7 @@ class HomeActivity : AppCompatActivity(),
             navId = R.id.nav_header_profile_edit
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-        referralApply.setOnClickListener {
+        /*referralApply.setOnClickListener {
             hideKeyboard()
             val referCode = referralET.text.toString().trim()
             if (referCode.isNotEmpty()) {
@@ -196,7 +196,7 @@ class HomeActivity : AppCompatActivity(),
             } else {
                 this.toast("রেফার কোড লিখুন")
             }
-        }
+        }*/
 
         FirebaseMessaging.getInstance().subscribeToTopic("DeliveryTigerTopic")
 
@@ -640,6 +640,36 @@ class HomeActivity : AppCompatActivity(),
                     Timber.d("tag", "ComplainFragment already exist")
                 } else {
                     addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
+                }
+            }
+            R.id.nav_express_service -> {
+                val currentFragment =
+                    supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is WebViewFragment) {
+                    Timber.d("tag", "WebViewFragment already exist")
+                } else {
+
+                    try {
+                        val fragment = WebViewFragment.newInstance(AppConstant.EXPRESS_SERVICE_URL, getString(R.string.expressService))
+                        addFragment(fragment, WebViewFragment.tag)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+            R.id.nav_terms -> {
+                val currentFragment =
+                    supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is WebViewFragment) {
+                    Timber.d("tag", "WebViewFragment already exist")
+                } else {
+
+                    try {
+                        val fragment = WebViewFragment.newInstance(AppConstant.TERMS_URL, getString(R.string.termsCondition))
+                        addFragment(fragment, WebViewFragment.tag)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
             }
             R.id.nav_privacy -> {

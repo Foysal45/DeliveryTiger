@@ -2,17 +2,21 @@ package com.bd.deliverytiger.app.ui.bill_pay
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthData
 import com.bd.deliverytiger.app.databinding.ItemViewServiceBillPayMonthBinding
 import com.bd.deliverytiger.app.utils.DigitConverter
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ServiceBillMonthAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList: MutableList<MonthData> = mutableListOf()
     var onItemClick: ((model: MonthData)-> Unit)? = null
     var onPaymentClick: ((model: MonthData)-> Unit)? = null
+    private val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.US)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding: ItemViewServiceBillPayMonthBinding = ItemViewServiceBillPayMonthBinding.inflate(LayoutInflater.from(parent.context),  parent, false)
@@ -29,6 +33,13 @@ class ServiceBillMonthAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             binding.monthName.text =  "${model.monthName},${model.yearOrder} (${DigitConverter.toBanglaDigit(model.orderList.size)}টি)"
             binding.totalChangeMonthly.text = "${DigitConverter.toBanglaDigit(model.totalAmount, true)} ৳"
+
+            if (position == dataList.lastIndex) {
+                binding.date.visibility = View.VISIBLE
+                binding.date.text = sdf.format(Date().time)
+            } else {
+                binding.date.visibility = View.GONE
+            }
 
         }
     }

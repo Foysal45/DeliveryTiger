@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.config.BannerModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
@@ -39,7 +40,6 @@ import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
@@ -74,10 +74,14 @@ class DashboardFragment : Fragment() {
     private var freezeDate = ""
 
     private var showOrderPopup: Boolean = false
+    private var instantPaymentOTPLimit: Int = 0
+    private var instantPaymentHourLimit: Int = 0
+
     private var isOTPRequested: Boolean = false
     private var netAmount: Int = 0
     private var availability: Boolean = false
     private var availabilityMessage: String = ""
+
 
     private var isBannerEnable: Boolean = false
     private var worker: Runnable? = null
@@ -138,6 +142,9 @@ class DashboardFragment : Fragment() {
 
         homeViewModel.bannerInfo.observe(viewLifecycleOwner, Observer { model ->
             showOrderPopup = model.showOrderPopup
+            instantPaymentOTPLimit = model.instantPaymentOTPLimit
+            instantPaymentHourLimit = model.instantPaymentHourLimit
+
             val bannerModel = model.bannerModel
             showBanner(bannerModel)
             setSpinner(model.dashboardDataDuration)
@@ -157,10 +164,7 @@ class DashboardFragment : Fragment() {
             addFragment(MapFragment.newInstance(null), MapFragment.tag)
         }
         binding?.nearByHubBtn?.setOnClickListener {
-            val bundle = bundleOf(
-                "isNearByHubView" to true
-            )
-            addFragment(MapFragment.newInstance(bundle), MapFragment.tag)
+            goToNearByHubMap()
         }
         binding?.complainBtn?.setOnClickListener {
             addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
@@ -225,7 +229,7 @@ class DashboardFragment : Fragment() {
         dashboardAdapter.onPaymentRequestClick = { position, model ->
 
             if (availability && netAmount > 0) {
-                if (netAmount > 5000) {
+                if (netAmount > instantPaymentOTPLimit) {
                     if (!isOTPRequested) {
                         sendOTP()
                     }
@@ -237,9 +241,6 @@ class DashboardFragment : Fragment() {
                     availabilityMessage = "পর্যাপ্ত তথ্য নেই"
                 }
                 alert("নির্দেশনা", availabilityMessage, true, "ঠিক আছে", "ক্যানসেল") {
-                    if (it == AlertDialog.BUTTON_POSITIVE) {
-
-                    }
                 }.show()
                 //binding?.swipeRefresh?.snackbar(availabilityMessage, Snackbar.LENGTH_INDEFINITE, "ঠিক আছে"){}?.show()
             }
@@ -581,29 +582,16 @@ class DashboardFragment : Fragment() {
                 context?.toast("পর্যাপ্ত তথ্য নেই")
             }
         }
-
-        /*val builder = MaterialAlertDialogBuilder(requireContext())
-        val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_return_type,null)
-        builder.setView(view)
-        val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
-        val dataAdapter = ReturnAdapter()
-        with(recyclerView) {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = dataAdapter
-        }
-        dataAdapter.initData(returnDataList)
-        val dialog = builder.create()
-        dialog.show()
-        dataAdapter.onItemClick = { position, model ->
-            dialog.dismiss()
-            if (model.count > 0) {
-                goToAllOrder(model.name ?: "", model.dashboardStatusFilter, selectedStartDate, selectedEndDate)
-            } else {
-                context?.toast("পর্যাপ্ত তথ্য নেই")
+        dialog.onMapClick = { model, position ->
+            if (model.statusGroupId == 11) {
+                dialog.dismiss()
+                goToNearByHubMap()
+            } else if (model.statusGroupId == 10) {
+                dialog.dismiss()
+                val hubModel = HubInfo(10, "সেন্ট্রাল হাব", "lalmatia-hub", true, "7/7 Block C Lalmatia Mohammadpur","90.3678406", "23.7544619", "01521427957")
+                goToHubMap(hubModel)
             }
-        }*/
-
+        }
     }
 
     private fun addFragment(fragment: Fragment, tag: String) {
@@ -678,7 +666,8 @@ class DashboardFragment : Fragment() {
         Timber.d("appLog", "InstantPaymentRequest called")
         viewModel.updateInstantPaymentRequest(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { flag ->
             if (flag) {
-                context?.toast("পেমেন্ট রিকোয়েস্ট সফল হয়েছে")
+                val msg = "আপনার ইন্সট্যান্ট পেমেন্ট রিকোয়েস্টটি গ্রহণ করা হয়েছে। আগামী ${DigitConverter.toBanglaDigit(instantPaymentHourLimit)} ঘন্টার মধ্যে আপনার bKash নাম্বারে (${DigitConverter.toBanglaDigit(SessionManager.bkashNumber)}) ${DigitConverter.toBanglaDigit(netAmount, true)} টাকা পেমেন্ট করা হবে।"
+                alert("নির্দেশনা", msg).show()
             }
         })
     }
@@ -689,9 +678,12 @@ class DashboardFragment : Fragment() {
         //val mobileNumber = "01728959986"
         viewModel.sendOTP(OTPRequestModel(mobileNumber, mobileNumber)).observe(viewLifecycleOwner, Observer { msg ->
             isOTPRequested = false
-            binding?.swipeRefresh?.snackbar("আপনার ডেলিভারি টাইগারের অ্যাকাউন্ট OTP কোড: ${SessionManager.mobile} এই মোবাইল নাম্বার এ পাঠানো হয়েছে", Snackbar.LENGTH_INDEFINITE, "ভেরিফাই") {
-                showOTPVerify()
-            }?.show()
+            val message = "আপনার অ্যাকাউন্ট ভেরিফিকেশন কোড ${SessionManager.mobile} এই মোবাইল নম্বরে পাঠানো হয়েছে"
+            alert("নির্দেশনা", message, true, "ভেরিফাই", "ক্যানসেল"){
+                if (it == AlertDialog.BUTTON_POSITIVE) {
+                    showOTPVerify()
+                }
+            }.show()
         })
     }
 
@@ -720,6 +712,9 @@ class DashboardFragment : Fragment() {
             hideKeyboard()
             verifyOTP(message)
         }
+        dialog.onCancel = {
+            hideKeyboard()
+        }
     }
 
     /*private fun showDeliveryChargeCalculator() {
@@ -729,6 +724,27 @@ class DashboardFragment : Fragment() {
             childFragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit()
         }
     }*/
+
+    private fun goToNearByHubMap() {
+        val bundle = bundleOf(
+            "isNearByHubView" to true
+        )
+        addFragment(MapFragment.newInstance(bundle), MapFragment.tag)
+    }
+
+    private fun goToHubMap(hubModel: HubInfo) {
+
+        val bundle = bundleOf(
+            "hubView" to true,
+            "hubModel" to hubModel
+        )
+
+        val fragment = MapFragment.newInstance(bundle)
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.mainActivityContainer, fragment, MapFragment.tag)
+        ft?.addToBackStack(MapFragment.tag)
+        ft?.commit()
+    }
 
     override fun onDestroyView() {
         binding?.unbind()

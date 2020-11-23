@@ -68,7 +68,7 @@
                         android:layout_height="16dp"
                         android:contentDescription="@string/cd"
                         android:src="@drawable/ic_location1"
-                        android:tint="@color/colorPrimary"
+                        app:tint="@color/colorPrimary"
                         />
 
                     <TextView

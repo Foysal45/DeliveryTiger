@@ -18,6 +18,7 @@ class StatusBreakDownBottomSheet(): BottomSheetDialogFragment() {
 
     private var binding: FragmentStatusBreakDownBinding? = null
     var onItemClicked: ((model: DashboardData, position: Int) -> Unit)? = null
+    var onMapClick: ((model: DashboardData, position: Int) -> Unit)? = null
 
     private lateinit var dataList: MutableList<DashboardData>
 
@@ -76,6 +77,9 @@ class StatusBreakDownBottomSheet(): BottomSheetDialogFragment() {
         dataAdapter.initData(dataList)
         dataAdapter.onItemClick = { position, model ->
             onItemClicked?.invoke(model, position)
+        }
+        dataAdapter.onMapClick = { position, model ->
+            onMapClick?.invoke(model, position)
         }
     }
 

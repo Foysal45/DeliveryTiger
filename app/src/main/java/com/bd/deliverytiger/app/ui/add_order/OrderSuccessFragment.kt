@@ -22,6 +22,7 @@ import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButton
 import org.koin.android.ext.android.inject
+import java.util.*
 
 class OrderSuccessFragment : Fragment() {
 
@@ -111,6 +112,8 @@ class OrderSuccessFragment : Fragment() {
         })
 
 
+        timeLimitAlert()
+
         orderListClickedLay.setOnClickListener {
             allOrderListFragment()
         }
@@ -138,6 +141,17 @@ class OrderSuccessFragment : Fragment() {
         })
 
         UserLogger.logPurchase(SessionManager.totalAmount)
+    }
+
+    private fun timeLimitAlert() {
+
+        var msg = "Your Delivery Tiger order (${orderResponse!!.courierOrdersId}) has been placed. We will collect it as soon as possible by today before 6 pm."
+        val calendar = Calendar.getInstance()
+        val currentHour24 = calendar.get(Calendar.HOUR_OF_DAY)
+        if (currentHour24 >= 16) {
+            msg += " If your order has been placed after 4 pm, it might not be collected today."
+        }
+        alert ("Confirmation", msg, false, "Ok", "Cancel").show()
     }
 
     private fun offerBottomSheet(model: CourierInfoModel?) {

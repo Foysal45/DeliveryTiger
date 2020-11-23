@@ -330,6 +330,10 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/text_16"
                     android:textStyle="bold"
+
+                    app:drawableStartCompat="@drawable/ic_add_box"
+                    app:drawableTint="@color/colorPrimary"
+                    android:drawablePadding="5dp"
                     />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
