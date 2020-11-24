@@ -31,6 +31,8 @@ import com.bd.deliverytiger.app.api.model.order_track.OrderTrackReqBody
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
+import com.bd.deliverytiger.app.api.model.referral.RefereeInfo
+import com.bd.deliverytiger.app.api.model.referral.ReferrerInfo
 import com.bd.deliverytiger.app.api.model.rider.RiderInfo
 import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -143,5 +145,11 @@ interface ApiInterfaceCore {
 
     @GET("api/Dashboard/GetMerchantBalanceInfo/{courierUserId}/{amount}")
     suspend fun fetchMerchantBalanceInfo(@Path("courierUserId") courierUserId: Int, @Path("amount") amount: Int): NetworkResponse<GenericResponse<BalanceInfo>, ErrorResponse>
+
+    @GET("/api/Fetch/GetReferee")
+    suspend fun fetchRefereeInfo(): NetworkResponse<GenericResponse<RefereeInfo>, ErrorResponse>
+
+    @GET("/api/Fetch/GetReferrer")
+    suspend fun fetchReferrerInfo(): NetworkResponse<GenericResponse<ReferrerInfo>, ErrorResponse>
 
 }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/nav_header_height"
+    android:layout_height="150dp"
     android:background="@color/colorPrimary"
     android:gravity="bottom"
     android:padding="12dp">
@@ -71,6 +71,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/all_order_edit"
         app:tint="@color/white" />
+
+    <LinearLayout
+        android:id="@+id/nearbyHub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/cd"
+            android:src="@drawable/ic_hub"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nearby_hub"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:layout_marginStart="4dp"
+            />
+
+    </LinearLayout>
+
 
     <!--<LinearLayout
         android:id="@+id/referralLayout"

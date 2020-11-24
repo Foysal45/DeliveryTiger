@@ -11,6 +11,160 @@
     android:padding="16dp"
     >
 
+    <TextView
+        android:id="@+id/msg1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#58595B"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:text="রেফার সফল হলে (যাকে রেফার করেছেন তিনি ডেলিভারি টাইগার ব্যবহার শুরু করলেই) আপনি পাবেন"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="24dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/layout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/msg1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        >
+
+        <TextView
+            android:id="@+id/referCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/orange"
+            android:textSize="28sp"
+            android:gravity="center"
+            tools:text="৫"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/orange"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:text="টি"
+            android:layout_marginStart="5dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:text="ডেলিভারি"
+            android:layout_marginStart="5dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/orange"
+            android:textSize="28sp"
+            android:gravity="center"
+            android:text="ফ্রি!"
+            android:layout_marginStart="5dp"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/msg2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#58595B"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:text="(প্রতি সফল রেফারের জন্য টি)"
+        app:layout_constraintTop_toBottomOf="@id/layout1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        />
+
+    <ImageView
+        android:id="@+id/referIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="130dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_refer"
+        android:contentDescription="@string/cd"
+        app:layout_constraintTop_toBottomOf="@id/msg2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/referBtn"
+        android:layout_width="280dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="রেফার করুন"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/referIcon"
+         />
+
+    <LinearLayout
+        android:id="@+id/layout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/referBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#58595B"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:text="যাকে রেফার করছেন তিনিও পাবেন"
+            />
+
+        <TextView
+            android:id="@+id/referCount1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/orange"
+            android:textSize="18sp"
+            android:gravity="center"
+            tools:text="৫টি ফ্রি"
+            android:layout_marginStart="5dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:text="ডেলিভারি!"
+            android:layout_marginStart="5dp"
+            />
+
+    </LinearLayout>
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="30dp"
@@ -20,21 +174,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6"
         tools:visibility="visible" />
-
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/referBtn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="@color/orange"
-        android:text="রেফার করুন"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_14"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

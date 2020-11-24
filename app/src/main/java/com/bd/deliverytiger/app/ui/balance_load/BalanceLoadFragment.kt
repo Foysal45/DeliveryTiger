@@ -48,11 +48,11 @@ class BalanceLoadFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.fetchMerchantReceivableList(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
-            if (model.totalAmount > 0) {
+        viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, 0).observe(viewLifecycleOwner, Observer { model ->
+            if (model.serviceCharge > 0) {
                 binding?.serviceChargeLayout?.visibility = View.VISIBLE
-                binding?.serviceChargeAmount?.text = "${DigitConverter.toBanglaDigit(model.totalAmount, true)}৳"
-                binding?.amountET?.setText("${model.totalAmount}")
+                binding?.serviceChargeAmount?.text = "${DigitConverter.toBanglaDigit(model.serviceCharge, true)}৳"
+                binding?.amountET?.setText("${model.serviceCharge}")
             }
         })
 

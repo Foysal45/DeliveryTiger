@@ -142,4 +142,8 @@ class AppRepository(
 
     suspend fun fetchMerchantBalanceInfo(courierUserId: Int, amount: Int) = apiInterfaceCore.fetchMerchantBalanceInfo(courierUserId, amount)
 
+    suspend fun fetchRefereeInfo() = apiInterfaceCore.fetchRefereeInfo()
+
+    suspend fun fetchReferrerInfo() = apiInterfaceCore.fetchReferrerInfo()
+
 }

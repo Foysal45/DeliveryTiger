@@ -16,14 +16,12 @@ import android.provider.Settings
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -100,6 +98,7 @@ class HomeActivity : AppCompatActivity(),
     private lateinit var separetor: View
     private lateinit var addOrderFab: FloatingActionButton
     private lateinit var parent: CoordinatorLayout
+    private lateinit var actionBtn: TextView
 
     private val viewModel: HomeViewModel by inject()
     private var doubleBackToExitPressedOnce = false
@@ -146,6 +145,7 @@ class HomeActivity : AppCompatActivity(),
         separetor = findViewById(R.id.home_toolbar_separator)
         addOrderFab = findViewById(R.id.addOrderFab)
         parent = findViewById(R.id.parent)
+        actionBtn = findViewById(R.id.actionBtn)
         navView.setNavigationItemSelectedListener(this)
 
 
@@ -172,6 +172,7 @@ class HomeActivity : AppCompatActivity(),
         val headerUserNameTV: TextView = headerView.findViewById(R.id.nav_header_title)
         val headerDesignationTV: TextView = headerView.findViewById(R.id.nav_header_sub_title)
         val profileEdit: ImageView = headerView.findViewById(R.id.nav_header_profile_edit)
+        val nearbyHub: LinearLayout = headerView.findViewById(R.id.nearbyHub)
         //val referralET: EditText = headerView.findViewById(R.id.referralET)
         //val referralApply: ImageView = headerView.findViewById(R.id.referralApply)
         //val merchantCredit: TextView = headerView.findViewById(R.id.merchantCredit)
@@ -188,6 +189,11 @@ class HomeActivity : AppCompatActivity(),
         headerPic.setOnClickListener {
             navId = R.id.nav_header_profile_edit
             drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        nearbyHub.setOnClickListener {
+            navId = R.id.nav_nearby_hub
+            drawerLayout.closeDrawer(GravityCompat.START)
+            //goToNearByHubMap()
         }
         /*referralApply.setOnClickListener {
             hideKeyboard()
@@ -214,13 +220,16 @@ class HomeActivity : AppCompatActivity(),
             goToOrderTracking()
         }
         searchIV.setOnClickListener {
-            goToAllOrder()
+            goToAllOrder(true)
         }
         downloadTV.setOnClickListener {
             val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
             if (currentFragment is PaymentStatementDetailFragment) {
                 currentFragment.downloadFile()
             }
+        }
+        actionBtn.setOnClickListener {
+            goToAllOrder(false)
         }
 
         onNewIntent(intent)
@@ -362,11 +371,15 @@ class HomeActivity : AppCompatActivity(),
                 //logoIV.visibility = View.VISIBLE
                 searchIV.visibility = View.VISIBLE
                 separetor.visibility = View.VISIBLE
+                actionBtn.visibility = View.VISIBLE
+                trackingIV.visibility = View.GONE
                 //moveFabBy(100f)
             } else {
                 //logoIV.visibility = View.GONE
                 searchIV.visibility = View.GONE
                 separetor.visibility = View.GONE
+                actionBtn.visibility = View.GONE
+                trackingIV.visibility = View.VISIBLE
                 //moveFabBy(24f)
             }
 
@@ -639,6 +652,17 @@ class HomeActivity : AppCompatActivity(),
                     addFragment(MapFragment.newInstance(null), MapFragment.tag)
                 }
             }
+            R.id.nav_nearby_hub -> {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is MapFragment) {
+                    Timber.d("tag", "MapFragment already exist")
+                } else {
+                    val bundle = bundleOf(
+                        "isNearByHubView" to true
+                    )
+                    addFragment(MapFragment.newInstance(bundle), MapFragment.tag)
+                }
+            }
             R.id.nav_complain -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ComplainFragment) {
@@ -782,6 +806,8 @@ class HomeActivity : AppCompatActivity(),
         logoIV.visibility = View.VISIBLE
         addProductBtnVisibility(false)
         searchIV.visibility = View.VISIBLE
+        actionBtn.visibility = View.VISIBLE
+        trackingIV.visibility = View.GONE
 
         val fragment = DashboardFragment.newInstance()
         val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
@@ -803,13 +829,6 @@ class HomeActivity : AppCompatActivity(),
         ft.replace(R.id.mainActivityContainer, fragment, AddOrderFragmentTwo.tag)
         ft.addToBackStack(AddOrderFragmentTwo.tag)
         ft.commit()*/
-    }
-
-    private fun addFragment(fragment: Fragment, tag: String) {
-        val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.mainActivityContainer, fragment, tag)
-        ft.addToBackStack(tag)
-        ft.commit()
     }
 
     private fun goToNotification() {
@@ -840,12 +859,26 @@ class HomeActivity : AppCompatActivity(),
         ft.commit()
     }
 
-    private fun goToAllOrder() {
+    private fun goToAllOrder(shouldOpenFilter: Boolean) {
 
-        val fragment = AllOrdersFragment.newInstance(true)
+        val fragment = AllOrdersFragment.newInstance(shouldOpenFilter)
         val ft = supportFragmentManager.beginTransaction()
         ft.add(R.id.mainActivityContainer, fragment, AllOrdersFragment.tag)
         ft.addToBackStack(AllOrdersFragment.tag)
+        ft.commit()
+    }
+
+    private fun goToNearByHubMap() {
+        val bundle = bundleOf(
+            "isNearByHubView" to true
+        )
+        addFragment(MapFragment.newInstance(bundle), MapFragment.tag)
+    }
+
+    private fun addFragment(fragment: Fragment, tag: String) {
+        val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.mainActivityContainer, fragment, tag)
+        ft.addToBackStack(tag)
         ft.commit()
     }
 

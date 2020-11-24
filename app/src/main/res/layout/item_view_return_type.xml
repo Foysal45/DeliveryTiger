@@ -16,7 +16,7 @@
         android:ellipsize="end"
         android:gravity="center"
         android:minHeight="50dp"
-        android:paddingStart="50dp"
+        android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:textColor="@color/white"
         android:textSize="14sp"
@@ -27,27 +27,30 @@
 
     <TextView
         android:id="@+id/countTV"
-        android:layout_width="60dp"
+        android:layout_width="80dp"
         android:layout_height="match_parent"
         android:background="@drawable/bg_return_dialog"
         android:gravity="center"
         android:minHeight="50dp"
-        android:padding="5dp"
         android:textColor="@color/black_90"
         android:textSize="16sp"
+        android:paddingEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:includeFontPadding="false"
         tools:text="99" />
 
     <ImageView
         android:id="@+id/mapBtn"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:contentDescription="@string/cd"
-        android:padding="12dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:padding="4dp"
+        android:layout_marginEnd="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:tint="@color/orange"
         tools:src="@drawable/ic_location1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

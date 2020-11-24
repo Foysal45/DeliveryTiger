@@ -163,8 +163,8 @@ class DashboardFragment : Fragment() {
         binding?.collectorTrackBtn?.setOnClickListener {
             addFragment(MapFragment.newInstance(null), MapFragment.tag)
         }
-        binding?.nearByHubBtn?.setOnClickListener {
-            goToNearByHubMap()
+        binding?.orderTrackingBtn?.setOnClickListener {
+            addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
         }
         binding?.complainBtn?.setOnClickListener {
             addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)

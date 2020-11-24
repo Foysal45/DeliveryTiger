@@ -266,7 +266,7 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:id="@+id/nearByHubBtn"
+                            android:id="@+id/orderTrackingBtn"
                             android:layout_width="0dp"
                             android:layout_height="50dp"
                             android:layout_gravity="center_horizontal"
@@ -278,10 +278,12 @@
                             tools:ignore="UselessParent">
 
                             <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
                                 android:contentDescription="@string/cd"
-                                android:src="@drawable/ic_hub" />
+                                android:src="@drawable/ic_tracking"
+                                app:tint="@color/white"
+                                />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -289,7 +291,7 @@
                                 android:layout_marginStart="8dp"
                                 android:ellipsize="end"
                                 android:maxLines="1"
-                                android:text="নিকটস্থ হাব"
+                                android:text="ট্র্যাক অর্ডার"
                                 android:textColor="@color/white"
                                 android:textSize="16sp" />
 
