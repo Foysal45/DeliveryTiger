@@ -27,4 +27,7 @@ interface LoginInterface {
 
     @GET("Recover/CheckOTP/{mobileNo}/{OTP}")
     fun checkOTP(@Path("mobileNo") mobileNo: String, @Path("OTP") OPTCode: String): Call<OTPCheckResponse>
+
+    @GET("api/Account/CheckReferrerMobile/{referrerMobile}")
+    fun checkReferrerMobile(@Path("referrerMobile") referrerMobile: String): Call<GenericResponse<SignUpResponse>>
 }

@@ -8,6 +8,27 @@
     android:id="@+id/parent"
     android:orientation="vertical"
     >
+
+    <TextView
+        android:id="@+id/nearbyHub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:minHeight="50dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="আপনার বর্তমান অবস্থানের নিকটস্থ হাব"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
     <TextView
         android:id="@+id/titleTV"
         android:layout_width="wrap_content"
@@ -17,7 +38,7 @@
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_16"
         android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

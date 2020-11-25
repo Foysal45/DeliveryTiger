@@ -17,21 +17,17 @@ import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.RetrofitSingletonAPI
 import com.bd.deliverytiger.app.api.endpoint.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
-import com.bd.deliverytiger.app.api.model.login.LoginResponse
-import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
-import com.bd.deliverytiger.app.api.model.login.OTPResponse
-import com.bd.deliverytiger.app.api.model.login.UserInfoRequest
+import com.bd.deliverytiger.app.api.model.login.*
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
 import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
 import com.bd.deliverytiger.app.utils.VariousTask.showShortToast
+import com.bd.deliverytiger.app.utils.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class SignUpFragment : Fragment(), View.OnClickListener {
 
     companion object {
@@ -51,7 +47,8 @@ class SignUpFragment : Fragment(), View.OnClickListener {
     private lateinit var btnSignUp: Button
     private lateinit var tvLogin: TextView
 
-    private lateinit var OTPInterface: LoginInterface
+    private lateinit var loginInterface: LoginInterface
+    private lateinit var checkReferrer: LoginInterface
     private var progressDialog: ProgressDialog? = null
 
     override fun onCreateView(
@@ -70,6 +67,9 @@ class SignUpFragment : Fragment(), View.OnClickListener {
         referCodeET = view.findViewById(R.id.referCodeET)
         btnSignUp = view.findViewById(R.id.btnSignUp)
         tvLogin = view.findViewById(R.id.tvLogin)
+
+        loginInterface = RetrofitSingletonAPI.getInstance(requireContext()).create(LoginInterface::class.java)
+        checkReferrer = RetrofitSingleton.getInstance(requireContext()).create(LoginInterface::class.java)
 
         progressDialog = ProgressDialog(mContext)
         progressDialog?.setMessage("অপেক্ষা করুন")
@@ -98,50 +98,26 @@ class SignUpFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun sendOTP() {
-
-        progressDialog?.show()
-
-        val mobileNo = etSignUpMobileNo.text.toString()
-        val retrofit = RetrofitSingletonAPI.getInstance(mContext)
-        val loginInterface = retrofit.create(LoginInterface::class.java)
-        val requestBody = OTPRequestModel(mobileNo, mobileNo)
-        loginInterface.sendOTP(requestBody).enqueue(object : Callback<OTPResponse> {
-            override fun onFailure(call: Call<OTPResponse>, t: Throwable) {
-                Timber.e("userUserRegister", "failed " + t.message)
-                progressDialog?.dismiss()
-            }
-
-            override fun onResponse(
-                call: Call<OTPResponse>,
-                response: Response<OTPResponse>
-            ) {
-                progressDialog?.dismiss()
-                if (response.isSuccessful && response.body() != null && isAdded) {
-                    Timber.e("userUserRegister", response.body().toString())
-                    showShortToast(context, response.body()!!.model ?: "Send")
-                    goToSignUpOTP()
-                }
-            }
-        })
-
-    }
-
 
     private fun checkIfUserExist() {
 
         progressDialog?.show()
         val mobile = etSignUpMobileNo.text.toString()
-        val loginInterface = RetrofitSingleton.getInstance(mContext).create(LoginInterface::class.java)
         loginInterface.getUserInfo(UserInfoRequest(mobile)).enqueue(object : Callback<GenericResponse<LoginResponse>> {
             override fun onFailure(call: Call<GenericResponse<LoginResponse>>, t: Throwable) {
                 progressDialog?.dismiss()
+                context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
             }
 
             override fun onResponse(call: Call<GenericResponse<LoginResponse>>, response: Response<GenericResponse<LoginResponse>>) {
 
                 if (response.code() == 404) {
-                    sendOTP()
+                    val referCode = referCodeET.text.toString().trim()
+                    if (referCode.isNotEmpty()) {
+                        checkReferrerMobile(referCode)
+                    } else {
+                        sendOTP()
+                    }
                 } else {
                     progressDialog?.dismiss()
                     showShortToast(context, "এই মোবাইল নম্বর দিয়ে ইতিমধ্যে রেজিস্ট্রেশন করা হয়েছে")
@@ -149,6 +125,54 @@ class SignUpFragment : Fragment(), View.OnClickListener {
             }
 
         })
+    }
+
+    private fun checkReferrerMobile(referrerMobile: String) {
+
+        progressDialog?.show()
+        checkReferrer.checkReferrerMobile(referrerMobile).enqueue(object: Callback<GenericResponse<SignUpResponse>> {
+            override fun onResponse(call: Call<GenericResponse<SignUpResponse>>, response: Response<GenericResponse<SignUpResponse>>) {
+                progressDialog?.dismiss()
+                if (response.code() == 200) {
+                    sendOTP()
+                } else {
+                    context?.toast("রেফার কোড সঠিক নয়")
+                }
+            }
+
+            override fun onFailure(call: Call<GenericResponse<SignUpResponse>>, t: Throwable) {
+                progressDialog?.dismiss()
+                context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
+            }
+
+        })
+    }
+
+    private fun sendOTP() {
+
+        progressDialog?.show()
+
+        val mobileNo = etSignUpMobileNo.text.toString()
+        val requestBody = OTPRequestModel(mobileNo, mobileNo)
+        loginInterface.sendOTP(requestBody).enqueue(object : Callback<OTPResponse> {
+            override fun onFailure(call: Call<OTPResponse>, t: Throwable) {
+                Timber.e("userUserRegister", "failed " + t.message)
+                progressDialog?.dismiss()
+                context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
+            }
+
+            override fun onResponse(call: Call<OTPResponse>, response: Response<OTPResponse>) {
+                progressDialog?.dismiss()
+                if (response.isSuccessful && response.body() != null && isAdded) {
+                    Timber.e("userUserRegister", response.body().toString())
+                    showShortToast(context, response.body()!!.model ?: "Send")
+                    goToSignUpOTP()
+                } else {
+                    context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
+                }
+            }
+        })
+
     }
 
     private fun validate(): Boolean {
@@ -167,6 +191,13 @@ class SignUpFragment : Fragment(), View.OnClickListener {
         } else if (etSignUpPassword.text.toString() != etSignUpConfirmPassword.text.toString()) {
             showShortToast(context, getString(R.string.match_pass))
             go = false
+        } else if (referCodeET.text.toString().isNotEmpty()) {
+            val referCode = referCodeET.text.toString().trim()
+            if (!Validator.isValidMobileNumber(referCode) || referCode.length < 11) {
+                showShortToast(context, "সঠিক রেফার কোড লিখুন")
+                go = false
+                referCodeET.requestFocus()
+            }
         }
         hideSoftKeyBoard(requireActivity())
         return go

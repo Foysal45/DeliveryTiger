@@ -86,6 +86,9 @@ interface ApiInterfaceCore {
     @GET("api/Fetch/GetDTOrderGenericLimit")
     suspend fun fetchDTOrderGenericLimit(): NetworkResponse<GenericResponse<GenericLimitData>, ErrorResponse>
 
+    @GET("api/Settings/GetOfferCharge/{courierUserId}")
+    suspend fun fetchOfferCharge(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<Boolean>, ErrorResponse>
+
     @GET("api/Fetch/GetPickupLocations/{courierUserId}")
     suspend fun getPickupLocations(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<List<PickupLocation>>, ErrorResponse>
 

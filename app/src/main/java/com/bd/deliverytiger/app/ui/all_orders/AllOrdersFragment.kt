@@ -132,7 +132,7 @@ class AllOrdersFragment : Fragment() {
             val statusArray = dashboardStatusFilter.split(",")
             statusGroupList.clear()
             statusGroupList.addAll(statusArray)
-            activeFilter()
+            activeFilter(true)
         }
 
         allOrderInterface =
@@ -355,17 +355,19 @@ class AllOrdersFragment : Fragment() {
         })
     }
 
-    private fun activeFilter(){
+    private fun activeFilter(initFilter: Boolean = false){
 
-        if (fromDate != defaultDate){
-            val msg = "${DigitConverter.toBanglaDate(fromDate, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate, "yyyy-MM-dd")}"
-            filterDateTag.text = msg
-            filterDateTag.visibility = View.VISIBLE
-        } else {
-            filterDateTag.text = ""
-            filterDateTag.visibility = View.GONE
-            fromDate = defaultDate
-            toDate = defaultDate
+        if (!initFilter) {
+            if (fromDate != defaultDate){
+                val msg = "${DigitConverter.toBanglaDate(fromDate, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate, "yyyy-MM-dd")}"
+                filterDateTag.text = msg
+                filterDateTag.visibility = View.VISIBLE
+            } else {
+                filterDateTag.text = ""
+                filterDateTag.visibility = View.GONE
+                fromDate = defaultDate
+                toDate = defaultDate
+            }
         }
 
         if (statusGroup != "-1"){

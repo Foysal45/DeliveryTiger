@@ -77,5 +77,7 @@ data class OrderRequest(
     @SerializedName("collectionTimeSlotId")
     var collectionTimeSlotId: Int,
     @SerializedName("collectionTime")
-    var collectionTime: String = ""
+    var collectionTime: String = "",
+    @SerializedName("offerType")
+    var offerType: String = ""
 )

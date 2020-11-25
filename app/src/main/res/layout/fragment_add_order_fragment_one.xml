@@ -51,7 +51,10 @@
                     android:paddingEnd="16dp"
                     android:paddingBottom="8dp"
                     android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14" />
+                    android:textSize="@dimen/text_14"
+                    app:drawableEndCompat="@drawable/ic_star"
+                    app:drawableTint="@color/red"
+                    />
 
                 <EditText
                     android:id="@+id/etAddOrderMobileNo"
@@ -68,7 +71,10 @@
                     android:paddingEnd="16dp"
                     android:paddingBottom="8dp"
                     android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14" />
+                    android:textSize="@dimen/text_14"
+                    app:drawableEndCompat="@drawable/ic_star"
+                    app:drawableTint="@color/red"
+                    />
 
                 <EditText
                     android:id="@+id/etAlternativeMobileNo"
@@ -87,23 +93,56 @@
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14" />
 
-                <EditText
-                    android:id="@+id/etDistrict"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/login_view_height"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
-                    android:background="@drawable/bg_add_order_edit_text"
-                    android:drawableEnd="@drawable/ic_arrow_drop_down"
-                    android:focusable="false"
-                    android:hint="জেলা নির্বাচন করুন"
-                    android:importantForAutofill="no"
-                    android:inputType="phone"
-                    android:paddingStart="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingBottom="8dp"
-                    android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14" />
+                    >
+
+                    <EditText
+                        android:id="@+id/etDistrict"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_view_height"
+                        android:background="@drawable/bg_add_order_edit_text"
+                        android:focusable="false"
+                        android:hint="জেলা নির্বাচন করুন"
+                        android:importantForAutofill="no"
+                        android:inputType="phone"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:contentDescription="@string/cd"
+                        app:layout_constraintEnd_toEndOf="@id/etDistrict"
+                        app:layout_constraintTop_toTopOf="@id/etDistrict"
+                        app:layout_constraintBottom_toBottomOf="@id/etDistrict"
+                        app:srcCompat="@drawable/ic_arrow_drop_down"
+                        />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="@string/cd"
+                        app:layout_constraintEnd_toEndOf="@id/etDistrict"
+                        app:layout_constraintTop_toTopOf="@id/etDistrict"
+                        app:layout_constraintBottom_toBottomOf="@id/etDistrict"
+                        app:srcCompat="@drawable/ic_star"
+                        app:tint="@color/red"
+                        />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                 <EditText
                     android:id="@+id/etThana"
@@ -143,23 +182,45 @@
                     android:visibility="gone"
                     tools:visibility="visible" />
 
-                <EditText
-                    android:id="@+id/etCustomersAddress"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
-                    android:background="@drawable/bg_add_order_edit_text"
-                    android:gravity="start|top"
-                    android:hint="বিস্তারিত ঠিকানা লিখুন (বাড়ি/রোড/গ্রাম/হোল্ডিং)"
-                    android:importantForAutofill="no"
-                    android:inputType="textPostalAddress"
-                    android:minHeight="96dp"
-                    android:paddingStart="16dp"
-                    android:paddingTop="12dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="8dp"
-                    android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14" />
+                    >
+
+                    <EditText
+                        android:id="@+id/etCustomersAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_add_order_edit_text"
+                        android:gravity="start|top"
+                        android:hint="বিস্তারিত ঠিকানা লিখুন (বাড়ি/রোড/গ্রাম/হোল্ডিং)"
+                        android:importantForAutofill="no"
+                        android:inputType="textPostalAddress"
+                        android:minHeight="96dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="12dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="@string/cd"
+                        app:layout_constraintEnd_toEndOf="@id/etCustomersAddress"
+                        app:layout_constraintTop_toTopOf="@id/etCustomersAddress"
+                        app:srcCompat="@drawable/ic_star"
+                        app:tint="@color/red"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                 <TextView
                     android:id="@+id/tvCustomerDetails1"
@@ -169,7 +230,8 @@
                     android:text="প্যাকেজ ও কালেকশনের তথ্য"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/text_16"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    />
 
 
                 <EditText
@@ -186,14 +248,16 @@
                     android:paddingEnd="16dp"
                     android:paddingBottom="8dp"
                     android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14" />
+                    android:textSize="@dimen/text_14"
+                    app:drawableEndCompat="@drawable/ic_star"
+                    app:drawableTint="@color/red"
+                    />
 
                 <com.bd.deliverytiger.app.utils.CustomMaterialButtonToggleGroup
                     android:id="@+id/toggle_button_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    app:checkedButton="@id/toggle_button_1"
                     app:singleSelection="true"
                     >
 
@@ -239,7 +303,10 @@
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14"
                     android:visibility="gone"
-                    tools:visibility="visible" />
+                    tools:visibility="visible"
+                    app:drawableEndCompat="@drawable/ic_star"
+                    app:drawableTint="@color/red"
+                    />
 
                 <EditText
                     android:id="@+id/actualPackageAmount"
@@ -256,7 +323,9 @@
                     android:paddingBottom="8dp"
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14"
-                     />
+                    app:drawableEndCompat="@drawable/ic_star"
+                    app:drawableTint="@color/red"
+                    />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -361,12 +430,24 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginEnd="20dp"
                         android:contentDescription="@string/cd"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/spinnerCollectionLocation"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="@string/cd"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/spinnerCollectionLocation"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_star"
+                        app:tint="@color/red"
+                        />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -519,7 +600,10 @@
                     android:paddingEnd="16dp"
                     android:paddingBottom="8dp"
                     android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14" />
+                    android:textSize="@dimen/text_14"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    />
 
 
                 <LinearLayout
@@ -547,7 +631,9 @@
                         android:text="আমি শর্তাবলী মেনে নিলাম"
                         android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
-
+                        app:drawableEndCompat="@drawable/ic_star"
+                        app:drawableTint="@color/red"
+                        android:drawablePadding="4dp"
                         />
                 </LinearLayout>
 

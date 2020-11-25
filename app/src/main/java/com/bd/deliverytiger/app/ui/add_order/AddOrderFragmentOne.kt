@@ -141,6 +141,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     private var total: Double = 0.0
 
+    private var isShipmentChargeFree: Boolean = false
+    private var offerType: String = ""
+
     private var deliveryType: String = ""
     private var orderType: String = "Only Delivery"
     private var productType: String = "small"
@@ -148,6 +151,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var collectionName: String = ""
     private var packingName: String = ""
     private var collectionAddress: String = ""
+    private var isOrderTypeSelected: Boolean = false
 
     private var deliveryRangeId: Int = 0
     private var weightRangeId: Int = 0
@@ -219,12 +223,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         etAriaPostOffice.setOnClickListener(this)
         orderPlaceBtn.setOnClickListener(this)
 
+        fetchOfferCharge()
         getBreakableCharge()
         getCollectionCharge()
         getPackagingCharge()
         getPickupLocation()
         fetchDTOrderGenericLimit()
-        fetchCollectionTimeSlot()
+        //fetchCollectionTimeSlot()
 
 
         deliveryTypeAdapter = DeliveryTypeAdapter(requireContext(), deliveryTypeList)
@@ -236,9 +241,14 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             adapter = deliveryTypeAdapter
         }
         deliveryTypeAdapter.onItemClick = { position, model ->
-            //deliveryTypeRV.requestFocus()
-            payShipmentCharge = model.chargeAmount
-            //cityDeliveryCharge = model.cityDeliveryCharge
+
+            if (isShipmentChargeFree) {
+                payShipmentCharge = 0.0
+                offerType = "freedelivery"
+            } else {
+                payShipmentCharge = model.chargeAmount
+                offerType = ""
+            }
 
             deliveryType = "${model.deliveryType} ${model.days}"
             deliveryRangeId = model.deliveryRangeId
@@ -314,6 +324,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         toggleButtonGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked) {
+                isOrderTypeSelected = true
                 when (checkedId) {
                     R.id.toggle_button_1 -> {
                         collectionAmountET.visibility = View.GONE
@@ -510,6 +521,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     private fun orderPlaceProcess() {
+        //timber.log.Timber.tag("orderDebug").d("ThanaId: $thanaId")
         when {
             !isCollection && !isMerchantCreditAvailable -> showCreditLimitAlert()
             !isProfileComplete -> checkProfileData()
@@ -517,47 +529,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun validate(): Boolean {
-        var go = true
-        getAllViewData()
-        if (customerName.isEmpty()) {
-            context?.toast(getString(R.string.write_yr_name))
-            go = false
-            etCustomerName.requestFocus()
-        } else if (mobileNo.isEmpty()) {
-            context?.toast(getString(R.string.write_phone_number))
-            go = false
-            etAddOrderMobileNo.requestFocus()
-        } else if (!Validator.isValidMobileNumber(mobileNo) || mobileNo.length < 11) {
-            context?.toast(getString(R.string.write_proper_phone_number_recharge))
-            go = false
-            etAddOrderMobileNo.requestFocus()
-        }/* else if(alternativeMobileNo.isEmpty()){
-            go = false
-            context?.toast(context!!, getString(R.string.write_alt_phone_number))
-            etAlternativeMobileNo.requestFocus()
-        }*/
-        else if (districtId == 0) {
-            go = false
-            context?.toast(getString(R.string.select_dist))
-        } else if (thanaId == 0) {
-            go = false
-            context?.toast(getString(R.string.select_thana))
-        } else if (isAriaAvailable && areaId == 0) {
-            go = false
-            context?.toast(getString(R.string.select_aria))
-        } else if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
-            go = false
-            context?.toast(getString(R.string.write_yr_address))
-            etCustomersAddress.requestFocus()
-        }
-        hideKeyboard()
 
-        //mockUserData()
-        //go = true
-
-        return go
-    }
 
     private fun getAllViewData() {
         customerName = etCustomerName.text.toString()
@@ -912,6 +884,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         })
     }
 
+    private fun fetchOfferCharge() {
+        viewModel.fetchOfferCharge(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { flag ->
+            isShipmentChargeFree = flag
+        })
+    }
+
     private fun setUpCollectionSlotSpinner(list: List<TimeSlotData>) {
 
         val slotList: MutableList<String> = mutableListOf()
@@ -1085,7 +1063,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             payBreakableCharge, additionalNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge, packingName,
             payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,
             "android-${SessionManager.versionName}", true, collectionDistrictId, collectionThanaId,
-            deliveryDate, collectionDate, isOfficeDrop,payActualPackagePrice, timeSlotId, selectedCollectionSlotDate
+            deliveryDate, collectionDate, isOfficeDrop,payActualPackagePrice, timeSlotId, selectedCollectionSlotDate, offerType
         )
 
 
@@ -1097,12 +1075,61 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     }
 
+    private fun validate(): Boolean {
+        var go = true
+        getAllViewData()
+        if (customerName.isEmpty()) {
+            context?.toast(getString(R.string.write_yr_name))
+            go = false
+            etCustomerName.requestFocus()
+        } else if (mobileNo.isEmpty()) {
+            context?.toast(getString(R.string.write_phone_number))
+            go = false
+            etAddOrderMobileNo.requestFocus()
+        } else if (!Validator.isValidMobileNumber(mobileNo) || mobileNo.length < 11) {
+            context?.toast(getString(R.string.write_proper_phone_number_recharge))
+            go = false
+            etAddOrderMobileNo.requestFocus()
+        }/* else if(alternativeMobileNo.isEmpty()){
+            go = false
+            context?.toast(context!!, getString(R.string.write_alt_phone_number))
+            etAlternativeMobileNo.requestFocus()
+        }*/
+        else if (districtId == 0) {
+            go = false
+            context?.toast(getString(R.string.select_dist))
+        }
+        /*else if (thanaId == 0) {
+            go = false
+            context?.toast(getString(R.string.select_thana))
+        }*/
+        /*else if (isAriaAvailable && areaId == 0) {
+            go = false
+            context?.toast(getString(R.string.select_aria))
+        } */
+        else if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
+            go = false
+            context?.toast(getString(R.string.write_yr_address))
+            etCustomersAddress.requestFocus()
+        }
+        hideKeyboard()
+
+        //mockUserData()
+        //go = true
+
+        return go
+    }
+
     private fun validateFormData(): Boolean {
 
         collectionName = productNameET.text.toString()
         collectionAddress = collectionAddressET.text.toString()
         if (collectionName.isEmpty()) {
             context?.showToast("নিজস্ব রেফারেন্স নম্বর / ইনভয়েস লিখুন")
+            return false
+        }
+        if (!isOrderTypeSelected) {
+            context?.showToast("অর্ডার টাইপ সিলেক্ট করুন")
             return false
         }
         if (isCollection) {
@@ -1126,7 +1153,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         val payActualPackagePriceText = actualPackageAmountET.text.toString().trim()
         if (payActualPackagePriceText.isEmpty()) {
-            context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস লিখুন")
+            context?.showToast("প্যাকেজের দাম লিখুন")
             return false
         } else {
             try {
@@ -1149,10 +1176,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             }
         }
 
-        if (!isWeightSelected) {
+        /*if (!isWeightSelected) {
             context?.showToast("প্যাকেজ এর ওজন নির্বাচন করুন")
             return false
-        }
+        }*/
         if (!isPackagingSelected) {
             context?.showToast("প্যাকেজিং নির্বাচন করুন")
             return false

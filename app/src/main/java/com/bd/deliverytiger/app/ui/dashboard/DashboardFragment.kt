@@ -141,7 +141,7 @@ class DashboardFragment : Fragment() {
     private fun fetchBannerData() {
 
         homeViewModel.bannerInfo.observe(viewLifecycleOwner, Observer { model ->
-            showOrderPopup = model.showOrderPopup
+            //showOrderPopup = model.showOrderPopup
             instantPaymentOTPLimit = model.instantPaymentOTPLimit
             instantPaymentHourLimit = model.instantPaymentHourLimit
 
@@ -220,10 +220,10 @@ class DashboardFragment : Fragment() {
             }
         }
         dashboardAdapter.onCODCollectionClick = { position, model ->
-            if (netAmount > 0) {
-                addFragment(UnpaidCODFragment.newInstance(), UnpaidCODFragment.tag)
-            } else {
+            if (netAmount == 0) {
                 context?.toast("পর্যাপ্ত তথ্য নেই")
+            } else {
+                addFragment(UnpaidCODFragment.newInstance(), UnpaidCODFragment.tag)
             }
         }
         dashboardAdapter.onPaymentRequestClick = { position, model ->

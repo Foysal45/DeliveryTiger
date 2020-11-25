@@ -34,6 +34,7 @@
         android:minHeight="50dp"
         android:textColor="@color/black_90"
         android:textSize="16sp"
+        android:paddingStart="0dp"
         android:paddingEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.ui.dashboard
 
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -47,10 +48,11 @@ class ReturnAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             if (model.statusGroupId == 11 || model.statusGroupId == 10) {
                 binding.mapBtn.setImageResource(R.drawable.ic_location1)
+                binding.countTV.setPadding(0,0,binding.countTV.context.dpToPx(16f),0)
             } else if (model.statusGroupId == 9) {
-                binding.mapBtn.setImageResource(R.drawable.ic_parcel)
+                binding.mapBtn.visibility = View.GONE
+                binding.countTV.setPadding(0,0,0,0)
             }
-
         }
     }
 

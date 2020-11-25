@@ -21,6 +21,7 @@ class PickupLocationBottomSheet: BottomSheetDialogFragment() {
 
     private var binding: FragmentPickupLocationBottomSheetBinding? = null
     var onItemClicked: ((model: PickupLocation) -> Unit)? = null
+    var onNearByHubClicked: (() -> Unit)? = null
 
     private lateinit var pickUpList: List<PickupLocation>
     private var isHub: Boolean = false
@@ -72,6 +73,13 @@ class PickupLocationBottomSheet: BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (isHub) {
+            binding?.nearbyHub?.visibility = View.VISIBLE
+            binding?.nearbyHub?.setOnClickListener {
+                onNearByHubClicked?.invoke()
+            }
+        }
 
         val pickupAddressAdapter = PickUpLocationAdapter()
         if (isHub) {

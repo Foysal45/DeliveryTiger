@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="60dp"
     android:orientation="vertical"
     android:padding="8dp"
     android:background="@drawable/bg_pickup_address"
@@ -67,6 +68,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/thana"
-        tools:text="address" />
+        tools:text="address"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -240,17 +240,21 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     }
                 }
                 if (isNearByHubView) {
-                    pickUpLocationList.add(0,
-                        PickupLocation(thanaName = "আপনার বর্তমান অবস্থান",
-                            pickupAddress = "আপনার বর্তমান অবস্থান থেকে নিকটস্থ হাব",
+                    /*pickUpLocationList.add(0,
+                        PickupLocation(thanaName = "",
+                            pickupAddress = "আপনার বর্তমান অবস্থানের নিকটস্থ হাব",
                             latitude = currentLatitude.toString(),
-                            longitude = currentLongitude.toString()))
-                }
-                if (pickUpLocationList.size > 1) {
+                            longitude = currentLongitude.toString()))*/
+
                     choosePickupLocation(pickUpLocationList)
                     binding?.pickUpBtn?.visibility = View.VISIBLE
                 } else {
-                    onPickUpLocation(list.first())
+                    if (pickUpLocationList.size > 1) {
+                        choosePickupLocation(pickUpLocationList)
+                        binding?.pickUpBtn?.visibility = View.VISIBLE
+                    } else {
+                        onPickUpLocation(list.first())
+                    }
                 }
             } else {
                 context?.toast("প্রোফাইলে পিকআপ লোকেশন অ্যাড করুন")
@@ -265,6 +269,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         dialog.show(childFragmentManager, tag)
         dialog.onItemClicked = { model ->
             dialog.dismiss()
+            onPickUpLocation(model)
+        }
+        dialog.onNearByHubClicked = {
+            dialog.dismiss()
+            val model = PickupLocation(thanaName = "",
+                pickupAddress = "আপনার বর্তমান অবস্থানের নিকটস্থ হাব",
+                latitude = currentLatitude.toString(),
+                longitude = currentLongitude.toString())
             onPickUpLocation(model)
         }
     }

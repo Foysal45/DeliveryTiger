@@ -19,14 +19,12 @@ import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.*
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.VariousTask
+import com.bd.deliverytiger.app.utils.toast
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-/**
- * A simple [Fragment] subclass.
- */
 class SignUpOTPFragment : Fragment() {
 
     private lateinit var mContext: Context
@@ -105,6 +103,7 @@ class SignUpOTPFragment : Fragment() {
         OTPInterface.checkOTP(userMobile, OTPCode).enqueue(object : Callback<OTPCheckResponse> {
             override fun onFailure(call: Call<OTPCheckResponse>, t: Throwable) {
                 progressDialog?.dismiss()
+                context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
             }
 
             override fun onResponse(call: Call<OTPCheckResponse>, response: Response<OTPCheckResponse>) {
@@ -128,16 +127,16 @@ class SignUpOTPFragment : Fragment() {
             override fun onFailure(call: Call<OTPResponse>, t: Throwable) {
                 Timber.e("userUserRegister", "failed " + t.message)
                 progressDialog?.dismiss()
+                context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
             }
 
-            override fun onResponse(
-                call: Call<OTPResponse>,
-                response: Response<OTPResponse>
-            ) {
+            override fun onResponse(call: Call<OTPResponse>, response: Response<OTPResponse>) {
                 progressDialog?.dismiss()
                 if (response.isSuccessful && response.body() != null && isAdded) {
                     Timber.e("userUserRegister", response.body().toString())
                     VariousTask.showShortToast(context, response.body()!!.model ?: "Send")
+                } else {
+                    context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
                 }
             }
         })
@@ -146,17 +145,15 @@ class SignUpOTPFragment : Fragment() {
     private fun registerUser() {
 
         val loginInterface = RetrofitSingleton.getInstance(mContext).create(LoginInterface::class.java)
-        val signUpReqBody = SignUpReqBody(userMobile, userPassword)
+        val signUpReqBody = SignUpReqBody(userMobile, userPassword, referCode)
         loginInterface.userUserRegister(signUpReqBody).enqueue(object : Callback<GenericResponse<SignUpResponse>> {
             override fun onFailure(call: Call<GenericResponse<SignUpResponse>>, t: Throwable) {
                 Timber.e("userUserRegister", "failed " + t.message)
                 progressDialog?.dismiss()
+                context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
             }
 
-            override fun onResponse(
-                call: Call<GenericResponse<SignUpResponse>>,
-                response: Response<GenericResponse<SignUpResponse>>
-            ) {
+            override fun onResponse(call: Call<GenericResponse<SignUpResponse>>, response: Response<GenericResponse<SignUpResponse>>) {
                 progressDialog?.dismiss()
                 if (response.isSuccessful && response.body() != null) {
                     Timber.e("userUserRegister", response.body().toString())

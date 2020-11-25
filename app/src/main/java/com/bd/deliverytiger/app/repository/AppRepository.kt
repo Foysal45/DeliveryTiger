@@ -100,6 +100,8 @@ class AppRepository(
 
     suspend fun fetchDTOrderGenericLimit() = apiInterfaceCore.fetchDTOrderGenericLimit()
 
+    suspend fun fetchOfferCharge(courierUserId: Int) = apiInterfaceCore.fetchOfferCharge(courierUserId)
+
     suspend fun getPickupLocations(courierUserId: Int) = apiInterfaceCore.getPickupLocations(courierUserId)
 
     suspend fun fetchPickupLocationsWithAcceptedOrderCount(courierUserId: Int) = apiInterfaceCore.fetchPickupLocationsWithAcceptedOrderCount(courierUserId)

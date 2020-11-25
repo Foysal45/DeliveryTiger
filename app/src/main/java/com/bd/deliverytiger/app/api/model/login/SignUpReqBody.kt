@@ -7,6 +7,9 @@ data class SignUpReqBody(
     var mobile: String,
     @SerializedName("password")
     var password: String,
+    @SerializedName("referrer")
+    var referrer: String = "",
+
     @SerializedName("userName")
     var userName: String = "user name",
     @SerializedName("address")

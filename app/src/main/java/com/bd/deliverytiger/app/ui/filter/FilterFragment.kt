@@ -3,6 +3,7 @@ package com.bd.deliverytiger.app.ui.filter
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -120,10 +121,11 @@ class FilterFragment : Fragment() {
         if (filterType == 1){
             searchET.isFocusableInTouchMode = true
             searchET.requestFocus()
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 VariousTask.showKeyboard(activity)
             }, 300L)
             loadStatusGroup()
+            dateFilterLayout.visibility = View.GONE
         } else if (filterType == 2) {
             statusFilterLayout.visibility = View.GONE
         } else if(filterType == 3) {
