@@ -15,6 +15,7 @@ import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
+import com.bd.deliverytiger.app.api.model.referral.OfferData
 import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.SessionManager
@@ -349,9 +350,9 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
         return responseData
     }
 
-    fun fetchOfferCharge(courierUserId: Int): LiveData<Boolean> {
+    fun fetchOfferCharge(courierUserId: Int): LiveData<OfferData> {
 
-        val responseData: MutableLiveData<Boolean> = MutableLiveData()
+        val responseData: MutableLiveData<OfferData> = MutableLiveData()
 
         viewState.value = ViewState.ProgressState(true)
         viewModelScope.launch(Dispatchers.IO) {

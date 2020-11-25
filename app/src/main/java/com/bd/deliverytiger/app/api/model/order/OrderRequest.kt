@@ -79,5 +79,7 @@ data class OrderRequest(
     @SerializedName("collectionTime")
     var collectionTime: String = "",
     @SerializedName("offerType")
-    var offerType: String = ""
+    var offerType: String = "",
+    @SerializedName("relationType")
+    var relationType: String = ""
 )

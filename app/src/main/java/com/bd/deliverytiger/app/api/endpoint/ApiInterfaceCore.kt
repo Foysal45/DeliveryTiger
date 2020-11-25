@@ -31,6 +31,7 @@ import com.bd.deliverytiger.app.api.model.order_track.OrderTrackReqBody
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
+import com.bd.deliverytiger.app.api.model.referral.OfferData
 import com.bd.deliverytiger.app.api.model.referral.RefereeInfo
 import com.bd.deliverytiger.app.api.model.referral.ReferrerInfo
 import com.bd.deliverytiger.app.api.model.rider.RiderInfo
@@ -87,7 +88,7 @@ interface ApiInterfaceCore {
     suspend fun fetchDTOrderGenericLimit(): NetworkResponse<GenericResponse<GenericLimitData>, ErrorResponse>
 
     @GET("api/Settings/GetOfferCharge/{courierUserId}")
-    suspend fun fetchOfferCharge(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<Boolean>, ErrorResponse>
+    suspend fun fetchOfferCharge(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<OfferData>, ErrorResponse>
 
     @GET("api/Fetch/GetPickupLocations/{courierUserId}")
     suspend fun getPickupLocations(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<List<PickupLocation>>, ErrorResponse>

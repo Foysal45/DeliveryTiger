@@ -143,6 +143,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     private var isShipmentChargeFree: Boolean = false
     private var offerType: String = ""
+    private var relationType: String = ""
 
     private var deliveryType: String = ""
     private var orderType: String = "Only Delivery"
@@ -885,8 +886,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     private fun fetchOfferCharge() {
-        viewModel.fetchOfferCharge(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { flag ->
-            isShipmentChargeFree = flag
+        viewModel.fetchOfferCharge(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            isShipmentChargeFree = model.isDeliveryCharge
+            relationType = model.relationType
         })
     }
 
@@ -1063,7 +1065,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             payBreakableCharge, additionalNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge, packingName,
             payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,
             "android-${SessionManager.versionName}", true, collectionDistrictId, collectionThanaId,
-            deliveryDate, collectionDate, isOfficeDrop,payActualPackagePrice, timeSlotId, selectedCollectionSlotDate, offerType
+            deliveryDate, collectionDate, isOfficeDrop,payActualPackagePrice, timeSlotId, selectedCollectionSlotDate, offerType, relationType
         )
 
 
