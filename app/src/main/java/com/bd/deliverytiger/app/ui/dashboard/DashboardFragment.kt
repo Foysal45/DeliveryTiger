@@ -130,6 +130,7 @@ class DashboardFragment : Fragment() {
         viewModel.fetchMerchantCurrentAdvanceBalance(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { accoutBalance ->
             val balance = accoutBalance.balance
             viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, balance).observe(viewLifecycleOwner, Observer { balanceinfo ->
+                //val adjustBalance = balanceinfo.serviceCharge + balanceinfo.credit + balanceinfo.staticVal + balanceinfo.calculatedCollectionAmount
                 val adjustBalance = balanceinfo.adjustBalance
                 binding?.accountBalance?.text = "(৳ ${DigitConverter.toBanglaDigit(adjustBalance, true)})"
             })

@@ -2,22 +2,23 @@ package com.bd.deliverytiger.app.ui.login
 
 
 import android.app.ProgressDialog
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
+import androidx.appcompat.widget.AppCompatCheckBox
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.RetrofitSingletonAPI
 import com.bd.deliverytiger.app.api.endpoint.LoginInterface
+import com.bd.deliverytiger.app.api.endpoint.OtherApiInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.*
+import com.bd.deliverytiger.app.api.model.terms.TermsModel
 import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
 import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
@@ -28,59 +29,81 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class SignUpFragment : Fragment(), View.OnClickListener {
+class SignUpFragment() : Fragment(), View.OnClickListener {
 
-    companion object {
-        fun newInstance(): SignUpFragment {
-            val fragment = SignUpFragment()
-            return fragment
-        }
-
-        val tag = LoginFragment::class.java.name
-    }
-
-    private lateinit var mContext: Context
     private lateinit var etSignUpMobileNo: EditText
     private lateinit var etSignUpPassword: EditText
     private lateinit var etSignUpConfirmPassword: EditText
     private lateinit var referCodeET: EditText
     private lateinit var btnSignUp: Button
     private lateinit var tvLogin: TextView
+    private lateinit var paymentGroup: RadioGroup
+    private lateinit var instantPaymentLayout: LinearLayout
+    private lateinit var bkashNumberET: EditText
+    private lateinit var conditionTV: TextView
+    private lateinit var checkBox: AppCompatCheckBox
 
     private lateinit var loginInterface: LoginInterface
     private lateinit var checkReferrer: LoginInterface
+    private lateinit var otherApiInterface: OtherApiInterface
     private var progressDialog: ProgressDialog? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    private var isInstantPayment: Boolean = false
+    private var preferredPaymentCycle: String = ""
+
+    companion object {
+        fun newInstance(): SignUpFragment = SignUpFragment()
+        val tag: String = SignUpFragment::class.java.name
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_sign_up, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         etSignUpMobileNo = view.findViewById(R.id.etSignUpMobileNo)
         etSignUpPassword = view.findViewById(R.id.etSignUpPassword)
         etSignUpConfirmPassword = view.findViewById(R.id.etSignUpConfirmPassword)
         referCodeET = view.findViewById(R.id.referCodeET)
         btnSignUp = view.findViewById(R.id.btnSignUp)
         tvLogin = view.findViewById(R.id.tvLogin)
+        paymentGroup = view.findViewById(R.id.paymentGroup)
+        instantPaymentLayout = view.findViewById(R.id.instantPaymentLayout)
+        bkashNumberET = view.findViewById(R.id.bkashNumber)
+        conditionTV = view.findViewById(R.id.conditionTV)
+        checkBox = view.findViewById(R.id.checkBox)
 
         loginInterface = RetrofitSingletonAPI.getInstance(requireContext()).create(LoginInterface::class.java)
         checkReferrer = RetrofitSingleton.getInstance(requireContext()).create(LoginInterface::class.java)
+        otherApiInterface = RetrofitSingleton.getInstance(requireContext()).create(OtherApiInterface::class.java)
 
-        progressDialog = ProgressDialog(mContext)
+        progressDialog = ProgressDialog(requireContext())
         progressDialog?.setMessage("অপেক্ষা করুন")
         progressDialog?.setCancelable(false)
 
         initClickListener()
+        loadTerms()
     }
 
     private fun initClickListener() {
         btnSignUp.setOnClickListener(this)
         tvLogin.setOnClickListener(this)
+        paymentGroup.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.paymentWeekly -> {
+                    isInstantPayment = false
+                    instantPaymentLayout.visibility = View.GONE
+                    preferredPaymentCycle = "week"
+                }
+                R.id.paymentInstant -> {
+                    isInstantPayment = true
+                    instantPaymentLayout.visibility = View.VISIBLE
+                    preferredPaymentCycle = "instant"
+                }
+            }
+        }
     }
 
     override fun onClick(p0: View?) {
@@ -175,7 +198,28 @@ class SignUpFragment : Fragment(), View.OnClickListener {
 
     }
 
+    private fun loadTerms() {
+
+        otherApiInterface.loadTerms().enqueue(object : Callback<GenericResponse<TermsModel>> {
+            override fun onFailure(call: Call<GenericResponse<TermsModel>>, t: Throwable) {
+            }
+
+            override fun onResponse(call: Call<GenericResponse<TermsModel>>, response: Response<GenericResponse<TermsModel>>) {
+
+                if (response.isSuccessful && response.body() != null){
+                    if (response.body()!!.model != null){
+                        val termsConditions = response.body()!!.model.registerTermsConditions ?: "Terms and Conditions"
+                        //val termsConditions = "Terms and Conditions"
+                        conditionTV.text = HtmlCompat.fromHtml(termsConditions, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                    }
+                }
+            }
+
+        })
+    }
+
     private fun validate(): Boolean {
+        hideSoftKeyBoard(requireActivity())
         var go = true
         if (etSignUpMobileNo.text.toString().isEmpty()) {
             showShortToast(context, getString(R.string.write_phone_number))
@@ -199,7 +243,22 @@ class SignUpFragment : Fragment(), View.OnClickListener {
                 referCodeET.requestFocus()
             }
         }
-        hideSoftKeyBoard(requireActivity())
+        else if (preferredPaymentCycle.isEmpty()) {
+            showShortToast(context, "পেমেন্ট টাইপ সিলেক্ট করুন")
+            go = false
+        }
+        else if (isInstantPayment) {
+            val bkashNumber = bkashNumberET.text.toString().trim()
+            if (!Validator.isValidMobileNumber(bkashNumber) || bkashNumber.length < 11){
+                showShortToast(context, "সঠিক বিকাশ মোবাইল নম্বর লিখুন")
+                go = false
+                bkashNumberET.requestFocus()
+            }
+            if (!checkBox.isChecked) {
+                showShortToast(context, "শর্তাবলী মেনে রেজিস্ট্রেশন করুন")
+                go = false
+            }
+        }
         return go
     }
 
@@ -208,8 +267,9 @@ class SignUpFragment : Fragment(), View.OnClickListener {
         val mobile = etSignUpMobileNo.text.toString()
         val password = etSignUpPassword.text.toString()
         val referCode = referCodeET.text.toString()
+        val bkashNumber = bkashNumberET.text.toString().trim()
 
-        val fragment = SignUpOTPFragment.newInstance(mobile, password, referCode)
+        val fragment = SignUpOTPFragment.newInstance(mobile, password, referCode, bkashNumber, preferredPaymentCycle)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpOTPFragment.tag)
         ft?.commit()
@@ -223,11 +283,5 @@ class SignUpFragment : Fragment(), View.OnClickListener {
         //ft?.addToBackStack(LoginFragment.tag)
         ft?.commit()
     }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        this.mContext = context
-    }
-
 
 }

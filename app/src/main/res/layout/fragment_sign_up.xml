@@ -1,211 +1,344 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blur"
+    tools:context=".ui.login.LoginFragment">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/cd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/delivery_tiger_login_bg" />
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/blur"
-        tools:context=".ui.login.LoginFragment">
+        android:overScrollMode="never">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:layout_marginBottom="?attr/actionBarSize"
-            android:adjustViewBounds="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/cd"
-            app:srcCompat="@drawable/delivery_tiger_login_bg" />
-
-
-        <ImageView
-            android:id="@+id/ivLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="?attr/actionBarSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/cd"
-            app:srcCompat="@drawable/ic_logo" />
-
-        <TextView
-            android:id="@+id/loginTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/login_view_height"
-            android:text="রেজিস্ট্রেশন"
-            android:textColor="@color/black_80"
-            android:textSize="@dimen/login_title_size"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivLogo" />
-
-        <androidx.cardview.widget.CardView
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/loginTitle"
-            android:id="@+id/editTextLay"
-            android:layout_marginTop="24dp"
-            android:layout_marginStart="@dimen/left_right_margin"
-            android:layout_marginEnd="@dimen/left_right_margin"
-
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/loginTitle">
-
-            <EditText
-                android:id="@+id/etSignUpMobileNo"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_view_height"
-                android:background="@drawable/bg_login_top_edit_text"
-                android:hint="মোবাইল নম্বর লিখুন"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp"
-                android:textSize="@dimen/text_14"
-                android:textColor="@color/black_80"
-                android:inputType="phone"
+            <ImageView
+                android:id="@+id/ivLogo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:contentDescription="@string/cd"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/loginTitle"
-                android:importantForAutofill="no" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_logo" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/login_title_color" />
-
-            <EditText
-                android:id="@+id/etSignUpPassword"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_view_height"
-                android:background="@drawable/bg_login_middle_edit_text"
-                android:hint="পাসওয়ার্ড লিখুন"
-                android:inputType="textPassword"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp"
-                android:textSize="@dimen/text_14"
+            <TextView
+                android:id="@+id/loginTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/login_view_height"
+                android:text="রেজিস্ট্রেশন"
                 android:textColor="@color/black_80"
+                android:textSize="@dimen/login_title_size"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo"
-                android:importantForAutofill="no" />
+                app:layout_constraintTop_toBottomOf="@id/ivLogo" />
 
-            <View
+            <androidx.cardview.widget.CardView
+                android:id="@+id/editTextLay"
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/login_title_color" />
-
-            <EditText
-                android:id="@+id/etSignUpConfirmPassword"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_view_height"
-                android:background="@drawable/bg_login_bottom_edit_text"
-                android:hint="পুনরায় পাসওয়ার্ড লিখুন"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp"
-                android:textSize="@dimen/text_14"
-                android:textColor="@color/black_80"
-                android:inputType="textPassword"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/left_right_margin"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="@dimen/left_right_margin"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo"
-                android:importantForAutofill="no" />
+                app:layout_constraintTop_toBottomOf="@id/loginTitle">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/login_title_color" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/referCodeET"
+                    <EditText
+                        android:id="@+id/etSignUpMobileNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_view_height"
+                        android:background="@drawable/bg_login_top_edit_text"
+                        android:hint="মোবাইল নম্বর লিখুন"
+                        android:maxLength="11"
+                        android:importantForAutofill="no"
+                        android:inputType="phone"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
+                        app:drawableEndCompat="@drawable/ic_star"
+                        app:drawableTint="@color/red"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/loginTitle" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/login_title_color" />
+
+                    <EditText
+                        android:id="@+id/etSignUpPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_view_height"
+                        android:background="@drawable/bg_login_middle_edit_text"
+                        android:hint="পাসওয়ার্ড লিখুন"
+                        android:importantForAutofill="no"
+                        android:inputType="textPassword"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
+                        app:drawableEndCompat="@drawable/ic_star"
+                        app:drawableTint="@color/red"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo"
+                        android:maxLength="30"
+                        />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/login_title_color" />
+
+                    <EditText
+                        android:id="@+id/etSignUpConfirmPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_view_height"
+                        android:background="@drawable/bg_login_bottom_edit_text"
+                        android:hint="পুনরায় পাসওয়ার্ড লিখুন"
+                        android:importantForAutofill="no"
+                        android:inputType="textPassword"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
+                        app:drawableEndCompat="@drawable/ic_star"
+                        app:drawableTint="@color/red"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo"
+                        android:maxLength="30"
+                        />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/login_title_color" />
+
+                    <EditText
+                        android:id="@+id/referCodeET"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_view_height"
+                        android:background="@drawable/bg_login_bottom_edit_text"
+                        android:hint="রেফার কোড (অপশনাল)"
+                        android:importantForAutofill="no"
+                        android:inputType="phone"
+                        android:maxLength="11"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/login_title_color" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp"
+                        android:text="আপনি কিভাবে COD কালেশানের পেমেন্ট গ্রহণ করবেন?"
+                        android:textColor="@color/black_80"
+                        android:textSize="14sp"
+                        app:drawableEndCompat="@drawable/ic_star"
+                        app:drawableTint="@color/red"
+                        />
+
+                    <RadioGroup
+                        android:id="@+id/paymentGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingStart="12dp"
+                        android:paddingTop="0dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="8dp">
+
+                        <RadioButton
+                            android:id="@+id/paymentWeekly"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="4dp"
+                            android:text="সপ্তাহে একবার"
+                            android:textColor="@color/black_80"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/paymentInstant"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="4dp"
+                            android:text="ইন্সট্যান্ট পেমেন্ট"
+                            android:textColor="@color/black_80"
+                            android:textSize="14sp" />
+                    </RadioGroup>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/login_title_color" />
+
+                    <LinearLayout
+                        android:id="@+id/instantPaymentLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <EditText
+                            android:id="@+id/bkashNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/login_view_height"
+                            android:background="@drawable/bg_login_top_edit_text"
+                            android:hint="বিকাশ মোবাইল নম্বর লিখুন"
+                            android:importantForAutofill="no"
+                            android:inputType="phone"
+                            android:maxLength="11"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:paddingEnd="16dp"
+                            android:paddingBottom="8dp"
+                            android:textColor="@color/black_80"
+                            android:textSize="@dimen/text_14"
+                            app:drawableEndCompat="@drawable/ic_star"
+                            app:drawableTint="@color/red"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/loginTitle" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:background="@color/login_title_color" />
+
+                        <TextView
+                            android:id="@+id/conditionTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:paddingEnd="16dp"
+                            android:paddingBottom="8dp"
+                            android:textColor="@color/black_80"
+                            android:textSize="14sp"
+                            tools:text="Terms condition" />
+
+                        <androidx.appcompat.widget.AppCompatCheckBox
+                            android:id="@+id/checkBox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:drawablePadding="4dp"
+                            android:text="শর্তাবলী মেনে নিলাম"
+                            android:textColor="@color/black_80"
+                            android:textSize="14sp"
+                            app:drawableEndCompat="@drawable/ic_star"
+                            app:drawableTint="@color/red" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSignUp"
+                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/login_view_height"
-                android:background="@drawable/bg_login_bottom_edit_text"
-                android:hint="রেফার কোড (অপশনাল)"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp"
-                android:textSize="@dimen/text_14"
-                android:textColor="@color/black_80"
-                android:inputType="phone"
-                android:maxLength="11"
+                android:layout_height="56dp"
+                android:layout_marginStart="@dimen/left_right_margin"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="@dimen/left_right_margin"
+                android:backgroundTint="@color/colorPrimary"
+                android:padding="8dp"
+                android:text="রেজিস্ট্রেশন"
+                android:textColor="@color/white"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo"
-                android:importantForAutofill="no" />
-        </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                app:layout_constraintTop_toBottomOf="@id/editTextLay" />
 
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSignUp"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="@dimen/left_right_margin"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="@dimen/left_right_margin"
-            android:backgroundTint="@color/colorPrimary"
-            android:padding="8dp"
-            android:text="রেজিস্ট্রেশন"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editTextLay" />
+            <TextView
+                android:id="@+id/tvLoginForgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/left_right_margin"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:text="একাউন্ট আছে?"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/login_sign_up_tv_size"
+                app:layout_constraintEnd_toStartOf="@id/tvLogin"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnSignUp" />
 
+            <TextView
+                android:id="@+id/tvLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="@dimen/left_right_margin"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="লগইন করুন"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/login_sign_up_tv_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvLoginForgotPassword"
+                app:layout_constraintTop_toBottomOf="@id/btnSignUp" />
 
-        <TextView
-            android:id="@+id/tvLoginForgotPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/left_right_margin"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="8dp"
-            android:text="একাউন্ট আছে?"
-            android:textColor="@color/black_80"
-            android:textSize="@dimen/login_sign_up_tv_size"
-            app:layout_constraintEnd_toStartOf="@id/tvLogin"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnSignUp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/tvLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="@dimen/left_right_margin"
-            android:text="লগইন করুন"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/login_sign_up_tv_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tvLoginForgotPassword"
-            app:layout_constraintTop_toBottomOf="@id/btnSignUp" />
+    </androidx.core.widget.NestedScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

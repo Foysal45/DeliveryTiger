@@ -9,6 +9,10 @@ data class SignUpReqBody(
     var password: String,
     @SerializedName("referrer")
     var referrer: String = "",
+    @SerializedName("bkashNumber")
+    var bkashNumber: String = "",
+    @SerializedName("preferredPaymentCycle")
+    var preferredPaymentCycle: String = "",
 
     @SerializedName("userName")
     var userName: String = "user name",

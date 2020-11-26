@@ -14,6 +14,7 @@ import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 
 @SuppressLint("SetTextI18n")
 class BalanceLoadFragment: Fragment() {
@@ -49,10 +50,13 @@ class BalanceLoadFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, 0).observe(viewLifecycleOwner, Observer { model ->
-            if (model.serviceCharge > 0) {
+
+            val adjustBalance = model.serviceCharge + model.credit + model.staticVal
+            Timber.tag("adjustBalance").d( "serviceCharge: ${model.serviceCharge} + credit: ${model.credit} + staticVal: ${model.staticVal} = adjustBalance: $adjustBalance")
+            if (adjustBalance > 0) {
                 binding?.serviceChargeLayout?.visibility = View.VISIBLE
-                binding?.serviceChargeAmount?.text = "${DigitConverter.toBanglaDigit(model.serviceCharge, true)}৳"
-                binding?.amountET?.setText("${model.serviceCharge}")
+                binding?.serviceChargeAmount?.text = "${DigitConverter.toBanglaDigit(adjustBalance, true)}৳"
+                binding?.amountET?.setText("$adjustBalance")
             }
         })
 

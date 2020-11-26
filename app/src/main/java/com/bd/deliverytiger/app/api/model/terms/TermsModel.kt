@@ -7,5 +7,7 @@ data class TermsModel(
     @SerializedName("id")
     var id: Int = 0,
     @SerializedName("termsConditions")
-    var termsConditions: String? = ""
+    var termsConditions: String? = "",
+    @SerializedName("registerTermsConditions")
+    var registerTermsConditions: String? = ""
 )
