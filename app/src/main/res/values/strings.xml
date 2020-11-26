@@ -82,8 +82,8 @@
 
     <string name="cod_collection">COD - পরিশোধিত</string>
     <string name="service_bill_pay">বকেয়া সার্ভিস চার্জ (প্রি-পেইড)</string>
-    <string name="payment_statement">COD পেমেন্ট স্টেটমেন্ট</string>
-    <string name="bill_pay_history">পরিশোধিত সার্ভিস চার্জ স্টেটমেন্ট</string>
+    <string name="payment_statement">স্টেটমেন্ট - COD পেমেন্ট</string>
+    <string name="bill_pay_history">স্টেটমেন্ট - পরিশোধিত সার্ভিস চার্জ</string>
     <string name="termsCondition">শর্তাবলী (Terms &amp; Conditions)</string>
     <string name="expressService">এক্সপ্রেস ও নেক্সট ডে সার্ভিস</string>
     <string name="nearby_hub">নিকটস্থ হাব</string>

@@ -307,14 +307,44 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 list.forEach { hubInfo ->
                     val distance = floatArrayOf(0.0f)
                     Location.distanceBetween(currentLatitude, currentLongitude, hubInfo.latitude?.toDoubleOrNull() ?: 0.0, hubInfo.longitude?.toDoubleOrNull() ?: 0.0, distance)
-                    if (distance.isNotEmpty() && distance.first() > 10.0) {
+                    if (distance.isNotEmpty()) {
                         distanceList.add(DistanceMapping(distance.first(), hubInfo))
                     }
                 }
                 distanceList.sortBy { it.distance }
+                Timber.d("distanceList $distanceList")
                 if (distanceList.isNotEmpty()) {
                     drawHubLocationOnMap(pickUpModel, distanceList.first().hubModel)
                 }
+
+                // Show all hub location on map
+                /*val bound = LatLngBounds.builder()
+                distanceList.forEach {
+                    val hubModel = it.hubModel
+                    showCurrentMarker()
+                    val hubName = hubModel?.name ?: "DT Hub"
+                    val address = hubModel?.hubAddress ?: ""
+                    var hubLatLng: LatLng? = null
+                    if (isValidCoordinate(hubModel?.latitude) && isValidCoordinate(hubModel?.longitude)) {
+                        hubLatLng = LatLng(hubModel.latitude?.toDouble() ?: 0.0, hubModel?.longitude?.toDouble() ?: 0.0)
+                    }
+                    val hubMarker = map?.addMarker(
+                        MarkerOptions()
+                            .position(hubLatLng!!)
+                            .title(hubName)
+                            .snippet(address)
+                            .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_home_circle))
+                    )
+                    hubMarker?.showInfoWindow()
+                    bound.include(hubLatLng)
+                }
+                try {
+                    val cameraUpdateBounds = CameraUpdateFactory.newLatLngBounds(bound.build(), 200)
+                    map?.moveCamera(cameraUpdateBounds)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }*/
+
             })
         } else {
             viewModel.fetchHubByPickupLocation(pickUpModel).observe(viewLifecycleOwner, Observer { hubModel ->

@@ -11,14 +11,14 @@
             android:title="@string/cod_collection" />
 
         <item
-            android:id="@+id/nav_payment_history"
-            android:icon="@drawable/ic_history_cod"
-            android:title="@string/payment_statement" />
-
-        <item
             android:id="@+id/nav_bill_pay"
             android:icon="@drawable/ic_service_charge"
             android:title="@string/service_bill_pay" />
+
+        <item
+            android:id="@+id/nav_payment_history"
+            android:icon="@drawable/ic_history_cod"
+            android:title="@string/payment_statement" />
 
         <item
             android:id="@+id/nav_bill_pay_history"

@@ -75,8 +75,8 @@ class PickupLocationBottomSheet: BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (isHub) {
-            binding?.nearbyHub?.visibility = View.VISIBLE
-            binding?.nearbyHub?.setOnClickListener {
+            binding?.nearbyHubBtn?.visibility = View.VISIBLE
+            binding?.nearbyHubBtn?.setOnClickListener {
                 onNearByHubClicked?.invoke()
             }
         }

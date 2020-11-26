@@ -129,12 +129,10 @@ class DashboardFragment : Fragment() {
     private fun fetchCurrentBalance() {
         viewModel.fetchMerchantCurrentAdvanceBalance(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { accoutBalance ->
             val balance = accoutBalance.balance
-            if (balance > 0) {
-                viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, balance).observe(viewLifecycleOwner, Observer { balanceinfo ->
-                    val adjustBalance = balanceinfo.adjustBalance
-                    binding?.accountBalance?.text = "(৳ ${DigitConverter.toBanglaDigit(adjustBalance, true)})"
-                })
-            }
+            viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, balance).observe(viewLifecycleOwner, Observer { balanceinfo ->
+                val adjustBalance = balanceinfo.adjustBalance
+                binding?.accountBalance?.text = "(৳ ${DigitConverter.toBanglaDigit(adjustBalance, true)})"
+            })
         })
     }
 
