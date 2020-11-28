@@ -28,6 +28,7 @@ import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadFragment
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
+import com.bd.deliverytiger.app.ui.collection_history.CollectionHistoryFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.complain.ComplainFragment
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
@@ -81,6 +82,8 @@ class DashboardFragment : Fragment() {
     private var netAmount: Int = 0
     private var availability: Boolean = false
     private var availabilityMessage: String = ""
+
+    private var collectionToday: Int = 0
 
 
     private var isBannerEnable: Boolean = false
@@ -242,6 +245,14 @@ class DashboardFragment : Fragment() {
                 alert("নির্দেশনা", availabilityMessage, true, "ঠিক আছে", "ক্যানসেল") {
                 }.show()
                 //binding?.swipeRefresh?.snackbar(availabilityMessage, Snackbar.LENGTH_INDEFINITE, "ঠিক আছে"){}?.show()
+            }
+        }
+
+        binding?.collectionLayout?.setOnClickListener {
+            if (collectionToday > 0) {
+                addFragment(CollectionHistoryFragment.newInstance(), CollectionHistoryFragment.tag)
+            } else {
+                context?.toast("পর্যাপ্ত তথ্য নেই")
             }
         }
 
@@ -437,9 +448,10 @@ class DashboardFragment : Fragment() {
 
         viewModel.fetchCollection(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
 
+            collectionToday = model.count
             val currentDate = "${DigitConverter.toBanglaDigit(today)} ${DigitConverter.banglaMonth[currentMonth]}"
             binding?.msg3?.text = "আজকে ($currentDate) পার্সেল দিয়েছি"
-            binding?.amount3?.text = "${DigitConverter.toBanglaDigit(model.count.toString())}টি"
+            binding?.amount3?.text = "${DigitConverter.toBanglaDigit(collectionToday.toString())}টি"
 
             //model.count = 0
             if (model.count == 0) {

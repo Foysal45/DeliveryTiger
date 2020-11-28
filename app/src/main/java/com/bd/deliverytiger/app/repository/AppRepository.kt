@@ -148,4 +148,6 @@ class AppRepository(
 
     suspend fun fetchReferrerInfo() = apiInterfaceCore.fetchReferrerInfo()
 
+    suspend fun fetchCollectionHistory(courierUserId: Int) = apiInterfaceCore.fetchCollectionHistory(courierUserId)
+
 }

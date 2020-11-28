@@ -43,6 +43,7 @@ import com.bd.deliverytiger.app.ui.bill_pay_history.ServiceBillPayHistoryFragmen
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
 import com.bd.deliverytiger.app.ui.chat.ChatActivity
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
+import com.bd.deliverytiger.app.ui.collection_history.CollectionHistoryFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.complain.ComplainFragment
 import com.bd.deliverytiger.app.ui.dashboard.DashboardFragment
@@ -336,7 +337,8 @@ class HomeActivity : AppCompatActivity(),
                 currentFragment is BalanceLoadFragment ||
                 currentFragment is ComplainFragment ||
                 currentFragment is UnpaidCODFragment ||
-                currentFragment is ReferralFragment
+                currentFragment is ReferralFragment ||
+                currentFragment is CollectionHistoryFragment
             ) {
                 addProductBtnVisibility(false)
             } else {
@@ -439,6 +441,9 @@ class HomeActivity : AppCompatActivity(),
                     currentFragment.onResume()
                 }
                 is ReferralFragment -> {
+                    currentFragment.onResume()
+                }
+                is CollectionHistoryFragment -> {
                     currentFragment.onResume()
                 }
             }

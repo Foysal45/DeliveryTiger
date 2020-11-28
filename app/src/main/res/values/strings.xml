@@ -87,6 +87,7 @@
     <string name="termsCondition">শর্তাবলী (Terms &amp; Conditions)</string>
     <string name="expressService">এক্সপ্রেস ও নেক্সট ডে সার্ভিস</string>
     <string name="nearby_hub">নিকটস্থ হাব</string>
+    <string name="collection_history">আজকের কালেকশন</string>
     <string name="referral">রেফার করুন</string>
     <string name="orderType1">শুধু ডেলিভারি\n(প্রি-পেইড)</string>
     <string name="orderType2">ডেলিভারি+টাকা কালেকশন\n(COD)</string>

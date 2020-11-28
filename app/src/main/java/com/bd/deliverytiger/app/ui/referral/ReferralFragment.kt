@@ -123,7 +123,7 @@ class ReferralFragment() : Fragment() {
                 val shortLink = shortDynamicLink.shortLink
                 val flowchartLink = shortDynamicLink.previewLink //flowchart link is a debugging URL
                 Timber.d("createDynamicLink shortLink: $shortLink flowchartLink: $flowchartLink")
-                val msg = "সারাদেশে ৫ টি ফ্রি ডেলিভারির সুযোগ নিন!\nনিচের লিংকে ক্লিক করে এখনই ডেলিভারি টাইগারে রেজিস্ট্রেশন করুন।\n${shortLink.toString()}\nঅফারটি আগামী ৩০ দিনের জন্য প্রযোজ্য"
+                val msg = "সারাদেশে ৫ টি ফ্রি ডেলিভারির সুযোগ নিন!\n\nনিচের লিংকে ক্লিক করে এখনই ডেলিভারি টাইগারে রেজিস্ট্রেশন করুন।\n${shortLink.toString()}\n\nঅফারটি আগামী ৩০ দিনের জন্য প্রযোজ্য"
                 shareContent(msg)
 
             }.addOnFailureListener {

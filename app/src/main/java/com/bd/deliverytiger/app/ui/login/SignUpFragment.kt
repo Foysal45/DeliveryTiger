@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -41,7 +40,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     private lateinit var instantPaymentLayout: LinearLayout
     private lateinit var bkashNumberET: EditText
     private lateinit var conditionTV: TextView
-    private lateinit var checkBox: AppCompatCheckBox
+    private lateinit var referTitle: TextView
 
     private lateinit var loginInterface: LoginInterface
     private lateinit var checkReferrer: LoginInterface
@@ -73,7 +72,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         instantPaymentLayout = view.findViewById(R.id.instantPaymentLayout)
         bkashNumberET = view.findViewById(R.id.bkashNumber)
         conditionTV = view.findViewById(R.id.conditionTV)
-        checkBox = view.findViewById(R.id.checkBox)
+        referTitle = view.findViewById(R.id.referTitle)
 
         loginInterface = RetrofitSingletonAPI.getInstance(requireContext()).create(LoginInterface::class.java)
         checkReferrer = RetrofitSingleton.getInstance(requireContext()).create(LoginInterface::class.java)
@@ -94,14 +93,24 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
             when (checkedId) {
                 R.id.paymentWeekly -> {
                     isInstantPayment = false
-                    instantPaymentLayout.visibility = View.GONE
                     preferredPaymentCycle = "week"
+                    bkashNumberET.visibility = View.GONE
+                    instantPaymentLayout.visibility = View.GONE
                 }
                 R.id.paymentInstant -> {
                     isInstantPayment = true
-                    instantPaymentLayout.visibility = View.VISIBLE
                     preferredPaymentCycle = "instant"
+                    bkashNumberET.visibility = View.VISIBLE
+                    instantPaymentLayout.visibility = View.VISIBLE
                 }
+            }
+        }
+        referTitle.setOnClickListener {
+            if (referCodeET.visibility == View.GONE) {
+                referCodeET.visibility = View.VISIBLE
+            } else {
+                referCodeET.visibility = View.GONE
+                referCodeET.text.clear()
             }
         }
     }
@@ -253,10 +262,6 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
                 showShortToast(context, "সঠিক বিকাশ মোবাইল নম্বর লিখুন")
                 go = false
                 bkashNumberET.requestFocus()
-            }
-            if (!checkBox.isChecked) {
-                showShortToast(context, "শর্তাবলী মেনে রেজিস্ট্রেশন করুন")
-                go = false
             }
         }
         return go

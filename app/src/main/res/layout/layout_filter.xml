@@ -54,7 +54,7 @@
             android:id="@+id/tvDetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ফিল্টার"
+            android:text="সার্চ"
             android:textColor="@color/black_80"
             android:textSize="@dimen/text_14"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -69,8 +69,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_search"
+            app:srcCompat="@drawable/order_track_search"
             android:contentDescription="@string/cd"
+            app:tint="@color/black_80"
             />
 
 

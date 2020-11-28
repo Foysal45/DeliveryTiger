@@ -83,7 +83,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private lateinit var totalLayout: LinearLayout
     private lateinit var deliveryDatePicker: TextView
     private lateinit var collectionDatePicker: TextView
+    private lateinit var hubDropLayout: ConstraintLayout
     private lateinit var checkOfficeDrop: AppCompatCheckBox
+    private lateinit var hubDropMsg2: TextView
     private lateinit var spinnerCollectionLocation: AppCompatSpinner
     private lateinit var orderPlaceBtn: TextView
 
@@ -215,7 +217,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         totalLayout = view.findViewById(R.id.payment_details)
         deliveryDatePicker = view.findViewById(R.id.deliveryDatePicker)
         collectionDatePicker = view.findViewById(R.id.collectionDatePicker)
+        hubDropLayout = view.findViewById(R.id.hubDropLayout)
         checkOfficeDrop = view.findViewById(R.id.checkOfficeDrop)
+        hubDropMsg2 = view.findViewById(R.id.hubDropMsg2)
         spinnerCollectionLocation = view.findViewById(R.id.spinnerCollectionLocation)
         orderPlaceBtn = view.findViewById(R.id.orderPlaceBtn)
 
@@ -224,9 +228,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         etAriaPostOffice.setOnClickListener(this)
         orderPlaceBtn.setOnClickListener(this)
 
-        fetchOfferCharge()
+        // Fetch Charge Data
         getBreakableCharge()
         getCollectionCharge()
+        fetchOfferCharge()
         getPackagingCharge()
         getPickupLocation()
         fetchDTOrderGenericLimit()
@@ -265,7 +270,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 0 -> {
                     deliveryDatePicker.visibility = View.GONE
                     collectionDatePicker.visibility = View.GONE
-                    checkOfficeDrop.visibility = View.GONE
+                    hubDropLayout.visibility = View.GONE
                     checkOfficeDrop.isChecked = false
                     deliveryDate = ""
                     deliveryDatePicker.text = ""
@@ -276,7 +281,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 1 -> {
                     deliveryDatePicker.visibility = View.VISIBLE
                     collectionDatePicker.visibility = View.VISIBLE
-                    checkOfficeDrop.visibility = View.GONE
+                    hubDropLayout.visibility = View.GONE
                     checkOfficeDrop.isChecked = false
                     deliveryDate = ""
                     deliveryDatePicker.text = ""
@@ -287,7 +292,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 2 -> {
                     deliveryDatePicker.visibility = View.GONE
                     collectionDatePicker.visibility = View.GONE
-                    checkOfficeDrop.visibility = View.VISIBLE
+                    hubDropLayout.visibility = View.VISIBLE
                     deliveryDate = ""
                     deliveryDatePicker.text = ""
                     collectionDate = ""
@@ -357,6 +362,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             }
         }
 
+        hubDropLayout.setOnClickListener {
+            checkOfficeDrop.toggle()
+        }
         checkOfficeDrop.setOnCheckedChangeListener { buttonView, isChecked ->
             isOfficeDrop = isChecked
             calculateTotalPrice()
@@ -773,6 +781,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private fun getCollectionCharge() {
         viewModel.getCollectionCharge(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { charge ->
             collectionChargeApi = charge.toDouble()
+
+            val hubDropMsg = "( <font color='#f05a2b'>${DigitConverter.toBanglaDigit(collectionChargeApi.toInt())}</font> টাকা সেভ করুন )"
+            hubDropMsg2.text = HtmlCompat.fromHtml(hubDropMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
         })
     }
 
@@ -1010,10 +1021,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             payCODCharge = 0.0
         }
 
-        if (isOfficeDrop) {
-            payCollectionCharge = 0.0
-        } else {
-            payCollectionCharge = collectionChargeApi
+        if (isCollectionLocationSelected) {
+            if (isOfficeDrop) {
+                payCollectionCharge = 0.0
+            } else {
+                payCollectionCharge = collectionChargeApi
+            }
         }
 
         //val payReturnCharge = SessionManager.returnCharge

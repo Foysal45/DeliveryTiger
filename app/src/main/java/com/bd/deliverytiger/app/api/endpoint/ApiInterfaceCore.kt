@@ -14,6 +14,7 @@ import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
+import com.bd.deliverytiger.app.api.model.collection_history.CollectionData
 import com.bd.deliverytiger.app.api.model.config.BannerResponse
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
@@ -150,10 +151,14 @@ interface ApiInterfaceCore {
     @GET("api/Dashboard/GetMerchantBalanceInfo/{courierUserId}/{amount}")
     suspend fun fetchMerchantBalanceInfo(@Path("courierUserId") courierUserId: Int, @Path("amount") amount: Int): NetworkResponse<GenericResponse<BalanceInfo>, ErrorResponse>
 
-    @GET("/api/Fetch/GetReferee")
+    @GET("api/Fetch/GetReferee")
     suspend fun fetchRefereeInfo(): NetworkResponse<GenericResponse<RefereeInfo>, ErrorResponse>
 
-    @GET("/api/Fetch/GetReferrer")
+    @GET("api/Fetch/GetReferrer")
     suspend fun fetchReferrerInfo(): NetworkResponse<GenericResponse<ReferrerInfo>, ErrorResponse>
+
+    @GET("api/Dashboard/GetCollectionHistory/{courierUserId}")
+    suspend fun fetchCollectionHistory(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<List<CollectionData>>, ErrorResponse>
+
 
 }

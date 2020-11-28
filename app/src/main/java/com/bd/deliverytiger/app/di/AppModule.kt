@@ -14,6 +14,7 @@ import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillViewModel
 import com.bd.deliverytiger.app.ui.bill_pay_history.ServiceBillHistoryViewModel
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeViewModel
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionViewModel
+import com.bd.deliverytiger.app.ui.collection_history.CollectionHistoryViewModel
 import com.bd.deliverytiger.app.ui.collector_tracking.MapViewModel
 import com.bd.deliverytiger.app.ui.complain.ComplainViewModel
 import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
@@ -74,5 +75,6 @@ val appModule = module {
     viewModel { BalanceLoadViewModel(get()) }
     viewModel { UnpaidCODViewModel(get()) }
     viewModel { ReferralViewModel(get()) }
+    viewModel { CollectionHistoryViewModel(get()) }
 
 }
