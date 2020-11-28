@@ -35,6 +35,7 @@ import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
 import com.bd.deliverytiger.app.ui.quick_order.QuickOrderFragment
+import com.bd.deliverytiger.app.ui.referral.ReferralFragment
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
@@ -254,6 +255,10 @@ class DashboardFragment : Fragment() {
             } else {
                 context?.toast("পর্যাপ্ত তথ্য নেই")
             }
+        }
+
+        binding?.referBtn?.setOnClickListener {
+            addFragment(ReferralFragment.newInstance(), ReferralFragment.tag)
         }
 
        /* binding?.dateRangePicker?.setOnClickListener {
