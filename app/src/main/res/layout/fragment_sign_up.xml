@@ -301,6 +301,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/referTitle"
                     app:layout_constraintStart_toEndOf="@id/referTitle"
+                    android:rotation="90"
                     />
 
                 <View

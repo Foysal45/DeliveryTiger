@@ -3,6 +3,8 @@ package com.bd.deliverytiger.app.ui.login
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -102,6 +104,9 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
                     preferredPaymentCycle = "instant"
                     bkashNumberET.visibility = View.VISIBLE
                     instantPaymentLayout.visibility = View.VISIBLE
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        bkashNumberET.requestFocus()
+                    }, 200L)
                 }
             }
         }

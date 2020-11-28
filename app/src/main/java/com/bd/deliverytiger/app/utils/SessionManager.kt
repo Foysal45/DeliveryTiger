@@ -334,6 +334,15 @@ object SessionManager {
         }
     }
 
+    var isPickupLocationAdded: Boolean
+        get() {
+            return pref.getBoolean("isPickupLocationAdded", false)
+        }
+        set(value) {
+            pref.edit {
+                putBoolean("isPickupLocationAdded", value)
+            }
+        }
 
     var popupShowCount: Int
         get() {

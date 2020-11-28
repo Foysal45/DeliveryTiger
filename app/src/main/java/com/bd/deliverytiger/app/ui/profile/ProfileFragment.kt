@@ -381,6 +381,12 @@ class ProfileFragment : Fragment() {
             return false
         }*/
 
+        if (!SessionManager.isPickupLocationAdded) {
+            context?.toast("কমপক্ষে একটি পিকআপ লোকেশন অ্যাড করুন")
+            binding?.nestedScrollView?.fullScroll(View.FOCUS_DOWN)
+            return false
+        }
+
         return true
     }
 
@@ -587,9 +593,11 @@ class ProfileFragment : Fragment() {
                 //setUpCollectionSpinner(list, null, 1)
                 pickupAddressAdapter.initList(list)
                 binding?.emptyView?.visibility = View.GONE
+                SessionManager.isPickupLocationAdded = true
             } else {
                 //getDistrictThanaOrAria(14, 4)
                 binding?.emptyView?.visibility = View.VISIBLE
+                SessionManager.isPickupLocationAdded = false
             }
 
             if (isPickupLocation) {

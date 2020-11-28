@@ -48,14 +48,14 @@ class ReferralFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.fetchRefereeInfo().observe(viewLifecycleOwner, Observer { model ->
-            val referrerOrder = model.refereeOrder
-            binding?.referCount?.text = DigitConverter.toBanglaDigit(referrerOrder)
-            binding?.msg2?.text = "(প্রতি সফল রেফারের জন্য ${DigitConverter.toBanglaDigit(referrerOrder)} টি)"
+            refereeOrder = model.refereeOrder
+            binding?.referCount1?.text = "${DigitConverter.toBanglaDigit(refereeOrder)}টি ফ্রি"
         })
 
         viewModel.fetchReferrerInfo().observe(viewLifecycleOwner, Observer { model ->
-            refereeOrder = model.referrerOrder
-            binding?.referCount1?.text = "${DigitConverter.toBanglaDigit(refereeOrder)}টি ফ্রি"
+            val referrerOrder = model.referrerOrder
+            binding?.referCount?.text = DigitConverter.toBanglaDigit(referrerOrder)
+            binding?.msg2?.text = "(প্রতি সফল রেফারের জন্য ${DigitConverter.toBanglaDigit(referrerOrder)} টি)"
         })
 
         binding?.referBtn?.setOnClickListener {

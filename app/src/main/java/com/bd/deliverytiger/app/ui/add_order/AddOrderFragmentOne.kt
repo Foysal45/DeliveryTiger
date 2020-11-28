@@ -173,6 +173,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var selectedCollectionSlotDate: String = ""
     private var timeSlotId: Int = 0
 
+    private var isPickupLocationListAvailable: Boolean = false
+
     private val viewModel: AddOrderViewModel by inject()
 
     companion object {
@@ -469,6 +471,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             if(!isMissing) isMissing = true
             missingValues += "ইমেইল "
         }
+        if (!SessionManager.isPickupLocationAdded) {
+            if(!isMissing) isMissing = true
+            missingValues += "পিকআপ লোকেশন "
+        }
         missingValues += "যোগ করুন"
         if (isMissing) {
             alert("নির্দেশনা", missingValues, false) {
@@ -477,6 +483,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 }
             }.show()
             timber.log.Timber.d("missingValues: $missingValues")
+        }
+
+        if (!isPickupLocationListAvailable) {
+            getPickupLocation()
         }
 
         return !isMissing
@@ -492,6 +502,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
         (activity as HomeActivity).setToolbarTitle("নতুন অর্ডার")
+        isProfileComplete = checkProfileData()
     }
 
     override fun onClick(p0: View?) {
@@ -875,9 +886,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             if (list.isNotEmpty()) {
                 setUpCollectionSpinner(list, null, 1)
                 collectionAddressET.visibility = View.GONE
+                isPickupLocationListAvailable = true
             } else {
                 getDistrictThanaOrAria(14)
                 collectionAddressET.visibility = View.VISIBLE
+                isPickupLocationListAvailable = false
             }
         })
     }
