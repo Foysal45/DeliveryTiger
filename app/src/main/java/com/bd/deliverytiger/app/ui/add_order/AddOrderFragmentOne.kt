@@ -548,8 +548,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }
     }
 
-
-
     private fun getAllViewData() {
         customerName = etCustomerName.text.toString()
         mobileNo = etAddOrderMobileNo.text.toString()
@@ -887,10 +885,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 setUpCollectionSpinner(list, null, 1)
                 collectionAddressET.visibility = View.GONE
                 isPickupLocationListAvailable = true
+                SessionManager.isPickupLocationAdded = true
             } else {
                 getDistrictThanaOrAria(14)
                 collectionAddressET.visibility = View.VISIBLE
                 isPickupLocationListAvailable = false
+                SessionManager.isPickupLocationAdded = false
             }
         })
     }
@@ -1186,8 +1186,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             try {
                 payActualPackagePrice = payActualPackagePriceText.toDouble()
                 if (isCollection) {
-                    if (payActualPackagePrice > payCollectionAmount) {
-                        context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস কালেকশন অ্যামাউন্ট থেকে বেশি হতে পারবে না")
+                    if (payCollectionAmount > payActualPackagePrice) {
+                        context?.showToast("কালেকশন অ্যামাউন্ট অ্যাকচুয়াল প্যাকেজ প্রাইস থেকে বেশি হতে পারবে না")
                         return false
                     }
                 } else {

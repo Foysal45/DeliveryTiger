@@ -52,11 +52,6 @@
             android:title="ডেলিভারি চার্জ ক্যালকুলেটর" />
 
         <item
-            android:id="@+id/nav_nearby_hub"
-            android:icon="@drawable/ic_hub"
-            android:title="@string/nearby_hub" />
-
-        <item
             android:id="@+id/nav_express_service"
             android:icon="@drawable/ic_express"
             android:title="@string/expressService" />
@@ -147,6 +142,13 @@
             android:icon="@drawable/ic_map"
             android:title="কালেক্টর ট্র্যাকিং"
             android:visible="false" />
+
+        <item
+            android:id="@+id/nav_nearby_hub"
+            android:icon="@drawable/ic_hub"
+            android:title="@string/nearby_hub"
+            android:visible="false"
+            />
 
     </group>
 

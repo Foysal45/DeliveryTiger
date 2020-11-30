@@ -13,7 +13,6 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentReferralBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
-import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.ktx.*
 import com.google.firebase.ktx.Firebase
 import org.koin.android.ext.android.inject
@@ -59,7 +58,7 @@ class ReferralFragment() : Fragment() {
         })
 
         binding?.referBtn?.setOnClickListener {
-            shortDynamicLink()
+            buildDynamicLink()
         }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
@@ -81,56 +80,62 @@ class ReferralFragment() : Fragment() {
         })
     }
 
-    private fun shareContent(msg: String) {
-        Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, msg)
-        }.also {
-            startActivity(it)
-        }
-    }
 
-    private fun shortDynamicLink() {
-
-        buildDynamicLink("")
-
-    }
-
-    private fun buildDynamicLink(image: String?) {
+    private fun buildDynamicLink() {
 
         val dialog = progressDialog("অপেক্ষা করুন, শেয়ার লিংক তৈরি হচ্ছে")
         dialog.show()
-        val uri = Uri.parse("https://deliverytiger.com.bd/sign-up")
-        //val uri = Uri.parse("https://m.ajkerdeal.com/videoshopping/746")
+
+        val referralUrl = "https://deliverytiger.com.bd/sign-up?referrer=${SessionManager.mobile}"
+        val uri = Uri.parse(referralUrl)
         val dynamicLink = Firebase.dynamicLinks.dynamicLink {
             link = uri
-            domainUriPrefix = "https://deliverytiger.page.link"
+            domainUriPrefix = AppConstant.DOMAIN_URL_PREFIX
             androidParameters {
-                DynamicLink.AndroidParameters.Builder().setFallbackUrl(uri).build()
-            }
-            socialMetaTagParameters {
-                DynamicLink.SocialMetaTagParameters.Builder()
-                    .setTitle("ডেলিভারি টাইগার")
-                    .setDescription("রেজিস্ট্রেশন করুন এখনই")
-                    .setImageUrl(Uri.parse("https://static.ajkerdeal.com/images/dt/logo_dt.png"))
-                    .build()
+                minimumVersion = 21
+                fallbackUrl = uri
             }
             googleAnalyticsParameters {
-                DynamicLink.GoogleAnalyticsParameters.Builder().setSource("AndroidApp").build()
+                source = "AndroidApp"
             }
-            buildShortDynamicLink().addOnSuccessListener {shortDynamicLink ->
+            socialMetaTagParameters {
+                title = "ডেলিভারি টাইগার"
+                description = "বাংলাদেশের প্রথম অনলাইন কুরিয়ার এবং পার্সেল ডেলিভারি মার্কেটপ্লেস"
+                imageUrl = Uri.parse("https://static.ajkerdeal.com/images/dt/logo_dt_150.png")
+            }
+            navigationInfoParameters {
+                forcedRedirectEnabled = true
+            }
+            buildShortDynamicLink().addOnSuccessListener { shortDynamicLink ->
                 dialog.dismiss()
                 val shortLink = shortDynamicLink.shortLink
                 val flowchartLink = shortDynamicLink.previewLink //flowchart link is a debugging URL
                 Timber.d("createDynamicLink shortLink: $shortLink flowchartLink: $flowchartLink")
-                val msg = "সারাদেশে ৫ টি ফ্রি ডেলিভারির সুযোগ নিন!\n\nনিচের লিংকে ক্লিক করে এখনই ডেলিভারি টাইগারে রেজিস্ট্রেশন করুন।\n${shortLink.toString()}\n\nঅফারটি আগামী ৩০ দিনের জন্য প্রযোজ্য"
-                shareContent(msg)
+
+                generateShareContent(shortLink.toString())
 
             }.addOnFailureListener {
                 dialog.dismiss()
                 Timber.d(it)
                 context?.toast("কোথাও কোনো সমস্যা হচ্ছে")
             }
+        }
+
+        //generateShareContent(dynamicLink.uri.toString())
+        //dialog.dismiss()
+    }
+
+    private fun generateShareContent(url: String) {
+        val msg = "সারাদেশে ৫ টি ফ্রি ডেলিভারির সুযোগ নিন!\n\nনিচের লিংকে ক্লিক করে এখনই ডেলিভারি টাইগারে রেজিস্ট্রেশন করুন।\n$url\n\nঅফারটি আগামী ৩০ দিনের জন্য প্রযোজ্য।"
+        shareContent(msg)
+    }
+
+    private fun shareContent(msg: String) {
+        Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, msg)
+        }.also {
+            startActivity(it)
         }
     }
 
