@@ -135,7 +135,7 @@ class ReferralFragment() : Fragment() {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, msg)
         }.also {
-            startActivity(it)
+            activity?.startActivity(it)
         }
     }
 

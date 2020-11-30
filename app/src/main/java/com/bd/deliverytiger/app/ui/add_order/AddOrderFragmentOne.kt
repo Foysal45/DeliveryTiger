@@ -422,7 +422,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        isProfileComplete = checkProfileData()
         viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, 0).observe(viewLifecycleOwner, Observer { model ->
             val adjustBalance = model.serviceCharge + model.credit + model.staticVal + model.calculatedCollectionAmount
             timber.log.Timber.tag("adjustBalance").d( "serviceCharge: ${model.serviceCharge} + credit: ${model.credit} + staticVal: ${model.staticVal} + calculatedCollectionAmount: ${model.calculatedCollectionAmount} = adjustBalance: $adjustBalance")
@@ -475,6 +474,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             if(!isMissing) isMissing = true
             missingValues += "পিকআপ লোকেশন "
         }
+
         missingValues += "যোগ করুন"
         if (isMissing) {
             alert("নির্দেশনা", missingValues, false) {
@@ -502,7 +502,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
         (activity as HomeActivity).setToolbarTitle("নতুন অর্ডার")
-        isProfileComplete = checkProfileData()
+        //isProfileComplete = checkProfileData()
     }
 
     override fun onClick(p0: View?) {
@@ -892,6 +892,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 isPickupLocationListAvailable = false
                 SessionManager.isPickupLocationAdded = false
             }
+            isProfileComplete = checkProfileData()
         })
     }
 

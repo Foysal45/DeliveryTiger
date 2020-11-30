@@ -1,7 +1,6 @@
 package com.bd.deliverytiger.app.ui.web_view
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Bundle
@@ -110,7 +109,9 @@ class WebViewFragment : Fragment() {
         override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
             super.onReceivedSslError(view, handler, error)
 
-            val builder = AlertDialog.Builder(requireContext())
+            handler?.proceed()
+
+            /*val builder = AlertDialog.Builder(requireContext())
             var message = when (error?.primaryError) {
                 SslError.SSL_UNTRUSTED -> "The certificate authority is not trusted."
                 SslError.SSL_EXPIRED -> "The certificate has expired."
@@ -125,7 +126,7 @@ class WebViewFragment : Fragment() {
             builder.setPositiveButton("continue") { _, _ -> handler?.proceed() }
             builder.setNegativeButton("cancel") { _, _ -> handler?.cancel() }
             val dialog = builder.create()
-            dialog.show()
+            dialog.show()*/
         }
     }
 

@@ -65,7 +65,7 @@ class LoginActivity : AppCompatActivity() {
                 return
             }
             doubleBackToExitPressedOnce = true
-            Toast.makeText(this, "Press again to Exit", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "অ্যাপটি বন্ধ করতে আবার প্রেস করুন", Toast.LENGTH_SHORT).show()
             Handler().postDelayed({
                 doubleBackToExitPressedOnce = false
             }, 2000L)

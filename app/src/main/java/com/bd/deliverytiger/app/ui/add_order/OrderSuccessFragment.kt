@@ -77,6 +77,8 @@ class OrderSuccessFragment : Fragment() {
             tvSuccessOrderId.text ="# ${orderResponse!!.courierOrdersId}"
             tvSuccessOrderTitle.text =orderResponse!!.collectionName
             tvSuccessOrderAddress.text = getAddress(orderResponse)
+
+            timeLimitAlert()
         }
 
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
@@ -112,7 +114,6 @@ class OrderSuccessFragment : Fragment() {
         })
 
 
-        timeLimitAlert()
 
         orderListClickedLay.setOnClickListener {
             allOrderListFragment()
@@ -145,7 +146,7 @@ class OrderSuccessFragment : Fragment() {
 
     private fun timeLimitAlert() {
 
-        var msg = "Your Delivery Tiger order (${orderResponse!!.courierOrdersId}) has been placed. We will collect it as soon as possible by today before 6 pm."
+        var msg = "Your Delivery Tiger order (${orderResponse?.courierOrdersId}) has been placed. We will collect it as soon as possible by today before 6 pm."
         val calendar = Calendar.getInstance()
         val currentHour24 = calendar.get(Calendar.HOUR_OF_DAY)
         if (currentHour24 >= 16) {
