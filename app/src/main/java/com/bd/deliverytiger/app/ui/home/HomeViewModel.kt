@@ -22,6 +22,8 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
 
     val currentLocation = MutableLiveData<Location?>(null)
 
+    val refreshEvent = MutableLiveData<String>("")
+
     fun getBannerInfo(): LiveData<BannerResponse> {
 
         viewState.value = ViewState.ProgressState(true)

@@ -80,10 +80,13 @@ class ProfileFragment : Fragment() {
     private var currentLongitude: Double = 0.0
 
     private var isPickupLocation: Boolean = false
+    private var isFromOrderPlace: Boolean = false
+    private var isPickupLocationEmpty: Boolean = false
 
     companion object {
-        fun newInstance(isPickupLocation: Boolean = false): ProfileFragment = ProfileFragment().apply {
+        fun newInstance(isPickupLocation: Boolean = false, isFromOrderPlace: Boolean = false): ProfileFragment = ProfileFragment().apply {
             this.isPickupLocation = isPickupLocation
+            this.isFromOrderPlace = isFromOrderPlace
         }
         val tag: String = ProfileFragment::class.java.name
     }
@@ -450,9 +453,12 @@ class ProfileFragment : Fragment() {
             areaName
         )
 
-        viewModel.updateMerchantInformation(SessionManager.courierUserId, requestBody)/*.observe(viewLifecycleOwner, Observer {
+        viewModel.updateMerchantInformation(SessionManager.courierUserId, requestBody).observe(viewLifecycleOwner, Observer {
             SessionManager.createSession(it)
-        })*/
+            if (isFromOrderPlace) {
+                homeViewModel.refreshEvent.value = "OrderPlace"
+            }
+        })
 
     }
 
@@ -594,10 +600,12 @@ class ProfileFragment : Fragment() {
                 pickupAddressAdapter.initList(list)
                 binding?.emptyView?.visibility = View.GONE
                 SessionManager.isPickupLocationAdded = true
+                isPickupLocationEmpty = false
             } else {
                 //getDistrictThanaOrAria(14, 4)
                 binding?.emptyView?.visibility = View.VISIBLE
                 SessionManager.isPickupLocationAdded = false
+                isPickupLocationEmpty = true
             }
 
             if (isPickupLocation) {

@@ -85,7 +85,7 @@ class DistrictSelectFragment : Fragment() {
 
         distCross.setOnClickListener {
             //  dismiss()
-            hideSoftKeyBoard(activity!!)
+            hideSoftKeyBoard(requireActivity())
             (mContext as FragmentActivity).supportFragmentManager.popBackStack()
         }
     }
@@ -116,7 +116,7 @@ class DistrictSelectFragment : Fragment() {
 
         })
 
-        districtSuggestAdapter = DistrictSelectAdapter(context!!, sList)
+        districtSuggestAdapter = DistrictSelectAdapter(requireContext(), sList)
         rvDistrictSuggestion.apply {
             layoutManager = LinearLayoutManager(mContext)
             adapter = districtSuggestAdapter

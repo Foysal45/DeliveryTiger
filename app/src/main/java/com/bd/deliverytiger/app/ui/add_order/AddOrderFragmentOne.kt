@@ -39,6 +39,7 @@ import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.district.v2.CustomModel
 import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
+import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.utils.*
@@ -174,8 +175,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var timeSlotId: Int = 0
 
     private var isPickupLocationListAvailable: Boolean = false
+    private var isPickupLocationFirstLoad: Boolean = false
 
     private val viewModel: AddOrderViewModel by inject()
+    private val homeViewModel: HomeViewModel by inject()
 
     companion object {
         fun newInstance(): AddOrderFragmentOne = AddOrderFragmentOne()
@@ -416,6 +419,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             datePicker(3)
         }
 
+        homeViewModel.refreshEvent.observe(viewLifecycleOwner, Observer { tag ->
+            if (tag == "OrderPlace") {
+                homeViewModel.refreshEvent.value = ""
+                isProfileComplete = checkProfileData()
+            }
+        })
+
         SessionManager.orderSource = "DetailOrder"
     }
 
@@ -462,10 +472,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             if(!isMissing) isMissing = true
             missingValues += "বিকাশ নম্বর (পেমেন্ট গ্রহনের জন্য), "
         }
-        if (model.address.isNullOrEmpty()) {
+        /*if (model.address.isNullOrEmpty()) {
             if(!isMissing) isMissing = true
             missingValues += "বিস্তারিত কালেকশন ঠিকানা (বাড়ি/রোড/হোল্ডিং), "
-        }
+        }*/
         if (model.emailAddress.isNullOrEmpty()) {
             if(!isMissing) isMissing = true
             missingValues += "ইমেইল "
@@ -479,7 +489,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         if (isMissing) {
             alert("নির্দেশনা", missingValues, false) {
                 if (it == AlertDialog.BUTTON_POSITIVE) {
-                    addFragment(ProfileFragment.newInstance(), ProfileFragment.tag)
+                    addFragment(ProfileFragment.newInstance(false, true), ProfileFragment.tag)
                 }
             }.show()
             timber.log.Timber.d("missingValues: $missingValues")
@@ -892,7 +902,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 isPickupLocationListAvailable = false
                 SessionManager.isPickupLocationAdded = false
             }
-            isProfileComplete = checkProfileData()
+
+            if (!isPickupLocationFirstLoad) {
+                isPickupLocationFirstLoad = true
+                isProfileComplete = checkProfileData()
+            }
+
         })
     }
 

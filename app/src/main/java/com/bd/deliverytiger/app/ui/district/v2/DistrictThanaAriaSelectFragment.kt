@@ -73,13 +73,13 @@ class DistrictThanaAriaSelectFragment : Fragment() {
             onItemClick?.invoke(position, name, id,listPosition)
             //  dismiss()
             Timber.e("etDistrict 6", " - district clicked")
-            VariousTask.hideSoftKeyBoard(activity!!)
+            VariousTask.hideSoftKeyBoard(requireActivity())
             (mContext as FragmentActivity).supportFragmentManager.popBackStack()
         }
 
         distCross.setOnClickListener {
             //  dismiss()
-            VariousTask.hideSoftKeyBoard(activity!!)
+            VariousTask.hideSoftKeyBoard(requireActivity())
             (mContext as FragmentActivity).supportFragmentManager.popBackStack()
         }
     }
@@ -102,7 +102,7 @@ class DistrictThanaAriaSelectFragment : Fragment() {
 
         })
 
-        districtSuggestAdapter = ListAdapter(context!!, suggestList)
+        districtSuggestAdapter = ListAdapter(requireContext(), suggestList)
         rvDistrictSuggestion.apply {
             layoutManager = LinearLayoutManager(mContext)
             adapter = districtSuggestAdapter
@@ -113,7 +113,7 @@ class DistrictThanaAriaSelectFragment : Fragment() {
             onItemClick?.invoke(position, name, id,listPosition)
             //  dismiss()
             Timber.e("etDistrictSearch 6", " - districtSuggestAdapter clicked")
-            VariousTask.hideSoftKeyBoard(activity!!)
+            VariousTask.hideSoftKeyBoard(requireActivity())
             (mContext as FragmentActivity).supportFragmentManager.popBackStack()
         }
     }
