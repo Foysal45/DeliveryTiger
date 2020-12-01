@@ -40,6 +40,9 @@ import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
 import com.bd.deliverytiger.app.utils.*
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
@@ -151,6 +154,16 @@ class DashboardFragment : Fragment() {
             val bannerModel = model.bannerModel
             showBanner(bannerModel)
             setSpinner(model.dashboardDataDuration)
+
+            if (!model.referBanner.isNullOrEmpty()) {
+                binding?.referBtn?.let { view ->
+                    Glide.with(requireContext())
+                        .load(model.referBanner)
+                        .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE))
+                        .into(view)
+                }
+                binding?.referBtn?.visibility = View.VISIBLE
+            }
         })
     }
 

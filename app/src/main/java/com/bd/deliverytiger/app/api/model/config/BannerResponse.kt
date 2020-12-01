@@ -16,5 +16,7 @@ data class BannerResponse(
     @SerializedName("instantPaymentOTPLimit")
     var instantPaymentOTPLimit: Int = 5000,
     @SerializedName("instantPaymentHourLimit")
-    var instantPaymentHourLimit: Int = 12
+    var instantPaymentHourLimit: Int = 12,
+    @SerializedName("referBanner")
+    var referBanner: String? = ""
 )
