@@ -165,7 +165,7 @@ class OrderSuccessFragment : Fragment() {
             "offerBkashDiscount" to offerBkashDiscount,
             "offerBkashClaimed" to offerBkashClaimed,
             "offerCodClaimed" to offerCodClaimed,
-            "isCollection" to isCollection
+            "isCollection" to isCollection // if true show Adv offer
         )
 
         val tag: String = OfferBottomSheet.tag
