@@ -37,7 +37,7 @@ import kotlin.concurrent.thread
 class AddProductBottomSheet: BottomSheetDialogFragment() {
 
     private var binding: FragmentAddProductBottomSheetBinding? = null
-    var onProductUploaded: ((dealId: Int) -> Unit)? = null
+    var onProductUploaded: ((dealId: Int, offerType: Int) -> Unit)? = null
 
     private val productUploadRequest = ProductUploadRequest()
     private var imagePath: String = ""
@@ -48,10 +48,12 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
     private val gson: Gson by inject()
     private val viewModel: AddProductViewModel by inject()
 
+    private var offerType = 0
+
     companion object {
 
-        fun newInstance(): AddProductBottomSheet = AddProductBottomSheet().apply {
-
+        fun newInstance(offerType: Int): AddProductBottomSheet = AddProductBottomSheet().apply {
+            this.offerType = offerType
         }
 
         val tag: String = AddProductBottomSheet::class.java.name
@@ -120,7 +122,7 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
                             viewModel.uploadProductImage(uploadLocation, body)//.observe(viewLifecycleOwner, Observer {})
                             withContext(Dispatchers.Main) {
                                 binding?.uploadBtn?.isEnabled = true
-                                onProductUploaded?.invoke(model.dealId)
+                                onProductUploaded?.invoke(model.dealId, offerType)
                             }
                         }
                     }

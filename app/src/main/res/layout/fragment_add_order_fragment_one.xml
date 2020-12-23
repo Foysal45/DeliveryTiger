@@ -143,24 +143,55 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-                <EditText
-                    android:id="@+id/etThana"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/login_view_height"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
-                    android:background="@drawable/bg_add_order_edit_text"
-                    android:drawableEnd="@drawable/ic_arrow_drop_down"
-                    android:focusable="false"
-                    android:hint="থানা/এরিয়া নির্বাচন করুন"
-                    android:importantForAutofill="no"
-                    android:inputType="phone"
-                    android:paddingStart="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingBottom="8dp"
-                    android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14" />
+                    >
+
+                    <EditText
+                        android:id="@+id/etThana"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_view_height"
+                        android:background="@drawable/bg_add_order_edit_text"
+                        android:focusable="false"
+                        android:hint="থানা/এরিয়া নির্বাচন করুন"
+                        android:importantForAutofill="no"
+                        android:inputType="phone"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:contentDescription="@string/cd"
+                        app:layout_constraintEnd_toEndOf="@id/etThana"
+                        app:layout_constraintTop_toTopOf="@id/etThana"
+                        app:layout_constraintBottom_toBottomOf="@id/etThana"
+                        app:srcCompat="@drawable/ic_arrow_drop_down"
+                        />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="@string/cd"
+                        app:layout_constraintEnd_toEndOf="@id/etThana"
+                        app:layout_constraintTop_toTopOf="@id/etThana"
+                        app:layout_constraintBottom_toBottomOf="@id/etThana"
+                        app:srcCompat="@drawable/ic_star"
+                        app:tint="@color/red"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                 <EditText
                     android:id="@+id/etAriaPostOffice"
@@ -346,12 +377,26 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginEnd="20dp"
                         android:contentDescription="@string/cd"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/spinner_weight_selection"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="@string/cd"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/spinner_weight_selection"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_star"
+                        app:tint="@color/red"
+                        />
+
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -580,7 +625,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_add_order_edit_text"
                     android:layout_marginTop="@dimen/fab_margin"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     tools:visibility="visible"
                     >
 

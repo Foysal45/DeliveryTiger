@@ -175,17 +175,18 @@ class OrderSuccessFragment : Fragment() {
             dialog.dismiss()
             when(offerType) {
                 1 -> {
-                    addProductBottomSheet()
+                    addProductBottomSheet(offerType)
                 }
                 2 -> {
-                    claimBkashOffer()
+                    addProductBottomSheet(offerType)
+                    //claimBkashOffer()
                 }
             }
         }
     }
 
-    private fun claimBkashOffer() {
-        val requestBody = OfferUpdateRequest(offerBkashDiscount, 0,0)
+    private fun claimBkashOffer(dealId: Int) {
+        val requestBody = OfferUpdateRequest(offerBkashDiscount, 0, dealId)
         viewModel.updateOffer(orderResponse?.id ?: 0, requestBody).observe(viewLifecycleOwner, Observer { model ->
             val body1 = "আপনাকে https://deliverytiger.com.bd/apply-offer/${model.id}/${model.offerCode} লিংকে গিয়ে পেমেন্ট করার জন্য অনুরোধ করা হচ্ছে"
             viewModel.sendSMS(model.mobile ?: "", body1)
@@ -197,23 +198,33 @@ class OrderSuccessFragment : Fragment() {
     }
 
     private fun claimCodOffer(dealId: Int) {
-        val requestBody = OfferUpdateRequest(0, offerCodDiscount,dealId)
+        val requestBody = OfferUpdateRequest(0, offerCodDiscount, dealId)
         viewModel.updateOffer(orderResponse?.id ?: 0, requestBody).observe(viewLifecycleOwner, Observer { model ->
             offerCodClaimed = true
             alert("অফার", "আপনার প্রোডাক্টটি আজকেরডিল মার্কেটপ্লেসে যুক্ত হয়েছে এবং আপনি ${DigitConverter.toBanglaDigit(offerCodDiscount)} টাকা ছাড় পেয়েছেন।").show()
         })
     }
 
-    private fun addProductBottomSheet() {
+    private fun addProductBottomSheet(offerType: Int) {
 
         val tag: String = AddProductBottomSheet.tag
-        val dialog: AddProductBottomSheet = AddProductBottomSheet.newInstance()
+        val dialog: AddProductBottomSheet = AddProductBottomSheet.newInstance(offerType)
         dialog.show(childFragmentManager, tag)
-        dialog.onProductUploaded = { dealId ->
+        dialog.onProductUploaded = { dealId, offerType ->
             dialog.dismiss()
-            if (dealId > 0) {
-                claimCodOffer(dealId)
+            when(offerType) {
+                1 -> {
+                    if (dealId > 0) {
+                        claimCodOffer(dealId)
+                    }
+                }
+                2 -> {
+                    if (dealId > 0) {
+                        claimBkashOffer(dealId)
+                    }
+                }
             }
+
         }
     }
 

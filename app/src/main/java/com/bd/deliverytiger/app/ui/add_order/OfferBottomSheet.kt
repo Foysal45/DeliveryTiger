@@ -139,7 +139,7 @@ class OfferBottomSheet: BottomSheetDialogFragment() {
 
     private fun advanceLayout() {
         binding?.advanceLayout?.visibility = View.VISIBLE
-        binding?.advanceTitle?.text = "কাস্টমার কালেকশনের টাকা বিকাশ এর মাধ্যমে ডেলিভারি টাইগারকে প্রদান করলে ${DigitConverter.toBanglaDigit(offerBkashDiscount)} টাকা ছাড়।"
+        binding?.advanceTitle?.text = "অর্ডার পার্সেলের প্রোডাক্টটির ছবি ও দাম আজকেরডিল এর মার্কেটপ্লেস-এ লিস্ট করুন।\nকাস্টমার কালেকশনের টাকা বিকাশ এর মাধ্যমে ডেলিভারি টাইগারকে প্রদান করলে ${DigitConverter.toBanglaDigit(offerBkashDiscount)} টাকা ছাড়।"
         binding?.advanceOfferBtn?.text = "${DigitConverter.toBanglaDigit(offerBkashDiscount)} টাকা ছাড় নিন"
         binding?.advanceOfferBtn?.setOnClickListener {
             onOfferSelected?.invoke(2)

@@ -275,7 +275,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 0 -> {
                     deliveryDatePicker.visibility = View.GONE
                     collectionDatePicker.visibility = View.GONE
-                    hubDropLayout.visibility = View.GONE
+                    //hubDropLayout.visibility = View.GONE
                     checkOfficeDrop.isChecked = false
                     deliveryDate = ""
                     deliveryDatePicker.text = ""
@@ -286,7 +286,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 1 -> {
                     deliveryDatePicker.visibility = View.VISIBLE
                     collectionDatePicker.visibility = View.VISIBLE
-                    hubDropLayout.visibility = View.GONE
+                    //hubDropLayout.visibility = View.GONE
                     checkOfficeDrop.isChecked = false
                     deliveryDate = ""
                     deliveryDatePicker.text = ""
@@ -297,7 +297,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 2 -> {
                     deliveryDatePicker.visibility = View.GONE
                     collectionDatePicker.visibility = View.GONE
-                    hubDropLayout.visibility = View.VISIBLE
+                    //hubDropLayout.visibility = View.VISIBLE
                     deliveryDate = ""
                     deliveryDatePicker.text = ""
                     collectionDate = ""
@@ -1050,12 +1050,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             payCODCharge = 0.0
         }
 
-        if (isCollectionLocationSelected) {
-            if (isOfficeDrop) {
-                payCollectionCharge = 0.0
-            } else {
-                payCollectionCharge = collectionChargeApi
-            }
+        if (isOfficeDrop) {
+            payCollectionCharge = 0.0
+        } else {
+            payCollectionCharge = collectionChargeApi
         }
 
         //val payReturnCharge = SessionManager.returnCharge
@@ -1142,10 +1140,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             go = false
             context?.toast(getString(R.string.select_dist))
         }
-        /*else if (thanaId == 0) {
+        else if (thanaId == 0) {
             go = false
             context?.toast(getString(R.string.select_thana))
-        }*/
+        }
         /*else if (isAriaAvailable && areaId == 0) {
             go = false
             context?.toast(getString(R.string.select_aria))
@@ -1202,16 +1200,17 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             try {
                 payActualPackagePrice = payActualPackagePriceText.toDouble()
                 if (isCollection) {
-                    if (payCollectionAmount > payActualPackagePrice) {
+                    /*if (payCollectionAmount > payActualPackagePrice) {
                         context?.showToast("কালেকশন অ্যামাউন্ট অ্যাকচুয়াল প্যাকেজ প্রাইস থেকে বেশি হতে পারবে না")
                         return false
-                    }
+                    }*/
                 } else {
                     if (payActualPackagePrice > actualPackagePriceLimit) {
                         context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস ${DigitConverter.toBanglaDigit(actualPackagePriceLimit.toInt())} টাকার থেকে বেশি হতে পারবে না")
                         return false
                     }
                 }
+
             } catch (e: NumberFormatException) {
                 e.printStackTrace()
                 context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস লিখুন")
@@ -1219,10 +1218,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             }
         }
 
-        /*if (!isWeightSelected) {
+        if (!isWeightSelected) {
             context?.showToast("প্যাকেজ এর ওজন নির্বাচন করুন")
             return false
-        }*/
+        }
         if (!isPackagingSelected) {
             context?.showToast("প্যাকেজিং নির্বাচন করুন")
             return false
@@ -1253,6 +1252,15 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }*/
         if (deliveryDatePicker.visibility == View.VISIBLE && deliveryDate.isEmpty()) {
             context?.showToast("ডেলিভারি তারিখ নির্বাচন করুন")
+            return false
+        }
+        if (isCollection && payCollectionAmount <= total) {
+            context?.showToast("কালেকশন অ্যামাউন্ট সার্ভিস চার্জ থেকে বেশি হতে হবে")
+            return false
+        }
+        // Hub drop is must for weight > 5kg
+        if (weightRangeId > 6 && !isOfficeDrop) {
+            context?.showToast("পার্সেলের ওজন ৫ কেজির উপরে হলে কালেকশন হাবে ড্রপ করতে হবে")
             return false
         }
         if (!isAgreeTerms) {
