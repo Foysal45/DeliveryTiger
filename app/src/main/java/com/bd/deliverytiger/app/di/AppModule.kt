@@ -41,6 +41,7 @@ val appModule = module {
     single(named("adcore")) { retrofitInstance(AppConstant.BASE_URL_ADCORE, get(), get()) }
     single(named("adm")) { retrofitInstance(AppConstant.BASE_URL_ADM, get(), get()) }
     single(named("api")) { retrofitInstance(AppConstant.BASE_URL_API, get(), get()) }
+    single(named("ana")) { retrofitInstance(AppConstant.BASE_URL_ANA, get(), get()) }
     single(named("bridge")) { retrofitInstance(AppConstant.BASE_URL_BRIDGE, get(), get()) }
     single(named("lambda")) { retrofitInstance(AppConstant.BASE_URL_LAMBDA, get(), get()) }
     single(named("bariKoi")) { retrofitInstance(AppConstant.BASE_BARI_KOI, get(), get()) }
@@ -51,8 +52,9 @@ val appModule = module {
     single { ApiInterfaceBRIDGE(get(named("bridge"))) }
     single { ApiInterfaceLambda(get(named("lambda"))) }
     single { ApiInterfaceBariKoi(get(named("bariKoi"))) }
+    single { ApiInterfaceANA(get(named("ana"))) }
 
-    single { AppRepository(get(), get(), get(), get(), get(), get()) }
+    single { AppRepository(get(), get(), get(), get(), get(), get(), get()) }
 
     single { HomeViewModel(get()) }
 

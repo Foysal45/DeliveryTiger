@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
+import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.log.UserLogger
@@ -45,6 +46,8 @@ class OrderSuccessFragment : Fragment() {
     private var offerBkashClaimed: Boolean = false
     private var offerCodClaimed: Boolean = false
 
+    private var courierOrdersId: String = ""
+
 
     companion object {
         fun newInstance(bundle: Bundle?): OrderSuccessFragment = OrderSuccessFragment().apply{
@@ -74,7 +77,8 @@ class OrderSuccessFragment : Fragment() {
         }
 
         if(orderResponse != null){
-            tvSuccessOrderId.text ="# ${orderResponse!!.courierOrdersId}"
+            courierOrdersId = orderResponse!!.courierOrdersId ?: ""
+            tvSuccessOrderId.text ="# $courierOrdersId"
             tvSuccessOrderTitle.text =orderResponse!!.collectionName
             tvSuccessOrderAddress.text = getAddress(orderResponse)
 
@@ -194,6 +198,7 @@ class OrderSuccessFragment : Fragment() {
             viewModel.sendSMS(SessionManager.mobile, body2)
             offerBkashClaimed = true
             alert("অফার", "আপনাকে পেমেন্ট লিংক সহ একটি এসএমএস ও ইমেইল করা হয়েছে। এটি আপনার কাস্টমারের সাথে শেয়ার করুন। পেমেন্ট লিংক ব্যাবহার করে কাস্টমার পেমেন্ট সম্পন্ন করলেই আপনার কাছ থেকে প্রোডাক্ট ডেলিভারির জন্য কালেক্ট করা হবে।").show()
+            viewModel.logSMS(SMSLogRequest(courierOrdersId, body1))
         })
     }
 

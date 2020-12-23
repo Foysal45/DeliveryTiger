@@ -7,6 +7,7 @@ import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
+import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
@@ -25,7 +26,8 @@ class AppRepository(
     private val apiInterfaceAPI: ApiInterfaceAPI,
     private val apiInterfaceBridge: ApiInterfaceBRIDGE,
     private val apiInterfaceLambda: ApiInterfaceLambda,
-    private val apiInterfaceBariKoi: ApiInterfaceBariKoi
+    private val apiInterfaceBariKoi: ApiInterfaceBariKoi,
+    private val apiInterfaceANA: ApiInterfaceANA
 ) {
 
     //******************** API ********************//
@@ -36,6 +38,10 @@ class AppRepository(
     fun updateCourierStatus(requestBody: StatusLocationRequest) = apiInterfaceAPI.updateCourierStatus(requestBody)
 
     suspend fun uploadProductInfo(ProductUploadReqBody: RequestBody) = apiInterfaceAPI.uploadProductInfo(ProductUploadReqBody)
+
+    //******************** Analytics ********************//
+
+    suspend fun logSMS(requestBody: SMSLogRequest) = apiInterfaceANA.logSMS(requestBody)
 
     //******************** BRIDGE ********************//
 

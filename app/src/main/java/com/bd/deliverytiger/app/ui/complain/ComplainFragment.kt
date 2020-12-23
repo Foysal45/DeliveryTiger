@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentComplainBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
@@ -20,6 +22,8 @@ class ComplainFragment: Fragment() {
 
     private var binding: FragmentComplainBinding? = null
     private val viewModel: ComplainViewModel by inject()
+
+    private lateinit var dataAdapter: ComplainAdapter
 
     private var selectedType = 0
 
@@ -43,6 +47,8 @@ class ComplainFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setUpSpinner()
+        initComplainList()
+        fetchComplain()
 
         binding?.submitBtn?.setOnClickListener {
             hideKeyboard()
@@ -79,6 +85,24 @@ class ComplainFragment: Fragment() {
                 }
             }
         })
+    }
+
+    private fun initComplainList() {
+
+        dataAdapter = ComplainAdapter()
+        with(binding?.recyclerview!!) {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = dataAdapter
+            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        }
+
+    }
+
+    private fun fetchComplain() {
+
+        dataAdapter.initLoad(listOf("1", "2", "3"))
+
     }
 
     private fun validate(): Boolean {

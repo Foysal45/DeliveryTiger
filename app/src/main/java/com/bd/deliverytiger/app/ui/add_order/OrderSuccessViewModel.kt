@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
+import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
+import com.bd.deliverytiger.app.api.model.log_sms.SMSLogResponse
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
@@ -123,6 +125,40 @@ class OrderSuccessViewModel(private val repository: AppRepository): ViewModel() 
         return onSMSResponse
     }
 
+
+    fun logSMS(requestBody: SMSLogRequest):LiveData<SMSLogResponse>  {
+
+        viewState.value = ViewState.ProgressState(true)
+        val onSMSResponse: MutableLiveData<SMSLogResponse> = MutableLiveData()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.logSMS(requestBody)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body != null) {
+                            onSMSResponse.value = response.body
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return onSMSResponse
+    }
 
 
 }
