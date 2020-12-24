@@ -5,6 +5,7 @@ import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
+import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
@@ -72,6 +73,8 @@ class AppRepository(
     suspend fun fetchFreezeAmountDetails(courierUserId: Int) = apiInterfaceADM.fetchFreezeAmountDetails(courierUserId)
 
     suspend fun submitComplain(requestBody: ComplainRequest) = apiInterfaceADM.submitComplain(requestBody)
+
+    suspend fun fetchComplainList(requestBody: ComplainListRequest) = apiInterfaceADM.fetchComplainList(requestBody)
 
     suspend fun fetchBillPayHistory(courierUserId: Int) = apiInterfaceADM.fetchBillPayHistory(courierUserId)
 

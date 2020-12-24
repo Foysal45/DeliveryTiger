@@ -253,22 +253,22 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }
         deliveryTypeAdapter.onItemClick = { position, model ->
 
-            if (isShipmentChargeFree) {
+            deliveryType = "${model.deliveryType} ${model.days}"
+            deliveryRangeId = model.deliveryRangeId
+            weightRangeId = model.weightRangeId
+            alertMsg = model.deliveryAlertMessage ?: ""
+            logicExpression = model.loginHours ?: ""
+            dayAdvance = model.dateAdvance ?: ""
+            val showHide = model.showHide
+
+            // if free delivery is enable && weight <= 1KG
+            if (isShipmentChargeFree && weightRangeId <= 2) {
                 payShipmentCharge = 0.0
                 offerType = "freedelivery"
             } else {
                 payShipmentCharge = model.chargeAmount
                 offerType = ""
             }
-
-            deliveryType = "${model.deliveryType} ${model.days}"
-            deliveryRangeId = model.deliveryRangeId
-            weightRangeId = model.weightRangeId
-
-            alertMsg = model.deliveryAlertMessage ?: ""
-            logicExpression = model.loginHours ?: ""
-            dayAdvance = model.dateAdvance ?: ""
-            val showHide = model.showHide
 
             when (showHide) {
                 // Hide All fields
@@ -308,7 +308,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             calculateTotalPrice()
 
             if (model.deliveryType.contains("Postal", true)) {
-                alert("নির্দেশনা", "এই জায়গায় কাস্টমারকে কালেকশন পয়েন্ট থেকে পার্সেল কালেক্ট করতে হবে। অনিবার্য কারণ বশত ডেলিভারি সময় সর্বোচ্চ ৭ দিন হতে পারে") {
+                alert("নির্দেশনা", alertMsg) {
                 }.show()
             }
 

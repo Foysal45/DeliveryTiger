@@ -23,6 +23,7 @@ import com.warkiz.widget.IndicatorSeekBar
 import com.warkiz.widget.OnSeekChangeListener
 import com.warkiz.widget.SeekParams
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 
 @SuppressLint("SetTextI18n")
 class DeliveryChargeCalculatorFragment: Fragment() {
@@ -100,15 +101,19 @@ class DeliveryChargeCalculatorFragment: Fragment() {
 
         binding?.indicatorSeekBar?.onSeekChangeListener = object : OnSeekChangeListener {
             override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
+                Timber.d("seekBar onStopTrackingTouch ${seekBar?.progress}")
+            }
             override fun onSeeking(seekParams: SeekParams?) {
                 val position = seekParams?.thumbPosition ?: 0
+                Timber.d("seekBar onSeeking thumbPosition $position")
                 if (weightPriceList.isNotEmpty()) {
                     val model = weightPriceList[position]
                     calculate(model.courierDeliveryCharge)
                 }
             }
         }
+
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {

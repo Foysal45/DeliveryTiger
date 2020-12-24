@@ -36,7 +36,7 @@ object DigitConverter {
         }
     }
 
-    fun toBanglaDate(banglaDate: String?, pattern: String = "yyyy-MM-dd HH:mm:ss"): String {
+    fun toBanglaDate(banglaDate: String?, pattern: String = "yyyy-MM-dd HH:mm:ss", disableYear: Boolean = false): String {
 
         if (banglaDate == null) {
             return ""
@@ -54,7 +54,11 @@ object DigitConverter {
                 //val minute = calendar.get(Calendar.MINUTE)
                 //val second = calendar.get(Calendar.SECOND)
 
-                return engCahrReplacer(day.toString()) + " " + banglaMonth[month] + ", " + engCahrReplacer(year.toString())
+                return if (disableYear) {
+                    engCahrReplacer(day.toString()) + " " + banglaMonth[month]
+                } else {
+                    engCahrReplacer(day.toString()) + " " + banglaMonth[month] + ", " + engCahrReplacer(year.toString())
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()

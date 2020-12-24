@@ -7,15 +7,11 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentComplainBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
-import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
-import com.bd.deliverytiger.app.utils.ViewState
-import com.bd.deliverytiger.app.utils.hideKeyboard
-import com.bd.deliverytiger.app.utils.toast
+import com.bd.deliverytiger.app.utils.*
 import org.koin.android.ext.android.inject
 
 class ComplainFragment: Fragment() {
@@ -94,15 +90,16 @@ class ComplainFragment: Fragment() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
             adapter = dataAdapter
-            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+            //addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         }
 
     }
 
     private fun fetchComplain() {
 
-        dataAdapter.initLoad(listOf("1", "2", "3"))
-
+        viewModel.fetchComplainList(SessionManager.courierUserId, 0).observe(viewLifecycleOwner, Observer { list ->
+            dataAdapter.initLoad(list)
+        })
     }
 
     private fun validate(): Boolean {

@@ -4,40 +4,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.databinding.FragmentOrderTrackingBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.ViewState
 import com.bd.deliverytiger.app.utils.hideKeyboard
 import com.bd.deliverytiger.app.utils.toast
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 
 class OrderTrackingFragment : Fragment() {
 
-    private lateinit var toolbarTracking: Toolbar
-    private lateinit var backBtn: ImageView
-    private lateinit var turnOff: ImageView
-    private lateinit var toolbarTitle: TextView
-    private lateinit var etOrderTrackId: EditText
-    private lateinit var trackBtn: ConstraintLayout
-    private lateinit var progressBar: ProgressBar
-    private lateinit var recyclerView: RecyclerView
+    private var binding: FragmentOrderTrackingBinding? = null
+    private val viewModel: OrderTrackingViewModel by inject()
 
-    private lateinit var dataAdapter: OrderTrackingAdapter
+    private lateinit var dataAdapter: OrderTrackingNewAdapter
     private lateinit var customerOrderAdapter: CustomerOrderAdapter
 
     private var orderID = ""
-
-    private val viewModel: OrderTrackingViewModel by inject()
 
     companion object {
         fun newInstance(orderID: String): OrderTrackingFragment = OrderTrackingFragment().apply {
@@ -47,24 +34,19 @@ class OrderTrackingFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_order_tracking, container, false)
+        //return inflater.inflate(R.layout.fragment_order_tracking, container, false)
+        return FragmentOrderTrackingBinding.inflate(inflater, container, false).also {
+            binding = it
+        }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbarTracking = view.findViewById(R.id.toolbarTracking)
-        toolbarTitle = view.findViewById(R.id.toolbarTitle)
-        backBtn = view.findViewById(R.id.backBtn)
-        turnOff = view.findViewById(R.id.turnOff)
-        etOrderTrackId = view.findViewById(R.id.etOrderTrackId)
-        trackBtn = view.findViewById(R.id.orderTrackClickedLay)
-        progressBar = view.findViewById(R.id.rvOrderTrackProgress)
-        recyclerView = view.findViewById(R.id.rvOrderTrack)
 
-        dataAdapter = OrderTrackingAdapter()
+        dataAdapter = OrderTrackingNewAdapter()
         customerOrderAdapter = CustomerOrderAdapter()
-        with(recyclerView) {
+        with(binding?.recyclerView!!) {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = dataAdapter
@@ -77,17 +59,18 @@ class OrderTrackingFragment : Fragment() {
         }*/
         customerOrderAdapter.onItemClick = { model, position ->
             orderID = model.courierOrdersId ?: ""
-            recyclerView.adapter = dataAdapter
+            binding?.recyclerView?.adapter = dataAdapter
             getOrderTrackingList(orderID)
         }
 
-        trackBtn.setOnClickListener {
+        binding?.trackBtn?.setOnClickListener {
+            Timber.d("trackBtn called")
             trackOrder()
         }
 
         if (orderID.isNotEmpty()) {
             getOrderTrackingList(orderID)
-            etOrderTrackId.setText(orderID)
+            binding?.orderIdET?.setText(orderID)
         }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
@@ -100,30 +83,30 @@ class OrderTrackingFragment : Fragment() {
                 }
                 is ViewState.ProgressState -> {
                     if (state.isShow) {
-                        progressBar.visibility = View.VISIBLE
+                        binding?.progressBar?.visibility = View.VISIBLE
                     } else {
-                        progressBar.visibility = View.GONE
+                        binding?.progressBar?.visibility = View.GONE
                     }
                 }
             }
         })
 
         // Test
-        //etOrderTrackId.setText("01715269261") //DT-12222
+        binding?.orderIdET?.setText("DT-2122") //DT-12222 01715269261
     }
 
     override fun onResume() {
         super.onResume()
         if (activity is HomeActivity) {
-            toolbarTracking.visibility = View.GONE
+            binding?.toolbarTracking?.visibility = View.GONE
             (activity as HomeActivity).setToolbarTitle("অর্ডার ট্র্যাকিং")
         } else {
-            toolbarTracking.visibility = View.VISIBLE
-            toolbarTitle.text = "অর্ডার ট্র্যাকিং"
-            backBtn.setOnClickListener {
+            binding?.toolbarTracking?.visibility = View.VISIBLE
+            binding?.toolbarTitle?.text = "অর্ডার ট্র্যাকিং"
+            binding?.backBtn?.setOnClickListener {
                 activity?.onBackPressed()
             }
-            turnOff.setOnClickListener {
+            binding?.turnOff?.setOnClickListener {
                 activity?.moveTaskToBack(true)
                 activity?.finish()
             }
@@ -132,9 +115,9 @@ class OrderTrackingFragment : Fragment() {
 
     private fun trackOrder() {
 
-        val searchKey = etOrderTrackId.text.toString()
+        val searchKey = binding?.orderIdET?.text.toString()
         if (searchKey.trim().isEmpty()) {
-            etOrderTrackId.requestFocus()
+            binding?.orderIdET?.requestFocus()
             context?.toast(getString(R.string.give_order_id))
             return
         }
@@ -143,16 +126,19 @@ class OrderTrackingFragment : Fragment() {
         if (searchKey != orderID) {
             orderID = searchKey
             if (searchKey.length == 11 && searchKey.startsWith("01")) {
-                recyclerView.adapter = customerOrderAdapter
+                binding?.recyclerView?.adapter = customerOrderAdapter
                 fetchCustomerOrder(searchKey)
             } else {
-                recyclerView.adapter = dataAdapter
+                binding?.recyclerView?.adapter = dataAdapter
                 getOrderTrackingList(orderID)
             }
         }
     }
 
     private fun getOrderTrackingList(orderId: String) {
+
+        binding?.orderCode?.text = orderId
+        binding?.reference?.text = "Reference"
 
         dataAdapter.clear()
         viewModel.fetchOrderTrackingList(orderId).observe(viewLifecycleOwner, Observer { list ->
@@ -176,6 +162,11 @@ class OrderTrackingFragment : Fragment() {
             }
 
         })
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 

@@ -338,7 +338,8 @@ class HomeActivity : AppCompatActivity(),
                 currentFragment is ComplainFragment ||
                 currentFragment is UnpaidCODFragment ||
                 currentFragment is ReferralFragment ||
-                currentFragment is CollectionHistoryFragment
+                currentFragment is CollectionHistoryFragment ||
+                currentFragment is OrderTrackingFragment
             ) {
                 addProductBtnVisibility(false)
             } else {
