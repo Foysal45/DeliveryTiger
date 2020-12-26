@@ -109,7 +109,7 @@ class OrderTrackingFragment : Fragment() {
 
         // Test
         if (BuildConfig.DEBUG) {
-            binding?.orderIdET?.setText("DT-2122") //DT-12222 01715269261
+            binding?.orderIdET?.setText("DT-246194") //DT-12222 01715269261
         }
     }
 
@@ -161,7 +161,7 @@ class OrderTrackingFragment : Fragment() {
         dataAdapter.clear()
         viewModel.fetchOrderTrackingList(orderId).observe(viewLifecycleOwner, Observer { list ->
             if (list.isNotEmpty()) {
-                dataAdapter.initLoad(list.reversed())
+                dataAdapter.initLoad(list)
                 binding?.trackInfoLayout?.visibility = View.VISIBLE
             } else {
                 context?.toast(getString(R.string.give_right_order_id))

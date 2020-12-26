@@ -131,6 +131,8 @@ class AppRepository(
 
     suspend fun getOrderTrackingList(flag: String, requestBody: OrderTrackReqBody) = apiInterfaceCore.getOrderTrackingList(flag, requestBody)
 
+    suspend fun getOrderTrackingNewList(flag: String, requestBody: OrderTrackReqBody) = apiInterfaceCore.getOrderTrackingNewList(flag, requestBody)
+
     suspend fun fetchCustomerOrder(mobileNumber: String) = apiInterfaceCore.fetchCustomerOrder(mobileNumber)
 
     suspend fun fetchAllHubInfo() = apiInterfaceCore.fetchAllHubInfo()

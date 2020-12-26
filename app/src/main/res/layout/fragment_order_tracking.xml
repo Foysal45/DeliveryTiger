@@ -252,21 +252,27 @@
                     tools:visibility="visible" />
 
 
-                <include
+                <!--<include
                     android:id="@+id/returnTrack"
                     layout="@layout/item_view_order_tracking_shipment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/recyclerView" />
+                    app:layout_constraintTop_toTopOf="@id/recyclerView"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    />-->
 
-                <include
+                <!--<include
                     android:id="@+id/shipmentTrack"
                     layout="@layout/item_view_order_tracking_shipment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    />-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
