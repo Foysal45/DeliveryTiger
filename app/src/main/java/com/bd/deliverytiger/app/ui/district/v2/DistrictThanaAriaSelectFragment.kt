@@ -33,7 +33,7 @@ class DistrictThanaAriaSelectFragment : Fragment() {
         val tag = DistrictThanaAriaSelectFragment::class.java.name
     }
 
-    private lateinit var title: String
+    private var title: String? = null
     private var list: ArrayList<CustomModel> = ArrayList()
     private var mContext: Context? = null
     private lateinit var etDistrictSearch: AutoCompleteTextView

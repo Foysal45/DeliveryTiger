@@ -363,10 +363,10 @@ class DashboardFragment : Fragment() {
         worker = object : Runnable {
             override fun run() {
                 binding?.sliderView?.slideToNextPosition()
-                handler.postDelayed(this, 2000L)
+                handler.postDelayed(this, 5000L)
             }
         }
-        handler.postDelayed(worker!!, 2000L)
+        handler.postDelayed(worker!!, 5000L)
     }
 
     private fun initDashboard() {

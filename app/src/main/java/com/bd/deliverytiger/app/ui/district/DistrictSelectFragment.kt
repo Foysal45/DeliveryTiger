@@ -27,7 +27,7 @@ import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
 class DistrictSelectFragment : Fragment() {
 
     private var districtList: ArrayList<DistrictDeliveryChargePayLoad> = ArrayList()
-    private lateinit var mContext: Context
+    private var mContext: Context? = null
     private lateinit var etDistrictSearch: AutoCompleteTextView
     private lateinit var rvDistrictSuggestion: RecyclerView
     private lateinit var adapter: ArrayAdapter<String>
