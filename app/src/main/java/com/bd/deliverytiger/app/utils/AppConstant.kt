@@ -25,5 +25,7 @@ object AppConstant {
 
     const val DOMAIN_URL_PREFIX = "https://deliverytiger.page.link"
 
+    const val hotLineNumber = "০৯৬৩৮০১০৩০৩"
+
     const val GPS_REQUEST = 1001
 }

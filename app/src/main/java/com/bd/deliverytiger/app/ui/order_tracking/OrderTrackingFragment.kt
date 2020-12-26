@@ -1,15 +1,21 @@
 package com.bd.deliverytiger.app.ui.order_tracking
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentOrderTrackingBinding
+import com.bd.deliverytiger.app.ui.complain.ComplainFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
+import com.bd.deliverytiger.app.utils.AppConstant
 import com.bd.deliverytiger.app.utils.ViewState
 import com.bd.deliverytiger.app.utils.hideKeyboard
 import com.bd.deliverytiger.app.utils.toast
@@ -73,6 +79,16 @@ class OrderTrackingFragment : Fragment() {
             binding?.orderIdET?.setText(orderID)
         }
 
+        binding?.complainBtn?.setOnClickListener {
+            val tag = ComplainFragment.tag
+            val fragment = ComplainFragment.newInstance()
+            addFragment(fragment, tag)
+        }
+
+        binding?.callBtn?.setOnClickListener {
+            callHelpLine()
+        }
+
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
                 is ViewState.ShowMessage -> {
@@ -92,7 +108,9 @@ class OrderTrackingFragment : Fragment() {
         })
 
         // Test
-        binding?.orderIdET?.setText("DT-2122") //DT-12222 01715269261
+        if (BuildConfig.DEBUG) {
+            binding?.orderIdET?.setText("DT-2122") //DT-12222 01715269261
+        }
     }
 
     override fun onResume() {
@@ -144,6 +162,7 @@ class OrderTrackingFragment : Fragment() {
         viewModel.fetchOrderTrackingList(orderId).observe(viewLifecycleOwner, Observer { list ->
             if (list.isNotEmpty()) {
                 dataAdapter.initLoad(list.reversed())
+                binding?.trackInfoLayout?.visibility = View.VISIBLE
             } else {
                 context?.toast(getString(R.string.give_right_order_id))
             }
@@ -152,11 +171,15 @@ class OrderTrackingFragment : Fragment() {
 
     private fun fetchCustomerOrder(mobileNumber: String) {
 
+        binding?.orderCode?.text = orderID
+        binding?.reference?.text = "-"
+
         customerOrderAdapter.clear()
         viewModel.fetchCustomerOrder(mobileNumber).observe(viewLifecycleOwner, Observer { model ->
 
             if (!model.courierOrderViewModel.isNullOrEmpty()) {
                 customerOrderAdapter.initLoad(model.courierOrderViewModel!!)
+                binding?.trackInfoLayout?.visibility = View.VISIBLE
             } else {
                 context?.toast("সঠিক মোবাইল নম্বর দিয়ে সার্চ করুন")
             }
@@ -164,9 +187,28 @@ class OrderTrackingFragment : Fragment() {
         })
     }
 
+    private fun callHelpLine() {
+        try {
+            Intent(Intent.ACTION_DIAL, Uri.parse("tel:${AppConstant.hotLineNumber}")).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }.also {
+                startActivity(it)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     override fun onDestroyView() {
         binding = null
         super.onDestroyView()
+    }
+
+    private fun addFragment(fragment: Fragment, tag: String) {
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.mainActivityContainer, fragment, tag)
+        ft?.addToBackStack(tag)
+        ft?.commit()
     }
 
 
