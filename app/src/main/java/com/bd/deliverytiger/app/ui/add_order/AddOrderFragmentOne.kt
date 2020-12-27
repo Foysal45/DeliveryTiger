@@ -373,6 +373,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     R.id.toggleButtonPickup2 -> {
                         isOfficeDrop = false
                         pickupAddressLayout.visibility = View.VISIBLE
+                        calculateTotalPrice()
                     }
                 }
             }
