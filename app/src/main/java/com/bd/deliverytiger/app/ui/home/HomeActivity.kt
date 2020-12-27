@@ -17,6 +17,7 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
+import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
@@ -76,6 +77,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import org.koin.android.ext.android.inject
 import java.io.File
 import java.util.*
+import androidx.lifecycle.Observer
 
 
 class HomeActivity : AppCompatActivity(),
