@@ -18,7 +18,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
@@ -27,7 +26,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
@@ -345,11 +343,6 @@ class HomeActivity : AppCompatActivity(),
             } else {
                 addProductBtnVisibility(true)
             }
-            if (currentFragment is OrderTrackingFragment) {
-                trackingIV.visibility = View.GONE
-            } else {
-                trackingIV.visibility = View.VISIBLE
-            }
             if (currentFragment is WebViewFragment) {
                 trackingIV.visibility = View.GONE
                 searchIV.visibility = View.GONE
@@ -385,7 +378,11 @@ class HomeActivity : AppCompatActivity(),
                 trackingIV.visibility = View.VISIBLE
                 //moveFabBy(24f)
             }
-
+            if (currentFragment is OrderTrackingFragment) {
+                trackingIV.visibility = View.GONE
+            } else {
+                trackingIV.visibility = View.VISIBLE
+            }
             when (currentFragment) {
                 is DashboardFragment -> {
                     currentFragment.onResume()

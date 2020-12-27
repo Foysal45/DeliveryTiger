@@ -22,7 +22,6 @@ import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
@@ -43,6 +42,7 @@ import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.utils.*
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
@@ -75,6 +75,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private lateinit var checkTermsTV: TextView
     private lateinit var deliveryTypeRV: RecyclerView
     private lateinit var toggleButtonGroup: MaterialButtonToggleGroup
+    private lateinit var togglePickupGroup: MaterialButtonToggleGroup
+    private lateinit var toggleButtonPickup1: MaterialButton
+    private lateinit var pickupAddressLayout: ConstraintLayout
+
     private lateinit var actualPackageAmountET: EditText
     private lateinit var collectionSlotDatePicker: TextView
     private lateinit var collectionTimeSlotSpinner: AppCompatSpinner
@@ -213,6 +217,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         checkTermsTV = view.findViewById(R.id.check_terms_condition_text)
         deliveryTypeRV = view.findViewById(R.id.delivery_type_selection_rV)
         toggleButtonGroup = view.findViewById(R.id.toggle_button_group)
+        togglePickupGroup = view.findViewById(R.id.toggleButtonPickupGroup)
+        toggleButtonPickup1 = view.findViewById(R.id.toggleButtonPickup1)
+        pickupAddressLayout = view.findViewById(R.id.pickupAddressLayout)
         actualPackageAmountET = view.findViewById(R.id.actualPackageAmount)
 
         collectionSlotDatePicker = view.findViewById(R.id.collectionSlotDatePicker)
@@ -349,6 +356,22 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                         isCollection = true
                         orderType = "Delivery Taka Collection"
                         calculateTotalPrice()
+                    }
+                }
+            }
+        }
+
+        togglePickupGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    R.id.toggleButtonPickup1 -> {
+                        isOfficeDrop = true
+                        calculateTotalPrice()
+                        pickupAddressLayout.visibility = View.GONE
+                    }
+                    R.id.toggleButtonPickup2 -> {
+                        isOfficeDrop = false
+                        pickupAddressLayout.visibility = View.VISIBLE
                     }
                 }
             }
@@ -801,8 +824,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         viewModel.getCollectionCharge(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { charge ->
             collectionChargeApi = charge.toDouble()
 
-            val hubDropMsg = "( <font color='#f05a2b'>${DigitConverter.toBanglaDigit(collectionChargeApi.toInt())}</font> টাকা সেভ করুন )"
-            hubDropMsg2.text = HtmlCompat.fromHtml(hubDropMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            //হাবে ড্রপ\n(৫ টাকা সেভ)
+            val hubDropMsg = "হাবে ড্রপ (<font color='#f05a2b'>${DigitConverter.toBanglaDigit(collectionChargeApi.toInt())}</font> টাকা সেভ)"
+            //val hubDropMsg = "হাবে ড্রপ (${DigitConverter.toBanglaDigit(collectionChargeApi.toInt())} টাকা সেভ)"
+            //hubDropMsg2.text = HtmlCompat.fromHtml(hubDropMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            toggleButtonPickup1.text = HtmlCompat.fromHtml(hubDropMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            //toggleButtonPickup1.text = hubDropMsg
         })
     }
 
@@ -1226,18 +1253,21 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             context?.showToast("প্যাকেজিং নির্বাচন করুন")
             return false
         }
-        if (!isCollectionLocationSelected) {
-            context?.showToast("কালেকশন লোকেশন নির্বাচন করুন")
-            return false
+        if (!isOfficeDrop) {
+            if (!isCollectionLocationSelected) {
+                context?.showToast("কালেকশন লোকেশন নির্বাচন করুন")
+                return false
+            }
+            if (collectionAddress.trim().isEmpty()) {
+                context?.showToast("কালেকশন ঠিকানা লিখুন")
+                return false
+            }
+            if (collectionAddress.trim().length < 15) {
+                context?.showToast("বিস্তারিত কালেকশন ঠিকানা লিখুন, ন্যূনতম ১৫ ডিজিট")
+                return false
+            }
         }
-        if (collectionAddress.trim().isEmpty()) {
-            context?.showToast("কালেকশন ঠিকানা লিখুন")
-            return false
-        }
-        if (collectionAddress.trim().length < 15) {
-            context?.showToast("বিস্তারিত কালেকশন ঠিকানা লিখুন, ন্যূনতম ১৫ ডিজিট")
-            return false
-        }
+
         if (deliveryType.isEmpty()) {
             context?.showToast("ডেলিভারি টাইপ নির্বাচন করুন")
             return false

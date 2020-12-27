@@ -91,6 +91,8 @@
     <string name="referral">রেফার করুন</string>
     <string name="orderType1">শুধু ডেলিভারি\n(প্রি-পেইড)</string>
     <string name="orderType2">ডেলিভারি+টাকা কালেকশন\n(COD)</string>
+    <string name="pickupType1">হাবে ড্রপ\n(৫ টাকা সেভ)</string>
+    <string name="pickupType2">পিক আপ</string>
 
 
 </resources>

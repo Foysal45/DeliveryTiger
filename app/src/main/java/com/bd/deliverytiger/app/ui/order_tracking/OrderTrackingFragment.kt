@@ -18,7 +18,6 @@ import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.AppConstant
 import com.bd.deliverytiger.app.utils.ViewState
 import com.bd.deliverytiger.app.utils.hideKeyboard
-import com.bd.deliverytiger.app.utils.toast
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -31,10 +30,12 @@ class OrderTrackingFragment : Fragment() {
     private lateinit var customerOrderAdapter: CustomerOrderAdapter
 
     private var orderID = ""
+    private var containerType: String = ""
 
     companion object {
-        fun newInstance(orderID: String): OrderTrackingFragment = OrderTrackingFragment().apply {
+        fun newInstance(orderID: String, containerType: String = ""): OrderTrackingFragment = OrderTrackingFragment().apply {
             this.orderID = orderID
+            this.containerType = containerType
         }
         val tag: String = OrderTrackingFragment::class.java.name
     }
@@ -49,6 +50,9 @@ class OrderTrackingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (containerType == "login") {
+            binding?.complainBtn?.visibility = View.GONE
+        }
 
         dataAdapter = OrderTrackingNewAdapter()
         customerOrderAdapter = CustomerOrderAdapter()
@@ -81,7 +85,7 @@ class OrderTrackingFragment : Fragment() {
 
         binding?.complainBtn?.setOnClickListener {
             val tag = ComplainFragment.tag
-            val fragment = ComplainFragment.newInstance()
+            val fragment = ComplainFragment.newInstance(orderID)
             addFragment(fragment, tag)
         }
 
