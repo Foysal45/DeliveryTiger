@@ -382,9 +382,9 @@ class HomeActivity : AppCompatActivity(),
             }
             if (currentFragment is OrderTrackingFragment) {
                 trackingIV.visibility = View.GONE
-            } else {
+            } /*else {
                 trackingIV.visibility = View.VISIBLE
-            }
+            }*/
             when (currentFragment) {
                 is DashboardFragment -> {
                     currentFragment.onResume()
