@@ -141,6 +141,8 @@
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
             android:text="পূর্বের সকল কমপ্লেইন"
+            android:visibility="gone"
+            tools:visibility="visible"
             />
 
         <androidx.recyclerview.widget.RecyclerView

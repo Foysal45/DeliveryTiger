@@ -14,7 +14,7 @@ import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
 import org.koin.android.ext.android.inject
 
-class ComplainFragment: Fragment() {
+class ComplainFragment(): Fragment() {
 
     private var binding: FragmentComplainBinding? = null
     private val viewModel: ComplainViewModel by inject()
@@ -23,8 +23,13 @@ class ComplainFragment: Fragment() {
 
     private var selectedType = 0
 
+    private var orderId: String? = null
+
     companion object {
-        fun newInstance(): ComplainFragment = ComplainFragment()
+        fun newInstance(orderId: String? = null): ComplainFragment = ComplainFragment().apply {
+            this.orderId = orderId
+        }
+
         val tag: String = ComplainFragment::class.java.name
     }
 
@@ -45,6 +50,8 @@ class ComplainFragment: Fragment() {
         setUpSpinner()
         initComplainList()
         fetchComplain()
+
+        binding?.orderCodeTV?.setText(orderId)
 
         binding?.submitBtn?.setOnClickListener {
             hideKeyboard()
@@ -99,6 +106,9 @@ class ComplainFragment: Fragment() {
 
         viewModel.fetchComplainList(SessionManager.courierUserId, 0).observe(viewLifecycleOwner, Observer { list ->
             dataAdapter.initLoad(list)
+            if (list.isNotEmpty()){
+                binding?.complaintTitle?.visibility = View.VISIBLE
+            }
         })
     }
 

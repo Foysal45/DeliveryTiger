@@ -423,9 +423,10 @@
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="18dp"
+                        android:layout_marginBottom="18dp"
 
                         android:visibility="gone"
-                        app:sliderIndicatorMarginBottom="16dp"
+                        app:sliderIndicatorMarginBottom="3dp"
                         app:sliderIndicatorRadius="2dp"
                         tools:visibility="visible" />
 
