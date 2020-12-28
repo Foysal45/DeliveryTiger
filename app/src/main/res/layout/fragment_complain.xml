@@ -138,7 +138,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
             android:textSize="18sp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/black_90"
             android:textStyle="bold"
             android:text="পূর্বের সকল কমপ্লেইন"
             android:visibility="gone"
