@@ -47,10 +47,10 @@ class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             binding.orderCode.text = "DT-${model.orderId}"
             if (model.complaintDate != null) {
-                val list = model.complaintDate!!.split("T")
-                if (list.isNotEmpty()) {
-                    binding.date.text = list.first()
-                }
+                val formattedDate = DigitConverter.toBanglaDate(model.complaintDate!!,"yyyy-MM-dd", false)
+                binding.date.text = formattedDate
+            } else {
+                binding.date.text = ""
             }
 
             binding.status.text = "স্টেটাস: ${model.complainType}"

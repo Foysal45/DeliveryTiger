@@ -64,7 +64,7 @@
             android:id="@+id/status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="6dp"
             android:ellipsize="end"
             android:maxLines="2"
             android:textColor="@color/black_80"
