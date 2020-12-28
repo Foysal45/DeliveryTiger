@@ -22,6 +22,7 @@ import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
@@ -48,7 +49,6 @@ import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import androidx.lifecycle.Observer
 
 @SuppressLint("SetTextI18n")
 class AddOrderFragmentOne : Fragment(), View.OnClickListener {
@@ -999,7 +999,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private fun setUpCollectionSpinner(pickupParentList: List<PickupLocation>?, thanaOrAriaList: List<ThanaPayLoad>?, optionFlag: Int) {
 
         val pickupList: MutableList<String> = mutableListOf()
-        pickupList.add("কালেকশন লোকেশন")
+        pickupList.add("পিক আপ লোকেশন")
         if (optionFlag == 1) {
             pickupParentList?.forEach {
                 pickupList.add(it.thanaName ?: "")

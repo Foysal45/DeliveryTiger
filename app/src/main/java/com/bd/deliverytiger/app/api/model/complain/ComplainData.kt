@@ -11,5 +11,10 @@ data class ComplainData(
     @SerializedName("OrderId")
     var orderId: Int = 0,
     @SerializedName("ComplainType")
-    var complainType: String? = ""
+    var complainType: String? = "",
+    @SerializedName("Complain")
+    var complain: String? = "",
+
+    //Internal use only
+    var isExpand: Boolean = false
 )

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackData
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackReqBody
+import com.bd.deliverytiger.app.api.model.order_track.OrderTrackResponse
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -19,9 +20,9 @@ class OrderTrackingViewModel(private val repository: AppRepository): ViewModel()
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
 
-    fun fetchOrderTrackingList(orderId: String): LiveData<List<OrderTrackData>> {
+    fun fetchOrderTrackingList(orderId: String): LiveData<OrderTrackResponse> {
 
-        val responseData: MutableLiveData<List<OrderTrackData>> = MutableLiveData()
+        val responseData: MutableLiveData<OrderTrackResponse> = MutableLiveData()
 
         viewState.value = ViewState.ProgressState(true)
         viewModelScope.launch(Dispatchers.IO) {

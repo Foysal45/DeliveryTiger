@@ -6,13 +6,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
+import com.bd.deliverytiger.app.api.model.order_track.OrderTrackData
 import com.bd.deliverytiger.app.databinding.FragmentOrderTrackingBinding
+import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.complain.ComplainFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.AppConstant
@@ -62,12 +66,14 @@ class OrderTrackingFragment : Fragment() {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = dataAdapter
         }
-
         /*dataAdapter.onItemClick = { model, position ->
             val tag = OrderTrackingBottomSheet.tag
             val dialog = OrderTrackingBottomSheet.newInstance(model)
             dialog.show(childFragmentManager, tag)
         }*/
+        dataAdapter.onLocationClick = { model, position ->
+            goToHubLocation(model)
+        }
         customerOrderAdapter.onItemClick = { model, position ->
             orderID = model.courierOrdersId ?: ""
             binding?.recyclerView?.adapter = dataAdapter
@@ -114,7 +120,7 @@ class OrderTrackingFragment : Fragment() {
 
         // Test
         if (BuildConfig.DEBUG) {
-            binding?.orderIdET?.setText("DT-246194") //DT-12222 01715269261
+            binding?.orderIdET?.setText("DT-248667") //DT-12222 01715269261
         }
     }
 
@@ -160,13 +166,67 @@ class OrderTrackingFragment : Fragment() {
 
     private fun getOrderTrackingList(orderId: String) {
 
-        binding?.orderCode?.text = orderId
-        binding?.reference?.text = "Reference"
-
         dataAdapter.clear()
-        viewModel.fetchOrderTrackingList(orderId).observe(viewLifecycleOwner, Observer { list ->
-            if (list.isNotEmpty()) {
-                dataAdapter.initLoad(list)
+        viewModel.fetchOrderTrackingList(orderId).observe(viewLifecycleOwner, Observer { model ->
+
+            binding?.orderCode?.text = model.courierOrdersViewModel.courierOrdersId
+            binding?.reference?.text = model.courierOrdersViewModel.collectionName
+            if (model.orderTrackingGroupViewModel.isNotEmpty()) {
+
+                val filteredShipmentList = model.orderTrackingGroupViewModel.filter { it.trackingFlag && it.trackingColor == "green" }
+                val filteredReturnList = model.orderTrackingGroupViewModel.filter { it.trackingFlag && it.trackingColor == "red" }
+
+
+                val shipmentStep = filteredShipmentList.size
+                val returnStep = filteredReturnList.size
+                var shipmentIndex = 0
+                var returnIndex = 0
+
+                model.orderTrackingGroupViewModel.forEach {
+                    if (shipmentStep >= 2) {
+                        if (it.trackingFlag && it.trackingColor == "green") {
+                            if (shipmentStep == 2) {
+                                if (shipmentIndex == 0) {
+                                    it.trackState = 1 //top
+                                } else if (shipmentIndex == 1) {
+                                    it.trackState = 3 //bottom
+                                }
+                            } else {
+                                if (shipmentIndex == 0) {
+                                    it.trackState = 1 //top
+                                } else if (shipmentIndex == (shipmentStep-1)) {
+                                    it.trackState = 3 //bottom
+                                } else {
+                                    it.trackState = 2 //middle
+                                }
+                            }
+                            shipmentIndex++
+                        }
+                    }
+                    if (returnStep >= 2) {
+                        if (it.trackingFlag && it.trackingColor == "red") {
+                            if (returnStep == 2) {
+                                if (returnIndex == 0) {
+                                    it.trackState = 1 //top
+                                } else if (returnIndex == 1) {
+                                    it.trackState = 3 //bottom
+                                }
+                            } else {
+                                if (returnIndex == 0) {
+                                    it.trackState = 1 //top
+                                } else if (returnIndex == (returnStep-1)) {
+                                    it.trackState = 3 //bottom
+                                } else {
+                                    it.trackState = 2 //middle
+                                }
+                            }
+                            returnIndex++
+                        }
+                    }
+                }
+
+
+                dataAdapter.initLoad(model.orderTrackingGroupViewModel)
                 binding?.trackInfoLayout?.visibility = View.VISIBLE
             } else {
                 context?.toast(getString(R.string.give_right_order_id))
@@ -202,6 +262,42 @@ class OrderTrackingFragment : Fragment() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun goToHubLocation(model: OrderTrackData) {
+
+        val hubModel = HubInfo()
+        if (model.trackingFlag && model.trackingColor == "green") {
+            val trackHub = model.subTrackingShipmentName
+            hubModel.apply {
+                id = 0
+                name = trackHub.name
+                value = trackHub.value
+                hubAddress = trackHub.hubAddress
+                latitude = trackHub.latitude
+                longitude = trackHub.longitude
+                hubMobile = trackHub.hubMobile
+            }
+        } else if (model.trackingFlag && model.trackingColor == "red") {
+            val trackHub = model.subTrackingReturnName
+            hubModel.apply {
+                id = 0
+                name = trackHub.name
+                value = trackHub.value
+                hubAddress = trackHub.hubAddress
+                latitude = trackHub.latitude
+                longitude = trackHub.longitude
+                hubMobile = trackHub.hubMobile
+            }
+        }
+
+        val bundle = bundleOf(
+            "hubView" to true,
+            "hubModel" to hubModel
+        )
+        val fragment = MapFragment.newInstance(bundle)
+        val tag = MapFragment.tag
+        addFragment(fragment, tag)
     }
 
     override fun onDestroyView() {

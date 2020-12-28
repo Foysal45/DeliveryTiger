@@ -3,15 +3,17 @@ package com.bd.deliverytiger.app.ui.complain
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.api.model.complain.ComplainData
 import com.bd.deliverytiger.app.databinding.ItemViewComplainBinding
+import com.bd.deliverytiger.app.utils.DigitConverter
 
 class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList: MutableList<ComplainData> = mutableListOf()
     var onItemClicked: ((model: ComplainData) -> Unit)? = null
-
+    private val charLimit = 85
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding: ItemViewComplainBinding = ItemViewComplainBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewModel(binding)
@@ -25,6 +27,24 @@ class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val model = dataList[position]
             val binding = holder.binding
 
+            //model.complain = "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet."
+            if (!model.complain.isNullOrEmpty()) {
+                if (!model.isExpand && model.complain!!.length > charLimit) {
+                    val subString = model.complain!!.substring(0, charLimit-1) + "...<font color='#00844A'>বিস্তারিত</font>"
+                    binding.complainType.text = HtmlCompat.fromHtml(subString, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                    binding.complainType.setOnClickListener {
+                        if (!model.isExpand) {
+                            model.isExpand = true
+                            notifyItemChanged(position)
+                        }
+                    }
+                } else {
+                    binding.complainType.text = model.complain
+                }
+            } else {
+                binding.complainType.text = ""
+            }
+
             binding.orderCode.text = "DT-${model.orderId}"
             if (model.complaintDate != null) {
                 val list = model.complaintDate!!.split("T")
@@ -32,12 +52,11 @@ class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     binding.date.text = list.first()
                 }
             }
+
             binding.status.text = "স্টেটাস: ${model.complainType}"
             if (model.solvedDate != null && model.solvedDate != "0001-01-01T00:00:00Z") {
-                val list = model.solvedDate!!.split("T")
-                if (list.isNotEmpty()) {
-                    binding.complain.text = "কমপ্লেইন সল্ভ: ${list.first()}"
-                }
+                val formattedDate = DigitConverter.toBanglaDate(model.solvedDate!!,"yyyy-MM-dd", true)
+                binding.status.append(" ($formattedDate)")
             }
         }
     }

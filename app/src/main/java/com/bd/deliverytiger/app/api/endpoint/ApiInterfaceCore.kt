@@ -27,9 +27,9 @@ import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderResponse
-import com.bd.deliverytiger.app.api.model.order_track.OrderTrackData
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackMainResponse
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackReqBody
+import com.bd.deliverytiger.app.api.model.order_track.OrderTrackResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
@@ -123,7 +123,7 @@ interface ApiInterfaceCore {
     suspend fun getOrderTrackingList(@Path("flag") flag: String, @Body requestBody: OrderTrackReqBody): NetworkResponse<GenericResponse<List<OrderTrackMainResponse>>, ErrorResponse>
 
     @POST("api/Fetch/GetOrderTrackingNew/{flag}")
-    suspend fun getOrderTrackingNewList(@Path("flag") flag: String, @Body requestBody: OrderTrackReqBody): NetworkResponse<GenericResponse<List<OrderTrackData>>, ErrorResponse>
+    suspend fun getOrderTrackingNewList(@Path("flag") flag: String, @Body requestBody: OrderTrackReqBody): NetworkResponse<GenericResponse<OrderTrackResponse>, ErrorResponse>
 
     @GET("api/Fetch/GetCustomerOrders/{mobileNumber}")
     suspend fun fetchCustomerOrder(@Path("mobileNumber") mobileNumber: String): NetworkResponse<GenericResponse<CODResponse>, ErrorResponse>

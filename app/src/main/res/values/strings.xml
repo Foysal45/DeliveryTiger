@@ -56,7 +56,7 @@
         <item>প্যাকেজিং</item>
     </string-array>
     <string-array name="spinner_array_collection_location">
-        <item>কালেকশন লোকেশন</item>
+        <item>পিক আপ লোকেশন</item>
     </string-array>
     <string-array name="arrayMonth">
         <item>মাস নির্বাচন</item>

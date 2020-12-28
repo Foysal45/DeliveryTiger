@@ -176,6 +176,7 @@
                     android:padding="16dp"
                     android:visibility="gone"
                     tools:visibility="visible"
+                    android:background="@color/background"
                     >
 
                     <TextView
@@ -223,35 +224,37 @@
 
                     <TextView
                         android:id="@+id/reference"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black_80"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="@id/referenceTitle"
                         app:layout_constraintTop_toBottomOf="@id/referenceTitle"
+                        app:layout_constraintEnd_toEndOf="@id/referenceTitle"
                         tools:text="6666" />
 
                     <TextView
                         android:id="@+id/trackingTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="0dp"
                         android:text="পার্সেল ট্র্যাকিং"
                         android:textColor="@color/black_80"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/orderCode" />
+                        app:layout_constraintBottom_toTopOf="@id/recyclerView"
+                        />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
                         android:layout_marginBottom="16dp"
                         android:clipToPadding="false"
                         android:overScrollMode="never"
-                        android:paddingTop="@dimen/order_tracking_start_end"
-                        app:layout_constraintTop_toBottomOf="@id/trackingTitle"
+                        app:layout_constraintTop_toBottomOf="@id/orderCode"
 
                         tools:itemCount="2"
                         tools:listitem="@layout/item_view_order_track"
