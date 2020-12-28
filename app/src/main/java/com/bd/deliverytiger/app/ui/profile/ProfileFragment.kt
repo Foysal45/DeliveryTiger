@@ -527,6 +527,7 @@ class ProfileFragment : Fragment() {
             dialog.onUpdateClicked = { model ->
                 dialog.dismiss()
                 context?.toast("সফলভাবে পিকআপ লোকেশন আপডেট হয়েছে")
+                getPickupLocation()
             }
         }
         pickupAddressAdapter.onDeleteClicked = { model ->
