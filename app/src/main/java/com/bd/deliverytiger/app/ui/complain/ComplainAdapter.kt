@@ -53,7 +53,7 @@ class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 binding.date.text = ""
             }
 
-            binding.status.text = "স্টেটাস: ${model.complainType}"
+            binding.status.text = "বর্তমান স্ট্যাটাস: ${model.complainType}"
             if (model.solvedDate != null && model.solvedDate != "0001-01-01T00:00:00Z") {
                 val formattedDate = DigitConverter.toBanglaDate(model.solvedDate!!,"yyyy-MM-dd", true)
                 binding.status.append(" ($formattedDate)")

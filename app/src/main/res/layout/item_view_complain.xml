@@ -73,7 +73,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/complainType"
-            tools:text="স্টেটাস: Solved (date)" />
+            tools:text="বর্তমান স্ট্যাটাস: Solved (date)" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
