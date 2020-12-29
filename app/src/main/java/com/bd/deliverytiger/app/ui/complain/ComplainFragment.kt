@@ -138,7 +138,7 @@ class ComplainFragment(): Fragment() {
     private fun setUpSpinner() {
 
         val pickupDistrictList: MutableList<String> = mutableListOf()
-        pickupDistrictList.add("নতুন কমপ্লেইন এন্ট্রি করুন")
+        pickupDistrictList.add("কমপ্লেইন টাইপ সিলেক্ট করুন")
         pickupDistrictList.add("কাস্টমার এখনো পার্সেল ডেলিভারি পায় নাই")
         pickupDistrictList.add("রিটার্ন পার্সেল এখনো বুঝে পাই নাই")
         pickupDistrictList.add("COD পেমেন্ট এখনো পাই নাই")

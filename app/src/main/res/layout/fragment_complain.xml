@@ -27,8 +27,18 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/bg_complain_add"
-            android:padding="8dp"
+            android:padding="16dp"
             >
+
+            <TextView
+                android:id="@+id/formTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black_90"
+                android:textStyle="bold"
+                android:text="নতুন কমপ্লেইন এন্ট্রি করুন"
+                />
 
             <EditText
                 android:id="@+id/orderCodeTV"
@@ -44,7 +54,7 @@
                 android:paddingBottom="8dp"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
-
+                android:layout_marginTop="12dp"
                 />
 
 

@@ -39,6 +39,7 @@ import com.bd.deliverytiger.app.ui.referral.ReferralFragment
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
+import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -336,6 +337,14 @@ class DashboardFragment : Fragment() {
             val sliderAdapter = SliderAdapter()
             sliderAdapter.initList(bannerUrlList)
             binding?.sliderView?.setSliderAdapter(sliderAdapter)
+            sliderAdapter.onItemClick = { data, position ->
+                val model = bannerList[position]
+                //goToWebView(model.webUrl ?: "")
+                if (model.isWebLinkActive) {
+                    goToWebView(model.webUrl ?: "")
+                }
+            }
+
 
             binding?.sliderView?.let { view ->
                 with(view) {
@@ -773,6 +782,13 @@ class DashboardFragment : Fragment() {
         ft?.add(R.id.mainActivityContainer, fragment, MapFragment.tag)
         ft?.addToBackStack(MapFragment.tag)
         ft?.commit()
+    }
+
+    private fun goToWebView(url: String) {
+
+        val fragment = WebViewFragment.newInstance(url, "ডেলিভারি টাইগার")
+        val tag = WebViewFragment.tag
+        addFragment(fragment, tag)
     }
 
     override fun onDestroyView() {

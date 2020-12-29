@@ -79,11 +79,10 @@
     </string-array>
     <string-array name="registration_known_source">
         <item>ডেলিভারি টাইগার সম্পর্কে শুনেছেন</item>
-        <item>Facebook</item>
-        <item>Email</item>
-        <item>LinkedIn</item>
-        <item>Twitter</item>
-        <item>Others</item>
+        <item>ফেসবুক</item>
+        <item>পরিচিত কারো থেকে</item>
+        <item>কল সেন্টারের কল থেকে</item>
+        <item>ইমেইল থেকে</item>
     </string-array>
     <string name="file_provider_authority" translatable="false">com.bd.deliverytiger.app.fileprovider</string>
 

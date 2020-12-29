@@ -169,8 +169,8 @@ class OrderTrackingFragment : Fragment() {
         dataAdapter.clear()
         viewModel.fetchOrderTrackingList(orderId).observe(viewLifecycleOwner, Observer { model ->
 
-            binding?.orderCode?.text = model.courierOrdersViewModel.courierOrdersId
-            binding?.reference?.text = model.courierOrdersViewModel.collectionName
+            binding?.orderCode?.text = model.courierOrdersViewModel?.courierOrdersId
+            binding?.reference?.text = model.courierOrdersViewModel?.collectionName
             if (model.orderTrackingGroupViewModel.isNotEmpty()) {
 
                 val filteredShipmentList = model.orderTrackingGroupViewModel.filter { it.trackingFlag && it.trackingColor == "green" }
