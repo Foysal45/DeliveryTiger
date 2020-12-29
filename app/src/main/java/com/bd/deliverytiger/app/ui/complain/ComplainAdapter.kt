@@ -28,9 +28,9 @@ class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val binding = holder.binding
 
             //model.complain = "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet."
-            if (!model.complain.isNullOrEmpty()) {
-                if (!model.isExpand && model.complain!!.length > charLimit) {
-                    val subString = model.complain!!.substring(0, charLimit-1) + "...<font color='#00844A'>বিস্তারিত</font>"
+            if (!model.comments.isNullOrEmpty()) {
+                if (!model.isExpand && model.comments!!.length > charLimit) {
+                    val subString = model.comments!!.substring(0, charLimit-1) + "...<font color='#00844A'>বিস্তারিত</font>"
                     binding.complainType.text = HtmlCompat.fromHtml(subString, HtmlCompat.FROM_HTML_MODE_LEGACY)
                     binding.complainType.setOnClickListener {
                         if (!model.isExpand) {
@@ -39,7 +39,7 @@ class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         }
                     }
                 } else {
-                    binding.complainType.text = model.complain
+                    binding.complainType.text = model.comments
                 }
             } else {
                 binding.complainType.text = ""
@@ -53,7 +53,7 @@ class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 binding.date.text = ""
             }
 
-            binding.status.text = "বর্তমান স্ট্যাটাস: ${model.complainType}"
+            binding.status.text = "স্ট্যাটাস: ${model.complainType}"
             if (model.solvedDate != null && model.solvedDate != "0001-01-01T00:00:00Z") {
                 val formattedDate = DigitConverter.toBanglaDate(model.solvedDate!!,"yyyy-MM-dd", true)
                 binding.status.append(" ($formattedDate)")

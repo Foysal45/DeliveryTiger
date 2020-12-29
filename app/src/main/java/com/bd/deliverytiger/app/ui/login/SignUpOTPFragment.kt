@@ -42,14 +42,16 @@ class SignUpOTPFragment : Fragment() {
     private var referCode: String = ""
     private var bkashNumber: String = ""
     private var preferredPaymentCycle: String = ""
+    private var knowingSource: String = ""
 
     companion object {
-        fun newInstance(userMobile: String, userPassword: String, referCode: String, bkashNumber: String, preferredPaymentCycle: String): SignUpOTPFragment = SignUpOTPFragment().apply {
+        fun newInstance(userMobile: String, userPassword: String, referCode: String, bkashNumber: String, preferredPaymentCycle: String, knowingSource: String): SignUpOTPFragment = SignUpOTPFragment().apply {
             this.userMobile = userMobile
             this.userPassword = userPassword
             this.referCode = referCode
             this.bkashNumber = bkashNumber
             this.preferredPaymentCycle = preferredPaymentCycle
+            this.knowingSource = knowingSource
         }
 
         val tag = SignUpOTPFragment::class.java.name
@@ -149,7 +151,7 @@ class SignUpOTPFragment : Fragment() {
     private fun registerUser() {
 
         val loginInterface = RetrofitSingleton.getInstance(mContext).create(LoginInterface::class.java)
-        val signUpReqBody = SignUpReqBody(userMobile, userPassword, referCode, bkashNumber, preferredPaymentCycle)
+        val signUpReqBody = SignUpReqBody(userMobile, userPassword, referCode, bkashNumber, preferredPaymentCycle, knowingSource)
         loginInterface.userUserRegister(signUpReqBody).enqueue(object : Callback<GenericResponse<SignUpResponse>> {
             override fun onFailure(call: Call<GenericResponse<SignUpResponse>>, t: Throwable) {
                 Timber.e("userUserRegister", "failed " + t.message)

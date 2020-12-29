@@ -261,6 +261,37 @@
 
                     </LinearLayout>
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+
+                        <androidx.appcompat.widget.AppCompatSpinner
+                            android:id="@+id/spinnerAboutDeliveryTiger"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/login_view_height"
+                            android:overlapAnchor="false"
+                            android:spinnerMode="dropdown"
+                            android:theme="@style/custom_spinner_style"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:entries="@array/registration_known_source" />
+
+                        <!--<ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:contentDescription="@string/cd"
+                            app:layout_constraintBottom_toBottomOf="@id/spinnerComplainType"
+                            app:layout_constraintEnd_toEndOf="@id/spinnerComplainType"
+                            app:layout_constraintTop_toTopOf="@id/spinnerComplainType"
+                            app:srcCompat="@drawable/ic_arrow_drop_down" />-->
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

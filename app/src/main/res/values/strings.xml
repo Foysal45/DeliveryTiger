@@ -77,7 +77,14 @@
         <item>শুধু ডেলিভারি (প্রি-পেইড)</item>
         <item>ডেলিভারি + টাকা কালেকশন (COD)</item>
     </string-array>
-
+    <string-array name="registration_known_source">
+        <item>ডেলিভারি টাইগার সম্পর্কে শুনেছেন</item>
+        <item>Facebook</item>
+        <item>Email</item>
+        <item>LinkedIn</item>
+        <item>Twitter</item>
+        <item>Others</item>
+    </string-array>
     <string name="file_provider_authority" translatable="false">com.bd.deliverytiger.app.fileprovider</string>
 
     <string name="cod_collection">COD - পরিশোধিত</string>
@@ -91,8 +98,8 @@
     <string name="referral">রেফার করুন</string>
     <string name="orderType1">শুধু ডেলিভারি\n(প্রি-পেইড)</string>
     <string name="orderType2">ডেলিভারি+টাকা কালেকশন\n(COD)</string>
-    <string name="pickupType1">হাবে ড্রপ\n(৫ টাকা সেভ)</string>
-    <string name="pickupType2">পিক আপ</string>
+    <string name="pickupType1">হাবে ড্রপ করব\n(৫৳ সেভ)</string>
+    <string name="pickupType2">কালেক্টর দ্বারা\npick up হবে</string>
 
 
 </resources>

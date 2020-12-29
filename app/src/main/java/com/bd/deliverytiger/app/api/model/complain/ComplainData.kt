@@ -12,8 +12,8 @@ data class ComplainData(
     var orderId: Int = 0,
     @SerializedName("ComplainType")
     var complainType: String? = "",
-    @SerializedName("Complain")
-    var complain: String? = "",
+    @SerializedName("Comments")
+    var comments: String? = "",
 
     //Internal use only
     var isExpand: Boolean = false

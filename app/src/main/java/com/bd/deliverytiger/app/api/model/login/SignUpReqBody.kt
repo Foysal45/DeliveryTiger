@@ -13,6 +13,10 @@ data class SignUpReqBody(
     var bkashNumber: String = "",
     @SerializedName("preferredPaymentCycle")
     var preferredPaymentCycle: String = "",
+    @SerializedName("knowingSource")
+    var knowingSource: String = "",
+    @SerializedName("registrationFrom")
+    var registrationFrom: String = "app",
 
     @SerializedName("userName")
     var userName: String = "user name",

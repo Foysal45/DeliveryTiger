@@ -175,41 +175,10 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     tools:visibility="visible"
-                    android:background="#f1eff0"
+
                     android:layout_margin="16dp"
                     >
 
-                    <TextView
-                        android:id="@+id/title"
-                        android:layout_width="0dp"
-                        android:layout_height="36dp"
-                        android:text="অন্যান্য তথ্য"
-                        android:textColor="@color/black_80"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:background="@color/white"
-                        android:gravity="center_vertical"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="0dp"
-                        />
-
-                    <TextView
-                        android:id="@+id/orderCodeTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginStart="16dp"
-                        android:text="DT অর্ডার কোড"
-                        android:textColor="#58595B"
-                        android:textSize="12sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/title" />
 
                     <TextView
                         android:id="@+id/orderCode"
@@ -217,55 +186,44 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/black_80"
                         android:textSize="16sp"
-                        app:layout_constraintStart_toStartOf="@id/orderCodeTitle"
-                        app:layout_constraintTop_toBottomOf="@id/orderCodeTitle"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:textStyle="bold"
                         tools:text="DT-12345" />
 
                     <TextView
                         android:id="@+id/referenceTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginEnd="16dp"
+
                         android:text="নিজস্ব রেফারেন্স নম্বর/ইনভয়েস"
                         android:textColor="#58595B"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/title" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/reference"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black_80"
-                        android:textSize="16sp"
+                        android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="@id/referenceTitle"
                         app:layout_constraintTop_toBottomOf="@id/referenceTitle"
                         app:layout_constraintEnd_toEndOf="@id/referenceTitle"
                         tools:text="6666" />
 
-                    <TextView
-                        android:id="@+id/trackingTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="পার্সেল ট্র্যাকিং"
-                        android:textColor="@color/black_80"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/recyclerView"
-                        />
-
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
                         android:clipToPadding="false"
                         android:overScrollMode="never"
-                        app:layout_constraintTop_toBottomOf="@id/orderCode"
+                        app:layout_constraintTop_toBottomOf="@id/reference"
+                        android:background="#f1eff0"
+                        android:paddingBottom="16dp"
 
                         tools:itemCount="2"
                         tools:listitem="@layout/item_view_order_track"

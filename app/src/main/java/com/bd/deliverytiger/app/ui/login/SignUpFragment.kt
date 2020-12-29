@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.AppCompatSpinner
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -43,6 +44,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     private lateinit var bkashNumberET: EditText
     private lateinit var conditionTV: TextView
     private lateinit var referTitle: TextView
+    private lateinit var knownSourceSpinner: AppCompatSpinner
 
     private lateinit var loginInterface: LoginInterface
     private lateinit var checkReferrer: LoginInterface
@@ -75,6 +77,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         bkashNumberET = view.findViewById(R.id.bkashNumber)
         conditionTV = view.findViewById(R.id.conditionTV)
         referTitle = view.findViewById(R.id.referTitle)
+        knownSourceSpinner = view.findViewById(R.id.spinnerAboutDeliveryTiger)
 
         loginInterface = RetrofitSingletonAPI.getInstance(requireContext()).create(LoginInterface::class.java)
         checkReferrer = RetrofitSingleton.getInstance(requireContext()).create(LoginInterface::class.java)
@@ -278,8 +281,9 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         val password = etSignUpPassword.text.toString()
         val referCode = referCodeET.text.toString()
         val bkashNumber = bkashNumberET.text.toString().trim()
+        val knowingSource: String = if (knownSourceSpinner.selectedItemPosition == 0) "" else knownSourceSpinner.selectedItem.toString()
 
-        val fragment = SignUpOTPFragment.newInstance(mobile, password, referCode, bkashNumber, preferredPaymentCycle)
+        val fragment = SignUpOTPFragment.newInstance(mobile, password, referCode, bkashNumber, preferredPaymentCycle, knowingSource)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpOTPFragment.tag)
         ft?.commit()
