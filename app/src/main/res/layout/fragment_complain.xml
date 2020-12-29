@@ -102,40 +102,51 @@
                 tools:visibility="visible"
                 />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                >
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/submitBtn"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="সাবমিট"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_14"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="8dp"
+                    android:elevation="4dp"
+                    android:indeterminateTint="@color/white"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/submitBtn"
+                    app:layout_constraintStart_toStartOf="@id/submitBtn"
+                    app:layout_constraintTop_toTopOf="@id/submitBtn"
+                    tools:visibility="visible" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/submitBtn"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/colorPrimary"
-            android:text="সাবমিট"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_14"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/inputLayout" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="8dp"
-            android:elevation="4dp"
-            android:indeterminateTint="@color/white"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/submitBtn"
-            app:layout_constraintStart_toStartOf="@id/submitBtn"
-            app:layout_constraintTop_toTopOf="@id/submitBtn"
-            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/complaintTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/submitBtn"
+            app:layout_constraintTop_toBottomOf="@id/inputLayout"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
