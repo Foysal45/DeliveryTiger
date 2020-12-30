@@ -170,8 +170,17 @@ class AllOrdersFragment : Fragment() {
         }
 
         allOrdersAdapter.onEditItemClick = { position ->
-            val orderUpdateReqBody = UpdateOrderReqBody(courierOrderViewModelList!![position]?.id,courierOrderViewModelList!![position]?.customerName,courierOrderViewModelList!![position]?.courierAddressContactInfo?.mobile,courierOrderViewModelList!![position]?.courierAddressContactInfo?.otherMobile,courierOrderViewModelList!![position]?.courierAddressContactInfo?.address,courierOrderViewModelList!![position]?.userInfo?.collectAddress,courierOrderViewModelList!![position]?.courierOrderInfo?.collectionName)
-            editOrder(courierOrderViewModelList!![position]?.courierOrdersId.toString(),orderUpdateReqBody, position)
+            val model = courierOrderViewModelList[position]
+            val orderUpdateReqBody = UpdateOrderReqBody(
+                model.id,
+                model.customerName,
+                model.courierAddressContactInfo?.mobile,
+                model.courierAddressContactInfo?.otherMobile,
+                model.courierAddressContactInfo?.address,
+                model.userInfo?.collectAddress,
+                model.courierOrderInfo?.collectionName
+            )
+            editOrder(model.courierOrdersId.toString(), orderUpdateReqBody, position)
         }
 
         allOrdersAdapter.onLocationBtnClick = { model, position ->
@@ -510,8 +519,6 @@ class AllOrdersFragment : Fragment() {
                 dialog.dismiss()
             }
         }
-
-
     }
 
     private fun updateOrderApiCall(orderId: String,updateOrderReqBody: UpdateOrderReqBody, indexPos: Int){
