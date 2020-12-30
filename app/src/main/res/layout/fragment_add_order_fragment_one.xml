@@ -235,6 +235,7 @@
                         android:paddingBottom="8dp"
                         android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
+                        android:maxLength="500"
                         app:layout_constraintTop_toTopOf="parent"
                         />
 
