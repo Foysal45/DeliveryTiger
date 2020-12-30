@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.utils.DigitConverter
-import com.bd.deliverytiger.app.utils.Timber
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 /**
@@ -78,7 +77,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
             total = getDouble("total", 0.0)
         }
 
-        Timber.d("bigProductCharge ", ""+ boroProductCheck)
+        //Timber.d("bigProductCharge ", ""+ boroProductCheck)
 
         codPercentTV.text = "COD চার্জঃ (${DigitConverter.toBanglaDigit(codChargePercentage, false)}%)"
 
@@ -101,7 +100,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
         packagingChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payPackagingCharge, true)}"
 
         totalTV.text = "৳ ${DigitConverter.toBanglaDigit(total, true)}"
-        Timber.d("total_value ", ""+ total)
+        //Timber.d("total_value ", ""+ total)
 
     }
 }

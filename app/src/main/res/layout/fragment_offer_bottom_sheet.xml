@@ -125,7 +125,8 @@
             android:id="@+id/advanceTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="অর্ডার পার্সেলের প্রোডাক্টটির ছবি ও দাম আজকেরডিল এর মার্কেটপ্লেস-এ লিস্ট করুন।\nকাস্টমার কালেকশনের টাকা বিকাশ এর মাধ্যমে ডেলিভারি টাইগারকে প্রদান করলে 0 টাকা ছাড়।"
+            android:text="অর্ডার পার্সেলের প্রোডাক্টটির ছবি ও দাম আজকেরডিল এর মার্কেটপ্লেস-এ লিস্ট করুন।\nকাস্টমারকে বিকাশ পেমেন্ট করতে বলুন এবং সফল পেমেন্টে ১০ টাকা ছাড় নিন।
+"
             android:textSize="16sp"
             android:textColor="@color/black_90"
             android:gravity="center"
@@ -163,7 +164,7 @@
             android:id="@+id/advanceClaimTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="আপনাকে পেমেন্ট লিংক সহ একটি এসএমএস ও ইমেইল করা হয়েছে। এটি আপনার কাস্টমারের সাথে শেয়ার করুন। পেমেন্ট লিংক ব্যাবহার করে কাস্টমার পেমেন্ট সম্পন্ন করলেই আপনার কাছ থেকে প্রোডাক্ট ডেলিভারির জন্য কালেক্ট করা হবে।"
+            android:text="@string/offer_advance_success"
             android:textSize="16sp"
             android:textColor="@color/black_90"
             android:gravity="center"

@@ -10,7 +10,7 @@ data class BannerData(
     @SerializedName("isActive")
     var isActive: Boolean = false,
 
-    @SerializedName("isWebLinkActive ")
+    @SerializedName("isWebLinkActive")
     var isWebLinkActive : Boolean = false,
     @SerializedName("webUrl")
     var webUrl: String? = ""

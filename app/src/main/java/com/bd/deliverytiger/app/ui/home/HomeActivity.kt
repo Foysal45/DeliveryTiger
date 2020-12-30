@@ -78,6 +78,7 @@ import org.koin.android.ext.android.inject
 import java.io.File
 import java.util.*
 import androidx.lifecycle.Observer
+import timber.log.Timber
 
 
 class HomeActivity : AppCompatActivity(),
@@ -345,12 +346,7 @@ class HomeActivity : AppCompatActivity(),
             } else {
                 addProductBtnVisibility(true)
             }
-            if (currentFragment is WebViewFragment) {
-                trackingIV.visibility = View.GONE
-                searchIV.visibility = View.GONE
-                separetor.visibility = View.GONE
-                addProductBtnVisibility(false)
-            }
+
             if (currentFragment is NotificationPreviewFragment) {
                 trackingIV.visibility = View.GONE
                 searchIV.visibility = View.GONE
@@ -385,6 +381,12 @@ class HomeActivity : AppCompatActivity(),
             } /*else {
                 trackingIV.visibility = View.VISIBLE
             }*/
+            if (currentFragment is WebViewFragment) {
+                trackingIV.visibility = View.GONE
+                searchIV.visibility = View.GONE
+                separetor.visibility = View.GONE
+                addProductBtnVisibility(false)
+            }
             when (currentFragment) {
                 is DashboardFragment -> {
                     currentFragment.onResume()
@@ -486,7 +488,7 @@ class HomeActivity : AppCompatActivity(),
 
             override fun onDrawerClosed(drawerView: View) {
                 manageNavigationItemSelection(navId)
-                Timber.d("HomeActivityLog", "onDrawerClosed called")
+                //Timber.d("HomeActivityLog", "onDrawerClosed called")
                 //val inputMethodManager: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 //inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
             }
@@ -509,7 +511,7 @@ class HomeActivity : AppCompatActivity(),
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ProfileFragment) {
-                    Timber.d("tag", "ProfileFragment already exist")
+                    Timber.d( "ProfileFragment already exist")
                 } else {
                     addFragment(ProfileFragment.newInstance(), ProfileFragment.tag)
                 }
@@ -518,7 +520,7 @@ class HomeActivity : AppCompatActivity(),
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is DashboardFragment) {
-                    Timber.d("tag", "DashboardFragment already exist")
+                    Timber.d( "DashboardFragment already exist")
                 } else {
                     //addFragment(DashboardFragment.newInstance(), DashboardFragment.tag)
                     if (supportFragmentManager.backStackEntryCount > 0) {
@@ -531,7 +533,7 @@ class HomeActivity : AppCompatActivity(),
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is AddOrderFragmentOne) {
-                    Timber.d("tag", "AddOrderFragmentOne already exist")
+                    //Timber.d( "AddOrderFragmentOne already exist")
                 } else {
                     addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
                 }
@@ -541,7 +543,7 @@ class HomeActivity : AppCompatActivity(),
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is AllOrdersFragment) {
-                    Timber.d("tag", "AllOrdersFragment already exist")
+                    Timber.d( "AllOrdersFragment already exist")
                 } else {
                     addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
                 }
@@ -550,7 +552,7 @@ class HomeActivity : AppCompatActivity(),
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ServiceChargeFragment) {
-                    Timber.d("tag", "BillingofServiceFragment already exist")
+                    Timber.d( "BillingofServiceFragment already exist")
                 } else {
                     addFragment(ServiceChargeFragment.newInstance(), ServiceChargeFragment.tag)
                 }
@@ -558,7 +560,7 @@ class HomeActivity : AppCompatActivity(),
             R.id.nav_bill_pay -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ServiceBillPayFragment) {
-                    Timber.d("tag", "ServiceBillPayFragment already exist")
+                    Timber.d( "ServiceBillPayFragment already exist")
                 } else {
                     addFragment(ServiceBillPayFragment.newInstance(), ServiceBillPayFragment.tag)
                 }
@@ -566,7 +568,7 @@ class HomeActivity : AppCompatActivity(),
             R.id.nav_bill_pay_history -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ServiceBillPayHistoryFragment) {
-                    Timber.d("tag", "ServiceBillPayHistoryFragment already exist")
+                    Timber.d( "ServiceBillPayHistoryFragment already exist")
                 } else {
                     addFragment(ServiceBillPayHistoryFragment.newInstance(), ServiceBillPayHistoryFragment.tag)
                 }
@@ -576,7 +578,7 @@ class HomeActivity : AppCompatActivity(),
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is CODCollectionFragment) {
-                    Timber.d("tag", "CODCollectionFragment already exist")
+                    Timber.d( "CODCollectionFragment already exist")
                 } else {
                     addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
                 }
@@ -587,7 +589,7 @@ class HomeActivity : AppCompatActivity(),
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is OrderTrackingFragment) {
-                    Timber.d("tag", "OrderTrackingFragment already exist")
+                    Timber.d( "OrderTrackingFragment already exist")
                 } else {
                     addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
                 }
@@ -597,7 +599,7 @@ class HomeActivity : AppCompatActivity(),
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is PaymentStatementFragment) {
-                    Timber.d("tag", "PaymentHistory already exist")
+                    Timber.d( "PaymentHistory already exist")
                 } else {
                     addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
                 }
@@ -607,7 +609,7 @@ class HomeActivity : AppCompatActivity(),
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ShipmentChargeFragment) {
-                    Timber.d("tag", "ShipmentChargeFragment already exist")
+                    Timber.d( "ShipmentChargeFragment already exist")
                 } else {
                     addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
                 }
@@ -615,7 +617,7 @@ class HomeActivity : AppCompatActivity(),
             R.id.nav_profile -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ProfileFragment) {
-                    Timber.d("tag", "ProfileFragment already exist")
+                    Timber.d( "ProfileFragment already exist")
                 } else {
                     addFragment(ProfileFragment.newInstance(), ProfileFragment.tag)
                 }
@@ -623,7 +625,7 @@ class HomeActivity : AppCompatActivity(),
             R.id.nav_pickup -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ProfileFragment) {
-                    Timber.d("tag", "ProfileFragment already exist")
+                    Timber.d( "ProfileFragment already exist")
                 } else {
                     addFragment(ProfileFragment.newInstance(true), ProfileFragment.tag)
                 }
@@ -632,14 +634,14 @@ class HomeActivity : AppCompatActivity(),
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is DeliveryChargeCalculatorFragment) {
-                    Timber.d("tag", "DeliveryChargeCalculatorFragment already exist")
+                    Timber.d( "DeliveryChargeCalculatorFragment already exist")
                 } else {
                     addFragment(DeliveryChargeCalculatorFragment.newInstance(true), DeliveryChargeCalculatorFragment.tag)
                 }
 
                 /*val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is WebViewFragment) {
-                    Timber.d("tag", "WebViewFragment already exist")
+                    Timber.d( "WebViewFragment already exist")
                 } else {
                     try {
                         val fragment = WebViewFragment.newInstance(AppConstant.CHARGE_CALCULATOR, "ডেলিভারি চার্জ ক্যালকুলেটর")
@@ -652,7 +654,7 @@ class HomeActivity : AppCompatActivity(),
             R.id.nav_map -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is MapFragment) {
-                    Timber.d("tag", "MapFragment already exist")
+                    Timber.d( "MapFragment already exist")
                 } else {
                     addFragment(MapFragment.newInstance(null), MapFragment.tag)
                 }
@@ -660,7 +662,7 @@ class HomeActivity : AppCompatActivity(),
             R.id.nav_nearby_hub -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is MapFragment) {
-                    Timber.d("tag", "MapFragment already exist")
+                    Timber.d( "MapFragment already exist")
                 } else {
                     val bundle = bundleOf(
                         "isNearByHubView" to true
@@ -671,7 +673,7 @@ class HomeActivity : AppCompatActivity(),
             R.id.nav_complain -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ComplainFragment) {
-                    Timber.d("tag", "ComplainFragment already exist")
+                    Timber.d( "ComplainFragment already exist")
                 } else {
                     addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
                 }
@@ -679,7 +681,7 @@ class HomeActivity : AppCompatActivity(),
             R.id.nav_referral -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ReferralFragment) {
-                    Timber.d("tag", "ComplainFragment already exist")
+                    Timber.d( "ComplainFragment already exist")
                 } else {
                     addFragment(ReferralFragment.newInstance(), ReferralFragment.tag)
                 }
@@ -688,7 +690,7 @@ class HomeActivity : AppCompatActivity(),
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is WebViewFragment) {
-                    Timber.d("tag", "WebViewFragment already exist")
+                    Timber.d( "WebViewFragment already exist")
                 } else {
 
                     try {
@@ -703,7 +705,7 @@ class HomeActivity : AppCompatActivity(),
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is WebViewFragment) {
-                    Timber.d("tag", "WebViewFragment already exist")
+                    Timber.d( "WebViewFragment already exist")
                 } else {
 
                     try {
@@ -718,7 +720,7 @@ class HomeActivity : AppCompatActivity(),
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is WebViewFragment) {
-                    Timber.d("tag", "WebViewFragment already exist")
+                    Timber.d( "WebViewFragment already exist")
                 } else {
 
                     try {
@@ -732,7 +734,7 @@ class HomeActivity : AppCompatActivity(),
             R.id.nav_communication -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is WebViewFragment) {
-                    Timber.d("tag", "WebViewFragment already exist")
+                    Timber.d( "WebViewFragment already exist")
                 } else {
                     try {
                         val fragment = WebViewFragment.newInstance(AppConstant.COMMUNICATION_URL, "যোগাযোগ")
@@ -844,7 +846,7 @@ class HomeActivity : AppCompatActivity(),
 
             val currentFragment = supportFragmentManager.findFragmentById(R.id.container_drawer)
             if (currentFragment is NotificationFragment) {
-                Timber.d("tag", "NotificationFragment already exist")
+                Timber.d( "NotificationFragment already exist")
             } else {
                 val fragment = NotificationFragment.newInstance()
                 val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
@@ -936,9 +938,9 @@ class HomeActivity : AppCompatActivity(),
         registerReceiver(connectivityReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
         ConnectivityReceiver.connectivityReceiverListener = this
 
-        Timber.d("HomeActivityLog", "onStart Called!")
+        Timber.d( "HomeActivityLog onStart Called!")
         if (SessionManager.profileImgUri.isNotEmpty()) {
-            Timber.d("HomeActivityLog 1 ", SessionManager.profileImgUri)
+            Timber.d("HomeActivityLog 1 ${SessionManager.profileImgUri}")
             setProfileImgUrl(SessionManager.profileImgUri)
         } else {
             headerPic.setImageResource(R.drawable.ic_account)

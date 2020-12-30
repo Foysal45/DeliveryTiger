@@ -155,17 +155,11 @@ class AllOrdersFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 layoutPosition = linearLayoutManager.findLastVisibleItemPosition()
-                Timber.e(
-                    "layoutPosition",
-                    layoutPosition.toString() + " " + totalLoadedData + " " + isLoading + " " + totalCount + " " + isMoreDataAvailable
-                )
+                //Timber.e("layoutPosition", layoutPosition.toString() + " " + totalLoadedData + " " + isLoading + " " + totalCount + " " + isMoreDataAvailable)
                 if (dy > 0) {
                     if (layoutPosition >= (totalLoadedData - 2) && !isLoading && layoutPosition < totalCount && isMoreDataAvailable) {
                         getAllOrders(totalLoadedData, 20)
-                        Timber.e(
-                            "layoutPosition loadMoreCalled ",
-                            layoutPosition.toString() + " " + totalLoadedData + " " + isLoading + " " + totalCount
-                        )
+                        //Timber.e("layoutPosition loadMoreCalled ", layoutPosition.toString() + " " + totalLoadedData + " " + isLoading + " " + totalCount)
                     }
                 }
             }
@@ -230,7 +224,7 @@ class AllOrdersFragment : Fragment() {
             "", orderId, collectionName, mobileNumber, index, count
         )
 
-        Timber.e("getAllOrdersReq", reqModel.toString())
+        //Timber.e("getAllOrdersReq", reqModel.toString())
 
         allOrderInterface.getAllOrder(reqModel)
             .enqueue(object : Callback<GenericResponse<CODResponse>> {
@@ -238,7 +232,7 @@ class AllOrdersFragment : Fragment() {
                     call: Call<GenericResponse<CODResponse>>,
                     t: Throwable
                 ) {
-                    Timber.e("getAllOrdersResponse", " f " + t.toString())
+                    //Timber.e("getAllOrdersResponse", " f " + t.toString())
                     if (allOrderProgressBar.visibility == View.VISIBLE) {
                         allOrderProgressBar.visibility = View.GONE
                     }
@@ -253,10 +247,7 @@ class AllOrdersFragment : Fragment() {
                     }
                     isLoading = false
                     if (response.isSuccessful && response.body() != null && response.body()!!.model != null && isAdded) {
-                        Timber.e(
-                            "getAllOrdersResponse",
-                            " s " + response.body()!!.model.courierOrderViewModel
-                        )
+                        //Timber.e("getAllOrdersResponse", " s " + response.body()!!.model.courierOrderViewModel)
                         collectionAmount = response.body()!!.model.adTotalCollectionAmount?.toInt() ?: 0
                         paymentInProcessing = response.body()!!.model.adCourierPaymentInfo?.paymentInProcessing?.toInt() ?: 0
                         paymentPaid = response.body()!!.model.adCourierPaymentInfo?.paymentPaid?.toInt() ?: 0
@@ -268,7 +259,7 @@ class AllOrdersFragment : Fragment() {
                         allOrdersAdapter.notifyDataSetChanged()
                         isMoreDataAvailable =
                             response.body()!!.model.courierOrderViewModel!!.size >= count - 2
-                        Timber.e("getAllOrdersResponse", " s " + response.body().toString())
+                        //Timber.e("getAllOrdersResponse", " s " + response.body().toString())
 
                         if (index < 20) {
                             totalCount = response.body()!!.model.totalCount!!.toInt()
@@ -283,7 +274,7 @@ class AllOrdersFragment : Fragment() {
                         }
 
                     } else {
-                        Timber.e("getAllOrdersResponse", " s null")
+                        //Timber.e("getAllOrdersResponse", " s null")
                         //topLay.visibility = View.GONE
                         //ivEmpty.visibility = View.VISIBLE
                     }
@@ -324,7 +315,7 @@ class AllOrdersFragment : Fragment() {
                 searchTypes = searchType
                 orderTypeFilter = orderType
 
-                Timber.d("filterTag", "$searchKey $searchType")
+                //Timber.d("filterTag", "$searchKey $searchType")
 
                 if (searchType == 0){
                     mobileNumber = ""

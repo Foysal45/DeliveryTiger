@@ -21,7 +21,6 @@ import com.bd.deliverytiger.app.api.endpoint.OtherApiInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.*
 import com.bd.deliverytiger.app.api.model.terms.TermsModel
-import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
 import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
 import com.bd.deliverytiger.app.utils.VariousTask.showShortToast
@@ -196,7 +195,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         val requestBody = OTPRequestModel(mobileNo, mobileNo)
         loginInterface.sendOTP(requestBody).enqueue(object : Callback<OTPResponse> {
             override fun onFailure(call: Call<OTPResponse>, t: Throwable) {
-                Timber.e("userUserRegister", "failed " + t.message)
+                //Timber.e("userUserRegister", "failed " + t.message)
                 progressDialog?.dismiss()
                 context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
             }
@@ -204,7 +203,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
             override fun onResponse(call: Call<OTPResponse>, response: Response<OTPResponse>) {
                 progressDialog?.dismiss()
                 if (response.isSuccessful && response.body() != null && isAdded) {
-                    Timber.e("userUserRegister", response.body().toString())
+                    //Timber.e("userUserRegister", response.body().toString())
                     showShortToast(context, response.body()!!.model ?: "Send")
                     goToSignUpOTP()
                 } else {

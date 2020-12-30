@@ -119,9 +119,9 @@ class OrderTrackingFragment : Fragment() {
         })
 
         // Test
-        if (BuildConfig.DEBUG) {
+        /*if (BuildConfig.DEBUG) {
             binding?.orderIdET?.setText("DT-248667") //DT-12222 01715269261
-        }
+        }*/
     }
 
     override fun onResume() {

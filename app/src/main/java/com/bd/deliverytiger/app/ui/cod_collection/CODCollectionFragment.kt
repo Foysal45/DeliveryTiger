@@ -145,7 +145,7 @@ class CODCollectionFragment : Fragment() {
                             selectedMonthIndex = position
                             generateDateRange(selectedYear, selectedMonthIndex)
                             fetchCODCollectionDetails(0, 20)
-                            Timber.d("serviceChargeLog","selectedMonthIndex $selectedMonthIndex")
+                            //Timber.d("serviceChargeLog","selectedMonthIndex $selectedMonthIndex")
                         }
                     }
                 }
@@ -155,7 +155,7 @@ class CODCollectionFragment : Fragment() {
                         if (view != null) {
                             selectedYear = yearList[position].toInt()
                             fetchCODCollectionDetails(0, 20)
-                            Timber.d("serviceChargeLog","selectedYear $selectedYear")
+                            //Timber.d("serviceChargeLog","selectedYear $selectedYear")
                         }
                     }
                 }

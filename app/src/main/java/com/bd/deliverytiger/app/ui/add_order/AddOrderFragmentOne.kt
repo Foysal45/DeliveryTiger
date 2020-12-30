@@ -334,7 +334,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 handler.removeCallbacks(runnable)
                 runnable = Runnable {
                     calculateTotalPrice()
-                    Timber.d(logTag, "$p0")
+                    //Timber.d(logTag, "$p0")
                 }
                 handler.postDelayed(runnable, 400L)
             }
@@ -643,7 +643,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         distFrag.setOnClick(object : DistrictSelectFragment.DistrictClick {
             override fun onClick(position: Int, name: String, clickedID: Int) {
-                Timber.e("etDistrictSearch 6 - ", "$name $clickedID")
+                //Timber.e("etDistrictSearch 6 - ", "$name $clickedID")
                 etDistrict.setText(name)
                 districtId = clickedID
 
@@ -675,7 +675,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         ft?.commit()
 
         distFrag.onItemClick = { adapterPosition: Int, name: String, id: Int, listPostion ->
-            Timber.e("distFrag1", adapterPosition.toString() + " " + listPostion.toString() + " " + name + " " + id + " " + thanaOrAriaList[listPostion].postalCode + " s")
+            //Timber.e("distFrag1", adapterPosition.toString() + " " + listPostion.toString() + " " + name + " " + id + " " + thanaOrAriaList[listPostion].postalCode + " s")
 
             if (track == 1) {
 
@@ -741,7 +741,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     }
                 }
             } catch (e: Exception) {
-                Timber.d("error", "Msg: ${e.message}")
+                //Timber.d("error", "Msg: ${e.message}")
             }
         } else {
             isSameDay = false

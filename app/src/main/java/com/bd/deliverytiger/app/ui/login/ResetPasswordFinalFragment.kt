@@ -18,12 +18,12 @@ import com.bd.deliverytiger.app.api.RetrofitSingletonAPI
 import com.bd.deliverytiger.app.api.endpoint.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.*
-import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.VariousTask
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 
 /**
  * A simple [Fragment] subclass.
@@ -154,7 +154,7 @@ class ResetPasswordFinalFragment : Fragment() {
         val requestBody = OTPRequestModel(userMobile,userMobile)
         OTPInterface.sendOTP(requestBody).enqueue(object : Callback<OTPResponse>{
             override fun onFailure(call: Call<OTPResponse>, t: Throwable) {
-                Timber.e("userUserRegister","failed "+t.message)
+                Timber.e("userUserRegister failed ${t.message}")
                 progressDialog?.dismiss()
             }
 
@@ -164,7 +164,7 @@ class ResetPasswordFinalFragment : Fragment() {
             ) {
                 progressDialog?.dismiss()
                 if(response.isSuccessful && response.body() != null && isAdded){
-                    Timber.e("userUserRegister",response.body().toString())
+                    Timber.e("userUserRegister ${response.body().toString()}")
                     VariousTask.showShortToast(context, response.body()!!.model ?: "Send")
                 }
             }

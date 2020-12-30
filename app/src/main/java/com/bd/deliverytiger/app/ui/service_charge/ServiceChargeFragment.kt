@@ -137,7 +137,7 @@ class ServiceChargeFragment : Fragment() {
                         selectedMonthIndex = position
                         generateDateRange(selectedYear, selectedMonthIndex)
                         fetchServiceBillDetails(0, 20)
-                        Timber.d("serviceChargeLog","selectedMonthIndex $selectedMonthIndex")
+                        //Timber.d("serviceChargeLog","selectedMonthIndex $selectedMonthIndex")
                     }
                 }
             }
@@ -147,7 +147,7 @@ class ServiceChargeFragment : Fragment() {
                     if (view != null) {
                         selectedYear = yearList[position].toInt()
                         fetchServiceBillDetails(0, 20)
-                        Timber.d("serviceChargeLog","selectedYear $selectedYear")
+                        //Timber.d("serviceChargeLog","selectedYear $selectedYear")
                     }
                 }
             }

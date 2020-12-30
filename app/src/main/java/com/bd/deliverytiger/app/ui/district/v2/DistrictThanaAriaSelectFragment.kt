@@ -16,7 +16,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.VariousTask
 
 class DistrictThanaAriaSelectFragment : Fragment() {
@@ -72,7 +71,7 @@ class DistrictThanaAriaSelectFragment : Fragment() {
         listAdapter.onItemClick = { position: Int, name: String, id: Int, listPosition ->
             onItemClick?.invoke(position, name, id,listPosition)
             //  dismiss()
-            Timber.e("etDistrict 6", " - district clicked")
+            //Timber.e("etDistrict 6", " - district clicked")
             VariousTask.hideSoftKeyBoard(requireActivity())
             (mContext as FragmentActivity).supportFragmentManager.popBackStack()
         }
@@ -112,7 +111,7 @@ class DistrictThanaAriaSelectFragment : Fragment() {
         districtSuggestAdapter.onItemClick = { position: Int, name: String, id: Int, listPosition ->
             onItemClick?.invoke(position, name, id,listPosition)
             //  dismiss()
-            Timber.e("etDistrictSearch 6", " - districtSuggestAdapter clicked")
+            //Timber.e("etDistrictSearch 6", " - districtSuggestAdapter clicked")
             VariousTask.hideSoftKeyBoard(requireActivity())
             (mContext as FragmentActivity).supportFragmentManager.popBackStack()
         }
@@ -131,7 +130,7 @@ class DistrictThanaAriaSelectFragment : Fragment() {
                 }
             }
         }
-        Timber.e("etDistrictSearch 5 - %s", suggestList.toString())
+        //Timber.e("etDistrictSearch 5 - %s", suggestList.toString())
 
         if (suggestList.size > 0) {
             rvDistrictSuggestion.visibility = View.VISIBLE

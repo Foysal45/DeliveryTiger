@@ -21,7 +21,6 @@ import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.api.model.login.OTPResponse
 import com.bd.deliverytiger.app.api.model.login.UserInfoRequest
-import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.Validator
 import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
 import com.bd.deliverytiger.app.utils.VariousTask.showShortToast
@@ -140,7 +139,7 @@ class ResetPasswordFragment : Fragment(), View.OnClickListener {
         val requestBody = OTPRequestModel(mobileNo, mobileNo)
         loginInterface.sendOTP(requestBody).enqueue(object : Callback<OTPResponse> {
             override fun onFailure(call: Call<OTPResponse>, t: Throwable) {
-                Timber.e("userUserRegister", "failed " + t.message)
+                //Timber.e("userUserRegister", "failed " + t.message)
                 progressDialog?.dismiss()
             }
 
@@ -150,7 +149,7 @@ class ResetPasswordFragment : Fragment(), View.OnClickListener {
             ) {
                 progressDialog?.dismiss()
                 if (response.isSuccessful && response.body() != null && isAdded) {
-                    Timber.e("userUserRegister", response.body().toString())
+                    //Timber.e("userUserRegister", response.body().toString())
                     showShortToast(context, response.body()!!.model ?: "Send")
                     goToResetPasswordTwo()
                 }

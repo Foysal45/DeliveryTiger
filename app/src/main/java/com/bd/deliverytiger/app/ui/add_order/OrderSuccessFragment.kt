@@ -192,12 +192,14 @@ class OrderSuccessFragment : Fragment() {
     private fun claimBkashOffer(dealId: Int) {
         val requestBody = OfferUpdateRequest(offerBkashDiscount, 0, dealId)
         viewModel.updateOffer(orderResponse?.id ?: 0, requestBody).observe(viewLifecycleOwner, Observer { model ->
-            val body1 = "আপনাকে https://deliverytiger.com.bd/apply-offer/${model.id}/${model.offerCode} লিংকে গিয়ে পেমেন্ট করার জন্য অনুরোধ করা হচ্ছে"
+            // For customer
+            val body1 = "আপনাকে https://deliverytiger.com.bd/apply-offer/${model.id}/${model.offerCode} লিংকে গিয়ে পেমেন্ট করার জন্য অনুরোধ করা হচ্ছে।"
             viewModel.sendSMS(model.mobile ?: "", body1)
-            val body2 = "আপনার কাস্টমারকে https://deliverytiger.com.bd/apply-offer/${model.id}/${model.offerCode} লিংকে গিয়ে পেমেন্ট করার জন্য অনুরোধ করা হয়েছে"
+            // For merchant
+            val body2 = "এই বিকাশ পেমেন্ট লিংকটি আপনার কাস্টমারকে দিয়ে পেমেন্ট করার অনুরোধ করুন।\nhttps://deliverytiger.com.bd/apply-offer/${model.id}/${model.offerCode}"
             viewModel.sendSMS(SessionManager.mobile, body2)
             offerBkashClaimed = true
-            alert("অফার", "আপনাকে পেমেন্ট লিংক সহ একটি এসএমএস ও ইমেইল করা হয়েছে। এটি আপনার কাস্টমারের সাথে শেয়ার করুন। পেমেন্ট লিংক ব্যাবহার করে কাস্টমার পেমেন্ট সম্পন্ন করলেই আপনার কাছ থেকে প্রোডাক্ট ডেলিভারির জন্য কালেক্ট করা হবে।").show()
+            alert("অফার", getString(R.string.offer_advance_success)).show()
             viewModel.logSMS(SMSLogRequest(courierOrdersId, body1))
         })
     }

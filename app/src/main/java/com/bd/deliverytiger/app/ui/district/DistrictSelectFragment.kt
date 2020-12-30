@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
-import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
 
 /**
@@ -126,7 +125,7 @@ class DistrictSelectFragment : Fragment() {
             override fun onClick(position: Int, name: String, clickedID: Int) {
                 districtClick?.onClick(position, name, clickedID)
                 //  dismiss()
-                Timber.e("etDistrictSearch 6", " - districtSuggestAdapter clicked")
+                //Timber.e("etDistrictSearch 6", " - districtSuggestAdapter clicked")
                 hideSoftKeyBoard(activity!!)
                 (mContext as FragmentActivity).supportFragmentManager.popBackStack()
             }
@@ -145,7 +144,7 @@ class DistrictSelectFragment : Fragment() {
                 }
             }
         }
-        Timber.e("etDistrictSearch 5 - %s", sList.toString())
+        //Timber.e("etDistrictSearch 5 - %s", sList.toString())
 
         if (sList.size > 0) {
             rvDistrictSuggestion.visibility = View.VISIBLE

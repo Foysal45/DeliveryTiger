@@ -28,9 +28,11 @@ import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 
 
 /**
@@ -86,10 +88,14 @@ class LoginFragment: Fragment() {
             passwordET.setText("123")
         }
 
-        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
-                val token = it.token
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Timber.d(task.exception)
+            } else {
+                val token = task.result
                 SessionManager.firebaseToken = token
-                Timber.d("applicationLog", "FirebaseToken:\n$token")
+                Timber.d("applicationLog FirebaseToken:\n$token")
+            }
         }
 
         if (isSessionOut) {
@@ -147,12 +153,12 @@ class LoginFragment: Fragment() {
         loginInterface.userLogin(LoginBody(mobile, password, SessionManager.firebaseToken)).enqueue(object : Callback<GenericResponse<LoginResponse>> {
 
             override fun onFailure(call: Call<GenericResponse<LoginResponse>>, t: Throwable) {
-                Timber.d(logTag, "${t.message}")
+                Timber.d(t)
                 dialog.dismiss()
             }
 
             override fun onResponse(call: Call<GenericResponse<LoginResponse>>, response: Response<GenericResponse<LoginResponse>>) {
-                Timber.d(logTag, "${response.code()} ${response.message()}")
+                Timber.d("${response.code()} ${response.message()}")
                 dialog.dismiss()
                 if (response.isSuccessful && response.body() != null && isAdded) {
                     if (response.body()!!.model != null) {
@@ -161,10 +167,10 @@ class LoginFragment: Fragment() {
                         SessionManager.isRememberMe = true
                         SessionManager.loginId = mobile
                         SessionManager.loginPassword = password
-                        Timber.d(logTag, "Password saved")
+                        Timber.d( "Password saved")
 
-                        Timber.d(logTag, "Token: ${SessionManager.accessToken}")
-                        Timber.d(logTag, "RefreshToken: ${SessionManager.refreshToken}")
+                        Timber.d("Token: ${SessionManager.accessToken}")
+                        Timber.d( "RefreshToken: ${SessionManager.refreshToken}")
                         saveAppVersion()
                         UserLogger.logLogIn()
                         goToHomeActivity()

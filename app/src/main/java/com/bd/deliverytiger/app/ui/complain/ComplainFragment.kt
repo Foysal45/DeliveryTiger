@@ -66,6 +66,7 @@ class ComplainFragment(): Fragment() {
                         binding?.spinnerComplainType?.setSelection(0)
 
                         context?.toast("আপনার অভিযোগ / মতামত সাবমিট হয়েছে")
+                        fetchComplain()
                     }
                 })
             }

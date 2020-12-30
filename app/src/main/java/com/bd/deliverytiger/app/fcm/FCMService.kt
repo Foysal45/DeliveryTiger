@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.SessionManager
-import com.bd.deliverytiger.app.utils.Timber
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
@@ -24,6 +23,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.GsonBuilder
+import timber.log.Timber
 
 class FCMService: FirebaseMessagingService() {
 
@@ -32,7 +32,7 @@ class FCMService: FirebaseMessagingService() {
 
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
-        Timber.d("FCMServiceTag", p0.data.toString())
+        Timber.d("FCMServiceTag ${p0.data}")
 
         var title = ""
         var body = ""

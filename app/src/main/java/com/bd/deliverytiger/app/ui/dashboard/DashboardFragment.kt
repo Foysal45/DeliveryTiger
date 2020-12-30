@@ -49,6 +49,7 @@ import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnima
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -339,12 +340,12 @@ class DashboardFragment : Fragment() {
             binding?.sliderView?.setSliderAdapter(sliderAdapter)
             sliderAdapter.onItemClick = { data, position ->
                 val model = bannerList[position]
+                Timber.d("sliderViewDebug $model")
                 //goToWebView(model.webUrl ?: "")
                 if (model.isWebLinkActive) {
                     goToWebView(model.webUrl ?: "")
                 }
             }
-
 
             binding?.sliderView?.let { view ->
                 with(view) {
@@ -419,7 +420,7 @@ class DashboardFragment : Fragment() {
         selectedStartDate = "$startYear-$startMonth-01"
 
         getDashBoardData(selectedMonth, selectedYear)
-        Timber.d("DashboardTag", "fetchDashBoard $selectedMonth $selectedYear")
+        Timber.d( "fetchDashBoard $selectedMonth $selectedYear")
 
         /*val list: MutableList<MonthDataModel> = mutableListOf()
         viewList.clear()
@@ -545,7 +546,7 @@ class DashboardFragment : Fragment() {
     private fun getDashBoardData(selectedMonth: Int, selectedYear: Int) {
 
         val dashBoardReqBody = DashBoardReqBody(0, 0, selectedStartDate, selectedEndDate, SessionManager.courierUserId)
-        Timber.d("DashboardTag r ", dashBoardReqBody.toString())
+
 
         viewModel.getDashboardStatusGroup(dashBoardReqBody).observe(viewLifecycleOwner, Observer { list ->
 
@@ -701,7 +702,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun requestPayment() {
-        Timber.d("appLog", "InstantPaymentRequest called")
+        //Timber.d("appLog", "InstantPaymentRequest called")
         viewModel.updateInstantPaymentRequest(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { flag ->
             if (flag) {
                 val msg = "আপনার ইন্সট্যান্ট পেমেন্ট রিকোয়েস্টটি গ্রহণ করা হয়েছে। আগামী ${DigitConverter.toBanglaDigit(instantPaymentHourLimit)} ঘন্টার মধ্যে আপনার bKash নাম্বারে (${DigitConverter.toBanglaDigit(SessionManager.bkashNumber)}) ${DigitConverter.toBanglaDigit(netAmount, true)} টাকা পেমেন্ট করা হবে।"

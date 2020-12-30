@@ -27,7 +27,6 @@ import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.district.v2.CustomModel
 import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
-import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.VariousTask
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
@@ -143,7 +142,7 @@ class ShipmentChargeFragment : Fragment() {
         val getDistrictThanaOrAria = RetrofitSingleton.getInstance(mContext).create(DistrictInterface::class.java)
         getDistrictThanaOrAria.getAllDistrictFromApi(id).enqueue(object : Callback<DeliveryChargePayLoad> {
             override fun onFailure(call: Call<DeliveryChargePayLoad>, t: Throwable) {
-                Timber.e("districtThanaOrAria_f-", t.toString())
+                //Timber.e("districtThanaOrAria_f-", t.toString())
                 pd.dismiss()
             }
 
@@ -153,7 +152,7 @@ class ShipmentChargeFragment : Fragment() {
             ) {
                 pd.dismiss()
                 if (response.isSuccessful && response.body() != null && response.body()!!.data!!.districtInfo != null) {
-                    Timber.e("districtThanaOrAria_s-", response.body().toString())
+                    //Timber.e("districtThanaOrAria_s-", response.body().toString())
 
                     if (track == 1) {
                         districtList.addAll(response.body()!!.data!!.districtInfo!!)
@@ -226,7 +225,7 @@ class ShipmentChargeFragment : Fragment() {
         ft?.commit()
 
         distFrag.onItemClick = { adapterPosition: Int, name: String, id: Int, listPostion ->
-            Timber.e("distFrag1", adapterPosition.toString() + " " + listPostion.toString() + " " + name + " " + id + " " + thanaOrAriaList[listPostion].postalCode + " s")
+            //Timber.e("distFrag1", adapterPosition.toString() + " " + listPostion.toString() + " " + name + " " + id + " " + thanaOrAriaList[listPostion].postalCode + " s")
 
             if (track == 1) {
                 thanaTV.text = districtList[listPostion].districtBng

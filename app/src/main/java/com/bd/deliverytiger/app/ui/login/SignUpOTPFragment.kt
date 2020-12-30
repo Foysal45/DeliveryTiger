@@ -17,7 +17,6 @@ import com.bd.deliverytiger.app.api.RetrofitSingletonAPI
 import com.bd.deliverytiger.app.api.endpoint.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.*
-import com.bd.deliverytiger.app.utils.Timber
 import com.bd.deliverytiger.app.utils.VariousTask
 import com.bd.deliverytiger.app.utils.toast
 import com.google.android.material.button.MaterialButton
@@ -131,7 +130,7 @@ class SignUpOTPFragment : Fragment() {
         val requestBody = OTPRequestModel(userMobile, userMobile)
         OTPInterface.sendOTP(requestBody).enqueue(object : Callback<OTPResponse> {
             override fun onFailure(call: Call<OTPResponse>, t: Throwable) {
-                Timber.e("userUserRegister", "failed " + t.message)
+                //Timber.e("userUserRegister", "failed " + t.message)
                 progressDialog?.dismiss()
                 context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
             }
@@ -139,7 +138,7 @@ class SignUpOTPFragment : Fragment() {
             override fun onResponse(call: Call<OTPResponse>, response: Response<OTPResponse>) {
                 progressDialog?.dismiss()
                 if (response.isSuccessful && response.body() != null && isAdded) {
-                    Timber.e("userUserRegister", response.body().toString())
+                    //Timber.e("userUserRegister", response.body().toString())
                     VariousTask.showShortToast(context, response.body()!!.model ?: "Send")
                 } else {
                     context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
@@ -154,7 +153,7 @@ class SignUpOTPFragment : Fragment() {
         val signUpReqBody = SignUpReqBody(userMobile, userPassword, referCode, bkashNumber, preferredPaymentCycle, knowingSource)
         loginInterface.userUserRegister(signUpReqBody).enqueue(object : Callback<GenericResponse<SignUpResponse>> {
             override fun onFailure(call: Call<GenericResponse<SignUpResponse>>, t: Throwable) {
-                Timber.e("userUserRegister", "failed " + t.message)
+                //Timber.e("userUserRegister", "failed " + t.message)
                 progressDialog?.dismiss()
                 context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
             }
@@ -162,14 +161,14 @@ class SignUpOTPFragment : Fragment() {
             override fun onResponse(call: Call<GenericResponse<SignUpResponse>>, response: Response<GenericResponse<SignUpResponse>>) {
                 progressDialog?.dismiss()
                 if (response.isSuccessful && response.body() != null) {
-                    Timber.e("userUserRegister", response.body().toString())
+                    //Timber.e("userUserRegister", response.body().toString())
                     VariousTask.showShortToast(context, getString(R.string.success_in_signin))
                     addLoginFragment(true)
                 } else {
                     if (response.body() != null) {
                         VariousTask.showShortToast(context, response.body()!!.errorMessage)
                     }
-                    Timber.e("userUserRegister", "null")
+                    //Timber.e("userUserRegister", "null")
                 }
             }
 
