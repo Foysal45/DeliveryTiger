@@ -172,13 +172,9 @@ class AllOrdersFragment : Fragment() {
         allOrdersAdapter.onEditItemClick = { position ->
             val model = courierOrderViewModelList[position]
             val orderUpdateReqBody = UpdateOrderReqBody(
-                model.id,
-                model.customerName,
                 model.courierAddressContactInfo?.mobile,
                 model.courierAddressContactInfo?.otherMobile,
                 model.courierAddressContactInfo?.address,
-                model.userInfo?.collectAddress,
-                model.courierOrderInfo?.collectionName
             )
             editOrder(model.courierOrdersId.toString(), orderUpdateReqBody, position)
         }
@@ -512,9 +508,9 @@ class AllOrdersFragment : Fragment() {
                 VariousTask.showShortToast(requireContext(), getString(R.string.write_yr_address))
                 etAlertCustomersAddress.requestFocus()
             } else {
-                 updateOrderReqBody.address = etAlertCustomersAddress.text.toString()
                  updateOrderReqBody.mobile = etAlertAddOrderMobileNo.text.toString()
                  updateOrderReqBody.otherMobile = etAlertAlternativeMobileNo.text.toString()
+                 updateOrderReqBody.address = etAlertCustomersAddress.text.toString()
                  updateOrderApiCall(orderId,updateOrderReqBody,indexPosition)
                 dialog.dismiss()
             }

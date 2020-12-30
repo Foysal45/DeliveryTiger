@@ -16,7 +16,7 @@ interface PlaceOrderInterface {
     @POST("api/Fetch/DeliveryChargeDetailsAreaWise")
     fun getDeliveryCharge(@Body requestBody: DeliveryChargeRequest): Call<GenericResponse<List<DeliveryChargeResponse>>>
 
-    @PUT("api/Update/UpdateCourierOrders/{courierOrdersId}")
+    @PUT("api/Update/UpdateCourierOrdersApp/{courierOrdersId}")
     fun placeOrderUpdate(@Path("courierOrdersId") courierOrdersId: String, @Body requestBody: UpdateOrderReqBody): Call<GenericResponse<UpdateOrderResponse>>
 
 }
