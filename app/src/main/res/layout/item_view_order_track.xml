@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/date"
-        android:layout_width="80dp"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:gravity="end"
@@ -18,7 +18,7 @@
         app:layout_constraintBottom_toBottomOf="@id/statusImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/statusImage"
-        tools:text="28 Dec" />
+        tools:text="৯৯ ফেব্রুয়ারী" />
 
     <TextView
         android:id="@+id/time"
@@ -114,16 +114,16 @@
 
     <com.bd.deliverytiger.app.utils.VerticalTextView
         android:id="@+id/stepTitle"
-        android:layout_width="18dp"
+        android:layout_width="24dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:includeFontPadding="false"
         android:textColor="@color/black_70"
         android:textSize="12sp"
         app:direction="downtoup"
-        app:layout_constraintBottom_toBottomOf="@id/road"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/road"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="শিপমেন্ট আছে" />
 
     <ImageView
@@ -134,8 +134,9 @@
         android:contentDescription="@string/cd"
         android:src="@drawable/ic_road_mid"
         android:visibility="gone"
+        android:layout_marginEnd="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/stepTitle"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 

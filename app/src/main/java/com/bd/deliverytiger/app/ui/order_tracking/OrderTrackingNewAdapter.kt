@@ -35,22 +35,6 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val model = dataList[position]
             val binding = holder.binding
 
-            if (model.statusGroupId == 0) {
-                try {
-                    val firstDate = sdf2.format(sdf1.parse(model.expectedFirstDeliveryDate))
-                    val lastDate = DigitConverter.toBanglaDate(model.expectedDeliveryDate,"yyyy-MM-dd'T'HH:mm:ss.SSS", true)
-                    binding.date.text = "${DigitConverter.toBanglaDigit(firstDate)}-$lastDate"
-                    binding.time.text = ""
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            } else {
-                val formattedDate = DigitConverter.toBanglaDate(model.trackingDate,"yyyy-MM-dd'T'HH:mm:ss.SSS", true)
-                binding.date.text = formattedDate
-                val formatTime = DigitConverter.formatDate(model.trackingDate, "yyyy-MM-dd'T'HH:mm:ss.SSS", "hh:mm a")
-                binding.time.text = DigitConverter.toBanglaDigit(formatTime)
-            }
-
             binding.statusName.text = model.trackingName
 
             if (model.trackingColor == "green") {
@@ -132,6 +116,27 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 binding.road.visibility = View.GONE
                 binding.car.visibility = View.GONE
                 binding.stepTitle.text = ""
+            }
+
+            if (model.statusGroupId == 0) {
+                try {
+                    val lastDate = DigitConverter.toBanglaDate(model.expectedDeliveryDate,"yyyy-MM-dd'T'HH:mm:ss.SSS", true)
+                    if (model.expectedFirstDeliveryDate.isNullOrEmpty()) {
+                        binding.subStatusName.text = lastDate
+                    } else {
+                        val firstDate = sdf2.format(sdf1.parse(model.expectedFirstDeliveryDate))
+                        binding.subStatusName.text = "${DigitConverter.toBanglaDigit(firstDate)}-$lastDate"
+                    }
+                    binding.date.text = ""
+                    binding.time.text = ""
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            } else {
+                val formattedDate = DigitConverter.toBanglaDate(model.trackingDate,"yyyy-MM-dd'T'HH:mm:ss.SSS", true)
+                binding.date.text = formattedDate
+                val formatTime = DigitConverter.formatDate(model.trackingDate, "yyyy-MM-dd'T'HH:mm:ss.SSS", "hh:mm a")
+                binding.time.text = DigitConverter.toBanglaDigit(formatTime)
             }
 
             if (position == 0) {

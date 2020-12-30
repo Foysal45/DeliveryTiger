@@ -827,10 +827,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             collectionChargeApi = charge.toDouble()
 
             //হাবে ড্রপ\n(৫ টাকা সেভ)
-            val hubDropMsg = "হাবে ড্রপ করব<br/>(<font color='#f05a2b'>${DigitConverter.toBanglaDigit(collectionChargeApi.toInt())}৳</font> সেভ)"
+            //val hubDropMsg = "হাবে ড্রপ করব<br/>(<font color='#f05a2b'>${DigitConverter.toBanglaDigit(collectionChargeApi.toInt())}৳</font> সেভ)"
             //val hubDropMsg = "হাবে ড্রপ (${DigitConverter.toBanglaDigit(collectionChargeApi.toInt())} টাকা সেভ)"
             //hubDropMsg2.text = HtmlCompat.fromHtml(hubDropMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
-            toggleButtonPickup1.text = HtmlCompat.fromHtml(hubDropMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            //toggleButtonPickup1.text = HtmlCompat.fromHtml(hubDropMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
             //toggleButtonPickup1.text = hubDropMsg
         })
     }

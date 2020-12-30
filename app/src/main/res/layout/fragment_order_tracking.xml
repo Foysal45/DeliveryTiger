@@ -196,8 +196,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
-                        android:text="নিজস্ব রেফারেন্স নম্বর/ইনভয়েস"
-                        android:textColor="#58595B"
+                        android:text="নিজস্ব রেফারেন্স/ইনভয়েস"
+                        android:textColor="@color/black_70"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -206,7 +206,7 @@
                         android:id="@+id/reference"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black_80"
+                        android:textColor="@color/black_70"
                         android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="@id/referenceTitle"
                         app:layout_constraintTop_toBottomOf="@id/referenceTitle"
