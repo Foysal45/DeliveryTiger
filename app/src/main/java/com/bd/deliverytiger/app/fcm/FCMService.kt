@@ -41,9 +41,9 @@ class FCMService: FirebaseMessagingService() {
         var bigText = ""
 
         p0.notification?.let {
-            timber.log.Timber.d("Message Notification Title: ${it.title}")
-            timber.log.Timber.d("Message Notification Body: ${it.body}")
-            timber.log.Timber.d("Message Notification Image: ${it.imageUrl}")
+            Timber.d("Message Notification Title: ${it.title}")
+            Timber.d("Message Notification Body: ${it.body}")
+            Timber.d("Message Notification Image: ${it.imageUrl}")
 
             title = it.title ?: ""
             body = it.body ?: ""
@@ -51,7 +51,7 @@ class FCMService: FirebaseMessagingService() {
         }
 
         if (p0.data.isNotEmpty()) {
-            timber.log.Timber.d("Message data payload: ${p0.data}")
+            Timber.d("Message data payload: ${p0.data}")
 
             p0.data["title"]?.let {
                 title = it

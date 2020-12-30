@@ -41,7 +41,13 @@ class SplashActivity : AppCompatActivity() {
             override fun onAnimationEnd(p0: Animator?) {
                 //Helper.showToast("Completed")
                 if (SessionManager.isLogin) {
-                    startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
+                    Intent(this@SplashActivity, HomeActivity::class.java).apply {
+                        if (intent.extras != null) {
+                            putExtras(intent.extras!!)
+                        }
+                    }.also {
+                        startActivity(it)
+                    }
                 } else {
                     startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
                 }

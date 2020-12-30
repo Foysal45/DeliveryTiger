@@ -234,6 +234,7 @@ class HomeActivity : AppCompatActivity(),
             goToAllOrder(false)
         }
 
+        //Timber.d("BundleLog ${intent.extras?.bundleToString()}")
         onNewIntent(intent)
 
         addOrderFab.setOnClickListener {
@@ -270,18 +271,40 @@ class HomeActivity : AppCompatActivity(),
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent != null) {
+            Timber.d("BundleLog ${intent.extras?.bundleToString()}")
             val model: FCMData? = intent.getParcelableExtra("data")
             if (model != null) {
-                val fragment = NotificationPreviewFragment.newInstance(model)
-                val tag = NotificationPreviewFragment.fragmentTag
-                val ft = supportFragmentManager.beginTransaction()
-                ft.add(R.id.mainActivityContainer, fragment, tag)
-                ft.addToBackStack(tag)
-                ft.commit()
-
+                goToNotificationPreview(model)
                 intent.removeExtra("data")
+            } else {
+                val bundleExt = intent.extras
+                if (bundleExt != null) {
+                    val notificationType = bundleExt.getString("notificationType")
+                    if (!notificationType.isNullOrEmpty()) {
+                        val fcmModel: FCMData = FCMData(
+                            bundleExt.getString("notificationType"),
+                            bundleExt.getString("title"),
+                            bundleExt.getString("body"),
+                            bundleExt.getString("imageUrl"),
+                            "",
+                            bundleExt.getString("bigText"),
+                        )
+                        Timber.d("BundleLog FCMData $fcmModel")
+                        goToNotificationPreview(fcmModel)
+                    }
+                }
+                intent.removeExtra("notificationType")
             }
         }
+    }
+
+    private fun goToNotificationPreview(model: FCMData) {
+        val fragment = NotificationPreviewFragment.newInstance(model)
+        val tag = NotificationPreviewFragment.fragmentTag
+        val ft = supportFragmentManager.beginTransaction()
+        ft.add(R.id.mainActivityContainer, fragment, tag)
+        ft.addToBackStack(tag)
+        ft.commit()
     }
 
     override fun onBackPressed() {
