@@ -69,6 +69,11 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                             binding.road.setImageResource(R.drawable.ic_road_top)
                             binding.car.visibility = View.GONE
                             binding.stepTitle.text = ""
+                            if (model.trackStateCount == 2) {
+                                binding.car.visibility = View.VISIBLE
+                                binding.car.setImageResource(R.drawable.ic_car_green)
+                                binding.stepTitle.text = "শিপমেন্টে আছে"
+                            }
                         }
                         //middle
                         2 -> {
@@ -94,6 +99,11 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                             binding.road.setImageResource(R.drawable.ic_road_top)
                             binding.car.visibility = View.GONE
                             binding.stepTitle.text = ""
+                            if (model.trackStateCount == 2) {
+                                binding.car.visibility = View.VISIBLE
+                                binding.car.setImageResource(R.drawable.ic_car_red)
+                                binding.stepTitle.text = "রিটার্নে আছে"
+                            }
                         }
                         //middle
                         2 -> {

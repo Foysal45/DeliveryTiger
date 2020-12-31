@@ -191,6 +191,7 @@ class OrderTrackingFragment : Fragment() {
                                 } else if (shipmentIndex == 1) {
                                     it.trackState = 3 //bottom
                                 }
+                                it.trackStateCount = shipmentStep
                             } else {
                                 if (shipmentIndex == 0) {
                                     it.trackState = 1 //top
@@ -199,6 +200,7 @@ class OrderTrackingFragment : Fragment() {
                                 } else {
                                     it.trackState = 2 //middle
                                 }
+                                it.trackStateCount = shipmentStep
                             }
                             shipmentIndex++
                         }
@@ -211,6 +213,7 @@ class OrderTrackingFragment : Fragment() {
                                 } else if (returnIndex == 1) {
                                     it.trackState = 3 //bottom
                                 }
+                                it.trackStateCount = shipmentStep
                             } else {
                                 if (returnIndex == 0) {
                                     it.trackState = 1 //top
@@ -219,6 +222,7 @@ class OrderTrackingFragment : Fragment() {
                                 } else {
                                     it.trackState = 2 //middle
                                 }
+                                it.trackStateCount = shipmentStep
                             }
                             returnIndex++
                         }
