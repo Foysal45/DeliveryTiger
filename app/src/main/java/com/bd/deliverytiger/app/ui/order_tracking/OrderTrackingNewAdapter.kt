@@ -19,7 +19,7 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var onItemClick: ((model:OrderTrackData, position: Int) -> Unit)? = null
     var onLocationClick: ((model:OrderTrackData, position: Int) -> Unit)? = null
 
-    private val sdf1 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.US)
+    private val sdf1 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
     private val sdf2 = SimpleDateFormat("dd", Locale.US)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -130,7 +130,7 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             if (model.statusGroupId == 0) {
                 try {
-                    val lastDate = DigitConverter.toBanglaDate(model.expectedDeliveryDate,"yyyy-MM-dd'T'HH:mm:ss.SSS", true)
+                    val lastDate = DigitConverter.toBanglaDate(model.expectedDeliveryDate,"yyyy-MM-dd'T'HH:mm:ss", true)
                     if (model.expectedFirstDeliveryDate.isNullOrEmpty()) {
                         binding.subStatusName.text = lastDate
                     } else {
@@ -143,9 +143,9 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     e.printStackTrace()
                 }
             } else {
-                val formattedDate = DigitConverter.toBanglaDate(model.trackingDate,"yyyy-MM-dd'T'HH:mm:ss.SSS", true)
+                val formattedDate = DigitConverter.toBanglaDate(model.trackingDate,"yyyy-MM-dd'T'HH:mm:ss", true)
                 binding.date.text = formattedDate
-                val formatTime = DigitConverter.formatDate(model.trackingDate, "yyyy-MM-dd'T'HH:mm:ss.SSS", "hh:mm a")
+                val formatTime = DigitConverter.formatDate(model.trackingDate, "yyyy-MM-dd'T'HH:mm:ss", "hh:mm a")
                 binding.time.text = DigitConverter.toBanglaDigit(formatTime)
             }
 
