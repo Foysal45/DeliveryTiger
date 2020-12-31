@@ -173,7 +173,6 @@ class OrderTrackingFragment : Fragment() {
                 val filteredShipmentList = model.orderTrackingGroupViewModel.filter { it.trackingFlag && it.trackingColor == "green" }
                 val filteredReturnList = model.orderTrackingGroupViewModel.filter { it.trackingFlag && it.trackingColor == "red" }
 
-
                 val shipmentStep = filteredShipmentList.size
                 val returnStep = filteredReturnList.size
                 var shipmentIndex = 0
@@ -210,7 +209,7 @@ class OrderTrackingFragment : Fragment() {
                                 } else if (returnIndex == 1) {
                                     it.trackState = 3 //bottom
                                 }
-                                it.trackStateCount = shipmentStep
+                                it.trackStateCount = returnStep
                             } else {
                                 if (returnIndex == 0) {
                                     it.trackState = 1 //top
@@ -219,7 +218,7 @@ class OrderTrackingFragment : Fragment() {
                                 } else {
                                     it.trackState = 2 //middle
                                 }
-                                it.trackStateCount = shipmentStep
+                                it.trackStateCount = returnStep
                             }
                             returnIndex++
                         }
