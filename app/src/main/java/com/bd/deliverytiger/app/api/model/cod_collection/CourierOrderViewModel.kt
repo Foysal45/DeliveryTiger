@@ -12,6 +12,10 @@ data class CourierOrderViewModel(
     var courierOrdersId: String? = null,
     @SerializedName("status")
     var status: String? = null,
+    @SerializedName("dashboardStatusGroup")
+    var dashboardStatusGroup: String? = null,
+    @SerializedName("orderTrackStatusGroup")
+    var orderTrackStatusGroup: String? = null,
     @SerializedName("statusType")
     var statusType: String? = null,
     @SerializedName("statusTypeName")

@@ -85,13 +85,16 @@ class AllOrdersFragment : Fragment() {
     private var paymentReady = 0
 
     private var sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+    private var isFromDashBoard: Boolean = false
 
     companion object {
-        fun newInstance(shouldOpenFilter: Boolean = false): AllOrdersFragment = AllOrdersFragment().apply {
+        fun newInstance(shouldOpenFilter: Boolean = false, isFromDashBoard: Boolean = false): AllOrdersFragment = AllOrdersFragment().apply {
             this.shouldOpenFilter = shouldOpenFilter
+            this.isFromDashBoard = isFromDashBoard
         }
-        fun newInstance(bundle: Bundle): AllOrdersFragment = AllOrdersFragment().apply {
+        fun newInstance(bundle: Bundle, isFromDashBoard: Boolean = false): AllOrdersFragment = AllOrdersFragment().apply {
             this.bundle = bundle
+            this.isFromDashBoard = isFromDashBoard
         }
         val tag = AllOrdersFragment::class.java.name
     }
@@ -142,6 +145,7 @@ class AllOrdersFragment : Fragment() {
         linearLayoutManager = LinearLayoutManager(context)
 
         allOrdersAdapter = AllOrdersAdapter(requireContext(), courierOrderViewModelList)
+        allOrdersAdapter.isFromDashBoard = isFromDashBoard
         rvAllOrder.apply {
             layoutManager = linearLayoutManager
             adapter = allOrdersAdapter

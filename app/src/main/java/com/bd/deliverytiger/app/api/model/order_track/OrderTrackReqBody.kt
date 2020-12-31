@@ -5,5 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class OrderTrackReqBody(
     @SerializedName("courierOrderId")
-    var courierOrderId: String? = ""
+    var courierOrderId: String? = "",
+    @SerializedName("courierUserId")
+    var courierUserId: Int? = 0
 )

@@ -17,6 +17,7 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
     var onOrderItemClick: ((position: Int) -> Unit)? = null
     var onEditItemClick: ((position: Int) -> Unit)? = null
     var onLocationBtnClick: ((model: CourierOrderViewModel, position: Int) -> Unit)? = null
+    var isFromDashBoard: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding: ItemViewAllOrderBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_view_all_order, parent, false)
@@ -43,7 +44,14 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
                 mobile += ",${model?.courierAddressContactInfo?.otherMobile}"
             }
             holder.binding.customerPhone.text = mobile
-            holder.binding.status.text = model?.status
+            //holder.binding.status.text = model?.status
+            val status = if (isFromDashBoard) {
+                model.dashboardStatusGroup
+            } else {
+                model.orderTrackStatusGroup
+            }
+            holder.binding.status.text = status
+
 
             /*
             holder.binding.address.text = model?.courierAddressContactInfo?.address

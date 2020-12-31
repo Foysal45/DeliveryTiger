@@ -20,13 +20,13 @@ class OrderTrackingViewModel(private val repository: AppRepository): ViewModel()
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
 
-    fun fetchOrderTrackingList(orderId: String): LiveData<OrderTrackResponse> {
+    fun fetchOrderTrackingList(orderId: String, courierUserId: Int): LiveData<OrderTrackResponse> {
 
         val responseData: MutableLiveData<OrderTrackResponse> = MutableLiveData()
 
         viewState.value = ViewState.ProgressState(true)
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getOrderTrackingNewList("private" , OrderTrackReqBody(orderId))
+            val response = repository.getOrderTrackingNewList("private" , OrderTrackReqBody(orderId, courierUserId))
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {

@@ -19,10 +19,7 @@ import com.bd.deliverytiger.app.databinding.FragmentOrderTrackingBinding
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.complain.ComplainFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
-import com.bd.deliverytiger.app.utils.AppConstant
-import com.bd.deliverytiger.app.utils.ViewState
-import com.bd.deliverytiger.app.utils.hideKeyboard
-import com.bd.deliverytiger.app.utils.toast
+import com.bd.deliverytiger.app.utils.*
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -167,7 +164,7 @@ class OrderTrackingFragment : Fragment() {
     private fun getOrderTrackingList(orderId: String) {
 
         dataAdapter.clear()
-        viewModel.fetchOrderTrackingList(orderId).observe(viewLifecycleOwner, Observer { model ->
+        viewModel.fetchOrderTrackingList(orderId, SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
 
             binding?.orderCode?.text = model.courierOrdersViewModel?.courierOrdersId
             binding?.reference?.text = model.courierOrdersViewModel?.collectionName

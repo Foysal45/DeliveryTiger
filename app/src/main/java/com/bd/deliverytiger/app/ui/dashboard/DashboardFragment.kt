@@ -648,7 +648,7 @@ class DashboardFragment : Fragment() {
         bundle.putString("toDate", endDate)
         bundle.putString("dashboardStatusFilter", statusFilter)
 
-        val fragment = AllOrdersFragment.newInstance(bundle)
+        val fragment = AllOrdersFragment.newInstance(bundle, true)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, AllOrdersFragment.tag)
         ft?.addToBackStack(AllOrdersFragment.tag)
