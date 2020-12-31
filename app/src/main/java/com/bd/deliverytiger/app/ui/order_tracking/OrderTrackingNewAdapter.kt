@@ -76,7 +76,7 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                             binding.road.setImageResource(R.drawable.ic_road_mid)
                             binding.car.visibility = View.VISIBLE
                             binding.car.setImageResource(R.drawable.ic_car_green)
-                            binding.stepTitle.text = "শিপমেন্ট আছে"
+                            binding.stepTitle.text = "শিপমেন্টে আছে"
                         }
                         //bottom
                         3 -> {
