@@ -416,7 +416,7 @@ class DashboardFragment : Fragment() {
         val calendarStart =  Calendar.getInstance()
         calendarStart.add(Calendar.MONTH, monthDuration * -1)
         val startYear = calendarStart.get(Calendar.YEAR)
-        val startMonth = calendarStart.get(Calendar.MONTH)
+        val startMonth = calendarStart.get(Calendar.MONTH) + 1
         selectedStartDate = "$startYear-$startMonth-01"
 
         getDashBoardData(selectedMonth, selectedYear)
