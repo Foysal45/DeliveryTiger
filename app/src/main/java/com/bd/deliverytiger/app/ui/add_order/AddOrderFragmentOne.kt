@@ -460,7 +460,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, 0).observe(viewLifecycleOwner, Observer { model ->
             val adjustBalance = model.credit  + model.calculatedCollectionAmount
             timber.log.Timber.tag("adjustBalance").d( "credit: ${model.credit} + calculatedCollectionAmount: ${model.calculatedCollectionAmount} = adjustBalance: $adjustBalance")
-            isMerchantCreditAvailable = adjustBalance > 0
+            timber.log.Timber.tag("adjustBalance").d( "service charge: ${model.serviceCharge}")
+            isMerchantCreditAvailable = adjustBalance > model.serviceCharge
+            timber.log.Timber.tag("adjustBalance").d( "isMerchantCreditAvailable: $isMerchantCreditAvailable")
         })
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
