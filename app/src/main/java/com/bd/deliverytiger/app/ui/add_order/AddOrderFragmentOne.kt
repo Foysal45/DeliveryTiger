@@ -111,7 +111,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private val districtList: ArrayList<DistrictDeliveryChargePayLoad> = ArrayList()
     private val thanaOrAriaList: ArrayList<ThanaPayLoad> = ArrayList()
     private var isAriaAvailable = true
-    private var isMerchantCreditAvailable: Boolean = false
     private var isProfileComplete: Boolean = false
 
     // Step 2
@@ -181,6 +180,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     private var isPickupLocationListAvailable: Boolean = false
     private var isPickupLocationFirstLoad: Boolean = false
+
+    private var merchantCredit: Int = 0
+    private var merchantCalculatedCollectionAmount: Int = 0
+    private var merchantServiceCharge: Int = 0
 
     private val viewModel: AddOrderViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
@@ -458,11 +461,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, 0).observe(viewLifecycleOwner, Observer { model ->
-            val adjustBalance = model.credit  + model.calculatedCollectionAmount
-            timber.log.Timber.tag("adjustBalance").d( "credit: ${model.credit} + calculatedCollectionAmount: ${model.calculatedCollectionAmount} = adjustBalance: $adjustBalance")
-            timber.log.Timber.tag("adjustBalance").d( "service charge: ${model.serviceCharge}")
-            isMerchantCreditAvailable = adjustBalance > model.serviceCharge
-            timber.log.Timber.tag("adjustBalance").d( "isMerchantCreditAvailable: $isMerchantCreditAvailable")
+            merchantCredit = model.credit
+            merchantCalculatedCollectionAmount = model.calculatedCollectionAmount
+            merchantServiceCharge = model.serviceCharge
         })
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -481,6 +482,18 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 }
             }
         })
+    }
+
+    private fun isMerchantCreditAvailable(): Boolean {
+        val adjustBalance = merchantCredit  + merchantCalculatedCollectionAmount
+        val shipmentCharge = payShipmentCharge.toInt()
+        val totalShipmentCharge = merchantServiceCharge + shipmentCharge
+        val isMerchantCreditAvailable = adjustBalance > totalShipmentCharge
+        timber.log.Timber.tag("adjustBalance").d( "credit: $merchantCredit + calculatedCollectionAmount: $merchantCalculatedCollectionAmount = adjustBalance: $adjustBalance")
+        timber.log.Timber.tag("adjustBalance").d( "service charge: $merchantServiceCharge")
+        timber.log.Timber.tag("adjustBalance").d( "shipment charge: $shipmentCharge")
+        timber.log.Timber.tag("adjustBalance").d( "isMerchantCreditAvailable: $adjustBalance > $totalShipmentCharge $isMerchantCreditAvailable")
+        return isMerchantCreditAvailable
     }
 
     private fun checkProfileData(): Boolean {
@@ -579,7 +592,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private fun orderPlaceProcess() {
         //timber.log.Timber.tag("orderDebug").d("ThanaId: $thanaId")
         when {
-            !isCollection && !isMerchantCreditAvailable -> showCreditLimitAlert()
+            !isCollection && !isMerchantCreditAvailable() -> showCreditLimitAlert()
             !isProfileComplete -> checkProfileData()
             else -> submitOrder()
         }
