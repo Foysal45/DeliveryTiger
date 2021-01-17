@@ -161,4 +161,6 @@ class AppRepository(
 
     suspend fun fetchCollectionHistory(courierUserId: Int) = apiInterfaceCore.fetchCollectionHistory(courierUserId)
 
+    suspend fun fetchReturnStatement(courierUserId: Int, index: Int, count: Int) = apiInterfaceCore.fetchReturnStatement(courierUserId, index, count)
+
 }

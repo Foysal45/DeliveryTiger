@@ -36,6 +36,7 @@ import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import com.bd.deliverytiger.app.api.model.referral.OfferData
 import com.bd.deliverytiger.app.api.model.referral.RefereeInfo
 import com.bd.deliverytiger.app.api.model.referral.ReferrerInfo
+import com.bd.deliverytiger.app.api.model.return_statement.ReturnStatementData
 import com.bd.deliverytiger.app.api.model.rider.RiderInfo
 import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -164,5 +165,9 @@ interface ApiInterfaceCore {
     @GET("api/Dashboard/GetCollectionHistory/{courierUserId}")
     suspend fun fetchCollectionHistory(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<List<CollectionData>>, ErrorResponse>
 
-
+    @GET("api/Fetch/GetReturnOrders/{courierUserId}/{index}/{count}")
+    suspend fun fetchReturnStatement(
+        @Path("courierUserId") courierUserId: Int,
+        @Path("index") index: Int,
+        @Path("count") count: Int): NetworkResponse<GenericResponse<List<ReturnStatementData>> ,ErrorResponse>
 }
