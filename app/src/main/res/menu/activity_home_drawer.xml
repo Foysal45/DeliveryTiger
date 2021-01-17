@@ -25,16 +25,16 @@
             android:icon="@drawable/ic_bill_pay_history"
             android:title="@string/bill_pay_history" />
 
+        <item
+            android:id="@+id/nav_return_statement"
+            android:icon="@drawable/ic_bill_pay_history"
+            android:title="@string/return_statement" />
+
     </group>
 
     <group
         android:id="@+id/settingGroup"
         android:checkableBehavior="none">
-
-        <item
-            android:id="@+id/nav_return_statement"
-            android:icon="@drawable/ic_bill_pay_history"
-            android:title="রিটার্ন স্টেটমেন্ট" />
 
         <item
             android:id="@+id/nav_profile"

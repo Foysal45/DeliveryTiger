@@ -79,6 +79,7 @@ import java.io.File
 import java.util.*
 import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.ui.return_statement.ReturnStatementFragment
+import com.bd.deliverytiger.app.ui.return_statement.details.ReturnStatementDetailsFragment
 import timber.log.Timber
 
 
@@ -364,7 +365,8 @@ class HomeActivity : AppCompatActivity(),
                 currentFragment is UnpaidCODFragment ||
                 currentFragment is ReferralFragment ||
                 currentFragment is CollectionHistoryFragment ||
-                currentFragment is OrderTrackingFragment || currentFragment is ReturnStatementFragment
+                currentFragment is OrderTrackingFragment ||
+                currentFragment is ReturnStatementFragment || currentFragment is ReturnStatementDetailsFragment
             ) {
                 addProductBtnVisibility(false)
             } else {

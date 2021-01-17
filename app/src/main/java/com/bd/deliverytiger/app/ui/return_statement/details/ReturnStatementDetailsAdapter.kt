@@ -22,17 +22,13 @@ class ReturnStatementDetailsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder is ViewModel) {
             val model = dataList[position]
             val binding = holder.binding
-//
-            binding.orderId.text = model.id.toString()
+
+            binding.orderId.text = model.courierOrdersId
             binding.reference.text = model.collectionName
             binding.customerName.text = model.customerName
             binding.customerPhone.text = model.mobile
             binding.status.text = model.comment
 
-//            Glide.with(binding.productImage).load(model.productImageLink).into(binding.productImage)
-//            binding.title.text = model.dealTitle
-//            binding.couponId.text = "কুপন কোড: ${DigitConverter.toBanglaDigit(model.couponId)}"
-//            binding.dealId.text = "ডিল কোড: ${DigitConverter.toBanglaDigit(model.dealId)}"
         }
     }
 
@@ -48,14 +44,14 @@ class ReturnStatementDetailsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolde
 
     fun initLoad(list: List<ReturnOrder>) {
         dataList.clear()
-//        dataList.addAll(list)
+        dataList.addAll(list)
         notifyDataSetChanged()
     }
 
     fun pagingLoad(list: List<ReturnOrder>) {
         val currentIndex = dataList.size
         val newDataCount = list.size
-//        dataList.addAll(list)
+        dataList.addAll(list)
         notifyItemRangeInserted(currentIndex, newDataCount)
     }
 

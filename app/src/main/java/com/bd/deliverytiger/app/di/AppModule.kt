@@ -25,6 +25,7 @@ import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementViewModel
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailViewModel
 import com.bd.deliverytiger.app.ui.profile.ProfileViewModel
 import com.bd.deliverytiger.app.ui.referral.ReferralViewModel
+import com.bd.deliverytiger.app.ui.return_statement.ReturnStatementViewModel
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeViewModel
 import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODViewModel
 import com.bd.deliverytiger.app.utils.AppConstant
@@ -78,5 +79,6 @@ val appModule = module {
     viewModel { UnpaidCODViewModel(get()) }
     viewModel { ReferralViewModel(get()) }
     viewModel { CollectionHistoryViewModel(get()) }
+    viewModel { ReturnStatementViewModel(get()) }
 
 }
