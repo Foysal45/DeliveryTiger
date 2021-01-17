@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.ui.return_statement
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.bd.deliverytiger.app.utils.SessionManager
 import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.return_statement.ReturnStatementData
 import com.bd.deliverytiger.app.ui.home.HomeActivity
@@ -28,6 +30,11 @@ class ReturnStatementFragment(): Fragment() {
     private val viewModel: ReturnStatementViewModel by inject()
 
     private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+
+    // Paging params
+    private var isLoading = false
+    //private var totalProduct = 0
+    private val visibleThreshold = 5
 
     private lateinit var dataAdapter:ReturnStatementAdapter
 
@@ -62,7 +69,7 @@ class ReturnStatementFragment(): Fragment() {
             goToReturnDetails(model)
         }
 
-        fetchReturnDataMonthWise()
+        fetchReturnStatementData(0)
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -81,6 +88,40 @@ class ReturnStatementFragment(): Fragment() {
                 }
             }
         })
+
+        viewModel.pagingState.observe(viewLifecycleOwner, Observer { state ->
+            isLoading = false
+            if (state.isInitLoad) {
+                dataAdapter.initLoad(state.dataList)
+
+                if (state.dataList.isEmpty()) {
+                    binding?.emptyView?.visibility = View.VISIBLE
+                } else {
+                    binding?.emptyView?.visibility = View.GONE
+                }
+
+            } else {
+                dataAdapter.pagingLoad(state.dataList)
+                if (state.dataList.isEmpty()) {
+                    isLoading = true
+                }
+            }
+        })
+
+        binding?.recyclerview?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0) {
+                    val currentItemCount = (recyclerView.layoutManager as LinearLayoutManager).itemCount
+                    val lastVisibleItem = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                    if (!isLoading && currentItemCount <= lastVisibleItem + visibleThreshold) {
+                        isLoading = true
+                        fetchReturnStatementData(currentItemCount)
+                    }
+                }
+
+            }
+        })
     }
 
     override fun onDestroyView() {
@@ -88,17 +129,10 @@ class ReturnStatementFragment(): Fragment() {
         super.onDestroyView()
     }
 
-    private fun fetchReturnDataMonthWise() {
+    private fun fetchReturnStatementData(index: Int, count: Int = 20) {
         val courierUserId = SessionManager.courierUserId
         //todo: remove 6229 and add courierUserId
-        viewModel.fetchReturnCount(6229, 0, 20 ).observe(viewLifecycleOwner, Observer { list ->
-            dataAdapter.initLoad(list)
-            if (list.isEmpty()) {
-                binding?.emptyView?.visibility = View.VISIBLE
-            } else {
-                binding?.emptyView?.visibility = View.GONE
-            }
-        })
+        viewModel.fetchReturnCount(6229, index, count )
     }
 
     private fun goToReturnDetails(model: ReturnStatementData) {

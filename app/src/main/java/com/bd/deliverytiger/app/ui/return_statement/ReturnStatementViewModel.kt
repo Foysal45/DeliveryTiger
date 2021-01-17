@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bd.deliverytiger.app.api.model.PagingModel
 import com.bd.deliverytiger.app.api.model.return_statement.ReturnStatementData
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
@@ -17,8 +18,9 @@ import timber.log.Timber
 class ReturnStatementViewModel (private val repository: AppRepository): ViewModel() {
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
+    val pagingState: MutableLiveData<PagingModel<List<ReturnStatementData>>> = MutableLiveData()
 
-    fun fetchReturnCount(courierUserId: Int, index : Int, count: Int = 20): LiveData<List<ReturnStatementData>> {
+    fun fetchReturnCount(courierUserId: Int, index : Int, count: Int = 20) {
 
         viewState.value = ViewState.ProgressState(true)
         val responseBody = MutableLiveData<List<ReturnStatementData>>()
@@ -29,10 +31,15 @@ class ReturnStatementViewModel (private val repository: AppRepository): ViewMode
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {
                     is NetworkResponse.Success -> {
-                        if (response.body != null) {
-                            responseBody.value = response.body.model
-                        } else {
+                        if (index == 0){
+                            if (response.body.model.isNotEmpty()){
+                                pagingState.value = PagingModel(true, response.body.model.count(), 0, 0.0, 0.0, response.body.model)
+                            }else{
+                                pagingState.value = PagingModel(true, 0, 0, 0.0, 0.0, response.body.model)
 
+                            }
+                        }else{
+                            pagingState.value = PagingModel(false, 0, 0, 0.0, 0.0, response.body.model)
                         }
                     }
                     is NetworkResponse.ServerError -> {
@@ -51,6 +58,6 @@ class ReturnStatementViewModel (private val repository: AppRepository): ViewMode
                 }.exhaustive
             }
         }
-        return responseBody
+        //return responseBody
     }
 }
