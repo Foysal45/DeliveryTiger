@@ -131,8 +131,7 @@ class ReturnStatementFragment(): Fragment() {
 
     private fun fetchReturnStatementData(index: Int, count: Int = 20) {
         val courierUserId = SessionManager.courierUserId
-        //todo: remove 6229 and add courierUserId
-        viewModel.fetchReturnCount(6229, index, count )
+        viewModel.fetchReturnCount(courierUserId, index, count )
     }
 
     private fun goToReturnDetails(model: ReturnStatementData) {
