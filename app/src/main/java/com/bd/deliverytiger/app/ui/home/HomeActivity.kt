@@ -78,6 +78,7 @@ import org.koin.android.ext.android.inject
 import java.io.File
 import java.util.*
 import androidx.lifecycle.Observer
+import com.bd.deliverytiger.app.ui.return_statement.ReturnStatementFragment
 import timber.log.Timber
 
 
@@ -363,7 +364,7 @@ class HomeActivity : AppCompatActivity(),
                 currentFragment is UnpaidCODFragment ||
                 currentFragment is ReferralFragment ||
                 currentFragment is CollectionHistoryFragment ||
-                currentFragment is OrderTrackingFragment
+                currentFragment is OrderTrackingFragment || currentFragment is ReturnStatementFragment
             ) {
                 addProductBtnVisibility(false)
             } else {
@@ -769,6 +770,14 @@ class HomeActivity : AppCompatActivity(),
             }
             R.id.nav_chat -> {
                 startActivity(Intent(this, ChatActivity::class.java))
+            }
+            R.id.nav_return_statement -> {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is ReturnStatementFragment) {
+                    Timber.d( "ReturnStatementFragment already exist")
+                } else {
+                    addFragment(ReturnStatementFragment.newInstance(), ReturnStatementFragment.tag)
+                }
             }
             R.id.nav_logout -> {
 
