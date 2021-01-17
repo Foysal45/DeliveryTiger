@@ -411,6 +411,11 @@ class ProfileFragment : Fragment() {
             return
         }
 
+        if (currentLatitude == 0.0 && currentLongitude == 0.0) {
+            context?.toast("জিপিএস লোকেশন অ্যাড করুন")
+            return
+        }
+
         val requestBody = PickupLocation().apply {
             districtId = this@ProfileFragment.districtId
             thanaId = this@ProfileFragment.thanaId
