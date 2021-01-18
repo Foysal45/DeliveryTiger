@@ -502,6 +502,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (coordinate.isNullOrEmpty()) return false
         if (coordinate.trim().isEmpty()) return false
         if (coordinate == "0.0") return false
+        if (coordinate == "0") return false
         return true
     }
 
