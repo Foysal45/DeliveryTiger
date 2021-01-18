@@ -27,6 +27,7 @@ import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadFragment
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
+import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.collection_history.CollectionHistoryFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
@@ -188,13 +189,22 @@ class DashboardFragment : Fragment() {
             addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
         }
         binding?.balanceLoadLayout?.setOnClickListener {
-            addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
+
+            if (netAmount >= 0) {
+                addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
+            } else {
+                serviceChargeDialog()
+            }
         }
         binding?.orderBtn?.setOnClickListener {
             if (showOrderPopup) {
                 orderDialog()
             } else {
-                addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+                if (netAmount >= 0) {
+                    addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+                } else {
+                    serviceChargeDialog()
+                }
             }
         }
         dashboardAdapter.onItemClick = { _, model ->
@@ -790,6 +800,14 @@ class DashboardFragment : Fragment() {
         val fragment = WebViewFragment.newInstance(url, "ডেলিভারি টাইগার")
         val tag = WebViewFragment.tag
         addFragment(fragment, tag)
+    }
+
+    private fun serviceChargeDialog() {
+        alert("নির্দেশনা", "আপনার সার্ভিস চার্জ (প্রি-পেইড) ৳${DigitConverter.toBanglaDigit(netAmount)} বকেয়া রয়েছে। সার্ভিস চার্জ পে করুন।", false, "সার্ভিস চার্জ পে","") {
+            if (it == AlertDialog.BUTTON_POSITIVE) {
+                addFragment(ServiceBillPayFragment.newInstance(), ServiceBillPayFragment.tag)
+            }
+        }.show()
     }
 
     override fun onDestroyView() {
