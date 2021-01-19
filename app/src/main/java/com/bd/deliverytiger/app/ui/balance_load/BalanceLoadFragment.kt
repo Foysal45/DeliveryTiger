@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
@@ -45,25 +46,11 @@ class BalanceLoadFragment: Fragment() {
         }.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, 0).observe(viewLifecycleOwner, Observer { model ->
-
-            val adjustBalance = model.serviceCharge + model.credit + model.staticVal
-            Timber.tag("adjustBalance").d( "serviceCharge: ${model.serviceCharge} + credit: ${model.credit} + staticVal: ${model.staticVal} = adjustBalance: $adjustBalance")
-            if (adjustBalance > 0) {
-                binding?.serviceChargeLayout?.visibility = View.VISIBLE
-                binding?.serviceChargeAmount?.text = "${DigitConverter.toBanglaDigit(adjustBalance, true)}৳"
-                binding?.amountET?.setText("$adjustBalance")
-            }
-        })
-
-        viewModel.fetchBalanceLimit(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
-            minimumAmount = model.minAmount
-            maximumAmount = model.maxAmount
-        })
+        fetchCurrentBalance()
+        fetchBalanceLimit()
 
         binding?.payBtn?.setOnClickListener {
             hideKeyboard()
@@ -71,12 +58,6 @@ class BalanceLoadFragment: Fragment() {
                 paymentGateway(amountTaka)
             }
         }
-
-        /*binding?.serviceChargeLayout?.setOnClickListener {
-            val tag = ServiceBillPayFragment.tag
-            val fragment = ServiceBillPayFragment.newInstance()
-            addFragment(fragment, tag)
-        }*/
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -94,6 +75,31 @@ class BalanceLoadFragment: Fragment() {
                     }
                 }
             }
+        })
+    }
+
+    private fun fetchCurrentBalance() {
+        viewModel.fetchMerchantCurrentAdvanceBalance(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { accountBalance ->
+            val balance = accountBalance.balance
+
+            viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, balance).observe(viewLifecycleOwner, Observer { balanceInfo ->
+
+                //val adjustBalance = balanceInfo.serviceCharge + balanceInfo.credit + balanceInfo.staticVal
+                Timber.tag("adjustBalance").d( "serviceCharge: ${balanceInfo.serviceCharge} + credit: ${balanceInfo.credit} + staticVal: ${balanceInfo.staticVal}")
+
+                val adjustBalance = "ব্যালান্স: <font color='#f05a2b'>৳${DigitConverter.toBanglaDigit(balanceInfo.adjustBalance, true)}</font>"
+                binding?.adjustedBalance?.text = HtmlCompat.fromHtml(adjustBalance, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+                val creditMsg = "ক্রেডিট: <font color='#f05a2b'>৳${DigitConverter.toBanglaDigit(balanceInfo.credit, true)}</font>"
+                binding?.credit?.text = HtmlCompat.fromHtml(creditMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            })
+        })
+    }
+
+    private fun fetchBalanceLimit() {
+        viewModel.fetchBalanceLimit(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            minimumAmount = model.minAmount
+            maximumAmount = model.maxAmount
         })
     }
 
@@ -131,8 +137,8 @@ class BalanceLoadFragment: Fragment() {
     }
 
     override fun onDestroyView() {
-        binding = null
         super.onDestroyView()
+        binding = null
     }
 
     private fun addFragment(fragment: Fragment, tag: String) {

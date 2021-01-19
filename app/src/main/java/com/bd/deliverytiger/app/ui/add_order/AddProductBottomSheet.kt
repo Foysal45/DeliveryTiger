@@ -119,7 +119,7 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
                             val body = compressedFile.readBytes().toRequestBody(mediaTypeOctet)
                             //val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
                             //val body = MultipartBody.Part.createFormData("file", compressedFile.name, requestFile)
-                            viewModel.uploadProductImage(uploadLocation, body)//.observe(viewLifecycleOwner, Observer {})
+                            viewModel.uploadProductImage(uploadLocation, productUploadRequest.productTitle, body)//.observe(viewLifecycleOwner, Observer {})
                             withContext(Dispatchers.Main) {
                                 binding?.uploadBtn?.isEnabled = true
                                 onProductUploaded?.invoke(model.dealId, offerType)

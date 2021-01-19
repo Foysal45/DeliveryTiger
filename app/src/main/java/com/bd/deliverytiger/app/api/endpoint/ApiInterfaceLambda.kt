@@ -25,6 +25,7 @@ interface ApiInterfaceLambda {
     suspend fun uploadProductImage(
         @Query("bucket") bucket: String = "ajkerdeal-images-ohio-1",
         @Query("location") location: String = "images/deals/folderName",
+        @Query("title") title: String = "",
         @Query("bigImageSize") bigImageSize: String = "1024,910",
         @Query("smallImageSize") smallImageSize: String = "250,222",
         @Query("miniImageSize") miniImageSize: String = "90,80",

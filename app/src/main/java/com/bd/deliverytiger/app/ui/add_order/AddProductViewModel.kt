@@ -53,11 +53,11 @@ class AddProductViewModel(private val repository: AppRepository) : ViewModel() {
         return responseData
     }
 
-    suspend fun uploadProductImage(location: String, file: RequestBody): LiveData<ImageUploadResponse> {
+    suspend fun uploadProductImage(location: String, title: String, file: RequestBody): LiveData<ImageUploadResponse> {
         val responseData: MutableLiveData<ImageUploadResponse> = MutableLiveData()
 
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.uploadProductImage(location, file)
+            val response = repository.uploadProductImage(location, title, file)
             when (response) {
                 is NetworkResponse.Success -> {
                     if (response.body != null) {

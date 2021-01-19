@@ -115,7 +115,7 @@ class DashboardFragment : Fragment() {
         fetchBannerData()
         fetchCODData()
         fetchCollection()
-        fetchCurrentBalance()
+        //fetchCurrentBalance()
         initClickLister()
         //showDeliveryChargeCalculator()
         //fetchAccountsData()
@@ -133,17 +133,6 @@ class DashboardFragment : Fragment() {
         worker?.let {
             handler.removeCallbacks(it)
         }
-    }
-
-    private fun fetchCurrentBalance() {
-        viewModel.fetchMerchantCurrentAdvanceBalance(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { accoutBalance ->
-            val balance = accoutBalance.balance
-            viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, balance).observe(viewLifecycleOwner, Observer { balanceinfo ->
-                //val adjustBalance = balanceinfo.serviceCharge + balanceinfo.credit + balanceinfo.staticVal + balanceinfo.calculatedCollectionAmount
-                val adjustBalance = balanceinfo.adjustBalance
-                binding?.accountBalance?.text = "(৳ ${DigitConverter.toBanglaDigit(adjustBalance, true)})"
-            })
-        })
     }
 
     private fun fetchBannerData() {
@@ -174,7 +163,7 @@ class DashboardFragment : Fragment() {
         binding?.swipeRefresh?.setOnRefreshListener {
             getDashBoardData(selectedMonth, selectedYear)
             fetchCollection()
-            fetchCurrentBalance()
+            //fetchCurrentBalance()
         }
         binding?.retryBtn?.setOnClickListener {
             getDashBoardData(selectedMonth, selectedYear)
@@ -552,6 +541,17 @@ class DashboardFragment : Fragment() {
             }
         })
     }
+
+    /*private fun fetchCurrentBalance() {
+        viewModel.fetchMerchantCurrentAdvanceBalance(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { accoutBalance ->
+            val balance = accoutBalance.balance
+            viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, balance).observe(viewLifecycleOwner, Observer { balanceinfo ->
+                //val adjustBalance = balanceinfo.serviceCharge + balanceinfo.credit + balanceinfo.staticVal + balanceinfo.calculatedCollectionAmount
+                val adjustBalance = balanceinfo.adjustBalance
+                binding?.accountBalance?.text = "(৳ ${DigitConverter.toBanglaDigit(adjustBalance, true)})"
+            })
+        })
+    }*/
 
     private fun getDashBoardData(selectedMonth: Int, selectedYear: Int) {
 

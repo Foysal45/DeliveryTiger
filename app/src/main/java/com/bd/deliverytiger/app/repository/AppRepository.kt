@@ -50,7 +50,7 @@ class AppRepository(
 
     //******************** LAMBDA ********************//
 
-    suspend fun uploadProductImage(location: String, file: RequestBody) = apiInterfaceLambda.uploadProductImage(location = location, file = file)
+    suspend fun uploadProductImage(location: String, title: String, file: RequestBody) = apiInterfaceLambda.uploadProductImage(location = location, title = title, file = file)
 
     //******************** Bari Koi ********************//
 
