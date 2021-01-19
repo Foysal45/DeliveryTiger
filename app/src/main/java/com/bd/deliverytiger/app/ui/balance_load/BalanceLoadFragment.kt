@@ -87,7 +87,7 @@ class BalanceLoadFragment: Fragment() {
                 //val adjustBalance = balanceInfo.serviceCharge + balanceInfo.credit + balanceInfo.staticVal
                 Timber.tag("adjustBalance").d( "serviceCharge: ${balanceInfo.serviceCharge} + credit: ${balanceInfo.credit} + staticVal: ${balanceInfo.staticVal}")
 
-                val adjustBalance = "ব্যালান্স: <font color='#f05a2b'>৳${DigitConverter.toBanglaDigit(balanceInfo.adjustBalance, true)}</font>"
+                val adjustBalance = "নেট ব্যালান্স: <font color='#f05a2b'>৳${DigitConverter.toBanglaDigit(balanceInfo.adjustBalance, true)}</font>"
                 binding?.adjustedBalance?.text = HtmlCompat.fromHtml(adjustBalance, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
                 val creditMsg = "ক্রেডিট: <font color='#f05a2b'>৳${DigitConverter.toBanglaDigit(balanceInfo.credit, true)}</font>"

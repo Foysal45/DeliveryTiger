@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black_80"
         android:textSize="16sp"
-        android:text="ব্যালান্স: ৳০"
+        android:text="নেট ব্যালান্স: ৳০"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
