@@ -63,7 +63,8 @@ class AllOrdersFragment : Fragment() {
     private var layoutPosition = 0
     private var totalCount = 0
     private var courierOrderViewModelList: MutableList<CourierOrderViewModel> = mutableListOf()
-    private var defaultDate = "2001-01-01"
+    private var defaultFromDate = "2001-01-01"
+    private var defaultToDate = "2001-01-01"
     private var fromDate = "2001-01-01"
     private var toDate = "2001-01-01"
     private var status = -1
@@ -128,8 +129,10 @@ class AllOrdersFragment : Fragment() {
 
         if (!bundle.isEmpty){
             statusGroup = bundle.getString("statusGroup", "-1")
-            fromDate = bundle.getString("fromDate", defaultDate)
-            toDate = bundle.getString("toDate",defaultDate)
+            fromDate = bundle.getString("fromDate", defaultFromDate)
+            toDate = bundle.getString("toDate", defaultToDate)
+            defaultFromDate = fromDate
+            defaultToDate = toDate
             val dashboardStatusFilter = bundle.getString("dashboardStatusFilter", "-1")
 
             val statusArray = dashboardStatusFilter.split(",")
@@ -358,15 +361,15 @@ class AllOrdersFragment : Fragment() {
     private fun activeFilter(initFilter: Boolean = false){
 
         if (!initFilter) {
-            if (fromDate != defaultDate){
+            if (fromDate != defaultFromDate){
                 val msg = "${DigitConverter.toBanglaDate(fromDate, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate, "yyyy-MM-dd")}"
                 filterDateTag.text = msg
                 filterDateTag.visibility = View.VISIBLE
             } else {
                 filterDateTag.text = ""
                 filterDateTag.visibility = View.GONE
-                fromDate = defaultDate
-                toDate = defaultDate
+                fromDate = defaultFromDate
+                toDate = defaultToDate
             }
         }
 
@@ -408,8 +411,8 @@ class AllOrdersFragment : Fragment() {
         filterDateTag.setOnClickListener {
             filterDateTag.text = ""
             filterDateTag.visibility = View.GONE
-            fromDate = defaultDate
-            toDate = defaultDate
+            fromDate = defaultFromDate
+            toDate = defaultToDate
 
             courierOrderViewModelList?.clear()
             allOrdersAdapter.notifyDataSetChanged()
@@ -440,8 +443,8 @@ class AllOrdersFragment : Fragment() {
         filterSearchKeyTag.setOnClickListener {
             filterSearchKeyTag.text = ""
             filterSearchKeyTag.visibility = View.GONE
-            fromDate = defaultDate
-            toDate = defaultDate
+            fromDate = defaultFromDate
+            toDate = defaultToDate
             status = -1
             statusGroup = "-1"
             statusGroupList.clear()
