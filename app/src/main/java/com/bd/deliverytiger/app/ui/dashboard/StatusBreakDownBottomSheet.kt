@@ -20,7 +20,7 @@ class StatusBreakDownBottomSheet(): BottomSheetDialogFragment() {
     var onItemClicked: ((model: DashboardData, position: Int) -> Unit)? = null
     var onMapClick: ((model: DashboardData, position: Int) -> Unit)? = null
 
-    private lateinit var dataList: MutableList<DashboardData>
+    private var dataList: MutableList<DashboardData> = mutableListOf()
 
     companion object {
         fun newInstance(dataList: MutableList<DashboardData>): StatusBreakDownBottomSheet = StatusBreakDownBottomSheet().apply {

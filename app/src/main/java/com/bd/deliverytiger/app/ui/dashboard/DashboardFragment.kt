@@ -647,7 +647,7 @@ class DashboardFragment : Fragment() {
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
-        ft?.commit()
+        ft?.commitAllowingStateLoss()
     }
 
     private fun goToAllOrder(statusGroupName: String, statusFilter: String, startDate: String, endDate: String) {
