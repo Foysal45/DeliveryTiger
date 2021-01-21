@@ -30,6 +30,15 @@ object UserLogger {
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle)
     }
 
+    fun logRegistration(courierUserId: Int, orderSource: String) {
+        val bundle = bundleOf(
+            "DeviceId" to deviceId,
+            "CourierUserId" to courierUserId,
+            "Source" to orderSource
+        )
+        firebaseAnalytics.logEvent("Registration", bundle)
+    }
+
     fun logOpenSource(openSource: String, deepLink: String? = null) {
         val courierUserId = SessionManager.courierUserId
         val bundle = bundleOf(
