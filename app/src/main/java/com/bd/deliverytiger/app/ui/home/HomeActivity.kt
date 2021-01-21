@@ -14,6 +14,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.provider.Settings
 import android.util.Base64
+import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
@@ -272,7 +273,7 @@ class HomeActivity : AppCompatActivity(),
         appUpdateManager()
         UserLogger.logAppOpen()
 
-        //facebookHash()
+        facebookHash()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -1125,8 +1126,8 @@ class HomeActivity : AppCompatActivity(),
         }
     }
 
+    @SuppressLint("PackageManagerGetSignatures")
     private fun facebookHash() {
-        // Add code to print out the key hash
         try {
             val info = packageManager.getPackageInfo("com.bd.deliverytiger.app", PackageManager.GET_SIGNATURES)
             for (signature in info.signatures) {
@@ -1134,9 +1135,12 @@ class HomeActivity : AppCompatActivity(),
                 md.update(signature.toByteArray())
                 val hash = Base64.encodeToString(md.digest(), Base64.DEFAULT)
                 Timber.d("KeyHash $hash")
+                Log.d("KeyHash", hash)
             }
         } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
         } catch (e: NoSuchAlgorithmException) {
+            e.printStackTrace()
         }
     }
 

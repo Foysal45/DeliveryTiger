@@ -637,7 +637,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     for ((index, model) in thanaOrAriaList.withIndex()) {
                         temp = 0
                         if (model.postalCode != null && model.postalCode?.isNotEmpty()!!) {
-                            temp = model.postalCode?.toInt()!!
+                            temp = model.postalCode?.trim()?.toInt()!!
                         }
                         mList.add(CustomModel(temp, model.thanaBng + "", model.thana + "", index))
                     }

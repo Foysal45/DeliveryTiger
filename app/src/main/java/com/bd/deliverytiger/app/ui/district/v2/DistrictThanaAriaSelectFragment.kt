@@ -62,7 +62,7 @@ class DistrictThanaAriaSelectFragment : Fragment() {
         searchTextListener()
         etDistrictSearch.hint = title
 
-        val listAdapter = ListAdapter(mContext!!, list)
+        val listAdapter = ListAdapter(requireContext(), list)
         rvSelectDistrict.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = listAdapter

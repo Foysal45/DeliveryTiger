@@ -31,6 +31,7 @@ app/release
 /.idea/navEditor.xml
 /.idea/codeStyles
 /.idea/compiler.xml
+/.idea/shelf
 
 # Keystore files
 # Uncomment the following lines if you do not want to check your keystore files in.
