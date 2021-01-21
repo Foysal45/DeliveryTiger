@@ -184,6 +184,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var merchantCredit: Int = 0
     private var merchantCalculatedCollectionAmount: Int = 0
     private var merchantServiceCharge: Int = 0
+    private var adjustBalance: Int = 0
 
     private val viewModel: AddOrderViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
@@ -460,11 +461,15 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, 0).observe(viewLifecycleOwner, Observer { model ->
-            merchantCredit = model.credit
-            merchantCalculatedCollectionAmount = model.calculatedCollectionAmount
-            merchantServiceCharge = model.serviceCharge
+        viewModel.fetchMerchantCurrentAdvanceBalance(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { advBalance ->
+            viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, advBalance.balance).observe(viewLifecycleOwner, Observer { model ->
+                merchantCredit = model.credit
+                merchantCalculatedCollectionAmount = model.calculatedCollectionAmount
+                merchantServiceCharge = model.serviceCharge
+                adjustBalance = model.adjustBalance
+            })
         })
+
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
                 is ViewState.ShowMessage -> {
@@ -594,6 +599,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         when {
             !isCollection && !isMerchantCreditAvailable() -> showCreditLimitAlert()
             !isProfileComplete -> checkProfileData()
+            !isCollection && adjustBalance <= (merchantCredit/2) -> showCreditLimitReachAlert()
             else -> submitOrder()
         }
     }
@@ -1336,6 +1342,14 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     private fun showCreditLimitAlert() {
         alert("নির্দেশনা", "আপনার ক্রেডিট লিমিট শেষ হয়ে গিয়েছে। অনুগ্রহপূর্বক সাপোর্ট এর সাথে যোগাযোগ করুন।", false).show()
+    }
+
+    private fun showCreditLimitReachAlert() {
+        alert("নির্দেশনা", "আপনার ক্রেডিট লিমিট (৳${DigitConverter.toBanglaDigit(adjustBalance)}) প্রায় শেষ। অনুগ্রহপূর্বক ব্যালান্স রিচার্জ করুন।", false, "ঠিক আছে", ""){
+            if (it == AlertDialog.BUTTON_POSITIVE) {
+                submitOrder()
+            }
+        }.show()
     }
 
     private fun mockUserData() {
