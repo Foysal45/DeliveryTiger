@@ -14,41 +14,70 @@
 
 
     <TextView
-        android:id="@+id/adjustedBalance"
+        android:id="@+id/balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black_80"
-        android:textSize="16sp"
-        android:text="নেট ব্যালান্স: ৳০"
+        android:textSize="14sp"
+        android:text="ব্যালান্স:        ৳০"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
+
+    <TextView
+        android:id="@+id/prepaidServiceCharge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_80"
+        android:textSize="14sp"
+        android:text="সার্ভিস চার্জ:   ৳০"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/balance"
+        />
+
+    <TextView
+        android:id="@+id/adjustedBalance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="নেট ব্যালান্স:  ৳০"
+        android:textColor="@color/black_80"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/prepaidServiceCharge" />
 
     <TextView
         android:id="@+id/credit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black_80"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:text="ক্রেডিট: ৳০"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
 
+
+    <TextView
+        android:id="@+id/suggestedAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="সাজেস্টেড ব্যালান্স লোড অ্যামাউন্ট: ৳০"
+        android:textColor="@color/black_80"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/adjustedBalance" />
+
     <TextView
         android:id="@+id/suggestion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="আপনার প্রয়োজন মতো ব্যালান্স লোড করুন"
         android:textColor="@color/black_80"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/adjustedBalance"
-        android:layout_marginTop="16dp"
-        />
-
-
-
+        app:layout_constraintTop_toBottomOf="@id/suggestedAmount" />
 
     <EditText
         android:id="@+id/amountET"
@@ -66,7 +95,7 @@
         android:paddingBottom="8dp"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
-        app:layout_constraintTop_toBottomOf="@id/suggestion" />
+        app:layout_constraintTop_toBottomOf="@+id/suggestion"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/payBtn"

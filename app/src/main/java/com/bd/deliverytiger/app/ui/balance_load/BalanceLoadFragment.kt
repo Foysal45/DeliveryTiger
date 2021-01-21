@@ -16,6 +16,7 @@ import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
 import org.koin.android.ext.android.inject
 import timber.log.Timber
+import kotlin.math.abs
 
 @SuppressLint("SetTextI18n")
 class BalanceLoadFragment: Fragment() {
@@ -87,11 +88,27 @@ class BalanceLoadFragment: Fragment() {
                 //val adjustBalance = balanceInfo.serviceCharge + balanceInfo.credit + balanceInfo.staticVal
                 Timber.tag("adjustBalance").d( "serviceCharge: ${balanceInfo.serviceCharge} + credit: ${balanceInfo.credit} + staticVal: ${balanceInfo.staticVal}")
 
-                val adjustBalance = "নেট ব্যালান্স: <font color='#f05a2b'>৳${DigitConverter.toBanglaDigit(balanceInfo.adjustBalance, true)}</font>"
-                binding?.adjustedBalance?.text = HtmlCompat.fromHtml(adjustBalance, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-                val creditMsg = "ক্রেডিট: <font color='#f05a2b'>৳${DigitConverter.toBanglaDigit(balanceInfo.credit, true)}</font>"
+                val serviceCharge = balanceInfo.serviceCharge
+                val adjustBalance = balanceInfo.adjustBalance
+
+                val balanceText = "ব্যালান্স: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;৳ ${DigitConverter.toBanglaDigit(balance, true)}</font>"
+                val prepaidServiceChargeText = "সার্ভিস চার্জ: &nbsp;<font color='#E84545'>৳ -${DigitConverter.toBanglaDigit(serviceCharge, true)}</font>"
+
+                binding?.balance?.text = HtmlCompat.fromHtml(balanceText, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                binding?.prepaidServiceCharge?.text = HtmlCompat.fromHtml(prepaidServiceChargeText, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+                val adjustBalanceText = "নেট ব্যালান্স: ৳ <b>${DigitConverter.toBanglaDigit(balanceInfo.adjustBalance, true)}</b></font>"
+                binding?.adjustedBalance?.text = HtmlCompat.fromHtml(adjustBalanceText, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+                val creditMsg = "ক্রেডিট: <font color='#f05a2b'>৳ <b>${DigitConverter.toBanglaDigit(balanceInfo.credit, true)}</b></font>"
                 binding?.credit?.text = HtmlCompat.fromHtml(creditMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+                val absAdjustBalance = abs(adjustBalance)+balanceInfo.credit
+                val suggestedAmountText = "সাজেস্টেড ব্যালান্স লোড অ্যামাউন্ট: <font color='#006F3D'>৳ ${DigitConverter.toBanglaDigit(absAdjustBalance, true)}</font>"
+                binding?.suggestedAmount?.text = HtmlCompat.fromHtml(suggestedAmountText, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+                binding?.amountET?.setText(absAdjustBalance.toString())
             })
         })
     }
