@@ -105,9 +105,8 @@ class BalanceLoadFragment: Fragment() {
                 val creditMsg = "ক্রেডিট: <font color='#f05a2b'>৳ <b>${DigitConverter.toBanglaDigit(balanceInfo.credit, true)}</b></font>"
                 binding?.credit?.text = HtmlCompat.fromHtml(creditMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-
                 if (adjustBalance < 0) {
-                    val absAdjustBalance = abs(adjustBalance)+balanceInfo.credit
+                    val absAdjustBalance = abs(adjustBalance) + balanceInfo.credit + balanceInfo.staticVal
                     val suggestedAmountText = "সাজেস্টেড ব্যালান্স লোড অ্যামাউন্ট: <font color='#006F3D'>৳ ${DigitConverter.toBanglaDigit(absAdjustBalance, true)}</font>"
                     binding?.suggestedAmount?.text = HtmlCompat.fromHtml(suggestedAmountText, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
