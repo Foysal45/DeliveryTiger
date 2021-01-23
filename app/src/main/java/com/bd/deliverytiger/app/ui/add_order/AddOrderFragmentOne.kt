@@ -1340,7 +1340,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     private fun showCreditLimitAlert() {
-        val msg = "আপনার প্রি-পেইড অর্ডার করার জন্য পর্যাপ্ত ব্যালান্স নেই। আপনার বর্তমান ব্যালান্স <font color='#00844A'>${DigitConverter.toBanglaDigit(adjustBalance, true)}</font> টাকা (সার্ভিস চার্জ বকেয়া রয়েছে)। অনুগ্রহপূর্বক বকেয়া পরিশোধ করতে ব্যালান্স লোড করুন।"
+        val msg = "আপনার প্রি-পেইড অর্ডার করার জন্য পর্যাপ্ত ব্যালান্স নেই। আপনার বর্তমান ব্যালান্স <font color='#00844A'>${DigitConverter.toBanglaDigit(adjustBalance, true)}</font> টাকা। অনুগ্রহপূর্বক ব্যালান্স লোড করুন।"
         alert("নির্দেশনা", HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY), false, "ব্যালান্স লোড", "",){
             if (it == AlertDialog.BUTTON_POSITIVE) {
                 (activity as HomeActivity).goToBalanceLoad()
