@@ -17,7 +17,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 21 // play store 20
-        versionName "1.8.5-debug" // play store 1.8.4
+        versionName "1.8.5" // play store 1.8.4
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
