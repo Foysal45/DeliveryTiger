@@ -34,9 +34,22 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black_80"
         android:textSize="14sp"
-        android:text="ব্যালান্স:        ৳০"
+        android:text="কারেন্ট ব্যালেন্স:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/merchantName"
+        android:layout_marginTop="6dp"
+        />
+
+    <TextView
+        android:id="@+id/balanceAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_80"
+        android:textSize="14sp"
+        android:text="০ ৳"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/merchantName"
+        android:layout_marginTop="6dp"
         />
 
     <TextView
@@ -45,65 +58,51 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black_80"
         android:textSize="14sp"
-        android:text="সার্ভিস চার্জ:   ৳০"
+        android:text="সার্ভিস চার্জ (শিপমেন্টে থাকা পার্সেল):"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/balance"
+        />
+
+    <TextView
+        android:id="@+id/serviceChargeAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_80"
+        android:textSize="14sp"
+        android:text="০ ৳"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/balanceAmount"
         />
 
     <TextView
         android:id="@+id/adjustedBalance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="নেট ব্যালান্স:  ৳০"
+        android:text="নেট কারেন্ট ব্যালেন্স:"
         android:textColor="@color/black_80"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/prepaidServiceCharge" />
 
     <TextView
-        android:id="@+id/credit"
+        android:id="@+id/netAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black_80"
         android:textSize="14sp"
-        android:text="ক্রেডিট: ৳০"
+        android:text="০ ৳"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/merchantName"
+        app:layout_constraintTop_toBottomOf="@id/serviceChargeAmount"
         />
 
-
-    <TextView
-        android:id="@+id/suggestedAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="সাজেস্টেড ব্যালান্স লোড অ্যামাউন্ট: ৳০"
-        android:textColor="@color/black_80"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/adjustedBalance"
-        android:visibility="gone"
-        tools:visibility="visible"
-        />
-
-    <TextView
-        android:id="@+id/suggestion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="আপনার প্রয়োজন মতো ব্যালান্স লোড করুন"
-        android:textColor="@color/black_80"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/suggestedAmount" />
 
     <EditText
         android:id="@+id/amountET"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_view_height"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/bg_add_order_edit_text"
-        android:hint="টাকার অ্যামাউন্ট"
+        android:hint="নতুন ব্যালেন্স লোড অ্যামাউন্ট"
         android:importantForAutofill="no"
         android:inputType="number"
         android:maxLength="8"
@@ -113,7 +112,24 @@
         android:paddingBottom="8dp"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
-        app:layout_constraintTop_toBottomOf="@+id/suggestion"/>
+        app:layout_constraintTop_toBottomOf="@+id/adjustedBalance"/>
+
+    <TextView
+        android:id="@+id/suggestedAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="সাজেস্টেড ব্যালান্স লোড অ্যামাউন্ট ৳০ (১০০৳ ইমার্জেন্সি ব্যালেন্স সহ)"
+        android:textColor="@color/black_70"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/amountET"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/payBtn"
@@ -126,7 +142,7 @@
         android:textSize="@dimen/text_14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/amountET" />
+        app:layout_constraintTop_toBottomOf="@id/suggestedAmount" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -139,5 +155,19 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
+    <TextView
+        android:id="@+id/alertTV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="পর্যাপ্ত ব্যালেন্স না থাকলে আপনি প্রি-পেইড অর্ডার প্লেস করতে পারবেন না।"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="14sp"
+        android:textColor="@color/black_80"
+        android:background="@drawable/bg_stroke1"
+        android:padding="16dp"
+        android:layout_marginBottom="24dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -83,37 +84,32 @@ class BalanceLoadFragment: Fragment() {
     private fun fetchCurrentBalance() {
         viewModel.fetchMerchantCurrentAdvanceBalance(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { accountBalance ->
             val balance = accountBalance.balance
-
             viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, balance).observe(viewLifecycleOwner, Observer { balanceInfo ->
 
-                //val adjustBalance = balanceInfo.serviceCharge + balanceInfo.credit + balanceInfo.staticVal
                 Timber.tag("adjustBalance").d( "serviceCharge: ${balanceInfo.serviceCharge} + credit: ${balanceInfo.credit} + staticVal: ${balanceInfo.staticVal}")
-
 
                 val serviceCharge = balanceInfo.serviceCharge
                 val adjustBalance = balanceInfo.adjustBalance
+                val credit = balanceInfo.credit
 
-                val balanceText = "ব্যালান্স: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;৳ ${DigitConverter.toBanglaDigit(balance, true)}</font>"
-                val prepaidServiceChargeText = "সার্ভিস চার্জ: &nbsp;<font color='#E84545'>৳ -${DigitConverter.toBanglaDigit(serviceCharge, true)}</font>"
+                val balanceText = "${DigitConverter.toBanglaDigit(balance, true)} ৳"
+                binding?.balanceAmount?.text = balanceText
 
-                binding?.balance?.text = HtmlCompat.fromHtml(balanceText, HtmlCompat.FROM_HTML_MODE_LEGACY)
-                binding?.prepaidServiceCharge?.text = HtmlCompat.fromHtml(prepaidServiceChargeText, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                val prepaidServiceChargeText = "- ${DigitConverter.toBanglaDigit(serviceCharge, true)} ৳"
+                binding?.serviceChargeAmount?.text = prepaidServiceChargeText
 
-                val adjustBalanceText = "নেট ব্যালান্স: ৳ <b>${DigitConverter.toBanglaDigit(balanceInfo.adjustBalance, true)}</b></font>"
-                binding?.adjustedBalance?.text = HtmlCompat.fromHtml(adjustBalanceText, HtmlCompat.FROM_HTML_MODE_LEGACY)
-
-                val creditMsg = "ক্রেডিট: <font color='#f05a2b'>৳ <b>${DigitConverter.toBanglaDigit(balanceInfo.credit, true)}</b></font>"
-                binding?.credit?.text = HtmlCompat.fromHtml(creditMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                val adjustBalanceText = "${DigitConverter.toBanglaDigit(adjustBalance, true)} ৳"
+                binding?.netAmount?.text = adjustBalanceText
 
                 if (adjustBalance < 0) {
-                    val absAdjustBalance = abs(adjustBalance) + balanceInfo.credit + balanceInfo.staticVal
-                    val suggestedAmountText = "সাজেস্টেড ব্যালান্স লোড অ্যামাউন্ট: <font color='#006F3D'>৳ ${DigitConverter.toBanglaDigit(absAdjustBalance, true)}</font>"
-                    binding?.suggestedAmount?.text = HtmlCompat.fromHtml(suggestedAmountText, HtmlCompat.FROM_HTML_MODE_LEGACY)
-
+                    val absAdjustBalance = abs(adjustBalance) + credit
+                    val suggestedAmountText = "সাজেস্টেড ব্যালান্স লোড অ্যামাউন্ট ${DigitConverter.toBanglaDigit(absAdjustBalance, true)}৳\n(${DigitConverter.toBanglaDigit(credit, true)}৳ ইমার্জেন্সি ব্যালেন্স সহ)"
+                    binding?.suggestedAmount?.text = suggestedAmountText
                     binding?.suggestedAmount?.visibility = View.VISIBLE
-                    binding?.amountET?.setText(absAdjustBalance.toString())
-                }
 
+                    binding?.netAmount?.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+                    //binding?.amountET?.setText(absAdjustBalance.toString())
+                }
             })
         })
     }
