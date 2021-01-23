@@ -922,6 +922,11 @@ class HomeActivity : AppCompatActivity(),
         addFragment(MapFragment.newInstance(bundle), MapFragment.tag)
     }
 
+    fun goToBalanceLoad() {
+        onBackPressed()
+        addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
+    }
+
     private fun addFragment(fragment: Fragment, tag: String) {
         val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
         ft.replace(R.id.mainActivityContainer, fragment, tag)

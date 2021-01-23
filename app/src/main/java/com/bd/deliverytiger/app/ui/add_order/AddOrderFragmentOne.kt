@@ -1,7 +1,6 @@
 package com.bd.deliverytiger.app.ui.add_order
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
 import android.os.Bundle
@@ -15,6 +14,7 @@ import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -490,14 +490,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     private fun isMerchantCreditAvailable(): Boolean {
-        val adjustBalance = merchantCredit  + merchantCalculatedCollectionAmount
+        val totalAdjustBalance = merchantCredit  + merchantCalculatedCollectionAmount + adjustBalance
         val shipmentCharge = payShipmentCharge.toInt()
-        val totalShipmentCharge = merchantServiceCharge + shipmentCharge
-        val isMerchantCreditAvailable = adjustBalance > totalShipmentCharge
-        timber.log.Timber.tag("adjustBalance").d( "credit: $merchantCredit + calculatedCollectionAmount: $merchantCalculatedCollectionAmount = adjustBalance: $adjustBalance")
+        val isMerchantCreditAvailable = totalAdjustBalance > shipmentCharge
+        timber.log.Timber.tag("adjustBalance").d( "credit: $merchantCredit + calculatedCollectionAmount: $merchantCalculatedCollectionAmount + adjustBalance: $adjustBalance = totalAdjustBalance $totalAdjustBalance")
         timber.log.Timber.tag("adjustBalance").d( "service charge: $merchantServiceCharge")
         timber.log.Timber.tag("adjustBalance").d( "shipment charge: $shipmentCharge")
-        timber.log.Timber.tag("adjustBalance").d( "isMerchantCreditAvailable: $adjustBalance > $totalShipmentCharge $isMerchantCreditAvailable")
+        timber.log.Timber.tag("adjustBalance").d( "isMerchantCreditAvailable: $totalAdjustBalance > $shipmentCharge $isMerchantCreditAvailable")
         return isMerchantCreditAvailable
     }
 
@@ -599,7 +598,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         when {
             !isCollection && !isMerchantCreditAvailable() -> showCreditLimitAlert()
             !isProfileComplete -> checkProfileData()
-            !isCollection && adjustBalance <= (merchantCredit/2) -> showCreditLimitReachAlert()
+            //!isCollection && adjustBalance <= (merchantCredit/2) -> showCreditLimitReachAlert()
             else -> submitOrder()
         }
     }
@@ -1341,11 +1340,16 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     private fun showCreditLimitAlert() {
-        alert("নির্দেশনা", "আপনার ক্রেডিট লিমিট শেষ হয়ে গিয়েছে। অনুগ্রহপূর্বক সাপোর্ট এর সাথে যোগাযোগ করুন।", false).show()
+        val msg = "আপনার প্রি-পেইড অর্ডার করার জন্য পর্যাপ্ত ব্যালান্স নেই। আপনার বর্তমান ব্যালান্স <font color='#00844A'>${DigitConverter.toBanglaDigit(adjustBalance, true)}</font> টাকা (সার্ভিস চার্জ বকেয়া রয়েছে)। অনুগ্রহপূর্বক বকেয়া পরিশোধ করতে ব্যালান্স লোড করুন।"
+        alert("নির্দেশনা", HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY), false, "ব্যালান্স লোড", "",){
+            if (it == AlertDialog.BUTTON_POSITIVE) {
+                (activity as HomeActivity).goToBalanceLoad()
+            }
+        }.show()
     }
 
     private fun showCreditLimitReachAlert() {
-        alert("নির্দেশনা", "আপনার ক্রেডিট লিমিট (৳${DigitConverter.toBanglaDigit(adjustBalance)}) প্রায় শেষ। অনুগ্রহপূর্বক ব্যালান্স রিচার্জ করুন।", false, "ঠিক আছে", ""){
+        alert("নির্দেশনা", "আপনার ব্যালান্স (৳${DigitConverter.toBanglaDigit(adjustBalance)}) প্রায় শেষ। আপনি আর অল্প কিছু সংখ্যক প্রি-পেইড অর্ডার করতে পারবেন। অনুগ্রহপূর্বক ব্যালান্স রিচার্জ করুন।", false, "ঠিক আছে", ""){
             if (it == AlertDialog.BUTTON_POSITIVE) {
                 submitOrder()
             }
