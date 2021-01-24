@@ -274,7 +274,7 @@ class ExcelGenerator(private val context: Context) {
             if (!directory.exists()) {
                 directory.mkdirs()
             }
-            val file = File(directory, fileName)
+            val file = File(directory, "$fileName.xls")
             filePath = file.absolutePath
             FileOutputStream(file)
         } else {
