@@ -11,10 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.product_upload.ProductUploadRequest
 import com.bd.deliverytiger.app.databinding.FragmentAddProductBottomSheetBinding
-import com.bd.deliverytiger.app.utils.SessionManager
-import com.bd.deliverytiger.app.utils.ViewState
-import com.bd.deliverytiger.app.utils.hideKeyboard
-import com.bd.deliverytiger.app.utils.toast
+import com.bd.deliverytiger.app.repository.AppRepository
+import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.esafirm.imagepicker.features.ImagePicker
@@ -24,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
+import com.haroldadmin.cnradapter.NetworkResponse
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,6 +46,7 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
     private val mediaTypeOctet = "application/octet".toMediaTypeOrNull()
     private val gson: Gson by inject()
     private val viewModel: AddProductViewModel by inject()
+    private val appRepository: AppRepository by inject()
 
     private var offerType = 0
 
@@ -83,7 +83,7 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
             with(BottomSheetBehavior.from(bottomSheet)) {
                 //state = BottomSheetBehavior.STATE_COLLAPSED
                 skipCollapsed = true
-                isHideable = true
+                isHideable = false
 
             }
         }
@@ -107,6 +107,9 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
 
             hideKeyboard()
             if (validate()) {
+
+                val progressDialog = progressDialog()
+                progressDialog.show()
                 val jsonModel = gson.toJson(productUploadRequest)
                 binding?.uploadBtn?.isEnabled = false
                 viewModel.uploadProductInfo(jsonModel.toRequestBody(mediaTypeText)).observe(viewLifecycleOwner, Observer { model ->
@@ -119,10 +122,21 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
                             val body = compressedFile.readBytes().toRequestBody(mediaTypeOctet)
                             //val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
                             //val body = MultipartBody.Part.createFormData("file", compressedFile.name, requestFile)
-                            viewModel.uploadProductImage(uploadLocation, productUploadRequest.productTitle, body)//.observe(viewLifecycleOwner, Observer {})
-                            withContext(Dispatchers.Main) {
+                            /*viewModel.uploadProductImage(uploadLocation, productUploadRequest.productTitle, body).observe(viewLifecycleOwner, Observer {
                                 binding?.uploadBtn?.isEnabled = true
                                 onProductUploaded?.invoke(model.dealId, offerType)
+                            })*/
+                            val imageUploadResponse = appRepository.uploadProductImage(uploadLocation, productUploadRequest.productTitle, body)
+                            withContext(Dispatchers.Main) {
+                                progressDialog.dismiss()
+                                if (imageUploadResponse is NetworkResponse.Success) {
+                                    binding?.uploadBtn?.isEnabled = true
+                                    onProductUploaded?.invoke(model.dealId, offerType)
+                                } else {
+                                    //context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
+                                    binding?.uploadBtn?.isEnabled = true
+                                    onProductUploaded?.invoke(model.dealId, offerType)
+                                }
                             }
                         }
                     }
