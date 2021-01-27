@@ -156,7 +156,8 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation 'com.facebook.android:facebook-core:8.1.0'
-    implementation 'com.facebook.android:facebook-applinks:8.1.0'
+    implementation 'com.facebook.android:facebook-marketing:4.42.0'
+    //implementation 'com.facebook.android:facebook-applinks:8.1.0'
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
     testImplementation 'junit:junit:4.13'
