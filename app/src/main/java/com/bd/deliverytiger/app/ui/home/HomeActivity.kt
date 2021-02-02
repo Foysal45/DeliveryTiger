@@ -273,6 +273,7 @@ class HomeActivity : AppCompatActivity(),
         appUpdateManager()
         UserLogger.logAppOpen()
 
+        //ToDO: remove
         facebookHash()
     }
 
