@@ -85,7 +85,7 @@
         <item>ইমেইল থেকে</item>
     </string-array>
     <string name="file_provider_authority" translatable="false">com.bd.deliverytiger.app.fileprovider</string>
-    <string name="facebook_app_id">227253438942250</string>
+    <string name="facebook_app_id">321299715967933</string>
 
     <string name="cod_collection">COD - পরিশোধিত</string>
     <string name="service_bill_pay">বকেয়া সার্ভিস চার্জ (প্রি-পেইড)</string>
