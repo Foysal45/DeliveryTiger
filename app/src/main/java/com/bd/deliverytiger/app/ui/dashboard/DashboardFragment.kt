@@ -191,6 +191,7 @@ class DashboardFragment : Fragment() {
             } else {
                 if (netAmount >= 0) {
                     addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+                    UserLogger.logGenie("AddOrder")
                 } else {
                     serviceChargeDialog()
                 }

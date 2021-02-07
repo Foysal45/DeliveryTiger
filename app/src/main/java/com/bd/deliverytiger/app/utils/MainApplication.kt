@@ -10,6 +10,7 @@ import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.di.appModule
 import com.bd.deliverytiger.app.interfaces.Session
+import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.ktx.Firebase
@@ -35,6 +36,7 @@ class MainApplication: Application() {
 
         SessionManager.init(this)
         RetrofitSingleton.addSessionListener(getSession())
+        UserLogger.initAnalytics(this)
         retrofit = RetrofitSingleton.getInstance(this)
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
