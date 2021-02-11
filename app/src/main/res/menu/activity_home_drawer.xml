@@ -77,6 +77,11 @@
             android:title="যোগাযোগ" />
 
         <item
+            android:id="@+id/nav_survey"
+            android:icon="@drawable/ic_bill_pay_history"
+            android:title="Survey" />
+
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout"
             android:title="লগ আউট" />

@@ -163,4 +163,5 @@ class AppRepository(
 
     suspend fun fetchReturnStatement(courierUserId: Int, index: Int, count: Int) = apiInterfaceCore.fetchReturnStatement(courierUserId, index, count)
 
+    suspend fun fetchSurveyQuestion() = apiInterfaceCore.fetchSurveyQuestion()
 }

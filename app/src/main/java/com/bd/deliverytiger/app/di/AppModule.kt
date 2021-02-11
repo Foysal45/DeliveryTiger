@@ -27,6 +27,7 @@ import com.bd.deliverytiger.app.ui.profile.ProfileViewModel
 import com.bd.deliverytiger.app.ui.referral.ReferralViewModel
 import com.bd.deliverytiger.app.ui.return_statement.ReturnStatementViewModel
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeViewModel
+import com.bd.deliverytiger.app.ui.survey.SurveyViewModel
 import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODViewModel
 import com.bd.deliverytiger.app.utils.AppConstant
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -80,5 +81,6 @@ val appModule = module {
     viewModel { ReferralViewModel(get()) }
     viewModel { CollectionHistoryViewModel(get()) }
     viewModel { ReturnStatementViewModel(get()) }
+    viewModel { SurveyViewModel(get()) }
 
 }

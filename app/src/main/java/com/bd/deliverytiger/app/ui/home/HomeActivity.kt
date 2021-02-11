@@ -67,6 +67,7 @@ import com.bd.deliverytiger.app.ui.return_statement.ReturnStatementFragment
 import com.bd.deliverytiger.app.ui.return_statement.details.ReturnStatementDetailsFragment
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
+import com.bd.deliverytiger.app.ui.survey.SurveyActivity
 import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
@@ -787,6 +788,9 @@ class HomeActivity : AppCompatActivity(),
                 } else {
                     addFragment(ReturnStatementFragment.newInstance(), ReturnStatementFragment.tag)
                 }
+            }
+            R.id.nav_survey -> {
+                startActivity(Intent(this, SurveyActivity::class.java))
             }
             R.id.nav_logout -> {
 
