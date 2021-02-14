@@ -7,5 +7,8 @@ data class ComplainRequest(
     @SerializedName("OrderId")
     var orderId: String?,
     @SerializedName("Comments")
-    var comments: String?
+    var comments: String?,
+    @SerializedName("OrderFrom")
+    var orderFrom: String = "app"
+
 )
