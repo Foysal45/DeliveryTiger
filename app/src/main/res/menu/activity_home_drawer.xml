@@ -79,7 +79,7 @@
         <item
             android:id="@+id/nav_survey"
             android:icon="@drawable/ic_bill_pay_history"
-            android:title="Survey" />
+            android:title="ফিডব্যাক" />
 
         <item
             android:id="@+id/nav_logout"

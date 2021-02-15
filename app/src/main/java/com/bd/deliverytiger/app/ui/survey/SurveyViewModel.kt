@@ -18,7 +18,7 @@ class SurveyViewModel (private val repository: AppRepository) : ViewModel() {
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
 
-    fun fetchSurveyQuestion():  LiveData<List<SurveyQuestionModel>> {
+    fun fetchSurveyQuestion():  MutableLiveData<List<SurveyQuestionModel>> {
 
         viewState.value = ViewState.ProgressState(true)
         val responseBody: MutableLiveData<List<SurveyQuestionModel>> = MutableLiveData()

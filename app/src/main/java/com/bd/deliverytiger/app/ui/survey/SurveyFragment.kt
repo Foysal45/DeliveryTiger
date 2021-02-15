@@ -4,7 +4,10 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionModel
 import com.bd.deliverytiger.app.databinding.FragmentSurveyBinding
@@ -48,7 +51,15 @@ class SurveyFragment : Fragment() {
                 adapter = dataAdapter
             }
         }
-        dataAdapter.initLoad(model.surveyAnswer)
+        dataAdapter.initLoad(model.surveyAnswer, model.multipleAnswer)
+
+        if (model.surveyAnswer != null && model.surveyAnswer.first().answerName == "Comment"){
+            binding?.recyclerview?.visibility = GONE
+            binding?.inputTextView?.isVisible = true
+        }else{
+            binding?.inputTextView?.isVisible = false
+            binding?.recyclerview?.visibility = VISIBLE
+        }
 
     }
 

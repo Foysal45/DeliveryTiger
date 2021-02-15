@@ -32,12 +32,30 @@
         tools:orientation="vertical"
         tools:visibility="visible" />
 
+    <EditText
+        android:id="@+id/inputTextView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/bg_add_order_edit_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recyclerview"
+        tools:visibility="visible"
+        android:hint="লিখুন"
+        android:inputType="text"
+        android:gravity="center"/>
+
     <ImageView
         android:id="@+id/surveyImageView"
         android:layout_width="200dp"
         android:layout_height="200dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyclerview"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="Image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

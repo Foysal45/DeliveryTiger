@@ -6,17 +6,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyAnswer
 import com.bd.deliverytiger.app.databinding.ItemViewSurveyQuestionOptionBinding
-import kotlinx.android.synthetic.main.fragment_survey.*
 
 class SurveyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var dataList : MutableList<SurveyAnswer> = mutableListOf()
     var onItemClicked: ((model: SurveyAnswer) -> Unit)? = null
+    private var selectedPosition = -1
+    private var multipleAnswer: Boolean = false
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding: ItemViewSurveyQuestionOptionBinding = ItemViewSurveyQuestionOptionBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false)
+                LayoutInflater.from(parent.context), parent, false)
         return ViewModel(binding)
     }
 
@@ -29,6 +30,20 @@ class SurveyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val binding = holder.binding
 
             binding.surveyQuestion.text = model.answerName
+
+            if (multipleAnswer){
+                binding.checkBoxRightAnswer.setOnClickListener {
+                    this.selectedPosition = holder.adapterPosition
+                    notifyDataSetChanged()
+                }
+
+            }else {
+                binding.checkBoxRightAnswer.isChecked = selectedPosition == position
+                binding.checkBoxRightAnswer.setOnClickListener {
+                    this.selectedPosition = holder.adapterPosition
+                    notifyDataSetChanged()
+                }
+            }
         }
     }
 
@@ -42,10 +57,12 @@ class SurveyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    fun initLoad(list: List<SurveyAnswer>) {
+    fun initLoad(list: List<SurveyAnswer>, multipleAnswer: Boolean) {
         dataList.clear()
         dataList.addAll(list)
+        this.multipleAnswer = multipleAnswer
         notifyDataSetChanged()
     }
+
 
 }
