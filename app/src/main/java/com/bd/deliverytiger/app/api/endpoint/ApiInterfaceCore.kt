@@ -38,6 +38,8 @@ import com.bd.deliverytiger.app.api.model.referral.RefereeInfo
 import com.bd.deliverytiger.app.api.model.referral.ReferrerInfo
 import com.bd.deliverytiger.app.api.model.return_statement.ReturnStatementData
 import com.bd.deliverytiger.app.api.model.rider.RiderInfo
+import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionAnswer
+import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionAnswerResponse
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionModel
 import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -174,4 +176,7 @@ interface ApiInterfaceCore {
 
     @GET("api/Fetch/GetSurveyQuestion")
     suspend fun fetchSurveyQuestion(): NetworkResponse<GenericResponse<List<SurveyQuestionModel>>, ErrorResponse>
+
+    @POST("api/Entry/AddSurveyQuestionAnswerLog")
+    suspend fun fetchSubmitSurvey(@Body requestBody: List<SurveyQuestionAnswer>): NetworkResponse<GenericResponse<List<SurveyQuestionAnswerResponse>>, ErrorResponse>
 }

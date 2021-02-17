@@ -1,18 +1,26 @@
 package com.bd.deliverytiger.app.ui.survey
 
+import android.app.Activity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionModel
 import com.bd.deliverytiger.app.databinding.FragmentSurveyBinding
+import com.bd.deliverytiger.app.databinding.ItemViewSurveyQuestionOptionBinding
+import com.bd.deliverytiger.app.utils.toast
 import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.fragment_add_product_bottom_sheet.view.*
 import org.koin.android.ext.android.inject
+import timber.log.Timber
+
 
 class SurveyFragment : Fragment() {
 
@@ -20,12 +28,17 @@ class SurveyFragment : Fragment() {
     private val viewModel: SurveyViewModel by inject()
     private lateinit var dataAdapter: SurveyAdapter
 
+    private var dataList: MutableList<SurveyQuestionModel> = mutableListOf()
+    private var position = -1
     private lateinit var model: SurveyQuestionModel
+
 
     companion object {
         @JvmStatic
-        fun newInstance(model: SurveyQuestionModel): SurveyFragment = SurveyFragment().apply {
-            this.model = model
+        fun newInstance(dataList: MutableList<SurveyQuestionModel>, position: Int): SurveyFragment = SurveyFragment().apply {
+            this.dataList = dataList
+            this.position = position
+            this.model = dataList[position]
         }
 
         @JvmField
@@ -41,30 +54,124 @@ class SurveyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.surveyQues?.text = model.questionName
-        Glide.with(binding?.surveyImageView!!).load(model.imageUrl).into(binding?.surveyImageView!!)
+        // ToDo: remove after test
+        binding?.surveyQues?.text = model.questionName + " ${model.surveyQuestionId}"
+        if (model.isMultipleAnswer) {
+            binding?.surveyQuesHint?.text = "(চাইলে একের অধিক উত্তর সিলেক্ট করুন)"
+        } else {
+            binding?.surveyQuesHint?.text = "(একটি উত্তর সিলেক্ট করুন)"
+        }
+        binding?.surveyImageView?.let { view ->
+            Glide.with(view)
+                    .load(model.imageUrl)
+                    .into(view)
+        }
+        Timber.d("ImageUrlCheck ${model.imageUrl}")
+
         dataAdapter = SurveyAdapter()
         binding?.recyclerview?.let { recyclerView ->
             with(recyclerView) {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = dataAdapter
+                itemAnimator = null
             }
         }
-        dataAdapter.initLoad(model.surveyAnswer, model.multipleAnswer)
 
-        if (model.surveyAnswer != null && model.surveyAnswer.first().answerName == "Comment"){
+        dataAdapter.onAnswerChecked = { model, isMultipleAnswer ->
+            Timber.d("CheckAnswerDebug $isMultipleAnswer $model")
+            Timber.d("CheckAnswerDebug ${this.model}")
+            if (!isMultipleAnswer) {
+                when (model.surveyQuestionId) {
+                    2 -> {
+                        if (model.surveyAnswerId == 6) {
+                            model.surveyRedirectNextQuestionId = 5
+                            val nextQuestion = dataList.find { it.surveyQuestionId == 5 }
+                            nextQuestion?.surveyAnswer?.forEach { question ->
+                                question.surveyRedirectPreviousQuestionId = 2
+                            }
+                        }
+                    }
+                    4 -> {
+                        if (model.surveyAnswerId == 12) {
+                            model.surveyRedirectNextQuestionId = 5
+                            val nextQuestion = dataList.find { it.surveyQuestionId == 5 }
+                            nextQuestion?.surveyAnswer?.forEach { question ->
+                                question.surveyRedirectPreviousQuestionId = 4
+                            }
+                        }
+                    }
+                }
+                nextQuestion()
+            } else {
+
+            }
+        }
+
+
+
+        binding?.nextBtn?.setOnClickListener {
+            when {
+                model.surveyAnswer.first().answerName == "comment" -> {
+                    model.surveyAnswer.first().comment = binding?.inputTextView?.text.toString()
+                    nextQuestion()
+                }
+                model.surveyAnswer.any { it.isSelected } -> {
+                    nextQuestion()
+                }
+                else -> {
+                    context?.toast("${binding?.surveyQuesHint?.text?.toString()}")
+                }
+            }
+        }
+
+        binding?.previousBtn?.setOnClickListener{
+            previousQuestion()
+        }
+
+        binding?.submitBtn?.setOnClickListener {
+            (activity as SurveyActivity).submitFeedback()
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        dataAdapter.initLoad(model.surveyAnswer, model.isMultipleAnswer)
+        // CommentBox
+        if (model.surveyAnswer.first().answerName == "comment"){
             binding?.recyclerview?.visibility = GONE
             binding?.inputTextView?.isVisible = true
-        }else{
+        }else if (model.surveyAnswer.first().answerName == "thanks"){
+            binding?.surveyQues?.isVisible = false
+            binding?.surveyThanks?.isVisible = true
+            binding?.surveyThanks?.text = model.questionName
+            binding?.inputTextView?.isVisible = false
+            binding?.recyclerview?.visibility = GONE
+            binding?.surveyImageView?.setBackgroundResource(R.drawable.ic_hand)
+            binding?.submitBtn?.isVisible = true
+            binding?.nextBtn?.isVisible = false
+            binding?.previousBtn?.isVisible = false
+            binding?.surveyQuesHint?.isVisible = false
+            (activity as SurveyActivity).updatefootter(false)
+
+        } else{
             binding?.inputTextView?.isVisible = false
             binding?.recyclerview?.visibility = VISIBLE
         }
+    }
 
+    private fun nextQuestion() {
+        (activity as SurveyActivity).nextQuesFragment()
+    }
+
+    private fun previousQuestion() {
+        (activity as SurveyActivity).previousQuesFragment()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
     }
+
 }

@@ -11,8 +11,8 @@ data class SurveyQuestionModel(
     var ordering: Int = 0,
     @SerializedName("imageUrl")
     var imageUrl: String = "",
-    @SerializedName("multipleAnswer")
-    var multipleAnswer: Boolean = false,
+    @SerializedName("isMultipleAnswer")
+    var isMultipleAnswer: Boolean = false,
     @SerializedName("surveyAnswerViewModel")
-    var surveyAnswer: List<SurveyAnswer>
+    var surveyAnswer: MutableList<SurveyAnswer>
 )

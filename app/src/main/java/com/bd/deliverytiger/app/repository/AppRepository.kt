@@ -16,6 +16,7 @@ import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackReqBody
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
+import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionAnswer
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
@@ -164,4 +165,6 @@ class AppRepository(
     suspend fun fetchReturnStatement(courierUserId: Int, index: Int, count: Int) = apiInterfaceCore.fetchReturnStatement(courierUserId, index, count)
 
     suspend fun fetchSurveyQuestion() = apiInterfaceCore.fetchSurveyQuestion()
+
+    suspend fun fetchSubmitSurvey(requestBody: List<SurveyQuestionAnswer>) = apiInterfaceCore.fetchSubmitSurvey(requestBody)
 }

@@ -14,5 +14,9 @@ data class SurveyAnswer(
     @SerializedName("surveyRedirectNextQuestionId")
     var surveyRedirectNextQuestionId: Int = 0,
     @SerializedName("surveyRedirectPreviousQuestionId")
-    var surveyRedirectPreviousQuestionId: Int = 0
+    var surveyRedirectPreviousQuestionId: Int = 0,
+
+    // private fields
+    var isSelected: Boolean = false,
+    var comment: String? = null
 )

@@ -37,6 +37,11 @@
         android:checkableBehavior="none">
 
         <item
+            android:id="@+id/nav_survey"
+            android:icon="@drawable/ic_bill_pay_history"
+            android:title="ফিডব্যাক" />
+
+        <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_profile"
             android:title="প্রোফাইল আপডেট" />
@@ -75,11 +80,6 @@
             android:id="@+id/nav_communication"
             android:icon="@drawable/ic_headset_mic"
             android:title="যোগাযোগ" />
-
-        <item
-            android:id="@+id/nav_survey"
-            android:icon="@drawable/ic_bill_pay_history"
-            android:title="ফিডব্যাক" />
 
         <item
             android:id="@+id/nav_logout"

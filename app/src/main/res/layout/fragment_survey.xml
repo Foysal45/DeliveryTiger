@@ -8,12 +8,42 @@
 
     <TextView
         android:id="@+id/surveyQues"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="আপনি আমাদের সার্ভিসে কতটুকু সন্তুষ্ট?" />
+
+    <TextView
+        android:id="@+id/surveyQuesHint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:textColor="@color/gray_500"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/surveyQues"
+        tools:text="(একটি উত্তর সিলেক্ট করুন)" />
+
+
+    <TextView
+        android:id="@+id/surveyThanks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:gravity="center"
         android:textColor="@color/colorPrimary"
-        android:textSize="16sp"
+        android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,38 +54,130 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:layout_marginStart="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/surveyQues"
         tools:listitem="@layout/item_view_survey_question_option"
         tools:orientation="vertical"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        android:overScrollMode="never"
+        />
 
     <EditText
         android:id="@+id/inputTextView"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginStart="35dp"
-        android:layout_marginEnd="35dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="35dp"
         android:background="@drawable/bg_add_order_edit_text"
+        android:gravity="top"
+        android:hint="লিখুন"
+        android:padding="8dp"
+        android:inputType="textMultiLine"
+        android:includeFontPadding="true"
+        android:textSize="@dimen/text_14"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recyclerview"
-        tools:visibility="visible"
-        android:hint="লিখুন"
-        android:inputType="text"
-        android:gravity="center"/>
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/surveyImageView"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginBottom="20dp"
+        android:contentDescription="Image"
+        app:layout_constraintBottom_toTopOf="@+id/previousBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/previousBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="2dp"
+        android:backgroundTint="@color/ashColor"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="পূর্ববর্তী ধাপ"
+        android:textAlignment="center"
+        android:textColor="@color/ef_white"
+        app:icon="@drawable/ic_arrow_left_new"
+        app:iconGravity="textStart"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:contentDescription="Image" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/nextBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginEnd="2dp"
+        android:backgroundTint="@color/ashColor"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="পরবর্তী ধাপ"
+        android:textAlignment="center"
+        app:icon="@drawable/ic_arrow_right"
+        app:iconGravity="textEnd"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/submitBtn"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="সাবমিট"
+        android:textSize="16sp"
+        android:textAlignment="center"
+        android:textColor="@color/ef_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+    <!-- <ProgressBar
+         android:id="@+id/progressBar"
+         style="@style/MyProgressBar"
+         android:layout_width="match_parent"
+         android:layout_height="8dp"
+         app:layout_constraintBottom_toTopOf="@+id/footerTextView"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintHorizontal_bias="1.0"
+         app:layout_constraintStart_toStartOf="parent"
+         tools:progress="100" />
+
+     <TextView
+         android:id="@+id/progressText"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="90%"
+         android:textSize="16sp"
+         android:textColor="@color/colorPrimary"
+         app:layout_constraintBottom_toTopOf="@id/progressBar"
+         app:layout_constraintStart_toEndOf="@id/previousBtn"
+         app:layout_constraintEnd_toStartOf="@id/nextBtn"
+         app:layout_constraintTop_toTopOf="@id/nextBtn"
+         />
+
+     <TextView
+         android:id="@+id/footerTextView"
+         android:layout_width="match_parent"
+         android:layout_height="30dp"
+         android:text="আপনার ফিডব্যাক আমাদের জন্য অত্যন্ত গুরুত্বপূর্ণ"
+         android:background="#FEEFE8"
+         android:textSize="12sp"
+         android:gravity="center"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintBottom_toBottomOf="parent"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

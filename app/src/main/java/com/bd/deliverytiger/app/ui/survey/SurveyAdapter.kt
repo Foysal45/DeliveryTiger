@@ -5,19 +5,21 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyAnswer
+import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionModel
 import com.bd.deliverytiger.app.databinding.ItemViewSurveyQuestionOptionBinding
+import timber.log.Timber
 
-class SurveyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SurveyAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var dataList : MutableList<SurveyAnswer> = mutableListOf()
+    private var dataList: MutableList<SurveyAnswer> = mutableListOf()
+    private var isMultipleAnswer: Boolean = false
+
     var onItemClicked: ((model: SurveyAnswer) -> Unit)? = null
-    private var selectedPosition = -1
-    private var multipleAnswer: Boolean = false
+    var onAnswerChecked: ((model: SurveyAnswer, isMultipleAnswer: Boolean) -> Unit)? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val binding: ItemViewSurveyQuestionOptionBinding = ItemViewSurveyQuestionOptionBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false)
+        val binding: ItemViewSurveyQuestionOptionBinding = ItemViewSurveyQuestionOptionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewModel(binding)
     }
 
@@ -29,40 +31,36 @@ class SurveyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val model = dataList[position]
             val binding = holder.binding
 
-            binding.surveyQuestion.text = model.answerName
-
-            if (multipleAnswer){
-                binding.checkBoxRightAnswer.setOnClickListener {
-                    this.selectedPosition = holder.adapterPosition
-                    notifyDataSetChanged()
-                }
-
-            }else {
-                binding.checkBoxRightAnswer.isChecked = selectedPosition == position
-                binding.checkBoxRightAnswer.setOnClickListener {
-                    this.selectedPosition = holder.adapterPosition
-                    notifyDataSetChanged()
+            binding.checkBoxRightAnswer.text = model.answerName
+            binding.checkBoxRightAnswer.isChecked = model.isSelected
+            binding.checkBoxRightAnswer.setOnCheckedChangeListener { _, b ->
+                val checkedModel = dataList[holder.adapterPosition]
+                if (b) {
+                    if (!isMultipleAnswer) {
+                        dataList.forEach {
+                            it.isSelected = false
+                        }
+                    }
+                    checkedModel.isSelected = true
+                    if (!isMultipleAnswer) {
+                        onAnswerChecked?.invoke(checkedModel, isMultipleAnswer)
+                    }
+                } else {
+                    checkedModel.isSelected = false
                 }
             }
+
         }
     }
 
     inner class ViewModel(val binding: ItemViewSurveyQuestionOptionBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        init {
-            binding.root.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION)
-                    onItemClicked?.invoke(dataList[adapterPosition])
-            }
-        }
     }
 
-    fun initLoad(list: List<SurveyAnswer>, multipleAnswer: Boolean) {
-        dataList.clear()
-        dataList.addAll(list)
-        this.multipleAnswer = multipleAnswer
+    fun initLoad(list: MutableList<SurveyAnswer>, isMultipleAnswer: Boolean) {
+        this.dataList = list
+        this.isMultipleAnswer = isMultipleAnswer
         notifyDataSetChanged()
     }
-
 
 }
