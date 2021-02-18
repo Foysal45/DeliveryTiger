@@ -54,8 +54,7 @@ class SurveyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ToDo: remove after test
-        binding?.surveyQues?.text = model.questionName + " ${model.surveyQuestionId}"
+        binding?.surveyQues?.text = model.questionName
         if (model.isMultipleAnswer) {
             binding?.surveyQuesHint?.text = "(চাইলে একের অধিক উত্তর সিলেক্ট করুন)"
         } else {
@@ -93,7 +92,13 @@ class SurveyFragment : Fragment() {
                         }
                     }
                     4 -> {
-                        if (model.surveyAnswerId == 12) {
+                        if (model.surveyAnswerId == 11) {
+                            model.surveyRedirectNextQuestionId = 6
+                            val nextQuestion = dataList.find { it.surveyQuestionId == 6 }
+                            nextQuestion?.surveyAnswer?.forEach { question ->
+                                question.surveyRedirectPreviousQuestionId = 4
+                            }
+                        }else{
                             model.surveyRedirectNextQuestionId = 5
                             val nextQuestion = dataList.find { it.surveyQuestionId == 5 }
                             nextQuestion?.surveyAnswer?.forEach { question ->
@@ -142,16 +147,19 @@ class SurveyFragment : Fragment() {
         if (model.surveyAnswer.first().answerName == "comment"){
             binding?.recyclerview?.visibility = GONE
             binding?.inputTextView?.isVisible = true
+            binding?.surveyQuesHint?.isVisible = false
         }else if (model.surveyAnswer.first().answerName == "thanks"){
             binding?.surveyQues?.isVisible = false
             binding?.surveyThanks?.isVisible = true
             binding?.surveyThanks?.text = model.questionName
+            binding?.surveyThanksSubTitle?.isVisible = true
+            binding?.surveyThanksSubTitle?.text = "আপনার ফিডব্যাক আমাদের জন্য অত্যন্ত গুরুত্বপূর্ণ"
             binding?.inputTextView?.isVisible = false
             binding?.recyclerview?.visibility = GONE
             binding?.surveyImageView?.setBackgroundResource(R.drawable.ic_hand)
             binding?.submitBtn?.isVisible = true
             binding?.nextBtn?.isVisible = false
-            binding?.previousBtn?.isVisible = false
+            binding?.previousBtn?.isVisible = true
             binding?.surveyQuesHint?.isVisible = false
             (activity as SurveyActivity).updatefootter(false)
 
