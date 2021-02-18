@@ -31,7 +31,7 @@ class ComplainViewModel(private val repository: AppRepository): ViewModel() {
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body != null) {
-                            responseData.value = response.body == 1
+                            responseData.value = response.body > 0
                         }
                     }
                     is NetworkResponse.ServerError -> {

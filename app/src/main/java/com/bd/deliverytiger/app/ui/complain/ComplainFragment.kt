@@ -67,6 +67,8 @@ class ComplainFragment(): Fragment() {
 
                         context?.toast("আপনার অভিযোগ / মতামত সাবমিট হয়েছে")
                         fetchComplain()
+                    }else{
+                        context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
                     }
                 })
             }
