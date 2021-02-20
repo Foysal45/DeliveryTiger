@@ -13,6 +13,7 @@ import com.bd.deliverytiger.app.databinding.FragmentComplainBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
 import org.koin.android.ext.android.inject
+import java.util.*
 
 class ComplainFragment(): Fragment() {
 
@@ -59,16 +60,25 @@ class ComplainFragment(): Fragment() {
 
                 val orderCode = binding?.orderCodeTV?.text.toString().trim()
                 val complain = binding?.complainTV?.text.toString().trim()
-                viewModel.submitComplain(orderCode, complain).observe(viewLifecycleOwner, Observer {
-                    if (it) {
-                        binding?.orderCodeTV?.text?.clear()
-                        binding?.complainTV?.text?.clear()
-                        binding?.spinnerComplainType?.setSelection(0)
+                val code = orderCode.toUpperCase().replace("DT-", "")
 
-                        context?.toast("আপনার অভিযোগ / মতামত সাবমিট হয়েছে")
-                        fetchComplain()
+
+                viewModel.isComplainExist(code, "dt", complain).observe(viewLifecycleOwner, Observer { duplicateComplain->
+                    if (!duplicateComplain.isExists) {
+                        viewModel.submitComplain(orderCode, complain).observe(viewLifecycleOwner, Observer {
+                            if (it) {
+                                binding?.orderCodeTV?.text?.clear()
+                                binding?.complainTV?.text?.clear()
+                                binding?.spinnerComplainType?.setSelection(0)
+
+                                context?.toast("আপনার অভিযোগ / মতামত সাবমিট হয়েছে")
+                                fetchComplain()
+                            }else{
+                                context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
+                            }
+                        })
                     }else{
-                        context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
+                        context?.toast("এই কমপ্লেইন ইতিমধ্যে করা হয়েছে")
                     }
                 })
             }

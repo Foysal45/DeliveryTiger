@@ -10,6 +10,7 @@ import com.bd.deliverytiger.app.api.model.bill_pay_history.BillPayHistoryRespons
 import com.bd.deliverytiger.app.api.model.complain.ComplainData
 import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
+import com.bd.deliverytiger.app.api.model.complain.IsComplainExistsResponse
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentData
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsResponse
 import com.bd.deliverytiger.app.api.model.return_statement.ReturnStatementData
@@ -57,6 +58,9 @@ interface ApiInterfaceADM {
 
     @POST("api/ComplainInsert/InsertDTComplain")
     suspend fun submitComplain(@Body requestBody: ComplainRequest): NetworkResponse<Int, ErrorResponse>
+
+    @GET("api/Complain/IsComplainExist/{code}/{source}/{complain}")
+    suspend fun isComplainExist(@Path("code") code: String, @Path("source") source: String, @Path("complain") complain:String): NetworkResponse<IsComplainExistsResponse, ErrorResponse>
 
     @POST("api/Complain/ComplainList")
     suspend fun fetchComplainList(@Body requestBody: ComplainListRequest):NetworkResponse<List<ComplainData>, ErrorResponse>

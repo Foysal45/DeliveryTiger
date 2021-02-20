@@ -73,6 +73,8 @@ class AppRepository(
 
     suspend fun fetchFreezeAmountDetails(courierUserId: Int) = apiInterfaceADM.fetchFreezeAmountDetails(courierUserId)
 
+    suspend fun isComplainExist(code: String, source: String, complain: String)  = apiInterfaceADM.isComplainExist(code, source, complain)
+
     suspend fun submitComplain(requestBody: ComplainRequest) = apiInterfaceADM.submitComplain(requestBody)
 
     suspend fun fetchComplainList(requestBody: ComplainListRequest) = apiInterfaceADM.fetchComplainList(requestBody)
