@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackData
@@ -18,6 +19,7 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val dataList: MutableList<OrderTrackData> = mutableListOf()
     var onItemClick: ((model:OrderTrackData, position: Int) -> Unit)? = null
     var onLocationClick: ((model:OrderTrackData, position: Int) -> Unit)? = null
+    var onCallPress: ((model:OrderTrackData, position: Int) -> Unit)? = null
 
     private val sdf1 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
     private val sdf2 = SimpleDateFormat("dd", Locale.US)
@@ -40,22 +42,36 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             if (model.trackingColor == "green") {
                 val greenTic = ContextCompat.getDrawable(binding.statusImage.context, R.drawable.ic_done_green)
                 binding.statusImage.setImageDrawable(greenTic)
-                binding.subStatusName.text = model.subTrackingShipmentName.name
-                if (!model.subTrackingShipmentName.latitude.isNullOrEmpty() && !model.subTrackingShipmentName.longitude.isNullOrEmpty()) {
-                    binding.locationTrack.visibility = View.VISIBLE
+                if (model.subTrackingShipmentName.name?.isNotEmpty() == true) {
+                    binding.hubInfo.isVisible = true
+                    binding.subStatusName.text = model.subTrackingShipmentName.name
+                    if (!model.subTrackingShipmentName.latitude.isNullOrEmpty() && !model.subTrackingShipmentName.longitude.isNullOrEmpty()) {
+                        binding.locationTrack.isVisible = true
+                    } else {
+                        binding.locationTrack.isVisible = false
+                    }
+                } else {
+                    binding.hubInfo.isVisible = false
                 }
 
             } else if (model.trackingColor == "red") {
                 val redTic = ContextCompat.getDrawable(binding.statusImage.context, R.drawable.ic_done_red)
                 binding.statusImage.setImageDrawable(redTic)
-                binding.subStatusName.text = model.subTrackingReturnName.name
-                if (!model.subTrackingReturnName.latitude.isNullOrEmpty() && !model.subTrackingReturnName.longitude.isNullOrEmpty()) {
-                    binding.locationTrack.visibility = View.VISIBLE
+                if (model.subTrackingReturnName.name?.isNotEmpty() == true) {
+                    binding.hubInfo.isVisible = true
+                    binding.subStatusName.text = model.subTrackingReturnName.name
+                    if (!model.subTrackingReturnName.latitude.isNullOrEmpty() && !model.subTrackingReturnName.longitude.isNullOrEmpty()) {
+                        binding.locationTrack.isVisible = true
+                    } else {
+                        binding.locationTrack.isVisible = false
+                    }
+                } else {
+                    binding.hubInfo.isVisible = false
                 }
-
             } else {
                 val gryTic = ContextCompat.getDrawable(binding.statusImage.context, R.drawable.bg_circle_gray)
                 binding.statusImage.setImageDrawable(gryTic)
+                binding.hubInfo.isVisible = false
                 binding.subStatusName.text = ""
                 binding.locationTrack.visibility = View.GONE
             }
@@ -137,6 +153,8 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         val firstDate = sdf2.format(sdf1.parse(model.expectedFirstDeliveryDate))
                         binding.subStatusName.text = "${DigitConverter.toBanglaDigit(firstDate)}-$lastDate"
                     }
+                    binding.hubInfo.isVisible = true
+                    binding.locationTrack.isVisible = false
                     binding.date.text = ""
                     binding.time.text = ""
                 } catch (e: Exception) {
@@ -147,6 +165,15 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 binding.date.text = formattedDate
                 val formatTime = DigitConverter.formatDate(model.trackingDate, "yyyy-MM-dd'T'HH:mm:ss", "hh:mm a")
                 binding.time.text = DigitConverter.toBanglaDigit(formatTime)
+            }
+
+            //ToDo: need to be dynamic
+            if (model.statusGroupId == 7) {
+                binding.deliveryManInfo.isVisible = true
+                //ToDo: need to be dynamic
+                binding.mobileNumber.text = "01555555555"
+            } else {
+                binding.deliveryManInfo.isVisible = false
             }
 
             if (position == 0) {
@@ -173,6 +200,11 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.locationTrack.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     onLocationClick?.invoke(dataList[adapterPosition], adapterPosition)
+                }
+            }
+            binding.mobileNumber.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onCallPress?.invoke(dataList[adapterPosition], adapterPosition)
                 }
             }
         }

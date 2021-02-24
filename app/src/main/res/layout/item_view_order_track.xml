@@ -65,19 +65,95 @@
         app:layout_constraintStart_toStartOf="@id/statusImage"
         app:layout_constraintTop_toBottomOf="@id/statusImage" />
 
-    <TextView
-        android:id="@+id/subStatusName"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/deliveryInfo"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginBottom="2dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="#414042"
-        android:textSize="14sp"
+        android:minHeight="24dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/statusImage"
-        tools:text="Mirpur hub leave" />
+        app:layout_constraintEnd_toStartOf="@id/road"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="2dp"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/hubInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible"
+            >
+
+            <TextView
+                android:id="@+id/subStatusName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="#414042"
+                android:textSize="14sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Mirpur hub leave" />
+
+            <ImageView
+                android:id="@+id/locationTrack"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="2dp"
+                android:contentDescription="@string/cd"
+                android:src="@drawable/ic_location1"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/subStatusName"
+                app:layout_constraintStart_toEndOf="@id/subStatusName"
+                app:tint="@color/colorPrimary"
+                tools:visibility="visible" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/deliveryManInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ডেলিভারি ম্যান"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="#414042"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                android:id="@+id/mobileNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_phone_number"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                tools:text="01555555555"
+                app:drawableStartCompat="@drawable/ic_call_small"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+    
 
     <TextView
         android:id="@+id/statusName"
@@ -90,7 +166,7 @@
         android:textColor="#231F20"
         android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/subStatusName"
+        app:layout_constraintBottom_toTopOf="@id/deliveryInfo"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/statusImage"
@@ -99,18 +175,7 @@
         />
 
 
-    <ImageView
-        android:id="@+id/locationTrack"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:layout_marginStart="2dp"
-        android:contentDescription="@string/cd"
-        android:src="@drawable/ic_location1"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/subStatusName"
-        app:layout_constraintStart_toEndOf="@id/subStatusName"
-        app:tint="@color/colorPrimary"
-        tools:visibility="visible" />
+
 
     <com.bd.deliverytiger.app.utils.VerticalTextView
         android:id="@+id/stepTitle"

@@ -71,6 +71,10 @@ class OrderTrackingFragment : Fragment() {
         dataAdapter.onLocationClick = { model, position ->
             goToHubLocation(model)
         }
+        dataAdapter.onCallPress = { model, position ->
+            //ToDo: need to be dynamic
+            callNumber("01555555555")
+        }
         customerOrderAdapter.onItemClick = { model, position ->
             orderID = model.courierOrdersId ?: ""
             binding?.recyclerView?.adapter = dataAdapter
@@ -116,9 +120,19 @@ class OrderTrackingFragment : Fragment() {
         })
 
         // Test
-        /*if (BuildConfig.DEBUG) {
-            binding?.orderIdET?.setText("DT-248667") //DT-12222 01715269261
-        }*/
+        if (BuildConfig.DEBUG) {
+            binding?.orderIdET?.setText("DT-248667") //DT-12222 01715269261 DT-314560
+        }
+    }
+
+    private fun callNumber(number: String) {
+        try {
+            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$number"))
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        } catch (e: Exception) {
+            requireContext().toast("Could not find an activity to place the call")
+        }
     }
 
     override fun onResume() {
