@@ -277,10 +277,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             if (isShipmentChargeFree && weightRangeId <= 2) {
                 payShipmentCharge = 0.0
                 offerType = "freedelivery"
-            } else if (districtId == collectionDistrictId) {
+            }
+            /*else if (districtId == collectionDistrictId) {
                 payShipmentCharge = model.cityDeliveryCharge
                 offerType = ""
-            } else {
+            } */
+            else {
                 payShipmentCharge = model.chargeAmount
                 offerType = ""
             }
@@ -1055,10 +1057,14 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                         collectionDistrictId = 14
                         collectionThanaId = model.thanaId
                     }
-                    deliveryTypeAdapter.clearSelectedItemPosition()
+                    if (districtId == collectionDistrictId) {
+                        getDeliveryCharge(14, 10026, 0)
+                    }
+                    /*deliveryTypeAdapter.clearSelectedItemPosition()
                     deliveryTypeAdapter.notifyDataSetChanged()
                     deliveryType = ""
-                    payShipmentCharge = 0.0
+                    payShipmentCharge = 0.0*/
+
                     isCollectionLocationSelected = true
                     calculateTotalPrice()
                 } else {

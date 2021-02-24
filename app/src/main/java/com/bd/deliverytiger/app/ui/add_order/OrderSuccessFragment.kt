@@ -76,15 +76,48 @@ class OrderSuccessFragment : Fragment() {
             isCollection = it.getBoolean("isCollection", false)
         }
 
-        if(orderResponse != null){
+        if (orderResponse != null) {
             courierOrdersId = orderResponse!!.courierOrdersId ?: ""
             tvSuccessOrderId.text ="# $courierOrdersId"
             tvSuccessOrderTitle.text =orderResponse!!.collectionName
             tvSuccessOrderAddress.text = getAddress(orderResponse)
 
             timeLimitAlert()
+            if (orderResponse!!.offerType != "freedelivery") {
+                fetchCourierUserInfo()
+            }
         }
 
+        orderListClickedLay.setOnClickListener {
+            allOrderListFragment()
+        }
+
+        offerBtn.setOnClickListener {
+            offerBottomSheet(courierInfoModel)
+        }
+
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is ViewState.ShowMessage -> {
+                    context?.toast(state.message)
+                }
+                is ViewState.KeyboardState -> {
+                    hideKeyboard()
+                }
+                is ViewState.ProgressState -> {
+                    if (state.isShow) {
+                        progressBar.visibility = View.VISIBLE
+                    } else {
+                        progressBar.visibility = View.GONE
+                    }
+                }
+            }
+        })
+
+        UserLogger.logPurchase(SessionManager.totalAmount)
+    }
+
+    private fun fetchCourierUserInfo() {
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
             courierInfoModel = model
             SessionManager.credit = courierInfoModel?.credit?.toInt() ?: 0
@@ -116,36 +149,6 @@ class OrderSuccessFragment : Fragment() {
                 }
             }
         })
-
-
-
-        orderListClickedLay.setOnClickListener {
-            allOrderListFragment()
-        }
-
-        offerBtn.setOnClickListener {
-            offerBottomSheet(courierInfoModel)
-        }
-
-        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
-            when (state) {
-                is ViewState.ShowMessage -> {
-                    context?.toast(state.message)
-                }
-                is ViewState.KeyboardState -> {
-                    hideKeyboard()
-                }
-                is ViewState.ProgressState -> {
-                    if (state.isShow) {
-                        progressBar.visibility = View.VISIBLE
-                    } else {
-                        progressBar.visibility = View.GONE
-                    }
-                }
-            }
-        })
-
-        UserLogger.logPurchase(SessionManager.totalAmount)
     }
 
     private fun timeLimitAlert() {

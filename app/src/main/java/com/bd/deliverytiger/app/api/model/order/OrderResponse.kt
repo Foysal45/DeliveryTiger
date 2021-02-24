@@ -102,6 +102,10 @@ data class OrderResponse(
     @SerializedName("isOfferBkashActive")
     var isOfferBkashActive: Boolean = false,
     @SerializedName("classifiedId")
-    var classifiedId: Int = 0
+    var classifiedId: Int = 0,
+    @SerializedName("offerType")
+    var offerType: String = "",
+    @SerializedName("relationType")
+    var relationType: String = ""
 
 ) : Parcelable
