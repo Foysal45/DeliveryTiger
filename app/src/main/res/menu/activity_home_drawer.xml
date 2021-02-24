@@ -39,7 +39,9 @@
         <item
             android:id="@+id/nav_survey"
             android:icon="@drawable/ic_bill_pay_history"
-            android:title="ফিডব্যাক" />
+            android:title="ফিডব্যাক"
+            android:visible="false"
+            />
 
         <item
             android:id="@+id/nav_profile"

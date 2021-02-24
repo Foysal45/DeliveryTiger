@@ -277,6 +277,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             if (isShipmentChargeFree && weightRangeId <= 2) {
                 payShipmentCharge = 0.0
                 offerType = "freedelivery"
+            } else if (districtId == collectionDistrictId) {
+                payShipmentCharge = model.cityDeliveryCharge
+                offerType = ""
             } else {
                 payShipmentCharge = model.chargeAmount
                 offerType = ""
@@ -674,10 +677,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 etAriaPostOffice.visibility = View.GONE
 
                 if (districtId == 14) {
-                    getDeliveryCharge(districtId, 10026) // Fetch data if any district selected
+                    getDeliveryCharge(districtId, 10026, 0) // Fetch data if any district selected
                     codChargePercentage = codChargePercentageInsideDhaka
                 } else {
-                    getDeliveryCharge(1, 10137)
+                    getDeliveryCharge(1, 10137, 0)
                     codChargePercentage = codChargePercentageOutsideDhaka
                 }
                 calculateTotalPrice()
@@ -710,12 +713,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 } else {
                     etAriaPostOffice.visibility = View.GONE
                 }
-                getDeliveryCharge(districtId, thanaId)
+                getDeliveryCharge(districtId, thanaId, 0)
             } else if (track == 3) {
                 if (thanaOrAriaList[listPostion].postalCode != null) {
                     if (thanaOrAriaList[listPostion].postalCode!!.isNotEmpty()) {
                         areaId = thanaOrAriaList[listPostion].thanaId
                         etAriaPostOffice.setText(thanaOrAriaList[listPostion].thanaBng + " (" + thanaOrAriaList[listPostion].postalCode + ")")
+                        getDeliveryCharge(districtId, thanaId, areaId)
                     } else {
                         areaId = 0
                         // isAriaAvailable = false
@@ -892,9 +896,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     }
 
-    private fun getDeliveryCharge(districtId: Int, thanaId: Int) {
+    private fun getDeliveryCharge(districtId: Int, thanaId: Int, areaId: Int) {
 
-        viewModel.getDeliveryCharge(DeliveryChargeRequest(districtId, thanaId)).observe(viewLifecycleOwner, Observer { list ->
+        viewModel.getDeliveryCharge(DeliveryChargeRequest(districtId, thanaId, areaId)).observe(viewLifecycleOwner, Observer { list ->
 
             val weightList: MutableList<String> = mutableListOf()
             weightList.add("ওজন (কেজি)")
@@ -1051,6 +1055,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                         collectionDistrictId = 14
                         collectionThanaId = model.thanaId
                     }
+                    deliveryTypeAdapter.clearSelectedItemPosition()
+                    deliveryTypeAdapter.notifyDataSetChanged()
+                    deliveryType = ""
+                    payShipmentCharge = 0.0
                     isCollectionLocationSelected = true
                     calculateTotalPrice()
                 } else {

@@ -7,5 +7,7 @@ data class DeliveryChargeRequest(
     @SerializedName("districtId")
     var districtId: Int,
     @SerializedName("thanaId")
-    var thanaId: Int
+    var thanaId: Int,
+    @SerializedName("areaId")
+    var areaId: Int = 0
 )
