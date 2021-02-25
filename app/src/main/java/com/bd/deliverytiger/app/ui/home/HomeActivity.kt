@@ -274,8 +274,8 @@ class HomeActivity : AppCompatActivity(),
         appUpdateManager()
         UserLogger.logAppOpen()
 
-        //ToDO: remove
-        facebookHash()
+
+        //facebookHash()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -1136,8 +1136,8 @@ class HomeActivity : AppCompatActivity(),
         }
     }
 
-    @SuppressLint("PackageManagerGetSignatures")
-    private fun facebookHash() {
+    //@SuppressLint("PackageManagerGetSignatures")
+    /*private fun facebookHash() {
         try {
             val info = packageManager.getPackageInfo("com.bd.deliverytiger.app", PackageManager.GET_SIGNATURES)
             for (signature in info.signatures) {
@@ -1152,6 +1152,6 @@ class HomeActivity : AppCompatActivity(),
         } catch (e: NoSuchAlgorithmException) {
             e.printStackTrace()
         }
-    }
+    }*/
 
 }

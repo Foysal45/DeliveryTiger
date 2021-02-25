@@ -8,6 +8,8 @@ data class PaymentDetailsResponse(
     var netPaidAmount: Int = 0,
     @SerializedName("TotalAdOrderCount")
     var totalAdOrderCount: Int = 0,
+    @SerializedName("TotalAdvanceReceivableCount")
+    var totalAdvanceReceivableCount: Int = 0,
     @SerializedName("TotalCrOrderCount")
     var totalCrOrderCount: Int = 0,
     @SerializedName("TotalOrderCount")
@@ -32,6 +34,8 @@ data class PaymentDetailsResponse(
     var netAdjustedAmount: Int = 0,
     @SerializedName("NetPayableAmount")
     var netPayableAmount: Int = 0,
+    @SerializedName("NetAdvanceReceivable")
+    var netAdvanceReceivable: Int = 0,
 
     @SerializedName("ModeOfPayment")
     var modeOfPayment: String? = "",

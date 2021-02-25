@@ -82,8 +82,6 @@ class LoginFragment: Fragment() {
         //checkRememberMe = view.findViewById(R.id.login_checkBox_remember_me)
 
         if (BuildConfig.DEBUG){
-            //mobileET.setText("01777717798")
-            //passwordET.setText("Rawnation_2020")
             mobileET.setText("01715269261")
             passwordET.setText("123")
         }
@@ -127,6 +125,7 @@ class LoginFragment: Fragment() {
         }
         signUpTV.setOnClickListener {
             goToSignUp()
+            UserLogger.logGenie("Registration_start")
         }
 
         if (SessionManager.isRememberMe){

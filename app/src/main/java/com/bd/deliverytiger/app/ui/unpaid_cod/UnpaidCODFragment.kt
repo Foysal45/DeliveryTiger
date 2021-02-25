@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.api.model.payment_statement.OrderHistoryData
+import com.bd.deliverytiger.app.api.model.unpaid_cod.CODDetailsData
 import com.bd.deliverytiger.app.databinding.FragmentUnpaidCodBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.payment_statement.details.OrderChargeDetailsFragment
@@ -53,21 +55,8 @@ class UnpaidCODFragment: Fragment() {
             adapter = dataAdapter
             //addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         }
-        dataAdapter.onItemClicked = { model, isOnlyDelivery ->
-            val orderHistoryData = OrderHistoryData(
-                orderCode = model.orderCode,
-                collectedAmount = model.collectedAmount,
-                deliveryCharge = model.deliveryCharge,
-                CODCharge = model.CODCharge,
-                breakableCharge = model.breakableCharge,
-                collectionCharge = model.collectionCharge,
-                returnCharge = model.returnCharge,
-                packagingCharge = model.packagingCharge,
-                amount = model.merchantPayable,
-                totalCharge = model.totalCharge
-            )
-            val dialog = OrderChargeDetailsFragment.newInstance(orderHistoryData, isOnlyDelivery)
-            dialog.show(childFragmentManager, OrderChargeDetailsFragment.tag)
+        dataAdapter.onItemClicked = { model, tabFlag ->
+            showDetails(model, tabFlag)
         }
 
         fetchCODData()
@@ -93,6 +82,26 @@ class UnpaidCODFragment: Fragment() {
         })
     }
 
+    private fun showDetails(model: CODDetailsData, tabFlag: Int) {
+        if (tabFlag == 2) {
+            return
+        }
+        val orderHistoryData = OrderHistoryData(
+            orderCode = model.orderCode,
+            collectedAmount = model.collectedAmount,
+            deliveryCharge = model.deliveryCharge,
+            CODCharge = model.CODCharge,
+            breakableCharge = model.breakableCharge,
+            collectionCharge = model.collectionCharge,
+            returnCharge = model.returnCharge,
+            packagingCharge = model.packagingCharge,
+            amount = model.merchantPayable,
+            totalCharge = model.totalCharge
+        )
+        val dialog = OrderChargeDetailsFragment.newInstance(orderHistoryData, tabFlag)
+        dialog.show(childFragmentManager, OrderChargeDetailsFragment.tag)
+    }
+
     private fun fetchCODData() {
         viewModel.fetchUnpaidCOD(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
             //responseModel = model
@@ -114,6 +123,12 @@ class UnpaidCODFragment: Fragment() {
             binding?.codCollection?.text = "${DigitConverter.toBanglaDigit(model.totalCollectedAmount, true)} ৳"
             binding?.codServiceCharge?.text = "- ${DigitConverter.toBanglaDigit(model.totalCodServiceCharge, true)} ৳"
             binding?.deliveryServiceCharge?.text = "- ${DigitConverter.toBanglaDigit(model.totalMerchantReceivable, true)} ৳"
+            if ((model?.totalAdvAccReceiveable ?: 0) > 0) {
+                binding?.key9?.isVisible = true
+                binding?.adjustment?.isVisible = true
+                binding?.adjustment?.text = "- ${DigitConverter.toBanglaDigit(model?.totalAdvAccReceiveable.toString())} ৳"
+                binding?.key9?.text = "(-) রিটার্ন প্রোডাক্টের পেমেন্ট অ্যাডজাস্টমেন্ট (${DigitConverter.toBanglaDigit(model.advAccReceiveableOrderCount)})"
+            }
             binding?.netPayment?.text = "${DigitConverter.toBanglaDigit(model.netAdjustedAmount, true)} ৳"
             netAmount = model.netAdjustedAmount
 
@@ -123,6 +138,13 @@ class UnpaidCODFragment: Fragment() {
             binding?.filterTab?.visibility = View.VISIBLE
             binding?.filterTab?.getTabAt(0)?.text = "COD (${model.payableOrderCount})"
             binding?.filterTab?.getTabAt(1)?.text = "প্রি-পেইড (${model.receivableOrderCount})"
+            if (model.advAccReceiveableOrderCount > 0) {
+                binding?.filterTab?.let { tabLayout ->
+                    tabLayout.addTab(tabLayout.newTab())
+                    tabLayout.getTabAt(2)?.text = "রিটার্ন প্রোডাক্টের পেমেন্ট অ্যাডজাস্টমেন্ট (${model.advAccReceiveableOrderCount})"
+                }
+            }
+
             binding?.filterTab?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabReselected(tab: TabLayout.Tab?) {}
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
@@ -134,7 +156,7 @@ class UnpaidCODFragment: Fragment() {
                                 dataAdapter.clear()
                             } else {
                                 binding?.emptyView?.visibility = View.GONE
-                                dataAdapter.isOnlyDelivery = false
+                                dataAdapter.tabFlag = 0
                                 dataAdapter.initLoad(model.payableOrders)
                             }
                         }
@@ -144,8 +166,18 @@ class UnpaidCODFragment: Fragment() {
                                 dataAdapter.clear()
                             } else {
                                 binding?.emptyView?.visibility = View.GONE
-                                dataAdapter.isOnlyDelivery = true
+                                dataAdapter.tabFlag = 1
                                 dataAdapter.initLoad(model.receivableOrders)
+                            }
+                        }
+                        2 -> {
+                            if (model.advAccReceiveableOrders.isEmpty()) {
+                                binding?.emptyView?.visibility = View.VISIBLE
+                                dataAdapter.clear()
+                            } else {
+                                binding?.emptyView?.visibility = View.GONE
+                                dataAdapter.tabFlag = 2
+                                dataAdapter.initLoad(model.advAccReceiveableOrders)
                             }
                         }
                     }

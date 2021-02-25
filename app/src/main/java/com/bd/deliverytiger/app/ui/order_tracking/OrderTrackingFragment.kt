@@ -72,8 +72,9 @@ class OrderTrackingFragment : Fragment() {
             goToHubLocation(model)
         }
         dataAdapter.onCallPress = { model, position ->
-            //ToDo: need to be dynamic
-            callNumber("01555555555")
+            if (model.courierDeliveryMan?.courierDeliveryManMobile?.isNotEmpty() == true) {
+                callNumber(model.courierDeliveryMan?.courierDeliveryManMobile!!)
+            }
         }
         customerOrderAdapter.onItemClick = { model, position ->
             orderID = model.courierOrdersId ?: ""
@@ -120,9 +121,9 @@ class OrderTrackingFragment : Fragment() {
         })
 
         // Test
-        if (BuildConfig.DEBUG) {
-            binding?.orderIdET?.setText("DT-248667") //DT-12222 01715269261 DT-314560
-        }
+        /*if (BuildConfig.DEBUG) {
+            binding?.orderIdET?.setText("DT-1") //DT-12222 01715269261 DT-314560
+        }*/
     }
 
     private fun callNumber(number: String) {

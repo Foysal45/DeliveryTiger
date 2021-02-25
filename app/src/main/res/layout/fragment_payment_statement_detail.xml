@@ -157,7 +157,7 @@
                     android:textSize="@dimen/text_14"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/totalCollectionAmount"
-                    tools:text="৯৯৯ ৳" />
+                    tools:text="- ৯৯৯ ৳" />
 
                 <TextView
                     android:id="@+id/key6"
@@ -169,6 +169,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/key5" />
 
+
                 <TextView
                     android:id="@+id/totalAdjustment"
                     android:layout_width="wrap_content"
@@ -177,7 +178,33 @@
                     android:textSize="@dimen/text_14"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/totalCharge"
-                    tools:text="৯৯৯ ৳" />
+                    tools:text="- ৯৯৯ ৳" />
+
+                <TextView
+                    android:id="@+id/key9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="অ্যাডজাস্টমেন্ট (রিটার্ন প্রোডাক্টের পেমেন্ট)"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/key6"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    />
+
+                <TextView
+                    android:id="@+id/adjustmentReceivable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/text_14"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/totalAdjustment"
+                    tools:text="- ৯৯৯ ৳"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    />
 
                 <TextView
                     android:id="@+id/key7"
@@ -187,7 +214,7 @@
                     android:textColor="@color/black_80"
                     android:textSize="@dimen/text_14"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/key6"
+                    app:layout_constraintTop_toBottomOf="@id/key9"
                     android:textStyle="bold"
                     />
 
@@ -198,7 +225,7 @@
                     android:textColor="@color/black_80"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/totalAdjustment"
+                    app:layout_constraintTop_toBottomOf="@id/adjustmentReceivable"
                     android:textStyle="bold"
                     tools:text="৯৯৯ ৳" />
 

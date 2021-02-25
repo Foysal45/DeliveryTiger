@@ -24,6 +24,8 @@ data class OrderTrackData(
     var subTrackingShipmentName: SubTrackingShipmentName = SubTrackingShipmentName(),
     @SerializedName("subTrackingReturnName")
     var subTrackingReturnName: SubTrackingReturnName = SubTrackingReturnName(),
+    @SerializedName("courierDeliveryMan")
+    var courierDeliveryMan: CourierDeliveryMan? = CourierDeliveryMan(),
 
     // Internal use only
     var trackState: Int = 0,

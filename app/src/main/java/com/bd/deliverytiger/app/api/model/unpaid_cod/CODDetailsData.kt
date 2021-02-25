@@ -22,6 +22,8 @@ data class CODDetailsData(
     var collectedAmount: Int = 0,
     @SerializedName("AdjustedAmount")
     var adjustedAmount: Int = 0,
+    @SerializedName("AdvAccReceiveable")
+    var advAccReceiveable: Int = 0,
     @SerializedName("AccReceiveable")
     var accReceiveable: Int = 0,
     @SerializedName("MerchantPayable")

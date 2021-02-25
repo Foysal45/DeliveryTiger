@@ -16,12 +16,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.payment_statement.OrderHistoryData
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsResponse
+import com.bd.deliverytiger.app.api.model.unpaid_cod.CODDetailsData
 import com.bd.deliverytiger.app.databinding.FragmentPaymentStatementDetailBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.payment_statement.excel_generator.ExcelGenerator
@@ -69,9 +71,8 @@ class PaymentStatementDetailFragment : Fragment() {
             adapter = dataAdapter
             //addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         }
-        dataAdapter.onItemClicked = { model, isOnlyDelivery ->
-            val dialog = OrderChargeDetailsFragment.newInstance(model, isOnlyDelivery)
-            dialog.show(childFragmentManager, OrderChargeDetailsFragment.tag)
+        dataAdapter.onItemClicked = { model, tabFlag ->
+            showDetails(model, tabFlag)
         }
 
         viewModel.getPaymentHistoryDetails(SessionManager.courierUserId, transactionId).observe(viewLifecycleOwner, Observer { model ->
@@ -106,10 +107,21 @@ class PaymentStatementDetailFragment : Fragment() {
             binding?.totalCollectionAmount?.text = "${DigitConverter.toBanglaDigit(model?.netCollectedAmount.toString())} ৳"
             binding?.totalCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.netTotalCharge.toString())} ৳"
             binding?.totalAdjustment?.text = "- ${DigitConverter.toBanglaDigit(model?.netAdjustedAmount.toString())} ৳"
+            if ((model?.netAdvanceReceivable ?: 0) > 0) {
+                binding?.key9?.isVisible = true
+                binding?.adjustmentReceivable?.isVisible = true
+                binding?.adjustmentReceivable?.text = "- ${DigitConverter.toBanglaDigit(model?.netAdvanceReceivable.toString())} ৳"
+            }
             binding?.totalPayment?.text = "${DigitConverter.toBanglaDigit(model?.netPaidAmount.toString())} ৳"
 
             binding?.filterTab?.getTabAt(0)?.text = "COD (${model?.totalCrOrderCount.toString()})"
             binding?.filterTab?.getTabAt(1)?.text = "Only Delivery & Adjustment (${model?.totalAdOrderCount.toString()})"
+            if ((model?.netAdvanceReceivable ?: 0) > 0) {
+                binding?.filterTab?.let { tabLayout ->
+                    tabLayout.addTab(tabLayout.newTab())
+                    tabLayout.getTabAt(2)?.text = "Return payment Adjustment (${model?.totalAdvanceReceivableCount.toString()})"
+                }
+            }
 
             filterOrderList(model?.orderList, "CR")
             binding?.filterTab?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -121,12 +133,16 @@ class PaymentStatementDetailFragment : Fragment() {
                     when (tab?.position) {
                         0 -> {
                             Timber.d("Tab selected 0")
-                            dataAdapter.isOnlyDelivery = false
+                            dataAdapter.tabFlag = 0
                             filterOrderList(model?.orderList, "CR")
                         }
                         1 -> {
-                            dataAdapter.isOnlyDelivery = true
+                            dataAdapter.tabFlag = 1
                             filterOrderList(model?.orderList, "CC")
+                        }
+                        2 -> {
+                            dataAdapter.tabFlag = 2
+                            filterOrderList(model?.orderList, "ADJ")
                         }
                     }
                 }
@@ -152,6 +168,14 @@ class PaymentStatementDetailFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun showDetails(model: OrderHistoryData, tabFlag: Int) {
+        if (tabFlag == 2) {
+            return
+        }
+        val dialog = OrderChargeDetailsFragment.newInstance(model, tabFlag)
+        dialog.show(childFragmentManager, OrderChargeDetailsFragment.tag)
     }
 
     private fun filterOrderList(dataList: List<OrderHistoryData>?, filterKey: String) {

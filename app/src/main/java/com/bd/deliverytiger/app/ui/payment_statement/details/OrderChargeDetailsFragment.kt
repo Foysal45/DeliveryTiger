@@ -16,11 +16,16 @@ class OrderChargeDetailsFragment: BottomSheetDialogFragment() {
     private var model: OrderHistoryData? = null
     private var binding: DialogOrderChangeDetailsBinding? = null
     private var isOnlyDelivery: Boolean = false
+    private var tabFlag: Int = 0
 
     companion object {
         fun newInstance(orderHistoryData: OrderHistoryData?, isOnlyDelivery: Boolean = false): OrderChargeDetailsFragment = OrderChargeDetailsFragment().apply {
             this.model = orderHistoryData
             this.isOnlyDelivery = isOnlyDelivery
+        }
+        fun newInstance(orderHistoryData: OrderHistoryData?, tabFlag: Int): OrderChargeDetailsFragment = OrderChargeDetailsFragment().apply {
+            this.model = orderHistoryData
+            this.tabFlag = tabFlag
         }
         val tag: String = OrderChargeDetailsFragment::class.java.name
     }
@@ -41,7 +46,7 @@ class OrderChargeDetailsFragment: BottomSheetDialogFragment() {
         super.onActivityCreated(savedInstanceState)
 
         binding?.orderCode?.text = model?.orderCode
-        if (isOnlyDelivery) {
+        if (isOnlyDelivery || tabFlag == 1) {
             binding?.key2?.visibility = View.GONE
             binding?.collectedAmount?.visibility = View.GONE
             binding?.key3?.text = "সর্বমোট সার্ভিস চার্জ"

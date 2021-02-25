@@ -12,6 +12,10 @@ data class UnpaidCODResponse(
     var payableOrderCount: Int = 0,
     @SerializedName("TotalOrderCount")
     var totalOrderCount: Int = 0,
+    @SerializedName("TotalAdvAccReceiveable")
+    var totalAdvAccReceiveable: Int = 0,
+    @SerializedName("AdvAccReceiveableOrderCount")
+    var advAccReceiveableOrderCount: Int = 0,
     @SerializedName("TotalMerchantReceivable")
     var totalMerchantReceivable: Int = 0,
     @SerializedName("TotalCodServiceCharge")
@@ -29,5 +33,7 @@ data class UnpaidCODResponse(
     @SerializedName("PayableOrders")
     var payableOrders: List<CODDetailsData> = listOf(),
     @SerializedName("ReceivableOrders")
-    var receivableOrders: List<CODDetailsData> = listOf()
+    var receivableOrders: List<CODDetailsData> = listOf(),
+    @SerializedName("AdvAccReceiveableOrders")
+    var advAccReceiveableOrders: List<CODDetailsData> = listOf()
 )

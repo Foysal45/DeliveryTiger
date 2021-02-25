@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
@@ -167,11 +168,11 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 binding.time.text = DigitConverter.toBanglaDigit(formatTime)
             }
 
-            //ToDo: need to be dynamic
-            if (model.statusGroupId == 7) {
+            if (model.courierDeliveryMan?.courierDeliveryManMobile?.isNotEmpty() == true) {
                 binding.deliveryManInfo.isVisible = true
-                //ToDo: need to be dynamic
-                binding.mobileNumber.text = "01555555555"
+                val deliveryManName = "ডেলিভারি করছেন - <b>${model.courierDeliveryMan?.courierDeliveryManName}</b>"
+                binding.deliveryManName.text = HtmlCompat.fromHtml(deliveryManName, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                binding.mobileNumber.text = model.courierDeliveryMan?.courierDeliveryManMobile
             } else {
                 binding.deliveryManInfo.isVisible = false
             }

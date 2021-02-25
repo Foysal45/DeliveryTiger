@@ -99,6 +99,32 @@
                 tools:text="- ৯৯৯ ৳" />
 
             <TextView
+                android:id="@+id/key9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(-) রিটার্ন প্রোডাক্টের পেমেন্ট অ্যাডজাস্টমেন্ট"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/key4"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+
+            <TextView
+                android:id="@+id/adjustment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/deliveryServiceCharge"
+                tools:text="- ৯৯৯ ৳"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+
+            <TextView
                 android:id="@+id/key5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,7 +133,7 @@
                 android:textSize="@dimen/text_14"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/key4" />
+                app:layout_constraintTop_toBottomOf="@id/key9" />
 
             <TextView
                 android:id="@+id/netPayment"
@@ -117,7 +143,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/deliveryServiceCharge"
+                app:layout_constraintTop_toBottomOf="@id/adjustment"
                 tools:text="৯৯৯ ৳" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

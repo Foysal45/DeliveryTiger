@@ -60,7 +60,7 @@ class ComplainFragment(): Fragment() {
 
                 val orderCode = binding?.orderCodeTV?.text.toString().trim()
                 val complain = binding?.complainTV?.text.toString().trim()
-                val code = orderCode.toUpperCase().replace("DT-", "")
+                val code = orderCode.toUpperCase(Locale.US).replace("DT-", "")
 
 
                 viewModel.isComplainExist(code, "dt", complain).observe(viewLifecycleOwner, Observer { duplicateComplain->
