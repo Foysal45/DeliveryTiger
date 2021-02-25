@@ -167,7 +167,11 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
 
         val productTitle = binding?.productTitleTV?.text?.toString() ?: ""
         if (productTitle.trim().isEmpty()) {
-            context?.toast("প্রোডাক্টের টাইটেল লিখুন")
+            context?.toast("প্রোডাক্টের টাইটেল ইংলিশে লিখুন ")
+            return false
+        }
+        if (!isEnglishLetterOnly(productTitle)) {
+            context?.toast("প্রোডাক্টের টাইটেল ইংলিশে লিখুন অথবা স্পেশাল ক্যারেক্টর বাদ দিন")
             return false
         }
 

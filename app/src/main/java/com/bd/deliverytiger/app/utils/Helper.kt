@@ -210,6 +210,11 @@ fun Bundle.bundleToString(): String {
     }
 }
 
+fun isEnglishLetterOnly(text: String): Boolean {
+    val match = """[a-zA-Z0-9/?><:;,(){}\[\]\-–_+=!@#%^&*|.'"\r\n ]*""".toRegex() // ${'['}
+    return text.matches(match)
+}
+
 fun generateNameInitial(name: String?): String {
     if (name.isNullOrEmpty()) return ""
     var initial: String = ""

@@ -76,7 +76,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/bg_add_order_edit_text"
-                android:hint="প্রোডাক্টের টাইটেল"
+                android:hint="প্রোডাক্টের টাইটেল ইংলিশে"
                 android:importantForAutofill="no"
                 android:inputType="text"
                 android:paddingStart="16dp"
