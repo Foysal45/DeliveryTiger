@@ -62,23 +62,22 @@ class ComplainFragment(): Fragment() {
                 val complain = binding?.complainTV?.text.toString().trim()
                 val code = orderCode.toUpperCase(Locale.US).replace("DT-", "")
 
+                viewModel.submitComplain(orderCode, complain).observe(viewLifecycleOwner, Observer { complainStatus->
+                    when {
+                        complainStatus > 0 -> {
+                            binding?.orderCodeTV?.text?.clear()
+                            binding?.complainTV?.text?.clear()
+                            binding?.spinnerComplainType?.setSelection(0)
 
-                viewModel.isComplainExist(code, "dt", complain).observe(viewLifecycleOwner, Observer { duplicateComplain->
-                    if (!duplicateComplain.isExists) {
-                        viewModel.submitComplain(orderCode, complain).observe(viewLifecycleOwner, Observer {
-                            if (it) {
-                                binding?.orderCodeTV?.text?.clear()
-                                binding?.complainTV?.text?.clear()
-                                binding?.spinnerComplainType?.setSelection(0)
-
-                                context?.toast("আপনার অভিযোগ / মতামত সাবমিট হয়েছে")
-                                fetchComplain()
-                            }else{
-                                context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
-                            }
-                        })
-                    }else{
-                        context?.toast("এই কমপ্লেইন ইতিমধ্যে করা হয়েছে")
+                            context?.toast("আপনার অভিযোগ / মতামত সাবমিট হয়েছে")
+                            fetchComplain()
+                        }
+                        complainStatus == -1 -> {
+                            context?.toast("এই কমপ্লেইন ইতিমধ্যে করা হয়েছে")
+                        }
+                        else -> {
+                            context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
+                        }
                     }
                 })
             }

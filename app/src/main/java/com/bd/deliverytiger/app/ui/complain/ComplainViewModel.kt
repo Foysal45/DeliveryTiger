@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.bd.deliverytiger.app.api.model.complain.ComplainData
 import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
-import com.bd.deliverytiger.app.api.model.complain.IsComplainExistsResponse
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -20,43 +19,9 @@ class ComplainViewModel(private val repository: AppRepository): ViewModel() {
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
 
-    fun isComplainExist(code: String, source: String, complain: String): LiveData<IsComplainExistsResponse> {
+    fun submitComplain(orderCode: String, comment: String): LiveData<Int> {
 
-        val responseData: MutableLiveData<IsComplainExistsResponse> = MutableLiveData()
-
-        viewState.value = ViewState.ProgressState(true)
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.isComplainExist(code, source, complain)
-            withContext(Dispatchers.Main) {
-                viewState.value = ViewState.ProgressState(false)
-                when (response) {
-                    is NetworkResponse.Success -> {
-                        if (response.body != null) {
-                            responseData.value = response.body
-                        }
-                    }
-                    is NetworkResponse.ServerError -> {
-                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
-                        viewState.value = ViewState.ShowMessage(message)
-                    }
-                    is NetworkResponse.NetworkError -> {
-                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
-                        viewState.value = ViewState.ShowMessage(message)
-                    }
-                    is NetworkResponse.UnknownError -> {
-                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
-                        viewState.value = ViewState.ShowMessage(message)
-                        Timber.d(response.error)
-                    }
-                }
-            }
-        }
-        return responseData
-    }
-
-    fun submitComplain(orderCode: String, comment: String): LiveData<Boolean> {
-
-        val responseData: MutableLiveData<Boolean> = MutableLiveData()
+        val responseData: MutableLiveData<Int> = MutableLiveData()
 
         viewState.value = ViewState.ProgressState(true)
         viewModelScope.launch(Dispatchers.IO) {
@@ -66,7 +31,7 @@ class ComplainViewModel(private val repository: AppRepository): ViewModel() {
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body != null) {
-                            responseData.value = response.body > 0
+                            responseData.value = response.body
                         }
                     }
                     is NetworkResponse.ServerError -> {
