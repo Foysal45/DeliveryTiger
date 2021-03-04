@@ -353,7 +353,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        tools:entries="@array/spinner_array_collection_location" />
+                        android:entries="@array/pickup_district" />
 
                     <ImageView
                         android:layout_width="wrap_content"

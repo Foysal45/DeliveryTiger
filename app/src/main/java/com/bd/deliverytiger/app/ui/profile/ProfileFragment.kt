@@ -175,6 +175,8 @@ class ProfileFragment : Fragment() {
                 }
             }
         })
+
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -622,36 +624,36 @@ class ProfileFragment : Fragment() {
 
     private fun setUpPickupDistrict() {
 
-        val pickupDistrictList: MutableList<String> = mutableListOf()
-        pickupDistrictList.add("জেলা নির্বাচন করুন")
-        pickupDistrictList.add("ঢাকা সিটি")
-        pickupDistrictList.add("চট্টগ্রাম সিটি")
+        viewModel.loadAllDistricts().observe(viewLifecycleOwner, Observer { list->
 
-        val pickupDistrictAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, pickupDistrictList)
-        binding?.spinnerPickUpDistrict?.adapter = pickupDistrictAdapter
-        binding?.spinnerPickUpDistrict?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position != 0) {
-                    if (position==1) {
-                        districtId = 14
-                        districtName = "ঢাকা"
-                        binding?.thanaSelect?.setText("থানা/এরিয়া নির্বাচন করুন")
-                    } else if (position == 2) {
-                        districtId = 80
-                        districtName = "চট্টগ্রাম"
+            val filterList = list.filter { it.isPickupLocation }
+            val pickupDistrictList: MutableList<String> = mutableListOf()
+            pickupDistrictList.add("জেলা নির্বাচন করুন")
+            filterList.forEach {
+                pickupDistrictList.add(it.districtBng ?: "")
+            }
+
+            val pickupDistrictAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, pickupDistrictList)
+            binding?.spinnerPickUpDistrict?.adapter = pickupDistrictAdapter
+            binding?.spinnerPickUpDistrict?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    if (position != 0) {
+                        val model = filterList[position-1]
+                        districtId = model.districtId
+                        districtName = model.districtBng ?: ""
                         binding?.thanaSelect?.setText("থানা/এরিয়া নির্বাচন করুন")
                     } else {
                         districtId = 0
                         districtName = ""
+                        binding?.thanaSelect?.setText("থানা/এরিয়া নির্বাচন করুন")
                     }
-                } else {
-                    districtId = 0
-                    districtName = ""
-                    binding?.thanaSelect?.setText("থানা/এরিয়া নির্বাচন করুন")
                 }
             }
-        }
+
+        })
+
+
     }
 
     /*private fun setUpCollectionSpinner(pickupParentList: List<PickupLocation>?, thanaOrAriaList: List<ThanaPayLoad>?, optionFlag: Int) {

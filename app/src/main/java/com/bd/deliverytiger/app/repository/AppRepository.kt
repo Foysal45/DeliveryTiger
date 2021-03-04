@@ -94,6 +94,8 @@ class AppRepository(
 
     fun getAllDistrictFromApi(id: Int) = apiInterfaceCore.getAllDistrictFromApi(id)
 
+    suspend fun loadAllDistricts() = apiInterfaceCore.loadAllDistricts()
+
     fun getMerchantCredit(courierUserId: Int) = apiInterfaceCore.getMerchantCredit(courierUserId)
 
     fun getBreakableCharge() = apiInterfaceCore.getBreakableCharge()

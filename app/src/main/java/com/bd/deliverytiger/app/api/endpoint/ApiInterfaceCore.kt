@@ -20,6 +20,7 @@ import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
+import com.bd.deliverytiger.app.api.model.district.DistrictListsProfileModel
 import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
@@ -67,6 +68,9 @@ interface ApiInterfaceCore {
 
     @GET("api/Other/GetAllDistrictFromApi/{id}")
     fun getAllDistrictFromApi(@Path("id") id: Int): Call<DeliveryChargePayLoad>
+
+    @GET("api/Fetch/LoadAllDistricts")
+    suspend fun loadAllDistricts(): NetworkResponse<GenericResponse<List<DistrictListsProfileModel>>, ErrorResponse>
 
     @GET("api/Fetch/GetMerchantCredit/{courierUserId}")
     fun getMerchantCredit(@Path("courierUserId") courierUserId: Int): Call<GenericResponse<Boolean>>
