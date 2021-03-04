@@ -30,6 +30,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 import java.io.File
 import kotlin.concurrent.thread
 
@@ -197,6 +198,8 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
             return false
         }
 
+        val currentAppVersion: String = appVersion()
+
         productUploadRequest.apply {
             this.productTitle = productTitle
             productTitleEng = productTitle
@@ -204,6 +207,8 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
             this.productDescription = productDescription
             mobileNumber = SessionManager.mobile
             customerId = SessionManager.courierUserId
+            appVersion = currentAppVersion
+            Timber.d("productUploadRequest $productUploadRequest")
         }
 
         return true

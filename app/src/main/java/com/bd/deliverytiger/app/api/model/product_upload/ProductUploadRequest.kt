@@ -37,5 +37,7 @@ data class ProductUploadRequest(
     @SerializedName("ImageCount")
     var imageCount: Int = 1,
     @SerializedName("UploadBy")
-    var uploadBy: String = "dtApp"
+    var uploadBy: String = "dtApp",
+    @SerializedName("AppVersion")
+    var appVersion: String = ""
 )

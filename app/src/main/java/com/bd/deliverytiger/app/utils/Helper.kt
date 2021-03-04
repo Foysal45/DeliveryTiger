@@ -3,6 +3,7 @@ package com.bd.deliverytiger.app.utils
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.pm.PackageInfo
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.ConnectivityManager
@@ -225,4 +226,14 @@ fun generateNameInitial(name: String?): String {
         }
     }
     return  initial
+}
+
+fun Activity.appVersion(): String {
+    val pInfo: PackageInfo = packageManager.getPackageInfo(packageName, 0)
+    return pInfo.versionName
+}
+
+fun Fragment.appVersion(): String {
+    val pInfo: PackageInfo? = this.context?.packageManager?.getPackageInfo(this.context?.packageName ?: "", 0)
+    return pInfo?.versionName ?: ""
 }
