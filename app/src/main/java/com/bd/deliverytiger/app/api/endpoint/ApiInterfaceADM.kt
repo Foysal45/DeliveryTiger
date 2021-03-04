@@ -9,6 +9,7 @@ import com.bd.deliverytiger.app.api.model.complain.ComplainData
 import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentData
+import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsRequest
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsResponse
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableResponse
@@ -43,8 +44,8 @@ interface ApiInterfaceADM {
     @GET("api/account/reports/GetDTMerchantPaidChequeList/{courierUserId}")
     suspend fun getPaymentHistory(@Path("courierUserId") courierUserId: Int): NetworkResponse<List<PaymentData>, ErrorResponse>
 
-    @GET("api/account/reports/GetDTMerchantPaidChequeDetails/{courierUserId}/{transactionId}")
-    suspend fun getPaymentHistoryDetails(@Path("courierUserId") courierUserId: Int, @Path("transactionId") transactionId: String): NetworkResponse<List<PaymentDetailsResponse>, ErrorResponse>
+    @POST("api/account/reports/GetDTMerchantPaidChequeDetails_V2")
+    suspend fun getPaymentHistoryDetails(@Body requestBody: PaymentDetailsRequest): NetworkResponse<List<PaymentDetailsResponse>, ErrorResponse>
 
     @GET("api/account/reports/GetDTMerchantFreezeAmountInfo/{courierUserId}")
     suspend fun fetchFreezeAmountData(@Path("courierUserId") courierUserId: Int): NetworkResponse<AccountsData, ErrorResponse>

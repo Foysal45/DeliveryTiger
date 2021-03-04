@@ -14,6 +14,7 @@ import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackReqBody
+import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsRequest
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionAnswer
@@ -67,7 +68,7 @@ class AppRepository(
 
     suspend fun getPaymentHistory(courierUserId: Int) = apiInterfaceADM.getPaymentHistory(courierUserId)
 
-    suspend fun getPaymentHistoryDetails(courierUserId: Int, transactionId: String) = apiInterfaceADM.getPaymentHistoryDetails(courierUserId, transactionId)
+    suspend fun getPaymentHistoryDetails(requestBody: PaymentDetailsRequest) = apiInterfaceADM.getPaymentHistoryDetails(requestBody)
 
     suspend fun fetchFreezeAmountData(courierUserId: Int) = apiInterfaceADM.fetchFreezeAmountData(courierUserId)
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsRequest
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsResponse
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
@@ -22,7 +23,7 @@ class PaymentStatementDetailViewModel(private val repository: AppRepository): Vi
         viewState.value = ViewState.ProgressState(true)
         val responseBody = MutableLiveData<PaymentDetailsResponse>()
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getPaymentHistoryDetails(courierUserId, transactionId)
+            val response = repository.getPaymentHistoryDetails(PaymentDetailsRequest(courierUserId, transactionId))
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {
