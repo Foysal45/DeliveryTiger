@@ -3,12 +3,14 @@ package com.bd.deliverytiger.app.ui.add_order
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -23,6 +25,8 @@ import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButton
 import org.koin.android.ext.android.inject
+import shark.SharkLog.d
+import timber.log.Timber
 import java.util.*
 
 class OrderSuccessFragment : Fragment() {
@@ -39,6 +43,7 @@ class OrderSuccessFragment : Fragment() {
     private var bundle: Bundle? = null
     private var orderResponse: OrderResponse? = null
     private var isCollection: Boolean = false
+    private var isGetOfferByMerchant: Boolean = false
     private var courierInfoModel: CourierInfoModel? = null
     private var offerBkashDiscount: Int = 0
     private var offerCodDiscount: Int = 0
@@ -76,6 +81,11 @@ class OrderSuccessFragment : Fragment() {
             isCollection = it.getBoolean("isCollection", false)
         }
 
+        viewModel.isGetOfferByMerchant(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {
+            isGetOfferByMerchant = it
+            Timber.d("isGetOfferByMerchant $isGetOfferByMerchant 1")
+        })
+
         if (orderResponse != null) {
             courierOrdersId = orderResponse!!.courierOrdersId ?: ""
             tvSuccessOrderId.text ="# $courierOrdersId"
@@ -93,7 +103,11 @@ class OrderSuccessFragment : Fragment() {
         }
 
         offerBtn.setOnClickListener {
-            offerBottomSheet(courierInfoModel)
+            if (!courierInfoModel!!.isOfferTaken){
+                offerBottomSheet(courierInfoModel)
+            }else{
+                Toast.makeText(requireContext(), "একসাথে দুইটি অফার প্রযোজ্য নয়", Toast.LENGTH_SHORT).show()
+            }
         }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
@@ -172,19 +186,24 @@ class OrderSuccessFragment : Fragment() {
             "offerBkashDiscount" to offerBkashDiscount,
             "offerBkashClaimed" to offerBkashClaimed,
             "offerCodClaimed" to offerCodClaimed,
-            "isCollection" to isCollection // if true show Adv offer
+            "isCollection" to isCollection,// if true show Adv offer
+            "isGetOfferByMerchant" to isGetOfferByMerchant
         )
 
         val tag: String = OfferBottomSheet.tag
         val dialog: OfferBottomSheet = OfferBottomSheet.newInstance(bundle)
-        dialog.show(childFragmentManager, tag)
+        Timber.d("isGetOfferByMerchant $isGetOfferByMerchant 2")
+        if (!isGetOfferByMerchant){
+        dialog.show(childFragmentManager, tag)}
         dialog.onOfferSelected = { offerType ->
             dialog.dismiss()
             when(offerType) {
                 1 -> {
+                    courierInfoModel!!.isOfferTaken = true
                     addProductBottomSheet(offerType)
                 }
                 2 -> {
+                    courierInfoModel!!.isOfferTaken = true
                     addProductBottomSheet(offerType)
                     //claimBkashOffer()
                 }

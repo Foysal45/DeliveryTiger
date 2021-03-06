@@ -183,4 +183,7 @@ interface ApiInterfaceCore {
 
     @POST("api/Entry/AddSurveyQuestionAnswerLog")
     suspend fun fetchSubmitSurvey(@Body requestBody: List<SurveyQuestionAnswer>): NetworkResponse<GenericResponse<List<SurveyQuestionAnswerResponse>>, ErrorResponse>
+
+    @GET("api/Offer/GetOfferByMerchant/{courierUserId}")
+    suspend fun isGetOfferByMerchant(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<Boolean>, ErrorResponse>
 }

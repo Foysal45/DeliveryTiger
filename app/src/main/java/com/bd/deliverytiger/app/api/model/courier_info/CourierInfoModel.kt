@@ -75,5 +75,8 @@ data class CourierInfoModel(
     @SerializedName("offerBkashDiscountDhaka")
     var offerBkashDiscountDhaka: Double,
     @SerializedName("offerBkashDiscountOutSideDhaka")
-    var offerBkashDiscountOutSideDhaka: Double
+    var offerBkashDiscountOutSideDhaka: Double,
+
+    //Internal
+    var isOfferTaken: Boolean = false
 )

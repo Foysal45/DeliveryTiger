@@ -170,4 +170,6 @@ class AppRepository(
     suspend fun fetchSurveyQuestion() = apiInterfaceCore.fetchSurveyQuestion()
 
     suspend fun fetchSubmitSurvey(requestBody: List<SurveyQuestionAnswer>) = apiInterfaceCore.fetchSubmitSurvey(requestBody)
+
+    suspend fun isGetOfferByMerchant(courierUserId: Int) = apiInterfaceCore.isGetOfferByMerchant(courierUserId)
 }
