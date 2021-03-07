@@ -233,9 +233,10 @@
                             android:overScrollMode="never"
                             android:padding="5dp"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
 
+                            app:layout_constraintTop_toTopOf="parent"
                             tools:itemCount="4"
                             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                             tools:listitem="@layout/item_view_dashboard"
@@ -460,6 +461,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:weightSum="1"
                 android:baselineAligned="false">
 
@@ -497,32 +500,20 @@
 
                 </LinearLayout>
 
-                <LinearLayout
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/orderBtn"
                     android:layout_width="0dp"
                     android:layout_height="60dp"
                     android:layout_weight="0.55"
                     android:background="@color/colorPrimary"
                     android:gravity="center"
+                    android:text="নতুন অর্ডার"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_add"
+                    app:iconGravity="textStart"
                     android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:contentDescription="@string/cd"
-                        android:src="@drawable/ic_add" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="নতুন অর্ডার"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
             </LinearLayout>
 

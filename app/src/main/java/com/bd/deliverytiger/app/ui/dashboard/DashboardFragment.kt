@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -188,10 +189,12 @@ class DashboardFragment : Fragment() {
             }
         }
         binding?.orderBtn?.setOnClickListener {
+            binding?.progressBar?.visibility = View.VISIBLE
             if (showOrderPopup) {
                 orderDialog()
             } else {
                 if (netAmount >= 0) {
+                    binding?.progressBar?.visibility = View.GONE
                     addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
                     UserLogger.logGenie("AddOrder")
                 } else {
