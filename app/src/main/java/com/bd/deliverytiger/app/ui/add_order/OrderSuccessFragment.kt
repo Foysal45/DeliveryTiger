@@ -43,10 +43,11 @@ class OrderSuccessFragment : Fragment() {
     private var bundle: Bundle? = null
     private var orderResponse: OrderResponse? = null
     private var isCollection: Boolean = false
-    private var isGetOfferByMerchant: Boolean = false
+    private var isCODOfferLimitExceed: Boolean = false
     private var courierInfoModel: CourierInfoModel? = null
     private var offerBkashDiscount: Int = 0
     private var offerCodDiscount: Int = 0
+    private var offerType: Int = 0
 
     private var offerBkashClaimed: Boolean = false
     private var offerCodClaimed: Boolean = false
@@ -81,11 +82,6 @@ class OrderSuccessFragment : Fragment() {
             isCollection = it.getBoolean("isCollection", false)
         }
 
-        viewModel.isGetOfferByMerchant(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {
-            isGetOfferByMerchant = it
-            Timber.d("isGetOfferByMerchant $isGetOfferByMerchant 1")
-        })
-
         if (orderResponse != null) {
             courierOrdersId = orderResponse!!.courierOrdersId ?: ""
             tvSuccessOrderId.text ="# $courierOrdersId"
@@ -103,11 +99,7 @@ class OrderSuccessFragment : Fragment() {
         }
 
         offerBtn.setOnClickListener {
-            if (!courierInfoModel!!.isOfferTaken){
-                offerBottomSheet(courierInfoModel)
-            }else{
-                Toast.makeText(requireContext(), "একসাথে দুইটি অফার প্রযোজ্য নয়", Toast.LENGTH_SHORT).show()
-            }
+            offerBottomSheet()
         }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
@@ -141,26 +133,40 @@ class OrderSuccessFragment : Fragment() {
                 courierInfoModel?.offerBkashDiscountOutSideDhaka?.toInt() ?: 0
             }
             offerCodDiscount = courierInfoModel?.offerCodDiscount?.toInt() ?: 0
+            offerType = model.offerType
             if (model.isOfferActive) {
-                when (model.offerType) {
-                    // COD
-                    1 -> {
-                        offerBtn.visibility = View.VISIBLE
-                        offerBottomSheet(model)
-                    }
-                    // bkash
-                    2 -> {
-                        if (isCollection) {
-                            offerBtn.visibility = View.VISIBLE
-                            offerBottomSheet(model)
+
+                viewModel.isGetOfferByMerchant(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { isCODOfferLimitExceed ->
+                    this.isCODOfferLimitExceed = isCODOfferLimitExceed
+                    Timber.d("isCODOfferLimitExceed $isCODOfferLimitExceed")
+                    when (offerType) {
+                        // COD
+                        1 -> {
+                            if (!isCODOfferLimitExceed) {
+                                offerBtn.visibility = View.VISIBLE
+                                offerBottomSheet()
+                            }
+                        }
+                        // bkash
+                        2 -> {
+                            if (isCollection) {
+                                offerBtn.visibility = View.VISIBLE
+                                offerBottomSheet()
+                            }
+                        }
+                        // All
+                        3 -> {
+                            if (isCODOfferLimitExceed && !isCollection) {
+                                offerBtn.visibility = View.GONE
+                            } else if (isCODOfferLimitExceed) {
+                                offerType = 2
+                                offerBtn.visibility = View.VISIBLE
+                                offerBottomSheet()
+                            }
                         }
                     }
-                    // All
-                    3 -> {
-                        offerBtn.visibility = View.VISIBLE
-                        offerBottomSheet(model)
-                    }
-                }
+
+                })
             }
         })
     }
@@ -176,25 +182,19 @@ class OrderSuccessFragment : Fragment() {
         alert ("Confirmation", msg, false, "Ok", "Cancel").show()
     }
 
-    private fun offerBottomSheet(model: CourierInfoModel?) {
-
-        model ?: return
-
+    private fun offerBottomSheet() {
         val bundle = bundleOf(
-            "offerType" to model.offerType,
+            "offerType" to offerType,
             "offerCodDiscount" to offerCodDiscount,
             "offerBkashDiscount" to offerBkashDiscount,
             "offerBkashClaimed" to offerBkashClaimed,
             "offerCodClaimed" to offerCodClaimed,
             "isCollection" to isCollection,// if true show Adv offer
-            "isGetOfferByMerchant" to isGetOfferByMerchant
         )
 
         val tag: String = OfferBottomSheet.tag
         val dialog: OfferBottomSheet = OfferBottomSheet.newInstance(bundle)
-        Timber.d("isGetOfferByMerchant $isGetOfferByMerchant 2")
-        if (!isGetOfferByMerchant){
-        dialog.show(childFragmentManager, tag)}
+        dialog.show(childFragmentManager, tag)
         dialog.onOfferSelected = { offerType ->
             dialog.dismiss()
             when(offerType) {
@@ -244,11 +244,13 @@ class OrderSuccessFragment : Fragment() {
             when(offerType) {
                 1 -> {
                     if (dealId > 0) {
+                        offerBtn.visibility = View.GONE
                         claimCodOffer(dealId)
                     }
                 }
                 2 -> {
                     if (dealId > 0) {
+                        offerBtn.visibility = View.GONE
                         claimBkashOffer(dealId)
                     }
                 }

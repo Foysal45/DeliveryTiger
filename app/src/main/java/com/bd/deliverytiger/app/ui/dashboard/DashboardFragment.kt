@@ -21,9 +21,11 @@ import com.bd.deliverytiger.app.api.model.config.BannerModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
+import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
+import com.bd.deliverytiger.app.ui.add_order.OrderSuccessFragment
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadFragment
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
@@ -190,7 +192,12 @@ class DashboardFragment : Fragment() {
                 orderDialog()
             } else {
                 if (netAmount >= 0) {
-                    addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+                    //addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+                    val bundle = bundleOf(
+                            "isCollection" to true,
+                            "orderResponse" to OrderResponse()
+                    )
+                    addFragment(OrderSuccessFragment.newInstance(bundle), OrderSuccessFragment.tag)
                     UserLogger.logGenie("AddOrder")
                 } else {
                     serviceChargeDialog()
