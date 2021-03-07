@@ -192,12 +192,7 @@ class DashboardFragment : Fragment() {
                 orderDialog()
             } else {
                 if (netAmount >= 0) {
-                    //addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
-                    val bundle = bundleOf(
-                            "isCollection" to true,
-                            "orderResponse" to OrderResponse()
-                    )
-                    addFragment(OrderSuccessFragment.newInstance(bundle), OrderSuccessFragment.tag)
+                    addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
                     UserLogger.logGenie("AddOrder")
                 } else {
                     serviceChargeDialog()
