@@ -12,6 +12,7 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.product_upload.ProductUploadRequest
 import com.bd.deliverytiger.app.databinding.FragmentAddProductBottomSheetBinding
 import com.bd.deliverytiger.app.repository.AppRepository
+import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -41,6 +42,9 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
 
     private val productUploadRequest = ProductUploadRequest()
     private var imagePath: String = ""
+
+    private var selectedDistrictId: Int = 0
+    private var districtName: String = ""
 
     private val mediaTypeText = "text/plain".toMediaTypeOrNull()
     private val mediaTypeMultipart = "multipart/form-data".toMediaTypeOrNull()
@@ -145,6 +149,28 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
             }
         }
 
+        binding?.etDistrict?.setOnClickListener {
+
+            viewModel.fetchAllDistricts().observe(viewLifecycleOwner, Observer { response ->
+
+                val districtList = response.districtInfo
+                val districtNameList = districtList.map { it.districtBng}
+
+                    val dialog = LocationSelectionDialog.newInstance(districtNameList as MutableList<String>)
+                    dialog.show(childFragmentManager, LocationSelectionDialog.tag)
+                    dialog.onLocationPicked = { position, value ->
+                        //context?.toast(value)
+                        districtName = value
+                        binding?.etDistrict?.setText(value)
+                        if (position in 0..response.districtInfo.lastIndex) {
+                            selectedDistrictId = districtList[position].districtId
+                        }
+                        Timber.d("districtName: $districtName districtId: $selectedDistrictId")
+                    }
+            })
+
+        }
+
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
                 is ViewState.ShowMessage -> {
@@ -167,8 +193,14 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
     private fun validate(): Boolean {
 
         val productTitle = binding?.productTitleTV?.text?.toString() ?: ""
+        val districtName = binding?.etDistrict?.text?.toString() ?: ""
+
         if (productTitle.trim().isEmpty()) {
             context?.toast("প্রোডাক্টের টাইটেল ইংলিশে লিখুন ")
+            return false
+        }
+        if (districtName.trim().isEmpty()) {
+            context?.toast("জেলা নির্বাচন করুন")
             return false
         }
         if (!isEnglishLetterOnly(productTitle)) {
@@ -205,6 +237,7 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
             productTitleEng = productTitle
             this.productPrice = productPriceNumber
             this.productDescription = productDescription
+            this.districtId = selectedDistrictId
             mobileNumber = SessionManager.mobile
             customerId = SessionManager.courierUserId
             appVersion = currentAppVersion
@@ -248,6 +281,4 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
         binding = null
         super.onDestroyView()
     }
-
-
 }

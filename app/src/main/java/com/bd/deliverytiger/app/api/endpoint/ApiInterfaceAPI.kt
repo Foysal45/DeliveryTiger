@@ -3,6 +3,7 @@ package com.bd.deliverytiger.app.api.endpoint
 import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.ResponseHeader
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
+import com.bd.deliverytiger.app.api.model.location.LocationResponse
 import com.bd.deliverytiger.app.api.model.login.OTPCheckResponse
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.api.model.login.OTPResponse
@@ -35,5 +36,8 @@ interface ApiInterfaceAPI {
     @Multipart
     @POST("api/Classified/V1/ProductUpload")
     suspend fun uploadProductInfo(@Part("Data") ProductUploadReqBody: RequestBody): NetworkResponse<ResponseHeader<ProductUploadResponse>, ErrorResponse>
+
+    @GET("District/v3/LoadAllDistrictFromJson")
+    suspend fun fetchAllDistricts(): NetworkResponse<ResponseHeader<LocationResponse>, ErrorResponse>
 
 }

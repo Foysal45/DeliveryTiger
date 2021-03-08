@@ -42,6 +42,8 @@ class AppRepository(
 
     suspend fun uploadProductInfo(ProductUploadReqBody: RequestBody) = apiInterfaceAPI.uploadProductInfo(ProductUploadReqBody)
 
+    suspend fun fetchAllDistricts() = apiInterfaceAPI.fetchAllDistricts()
+
     //******************** Analytics ********************//
 
     suspend fun logSMS(requestBody: SMSLogRequest) = apiInterfaceANA.logSMS(requestBody)
