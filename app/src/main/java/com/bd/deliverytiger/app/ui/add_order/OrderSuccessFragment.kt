@@ -136,9 +136,8 @@ class OrderSuccessFragment : Fragment() {
             offerType = model.offerType
             if (model.isOfferActive) {
 
-                viewModel.isGetOfferByMerchant(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { isCODOfferLimitExceed ->
-                    this.isCODOfferLimitExceed = isCODOfferLimitExceed
-                    Timber.d("isCODOfferLimitExceed $isCODOfferLimitExceed")
+                viewModel.isGetOfferByMerchant(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { isCODOfferLimitsExceed ->
+                    this.isCODOfferLimitExceed = isCODOfferLimitsExceed
                     when (offerType) {
                         // COD
                         1 -> {
@@ -160,6 +159,9 @@ class OrderSuccessFragment : Fragment() {
                                 offerBtn.visibility = View.GONE
                             } else if (isCODOfferLimitExceed) {
                                 offerType = 2
+                                offerBtn.visibility = View.VISIBLE
+                                offerBottomSheet()
+                            }else{
                                 offerBtn.visibility = View.VISIBLE
                                 offerBottomSheet()
                             }
