@@ -21,6 +21,7 @@ import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionA
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 class AppRepository(
@@ -43,6 +44,8 @@ class AppRepository(
     suspend fun uploadProductInfo(ProductUploadReqBody: RequestBody) = apiInterfaceAPI.uploadProductInfo(ProductUploadReqBody)
 
     suspend fun fetchAllDistricts() = apiInterfaceAPI.fetchAllDistricts()
+
+    suspend fun uploadProductImage(data: RequestBody, file: List<MultipartBody.Part>?) = apiInterfaceAPI.uploadProductImage(data, file)
 
     //******************** Analytics ********************//
 

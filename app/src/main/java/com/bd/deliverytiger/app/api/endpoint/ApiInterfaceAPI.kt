@@ -1,14 +1,17 @@
 package com.bd.deliverytiger.app.api.endpoint
 
 import com.bd.deliverytiger.app.api.model.ErrorResponse
+import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.ResponseHeader
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
+import com.bd.deliverytiger.app.api.model.image_upload.ClassifiedImageUploadResponse
 import com.bd.deliverytiger.app.api.model.location.LocationResponse
 import com.bd.deliverytiger.app.api.model.login.OTPCheckResponse
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.api.model.login.OTPResponse
 import com.bd.deliverytiger.app.api.model.product_upload.ProductUploadResponse
 import com.haroldadmin.cnradapter.NetworkResponse
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -39,5 +42,12 @@ interface ApiInterfaceAPI {
 
     @GET("District/v3/LoadAllDistrictFromJson")
     suspend fun fetchAllDistricts(): NetworkResponse<ResponseHeader<LocationResponse>, ErrorResponse>
+
+    @Multipart
+    @POST("api/Classified/ClassifiedImageUpload")
+    suspend fun uploadProductImage(
+            @Part("data") data: RequestBody,
+            @Part file: List<MultipartBody.Part>? = null
+            ): NetworkResponse<ResponseHeader<ClassifiedImageUploadResponse>,ErrorResponse>
 
 }

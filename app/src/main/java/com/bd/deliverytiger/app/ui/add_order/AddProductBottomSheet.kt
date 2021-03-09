@@ -1,6 +1,9 @@
 package com.bd.deliverytiger.app.ui.add_order
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +12,8 @@ import android.widget.FrameLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.ProgressRequestBody
+import com.bd.deliverytiger.app.api.model.image_upload.ClassifiedImageData
 import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.product_upload.ProductUploadRequest
 import com.bd.deliverytiger.app.databinding.FragmentAddProductBottomSheetBinding
@@ -30,12 +35,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.io.File
 import java.util.*
 import kotlin.concurrent.thread
+
 
 class AddProductBottomSheet : BottomSheetDialogFragment() {
 
@@ -111,43 +120,9 @@ class AddProductBottomSheet : BottomSheetDialogFragment() {
         }
 
         binding?.uploadBtn?.setOnClickListener {
-
             hideKeyboard()
             if (validate()) {
-
-                val progressDialog = progressDialog()
-                progressDialog.show()
-                val jsonModel = gson.toJson(productUploadRequest)
-                binding?.uploadBtn?.isEnabled = false
-                viewModel.uploadProductInfo(jsonModel.toRequestBody(mediaTypeText)).observe(viewLifecycleOwner, Observer { model ->
-
-                    val uploadLocation = "images/deals/${model.folderName}"
-                    val imageFile = File(imagePath)
-                    if (imageFile.exists()) {
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            val compressedFile = Compressor.compress(requireContext(), imageFile)
-                            val body = compressedFile.readBytes().toRequestBody(mediaTypeOctet)
-                            //val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
-                            //val body = MultipartBody.Part.createFormData("file", compressedFile.name, requestFile)
-                            /*viewModel.uploadProductImage(uploadLocation, productUploadRequest.productTitle, body).observe(viewLifecycleOwner, Observer {
-                                binding?.uploadBtn?.isEnabled = true
-                                onProductUploaded?.invoke(model.dealId, offerType)
-                            })*/
-                            val imageUploadResponse = appRepository.uploadProductImage(uploadLocation, productUploadRequest.productTitle, body)
-                            withContext(Dispatchers.Main) {
-                                progressDialog.dismiss()
-                                if (imageUploadResponse is NetworkResponse.Success) {
-                                    binding?.uploadBtn?.isEnabled = true
-                                    onProductUploaded?.invoke(model.dealId, offerType)
-                                } else {
-                                    //context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
-                                    binding?.uploadBtn?.isEnabled = true
-                                    onProductUploaded?.invoke(model.dealId, offerType)
-                                }
-                            }
-                        }
-                    }
-                })
+                uploadProduct()
             }
         }
 
@@ -267,6 +242,76 @@ class AddProductBottomSheet : BottomSheetDialogFragment() {
                 .start()
     }
 
+    private fun uploadProduct() {
+
+        val progressDialog = progressDialog()
+        progressDialog.show()
+        val jsonModel = gson.toJson(productUploadRequest)
+        binding?.uploadBtn?.isEnabled = false
+        viewModel.uploadProductInfo(jsonModel.toRequestBody(mediaTypeText)).observe(viewLifecycleOwner, Observer { model ->
+
+            val imageData = ClassifiedImageData(
+                    model.productTitle,
+                    model.folderName,
+                    model.dealId,
+                    1
+            )
+            val imageDataJson = gson.toJson(imageData)
+            val imageDataRequestBody = imageDataJson.toRequestBody(mediaTypeText)
+
+            val partList: MutableList<MultipartBody.Part> = mutableListOf()
+            val imageFile = File(imagePath)
+            if (imageFile.exists()) {
+
+                    val bigFile = scaleImage(imagePath, AppConstant.BIG_IMAGE_WIDTH, AppConstant.BIG_IMAGE_HEIGHT)
+                    val smallFile = scaleImage(imagePath, AppConstant.SMALL_IMAGE_WIDTH, AppConstant.SMALL_IMAGE_HEIGHT)
+                    val miniFile = scaleImage(imagePath, AppConstant.MINI_IMAGE_WIDTH, AppConstant.MINI_IMAGE_HEIGHT)
+
+                    if (!bigFile.isNullOrEmpty()) {
+                        //val compressedFile = Compressor.compress(context, File(bigFile))
+                        val compressedFile = File(bigFile)
+                        val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
+                        val part = MultipartBody.Part.createFormData("file1", "1.jpg", requestFile)
+                        partList.add(part)
+                    }
+
+                    if (!smallFile.isNullOrEmpty()) {
+                        //val compressedFile = Compressor.compress(context, File(smallFile))
+                        val compressedFile = File(smallFile)
+                        val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
+                        val partNew = MultipartBody.Part.createFormData("fileSmall1", "s1.jpg", requestFile)
+                        partList.add(partNew)
+                    }
+
+                    if (!miniFile.isNullOrEmpty()) {
+                        //val compressedFile = Compressor.compress(context, File(miniFile))
+                        val compressedFile = File(miniFile)
+                        val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
+                        val partNew = MultipartBody.Part.createFormData("fileMini1", "m1.jpg", requestFile)
+                        partList.add(partNew)
+                    }
+
+
+                lifecycleScope.launch(Dispatchers.IO) {
+
+                    val imageUploadResponse = appRepository.uploadProductImage(imageDataRequestBody, partList)
+                    withContext(Dispatchers.Main) {
+                        progressDialog.dismiss()
+                        if (imageUploadResponse is NetworkResponse.Success) {
+                            binding?.uploadBtn?.isEnabled = true
+                            onProductUploaded?.invoke(model.dealId, offerType)
+                        } else {
+                            //context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
+                            binding?.uploadBtn?.isEnabled = true
+                            onProductUploaded?.invoke(model.dealId, offerType)
+                        }
+                    }
+                }
+            }
+        })
+
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
 
@@ -282,6 +327,75 @@ class AddProductBottomSheet : BottomSheetDialogFragment() {
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun scaleImage(path: String, pictureWidth: Int, pictureHeight: Int, imageName: String? = null): String? {
+        var imagePath: String? = null
+        var scaledBitmap: Bitmap? = null
+        try {
+            // Part 1: Decode image
+            val unscaledBitmap = ScalingUtilities.decodeFile(path, pictureWidth, pictureHeight, ScalingUtilities.ScalingLogic.FIT)
+
+            if (unscaledBitmap.width > pictureWidth || unscaledBitmap.height > pictureHeight) {
+                // Part 2: Scale image
+
+                scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, pictureWidth, pictureHeight, ScalingUtilities.ScalingLogic.FIT)
+                //Log.e("scaleProblem", "scaledBitmap: width: " + scaledBitmap.getWidth() + " height: " + scaledBitmap.getHeight() );
+
+                if (scaledBitmap.width > pictureWidth || scaledBitmap.height > pictureHeight) {
+                    scaledBitmap = ScalingUtilities.createScaledBitmap(scaledBitmap, pictureWidth, pictureHeight, ScalingUtilities.ScalingLogic.FIT)
+                    //Log.e("scaleProblem", "scaledBitmap2: width: " + scaledBitmap.getWidth() + " height: " + scaledBitmap.getHeight() );
+                    if (scaledBitmap.width > pictureWidth || scaledBitmap.height > pictureHeight) {
+                        scaledBitmap = ScalingUtilities.createScaledBitmap(scaledBitmap, pictureWidth, pictureHeight, ScalingUtilities.ScalingLogic.FIT)
+                        //Log.e("scaleProblem", "scaledBitmap3: width: " + scaledBitmap.getWidth() + " height: " + scaledBitmap.getHeight() );
+                        scaledBitmap = drawCanvas(scaledBitmap, pictureWidth, pictureHeight)
+                    } else {
+                        scaledBitmap = drawCanvas(scaledBitmap, pictureWidth, pictureHeight)
+                    }
+
+                } else {
+                    scaledBitmap = drawCanvas(scaledBitmap, pictureWidth, pictureHeight)
+                }
+
+            } else if (unscaledBitmap.width < pictureWidth || unscaledBitmap.height < pictureHeight) {
+                scaledBitmap = drawCanvas(unscaledBitmap, pictureWidth, pictureHeight)
+            } else {
+                scaledBitmap = unscaledBitmap
+            }
+
+            // Store to tmp file
+            val file: File? = createNewFile(requireContext(), FileType.Picture)
+            file?.outputStream()?.use {
+                scaledBitmap!!.compress(Bitmap.CompressFormat.JPEG, 75, it)
+                it.flush()
+                it.close()
+            }
+            scaledBitmap!!.recycle()
+            imagePath = file?.absolutePath
+        } catch (e: Throwable) {
+            Timber.d(e)
+        }
+
+        return imagePath ?: path
+    }
+
+    private fun drawCanvas(unscaledBitmap1: Bitmap, dstWidth: Int, dstHeight: Int): Bitmap {
+
+        val bitmap = Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val canvasWidth = (dstWidth - unscaledBitmap1.width) / 2
+        val canvasHeight = (dstHeight - unscaledBitmap1.height) / 2
+
+        //Log.e("scaleProblem", "canvasPadding: width: " + canvasWidth + " height: " + canvasHeight );
+
+        canvas.drawColor(Color.WHITE)
+        canvas.drawBitmap(
+                unscaledBitmap1,
+                canvasWidth.toFloat(),
+                canvasHeight.toFloat(),
+                null
+        )
+        return bitmap
     }
 
     override fun onDestroyView() {

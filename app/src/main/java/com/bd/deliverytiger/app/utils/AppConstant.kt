@@ -28,4 +28,11 @@ object AppConstant {
     const val hotLineNumber = "০৯৬৩৮০১০৩০৩"
 
     const val GPS_REQUEST = 1001
+
+    const val BIG_IMAGE_WIDTH = 1024
+    const val BIG_IMAGE_HEIGHT = 910
+    const val SMALL_IMAGE_WIDTH = 250
+    const val SMALL_IMAGE_HEIGHT = 222
+    const val MINI_IMAGE_WIDTH = 90
+    const val MINI_IMAGE_HEIGHT = 80
 }
