@@ -9,6 +9,7 @@ import android.widget.FrameLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.product_upload.ProductUploadRequest
 import com.bd.deliverytiger.app.databinding.FragmentAddProductBottomSheetBinding
 import com.bd.deliverytiger.app.repository.AppRepository
@@ -33,9 +34,10 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.io.File
+import java.util.*
 import kotlin.concurrent.thread
 
-class AddProductBottomSheet: BottomSheetDialogFragment() {
+class AddProductBottomSheet : BottomSheetDialogFragment() {
 
     private var binding: FragmentAddProductBottomSheetBinding? = null
     var onProductUploaded: ((dealId: Int, offerType: Int) -> Unit)? = null
@@ -152,21 +154,26 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
         binding?.etDistrict?.setOnClickListener {
 
             viewModel.fetchAllDistricts().observe(viewLifecycleOwner, Observer { response ->
-
                 val districtList = response.districtInfo
-                val districtNameList = districtList.map { it.districtBng}
+                val locationList: MutableList<LocationData> = mutableListOf()
+                districtList.forEach { model ->
+                    locationList.add(
+                        LocationData(
+                            model.districtId,
+                            model.districtBng,
+                            model.district.toLowerCase(Locale.US)
+                        )
+                    )
+                }
 
-                    val dialog = LocationSelectionDialog.newInstance(districtNameList as MutableList<String>)
-                    dialog.show(childFragmentManager, LocationSelectionDialog.tag)
-                    dialog.onLocationPicked = { position, value ->
-                        //context?.toast(value)
-                        districtName = value
-                        binding?.etDistrict?.setText(value)
-                        if (position in 0..response.districtInfo.lastIndex) {
-                            selectedDistrictId = districtList[position].districtId
-                        }
-                        Timber.d("districtName: $districtName districtId: $selectedDistrictId")
-                    }
+                val dialog = LocationSelectionDialog.newInstance(locationList)
+                dialog.show(childFragmentManager, LocationSelectionDialog.tag)
+                dialog.onLocationPicked = { _, model ->
+                    selectedDistrictId = model.id
+                    districtName = model.displayName
+                    binding?.etDistrict?.setText(districtName)
+                    Timber.d("districtName: $districtName districtId: $selectedDistrictId")
+                }
             })
 
         }
@@ -249,28 +256,28 @@ class AddProductBottomSheet: BottomSheetDialogFragment() {
 
     private fun pickUpImage() {
         ImagePicker.create(this)
-            .returnMode(ReturnMode.ALL)
-            .language("bn")
-            .toolbarImageTitle("ছবি নির্বাচন করুন")
-            .includeVideo(false)
-            .single()
-            .folderMode(true)
-            .toolbarFolderTitle("ফোল্ডার নির্বাচন করুন")
-            .theme(R.style.ImagePickerTheme)
-            .start()
+                .returnMode(ReturnMode.ALL)
+                .language("bn")
+                .toolbarImageTitle("ছবি নির্বাচন করুন")
+                .includeVideo(false)
+                .single()
+                .folderMode(true)
+                .toolbarFolderTitle("ফোল্ডার নির্বাচন করুন")
+                .theme(R.style.ImagePickerTheme)
+                .start()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (ImagePicker.shouldHandle(requestCode, resultCode, data)){
+        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
 
             val image: Image? = ImagePicker.getFirstImageOrNull(data)
             if (image != null) {
                 imagePath = image.path
                 binding?.image?.let { view ->
                     Glide.with(requireContext())
-                        .load(imagePath)
-                        .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
-                        .into(view)
+                            .load(imagePath)
+                            .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
+                            .into(view)
                 }
             }
         }

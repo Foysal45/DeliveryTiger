@@ -6,11 +6,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.location.LocationData
 
 
-class LocationDistrictAdapter(private var dataList: MutableList<String>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class LocationDistrictAdapter(private var dataList: MutableList<LocationData>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var onItemClicked: ((position: Int, value: String) -> Unit)? = null
+    var onItemClicked: ((position: Int, value: LocationData) -> Unit)? = null
 
     /**
      * onCreateViewHolder
@@ -38,9 +39,8 @@ class LocationDistrictAdapter(private var dataList: MutableList<String>): Recycl
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         if (holder is ViewHolder) {
-
             val model = dataList[position]
-            holder.title.text = model
+            holder.title.text = model.displayName
         }
     }
 
@@ -61,7 +61,7 @@ class LocationDistrictAdapter(private var dataList: MutableList<String>): Recycl
         }
     }
 
-    fun setDataList(list: List<String>) {
+    fun setDataList(list: List<LocationData>) {
         dataList.clear()
         dataList.addAll(list)
         notifyDataSetChanged()

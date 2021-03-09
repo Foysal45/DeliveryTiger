@@ -3,6 +3,7 @@ package com.bd.deliverytiger.app.ui.add_order.district_dialog
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.utils.hideKeyboard
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -33,23 +35,23 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
     private lateinit var extraSpace: View
 
 
-    private var handler = Handler()
+    private var handler = Handler(Looper.getMainLooper())
     private var workRunnable: Runnable? = null
 
-    private var dataList: MutableList<String> = mutableListOf()
-    private var dataListCopy: MutableList<String> = mutableListOf()
+    private var dataList: MutableList<LocationData> = mutableListOf()
+    private var dataListCopy: MutableList<LocationData> = mutableListOf()
 
-    var onLocationPicked: ((position: Int, value: String) -> Unit)? = null
+    var onLocationPicked: ((position: Int, model: LocationData) -> Unit)? = null
 
     companion object {
 
         @JvmStatic
-        fun newInstance(dataList: MutableList<String>): LocationSelectionDialog = LocationSelectionDialog().apply {
+        fun newInstance(dataList: MutableList<LocationData>): LocationSelectionDialog = LocationSelectionDialog().apply {
                 this.dataList = dataList
             }
 
         @JvmField
-        val tag = LocationSelectionDialog::class.java.name
+        val tag: String = LocationSelectionDialog::class.java.name
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -121,8 +123,9 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
             progressBar?.visibility = View.GONE
             return
         }
+        val lowerCaseSearchKey = searchKey.toLowerCase(Locale.US)
         val filteredList = dataListCopy.filter { model ->
-            (model.toLowerCase(Locale.US).contains(searchKey.toLowerCase(Locale.US))) || (model.contains(searchKey))
+            (model.searchKey.contains(lowerCaseSearchKey))
         }
         (placeListRV.adapter as LocationDistrictAdapter).setDataList(filteredList)
         progressBar?.visibility = View.GONE
@@ -137,7 +140,7 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
         val metrics = resources.displayMetrics
         if (bottomSheet != null) {
             BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_COLLAPSED
-            thread {
+            thread {2
                 activity?.runOnUiThread {
                     //val dynamicHeight = parentLayout.height
                     BottomSheetBehavior.from(bottomSheet).peekHeight = metrics.heightPixels
