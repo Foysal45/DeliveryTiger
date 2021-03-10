@@ -21,6 +21,7 @@ import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.rider.RiderInfo
 import com.bd.deliverytiger.app.api.model.tracking.DistanceMapping
 import com.bd.deliverytiger.app.databinding.FragmentMapBinding
+import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.utils.PloyDecoder
@@ -120,6 +121,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         binding?.callBtn?.setOnClickListener {
             callNumber(mobileNumber)
+            UserLogger.logGenie("CallCollector_$mobileNumber")
         }
     }
 

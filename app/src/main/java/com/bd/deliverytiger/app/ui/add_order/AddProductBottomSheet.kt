@@ -279,7 +279,7 @@ class AddProductBottomSheet : BottomSheetDialogFragment() {
                         //val compressedFile = Compressor.compress(context, File(smallFile))
                         val compressedFile = File(smallFile)
                         val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
-                        val partNew = MultipartBody.Part.createFormData("fileSmall1", "s1.jpg", requestFile)
+                        val partNew = MultipartBody.Part.createFormData("fileSmall1", "smallimage1.jpg", requestFile)
                         partList.add(partNew)
                     }
 
@@ -287,7 +287,7 @@ class AddProductBottomSheet : BottomSheetDialogFragment() {
                         //val compressedFile = Compressor.compress(context, File(miniFile))
                         val compressedFile = File(miniFile)
                         val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
-                        val partNew = MultipartBody.Part.createFormData("fileMini1", "m1.jpg", requestFile)
+                        val partNew = MultipartBody.Part.createFormData("fileMini1", "miniimage1.jpg", requestFile)
                         partList.add(partNew)
                     }
 
