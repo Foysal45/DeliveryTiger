@@ -29,10 +29,10 @@ object AppConstant {
 
     const val GPS_REQUEST = 1001
 
-    const val BIG_IMAGE_WIDTH = 1024
-    const val BIG_IMAGE_HEIGHT = 910
-    const val SMALL_IMAGE_WIDTH = 250
-    const val SMALL_IMAGE_HEIGHT = 222
-    const val MINI_IMAGE_WIDTH = 90
-    const val MINI_IMAGE_HEIGHT = 80
+    const val BIG_IMAGE_WIDTH = 1000
+    const val BIG_IMAGE_HEIGHT = 1000
+    const val SMALL_IMAGE_WIDTH = 300
+    const val SMALL_IMAGE_HEIGHT = 300
+    const val MINI_IMAGE_WIDTH = 110
+    const val MINI_IMAGE_HEIGHT = 110
 }
