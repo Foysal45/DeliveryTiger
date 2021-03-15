@@ -70,6 +70,7 @@ class DeliveryChargeViewModel(private val repository: AppRepository): ViewModel(
                     is NetworkResponse.ServerError -> {
                         val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
                         viewState.value = ViewState.ShowMessage(message)
+                        responseBody.value = listOf()
                     }
                     is NetworkResponse.NetworkError -> {
                         val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"

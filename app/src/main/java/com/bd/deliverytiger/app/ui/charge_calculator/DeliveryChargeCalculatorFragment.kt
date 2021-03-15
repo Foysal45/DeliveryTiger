@@ -145,6 +145,10 @@ class DeliveryChargeCalculatorFragment: Fragment() {
     private fun fetchWeightData(districtId: Int, deliveryRangeId: Int) {
 
         viewModel.fetchWeightData(districtId, deliveryRangeId).observe(viewLifecycleOwner, Observer { list ->
+
+            if (list.isEmpty()) {
+                return@Observer
+            }
             weightPriceList.clear()
             weightPriceList.addAll(list)
 
