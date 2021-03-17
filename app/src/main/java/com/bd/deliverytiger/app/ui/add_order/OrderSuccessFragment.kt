@@ -3,14 +3,12 @@ package com.bd.deliverytiger.app.ui.add_order
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -25,8 +23,6 @@ import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButton
 import org.koin.android.ext.android.inject
-import shark.SharkLog.d
-import timber.log.Timber
 import java.util.*
 
 class OrderSuccessFragment : Fragment() {
