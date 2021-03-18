@@ -29,5 +29,9 @@ data class WeightRangeWiseData(
     @SerializedName("dateAdvance")
     var dateAdvance: String? = "",
     @SerializedName("cityDeliveryCharge")
-    var cityDeliveryCharge: Double = 0.0
+    var cityDeliveryCharge: Double = 0.0,
+    @SerializedName("deliveryCharge")
+    var deliveryCharge: Double = 0.0,
+    @SerializedName("extraDeliveryCharge")
+    var extraDeliveryCharge: Double = 0.0
 )

@@ -134,6 +134,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var payCollectionAmount: Double = 0.0
     private var payDeliveryCharge: Double = 0.0
     private var payShipmentCharge: Double = 0.0
+    private var deliveryCharge: Double = 0.0
+    private var extraDeliveryCharge: Double = 0.0
     private var cityDeliveryCharge: Double = 0.0
     private var payCODCharge: Double = 0.0
     private var payBreakableCharge: Double = 0.0
@@ -276,14 +278,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             // if free delivery is enable && weight <= 1KG
             if (isShipmentChargeFree && weightRangeId <= 2) {
                 payShipmentCharge = 0.0
+                deliveryCharge = 0.0
+                extraDeliveryCharge = 0.0
                 offerType = "freedelivery"
-            }
-            /*else if (districtId == collectionDistrictId) {
-                payShipmentCharge = model.cityDeliveryCharge
-                offerType = ""
-            } */
-            else {
+            } else {
                 payShipmentCharge = model.chargeAmount
+                deliveryCharge = model.deliveryCharge
+                extraDeliveryCharge = model.extraDeliveryCharge
                 offerType = ""
             }
 
@@ -442,6 +443,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             val bundle = Bundle()
             with(bundle) {
                 putDouble("payShipmentCharge", payDeliveryCharge)
+                putDouble("deliveryCharge", deliveryCharge)
+                putDouble("extraDeliveryCharge", extraDeliveryCharge)
                 putDouble("payCODCharge", payCODCharge)
                 putDouble("payBreakableCharge", payBreakableCharge)
                 putDouble("payCollectionCharge", payCollectionCharge)
@@ -1091,17 +1094,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     private fun calculateTotalPrice() {
 
-        /*payDeliveryCharge = if (districtId == collectionDistrictId) {
-            if (cityDeliveryCharge > 0.0) {
-                cityDeliveryCharge
-            } else {
-                payShipmentCharge
-            }
-        } else {
-            payShipmentCharge
-        }*/
         payDeliveryCharge = payShipmentCharge
-
 
         // Total = Shipment + cod + breakable + collection + packaging
         if (isCollection) {

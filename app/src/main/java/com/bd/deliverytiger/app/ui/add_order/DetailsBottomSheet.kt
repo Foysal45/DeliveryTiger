@@ -1,6 +1,6 @@
 package com.bd.deliverytiger.app.ui.add_order
 
-
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,24 +8,19 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.databinding.FragmentDetailsBottomSheetBinding
 import com.bd.deliverytiger.app.utils.DigitConverter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-/**
- * A simple [Fragment] subclass.
- */
+@SuppressLint("SetTextI18n")
 class DetailsBottomSheet : BottomSheetDialogFragment() {
 
-    private lateinit var shipmentTV: TextView
-    private lateinit var codChargeTV: TextView
-    private lateinit var breakableChargeTV: TextView
-    private lateinit var collectionChargeTV: TextView
-    private lateinit var packagingChargeTV: TextView
-    private lateinit var totalTV: TextView
-    private lateinit var codPercentTV: TextView
+    private var binding: FragmentDetailsBottomSheetBinding? = null
 
     private lateinit var bundle: Bundle
     private var payShipmentCharge: Double = 0.0
+    private var deliveryCharge: Double = 0.0
+    private var extraDeliveryCharge: Double = 0.0
     private var payCODCharge: Double = 0.0
     private var payBreakableCharge: Double = 0.0
     private var payCollectionCharge: Double = 0.0
@@ -36,12 +31,11 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
     private var total: Double = 0.0
     private var productType: String = ""
 
-
     companion object{
         fun newInstance(bundle: Bundle): DetailsBottomSheet = DetailsBottomSheet().apply {
             this.bundle = bundle
         }
-        val tag = DetailsBottomSheet::class.java.name
+        val tag: String = DetailsBottomSheet::class.java.name
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,22 +44,18 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_details_bottom_sheet, container, false)
+        return FragmentDetailsBottomSheetBinding.inflate(inflater, container, false).also {
+            binding = it
+        }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        shipmentTV = view.findViewById(R.id.details_item_value_1)
-        codChargeTV = view.findViewById(R.id.details_item_value_2)
-        breakableChargeTV = view.findViewById(R.id.details_item_value_3)
-        collectionChargeTV = view.findViewById(R.id.details_item_value_4)
-        packagingChargeTV = view.findViewById(R.id.details_item_value_5)
-        totalTV = view.findViewById(R.id.details_item_value_6)
-        codPercentTV = view.findViewById(R.id.details_item_2)
 
         with(bundle) {
             payShipmentCharge = getDouble("payShipmentCharge", 0.0)
+            deliveryCharge = getDouble("deliveryCharge", 0.0)
+            extraDeliveryCharge = getDouble("extraDeliveryCharge", 0.0)
             payCODCharge = getDouble("payCODCharge", 0.0)
             payBreakableCharge = getDouble("payBreakableCharge", 0.0)
             payCollectionCharge = getDouble("payCollectionCharge", 0.0)
@@ -77,30 +67,18 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
             total = getDouble("total", 0.0)
         }
 
-        //Timber.d("bigProductCharge ", ""+ boroProductCheck)
+        binding?.shipmentTV?.text = "${DigitConverter.toBanglaDigit(deliveryCharge, true)} ৳"
+        binding?.shipmentExtraTV?.text = "${DigitConverter.toBanglaDigit(extraDeliveryCharge, true)} ৳"
+        binding?.codChargeTitleTV?.text = "COD চার্জঃ (${DigitConverter.toBanglaDigit(codChargePercentage, false)}%)"
+        binding?.codChargeTV?.text = "${DigitConverter.toBanglaDigit(payCODCharge, true)} ৳"
+        binding?.breakableChargeTV?.text = "${DigitConverter.toBanglaDigit(payBreakableCharge, true)} ৳"
+        binding?.collectionChargeTV?.text = "${DigitConverter.toBanglaDigit(payCollectionCharge, true)} ৳"
+        binding?.packagingChargeTV?.text = "${DigitConverter.toBanglaDigit(payPackagingCharge, true)} ৳"
+        binding?.totalTV?.text = "${DigitConverter.toBanglaDigit(total, true)} ৳"
+    }
 
-        codPercentTV.text = "COD চার্জঃ (${DigitConverter.toBanglaDigit(codChargePercentage, false)}%)"
-
-       /* if (bigProductCharge > 0.0){
-            total =  payShipmentCharge + payCODCharge + payBreakableCharge + payCollectionCharge + payPackagingCharge + bigProductCharge
-        } else {
-            total =  payShipmentCharge + payCODCharge + payBreakableCharge + payCollectionCharge + payPackagingCharge
-        }*/
-
-
-        if(productType.equals("small")){
-            shipmentTV.text = "৳ ${DigitConverter.toBanglaDigit(payShipmentCharge, true)}"
-        }else if(productType.equals("big")){
-            shipmentTV.text = "৳ ${DigitConverter.toBanglaDigit(payShipmentCharge+bigProductCharge, true)}"
-        }
-
-        codChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payCODCharge, true)}"
-        breakableChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payBreakableCharge, true)}"
-        collectionChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payCollectionCharge, true)}"
-        packagingChargeTV.text = "৳ ${DigitConverter.toBanglaDigit(payPackagingCharge, true)}"
-
-        totalTV.text = "৳ ${DigitConverter.toBanglaDigit(total, true)}"
-        //Timber.d("total_value ", ""+ total)
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }
