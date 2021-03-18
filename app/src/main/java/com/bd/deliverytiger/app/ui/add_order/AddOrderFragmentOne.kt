@@ -269,7 +269,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             deliveryRangeId = model.deliveryRangeId
             weightRangeId = model.weightRangeId
             alertMsg = model.deliveryAlertMessage ?: ""
-            logicExpression = model.loginHours ?: ""
+            logicExpression = model.loginHours?.trim() ?: ""
             dayAdvance = model.dateAdvance ?: ""
             val showHide = model.showHide
 
@@ -320,14 +320,29 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     collectionDate = ""
                     collectionDatePicker.text = ""
                 }
+                // Delivery alert msg show
+                3 -> {
+                    if (logicExpression.isNotEmpty()) {
+                        val calendar = Calendar.getInstance()
+                        val hour24 = calendar.get(Calendar.HOUR_OF_DAY)
+                        val timeValidity = executeExpression("$hour24 $logicExpression")
+                        if (timeValidity) {
+                            alert("নির্দেশনা", alertMsg) {
+                            }.show()
+                        }
+                    } else {
+                        alert("নির্দেশনা", alertMsg) {
+                        }.show()
+                    }
+                }
             }
 
             calculateTotalPrice()
 
-            if (model.deliveryType.contains("Postal", true)) {
+            /*if (model.deliveryType.contains("Postal", true)) {
                 alert("নির্দেশনা", alertMsg) {
                 }.show()
-            }
+            }*/
 
         }
 
