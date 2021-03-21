@@ -1,46 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="15dp"
-    android:id="@+id/parent"
     >
 
-    <com.bd.deliverytiger.app.utils.CustomMaterialButtonToggleGroup
+    <TextView
+        android:id="@+id/terms_sheet_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="কালেকশন টাইপ"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_16"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+         />
+
+    <View
+        android:id="@+id/terms_sheet_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator"
+        android:layout_marginTop="8dp"
+        />
+
+    <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
         android:id="@+id/toggleButtonPickupGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        app:singleSelection="true"
+        app:justifyContent="center"
+        android:layout_marginTop="16dp"
         >
 
-        <com.google.android.material.button.MaterialButton
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
             android:id="@+id/toggleButtonPickup1"
-            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/toggleButtonHeight"
-            android:layout_weight="1"
-            android:text="@string/pickupType1"
-            android:textAllCaps="false"
-            />
+            android:layout_height="38dp"
+            app:toggle_text="@string/pickupType1" />
 
-        <com.google.android.material.button.MaterialButton
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
             android:id="@+id/toggleButtonPickup2"
-            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/toggleButtonHeight"
-            android:layout_weight="1"
-            android:maxLines="2"
-            android:text="@string/pickupType2"
-            android:textAllCaps="false"
-            android:padding="5dp"
-            />
+            android:layout_height="38dp"
+            app:toggle_text="@string/pickupType2" />
 
-    </com.bd.deliverytiger.app.utils.CustomMaterialButtonToggleGroup>
+    </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/pickupAddressLayout"
@@ -48,8 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/fab_margin"
         android:visibility="gone"
-        tools:visibility="visible"
-        >
+        tools:visibility="visible">
 
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spinnerCollectionLocation"
@@ -81,28 +89,13 @@
             app:layout_constraintEnd_toEndOf="@id/spinnerCollectionLocation"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_star"
-            app:tint="@color/red"
-            />
+            app:tint="@color/red" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <EditText
-        android:id="@+id/collectionAddress"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:background="@drawable/bg_add_order_edit_text"
-        android:hint="কালেকশন ঠিকানা"
-        android:importantForAutofill="no"
-        android:inputType="textMultiLine"
-        android:minHeight="@dimen/login_view_height"
-        android:paddingStart="16dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="8dp"
-        android:textColor="@color/black_80"
-        android:textSize="@dimen/text_14"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        android:layout_height="24dp"
+        />
 
 </LinearLayout>

@@ -87,6 +87,9 @@
     <string-array name="pickup_district">
         <item>"জেলা নির্বাচন করুন"</item>
     </string-array>
+    <string-array name="collection_time">
+        <item>"সিলেক্ট কালেকশন টাইম"</item>
+    </string-array>
     <string name="file_provider_authority" translatable="false">com.bd.deliverytiger.app.fileprovider</string>
     <string name="facebook_app_id">227253438942250</string>
 
