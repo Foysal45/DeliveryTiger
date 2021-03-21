@@ -26,10 +26,12 @@ class ListAdapter(var mContext: Context, var list: ArrayList<CustomModel>) :
 
     override fun onBindViewHolder(holder: DistViewHolder, position: Int) {
         holder.spinnerItemId.text = list[position].bangName
+        holder.spinnerItemIdEng.text = list[position].engName
     }
 
     inner class DistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val spinnerItemId: TextView = itemView.findViewById(R.id.district_spinner_item_id)
+        val spinnerItemIdEng: TextView = itemView.findViewById(R.id.district_spinner_item_id_english)
 
         init {
             itemView.setOnClickListener {

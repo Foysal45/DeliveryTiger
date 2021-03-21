@@ -22,10 +22,12 @@ class DistrictSelectAdapter(var mContext: Context, var districtList: ArrayList<D
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.spinnerItemId.text = districtList[position].districtBng
+        holder.spinnerItemIdEng.text = districtList[position].district
     }
 
     inner class ViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
         val spinnerItemId: TextView = itemView.findViewById(R.id.district_spinner_item_id)
+        val spinnerItemIdEng: TextView = itemView.findViewById(R.id.district_spinner_item_id_english)
 
         init {
             itemView.setOnClickListener{

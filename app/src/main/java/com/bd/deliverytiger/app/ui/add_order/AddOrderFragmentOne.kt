@@ -60,6 +60,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private lateinit var etDistrict: EditText
     private lateinit var etThana: EditText
     private lateinit var etAriaPostOffice: EditText
+    private lateinit var etAriaPostOfficeLayout: ConstraintLayout
     private lateinit var etCustomersAddress: EditText
     private lateinit var etAdditionalNote: EditText
 
@@ -207,6 +208,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         etAddOrderMobileNo = view.findViewById(R.id.etAddOrderMobileNo)
         etAlternativeMobileNo = view.findViewById(R.id.etAlternativeMobileNo)
         etDistrict = view.findViewById(R.id.etDistrict)
+        etAriaPostOfficeLayout = view.findViewById(R.id.etAriaPostOfficeLayout)
         etThana = view.findViewById(R.id.etThana)
         etAriaPostOffice = view.findViewById(R.id.etAriaPostOffice)
         etCustomersAddress = view.findViewById(R.id.etCustomersAddress)
@@ -387,10 +389,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             }
         }
 
-        togglePickupGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+       /* togglePickupGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked) {
                 when (checkedId) {
-                    R.id.toggleButtonPickup1 -> {
+                    R.id.toggleButtonPickup1 ->
+                    {
                         isOfficeDrop = true
                         calculateTotalPrice()
                         pickupAddressLayout.visibility = View.GONE
@@ -402,7 +405,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     }
                 }
             }
-        }
+        }*/
 
         checkBoxBreakable.setOnCheckedChangeListener { compoundButton, isChecked ->
             isBreakable = isChecked
@@ -616,6 +619,26 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }
     }
 
+    private fun pickupBottomSheet(){
+        val tag: String = ToggleButtonPickupBottomSheet.tag
+        val dialog: ToggleButtonPickupBottomSheet = ToggleButtonPickupBottomSheet.newInstance()
+        dialog.show(childFragmentManager, tag)
+
+        dialog.onTogglePickupGroupClicked = { isOfficeDrop , isDialogueDismiss->
+            this.isOfficeDrop = isOfficeDrop
+            calculateTotalPrice()
+            if (isDialogueDismiss){
+                dialog.dismiss()
+            }
+        }
+
+        dialog.onSpinnerCollectionLocationClicked = { position, isDialogueDismiss->
+            if (isDialogueDismiss){
+                dialog.dismiss()
+            }
+        }
+    }
+
     private fun orderPlaceProcess() {
         //timber.log.Timber.tag("orderDebug").d("ThanaId: $thanaId")
         when {
@@ -694,7 +717,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 areaId = 0
                 etAriaPostOffice.setText("")
                 etThana.setText("")
-                etAriaPostOffice.visibility = View.GONE
+                etAriaPostOfficeLayout.visibility = View.GONE
 
                 if (districtId == 14) {
                     getDeliveryCharge(districtId, 10026, 0) // Fetch data if any district selected
@@ -729,9 +752,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 areaId = 0
                 etAriaPostOffice.setText("")
                 if (isAriaAvailable) {
-                    etAriaPostOffice.visibility = View.VISIBLE
+                    etAriaPostOfficeLayout.visibility = View.VISIBLE
                 } else {
-                    etAriaPostOffice.visibility = View.GONE
+                    etAriaPostOfficeLayout.visibility = View.GONE
                 }
                 getDeliveryCharge(districtId, thanaId, 0)
             } else if (track == 3) {
@@ -1215,10 +1238,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             go = false
             context?.toast(getString(R.string.select_thana))
         }
-        /*else if (isAriaAvailable && areaId == 0) {
+        else if (isAriaAvailable && areaId == 0) {
             go = false
             context?.toast(getString(R.string.select_aria))
-        } */
+        }
         else if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
             go = false
             context?.toast(getString(R.string.write_yr_address))
@@ -1236,31 +1259,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         collectionName = productNameET.text.toString()
         collectionAddress = collectionAddressET.text.toString()
-        if (collectionName.isEmpty()) {
-            context?.showToast("নিজস্ব রেফারেন্স নম্বর / ইনভয়েস লিখুন")
+
+        if (!isWeightSelected) {
+            context?.showToast("প্যাকেজ এর ওজন নির্বাচন করুন")
             return false
-        }
-        if (!isOrderTypeSelected) {
-            context?.showToast("অর্ডার টাইপ সিলেক্ট করুন")
-            return false
-        }
-        if (isCollection) {
-            val collectionAmount = collectionAmountET.text.toString()
-            if (collectionAmount.isEmpty()) {
-                context?.showToast("কালেকশন অ্যামাউন্ট লিখুন")
-                return false
-            }
-            try {
-                payCollectionAmount = collectionAmount.toDouble()
-            } catch (e: NumberFormatException) {
-                e.printStackTrace()
-                context?.showToast("কালেকশন অ্যামাউন্ট লিখুন")
-                return false
-            }
-            if (payCollectionAmount > collectionAmountLimit) {
-                context?.showToast("কালেকশন অ্যামাউন্ট ${DigitConverter.toBanglaDigit(collectionAmountLimit.toInt())} টাকার থেকে বেশি হতে পারবে না")
-                return false
-            }
         }
 
         val payActualPackagePriceText = actualPackageAmountET.text.toString().trim()
@@ -1288,28 +1290,35 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 return false
             }
         }
-
-        if (!isWeightSelected) {
-            context?.showToast("প্যাকেজ এর ওজন নির্বাচন করুন")
+        if (!isOrderTypeSelected) {
+            context?.showToast("অর্ডার টাইপ সিলেক্ট করুন")
+            return false
+        }
+        if (isCollection) {
+            val collectionAmount = collectionAmountET.text.toString()
+            if (collectionAmount.isEmpty()) {
+                context?.showToast("কালেকশন অ্যামাউন্ট লিখুন")
+                return false
+            }
+            try {
+                payCollectionAmount = collectionAmount.toDouble()
+            } catch (e: NumberFormatException) {
+                e.printStackTrace()
+                context?.showToast("কালেকশন অ্যামাউন্ট লিখুন")
+                return false
+            }
+            if (payCollectionAmount > collectionAmountLimit) {
+                context?.showToast("কালেকশন অ্যামাউন্ট ${DigitConverter.toBanglaDigit(collectionAmountLimit.toInt())} টাকার থেকে বেশি হতে পারবে না")
+                return false
+            }
+        }
+        if (collectionName.isEmpty()) {
+            context?.showToast("নিজস্ব রেফারেন্স নম্বর / ইনভয়েস লিখুন")
             return false
         }
         if (!isPackagingSelected) {
             context?.showToast("প্যাকেজিং নির্বাচন করুন")
             return false
-        }
-        if (!isOfficeDrop) {
-            if (!isCollectionLocationSelected) {
-                context?.showToast("কালেকশন লোকেশন নির্বাচন করুন")
-                return false
-            }
-            if (collectionAddress.trim().isEmpty()) {
-                context?.showToast("কালেকশন ঠিকানা লিখুন")
-                return false
-            }
-            if (collectionAddress.trim().length < 15) {
-                context?.showToast("বিস্তারিত কালেকশন ঠিকানা লিখুন, ন্যূনতম ১৫ ডিজিট")
-                return false
-            }
         }
 
         if (deliveryType.isEmpty()) {
@@ -1340,6 +1349,21 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         if (!isAgreeTerms) {
             context?.showToast("শর্তাবলী মেনে অর্ডার দিন")
             return false
+        }
+        pickupBottomSheet()
+        if (!isOfficeDrop) {
+            if (!isCollectionLocationSelected) {
+                context?.showToast("কালেকশন লোকেশন নির্বাচন করুন")
+                return false
+            }
+            if (collectionAddress.trim().isEmpty()) {
+                context?.showToast("কালেকশন ঠিকানা লিখুন")
+                return false
+            }
+            if (collectionAddress.trim().length < 15) {
+                context?.showToast("বিস্তারিত কালেকশন ঠিকানা লিখুন, ন্যূনতম ১৫ ডিজিট")
+                return false
+            }
         }
 
         return true

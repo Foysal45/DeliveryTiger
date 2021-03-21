@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:id="@+id/parent"
+    >
+
+    <com.bd.deliverytiger.app.utils.CustomMaterialButtonToggleGroup
+        android:id="@+id/toggleButtonPickupGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:singleSelection="true"
+        >
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/toggleButtonPickup1"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/toggleButtonHeight"
+            android:layout_weight="1"
+            android:text="@string/pickupType1"
+            android:textAllCaps="false"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/toggleButtonPickup2"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/toggleButtonHeight"
+            android:layout_weight="1"
+            android:maxLines="2"
+            android:text="@string/pickupType2"
+            android:textAllCaps="false"
+            android:padding="5dp"
+            />
+
+    </com.bd.deliverytiger.app.utils.CustomMaterialButtonToggleGroup>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pickupAddressLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinnerCollectionLocation"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_view_height"
+            android:background="@drawable/bg_spinner"
+            android:overlapAnchor="false"
+            android:spinnerMode="dropdown"
+            android:theme="@style/custom_spinner_style"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:entries="@array/spinner_array_collection_location" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:contentDescription="@string/cd"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/spinnerCollectionLocation"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:contentDescription="@string/cd"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/spinnerCollectionLocation"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_star"
+            app:tint="@color/red"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <EditText
+        android:id="@+id/collectionAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:background="@drawable/bg_add_order_edit_text"
+        android:hint="কালেকশন ঠিকানা"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:minHeight="@dimen/login_view_height"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+</LinearLayout>
