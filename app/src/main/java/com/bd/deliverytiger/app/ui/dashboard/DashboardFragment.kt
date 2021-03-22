@@ -38,7 +38,6 @@ import com.bd.deliverytiger.app.ui.complain.ComplainFragment
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
-import com.bd.deliverytiger.app.ui.quick_order.QuickOrderFragment
 import com.bd.deliverytiger.app.ui.referral.ReferralFragment
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
@@ -614,7 +613,7 @@ class DashboardFragment : Fragment() {
         dialog.show()
         button1.setOnClickListener {
             dialog.dismiss()
-            addFragment(QuickOrderFragment.newInstance(), QuickOrderFragment.tag)
+            addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
             UserLogger.logGenie("NormalOrder")
         }
         button2.setOnClickListener {
