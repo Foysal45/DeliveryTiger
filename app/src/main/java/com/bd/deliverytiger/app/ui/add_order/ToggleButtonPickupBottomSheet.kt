@@ -8,12 +8,14 @@ import android.widget.AdapterView
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.databinding.FragmentCollectionInfoBottomSheetBinding
 import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
 import com.bd.deliverytiger.app.utils.SessionManager
+import com.bd.deliverytiger.app.utils.showToast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -29,10 +31,15 @@ class ToggleButtonPickupBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var pickupAddressLayout: ConstraintLayout
     private lateinit var spinnerCollectionLocation: AppCompatSpinner
+
+    private var weightRangeId = 0
+
     private val viewModel: AddOrderViewModel by inject()
 
     companion object {
-        fun newInstance(): ToggleButtonPickupBottomSheet = ToggleButtonPickupBottomSheet().apply {}
+        fun newInstance(weightRangeId: Int): ToggleButtonPickupBottomSheet = ToggleButtonPickupBottomSheet().apply {
+            this.weightRangeId = weightRangeId
+        }
         val tag: String = ToggleButtonPickupBottomSheet::class.java.name
     }
 
@@ -88,7 +95,13 @@ class ToggleButtonPickupBottomSheet : BottomSheetDialogFragment() {
                     pickupAddressLayout.visibility = View.GONE
                 }
                 R.id.toggleButtonPickup2 -> {
-                    pickupAddressLayout.visibility = View.VISIBLE
+                    if (weightRangeId > 6) {
+                        binding?.msg?.isVisible = true
+                        binding?.msg?.text = "পার্সেলের ওজন ৫ কেজির উপরে হলে কালেকশন হাবে ড্রপ করতে হবে, হাব ড্রপ সিলেক্ট করুন"
+                    } else {
+                        binding?.msg?.isVisible = false
+                        pickupAddressLayout.visibility = View.VISIBLE
+                    }
                 }
             }
         }

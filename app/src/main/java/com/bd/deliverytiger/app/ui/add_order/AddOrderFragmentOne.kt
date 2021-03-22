@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -97,7 +98,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private lateinit var orderPlaceBtn: TextView
 
     private lateinit var deliveryTypeAdapter: DeliveryTypeAdapter
-    private var handler: Handler = Handler()
+    private var handler: Handler = Handler(Looper.getMainLooper())
     private var runnable: Runnable = Runnable { }
 
     // Step 1
@@ -116,7 +117,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     // Step 2
     private val packagingDataList: MutableList<PackagingData> = mutableListOf()
-    private val deliveryTypeList: MutableList<WeightRangeWiseData> = mutableListOf()
 
     private var codChargePercentage: Double = 0.0
     private var codChargeMin: Int = 0
@@ -190,6 +190,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var merchantServiceCharge: Int = 0
     private var adjustBalance: Int = 0
 
+    private var merchantDistrict: Int = 0
+    private var selectedDeliveryType = ""
+
     private val viewModel: AddOrderViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
 
@@ -252,7 +255,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         // Fetch Charge Data
         getBreakableCharge()
-        getCollectionCharge()
+        getCourierUsersInformation()
         fetchOfferCharge()
         getPackagingCharge()
         fetchDTOrderGenericLimit()
@@ -260,7 +263,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         //fetchCollectionTimeSlot()
 
 
-        deliveryTypeAdapter = DeliveryTypeAdapter(requireContext(), deliveryTypeList)
+        deliveryTypeAdapter = DeliveryTypeAdapter()
         with(deliveryTypeRV) {
             setHasFixedSize(false)
             isNestedScrollingEnabled = false
@@ -277,6 +280,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             logicExpression = model.loginHours?.trim() ?: ""
             dayAdvance = model.dateAdvance ?: ""
             val showHide = model.showHide
+            val deliveryType = model.type ?: ""
 
             // if free delivery is enable && weight <= 1KG
             if (isShipmentChargeFree && weightRangeId <= 2) {
@@ -326,17 +330,20 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 }
                 // Delivery alert msg show
                 3 -> {
-                    if (logicExpression.isNotEmpty()) {
-                        val calendar = Calendar.getInstance()
-                        val hour24 = calendar.get(Calendar.HOUR_OF_DAY)
-                        val timeValidity = executeExpression("$hour24 $logicExpression")
-                        if (timeValidity) {
+                    if (selectedDeliveryType != deliveryType) {
+                        selectedDeliveryType = deliveryType
+                        if (logicExpression.isNotEmpty()) {
+                            val calendar = Calendar.getInstance()
+                            val hour24 = calendar.get(Calendar.HOUR_OF_DAY)
+                            val timeValidity = executeExpression("$hour24 $logicExpression")
+                            if (timeValidity) {
+                                alert("নির্দেশনা", alertMsg) {
+                                }.show()
+                            }
+                        } else {
                             alert("নির্দেশনা", alertMsg) {
                             }.show()
                         }
-                    } else {
-                        alert("নির্দেশনা", alertMsg) {
-                        }.show()
                     }
                 }
             }
@@ -622,7 +629,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     private fun pickupBottomSheet(){
         val tag: String = ToggleButtonPickupBottomSheet.tag
-        val dialog: ToggleButtonPickupBottomSheet = ToggleButtonPickupBottomSheet.newInstance()
+        val dialog: ToggleButtonPickupBottomSheet = ToggleButtonPickupBottomSheet.newInstance(weightRangeId)
         dialog.show(childFragmentManager, tag)
         dialog.onCollectionTypeSelected = { isPickup, pickupLocation ->
             dialog.dismiss()
@@ -895,16 +902,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     }
 
-    private fun getCollectionCharge() {
-        viewModel.getCollectionCharge(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { charge ->
-            collectionChargeApi = charge.toDouble()
-
-            //হাবে ড্রপ\n(৫ টাকা সেভ)
-            //val hubDropMsg = "হাবে ড্রপ করব<br/>(<font color='#f05a2b'>${DigitConverter.toBanglaDigit(collectionChargeApi.toInt())}৳</font> সেভ)"
-            //val hubDropMsg = "হাবে ড্রপ (${DigitConverter.toBanglaDigit(collectionChargeApi.toInt())} টাকা সেভ)"
-            //hubDropMsg2.text = HtmlCompat.fromHtml(hubDropMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
-            //toggleButtonPickup1.text = HtmlCompat.fromHtml(hubDropMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
-            //toggleButtonPickup1.text = hubDropMsg
+    private fun getCourierUsersInformation() {
+        viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            collectionChargeApi = model.collectionCharge
+            merchantDistrict = model.districtId
         })
     }
 
@@ -958,36 +959,35 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             val weightAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, weightList)
             spinnerWeight.adapter = weightAdapter
             spinnerWeight.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                }
-
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-
                     if (p2 != 0) {
-
                         val model2 = list[p2 - 1]
                         weight = model2.weight
-                        deliveryTypeAdapter.clearSelectedItemPosition()
-                        deliveryTypeList.clear()
-                        deliveryTypeList.addAll(model2.weightRangeWiseData)
-                        deliveryTypeAdapter.notifyDataSetChanged()
                         isWeightSelected = true
                         deliveryType = ""
+
+                        var filterDeliveryTypeList = model2.weightRangeWiseData
+                        if (merchantDistrict != 14) {
+                            filterDeliveryTypeList = model2.weightRangeWiseData.filterNot { it.type == "express" }
+                        }
+                        deliveryTypeAdapter.initLoad(filterDeliveryTypeList)
+                        deliveryTypeAdapter.selectPreSelection()
                     } else {
                         isWeightSelected = false
                         deliveryType = ""
                         if (list.isNotEmpty()) {
-                            deliveryTypeList.clear()
-                            deliveryTypeList.addAll(list.first().weightRangeWiseData)
-                            deliveryTypeAdapter.clearSelectedItemPosition()
-                            deliveryTypeAdapter.notifyDataSetChanged()
+                            val model2 = list.first()
+                            var filterDeliveryTypeList = model2.weightRangeWiseData
+                            if (merchantDistrict != 14) {
+                                filterDeliveryTypeList = model2.weightRangeWiseData.filterNot { it.type == "express" }
+                            }
+                            deliveryTypeAdapter.initLoad(filterDeliveryTypeList)
                         }
                     }
                 }
             }
         })
-
     }
 
     private fun getPickupLocation() {
@@ -1345,11 +1345,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             context?.showToast("কালেকশন অ্যামাউন্ট সার্ভিস চার্জ থেকে বেশি হতে হবে")
             return false
         }
-        // Hub drop is must for weight > 5kg
-        if (weightRangeId > 6 && !isOfficeDrop) {
-            context?.showToast("পার্সেলের ওজন ৫ কেজির উপরে হলে কালেকশন হাবে ড্রপ করতে হবে")
-            return false
-        }
+
         if (!isAgreeTerms) {
             context?.showToast("শর্তাবলী মেনে অর্ডার দিন")
             return false
@@ -1359,6 +1355,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             pickupBottomSheet()
             return false
         }
+
+        // Hub drop is must for weight > 5kg
+        /*if (weightRangeId > 6 && !isOfficeDrop) {
+            context?.showToast("পার্সেলের ওজন ৫ কেজির উপরে হলে কালেকশন হাবে ড্রপ করতে হবে")
+            isCollectionTypeSelected = false
+            return false
+        }*/
 
         if (!isOfficeDrop) {
             if (!isCollectionLocationSelected) {
@@ -1374,6 +1377,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 return false
             }
         }
+
         return true
     }
 

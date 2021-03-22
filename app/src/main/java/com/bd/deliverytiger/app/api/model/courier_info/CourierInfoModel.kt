@@ -76,6 +76,10 @@ data class CourierInfoModel(
     var offerBkashDiscountDhaka: Double,
     @SerializedName("offerBkashDiscountOutSideDhaka")
     var offerBkashDiscountOutSideDhaka: Double,
+    @SerializedName("districtId")
+    var districtId: Int = 0,
+    @SerializedName("thanaId")
+    var thanaId: Int = 0,
 
     //Internal
     var isOfferTaken: Boolean = false
