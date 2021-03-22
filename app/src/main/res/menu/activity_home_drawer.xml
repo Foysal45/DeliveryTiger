@@ -16,6 +16,11 @@
             android:title="@string/service_bill_pay" />
 
         <item
+            android:id="@+id/nav_payment_request"
+            android:icon="@drawable/ic_history_cod"
+            android:title="@string/payment_request" />
+
+        <item
             android:id="@+id/nav_payment_history"
             android:icon="@drawable/ic_history_cod"
             android:title="@string/payment_statement" />

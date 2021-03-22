@@ -58,6 +58,7 @@ import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
+import com.bd.deliverytiger.app.ui.payment_request.PaymentStatementMenuFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
@@ -636,6 +637,15 @@ class HomeActivity : AppCompatActivity(),
                     Timber.d("PaymentHistory already exist")
                 } else {
                     addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
+                }
+            }
+            R.id.nav_payment_request -> {
+                val currentFragment =
+                    supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is PaymentStatementMenuFragment) {
+                    Timber.d("PaymentStatementMenuFragment already exist")
+                } else {
+                    addFragment(PaymentStatementMenuFragment.newInstance(), PaymentStatementMenuFragment.tag)
                 }
             }
             R.id.nav_shipment_change -> {
