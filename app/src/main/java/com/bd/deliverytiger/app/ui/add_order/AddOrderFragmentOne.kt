@@ -146,6 +146,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var isOpenBoxCheck: Boolean = false
     private var isOfficeDrop: Boolean = false
     private var isCollectionLocationSelected: Boolean = false
+    private var isCollectionTypeSelected: Boolean = false
     private var collectionAmountLimit: Double = 0.0
     private var actualPackagePriceLimit: Double = 0.0
 
@@ -254,8 +255,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         getCollectionCharge()
         fetchOfferCharge()
         getPackagingCharge()
-        getPickupLocation()
         fetchDTOrderGenericLimit()
+        getPickupLocation()
         //fetchCollectionTimeSlot()
 
 
@@ -623,19 +624,24 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         val tag: String = ToggleButtonPickupBottomSheet.tag
         val dialog: ToggleButtonPickupBottomSheet = ToggleButtonPickupBottomSheet.newInstance()
         dialog.show(childFragmentManager, tag)
-
-        dialog.onTogglePickupGroupClicked = { isOfficeDrop , isDialogueDismiss->
-            this.isOfficeDrop = isOfficeDrop
+        dialog.onCollectionTypeSelected = { isPickup, pickupLocation ->
+            dialog.dismiss()
+            if (isPickup) {
+                isOfficeDrop = false
+                collectionDistrictId = pickupLocation.districtId
+                collectionThanaId = pickupLocation.thanaId
+                collectionAddress = pickupLocation.pickupAddress ?: ""
+                collectionAddressET.setText(collectionAddress)
+                if (districtId == collectionDistrictId) {
+                    getDeliveryCharge(14, 10026, 0)
+                }
+                isCollectionLocationSelected = true
+            } else {
+                isOfficeDrop = true
+                isCollectionLocationSelected = false
+            }
             calculateTotalPrice()
-            if (isDialogueDismiss){
-                dialog.dismiss()
-            }
-        }
-
-        dialog.onSpinnerCollectionLocationClicked = { position, isDialogueDismiss->
-            if (isDialogueDismiss){
-                dialog.dismiss()
-            }
+            isCollectionTypeSelected = true
         }
     }
 
@@ -988,22 +994,20 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         viewModel.getPickupLocations(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list ->
             if (list.isNotEmpty()) {
-                setUpCollectionSpinner(list, null, 1)
-                collectionAddressET.visibility = View.GONE
+                //setUpCollectionSpinner(list, null, 1)
+                //collectionAddressET.visibility = View.GONE
                 isPickupLocationListAvailable = true
                 SessionManager.isPickupLocationAdded = true
             } else {
-                getDistrictThanaOrAria(14)
-                collectionAddressET.visibility = View.VISIBLE
+                //getDistrictThanaOrAria(14)
+                //collectionAddressET.visibility = View.VISIBLE
                 isPickupLocationListAvailable = false
                 SessionManager.isPickupLocationAdded = false
             }
-
             if (!isPickupLocationFirstLoad) {
                 isPickupLocationFirstLoad = true
                 isProfileComplete = checkProfileData()
             }
-
         })
     }
 
@@ -1014,16 +1018,16 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         })
     }
 
-    private fun fetchCollectionTimeSlot() {
-        viewModel.fetchCollectionTimeSlot().observe(viewLifecycleOwner, Observer { list ->
-            setUpCollectionSlotSpinner(list)
-        })
-    }
-
     private fun fetchOfferCharge() {
         viewModel.fetchOfferCharge(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
             isShipmentChargeFree = model.isDeliveryCharge
             relationType = model.relationType
+        })
+    }
+
+    private fun fetchCollectionTimeSlot() {
+        viewModel.fetchCollectionTimeSlot().observe(viewLifecycleOwner, Observer { list ->
+            setUpCollectionSlotSpinner(list)
         })
     }
 
@@ -1350,7 +1354,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             context?.showToast("শর্তাবলী মেনে অর্ডার দিন")
             return false
         }
-        pickupBottomSheet()
+
+        if (!isCollectionTypeSelected) {
+            pickupBottomSheet()
+            return false
+        }
+
         if (!isOfficeDrop) {
             if (!isCollectionLocationSelected) {
                 context?.showToast("কালেকশন লোকেশন নির্বাচন করুন")
@@ -1365,7 +1374,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 return false
             }
         }
-
         return true
     }
 

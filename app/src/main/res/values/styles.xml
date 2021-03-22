@@ -118,4 +118,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>  //Activated color
     </style>
 
+    <style name="outlinedBoxTheme" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
+    <style name="outlineBtnStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:theme">@style/outlinedBoxTheme</item>
+    </style>
+
 </resources>
