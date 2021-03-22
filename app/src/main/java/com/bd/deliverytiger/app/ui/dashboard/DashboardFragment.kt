@@ -85,7 +85,7 @@ class DashboardFragment : Fragment() {
 
     private var showOrderPopup: Boolean = false
     private var instantPaymentOTPLimit: Int = 0
-    private var instantPaymentHourLimit: Int = 0
+    private var instantPaymentHourLimit: String = "12-24"
 
     private var isOTPRequested: Boolean = false
     private var netAmount: Int = 0
@@ -143,7 +143,7 @@ class DashboardFragment : Fragment() {
         homeViewModel.bannerInfo.observe(viewLifecycleOwner, Observer { model ->
             //showOrderPopup = model.showOrderPopup
             instantPaymentOTPLimit = model.instantPaymentOTPLimit
-            instantPaymentHourLimit = model.instantPaymentHourLimit
+            instantPaymentHourLimit = model.instantPaymentHourLimitRange ?: "12-24"
 
             val bannerModel = model.bannerModel
             showBanner(bannerModel)
