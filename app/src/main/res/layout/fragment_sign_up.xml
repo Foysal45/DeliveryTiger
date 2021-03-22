@@ -73,14 +73,13 @@
                     android:orientation="vertical">
 
                     <EditText
-                        android:id="@+id/etSignUpMobileNo"
+                        android:id="@+id/etCompanyName"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/login_view_height"
                         android:background="@drawable/bg_login_top_edit_text"
-                        android:hint="মোবাইল নম্বর লিখুন"
-                        android:maxLength="11"
+                        android:hint="কোম্পানির নাম"
                         android:importantForAutofill="no"
-                        android:inputType="phone"
+                        android:inputType="text"
                         android:paddingStart="16dp"
                         android:paddingTop="8dp"
                         android:paddingEnd="16dp"
@@ -99,11 +98,37 @@
                         android:background="@color/login_title_color" />
 
                     <EditText
+                        android:id="@+id/etSignUpMobileNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_view_height"
+                        android:background="@drawable/bg_login_top_edit_text"
+                        android:hint="মোবাইল নম্বর"
+                        android:maxLength="11"
+                        android:importantForAutofill="no"
+                        android:inputType="phone"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
+                        app:drawableEndCompat="@drawable/ic_star"
+                        app:drawableTint="@color/red"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etCompanyName" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/login_title_color" />
+
+                    <EditText
                         android:id="@+id/etSignUpPassword"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/login_view_height"
                         android:background="@drawable/bg_login_middle_edit_text"
-                        android:hint="পাসওয়ার্ড লিখুন"
+                        android:hint="পাসওয়ার্ড"
                         android:importantForAutofill="no"
                         android:inputType="textPassword"
                         android:paddingStart="16dp"
@@ -116,7 +141,7 @@
                         app:drawableTint="@color/red"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo"
+                        app:layout_constraintTop_toBottomOf="@id/etSignUpMobileNo"
                         android:maxLength="30"
                         />
 
@@ -130,7 +155,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/login_view_height"
                         android:background="@drawable/bg_login_bottom_edit_text"
-                        android:hint="পুনরায় পাসওয়ার্ড লিখুন"
+                        android:hint="পুনরায় পাসওয়ার্ড"
                         android:importantForAutofill="no"
                         android:inputType="textPassword"
                         android:paddingStart="16dp"
@@ -143,7 +168,7 @@
                         app:drawableTint="@color/red"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etLoginMobileNo"
+                        app:layout_constraintTop_toBottomOf="@id/etSignUpPassword"
                         android:maxLength="30"
                         />
 

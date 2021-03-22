@@ -37,6 +37,7 @@ class SignUpOTPFragment : Fragment() {
     private lateinit var OTPInterface: LoginInterface
     private var progressDialog: ProgressDialog? = null
 
+    private var companyName: String = ""
     private var userMobile: String = ""
     private var userPassword: String = ""
     private var referCode: String = ""
@@ -45,7 +46,8 @@ class SignUpOTPFragment : Fragment() {
     private var knowingSource: String = ""
 
     companion object {
-        fun newInstance(userMobile: String, userPassword: String, referCode: String, bkashNumber: String, preferredPaymentCycle: String, knowingSource: String): SignUpOTPFragment = SignUpOTPFragment().apply {
+        fun newInstance(companyName: String, userMobile: String, userPassword: String, referCode: String, bkashNumber: String, preferredPaymentCycle: String, knowingSource: String): SignUpOTPFragment = SignUpOTPFragment().apply {
+            this.companyName = companyName
             this.userMobile = userMobile
             this.userPassword = userPassword
             this.referCode = referCode
@@ -151,7 +153,7 @@ class SignUpOTPFragment : Fragment() {
     private fun registerUser() {
 
         val loginInterface = RetrofitSingleton.getInstance(mContext).create(LoginInterface::class.java)
-        val signUpReqBody = SignUpReqBody(userMobile, userPassword, referCode, bkashNumber, preferredPaymentCycle, knowingSource)
+        val signUpReqBody = SignUpReqBody(userMobile, userPassword, referCode, bkashNumber, preferredPaymentCycle, knowingSource, companyName)
         loginInterface.userUserRegister(signUpReqBody).enqueue(object : Callback<GenericResponse<SignUpResponse>> {
             override fun onFailure(call: Call<GenericResponse<SignUpResponse>>, t: Throwable) {
                 //Timber.e("userUserRegister", "failed " + t.message)
