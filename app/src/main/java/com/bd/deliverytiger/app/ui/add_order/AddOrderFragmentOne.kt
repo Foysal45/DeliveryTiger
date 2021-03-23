@@ -639,9 +639,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 collectionThanaId = pickupLocation.thanaId
                 collectionAddress = pickupLocation.pickupAddress ?: ""
                 collectionAddressET.setText(collectionAddress)
-                if (districtId == collectionDistrictId) {
-                    getDeliveryCharge(14, 10026, 0)
-                }
                 isCollectionLocationSelected = true
             } else {
                 isOfficeDrop = true
@@ -769,7 +766,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 } else {
                     etAriaPostOfficeLayout.visibility = View.GONE
                 }
-                getDeliveryCharge(districtId, thanaId, 0)
+                if (districtId == merchantDistrict) {
+                    getDeliveryCharge(14, 10026, 0)
+                } else {
+                    getDeliveryCharge(districtId, thanaId, 0)
+                }
             } else if (track == 3) {
                 if (thanaOrAriaList[listPostion].postalCode != null) {
                     if (thanaOrAriaList[listPostion].postalCode!!.isNotEmpty()) {

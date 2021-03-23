@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:padding="8dp"
-        android:text="কালেকশন টাইপ"
+        android:text="কিভাবে প্রোডাক্ট কালেক্ট করা হবে?"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_16"
         android:textStyle="bold" />
