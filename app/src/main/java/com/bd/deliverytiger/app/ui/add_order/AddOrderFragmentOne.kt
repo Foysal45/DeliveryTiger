@@ -26,6 +26,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
@@ -91,9 +92,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private lateinit var totalLayout: LinearLayout
     private lateinit var deliveryDatePicker: TextView
     private lateinit var collectionDatePicker: TextView
-    private lateinit var hubDropLayout: ConstraintLayout
-    private lateinit var checkOfficeDrop: AppCompatCheckBox
-    private lateinit var hubDropMsg2: TextView
+
     private lateinit var spinnerCollectionLocation: AppCompatSpinner
     private lateinit var orderPlaceBtn: TextView
 
@@ -144,7 +143,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var payPackagingCharge: Double = 0.0
     private var payActualPackagePrice: Double = 0.0
     private var isOpenBoxCheck: Boolean = false
-    private var isOfficeDrop: Boolean = false
+    private var isOfficeDrop: Boolean = true
     private var isCollectionLocationSelected: Boolean = false
     private var isCollectionTypeSelected: Boolean = false
     private var collectionAmountLimit: Double = 0.0
@@ -242,9 +241,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         totalLayout = view.findViewById(R.id.payment_details)
         deliveryDatePicker = view.findViewById(R.id.deliveryDatePicker)
         collectionDatePicker = view.findViewById(R.id.collectionDatePicker)
-        hubDropLayout = view.findViewById(R.id.hubDropLayout)
-        checkOfficeDrop = view.findViewById(R.id.checkOfficeDrop)
-        hubDropMsg2 = view.findViewById(R.id.hubDropMsg2)
         spinnerCollectionLocation = view.findViewById(R.id.spinnerCollectionLocation)
         orderPlaceBtn = view.findViewById(R.id.orderPlaceBtn)
 
@@ -301,7 +297,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     deliveryDatePicker.visibility = View.GONE
                     collectionDatePicker.visibility = View.GONE
                     //hubDropLayout.visibility = View.GONE
-                    checkOfficeDrop.isChecked = false
                     deliveryDate = ""
                     deliveryDatePicker.text = ""
                     collectionDate = ""
@@ -312,7 +307,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     deliveryDatePicker.visibility = View.VISIBLE
                     collectionDatePicker.visibility = View.VISIBLE
                     //hubDropLayout.visibility = View.GONE
-                    checkOfficeDrop.isChecked = false
                     deliveryDate = ""
                     deliveryDatePicker.text = ""
                     collectionDate = ""
@@ -382,12 +376,14 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 when (checkedId) {
                     R.id.toggle_button_1 -> {
                         collectionAmountET.visibility = View.GONE
+                        actualPackageAmountET.visibility = View.VISIBLE
                         isCollection = false
                         orderType = "Only Delivery"
                         calculateTotalPrice()
                     }
                     R.id.toggle_button_2 -> {
                         collectionAmountET.visibility = View.VISIBLE
+                        actualPackageAmountET.visibility = View.GONE
                         collectionAmountET.requestFocus()
                         isCollection = true
                         orderType = "Delivery Taka Collection"
@@ -426,14 +422,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     spinnerPackaging.setSelection(1, false)
                 }
             }
-        }
-
-        hubDropLayout.setOnClickListener {
-            checkOfficeDrop.toggle()
-        }
-        checkOfficeDrop.setOnCheckedChangeListener { buttonView, isChecked ->
-            isOfficeDrop = isChecked
-            calculateTotalPrice()
         }
 
         checkTermsTV.text = HtmlCompat.fromHtml("আমি <font color='#00844A'>শর্তাবলী</font> মেনে নিলাম", HtmlCompat.FROM_HTML_MODE_LEGACY)
@@ -1254,7 +1242,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }
         hideKeyboard()
 
-        //mockUserData()
         //go = true
 
         return go
@@ -1265,40 +1252,16 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         collectionName = productNameET.text.toString()
         collectionAddress = collectionAddressET.text.toString()
 
+        if (!isOrderTypeSelected) {
+            context?.showToast("অর্ডার টাইপ সিলেক্ট করুন")
+            return false
+        }
+
         if (!isWeightSelected) {
             context?.showToast("প্যাকেজ এর ওজন নির্বাচন করুন")
             return false
         }
 
-        val payActualPackagePriceText = actualPackageAmountET.text.toString().trim()
-        if (payActualPackagePriceText.isEmpty()) {
-            context?.showToast("প্যাকেজের দাম লিখুন")
-            return false
-        } else {
-            try {
-                payActualPackagePrice = payActualPackagePriceText.toDouble()
-                if (isCollection) {
-                    /*if (payCollectionAmount > payActualPackagePrice) {
-                        context?.showToast("কালেকশন অ্যামাউন্ট অ্যাকচুয়াল প্যাকেজ প্রাইস থেকে বেশি হতে পারবে না")
-                        return false
-                    }*/
-                } else {
-                    if (payActualPackagePrice > actualPackagePriceLimit) {
-                        context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস ${DigitConverter.toBanglaDigit(actualPackagePriceLimit.toInt())} টাকার থেকে বেশি হতে পারবে না")
-                        return false
-                    }
-                }
-
-            } catch (e: NumberFormatException) {
-                e.printStackTrace()
-                context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস লিখুন")
-                return false
-            }
-        }
-        if (!isOrderTypeSelected) {
-            context?.showToast("অর্ডার টাইপ সিলেক্ট করুন")
-            return false
-        }
         if (isCollection) {
             val collectionAmount = collectionAmountET.text.toString()
             if (collectionAmount.isEmpty()) {
@@ -1316,7 +1279,30 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 context?.showToast("কালেকশন অ্যামাউন্ট ${DigitConverter.toBanglaDigit(collectionAmountLimit.toInt())} টাকার থেকে বেশি হতে পারবে না")
                 return false
             }
+            actualPackageAmountET.setText(payCollectionAmount.toInt().toString())
         }
+
+
+        val payActualPackagePriceText = actualPackageAmountET.text.toString().trim()
+        if (payActualPackagePriceText.isEmpty()) {
+            context?.showToast("প্যাকেজের দাম লিখুন")
+            return false
+        } else {
+            try {
+                payActualPackagePrice = payActualPackagePriceText.toDouble()
+                if (!isCollection) {
+                    if (payActualPackagePrice > actualPackagePriceLimit) {
+                        context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস ${DigitConverter.toBanglaDigit(actualPackagePriceLimit.toInt())} টাকার থেকে বেশি হতে পারবে না")
+                        return false
+                    }
+                }
+            } catch (e: NumberFormatException) {
+                e.printStackTrace()
+                context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস লিখুন")
+                return false
+            }
+        }
+
         if (collectionName.isEmpty()) {
             context?.showToast("নিজস্ব রেফারেন্স নম্বর / ইনভয়েস লিখুন")
             return false

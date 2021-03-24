@@ -121,9 +121,9 @@ class OrderTrackingFragment : Fragment() {
         })
 
         // Test
-        /*if (BuildConfig.DEBUG) {
-            binding?.orderIdET?.setText("DT-1") //DT-12222 01715269261 DT-314560
-        }*/
+        if (BuildConfig.DEBUG) {
+            binding?.orderIdET?.setText("DT-357538") //DT-12222 01715269261 DT-314560
+        }
     }
 
     private fun callNumber(number: String) {
