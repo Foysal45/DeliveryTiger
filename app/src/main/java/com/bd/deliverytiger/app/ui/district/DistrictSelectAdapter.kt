@@ -26,8 +26,8 @@ class DistrictSelectAdapter(var mContext: Context, var districtList: ArrayList<D
     }
 
     inner class ViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
-        val spinnerItemId: TextView = itemView.findViewById(R.id.district_spinner_item_id)
-        val spinnerItemIdEng: TextView = itemView.findViewById(R.id.district_spinner_item_id_english)
+        val spinnerItemId: TextView = itemView.findViewById(R.id.locationName)
+        val spinnerItemIdEng: TextView = itemView.findViewById(R.id.locationNameEng)
 
         init {
             itemView.setOnClickListener{

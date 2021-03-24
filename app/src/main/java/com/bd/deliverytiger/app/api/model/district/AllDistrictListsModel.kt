@@ -3,7 +3,7 @@ package com.bd.deliverytiger.app.api.model.district
 
 import com.google.gson.annotations.SerializedName
 
-data class DistrictListsProfileModel(
+data class AllDistrictListsModel(
     @SerializedName("districtId")
     var districtId: Int = 0,
     @SerializedName("district")
@@ -23,5 +23,7 @@ data class DistrictListsProfileModel(
     @SerializedName("isActiveForCorona")
     var isActiveForCorona: Boolean = false,
     @SerializedName("isPickupLocation")
-    var isPickupLocation: Boolean = false
+    var isPickupLocation: Boolean = false,
+    @SerializedName("districtPriority")
+    var districtPriority: Int = 0
 )
