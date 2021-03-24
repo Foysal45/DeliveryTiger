@@ -136,6 +136,8 @@ class AddProductBottomSheet : BottomSheetDialogFragment() {
                         LocationData(
                             model.districtId,
                             model.districtBng,
+                            model.district,
+                            "",
                             model.district.toLowerCase(Locale.US)
                         )
                     )
@@ -145,7 +147,7 @@ class AddProductBottomSheet : BottomSheetDialogFragment() {
                 dialog.show(childFragmentManager, LocationSelectionDialog.tag)
                 dialog.onLocationPicked = { _, model ->
                     selectedDistrictId = model.id
-                    districtName = model.displayName
+                    districtName = model.displayNameBangla!!
                     binding?.etDistrict?.setText(districtName)
                     Timber.d("districtName: $districtName districtId: $selectedDistrictId")
                 }

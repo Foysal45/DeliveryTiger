@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
-import com.bd.deliverytiger.app.api.model.district.DistrictListsProfileModel
+import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
@@ -90,9 +90,9 @@ class ProfileViewModel(private val repository: AppRepository): ViewModel() {
         return responseBody
     }
 
-    fun loadAllDistricts(): LiveData<List<DistrictListsProfileModel>> {
+    fun loadAllDistricts(): LiveData<List<AllDistrictListsModel>> {
         viewState.value = ViewState.ProgressState(true)
-        val responseData = MutableLiveData<List<DistrictListsProfileModel>>()
+        val responseData = MutableLiveData<List<AllDistrictListsModel>>()
 
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.loadAllDistricts()
@@ -100,9 +100,7 @@ class ProfileViewModel(private val repository: AppRepository): ViewModel() {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {
                     is NetworkResponse.Success -> {
-                        if (response.body.model != null) {
-                            responseData.value = response.body.model
-                        }
+                        responseData.value = response.body.model
                     }
                     is NetworkResponse.ServerError -> {
                         val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"

@@ -24,7 +24,7 @@ class ThanaOrAriaAdapter(private var context: Context,private var thanaOrAriaLis
 
 
     inner  class mViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val district_spinner_item_id: TextView = itemView.findViewById(R.id.district_spinner_item_id)
+        val district_spinner_item_id: TextView = itemView.findViewById(R.id.locationName)
 
         init {
             itemView.setOnClickListener {

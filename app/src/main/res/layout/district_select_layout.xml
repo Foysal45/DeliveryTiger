@@ -1,52 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
-    >
+    <TextView
+        android:id="@+id/locationName"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingStart="8dp"
+        android:paddingEnd="4dp"
+        android:textColor="@color/black_80"
+        android:textSize="14sp"
+        tools:text="জামালপুর-(সদর)-পোষ্ট-অফিস" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_weight="5"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:paddingEnd="12dp"
-            android:maxLines="1"
-            android:textSize="15sp"
-            android:textColor="@color/black_80"
-            android:paddingStart="12dp"
-            android:id="@+id/district_spinner_item_id"
-            android:layout_width="match_parent"
-            android:gravity="start"
-            tools:text="hello"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_weight="5"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:paddingEnd="12dp"
-            android:maxLines="1"
-            android:textSize="15sp"
-            android:textColor="@color/black_80"
-            android:paddingStart="12dp"
-            android:id="@+id/district_spinner_item_id_english"
-            android:layout_width="match_parent"
-            android:gravity="end"
-            tools:text="hello"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-
-    <View
-            android:layout_marginBottom="4dp"
-            android:background="@color/separator"
-            android:layout_width="match_parent"
-            android:layout_height=".5dp"/>
+    <TextView
+        android:id="@+id/locationNameEng"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:gravity="center_vertical|end"
+        android:maxLines="1"
+        android:paddingStart="4dp"
+        android:paddingEnd="8dp"
+        android:textColor="@color/black_80"
+        android:textSize="14sp"
+        tools:text="JAMALPUR-SADAR-Post-Office" />
 
 </LinearLayout>
+

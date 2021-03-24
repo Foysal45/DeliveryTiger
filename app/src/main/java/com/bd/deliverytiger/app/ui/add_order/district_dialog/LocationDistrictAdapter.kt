@@ -40,7 +40,8 @@ class LocationDistrictAdapter(private var dataList: MutableList<LocationData>): 
 
         if (holder is ViewHolder) {
             val model = dataList[position]
-            holder.title.text = model.displayName
+            holder.displayNameBangla.text = model.displayNameBangla
+            holder.displayNameEnglish.text = model.displayNameEng
         }
     }
 
@@ -49,7 +50,8 @@ class LocationDistrictAdapter(private var dataList: MutableList<LocationData>): 
      */
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        internal val title: TextView = view.findViewById(R.id.district_spinner_item_id)
+        internal val displayNameBangla: TextView = view.findViewById(R.id.locationName)
+        internal val displayNameEnglish: TextView = view.findViewById(R.id.locationNameEng)
 
         init {
             view.setOnClickListener {

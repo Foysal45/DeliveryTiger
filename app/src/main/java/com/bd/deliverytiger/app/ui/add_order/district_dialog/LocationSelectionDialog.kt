@@ -13,10 +13,12 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.location.LocationData
+import com.bd.deliverytiger.app.databinding.FragmentLocationSelectionDialogBinding
 import com.bd.deliverytiger.app.utils.hideKeyboard
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -26,6 +28,8 @@ import java.util.*
 import kotlin.concurrent.thread
 
 class LocationSelectionDialog : BottomSheetDialogFragment() {
+
+    private var binding: FragmentLocationSelectionDialogBinding? = null
 
     private lateinit var crossBtn: ImageView
     private lateinit var searchEditText: EditText
@@ -54,8 +58,10 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
         val tag: String = LocationSelectionDialog::class.java.name
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_location_selection_dialog, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return FragmentLocationSelectionDialogBinding.inflate(inflater, container, false).also {
+            binding = it
+        }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,6 +78,7 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
         val locationAdapter = LocationDistrictAdapter(dataList)
         with(placeListRV) {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
             adapter = locationAdapter
         }
         locationAdapter.onItemClicked = { position, value ->
@@ -162,5 +169,14 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
         //extraSpace.minimumHeight = (metrics.heightPixels)
     }
 
+    override fun onStop() {
+        super.onStop()
+        workRunnable?.let { handler.removeCallbacks(it) }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
 
 }
