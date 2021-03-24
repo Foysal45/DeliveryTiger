@@ -32,6 +32,7 @@ import retrofit2.Response
 
 class SignUpFragment() : Fragment(), View.OnClickListener {
 
+    private lateinit var etCompanyName: EditText
     private lateinit var etSignUpMobileNo: EditText
     private lateinit var etSignUpPassword: EditText
     private lateinit var etSignUpConfirmPassword: EditText
@@ -66,6 +67,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         etSignUpMobileNo = view.findViewById(R.id.etSignUpMobileNo)
+        etCompanyName = view.findViewById(R.id.etCompanyName)
         etSignUpPassword = view.findViewById(R.id.etSignUpPassword)
         etSignUpConfirmPassword = view.findViewById(R.id.etSignUpConfirmPassword)
         referCodeET = view.findViewById(R.id.referCodeET)
@@ -237,6 +239,11 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     private fun validate(): Boolean {
         hideSoftKeyBoard(requireActivity())
         var go = true
+        if (etCompanyName.text.toString().isEmpty()) {
+            showShortToast(context, getString(R.string.write_name))
+            go = false
+            etCompanyName.requestFocus()
+        }
         if (etSignUpMobileNo.text.toString().isEmpty()) {
             showShortToast(context, getString(R.string.write_phone_number))
             go = false
@@ -276,13 +283,14 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
 
     private fun goToSignUpOTP() {
 
+        val companyName = etCompanyName.text.toString()
         val mobile = etSignUpMobileNo.text.toString()
         val password = etSignUpPassword.text.toString()
         val referCode = referCodeET.text.toString()
         val bkashNumber = bkashNumberET.text.toString().trim()
         val knowingSource: String = if (knownSourceSpinner.selectedItemPosition == 0) "" else knownSourceSpinner.selectedItem.toString()
 
-        val fragment = SignUpOTPFragment.newInstance(mobile, password, referCode, bkashNumber, preferredPaymentCycle, knowingSource)
+        val fragment = SignUpOTPFragment.newInstance(companyName, mobile, password, referCode, bkashNumber, preferredPaymentCycle, knowingSource)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpOTPFragment.tag)
         ft?.commit()

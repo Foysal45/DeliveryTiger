@@ -15,6 +15,8 @@ data class SignUpReqBody(
     var preferredPaymentCycle: String = "",
     @SerializedName("knowingSource")
     var knowingSource: String = "",
+    @SerializedName("companyName")
+    var companyName: String = "company name",
     @SerializedName("registrationFrom")
     var registrationFrom: String = "app",
 
