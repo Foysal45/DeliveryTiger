@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -25,6 +26,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
@@ -94,14 +96,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private lateinit var totalLayout: LinearLayout
     private lateinit var deliveryDatePicker: TextView
     private lateinit var collectionDatePicker: TextView
-    private lateinit var hubDropLayout: ConstraintLayout
-    private lateinit var checkOfficeDrop: AppCompatCheckBox
-    private lateinit var hubDropMsg2: TextView
+
     private lateinit var spinnerCollectionLocation: AppCompatSpinner
     private lateinit var orderPlaceBtn: TextView
 
     private lateinit var deliveryTypeAdapter: DeliveryTypeAdapter
-    private var handler: Handler = Handler()
+    private var handler: Handler = Handler(Looper.getMainLooper())
     private var runnable: Runnable = Runnable { }
 
     // Step 1
@@ -123,7 +123,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     // Step 2
     private val packagingDataList: MutableList<PackagingData> = mutableListOf()
-    private val deliveryTypeList: MutableList<WeightRangeWiseData> = mutableListOf()
 
     private var codChargePercentage: Double = 0.0
     private var codChargeMin: Int = 0
@@ -151,7 +150,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var payPackagingCharge: Double = 0.0
     private var payActualPackagePrice: Double = 0.0
     private var isOpenBoxCheck: Boolean = false
-    private var isOfficeDrop: Boolean = false
+    private var isOfficeDrop: Boolean = true
     private var isCollectionLocationSelected: Boolean = false
     private var isCollectionTypeSelected: Boolean = false
     private var collectionAmountLimit: Double = 0.0
@@ -196,6 +195,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var merchantCalculatedCollectionAmount: Int = 0
     private var merchantServiceCharge: Int = 0
     private var adjustBalance: Int = 0
+
+    private var merchantDistrict: Int = 0
+    private var selectedDeliveryType = ""
 
     private val viewModel: AddOrderViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
@@ -246,9 +248,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         totalLayout = view.findViewById(R.id.payment_details)
         deliveryDatePicker = view.findViewById(R.id.deliveryDatePicker)
         collectionDatePicker = view.findViewById(R.id.collectionDatePicker)
-        hubDropLayout = view.findViewById(R.id.hubDropLayout)
-        checkOfficeDrop = view.findViewById(R.id.checkOfficeDrop)
-        hubDropMsg2 = view.findViewById(R.id.hubDropMsg2)
         spinnerCollectionLocation = view.findViewById(R.id.spinnerCollectionLocation)
         orderPlaceBtn = view.findViewById(R.id.orderPlaceBtn)
 
@@ -260,7 +259,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         // Fetch Charge Data
         getAllDistrictsList()
         getBreakableCharge()
-        getCollectionCharge()
+        getCourierUsersInformation()
         fetchOfferCharge()
         getPackagingCharge()
         fetchDTOrderGenericLimit()
@@ -268,7 +267,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         //fetchCollectionTimeSlot()
 
 
-        deliveryTypeAdapter = DeliveryTypeAdapter(requireContext(), deliveryTypeList)
+        deliveryTypeAdapter = DeliveryTypeAdapter()
         with(deliveryTypeRV) {
             setHasFixedSize(false)
             isNestedScrollingEnabled = false
@@ -285,6 +284,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             logicExpression = model.loginHours?.trim() ?: ""
             dayAdvance = model.dateAdvance ?: ""
             val showHide = model.showHide
+            val deliveryType = model.type ?: ""
 
             // if free delivery is enable && weight <= 1KG
             if (isShipmentChargeFree && weightRangeId <= 2) {
@@ -305,7 +305,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     deliveryDatePicker.visibility = View.GONE
                     collectionDatePicker.visibility = View.GONE
                     //hubDropLayout.visibility = View.GONE
-                    checkOfficeDrop.isChecked = false
                     deliveryDate = ""
                     deliveryDatePicker.text = ""
                     collectionDate = ""
@@ -316,7 +315,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     deliveryDatePicker.visibility = View.VISIBLE
                     collectionDatePicker.visibility = View.VISIBLE
                     //hubDropLayout.visibility = View.GONE
-                    checkOfficeDrop.isChecked = false
                     deliveryDate = ""
                     deliveryDatePicker.text = ""
                     collectionDate = ""
@@ -334,17 +332,20 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 }
                 // Delivery alert msg show
                 3 -> {
-                    if (logicExpression.isNotEmpty()) {
-                        val calendar = Calendar.getInstance()
-                        val hour24 = calendar.get(Calendar.HOUR_OF_DAY)
-                        val timeValidity = executeExpression("$hour24 $logicExpression")
-                        if (timeValidity) {
+                    if (selectedDeliveryType != deliveryType) {
+                        selectedDeliveryType = deliveryType
+                        if (logicExpression.isNotEmpty()) {
+                            val calendar = Calendar.getInstance()
+                            val hour24 = calendar.get(Calendar.HOUR_OF_DAY)
+                            val timeValidity = executeExpression("$hour24 $logicExpression")
+                            if (timeValidity) {
+                                alert("নির্দেশনা", alertMsg) {
+                                }.show()
+                            }
+                        } else {
                             alert("নির্দেশনা", alertMsg) {
                             }.show()
                         }
-                    } else {
-                        alert("নির্দেশনা", alertMsg) {
-                        }.show()
                     }
                 }
             }
@@ -383,12 +384,14 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 when (checkedId) {
                     R.id.toggle_button_1 -> {
                         collectionAmountET.visibility = View.GONE
+                        actualPackageAmountET.visibility = View.VISIBLE
                         isCollection = false
                         orderType = "Only Delivery"
                         calculateTotalPrice()
                     }
                     R.id.toggle_button_2 -> {
                         collectionAmountET.visibility = View.VISIBLE
+                        actualPackageAmountET.visibility = View.GONE
                         collectionAmountET.requestFocus()
                         isCollection = true
                         orderType = "Delivery Taka Collection"
@@ -427,14 +430,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     spinnerPackaging.setSelection(1, false)
                 }
             }
-        }
-
-        hubDropLayout.setOnClickListener {
-            checkOfficeDrop.toggle()
-        }
-        checkOfficeDrop.setOnCheckedChangeListener { buttonView, isChecked ->
-            isOfficeDrop = isChecked
-            calculateTotalPrice()
         }
 
         checkTermsTV.text = HtmlCompat.fromHtml("আমি <font color='#00844A'>শর্তাবলী</font> মেনে নিলাম", HtmlCompat.FROM_HTML_MODE_LEGACY)
@@ -630,7 +625,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     private fun pickupBottomSheet(){
         val tag: String = ToggleButtonPickupBottomSheet.tag
-        val dialog: ToggleButtonPickupBottomSheet = ToggleButtonPickupBottomSheet.newInstance()
+        val dialog: ToggleButtonPickupBottomSheet = ToggleButtonPickupBottomSheet.newInstance(weightRangeId)
         dialog.show(childFragmentManager, tag)
         dialog.onCollectionTypeSelected = { isPickup, pickupLocation ->
             dialog.dismiss()
@@ -640,9 +635,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 collectionThanaId = pickupLocation.thanaId
                 collectionAddress = pickupLocation.pickupAddress ?: ""
                 collectionAddressET.setText(collectionAddress)
-                if (districtId == collectionDistrictId) {
-                    getDeliveryCharge(14, 10026, 0)
-                }
                 isCollectionLocationSelected = true
             } else {
                 isOfficeDrop = true
@@ -856,7 +848,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 } else {
                     etAriaPostOfficeLayout.visibility = View.GONE
                 }
-                getDeliveryCharge(districtId, thanaId, 0)
+                if (districtId == merchantDistrict) {
+                    getDeliveryCharge(14, 10026, 0)
+                } else {
+                    getDeliveryCharge(districtId, thanaId, 0)
+                }
             } else if (track == 3) {
                 if (thanaOrAriaList[listPostion].postalCode != null) {
                     if (thanaOrAriaList[listPostion].postalCode!!.isNotEmpty()) {
@@ -989,16 +985,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     }
 
-    private fun getCollectionCharge() {
-        viewModel.getCollectionCharge(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { charge ->
-            collectionChargeApi = charge.toDouble()
-
-            //হাবে ড্রপ\n(৫ টাকা সেভ)
-            //val hubDropMsg = "হাবে ড্রপ করব<br/>(<font color='#f05a2b'>${DigitConverter.toBanglaDigit(collectionChargeApi.toInt())}৳</font> সেভ)"
-            //val hubDropMsg = "হাবে ড্রপ (${DigitConverter.toBanglaDigit(collectionChargeApi.toInt())} টাকা সেভ)"
-            //hubDropMsg2.text = HtmlCompat.fromHtml(hubDropMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
-            //toggleButtonPickup1.text = HtmlCompat.fromHtml(hubDropMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
-            //toggleButtonPickup1.text = hubDropMsg
+    private fun getCourierUsersInformation() {
+        viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            collectionChargeApi = model.collectionCharge
+            merchantDistrict = model.districtId
         })
     }
 
@@ -1052,36 +1042,35 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             val weightAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, weightList)
             spinnerWeight.adapter = weightAdapter
             spinnerWeight.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                }
-
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-
                     if (p2 != 0) {
-
                         val model2 = list[p2 - 1]
                         weight = model2.weight
-                        deliveryTypeAdapter.clearSelectedItemPosition()
-                        deliveryTypeList.clear()
-                        deliveryTypeList.addAll(model2.weightRangeWiseData)
-                        deliveryTypeAdapter.notifyDataSetChanged()
                         isWeightSelected = true
                         deliveryType = ""
+
+                        var filterDeliveryTypeList = model2.weightRangeWiseData
+                        if (merchantDistrict != 14) {
+                            filterDeliveryTypeList = model2.weightRangeWiseData.filterNot { it.type == "express" }
+                        }
+                        deliveryTypeAdapter.initLoad(filterDeliveryTypeList)
+                        deliveryTypeAdapter.selectPreSelection()
                     } else {
                         isWeightSelected = false
                         deliveryType = ""
                         if (list.isNotEmpty()) {
-                            deliveryTypeList.clear()
-                            deliveryTypeList.addAll(list.first().weightRangeWiseData)
-                            deliveryTypeAdapter.clearSelectedItemPosition()
-                            deliveryTypeAdapter.notifyDataSetChanged()
+                            val model2 = list.first()
+                            var filterDeliveryTypeList = model2.weightRangeWiseData
+                            if (merchantDistrict != 14) {
+                                filterDeliveryTypeList = model2.weightRangeWiseData.filterNot { it.type == "express" }
+                            }
+                            deliveryTypeAdapter.initLoad(filterDeliveryTypeList)
                         }
                     }
                 }
             }
         })
-
     }
 
     private fun getAllDistrictsList(){
@@ -1383,7 +1372,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }
         hideKeyboard()
 
-        //mockUserData()
         //go = true
 
         return go
@@ -1394,40 +1382,16 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         collectionName = productNameET.text.toString()
         collectionAddress = collectionAddressET.text.toString()
 
+        if (!isOrderTypeSelected) {
+            context?.showToast("অর্ডার টাইপ সিলেক্ট করুন")
+            return false
+        }
+
         if (!isWeightSelected) {
             context?.showToast("প্যাকেজ এর ওজন নির্বাচন করুন")
             return false
         }
 
-        val payActualPackagePriceText = actualPackageAmountET.text.toString().trim()
-        if (payActualPackagePriceText.isEmpty()) {
-            context?.showToast("প্যাকেজের দাম লিখুন")
-            return false
-        } else {
-            try {
-                payActualPackagePrice = payActualPackagePriceText.toDouble()
-                if (isCollection) {
-                    /*if (payCollectionAmount > payActualPackagePrice) {
-                        context?.showToast("কালেকশন অ্যামাউন্ট অ্যাকচুয়াল প্যাকেজ প্রাইস থেকে বেশি হতে পারবে না")
-                        return false
-                    }*/
-                } else {
-                    if (payActualPackagePrice > actualPackagePriceLimit) {
-                        context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস ${DigitConverter.toBanglaDigit(actualPackagePriceLimit.toInt())} টাকার থেকে বেশি হতে পারবে না")
-                        return false
-                    }
-                }
-
-            } catch (e: NumberFormatException) {
-                e.printStackTrace()
-                context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস লিখুন")
-                return false
-            }
-        }
-        if (!isOrderTypeSelected) {
-            context?.showToast("অর্ডার টাইপ সিলেক্ট করুন")
-            return false
-        }
         if (isCollection) {
             val collectionAmount = collectionAmountET.text.toString()
             if (collectionAmount.isEmpty()) {
@@ -1445,7 +1409,30 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 context?.showToast("কালেকশন অ্যামাউন্ট ${DigitConverter.toBanglaDigit(collectionAmountLimit.toInt())} টাকার থেকে বেশি হতে পারবে না")
                 return false
             }
+            actualPackageAmountET.setText(payCollectionAmount.toInt().toString())
         }
+
+
+        val payActualPackagePriceText = actualPackageAmountET.text.toString().trim()
+        if (payActualPackagePriceText.isEmpty()) {
+            context?.showToast("প্যাকেজের দাম লিখুন")
+            return false
+        } else {
+            try {
+                payActualPackagePrice = payActualPackagePriceText.toDouble()
+                if (!isCollection) {
+                    if (payActualPackagePrice > actualPackagePriceLimit) {
+                        context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস ${DigitConverter.toBanglaDigit(actualPackagePriceLimit.toInt())} টাকার থেকে বেশি হতে পারবে না")
+                        return false
+                    }
+                }
+            } catch (e: NumberFormatException) {
+                e.printStackTrace()
+                context?.showToast("অ্যাকচুয়াল প্যাকেজ প্রাইস লিখুন")
+                return false
+            }
+        }
+
         if (collectionName.isEmpty()) {
             context?.showToast("নিজস্ব রেফারেন্স নম্বর / ইনভয়েস লিখুন")
             return false
@@ -1475,11 +1462,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             context?.showToast("কালেকশন অ্যামাউন্ট সার্ভিস চার্জ থেকে বেশি হতে হবে")
             return false
         }
-        // Hub drop is must for weight > 5kg
-        if (weightRangeId > 6 && !isOfficeDrop) {
-            context?.showToast("পার্সেলের ওজন ৫ কেজির উপরে হলে কালেকশন হাবে ড্রপ করতে হবে")
-            return false
-        }
+
         if (!isAgreeTerms) {
             context?.showToast("শর্তাবলী মেনে অর্ডার দিন")
             return false
@@ -1489,6 +1472,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             pickupBottomSheet()
             return false
         }
+
+        // Hub drop is must for weight > 5kg
+        /*if (weightRangeId > 6 && !isOfficeDrop) {
+            context?.showToast("পার্সেলের ওজন ৫ কেজির উপরে হলে কালেকশন হাবে ড্রপ করতে হবে")
+            isCollectionTypeSelected = false
+            return false
+        }*/
 
         if (!isOfficeDrop) {
             if (!isCollectionLocationSelected) {
@@ -1504,6 +1494,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 return false
             }
         }
+
         return true
     }
 

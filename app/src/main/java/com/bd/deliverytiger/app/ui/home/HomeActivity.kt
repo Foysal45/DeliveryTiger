@@ -62,7 +62,6 @@ import com.bd.deliverytiger.app.ui.payment_request.PaymentStatementMenuFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
-import com.bd.deliverytiger.app.ui.quick_order.QuickOrderFragment
 import com.bd.deliverytiger.app.ui.referral.ReferralFragment
 import com.bd.deliverytiger.app.ui.return_statement.ReturnStatementFragment
 import com.bd.deliverytiger.app.ui.return_statement.details.ReturnStatementDetailsFragment
@@ -363,7 +362,6 @@ class HomeActivity : AppCompatActivity(),
             val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
             if (currentFragment is DashboardFragment ||
                 currentFragment is AddOrderFragmentOne ||
-                currentFragment is QuickOrderFragment ||
                 currentFragment is ProfileFragment ||
                 currentFragment is DistrictSelectFragment || currentFragment is DistrictThanaAriaSelectFragment ||
                 currentFragment is MapFragment ||

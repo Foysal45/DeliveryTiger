@@ -38,7 +38,6 @@ import com.bd.deliverytiger.app.ui.complain.ComplainFragment
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
-import com.bd.deliverytiger.app.ui.quick_order.QuickOrderFragment
 import com.bd.deliverytiger.app.ui.referral.ReferralFragment
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
@@ -85,7 +84,7 @@ class DashboardFragment : Fragment() {
 
     private var showOrderPopup: Boolean = false
     private var instantPaymentOTPLimit: Int = 0
-    private var instantPaymentHourLimit: Int = 0
+    private var instantPaymentHourLimit: String = "12-24"
 
     private var isOTPRequested: Boolean = false
     private var netAmount: Int = 0
@@ -143,7 +142,7 @@ class DashboardFragment : Fragment() {
         homeViewModel.bannerInfo.observe(viewLifecycleOwner, Observer { model ->
             //showOrderPopup = model.showOrderPopup
             instantPaymentOTPLimit = model.instantPaymentOTPLimit
-            instantPaymentHourLimit = model.instantPaymentHourLimit
+            instantPaymentHourLimit = model.instantPaymentHourLimitRange ?: "12-24"
 
             val bannerModel = model.bannerModel
             showBanner(bannerModel)
@@ -614,7 +613,7 @@ class DashboardFragment : Fragment() {
         dialog.show()
         button1.setOnClickListener {
             dialog.dismiss()
-            addFragment(QuickOrderFragment.newInstance(), QuickOrderFragment.tag)
+            addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
             UserLogger.logGenie("NormalOrder")
         }
         button2.setOnClickListener {

@@ -10,6 +10,7 @@ import com.bd.deliverytiger.app.api.model.accounts.BalanceInfo
 import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
+import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
 import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
@@ -332,33 +333,6 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
         return responseBody
     }
 
-    fun getCollectionCharge(courierUserId: Int): LiveData<Int> {
-
-        viewState.value = ViewState.ProgressState(true)
-        val responseBody = MutableLiveData<Int>()
-
-        repository.getCollectionCharge(courierUserId).enqueue(object : Callback<GenericResponse<Int>> {
-            override fun onFailure(call: Call<GenericResponse<Int>>, t: Throwable) {
-                viewState.value = ViewState.ProgressState(false)
-                viewState.value = ViewState.ShowMessage(message)
-            }
-
-            override fun onResponse(call: Call<GenericResponse<Int>>, response: Response<GenericResponse<Int>>) {
-                if (response.isSuccessful && response.body() != null){
-                    if (response.body()!!.model != null){
-                        responseBody.value = response.body()!!.model
-                    } else {
-                        viewState.value = ViewState.ProgressState(false)
-                        viewState.value = ViewState.ShowMessage(message)
-                    }
-                } else {
-                    viewState.value = ViewState.ProgressState(false)
-                    viewState.value = ViewState.ShowMessage(message)
-                }
-            }
-        })
-        return responseBody
-    }
 
     /*fun fetchCollectionTimeSlot(): LiveData<Int> {
 
@@ -463,6 +437,40 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
         viewState.value = ViewState.ProgressState(true)
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.fetchOfferCharge(courierUserId)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
+    }
+
+    fun getCourierUsersInformation(courierUserId: Int): LiveData<CourierInfoModel> {
+
+        val responseData: MutableLiveData<CourierInfoModel> = MutableLiveData()
+
+        viewState.value = ViewState.ProgressState(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getCourierUsersInformation(courierUserId)
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {

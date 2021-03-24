@@ -173,6 +173,7 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val deliveryManName = "ডেলিভারি করছেন - <b>${model.courierDeliveryMan?.courierDeliveryManName}</b>"
                 binding.deliveryManName.text = HtmlCompat.fromHtml(deliveryManName, HtmlCompat.FROM_HTML_MODE_LEGACY)
                 binding.mobileNumber.text = model.courierDeliveryMan?.courierDeliveryManMobile
+                binding.courierComment.text = model.courierDeliveryMan?.courierComment
             } else {
                 binding.deliveryManInfo.isVisible = false
             }

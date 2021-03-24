@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp">
+    android:layout_height="wrap_content"
+    android:minHeight="90dp"
+    >
 
     <TextView
         android:id="@+id/date"
@@ -150,11 +152,20 @@
                 android:gravity="center"
                 />
 
+            <TextView
+                android:id="@+id/courierComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="#414042"
+                android:textSize="12sp"
+                tools:text="Package is on the way to delivery by Phoniksion(8801891907090)"
+                />
+
         </LinearLayout>
 
-
     </LinearLayout>
-    
 
     <TextView
         android:id="@+id/statusName"

@@ -6,7 +6,7 @@
     android:layout_margin="3dp">
 
     <ImageView
-        android:id="@+id/item_view_delivery_type_image"
+        android:id="@+id/deliveryTypeImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
@@ -14,42 +14,5 @@
         tools:srcCompat="@drawable/ic_sameday"
         tools:background="@color/black_5"
         />
-
-    <!--<TextView
-        android:id="@+id/item_view_delivery_type_range"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/black_80"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        tools:text="5-7" />-->
-
-    <!--<TextView
-        android:id="@+id/item_view_delivery_type_range_unit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        app:layout_constraintStart_toEndOf="@id/item_view_delivery_type_range"
-        app:layout_constraintBaseline_toBaselineOf="@id/item_view_delivery_type_range"
-        android:layout_marginTop="16dp"
-        android:textSize="14sp"
-        android:textColor="@color/black_80"
-        tools:text="দিন" />-->
-
-    <!--<TextView
-        android:id="@+id/item_view_delivery_type_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/item_view_delivery_type_range"
-        android:textSize="@dimen/text_14"
-        android:textColor="@color/black_70"
-        tools:text="Regular Delivery" />-->
 
 </LinearLayout>
