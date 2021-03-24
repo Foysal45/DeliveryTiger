@@ -330,6 +330,118 @@
 
                     </LinearLayout>
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/deliveredReturnLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/bg_stroke1"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        tools:ignore="UselessParent"
+                        tools:visibility="visible">
+
+                        <LinearLayout
+                            android:id="@+id/datePickerLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintTop_toTopOf="parent"
+                            >
+
+                            <TextView
+                                android:id="@+id/dateRangePicker"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_add_order_edit_text"
+                                android:hint="ডেট রেঞ্জ সিলেক্ট"
+                                android:gravity="center_vertical"
+                                android:includeFontPadding="false"
+                                android:paddingStart="16dp"
+                                android:paddingTop="8dp"
+                                android:paddingEnd="16dp"
+                                android:paddingBottom="8dp"
+                                android:textColor="@color/black_80"
+                                android:textColorHint="@color/gray_500"
+                                android:textSize="@dimen/text_14"
+                                app:drawableEndCompat="@drawable/ic_date" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/deliveryFilterLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@+id/datePickerLayout">
+
+                            <TextView
+                                android:id="@+id/locationName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:gravity="center_vertical"
+                                android:maxLines="1"
+                                android:paddingStart="8dp"
+                                android:paddingEnd="4dp"
+                                android:textColor="@color/black_80"
+                                android:textSize="14sp"
+                                tools:text="ডেলিভারি হয়েছে" />
+
+                            <TextView
+                                android:id="@+id/locationNameEng"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical|end"
+                                android:maxLines="1"
+                                android:paddingStart="4dp"
+                                android:paddingEnd="8dp"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:text="০টি"
+                                android:textColor="#F36E41" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@+id/deliveryFilterLayout">
+
+                            <TextView
+                                android:id="@+id/titleReturn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:gravity="center_vertical"
+                                android:maxLines="1"
+                                android:paddingStart="8dp"
+                                android:paddingEnd="4dp"
+                                android:textColor="@color/black_80"
+                                android:textSize="14sp"
+                                tools:text="ডরিটার্ন এ আছে" />
+
+                            <TextView
+                                android:id="@+id/filterCountReturn"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical|end"
+                                android:maxLines="1"
+                                android:paddingStart="4dp"
+                                android:paddingEnd="8dp"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:text="০টি"
+                                android:textColor="#F36E41" />
+
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
                     <ImageView
                         android:id="@+id/referBtn"
                         android:layout_width="match_parent"

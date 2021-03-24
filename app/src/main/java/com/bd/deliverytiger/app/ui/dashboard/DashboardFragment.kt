@@ -47,6 +47,7 @@ import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
@@ -81,6 +82,10 @@ class DashboardFragment : Fragment() {
     private var selectedEndDate = ""
     private var currentDate = ""
     private var freezeDate = ""
+    private var defaultFromDate = "2001-01-01"
+    private var defaultToDate = "2001-01-01"
+    private var fromDate = "2001-01-01"
+    private var toDate = "2001-01-01"
 
     private var showOrderPopup: Boolean = false
     private var instantPaymentOTPLimit: Int = 0
@@ -121,6 +126,10 @@ class DashboardFragment : Fragment() {
         initClickLister()
         //showDeliveryChargeCalculator()
         //fetchAccountsData()
+
+        binding?.dateRangePicker?.setOnClickListener {
+            dateRangePicker()
+        }
     }
 
     override fun onResume() {
@@ -768,6 +777,25 @@ class DashboardFragment : Fragment() {
         }
         dialog.onCancel = {
             hideKeyboard()
+        }
+    }
+
+    private fun dateRangePicker() {
+        val builder = MaterialDatePicker.Builder.dateRangePicker()
+        builder.setTheme(R.style.CustomMaterialCalendarTheme)
+        builder.setTitleText("ডেট রেঞ্জ সিলেক্ট করুন")
+        val picker = builder.build()
+        picker.show(childFragmentManager, "Picker")
+        picker.addOnPositiveButtonClickListener {
+
+            fromDate = sdf.format(it.first)
+            toDate = sdf.format(it.second)
+
+            /*activeFilter()
+            courierOrderViewModelList.clear()
+            allOrdersAdapter.notifyDataSetChanged()
+            getAllOrders(0, 20)*/
+
         }
     }
 
