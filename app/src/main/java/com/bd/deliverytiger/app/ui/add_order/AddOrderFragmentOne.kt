@@ -251,9 +251,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         spinnerCollectionLocation = view.findViewById(R.id.spinnerCollectionLocation)
         orderPlaceBtn = view.findViewById(R.id.orderPlaceBtn)
 
-        etDistrict.setOnClickListener(this)
-        etThana.setOnClickListener(this)
-        etAriaPostOffice.setOnClickListener(this)
         orderPlaceBtn.setOnClickListener(this)
 
         // Fetch Charge Data

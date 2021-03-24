@@ -50,7 +50,7 @@ class PaymentStatementMenuFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle(getString(R.string.payment_request))
+        (activity as HomeActivity).setToolbarTitle(getString(R.string.instant_payment))
     }
 
     override fun onDestroyView() {
