@@ -21,6 +21,7 @@ import androidx.appcompat.widget.AppCompatSpinner
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
@@ -39,6 +40,7 @@ import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
+import com.bd.deliverytiger.app.databinding.FragmentAddOrderFragmentOneBinding
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
 import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.district.v2.CustomModel
@@ -199,6 +201,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var merchantDistrict: Int = 0
     private var selectedDeliveryType = ""
 
+    private var binding: FragmentAddOrderFragmentOneBinding? = null
     private val viewModel: AddOrderViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
 
@@ -208,7 +211,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_add_order_fragment_one, container, false)
+        return FragmentAddOrderFragmentOneBinding.inflate(inflater, container, false).also {
+            binding = it
+        }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -251,9 +256,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         spinnerCollectionLocation = view.findViewById(R.id.spinnerCollectionLocation)
         orderPlaceBtn = view.findViewById(R.id.orderPlaceBtn)
 
-        etDistrict.setOnClickListener(this)
-        etThana.setOnClickListener(this)
-        etAriaPostOffice.setOnClickListener(this)
         orderPlaceBtn.setOnClickListener(this)
 
         // Fetch Charge Data
@@ -1074,7 +1076,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     private fun getAllDistrictsList(){
+        binding?.progressBar1?.isVisible = true
         viewModel.loadAllDistricts().observe(viewLifecycleOwner, Observer { list->
+            binding?.progressBar1?.isVisible = false
             allLocationList.clear()
             allLocationList.addAll(list)
 
@@ -1529,6 +1533,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 submitOrder()
             }
         }.show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 
     private fun mockUserData() {
