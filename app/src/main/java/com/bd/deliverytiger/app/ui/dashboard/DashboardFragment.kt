@@ -539,6 +539,8 @@ class DashboardFragment : Fragment() {
     private fun fetchCODData() {
         viewModel.fetchUnpaidCOD(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
 
+            SessionManager.instantPaymentLastRequestDate = if (model.lastRequestDate.isNullOrEmpty()) "No request" else model.lastRequestDate!!
+            SessionManager.instantPaymentStatus = if (model.availabilityMessage.isNullOrEmpty()) "No status" else model.availabilityMessage
             netAmount = model.netAdjustedAmount
             availability = model.availability
             availabilityMessage = model.availabilityMessage

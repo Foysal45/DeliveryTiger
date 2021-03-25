@@ -29,6 +29,9 @@ data class UnpaidCODResponse(
     var availability: Boolean = false,
     @SerializedName("AvailabilityMessage")
     var availabilityMessage: String = "",
+    @SerializedName("LastRequestDate")
+    var lastRequestDate: String? = "", //"Feb 22 2021  2:50PM"
+
 
     @SerializedName("PayableOrders")
     var payableOrders: List<CODDetailsData> = listOf(),

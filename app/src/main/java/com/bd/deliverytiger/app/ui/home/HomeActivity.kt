@@ -13,8 +13,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.provider.Settings
-import android.util.Base64
-import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
@@ -58,7 +56,7 @@ import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
-import com.bd.deliverytiger.app.ui.payment_request.PaymentStatementMenuFragment
+import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentUpdateFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
@@ -83,8 +81,6 @@ import com.google.firebase.messaging.FirebaseMessaging
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.io.File
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 import java.util.*
 
 
@@ -373,7 +369,8 @@ class HomeActivity : AppCompatActivity(),
                 currentFragment is ReferralFragment ||
                 currentFragment is CollectionHistoryFragment ||
                 currentFragment is OrderTrackingFragment ||
-                currentFragment is ReturnStatementFragment || currentFragment is ReturnStatementDetailsFragment
+                currentFragment is ReturnStatementFragment || currentFragment is ReturnStatementDetailsFragment ||
+                currentFragment is InstantPaymentUpdateFragment
             ) {
                 addProductBtnVisibility(false)
             } else {
@@ -479,6 +476,9 @@ class HomeActivity : AppCompatActivity(),
                     currentFragment.onResume()
                 }
                 is CollectionHistoryFragment -> {
+                    currentFragment.onResume()
+                }
+                is InstantPaymentUpdateFragment -> {
                     currentFragment.onResume()
                 }
             }
@@ -640,10 +640,10 @@ class HomeActivity : AppCompatActivity(),
             R.id.nav_payment_request -> {
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-                if (currentFragment is PaymentStatementMenuFragment) {
+                if (currentFragment is InstantPaymentUpdateFragment) {
                     Timber.d("PaymentStatementMenuFragment already exist")
                 } else {
-                    addFragment(PaymentStatementMenuFragment.newInstance(), PaymentStatementMenuFragment.tag)
+                    addFragment(InstantPaymentUpdateFragment.newInstance(), InstantPaymentUpdateFragment.tag)
                 }
             }
             R.id.nav_shipment_change -> {
