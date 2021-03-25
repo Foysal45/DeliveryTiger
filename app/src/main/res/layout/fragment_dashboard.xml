@@ -349,6 +349,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
                             >
 
                             <TextView
@@ -369,28 +370,42 @@
                                 android:textSize="@dimen/text_14"
                                 app:drawableEndCompat="@drawable/ic_date" />
 
+                            <ImageView
+                                android:id="@+id/clearDateRangeImage"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_margin="@dimen/size_4"
+                                android:padding="3dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_close_24px"
+                                android:contentDescription="@string/cd"
+                                android:visibility="gone"
+                                tools:visibility="visible"/>
+
                         </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/deliveryFilterLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:padding="5dp"
                             app:layout_constraintTop_toBottomOf="@+id/datePickerLayout">
 
                             <TextView
-                                android:id="@+id/locationName"
+                                android:id="@+id/titleDelivery"
                                 android:layout_width="wrap_content"
                                 android:layout_height="40dp"
+                                android:layout_weight="1"
                                 android:gravity="center_vertical"
                                 android:maxLines="1"
                                 android:paddingStart="8dp"
                                 android:paddingEnd="4dp"
                                 android:textColor="@color/black_80"
                                 android:textSize="14sp"
-                                tools:text="ডেলিভারি হয়েছে" />
+                                android:text="ডেলিভারি হয়েছে" />
 
                             <TextView
-                                android:id="@+id/locationNameEng"
+                                android:id="@+id/filterCountDelivery"
                                 android:layout_width="0dp"
                                 android:layout_height="40dp"
                                 android:layout_weight="1"
@@ -409,19 +424,21 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:padding="5dp"
                             app:layout_constraintTop_toBottomOf="@+id/deliveryFilterLayout">
 
                             <TextView
                                 android:id="@+id/titleReturn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="40dp"
+                                android:layout_weight="1"
                                 android:gravity="center_vertical"
                                 android:maxLines="1"
                                 android:paddingStart="8dp"
                                 android:paddingEnd="4dp"
                                 android:textColor="@color/black_80"
                                 android:textSize="14sp"
-                                tools:text="ডরিটার্ন এ আছে" />
+                                android:text="রিটার্ন এ আছে" />
 
                             <TextView
                                 android:id="@+id/filterCountReturn"

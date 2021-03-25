@@ -35,6 +35,7 @@ import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
 import com.bd.deliverytiger.app.ui.collection_history.CollectionHistoryFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.complain.ComplainFragment
+import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsFragment
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
@@ -129,6 +130,12 @@ class DashboardFragment : Fragment() {
 
         binding?.dateRangePicker?.setOnClickListener {
             dateRangePicker()
+        }
+        binding?.deliveryFilterLayout?.setOnClickListener {
+            addFragment(DeliveryDetailsFragment.newInstance(), DeliveryDetailsFragment.tag)
+        }
+        binding?.deliveredReturnLayout?.setOnClickListener {
+            addFragment(DeliveryDetailsFragment.newInstance(), DeliveryDetailsFragment.tag)
         }
     }
 
@@ -791,11 +798,13 @@ class DashboardFragment : Fragment() {
             fromDate = sdf.format(it.first)
             toDate = sdf.format(it.second)
 
-            /*activeFilter()
-            courierOrderViewModelList.clear()
-            allOrdersAdapter.notifyDataSetChanged()
-            getAllOrders(0, 20)*/
-
+            val msg = "${DigitConverter.toBanglaDate(fromDate, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate, "yyyy-MM-dd")}"
+            binding?.dateRangePicker?.text = msg
+            binding?.clearDateRangeImage?.visibility = View.VISIBLE
+        }
+        binding?.clearDateRangeImage?.setOnClickListener {
+            binding?.dateRangePicker?.text = ""
+            binding?.clearDateRangeImage?.visibility = View.GONE
         }
     }
 

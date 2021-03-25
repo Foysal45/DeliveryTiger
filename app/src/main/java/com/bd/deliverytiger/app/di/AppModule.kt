@@ -18,6 +18,7 @@ import com.bd.deliverytiger.app.ui.collection_history.CollectionHistoryViewModel
 import com.bd.deliverytiger.app.ui.collector_tracking.MapViewModel
 import com.bd.deliverytiger.app.ui.complain.ComplainViewModel
 import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
+import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsViewModel
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingViewModel
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsViewModel
@@ -82,5 +83,6 @@ val appModule = module {
     viewModel { CollectionHistoryViewModel(get()) }
     viewModel { ReturnStatementViewModel(get()) }
     viewModel { SurveyViewModel(get()) }
+    viewModel { DeliveryDetailsViewModel(get()) }
 
 }
