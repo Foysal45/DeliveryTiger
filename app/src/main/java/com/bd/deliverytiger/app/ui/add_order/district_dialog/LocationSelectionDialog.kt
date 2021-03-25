@@ -58,6 +58,11 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
         val tag: String = LocationSelectionDialog::class.java.name
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme2)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return FragmentLocationSelectionDialogBinding.inflate(inflater, container, false).also {
             binding = it
@@ -147,7 +152,7 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
         val metrics = resources.displayMetrics
         if (bottomSheet != null) {
             BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_COLLAPSED
-            thread {2
+            thread {
                 activity?.runOnUiThread {
                     //val dynamicHeight = parentLayout.height
                     BottomSheetBehavior.from(bottomSheet).peekHeight = metrics.heightPixels

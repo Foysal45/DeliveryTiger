@@ -59,6 +59,22 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
+    <style name="BottomSheet2" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="BaseBottomSheetDialog2" parent="@style/Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateVisible</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme2" parent="BaseBottomSheetDialog2">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/black_100</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
     <style name="MyProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:indeterminateTint">@color/colorPrimary</item>
     </style>
