@@ -404,4 +404,23 @@ object SessionManager {
             }
         }
 
+    var instantPaymentLastRequestDate: String
+        get() {
+            return pref.getString("lastRequestDate", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("lastRequestDate", value)
+            }
+        }
+
+    var instantPaymentStatus: String
+        get() {
+            return pref.getString("instantPaymentStatus", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("instantPaymentStatus", value)
+            }
+        }
 }

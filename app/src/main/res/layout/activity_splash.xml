@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/splash_back_image"
+        app:layout_constraintBottom_toTopOf="@id/splashCarBg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="UseCompoundDrawables">
@@ -37,24 +37,36 @@
 
     </LinearLayout>
 
-
-    <ImageView
-        android:id="@+id/splash_back_image"
+    <!--<ImageView
+        android:id="@+id/splashGif"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:contentDescription="@string/cd"
-        app:srcCompat="@drawable/ic_bg_splash_back"
+        app:srcCompat="@raw/gif_dt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />-->
+
+    <ImageView
+        android:id="@+id/splashCarBg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/cd"
+        app:srcCompat="@drawable/ic_car_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         />
 
     <ImageView
-        android:layout_width="match_parent"
+        android:id="@+id/car"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:contentDescription="@string/cd"
-        app:srcCompat="@drawable/ic_bg_splash_front"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@drawable/ic_car"
+        app:layout_constraintTop_toTopOf="@id/splashCarBg"
+        app:layout_constraintBottom_toBottomOf="@id/splashCarBg"
+        app:layout_constraintStart_toStartOf="parent"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
