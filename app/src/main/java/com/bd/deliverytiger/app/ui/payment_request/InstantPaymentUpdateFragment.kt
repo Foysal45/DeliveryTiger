@@ -6,15 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
 import com.bd.deliverytiger.app.databinding.FragmentInstantPaymentUpdateBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.toast
+import org.koin.android.ext.android.inject
 
 class InstantPaymentUpdateFragment : Fragment() {
 
     private var binding: FragmentInstantPaymentUpdateBinding? = null
+    private val viewModel: InstantPaymentUpdateViewModel by inject()
 
     companion object {
         fun newInstance(): InstantPaymentUpdateFragment = InstantPaymentUpdateFragment()
@@ -35,9 +39,16 @@ class InstantPaymentUpdateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.paymentRequestDate?.text = "Not Registered"
+        viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {  model->
+            if (model.preferredPaymentCycleDate == ""){
+                binding?.paymentRequestDate?.text = "Not Registered"
+                binding?.requestFormLayout?.visibility = View.VISIBLE
+            }else{
+                binding?.requestFormLayout?.visibility = View.GONE
+                binding?.paymentRequestDate?.text = model.preferredPaymentCycleDate
+            }
+        })
 
-        binding?.requestFormLayout?.isVisible = true
 
         binding?.lastPaymentRequestDate?.text = SessionManager.instantPaymentLastRequestDate
         binding?.status?.text = SessionManager.instantPaymentStatus
@@ -45,6 +56,10 @@ class InstantPaymentUpdateFragment : Fragment() {
         binding?.enablePaymentRequestButton?.setOnClickListener{
             val bkashNumber = binding?.bkashNumber?.text?.toString() ?: ""
             if (bkashNumber.isNotEmpty()) {
+                val requestBody = UpdatePaymentCycleRequest(SessionManager.courierUserId, bkashNumber, "instant")
+                viewModel.updatePaymentCycle(requestBody).observe(viewLifecycleOwner, Observer { model->
+                    binding?.paymentRequestDate?.text = model.preferredPaymentCycleDate
+                })
 
             } else {
                 context?.toast("সঠিক বিকাশ মোবাইল নম্বর লিখুন")

@@ -21,9 +21,13 @@ import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnCountResponseItem
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
+import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
+import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsResponse
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
 import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
+import com.bd.deliverytiger.app.api.model.instant_payment_update.InstantPaymentUpdateResponse
+import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
@@ -126,6 +130,9 @@ interface ApiInterfaceCore {
     @GET("api/Fetch/GetCourierUsersInformation/{courierUserId}")
     suspend fun getCourierUsersInformation(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<CourierInfoModel>, ErrorResponse>
 
+    @PUT("api/Update/UpdatePaymentCycle")
+    suspend fun updatePaymentCycle(@Body requestBody: UpdatePaymentCycleRequest): NetworkResponse<GenericResponse<InstantPaymentUpdateResponse>, ErrorResponse>
+
     @PUT("api/Offer/UpdateOffer/{orderId}")
     suspend fun updateOffer(@Path("orderId") orderId: Int, @Body requestBody: OfferUpdateRequest): NetworkResponse<GenericResponse<OrderResponse>, ErrorResponse>
 
@@ -191,4 +198,7 @@ interface ApiInterfaceCore {
 
     @POST("api/Fetch/GetDeliveredReturnedCount")
     suspend fun fetchDeliveredReturnedCount(@Body requestBody: DeliveredReturnedCountRequest): NetworkResponse<GenericResponse<List<DeliveredReturnCountResponseItem>>, ErrorResponse>
+
+    @POST("api/Fetch/GetDeliveredReturnedCountWiseDetails")
+    suspend fun fetchDeliveredReturnedCountWiseDetails(@Body requestBody: DeliveryDetailsRequest): NetworkResponse<GenericResponse<List<DeliveryDetailsResponse>>, ErrorResponse>
 }

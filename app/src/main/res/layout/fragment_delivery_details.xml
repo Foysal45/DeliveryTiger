@@ -7,6 +7,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.delivery_details.DeliveryDetailsFragment">
 
+    <TextView
+        android:id="@+id/emptyView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="কোনো তথ্য পাওয়া যায়নি"
+        android:textSize="14sp"
+        android:textColor="@color/black_90"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -21,5 +36,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:itemCount="3"
         tools:listitem="@layout/item_view_delivery_details" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,9 @@ import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
+import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
+import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsResponse
+import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
@@ -137,6 +140,8 @@ class AppRepository(
 
     suspend fun getCourierUsersInformation(courierUserId: Int) = apiInterfaceCore.getCourierUsersInformation(courierUserId)
 
+    suspend fun updatePaymentCycle(requestBody: UpdatePaymentCycleRequest) = apiInterfaceCore.updatePaymentCycle(requestBody)
+
     suspend fun updateOffer(orderId: Int, requestBody: OfferUpdateRequest) = apiInterfaceCore.updateOffer(orderId, requestBody)
 
     suspend fun getOrderTrackingList(flag: String, requestBody: OrderTrackReqBody) = apiInterfaceCore.getOrderTrackingList(flag, requestBody)
@@ -180,4 +185,6 @@ class AppRepository(
     suspend fun isGetOfferByMerchant(courierUserId: Int) = apiInterfaceCore.isGetOfferByMerchant(courierUserId)
 
     suspend fun fetchDeliveredReturnedCount(requestBody: DeliveredReturnedCountRequest) = apiInterfaceCore.fetchDeliveredReturnedCount(requestBody)
+
+    suspend fun fetchDeliveredReturnedCountWiseDetails(requestBody: DeliveryDetailsRequest) = apiInterfaceCore.fetchDeliveredReturnedCountWiseDetails(requestBody)
 }

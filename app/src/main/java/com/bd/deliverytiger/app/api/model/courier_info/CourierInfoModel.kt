@@ -80,6 +80,10 @@ data class CourierInfoModel(
     var districtId: Int = 0,
     @SerializedName("thanaId")
     var thanaId: Int = 0,
+    @SerializedName("preferredPaymentCycleDate")
+    var preferredPaymentCycleDate: String = "",
+    @SerializedName("preferredPaymentCycle")
+    var preferredPaymentCycle: String = "",
 
     //Internal
     var isOfferTaken: Boolean = false

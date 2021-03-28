@@ -22,6 +22,7 @@ import com.bd.deliverytiger.app.api.model.config.BannerModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
+import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
@@ -133,10 +134,12 @@ class DashboardFragment : Fragment() {
             dateRangePicker()
         }
         binding?.deliveryFilterLayout?.setOnClickListener {
-            addFragment(DeliveryDetailsFragment.newInstance(), DeliveryDetailsFragment.tag)
+            val reqBody = DeliveryDetailsRequest(fromDate, toDate, SessionManager.courierUserId,"delivery")
+            addFragment(DeliveryDetailsFragment.newInstance(reqBody), DeliveryDetailsFragment.tag)
         }
         binding?.deliveredReturnLayout?.setOnClickListener {
-            addFragment(DeliveryDetailsFragment.newInstance(), DeliveryDetailsFragment.tag)
+            val reqBody = DeliveryDetailsRequest(fromDate, toDate, SessionManager.courierUserId,"return")
+            addFragment(DeliveryDetailsFragment.newInstance(reqBody), DeliveryDetailsFragment.tag)
         }
     }
 
@@ -812,6 +815,8 @@ class DashboardFragment : Fragment() {
             })
         }
         binding?.clearDateRangeImage?.setOnClickListener {
+            fromDate = ""
+            toDate = ""
             binding?.filterCountDelivery?.text = "${DigitConverter.toBanglaDigit(0)} টি"
             binding?.filterCountReturn?.text = "${DigitConverter.toBanglaDigit(0)} টি"
             binding?.dateRangePicker?.text = ""
