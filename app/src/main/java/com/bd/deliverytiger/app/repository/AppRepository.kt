@@ -8,6 +8,7 @@ import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
+import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
@@ -177,4 +178,6 @@ class AppRepository(
     suspend fun fetchSubmitSurvey(requestBody: List<SurveyQuestionAnswer>) = apiInterfaceCore.fetchSubmitSurvey(requestBody)
 
     suspend fun isGetOfferByMerchant(courierUserId: Int) = apiInterfaceCore.isGetOfferByMerchant(courierUserId)
+
+    suspend fun fetchDeliveredReturnedCount(requestBody: DeliveredReturnedCountRequest) = apiInterfaceCore.fetchDeliveredReturnedCount(requestBody)
 }

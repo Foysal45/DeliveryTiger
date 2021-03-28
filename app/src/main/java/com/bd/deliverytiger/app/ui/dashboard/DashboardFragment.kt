@@ -21,6 +21,7 @@ import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.config.BannerModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
+import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
@@ -803,8 +804,16 @@ class DashboardFragment : Fragment() {
             val msg = "${DigitConverter.toBanglaDate(fromDate, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate, "yyyy-MM-dd")}"
             binding?.dateRangePicker?.text = msg
             binding?.clearDateRangeImage?.visibility = View.VISIBLE
+            val requestBody = DeliveredReturnedCountRequest(fromDate, toDate, SessionManager.courierUserId)
+
+            viewModel.fetchDeliveredCount(requestBody).observe(viewLifecycleOwner, Observer { list->
+                binding?.filterCountDelivery?.text = "${DigitConverter.toBanglaDigit(list.first().delivered)} টি"
+                binding?.filterCountReturn?.text = "${DigitConverter.toBanglaDigit(list.first().returned)} টি"
+            })
         }
         binding?.clearDateRangeImage?.setOnClickListener {
+            binding?.filterCountDelivery?.text = "${DigitConverter.toBanglaDigit(0)} টি"
+            binding?.filterCountReturn?.text = "${DigitConverter.toBanglaDigit(0)} টি"
             binding?.dateRangePicker?.text = ""
             binding?.clearDateRangeImage?.visibility = View.GONE
         }

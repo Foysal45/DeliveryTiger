@@ -19,6 +19,8 @@ import com.bd.deliverytiger.app.api.model.config.BannerResponse
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
+import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnCountResponseItem
+import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
 import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
@@ -186,4 +188,7 @@ interface ApiInterfaceCore {
 
     @GET("api/Offer/GetOfferByMerchant/{courierUserId}")
     suspend fun isGetOfferByMerchant(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<Boolean>, ErrorResponse>
+
+    @POST("api/Fetch/GetDeliveredReturnedCount")
+    suspend fun fetchDeliveredReturnedCount(@Body requestBody: DeliveredReturnedCountRequest): NetworkResponse<GenericResponse<List<DeliveredReturnCountResponseItem>>, ErrorResponse>
 }

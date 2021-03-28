@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -15,7 +16,6 @@ import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.databinding.FragmentCollectionInfoBottomSheetBinding
 import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
 import com.bd.deliverytiger.app.utils.SessionManager
-import com.bd.deliverytiger.app.utils.showToast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -23,13 +23,14 @@ import org.koin.android.ext.android.inject
 import kotlin.concurrent.thread
 
 
-class ToggleButtonPickupBottomSheet : BottomSheetDialogFragment() {
+class CollectionInfoBottomSheet : BottomSheetDialogFragment() {
 
     private var binding: FragmentCollectionInfoBottomSheetBinding? = null
 
     var onCollectionTypeSelected: ((isPickup: Boolean, pickupLocation: PickupLocation) -> Unit)? = null
 
     private lateinit var pickupAddressLayout: ConstraintLayout
+    private lateinit var chargeMsgLayout: LinearLayout
     private lateinit var spinnerCollectionLocation: AppCompatSpinner
 
     private var weightRangeId = 0
@@ -37,10 +38,10 @@ class ToggleButtonPickupBottomSheet : BottomSheetDialogFragment() {
     private val viewModel: AddOrderViewModel by inject()
 
     companion object {
-        fun newInstance(weightRangeId: Int): ToggleButtonPickupBottomSheet = ToggleButtonPickupBottomSheet().apply {
+        fun newInstance(weightRangeId: Int): CollectionInfoBottomSheet = CollectionInfoBottomSheet().apply {
             this.weightRangeId = weightRangeId
         }
-        val tag: String = ToggleButtonPickupBottomSheet::class.java.name
+        val tag: String = CollectionInfoBottomSheet::class.java.name
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +60,7 @@ class ToggleButtonPickupBottomSheet : BottomSheetDialogFragment() {
             BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_COLLAPSED
             thread {
                 activity?.runOnUiThread {
-                    val dynamicHeight = 500
+                    val dynamicHeight = 650
                     BottomSheetBehavior.from(bottomSheet).peekHeight = dynamicHeight
                 }
             }
@@ -83,6 +84,7 @@ class ToggleButtonPickupBottomSheet : BottomSheetDialogFragment() {
 
         spinnerCollectionLocation = view.findViewById(R.id.spinnerCollectionLocation)
         pickupAddressLayout = view.findViewById(R.id.pickupAddressLayout)
+        chargeMsgLayout = view.findViewById(R.id.chargeMsgLayout)
 
         viewModel.getPickupLocations(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list ->
             spinnerDataBinding(list)
@@ -93,6 +95,7 @@ class ToggleButtonPickupBottomSheet : BottomSheetDialogFragment() {
                 R.id.toggleButtonPickup1 -> {
                     onCollectionTypeSelected?.invoke(false, PickupLocation())
                     pickupAddressLayout.visibility = View.GONE
+                    chargeMsgLayout.visibility = View.GONE
                 }
                 R.id.toggleButtonPickup2 -> {
                     if (weightRangeId > 6) {
@@ -101,6 +104,7 @@ class ToggleButtonPickupBottomSheet : BottomSheetDialogFragment() {
                     } else {
                         binding?.msg?.isVisible = false
                         pickupAddressLayout.visibility = View.VISIBLE
+                        chargeMsgLayout.visibility = View.VISIBLE
                     }
                 }
             }

@@ -414,7 +414,7 @@
                                 android:maxLines="1"
                                 android:paddingStart="4dp"
                                 android:paddingEnd="8dp"
-                                android:textSize="20sp"
+                                android:textSize="@dimen/text_16"
                                 android:textStyle="bold"
                                 android:text="০টি"
                                 android:textColor="#F36E41" />
@@ -450,7 +450,7 @@
                                 android:maxLines="1"
                                 android:paddingStart="4dp"
                                 android:paddingEnd="8dp"
-                                android:textSize="20sp"
+                                android:textSize="@dimen/text_16"
                                 android:textStyle="bold"
                                 android:text="০টি"
                                 android:textColor="#F36E41" />

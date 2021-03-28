@@ -109,6 +109,46 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <LinearLayout
+        android:id="@+id/chargeMsgLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+
+        <TextView
+            android:id="@+id/chargeMsg1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:textSize="14sp"
+            android:text="*৫ টাকা " />
+
+        <TextView
+            android:id="@+id/chargeMsg2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:textSize="14sp"
+            android:text="Pick-Up"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/chargeMsg3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:textSize="14sp"
+            android:text=" চার্জ যোগ হবে" />
+
+    </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="24dp"

@@ -385,41 +385,39 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-                <com.bd.deliverytiger.app.utils.CustomMaterialButtonToggleGroup
-                    android:id="@+id/toggle_button_group"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/toggle_button_1"
+                    app:icon="@drawable/ic_delivery"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/black_70"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    app:singleSelection="true"
-                    >
+                    android:layout_height="45dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/dotted"
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:textColor="@color/black_90"
+                    android:text="@string/orderType1"
+                    android:textAllCaps="false"
+                    android:padding="5dp"
+                    />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/toggle_button_1"
-                        style="?attr/materialButtonOutlinedStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/toggleButtonHeight"
-                        android:layout_weight="1"
-                        android:text="@string/orderType1"
-                        android:maxLines="2"
-                        android:textAllCaps="false"
-                        android:padding="5dp"
-                        />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/toggle_button_2"
-                        style="?attr/materialButtonOutlinedStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/toggleButtonHeight"
-                        android:layout_weight="1"
-                        android:maxLines="2"
-                        android:text="@string/orderType2"
-                        android:textAllCaps="false"
-                        android:padding="5dp"
-                        />
-
-                </com.bd.deliverytiger.app.utils.CustomMaterialButtonToggleGroup>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/toggle_button_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="@dimen/fab_margin"
+                    app:icon="@drawable/ic_delivery_taka"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/black_70"
+                    android:background="@drawable/dotted"
+                    android:backgroundTint="@color/black_70"
+                    android:text="@string/orderType2"
+                    android:textColor="@color/black_90"
+                    android:padding="5dp"
+                    />
 
                 <EditText
                     android:id="@+id/collectionAmount"

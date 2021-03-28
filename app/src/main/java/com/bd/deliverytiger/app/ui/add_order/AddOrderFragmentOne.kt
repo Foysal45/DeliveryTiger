@@ -27,10 +27,8 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
-import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
 import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
 import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.ThanaPayLoad
@@ -42,9 +40,6 @@ import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.bd.deliverytiger.app.databinding.FragmentAddOrderFragmentOneBinding
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
-import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
-import com.bd.deliverytiger.app.ui.district.v2.CustomModel
-import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
@@ -84,7 +79,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private lateinit var checkTerms: AppCompatCheckBox
     private lateinit var checkTermsTV: TextView
     private lateinit var deliveryTypeRV: RecyclerView
-    private lateinit var toggleButtonGroup: MaterialButtonToggleGroup
+    private lateinit var deliveryButton: MaterialButton
+    private lateinit var deliveryTakaButton: MaterialButton
     private lateinit var togglePickupGroup: MaterialButtonToggleGroup
     private lateinit var toggleButtonPickup1: MaterialButton
     private lateinit var pickupAddressLayout: ConstraintLayout
@@ -240,7 +236,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         checkTerms = view.findViewById(R.id.check_terms_condition)
         checkTermsTV = view.findViewById(R.id.check_terms_condition_text)
         deliveryTypeRV = view.findViewById(R.id.delivery_type_selection_rV)
-        toggleButtonGroup = view.findViewById(R.id.toggle_button_group)
+        deliveryButton = view.findViewById(R.id.toggle_button_1)
+        deliveryTakaButton = view.findViewById(R.id.toggle_button_2)
         togglePickupGroup = view.findViewById(R.id.toggleButtonPickupGroup)
         toggleButtonPickup1 = view.findViewById(R.id.toggleButtonPickup1)
         pickupAddressLayout = view.findViewById(R.id.pickupAddressLayout)
@@ -380,27 +377,23 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         })
 
-        toggleButtonGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
-            if (isChecked) {
-                isOrderTypeSelected = true
-                when (checkedId) {
-                    R.id.toggle_button_1 -> {
-                        collectionAmountET.visibility = View.GONE
-                        actualPackageAmountET.visibility = View.VISIBLE
-                        isCollection = false
-                        orderType = "Only Delivery"
-                        calculateTotalPrice()
-                    }
-                    R.id.toggle_button_2 -> {
-                        collectionAmountET.visibility = View.VISIBLE
-                        actualPackageAmountET.visibility = View.GONE
-                        collectionAmountET.requestFocus()
-                        isCollection = true
-                        orderType = "Delivery Taka Collection"
-                        calculateTotalPrice()
-                    }
-                }
-            }
+        deliveryButton.setOnClickListener {
+            isOrderTypeSelected = true
+            collectionAmountET.visibility = View.GONE
+            actualPackageAmountET.visibility = View.VISIBLE
+            isCollection = false
+            orderType = "Only Delivery"
+            calculateTotalPrice()
+        }
+
+        deliveryTakaButton.setOnClickListener {
+            isOrderTypeSelected = true
+            collectionAmountET.visibility = View.VISIBLE
+            actualPackageAmountET.visibility = View.GONE
+            collectionAmountET.requestFocus()
+            isCollection = true
+            orderType = "Delivery Taka Collection"
+            calculateTotalPrice()
         }
 
        /* togglePickupGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
@@ -626,8 +619,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     private fun pickupBottomSheet(){
-        val tag: String = ToggleButtonPickupBottomSheet.tag
-        val dialog: ToggleButtonPickupBottomSheet = ToggleButtonPickupBottomSheet.newInstance(weightRangeId)
+        val tag: String = CollectionInfoBottomSheet.tag
+        val dialog: CollectionInfoBottomSheet = CollectionInfoBottomSheet.newInstance(weightRangeId)
         dialog.show(childFragmentManager, tag)
         dialog.onCollectionTypeSelected = { isPickup, pickupLocation ->
             dialog.dismiss()
