@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.databinding.FragmentDeliveryDetailsBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
+import com.bd.deliverytiger.app.utils.DigitConverter
 import org.koin.android.ext.android.inject
 
 class DeliveryDetailsFragment : Fragment() {
@@ -20,10 +21,12 @@ class DeliveryDetailsFragment : Fragment() {
 
     private lateinit var dataRequestBody: DeliveryDetailsRequest
     var title = ""
+    var total = 0
 
     companion object{
-        fun newInstance(dataRequestBody: DeliveryDetailsRequest): DeliveryDetailsFragment = DeliveryDetailsFragment().apply {
+        fun newInstance(dataRequestBody: DeliveryDetailsRequest, totalCount: Int): DeliveryDetailsFragment = DeliveryDetailsFragment().apply {
             this.dataRequestBody = dataRequestBody
+            total = totalCount
         }
         val tag: String = DeliveryDetailsFragment::class.java.name
     }
@@ -38,9 +41,9 @@ class DeliveryDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         title = if (dataRequestBody.type == "return"){
-            "রিটার্ন"
+            "রিটার্নে আছে (${DigitConverter.toBanglaDigit(total)} টি)"
         }else{
-            "ডেলিভারি"
+            "ডেলিভারি হয়েছে (${DigitConverter.toBanglaDigit(total)} টি)"
         }
 
         with(binding?.recyclerView!!) {

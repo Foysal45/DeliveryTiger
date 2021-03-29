@@ -438,7 +438,7 @@
                                 android:paddingEnd="4dp"
                                 android:textColor="@color/black_80"
                                 android:textSize="14sp"
-                                android:text="রিটার্ন এ আছে" />
+                                android:text="রিটার্নে আছে" />
 
                             <TextView
                                 android:id="@+id/filterCountReturn"

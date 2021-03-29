@@ -160,7 +160,7 @@ class DashboardFragment : Fragment() {
             }else{
                 if (dateRangeFilterList.first().delivered != 0){
                     val reqBody = DeliveryDetailsRequest(fromDate, toDate, SessionManager.courierUserId,"delivery")
-                    addFragment(DeliveryDetailsFragment.newInstance(reqBody), DeliveryDetailsFragment.tag)
+                    addFragment(DeliveryDetailsFragment.newInstance(reqBody, dateRangeFilterList.first().delivered), DeliveryDetailsFragment.tag)
                 }else{
                     Toast.makeText(requireContext(), "কোনো তথ্য পাওয়া যায়নি", Toast.LENGTH_SHORT).show()
                 }
@@ -173,7 +173,7 @@ class DashboardFragment : Fragment() {
             }else{
                 if (dateRangeFilterList.first().returned != 0) {
                     val reqBody = DeliveryDetailsRequest(fromDate, toDate, SessionManager.courierUserId, "return")
-                    addFragment(DeliveryDetailsFragment.newInstance(reqBody), DeliveryDetailsFragment.tag)
+                    addFragment(DeliveryDetailsFragment.newInstance(reqBody, dateRangeFilterList.first().returned), DeliveryDetailsFragment.tag)
                 }else{
                     Toast.makeText(requireContext(), "কোনো তথ্য পাওয়া যায়নি", Toast.LENGTH_SHORT).show()
                 }
