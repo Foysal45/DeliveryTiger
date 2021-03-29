@@ -27,7 +27,7 @@ object AppConstant {
 
     const val hotLineNumber = "০৯৬৩৮০১০৩০৩"
 
-    const val FAQ_URL = "https://deliverytiger.com.bd/how-to-active-instant-payment"
+    const val FAQ_URL = "https://deliverytiger.com.bd/instant-payment-faq"
 
     const val GPS_REQUEST = 1001
 

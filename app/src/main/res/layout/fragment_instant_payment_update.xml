@@ -10,8 +10,8 @@
         android:id="@+id/paymentRequestTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="পেমেন্ট রিকোয়েস্ট শুরু"
+        android:padding="4dp"
+        android:text="ইনস্ট্যান্ট পেমেন্ট শুরু"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/text_16"
         android:textStyle="bold"
@@ -22,7 +22,7 @@
         android:id="@+id/paymentRequestDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:padding="4dp"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/text_16"
         android:textStyle="bold"
@@ -46,7 +46,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
+            android:paddingStart="4dp"
             android:paddingTop="8dp"
             android:paddingEnd="16dp"
             android:paddingBottom="8dp"
@@ -59,7 +59,7 @@
             android:id="@+id/bkashNumber"
             android:layout_width="match_parent"
             android:layout_height="@dimen/login_view_height"
-            android:background="@drawable/bg_login_top_edit_text"
+            android:background="@drawable/bg_add_order_edit_text"
             android:hint="বিকাশ মোবাইল নম্বর লিখুন"
             android:importantForAutofill="no"
             android:inputType="phone"
@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="সর্বশেষ পেমেন্ট রিকোয়েস্ট"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/black_80"
                 android:textSize="@dimen/text_16"
                 android:textStyle="bold" />
 
@@ -122,7 +122,7 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:text="স্ট্যাটাস"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/black_80"
                 android:textSize="@dimen/text_16"
                 android:textStyle="bold" />
 
