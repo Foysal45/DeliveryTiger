@@ -47,6 +47,7 @@ import com.bd.deliverytiger.app.ui.collection_history.CollectionHistoryFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.complain.ComplainFragment
 import com.bd.deliverytiger.app.ui.dashboard.DashboardFragment
+import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsFragment
 import com.bd.deliverytiger.app.ui.dialog.PopupDialog
 import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
@@ -370,7 +371,8 @@ class HomeActivity : AppCompatActivity(),
                 currentFragment is CollectionHistoryFragment ||
                 currentFragment is OrderTrackingFragment ||
                 currentFragment is ReturnStatementFragment || currentFragment is ReturnStatementDetailsFragment ||
-                currentFragment is InstantPaymentUpdateFragment
+                currentFragment is InstantPaymentUpdateFragment ||
+                currentFragment is DeliveryDetailsFragment
             ) {
                 addProductBtnVisibility(false)
             } else {
@@ -479,6 +481,9 @@ class HomeActivity : AppCompatActivity(),
                     currentFragment.onResume()
                 }
                 is InstantPaymentUpdateFragment -> {
+                    currentFragment.onResume()
+                }
+                is DeliveryDetailsFragment -> {
                     currentFragment.onResume()
                 }
             }

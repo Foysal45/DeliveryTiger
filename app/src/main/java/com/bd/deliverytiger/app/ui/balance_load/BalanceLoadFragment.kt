@@ -84,7 +84,7 @@ class BalanceLoadFragment: Fragment() {
     }
 
     private fun balanceLoadPopup(){
-        alert("","ব্যালেন্স লোড আপনার প্রি-পেইড(Only Delivery) সার্ভিস চার্জ পরিশোধের জন্য প্রযোজ্য, COD অর্ডারের সাথে ব্যালেন্স লোডের কোন সম্পর্ক নেই", false).show()
+        alert("","ব্যালেন্স লোড আপনার প্রি-পেইড(Only Delivery) সার্ভিস চার্জ পরিশোধের জন্য প্রযোজ্য, COD অর্ডারের সাথে ব্যালেন্স লোডের কোন সম্পর্ক নেই।", false).show()
     }
 
     private fun fetchCurrentBalance() {
