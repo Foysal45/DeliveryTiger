@@ -84,6 +84,8 @@ class LoginFragment: Fragment() {
         if (BuildConfig.DEBUG){
             mobileET.setText("01715269261")
             passwordET.setText("123")
+            //mobileET.setText("01609881602")
+            //passwordET.setText("12345")
         }
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->

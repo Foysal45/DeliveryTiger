@@ -45,27 +45,27 @@ class InstantPaymentUpdateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {  model->
-            if (model.preferredPaymentCycleDate.isNullOrEmpty()){
-                binding?.paymentRequestDate?.text = "Not Registered"
+            if (model.preferredPaymentCycle != "instant") {
+                binding?.paymentRequestDate?.text = "এক্টিভ করা হয়নি"
                 binding?.requestFormLayout?.visibility = View.VISIBLE
-            }else{
+            } else {
+                val formattedDate = DigitConverter.toBanglaDate(model.preferredPaymentCycleDate, "yyyy-MM-dd")
+                binding?.paymentRequestDate?.text = formattedDate
                 binding?.requestFormLayout?.visibility = View.GONE
-                binding?.paymentRequestDate?.text = dateFormat(model.preferredPaymentCycleDate)
             }
         })
 
-
-        binding?.lastPaymentRequestDate?.text = SessionManager.instantPaymentLastRequestDate
-        binding?.status?.text = SessionManager.instantPaymentStatus
-
         binding?.enablePaymentRequestButton?.setOnClickListener{
             val bkashNumber = binding?.bkashNumber?.text?.toString() ?: ""
-            if (bkashNumber.isNotEmpty()) {
+            if (bkashNumber.isNotEmpty() && bkashNumber.length == 11) {
                 val requestBody = UpdatePaymentCycleRequest(SessionManager.courierUserId, bkashNumber, "instant")
                 viewModel.updatePaymentCycle(requestBody).observe(viewLifecycleOwner, Observer { model->
-                    binding?.paymentRequestDate?.text = dateFormat(model.preferredPaymentCycleDate!!)
+                    if (model.preferredPaymentCycle == "instant") {
+                        val formattedDate = DigitConverter.toBanglaDate(model.preferredPaymentCycleDate, "yyyy-MM-dd")
+                        binding?.paymentRequestDate?.text = formattedDate
+                        context?.toast("ইন্সট্যান্ট পেমেন্ট এক্টিভেট রিকোয়েস্ট সফল হয়েছে")
+                    }
                 })
-
             } else {
                 context?.toast("সঠিক বিকাশ মোবাইল নম্বর লিখুন")
             }
@@ -74,6 +74,9 @@ class InstantPaymentUpdateFragment : Fragment() {
         binding?.faqBtn?.setOnClickListener {
             goToWebView(AppConstant.FAQ_URL)
         }
+
+        binding?.lastPaymentRequestDate?.text = SessionManager.instantPaymentLastRequestDate
+        binding?.status?.text = SessionManager.instantPaymentStatus
 
     }
 
@@ -85,12 +88,6 @@ class InstantPaymentUpdateFragment : Fragment() {
         ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
         ft?.commit()
-    }
-
-    private fun dateFormat(inputDate: String): String {
-        var date = inputDate.split("T").first()
-        date = DigitConverter.formatDate(date, "yyyy-MM-dd", "dd-MM-yyyy")
-        return date
     }
 
     override fun onDestroyView() {

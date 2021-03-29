@@ -81,9 +81,9 @@ data class CourierInfoModel(
     @SerializedName("thanaId")
     var thanaId: Int = 0,
     @SerializedName("preferredPaymentCycleDate")
-    var preferredPaymentCycleDate: String = "",
+    var preferredPaymentCycleDate: String? = "",
     @SerializedName("preferredPaymentCycle")
-    var preferredPaymentCycle: String = "",
+    var preferredPaymentCycle: String? = "",
 
     //Internal
     var isOfferTaken: Boolean = false
