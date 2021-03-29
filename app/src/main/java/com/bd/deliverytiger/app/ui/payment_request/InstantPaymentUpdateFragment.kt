@@ -45,12 +45,12 @@ class InstantPaymentUpdateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {  model->
-            if (model.preferredPaymentCycleDate == ""){
+            if (model.preferredPaymentCycleDate.isNullOrEmpty()){
                 binding?.paymentRequestDate?.text = "Not Registered"
                 binding?.requestFormLayout?.visibility = View.VISIBLE
             }else{
                 binding?.requestFormLayout?.visibility = View.GONE
-                binding?.paymentRequestDate?.text = model.preferredPaymentCycleDate
+                binding?.paymentRequestDate?.text = dateFormat(model.preferredPaymentCycleDate)
             }
         })
 
@@ -63,7 +63,7 @@ class InstantPaymentUpdateFragment : Fragment() {
             if (bkashNumber.isNotEmpty()) {
                 val requestBody = UpdatePaymentCycleRequest(SessionManager.courierUserId, bkashNumber, "instant")
                 viewModel.updatePaymentCycle(requestBody).observe(viewLifecycleOwner, Observer { model->
-                    binding?.paymentRequestDate?.text = model.preferredPaymentCycleDate
+                    binding?.paymentRequestDate?.text = dateFormat(model.preferredPaymentCycleDate!!)
                 })
 
             } else {
@@ -90,7 +90,6 @@ class InstantPaymentUpdateFragment : Fragment() {
     private fun dateFormat(inputDate: String): String {
         var date = inputDate.split("T").first()
         date = DigitConverter.formatDate(date, "yyyy-MM-dd", "dd-MM-yyyy")
-        date = DigitConverter.toBanglaDigit(date)
         return date
     }
 
