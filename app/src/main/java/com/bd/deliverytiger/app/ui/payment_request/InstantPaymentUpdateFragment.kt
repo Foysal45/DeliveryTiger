@@ -6,11 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
 import com.bd.deliverytiger.app.databinding.FragmentInstantPaymentUpdateBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
+import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
+import com.bd.deliverytiger.app.utils.AppConstant
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.toast
 import org.koin.android.ext.android.inject
@@ -66,6 +69,20 @@ class InstantPaymentUpdateFragment : Fragment() {
             }
         }
 
+        binding?.faqBtn?.setOnClickListener {
+            goToWebView(AppConstant.FAQ_URL)
+        }
+
+    }
+
+    private fun goToWebView(url: String) {
+        val fragment = WebViewFragment.newInstance(url, "FAQ")
+        val tag = WebViewFragment.tag
+
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.mainActivityContainer, fragment, tag)
+        ft?.addToBackStack(tag)
+        ft?.commit()
     }
 
     override fun onDestroyView() {
