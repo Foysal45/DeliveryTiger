@@ -8,11 +8,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
-import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsResponse
 import com.bd.deliverytiger.app.databinding.FragmentDeliveryDetailsBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
-import com.bd.deliverytiger.app.utils.DigitConverter
-import com.bd.deliverytiger.app.utils.SessionManager
 import org.koin.android.ext.android.inject
 
 class DeliveryDetailsFragment : Fragment() {
@@ -20,8 +17,6 @@ class DeliveryDetailsFragment : Fragment() {
     private var binding : FragmentDeliveryDetailsBinding? = null
     private  var dataAdapter: DeliveryDetailsAdapter = DeliveryDetailsAdapter()
     private val viewModel: DeliveryDetailsViewModel by inject()
-    private val dataList: MutableList<DeliveryDetailsResponse> = mutableListOf()
-
 
     private lateinit var dataRequestBody: DeliveryDetailsRequest
     var title = ""
@@ -32,7 +27,6 @@ class DeliveryDetailsFragment : Fragment() {
         }
         val tag: String = DeliveryDetailsFragment::class.java.name
     }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentDeliveryDetailsBinding.inflate(inflater, container, false).also {

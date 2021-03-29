@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -21,6 +22,7 @@ import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.config.BannerModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
+import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnCountResponseItem
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
@@ -68,6 +70,7 @@ class DashboardFragment : Fragment() {
     private lateinit var dashboardAdapter: DashboardAdapter
     private val dataList: MutableList<DashboardData> = mutableListOf()
     private val returnDataList: MutableList<DashboardData> = mutableListOf()
+    private var dateRangeFilterList: MutableList<DeliveredReturnCountResponseItem> = mutableListOf()
     private val viewModel: DashboardViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
     //private lateinit var monthSpinnerAdapter: CustomSpinnerAdapter
@@ -129,18 +132,7 @@ class DashboardFragment : Fragment() {
         initClickLister()
         //showDeliveryChargeCalculator()
         //fetchAccountsData()
-
-        binding?.dateRangePicker?.setOnClickListener {
-            dateRangePicker()
-        }
-        binding?.deliveryFilterLayout?.setOnClickListener {
-            val reqBody = DeliveryDetailsRequest(fromDate, toDate, SessionManager.courierUserId,"delivery")
-            addFragment(DeliveryDetailsFragment.newInstance(reqBody), DeliveryDetailsFragment.tag)
-        }
-        binding?.deliveredReturnLayout?.setOnClickListener {
-            val reqBody = DeliveryDetailsRequest(fromDate, toDate, SessionManager.courierUserId,"return")
-            addFragment(DeliveryDetailsFragment.newInstance(reqBody), DeliveryDetailsFragment.tag)
-        }
+        initDeliveredClickLister()
     }
 
     override fun onResume() {
@@ -154,6 +146,38 @@ class DashboardFragment : Fragment() {
         super.onPause()
         worker?.let {
             handler.removeCallbacks(it)
+        }
+    }
+
+    private fun initDeliveredClickLister(){
+        binding?.dateRangePicker?.setOnClickListener {
+            dateRangePicker()
+        }
+
+        binding?.deliveryFilterLayout?.setOnClickListener {
+            if(dateRangeFilterList.isEmpty()){
+                Toast.makeText(requireContext(), "কোনো তথ্য পাওয়া যায়নি", Toast.LENGTH_SHORT).show()
+            }else{
+                if (dateRangeFilterList.first().delivered != 0){
+                    val reqBody = DeliveryDetailsRequest(fromDate, toDate, SessionManager.courierUserId,"delivery")
+                    addFragment(DeliveryDetailsFragment.newInstance(reqBody), DeliveryDetailsFragment.tag)
+                }else{
+                    Toast.makeText(requireContext(), "কোনো তথ্য পাওয়া যায়নি", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        }
+        binding?.deliveredReturnLayout?.setOnClickListener {
+            if(dateRangeFilterList.isEmpty()){
+                Toast.makeText(requireContext(), "কোনো তথ্য পাওয়া যায়নি", Toast.LENGTH_SHORT).show()
+            }else{
+                if (dateRangeFilterList.first().returned != 0) {
+                    val reqBody = DeliveryDetailsRequest(fromDate, toDate, SessionManager.courierUserId, "return")
+                    addFragment(DeliveryDetailsFragment.newInstance(reqBody), DeliveryDetailsFragment.tag)
+                }else{
+                    Toast.makeText(requireContext(), "কোনো তথ্য পাওয়া যায়নি", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
@@ -810,18 +834,22 @@ class DashboardFragment : Fragment() {
             val requestBody = DeliveredReturnedCountRequest(fromDate, toDate, SessionManager.courierUserId)
 
             viewModel.fetchDeliveredCount(requestBody).observe(viewLifecycleOwner, Observer { list->
-                binding?.filterCountDelivery?.text = "${DigitConverter.toBanglaDigit(list.first().delivered)} টি"
-                binding?.filterCountReturn?.text = "${DigitConverter.toBanglaDigit(list.first().returned)} টি"
+                dateRangeFilterList.addAll(list.toMutableList())
+                binding?.filterCountDelivery?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().delivered)} টি"
+                binding?.filterCountReturn?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().returned)} টি"
             })
+
         }
         binding?.clearDateRangeImage?.setOnClickListener {
             fromDate = ""
             toDate = ""
+            dateRangeFilterList.clear()
             binding?.filterCountDelivery?.text = "${DigitConverter.toBanglaDigit(0)} টি"
             binding?.filterCountReturn?.text = "${DigitConverter.toBanglaDigit(0)} টি"
             binding?.dateRangePicker?.text = ""
             binding?.clearDateRangeImage?.visibility = View.GONE
         }
+
     }
 
     /*private fun showDeliveryChargeCalculator() {
