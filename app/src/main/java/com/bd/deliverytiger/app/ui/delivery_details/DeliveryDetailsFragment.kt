@@ -23,12 +23,12 @@ class DeliveryDetailsFragment : Fragment() {
     private val dataList: MutableList<DeliveryDetailsResponse> = mutableListOf()
 
 
-    private lateinit var datarequestBody: DeliveryDetailsRequest
+    private lateinit var dataRequestBody: DeliveryDetailsRequest
     var title = ""
 
     companion object{
-        fun newInstance(datarequestBody: DeliveryDetailsRequest): DeliveryDetailsFragment = DeliveryDetailsFragment().apply {
-            this.datarequestBody = datarequestBody
+        fun newInstance(dataRequestBody: DeliveryDetailsRequest): DeliveryDetailsFragment = DeliveryDetailsFragment().apply {
+            this.dataRequestBody = dataRequestBody
         }
         val tag: String = DeliveryDetailsFragment::class.java.name
     }
@@ -43,10 +43,10 @@ class DeliveryDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (datarequestBody.type == "return"){
-            title = "রিটার্ন"
+        title = if (dataRequestBody.type == "return"){
+            "রিটার্ন"
         }else{
-            title = "ডেলিভারি"
+            "ডেলিভারি"
         }
 
         with(binding?.recyclerView!!) {
@@ -59,7 +59,7 @@ class DeliveryDetailsFragment : Fragment() {
 
     private fun fetchDetailsData() {
 
-        viewModel.fetchAllDataList(datarequestBody).observe(viewLifecycleOwner, Observer {  list->
+        viewModel.fetchAllDataList(dataRequestBody).observe(viewLifecycleOwner, Observer {  list->
             dataAdapter.initLoad(list)
             if (list.isNullOrEmpty()){
                 binding?.emptyView?.visibility = View.VISIBLE

@@ -19,6 +19,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
@@ -79,8 +80,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private lateinit var checkTerms: AppCompatCheckBox
     private lateinit var checkTermsTV: TextView
     private lateinit var deliveryTypeRV: RecyclerView
-    private lateinit var deliveryButton: MaterialButton
-    private lateinit var deliveryTakaButton: MaterialButton
+    private lateinit var deliveryButton: LinearLayout
+    private lateinit var deliveryTakaButton: LinearLayout
     private lateinit var togglePickupGroup: MaterialButtonToggleGroup
     private lateinit var toggleButtonPickup1: MaterialButton
     private lateinit var pickupAddressLayout: ConstraintLayout
@@ -236,8 +237,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         checkTerms = view.findViewById(R.id.check_terms_condition)
         checkTermsTV = view.findViewById(R.id.check_terms_condition_text)
         deliveryTypeRV = view.findViewById(R.id.delivery_type_selection_rV)
-        deliveryButton = view.findViewById(R.id.toggle_button_1)
-        deliveryTakaButton = view.findViewById(R.id.toggle_button_2)
+        deliveryButton = view.findViewById(R.id.deliveryPrepaidTypeLayout)
+        deliveryTakaButton = view.findViewById(R.id.deliveryTakaCollectionTypeLayout)
         togglePickupGroup = view.findViewById(R.id.toggleButtonPickupGroup)
         toggleButtonPickup1 = view.findViewById(R.id.toggleButtonPickup1)
         pickupAddressLayout = view.findViewById(R.id.pickupAddressLayout)
@@ -379,6 +380,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         deliveryButton.setOnClickListener {
             isOrderTypeSelected = true
+            deliveryButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.dotted_selected)
+            deliveryTakaButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.dotted)
             collectionAmountET.visibility = View.GONE
             actualPackageAmountET.visibility = View.VISIBLE
             isCollection = false
@@ -388,6 +391,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         deliveryTakaButton.setOnClickListener {
             isOrderTypeSelected = true
+            deliveryTakaButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.dotted_selected)
+            deliveryButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.dotted)
             collectionAmountET.visibility = View.VISIBLE
             actualPackageAmountET.visibility = View.GONE
             collectionAmountET.requestFocus()

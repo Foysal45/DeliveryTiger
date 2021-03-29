@@ -11,9 +11,11 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
 import com.bd.deliverytiger.app.databinding.FragmentInstantPaymentUpdateBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
+import com.bd.deliverytiger.app.utils.DigitConverter
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.toast
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 
 class InstantPaymentUpdateFragment : Fragment() {
 
@@ -45,7 +47,7 @@ class InstantPaymentUpdateFragment : Fragment() {
                 binding?.requestFormLayout?.visibility = View.VISIBLE
             }else{
                 binding?.requestFormLayout?.visibility = View.GONE
-                binding?.paymentRequestDate?.text = model.preferredPaymentCycleDate
+                binding?.paymentRequestDate?.text = dateFormat(model.preferredPaymentCycleDate)
             }
         })
 
@@ -58,7 +60,7 @@ class InstantPaymentUpdateFragment : Fragment() {
             if (bkashNumber.isNotEmpty()) {
                 val requestBody = UpdatePaymentCycleRequest(SessionManager.courierUserId, bkashNumber, "instant")
                 viewModel.updatePaymentCycle(requestBody).observe(viewLifecycleOwner, Observer { model->
-                    binding?.paymentRequestDate?.text = model.preferredPaymentCycleDate
+                    binding?.paymentRequestDate?.text = dateFormat(model.preferredPaymentCycleDate!!)
                 })
 
             } else {
@@ -66,6 +68,13 @@ class InstantPaymentUpdateFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun dateFormat(inputDate: String): String {
+        var date = inputDate.split("T").first()
+        date = DigitConverter.formatDate(date, "yyyy-MM-dd", "dd-MM-yyyy")
+        date = DigitConverter.toBanglaDigit(date)
+        return date
     }
 
     override fun onDestroyView() {
