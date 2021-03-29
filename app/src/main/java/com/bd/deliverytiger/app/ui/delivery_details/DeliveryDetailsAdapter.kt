@@ -8,11 +8,12 @@ import com.bd.deliverytiger.app.api.model.complain.ComplainData
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsResponse
 import com.bd.deliverytiger.app.databinding.ItemViewDeliveryDetailsBinding
 import com.bd.deliverytiger.app.utils.DigitConverter
+import timber.log.Timber
 
 class DeliveryDetailsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList: MutableList<DeliveryDetailsResponse> = mutableListOf()
-    var onItemClick: ((position: Int, model: DeliveryDetailsResponse) -> Unit)? = null
+    var onItemClick: (() -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
        val binding: ItemViewDeliveryDetailsBinding = ItemViewDeliveryDetailsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -26,11 +27,14 @@ class DeliveryDetailsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         if (holder is ViewModel) {
             val model = dataList[position]
             val binding = holder.binding
-            binding.orderId.text = "DT-${model.courierOrdersId}"
-            binding.date.text = "${model.orderDate}"
-            binding.customerName.text = "${model.collectionName}"
-            binding.customerPhone.text = "${model.mobile}"
-            binding.status.text = "${model.statusNameEng}"
+            binding.orderId.text = model.courierOrdersId
+            binding.reference.text = model.collectionName
+            val orderDate = model.orderDate?.split("T")?.first()
+            val formattedDate = DigitConverter.toBanglaDate(orderDate, "yyyy-MM-dd")
+            binding.date.text = formattedDate
+            binding.customerName.text = model.customerName
+            binding.customerPhone.text = model.mobile
+            binding.status.text = model.statusNameEng
         }
     }
 
@@ -38,7 +42,7 @@ class DeliveryDetailsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         init {
             binding.root.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onItemClick?.invoke(adapterPosition, dataList[adapterPosition])
+                    onItemClick?.invoke()
                 }
             }
         }

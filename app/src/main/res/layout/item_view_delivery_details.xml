@@ -53,7 +53,7 @@
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 app:barrierDirection="end"
-                app:constraint_referenced_ids="key1,key3,key6,key7" />
+                app:constraint_referenced_ids="key1,key2,key3,key6,key7" />
 
             <TextView
                 android:id="@+id/key1"
@@ -79,7 +79,7 @@
                 app:layout_constraintTop_toBottomOf="@id/separator"
                 tools:text="25 July, 2019" />
 
-            <!--<TextView
+            <TextView
                 android:id="@+id/key2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/barrier"
                 app:layout_constraintTop_toBottomOf="@id/date"
-                tools:text="985632" />-->
+                tools:text="985632" />
 
             <TextView
                 android:id="@+id/key3"
@@ -112,7 +112,7 @@
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/order_info_value_size"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/date" />
+                app:layout_constraintTop_toBottomOf="@id/key2" />
 
             <TextView
                 android:id="@+id/customerName"
@@ -126,7 +126,7 @@
                 android:textSize="@dimen/order_info_value_size"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/barrier"
-                app:layout_constraintTop_toBottomOf="@id/date"
+                app:layout_constraintTop_toBottomOf="@id/key2"
                 tools:text="Himel Chowdhury" />
 
             <TextView
