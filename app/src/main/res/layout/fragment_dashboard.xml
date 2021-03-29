@@ -350,6 +350,8 @@
                             android:orientation="horizontal"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
+                            tools:ignore="UseCompoundDrawables"
+                            android:gravity="center_vertical"
                             >
 
                             <TextView
@@ -372,12 +374,13 @@
 
                             <ImageView
                                 android:id="@+id/clearDateRangeImage"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:layout_margin="@dimen/size_4"
-                                android:padding="3dp"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginStart="2dp"
+                                android:layout_marginEnd="4dp"
                                 android:layout_gravity="center"
-                                android:src="@drawable/ic_close_24px"
+                                android:src="@drawable/ic_close_white_24dp"
+                                app:tint="@color/black_80"
                                 android:contentDescription="@string/cd"
                                 android:visibility="gone"
                                 tools:visibility="visible"/>
