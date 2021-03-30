@@ -94,6 +94,27 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/paymentMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/titleTV"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:text="পেমেন্ট রিকোয়েস্ট সাবমিট হয়েছে (23 Mar,2021)। 12-24 ঘন্টার মধ্যে বিকাশ একাউন্টে পেমেন্ট পাবেন।"
+        android:gravity="end"
+        />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

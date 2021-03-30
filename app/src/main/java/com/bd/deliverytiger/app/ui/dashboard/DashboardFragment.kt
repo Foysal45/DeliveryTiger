@@ -580,6 +580,9 @@ class DashboardFragment : Fragment() {
                 this.totalAmount = model.netAdjustedAmount.toDouble()
                 this.availability = model.availability
                 this.availabilityMessage = model.availabilityMessage
+                this.paymentRequestDate = model.lastRequestDate ?: ""
+                this.paymentProcessingTime = instantPaymentHourLimit
+                this.paymentStatus = model.paymentStatus
             }
             if (dataList.isNotEmpty()) {
                 dataList.last().apply {

@@ -30,6 +30,9 @@ data class DashboardData(
     var viewType: Int = 0,
     var paymentDate: String = "",
     var availability: Boolean = false,
-    var availabilityMessage: String = ""
+    var availabilityMessage: String = "",
+    var paymentStatus: String = "",
+    var paymentProcessingTime: String = "12-24",
+    var paymentRequestDate: String = ""
 
 )

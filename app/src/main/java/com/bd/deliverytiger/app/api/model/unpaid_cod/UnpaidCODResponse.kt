@@ -31,6 +31,8 @@ data class UnpaidCODResponse(
     var availabilityMessage: String = "",
     @SerializedName("LastRequestDate")
     var lastRequestDate: String? = "", //"Feb 22 2021  2:50PM"
+    @SerializedName("PaymentStatus")
+    var paymentStatus: String = "", // processing
 
 
     @SerializedName("PayableOrders")

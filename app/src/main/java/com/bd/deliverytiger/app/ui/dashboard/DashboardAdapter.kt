@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.text.HtmlCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
@@ -125,11 +126,21 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             val amount = model.totalAmount.toInt()
             binding.countTV.text = "৳ ${DigitConverter.toBanglaDigit(amount, true)}"
 
-            if ((!model.availability && model.availabilityMessage == "Unavailable") || amount <= 0) {
-                binding.actionLayout.visibility = View.GONE
-            } else {
+            if (model.availability && amount > 0) {
                 binding.actionLayout.visibility = View.VISIBLE
+                binding.paymentMessage.isVisible = false
+            } else {
+                binding.actionLayout.visibility = View.GONE
+                // ToDO: check
+                if (model.paymentStatus == "processing") {
+                    val msg = "পেমেন্ট রিকোয়েস্ট সাবমিট হয়েছে (<font color='#00844A'>${model.paymentRequestDate}</font>)। ${DigitConverter.toBanglaDigit(model.paymentProcessingTime)} ঘন্টার মধ্যে বিকাশ একাউন্টে পেমেন্ট পাবেন।"
+                    binding.paymentMessage.text = HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                    binding.paymentMessage.isVisible = true
+                } else {
+                    binding.paymentMessage.isVisible = false
+                }
             }
+
         }
     }
 
