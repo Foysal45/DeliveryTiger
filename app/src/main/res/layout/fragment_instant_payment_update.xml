@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:padding="4dp"
         android:text="ইনস্ট্যান্ট পেমেন্ট শুরু"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/black_80"
         android:textSize="@dimen/text_16"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,70 +23,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/black_80"
         android:textSize="@dimen/text_16"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/paymentRequestTitle"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="28-Jan-2020" />
-
-    <LinearLayout
-        android:id="@+id/requestFormLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/paymentRequestTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"
-        android:visibility="gone"
-        tools:visibility="visible"
-        >
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="4dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp"
-            android:text="ইন্সট্যান্ট পেমেন্ট এক্টিভের জন্য রিকোয়েস্ট করুন"
-            android:textColor="@color/black_80"
-            android:textSize="14sp"
-            />
-
-        <EditText
-            android:id="@+id/bkashNumber"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/login_view_height"
-            android:background="@drawable/bg_add_order_edit_text"
-            android:hint="বিকাশ মোবাইল নম্বর লিখুন"
-            android:importantForAutofill="no"
-            android:inputType="phone"
-            android:maxLength="11"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp"
-            android:textColor="@color/black_80"
-            android:textSize="@dimen/text_14"
-            app:drawableEndCompat="@drawable/ic_star"
-            app:drawableTint="@color/red"
-            app:layout_constraintStart_toEndOf="@id/paymentGroup"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/enablePaymentRequestButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="ইন্সট্যান্ট পেমেন্ট এক্টিভেট"
-            android:layout_gravity="center_horizontal"
-            />
-
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/lastPaymentRequestLayout"
@@ -97,7 +39,7 @@
         android:padding="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/requestFormLayout">
+        app:layout_constraintTop_toBottomOf="@+id/paymentRequestTitle">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -160,8 +102,94 @@
 
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
+    <LinearLayout
+        android:id="@+id/requestFormLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="@drawable/bg_stroke2"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/lastPaymentRequestLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="4dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:text="ইন্সট্যান্ট পেমেন্ট এক্টিভের জন্য রিকোয়েস্ট করুন"
+            android:textColor="@color/black_80"
+            android:textSize="14sp"
+            />
+
+        <EditText
+            android:id="@+id/bkashNumber"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_view_height"
+            android:background="@drawable/bg_add_order_edit_text"
+            android:hint="বিকাশ মোবাইল নম্বর লিখুন"
+            android:importantForAutofill="no"
+            android:inputType="phone"
+            android:maxLength="11"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/text_14"
+            app:drawableEndCompat="@drawable/ic_star"
+            app:drawableTint="@color/red"
+            app:layout_constraintStart_toEndOf="@id/paymentGroup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/enablePaymentRequestButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:text="ইন্সট্যান্ট পেমেন্ট এক্টিভ করতে চাই" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/faqBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="UseCompoundDrawables">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/colorPrimary"
+            android:text="ইনস্ট্যান্ট পেমেন্ট সম্পর্কে জিজ্ঞাসা"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_arrow_right"
+            android:contentDescription="@string/cd"
+            app:tint="@color/colorPrimary" />
+
+    </LinearLayout>
+
+    <!--<com.google.android.material.button.MaterialButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -175,7 +203,7 @@
         android:text="ইনস্ট্যান্ট পেমেন্ট সম্পর্কে জিজ্ঞাসা"
         app:iconGravity="end"
         app:icon="@drawable/ic_arrow_right"
-        />
+        />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
