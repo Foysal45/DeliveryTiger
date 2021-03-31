@@ -151,19 +151,39 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/paymentMessage"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/titleTV"
-            android:textColor="@color/black_80"
-            android:textSize="12sp"
-            android:gravity="end"
-            tools:text="১২ ঘণ্টার মধ্যে পেমেন্ট\nবিকাশ নাম্বারে ট্রান্সফার হবে"
-            />
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables"
+            android:gravity="center_vertical|end"
+            android:layout_marginTop="2dp"
+            >
+
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_payment"
+                android:contentDescription="@string/cd"
+                android:layout_marginEnd="8dp"
+                />
+
+            <TextView
+                android:id="@+id/paymentMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/titleTV"
+                android:textColor="@color/black_80"
+                android:textSize="12sp"
+                android:gravity="end"
+                tools:text="১২ ঘণ্টার মধ্যে পেমেন্ট\nবিকাশ নাম্বারে ট্রান্সফার হবে"
+                />
+
+        </LinearLayout>
 
     </LinearLayout>
 
