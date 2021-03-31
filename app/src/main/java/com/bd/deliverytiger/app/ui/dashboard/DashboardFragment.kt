@@ -26,11 +26,9 @@ import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnC
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
-import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
-import com.bd.deliverytiger.app.ui.add_order.OrderSuccessFragment
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadFragment
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
@@ -132,7 +130,7 @@ class DashboardFragment : Fragment() {
         initClickLister()
         //showDeliveryChargeCalculator()
         //fetchAccountsData()
-        initDeliveredClickLister()
+        manageDeliveryReturnDashboard()
     }
 
     override fun onResume() {
@@ -149,9 +147,29 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun initDeliveredClickLister(){
+    private fun manageDeliveryReturnDashboard(){
+
+        val calendar = Calendar.getInstance()
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        toDate = simpleDateFormat.format(calendar.time)
+        calendar.add(Calendar.DAY_OF_YEAR, -6)
+        fromDate = simpleDateFormat.format(calendar.time)
+        setDateRangePickerTitle()
+        val requestBody = DeliveredReturnedCountRequest(fromDate, toDate, SessionManager.courierUserId)
+        fetchDeliveredReturnCount(requestBody)
+
         binding?.dateRangePicker?.setOnClickListener {
             dateRangePicker()
+        }
+
+        binding?.clearDateRangeImage?.setOnClickListener {
+            fromDate = ""
+            toDate = ""
+            dateRangeFilterList.clear()
+            binding?.filterCountDelivery?.text = "${DigitConverter.toBanglaDigit(0)} টি"
+            binding?.filterCountReturn?.text = "${DigitConverter.toBanglaDigit(0)} টি"
+            binding?.dateRangePicker?.text = ""
+            binding?.clearDateRangeImage?.visibility = View.GONE
         }
 
         binding?.deliveryFilterLayout?.setOnClickListener {
@@ -830,29 +848,25 @@ class DashboardFragment : Fragment() {
 
             fromDate = sdf.format(it.first)
             toDate = sdf.format(it.second)
-
-            val msg = "${DigitConverter.toBanglaDate(fromDate, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate, "yyyy-MM-dd")}"
-            binding?.dateRangePicker?.text = msg
-            binding?.clearDateRangeImage?.visibility = View.VISIBLE
+            setDateRangePickerTitle()
             val requestBody = DeliveredReturnedCountRequest(fromDate, toDate, SessionManager.courierUserId)
-
-            viewModel.fetchDeliveredCount(requestBody).observe(viewLifecycleOwner, Observer { list->
-                dateRangeFilterList.addAll(list.toMutableList())
-                binding?.filterCountDelivery?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().delivered)} টি"
-                binding?.filterCountReturn?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().returned)} টি"
-            })
-
+            fetchDeliveredReturnCount(requestBody)
         }
-        binding?.clearDateRangeImage?.setOnClickListener {
-            fromDate = ""
-            toDate = ""
+    }
+
+    private fun setDateRangePickerTitle(){
+        val msg = "${DigitConverter.toBanglaDate(fromDate, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate, "yyyy-MM-dd")}"
+        binding?.dateRangePicker?.text = msg
+        binding?.clearDateRangeImage?.visibility = View.VISIBLE
+    }
+
+    private fun fetchDeliveredReturnCount(requestBody: DeliveredReturnedCountRequest){
+        viewModel.fetchDeliveredCount(requestBody).observe(viewLifecycleOwner, Observer { list->
             dateRangeFilterList.clear()
-            binding?.filterCountDelivery?.text = "${DigitConverter.toBanglaDigit(0)} টি"
-            binding?.filterCountReturn?.text = "${DigitConverter.toBanglaDigit(0)} টি"
-            binding?.dateRangePicker?.text = ""
-            binding?.clearDateRangeImage?.visibility = View.GONE
-        }
-
+            dateRangeFilterList.addAll(list.toMutableList())
+            binding?.filterCountDelivery?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().delivered)} টি"
+            binding?.filterCountReturn?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().returned)} টি"
+        })
     }
 
     /*private fun showDeliveryChargeCalculator() {
