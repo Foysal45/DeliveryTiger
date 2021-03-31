@@ -16,6 +16,8 @@ import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.databinding.ItemViewDashboardPaymentBinding
 import com.bd.deliverytiger.app.databinding.ItemViewDashboardUnpaidCodBinding
 import com.bd.deliverytiger.app.utils.DigitConverter
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class DashboardAdapter(private val mContext: Context?, private var dataList: MutableList<DashboardData>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -128,16 +130,19 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
 
             if (model.availability && amount > 0) {
                 binding.actionLayout.visibility = View.VISIBLE
-                binding.paymentMessage.isVisible = false
+                binding.paymentMessageLayout.isVisible = false
             } else {
                 binding.actionLayout.visibility = View.GONE
-                // ToDO: check
                 if (model.paymentStatus == "processing") {
-                    val msg = "পেমেন্ট রিকোয়েস্ট সাবমিট হয়েছে (<font color='#00844A'>${model.paymentRequestDate}</font>)। ${DigitConverter.toBanglaDigit(model.paymentProcessingTime)} ঘন্টার মধ্যে বিকাশ একাউন্টে পেমেন্ট পাবেন।"
-                    binding.paymentMessage.text = HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY)
-                    binding.paymentMessage.isVisible = true
+                    val requestTime = DigitConverter.formatDate(model.paymentRequestDate,"dd-MM-yyyy HH:mm:ss", "hh:mm a',' dd MMM")
+                        .replace("AM", "am")
+                        .replace("PM", "pm") // (2.28 pm, 28 Feb)
+                    binding.paymentAmount.text = "৳ ${DigitConverter.toBanglaDigit(amount, true)}"
+                    binding.paymentTime.text = "($requestTime)"
+                    binding.paymentMessage.text = "${DigitConverter.toBanglaDigit(model.paymentProcessingTime)} ঘণ্টার মধ্যে পেমেন্ট\nবিকাশ নাম্বারে ট্রান্সফার হবে"
+                    binding.paymentMessageLayout.isVisible = true
                 } else {
-                    binding.paymentMessage.isVisible = false
+                    binding.paymentMessageLayout.isVisible = false
                 }
             }
 

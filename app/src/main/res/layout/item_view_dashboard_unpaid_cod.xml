@@ -56,13 +56,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center"
+        android:gravity="end"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="16dp"
         android:visibility="gone"
-        tools:visibility="visible"
+        tools:visibility="gone"
         >
 
         <TextView
@@ -94,27 +94,77 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/paymentMessage"
+    <LinearLayout
+        android:id="@+id/paymentMessageLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/titleTV"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
-        android:textColor="@color/black_80"
-        android:textSize="@dimen/text_14"
-        android:visibility="gone"
-        tools:visibility="visible"
-        tools:text="পেমেন্ট রিকোয়েস্ট সাবমিট হয়েছে (23 Mar,2021)। 12-24 ঘন্টার মধ্যে বিকাশ একাউন্টে পেমেন্ট পাবেন।"
-        android:gravity="end"
-        />
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            >
+
+            <TextView
+                android:id="@+id/paymentAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/titleTV"
+                android:textColor="#0F7243"
+                android:textSize="13sp"
+                android:gravity="end"
+                android:layout_marginEnd="5dp"
+                android:textStyle="bold"
+                tools:text="৳ 3200"
+                />
+
+            <TextView
+                android:id="@+id/paymentTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/titleTV"
+                android:textColor="@color/orange"
+                android:textSize="12sp"
+                android:gravity="end"
+                tools:text="(2.28 pm, 28 Feb)"
+                />
 
 
+        </LinearLayout>
 
+        <TextView
+            android:id="@+id/paymentMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/titleTV"
+            android:textColor="@color/black_80"
+            android:textSize="12sp"
+            android:gravity="end"
+            tools:text="১২ ঘণ্টার মধ্যে পেমেন্ট\nবিকাশ নাম্বারে ট্রান্সফার হবে"
+            />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

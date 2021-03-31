@@ -32,7 +32,7 @@ data class UnpaidCODResponse(
     @SerializedName("LastRequestDate")
     var lastRequestDate: String? = "", //"Feb 22 2021  2:50PM"
     @SerializedName("PaymentStatus")
-    var paymentStatus: String = "", // processing
+    var paymentStatus: String = "", // Done / processing
 
 
     @SerializedName("PayableOrders")

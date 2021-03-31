@@ -580,9 +580,9 @@ class DashboardFragment : Fragment() {
                 this.totalAmount = model.netAdjustedAmount.toDouble()
                 this.availability = model.availability
                 this.availabilityMessage = model.availabilityMessage
-                this.paymentRequestDate = model.lastRequestDate ?: ""
+                this.paymentRequestDate = model.lastRequestDate ?: "" // "31-03-2021 13:45:00"
                 this.paymentProcessingTime = instantPaymentHourLimit
-                this.paymentStatus = model.paymentStatus
+                this.paymentStatus = model.paymentStatus // "processing"
             }
             if (dataList.isNotEmpty()) {
                 dataList.last().apply {
@@ -769,8 +769,10 @@ class DashboardFragment : Fragment() {
         //Timber.d("appLog", "InstantPaymentRequest called")
         viewModel.updateInstantPaymentRequest(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { flag ->
             if (flag) {
-                val msg = "আপনার ইন্সট্যান্ট পেমেন্ট রিকোয়েস্টটি গ্রহণ করা হয়েছে। আগামী ${DigitConverter.toBanglaDigit(instantPaymentHourLimit)} ঘন্টার মধ্যে আপনার bKash নাম্বারে (${DigitConverter.toBanglaDigit(SessionManager.bkashNumber)}) ${DigitConverter.toBanglaDigit(netAmount, true)} টাকা পেমেন্ট করা হবে।"
-                alert("নির্দেশনা", msg).show()
+                fetchCollection()
+                context?.toast("আপনার ইন্সট্যান্ট পেমেন্ট রিকোয়েস্টটি গ্রহণ করা হয়েছে")
+                //val msg = "আপনার ইন্সট্যান্ট পেমেন্ট রিকোয়েস্টটি গ্রহণ করা হয়েছে। আগামী ${DigitConverter.toBanglaDigit(instantPaymentHourLimit)} ঘন্টার মধ্যে আপনার bKash নাম্বারে (${DigitConverter.toBanglaDigit(SessionManager.bkashNumber)}) ${DigitConverter.toBanglaDigit(netAmount, true)} টাকা পেমেন্ট করা হবে।"
+                //alert("নির্দেশনা", msg).show()
             }
         })
     }
