@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.graphics.Rect
 import android.location.Location
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -13,9 +14,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.provider.Settings
-import android.view.MenuItem
-import android.view.MotionEvent
-import android.view.View
+import android.util.TypedValue
+import android.view.*
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -271,7 +272,9 @@ class HomeActivity : AppCompatActivity(),
         appUpdateManager()
         UserLogger.logAppOpen()
 
-
+        setKeyboardVisibilityListener() { isShown ->
+            viewModel.keyboardVisibility.value = isShown
+        }
         //facebookHash()
     }
 
@@ -1166,5 +1169,26 @@ class HomeActivity : AppCompatActivity(),
             e.printStackTrace()
         }
     }*/
+
+    private fun setKeyboardVisibilityListener(lister: ((isShown: Boolean) -> Unit)? = null) {
+        val parentView = (findViewById<View>(android.R.id.content) as ViewGroup).getChildAt(0)
+        parentView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            private var alreadyOpen = false
+            private val defaultKeyboardHeightDP = 100
+            private val EstimatedKeyboardDP = defaultKeyboardHeightDP + if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) 48 else 0
+            private val rect: Rect = Rect()
+            override fun onGlobalLayout() {
+                val estimatedKeyboardHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP.toFloat(), parentView.resources.displayMetrics).toInt()
+                parentView.getWindowVisibleDisplayFrame(rect)
+                val heightDiff: Int = parentView.rootView.height - (rect.bottom - rect.top)
+                val isShown = heightDiff >= estimatedKeyboardHeight
+                if (isShown == alreadyOpen) {
+                    return
+                }
+                alreadyOpen = isShown
+                lister?.invoke(isShown)
+            }
+        })
+    }
 
 }

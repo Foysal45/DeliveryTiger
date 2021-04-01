@@ -24,6 +24,8 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
 
     val refreshEvent = MutableLiveData<String>("")
 
+    val keyboardVisibility = MutableLiveData<Boolean>(false)
+
     fun getBannerInfo(): LiveData<BannerResponse> {
 
         viewState.value = ViewState.ProgressState(true)

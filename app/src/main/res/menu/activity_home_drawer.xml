@@ -30,16 +30,16 @@
             android:icon="@drawable/ic_bill_pay_history"
             android:title="@string/return_statement" />
 
+        <item
+            android:id="@+id/nav_payment_request"
+            android:icon="@drawable/ic_history_cod"
+            android:title="@string/instant_payment" />
+
     </group>
 
     <group
         android:id="@+id/settingGroup"
         android:checkableBehavior="none">
-
-        <item
-            android:id="@+id/nav_payment_request"
-            android:icon="@drawable/ic_history_cod"
-            android:title="@string/instant_payment" />
 
         <item
             android:id="@+id/nav_survey"

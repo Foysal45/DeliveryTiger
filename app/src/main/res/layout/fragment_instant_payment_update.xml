@@ -53,8 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="সর্বশেষ পেমেন্ট রিকোয়েস্ট"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/text_16"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -64,8 +64,8 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:text="স্ট্যাটাস"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/text_16"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -112,7 +112,7 @@
         app:layout_constraintTop_toBottomOf="@id/lastPaymentRequestLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="50dp"
         android:visibility="gone"
         tools:visibility="visible"
         >
@@ -173,8 +173,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            android:textColor="@color/orange"
             android:text="ইনস্ট্যান্ট পেমেন্ট সম্পর্কে জিজ্ঞাসা"
             android:textStyle="bold"/>
 
@@ -185,7 +185,7 @@
             android:layout_gravity="center"
             android:src="@drawable/ic_arrow_right"
             android:contentDescription="@string/cd"
-            app:tint="@color/colorPrimary" />
+            app:tint="@color/orange" />
 
     </LinearLayout>
 

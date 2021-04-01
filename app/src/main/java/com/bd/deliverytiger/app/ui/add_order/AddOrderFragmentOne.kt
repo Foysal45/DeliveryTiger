@@ -3,14 +3,18 @@ package com.bd.deliverytiger.app.ui.add_order
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
+import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -115,6 +119,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private val districtList: ArrayList<DistrictDeliveryChargePayLoad> = ArrayList()
     private val allLocationList: MutableList<AllDistrictListsModel> = mutableListOf()
     private var filteredDistrictLists: MutableList<AllDistrictListsModel> = mutableListOf()
+    private var filteredThanaLists: MutableList<AllDistrictListsModel> = mutableListOf()
     private var filteredAreaLists: MutableList<AllDistrictListsModel> = mutableListOf()
     private val thanaOrAriaList: ArrayList<ThanaPayLoad> = ArrayList()
     private var isAriaAvailable = true
@@ -387,6 +392,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             isCollection = false
             orderType = "Only Delivery"
             calculateTotalPrice()
+            actualPackageAmountET.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.red))
         }
 
         deliveryTakaButton.setOnClickListener {
@@ -399,6 +405,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             isCollection = true
             orderType = "Delivery Taka Collection"
             calculateTotalPrice()
+            collectionAmountET.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.red))
         }
 
        /* togglePickupGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
@@ -482,6 +489,15 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             if (tag == "OrderPlace") {
                 homeViewModel.refreshEvent.value = ""
                 isProfileComplete = checkProfileData()
+            }
+        })
+
+        homeViewModel.keyboardVisibility.observe(viewLifecycleOwner, Observer { isShown->
+            Timber.d("isShown $isShown")
+            if (isShown) {
+                binding?.paymentOverViewLayout?.isVisible = false
+            } else {
+                binding?.paymentOverViewLayout?.isVisible = true
             }
         })
 
@@ -665,21 +681,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     private fun goToDistrictSelectDialogue(list: MutableList<AllDistrictListsModel>, parentId: Int, operationFlag: Int) {
 
-        var filterList = listOf<AllDistrictListsModel>()
-        when (operationFlag) {
-            1 -> {
-                filterList = list
-            }
-            2 -> {
-                filterList = list.filter { it.parentId == parentId }.sortedBy { it.districtPriority } as MutableList<AllDistrictListsModel>
-            }
-            3 -> {
-                filterList = list
-            }
-        }
-
         val locationList: MutableList<LocationData> = mutableListOf()
-        filterList.forEach { model ->
+        list.forEach { model ->
             locationList.add(
                     LocationData(
                             model.districtId,
@@ -706,11 +709,18 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     etThana.setText("")
                     etAriaPostOfficeLayout.visibility = View.GONE
 
+                    val filterList = allLocationList.filter { it.parentId == districtId }
+                    filteredThanaLists.clear()
+                    if (filterList.isNotEmpty()) {
+                        val sortedList = filterList.sortedBy { it.districtPriority } as MutableList<AllDistrictListsModel>
+                        filteredThanaLists.addAll(sortedList)
+                    }
+
+                    val sadarThana = filteredThanaLists.first()
+                    getDeliveryCharge(districtId, sadarThana.districtId, 0)
                     if (districtId == 14) {
-                        getDeliveryCharge(districtId, 10026, 0) // Fetch data if any district selected
                         codChargePercentage = codChargePercentageInsideDhaka
                     } else {
-                        getDeliveryCharge(1, 10137, 0)
                         codChargePercentage = codChargePercentageOutsideDhaka
                     }
                     calculateTotalPrice()
@@ -1089,8 +1099,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
             etThana.setOnClickListener {
                 if (districtId != 0) {
-                    Timber.d("ThanaDebug $districtId $allLocationList")
-                    goToDistrictSelectDialogue(allLocationList, districtId,  2)
+                    //Timber.d("ThanaDebug $districtId $allLocationList")
+                    goToDistrictSelectDialogue(filteredThanaLists, 0,  2)
                 } else {
                     context?.toast(getString(R.string.select_dist))
                 }
@@ -1099,7 +1109,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             etAriaPostOffice.setOnClickListener {
                 if (isAriaAvailable) {
                     if (thanaId != 0) {
-                        goToDistrictSelectDialogue(filteredAreaLists, thanaId,  3)
+                        goToDistrictSelectDialogue(filteredAreaLists, 0,  3)
                     } else {
                         context?.toast(getString(R.string.select_thana))
                     }
@@ -1548,5 +1558,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         customersAddress = "Test Customer Address from IT"
         additionalNote = "This is test order from IT"
     }
+
+
 
 }
