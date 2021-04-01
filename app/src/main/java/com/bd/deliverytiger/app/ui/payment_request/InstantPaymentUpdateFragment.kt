@@ -19,6 +19,8 @@ import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.toast
 import org.koin.android.ext.android.inject
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 class InstantPaymentUpdateFragment : Fragment() {
 
@@ -44,16 +46,8 @@ class InstantPaymentUpdateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {  model->
-            if (model.preferredPaymentCycle != "instant") {
-                binding?.paymentRequestDate?.text = "এক্টিভ করা হয়নি"
-                binding?.requestFormLayout?.visibility = View.VISIBLE
-            } else {
-                val formattedDate = DigitConverter.toBanglaDate(model.preferredPaymentCycleDate, "yyyy-MM-dd")
-                binding?.paymentRequestDate?.text = formattedDate
-                binding?.requestFormLayout?.visibility = View.GONE
-            }
-        })
+        fetchCourierUsersInformation()
+        fetchInstantPaymentStatus()
 
         binding?.enablePaymentRequestButton?.setOnClickListener{
             val bkashNumber = binding?.bkashNumber?.text?.toString() ?: ""
@@ -75,9 +69,32 @@ class InstantPaymentUpdateFragment : Fragment() {
             goToWebView(AppConstant.FAQ_URL)
         }
 
-        binding?.lastPaymentRequestDate?.text = SessionManager.instantPaymentLastRequestDate
-        binding?.status?.text = SessionManager.instantPaymentStatus
+    }
 
+    private fun fetchCourierUsersInformation() {
+        viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {  model->
+            if (model.preferredPaymentCycle != "instant") {
+                binding?.paymentRequestDate?.text = "এক্টিভ করা হয়নি"
+                binding?.requestFormLayout?.visibility = View.VISIBLE
+            } else {
+                val formattedDate = DigitConverter.toBanglaDate(model.preferredPaymentCycleDate, "yyyy-MM-dd")
+                binding?.paymentRequestDate?.text = formattedDate
+                binding?.requestFormLayout?.visibility = View.GONE
+            }
+        })
+    }
+
+    private fun fetchInstantPaymentStatus() {
+        //58649
+        viewModel.fetchDTMerchantInstantPaymentStatus(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            if (model.lastRequestDate.isNullOrEmpty()) {
+                binding?.lastPaymentRequestDate?.text = "-"
+                binding?.status?.text = "-"
+            } else {
+                binding?.lastPaymentRequestDate?.text = DigitConverter.formatDate(model.lastRequestDate, "dd-MM-yyyy HH:mm:ss", "dd MMM',' yyyy hh:mm a")
+                binding?.status?.text = if (model.lastPaymentStatus == 0) "${model.lastPaymentAmount}৳ (Processing)" else "${model.lastPaymentAmount}৳ (Paid)"
+            }
+        })
     }
 
     private fun goToWebView(url: String) {

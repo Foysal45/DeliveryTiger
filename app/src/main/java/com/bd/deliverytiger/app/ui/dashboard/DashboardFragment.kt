@@ -585,8 +585,6 @@ class DashboardFragment : Fragment() {
     private fun fetchCODData() {
         viewModel.fetchUnpaidCOD(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
 
-            SessionManager.instantPaymentLastRequestDate = if (model.lastRequestDate.isNullOrEmpty()) "No request" else model.lastRequestDate!!
-            SessionManager.instantPaymentStatus = if (model.availabilityMessage.isNullOrEmpty()) "No status" else model.availabilityMessage
             netAmount = model.netAdjustedAmount
             availability = model.availability
             availabilityMessage = model.availabilityMessage
@@ -598,19 +596,38 @@ class DashboardFragment : Fragment() {
                 this.totalAmount = model.netAdjustedAmount.toDouble()
                 this.availability = model.availability
                 this.availabilityMessage = model.availabilityMessage
-                this.paymentRequestDate = model.lastRequestDate ?: "" // "31-03-2021 13:45:00"
                 this.paymentProcessingTime = instantPaymentHourLimit
-                this.paymentStatus = model.paymentStatus // "processing"
             }
-            if (dataList.isNotEmpty()) {
-                dataList.last().apply {
+
+            viewModel.fetchDTMerchantInstantPaymentStatus(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model1 ->
+                paymentDashboardModel.apply {
                     this.name = "COD কালেকশন"
                     this.totalAmount = model.netAdjustedAmount.toDouble()
                     this.availability = model.availability
                     this.availabilityMessage = model.availabilityMessage
+                    this.paymentProcessingTime = instantPaymentHourLimit
+
+                    this.currentRequestDate = model1.currentRequestDate ?: ""
+                    this.currentPaymentAmount = model1.currentPaymentAmount
+                    this.currentPaymentStatus = model1.currentPaymentStatus
                 }
-                dashboardAdapter.notifyItemChanged(dataList.lastIndex)
-            }
+                if (dataList.isNotEmpty()) {
+                    dataList.last().apply {
+                        this.name = "COD কালেকশন"
+                        this.totalAmount = model.netAdjustedAmount.toDouble()
+                        this.availability = model.availability
+                        this.availabilityMessage = model.availabilityMessage
+                        this.paymentProcessingTime = instantPaymentHourLimit
+
+                        this.currentRequestDate = model1.currentRequestDate ?: ""
+                        this.currentPaymentAmount = model1.currentPaymentAmount
+                        this.currentPaymentStatus = model1.currentPaymentStatus
+                    }
+                    dashboardAdapter.notifyItemChanged(dataList.lastIndex)
+                }
+            })
+
+
         })
     }
 

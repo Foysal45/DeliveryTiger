@@ -8,6 +8,7 @@ import com.bd.deliverytiger.app.api.model.bill_pay_history.BillPayHistoryRespons
 import com.bd.deliverytiger.app.api.model.complain.ComplainData
 import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
+import com.bd.deliverytiger.app.api.model.instant_payment_status.InstantPaymentStatusData
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentData
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsRequest
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsResponse
@@ -70,5 +71,8 @@ interface ApiInterfaceADM {
 
     @GET("api/account/reports/GetMerchantCurrentAdvanceBalance/{courierUserId}")
     suspend fun fetchMerchantCurrentAdvanceBalance(@Path("courierUserId") courierUserId: Int): NetworkResponse<AdvanceBalanceData, ErrorResponse>
+
+    @GET("api/account/reports/GetDTMerchantInstantPaymentStatus/{courierUserId}")
+    suspend fun fetchDTMerchantInstantPaymentStatus(@Path("courierUserId") courierUserId: Int): NetworkResponse<InstantPaymentStatusData, ErrorResponse>
 
 }

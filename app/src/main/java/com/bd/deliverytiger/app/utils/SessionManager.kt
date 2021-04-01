@@ -414,13 +414,23 @@ object SessionManager {
             }
         }
 
-    var instantPaymentStatus: String
+    var instantPaymentLastStatus: Int
         get() {
-            return pref.getString("instantPaymentStatus", "")!!
+            return pref.getInt("instantPaymentLastStatus", -1)
         }
         set(value) {
             pref.edit {
-                putString("instantPaymentStatus", value)
+                putInt("instantPaymentLastStatus", value)
+            }
+        }
+
+    var instantPaymentAmount: Int
+        get() {
+            return pref.getInt("instantPaymentAmount", 0)
+        }
+        set(value) {
+            pref.edit {
+                putInt("instantPaymentAmount", value)
             }
         }
 }

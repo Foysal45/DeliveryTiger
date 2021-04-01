@@ -133,11 +133,11 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
                 binding.paymentMessageLayout.isVisible = false
             } else {
                 binding.actionLayout.visibility = View.GONE
-                if (model.paymentStatus == "processing") {
-                    val requestTime = DigitConverter.formatDate(model.paymentRequestDate,"dd-MM-yyyy HH:mm:ss", "hh:mm a',' dd MMM")
+                if (model.currentRequestDate.isNotEmpty() && model.currentPaymentStatus == 0) {
+                    val requestTime = DigitConverter.formatDate(model.currentRequestDate,"dd-MM-yyyy HH:mm:ss", "hh:mm a',' dd MMM")
                         .replace("AM", "am")
                         .replace("PM", "pm") // (2.28 pm, 28 Feb)
-                    binding.paymentAmount.text = "৳ ${DigitConverter.toBanglaDigit(amount, true)}"
+                    binding.paymentAmount.text = "৳ ${DigitConverter.toBanglaDigit(model.currentPaymentAmount, true)}"
                     binding.paymentTime.text = "($requestTime)"
                     binding.paymentMessage.text = "${DigitConverter.toBanglaDigit(model.paymentProcessingTime)} ঘণ্টার মধ্যে পেমেন্ট\nবিকাশ নাম্বারে ট্রান্সফার হবে"
                     binding.paymentMessageLayout.isVisible = true
