@@ -883,7 +883,9 @@ class DashboardFragment : Fragment() {
         viewModel.fetchDeliveredCount(requestBody).observe(viewLifecycleOwner, Observer { list->
             dateRangeFilterList.clear()
             dateRangeFilterList.addAll(list.toMutableList())
+            binding?.filterCountDeliveryPercent?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().delivered)}%"
             binding?.filterCountDelivery?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().delivered)} টি"
+            binding?.filterCountReturnPercent?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().delivered)}%"
             binding?.filterCountReturn?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().returned)} টি"
         })
     }
