@@ -876,16 +876,16 @@ class DashboardFragment : Fragment() {
     private fun setDateRangePickerTitle(){
         val msg = "${DigitConverter.toBanglaDate(fromDate, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate, "yyyy-MM-dd")}"
         binding?.dateRangePicker?.text = msg
-        binding?.clearDateRangeImage?.visibility = View.VISIBLE
+        //binding?.clearDateRangeImage?.visibility = View.VISIBLE
     }
 
     private fun fetchDeliveredReturnCount(requestBody: DeliveredReturnedCountRequest){
         viewModel.fetchDeliveredCount(requestBody).observe(viewLifecycleOwner, Observer { list->
             dateRangeFilterList.clear()
-            dateRangeFilterList.addAll(list.toMutableList())
-            binding?.filterCountDeliveryPercent?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().delivered)}%"
+            dateRangeFilterList.addAll(list)
+            binding?.filterCountDeliveryPercent?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().deliveredPercentage)}%"
             binding?.filterCountDelivery?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().delivered)} টি"
-            binding?.filterCountReturnPercent?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().delivered)}%"
+            binding?.filterCountReturnPercent?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().returnPercentagee)}%"
             binding?.filterCountReturn?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().returned)} টি"
         })
     }

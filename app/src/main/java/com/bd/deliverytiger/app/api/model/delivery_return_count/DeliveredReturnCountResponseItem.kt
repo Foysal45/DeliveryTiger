@@ -7,5 +7,10 @@ data class DeliveredReturnCountResponseItem(
     @SerializedName("Delivered")
     var delivered: Int = 0,
     @SerializedName("Return")
-    var returned: Int = 0
+    var returned: Int = 0,
+    @SerializedName("DeliveredPercentage")
+    var deliveredPercentage: Int = 0,
+    @SerializedName("ReturnPercentagee")
+    var returnPercentagee: Int = 0,
+
 )
