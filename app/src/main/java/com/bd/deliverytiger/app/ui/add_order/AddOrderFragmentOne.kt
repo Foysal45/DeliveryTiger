@@ -731,7 +731,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     areaId = 0
                     etAriaPostOffice.setText("")
 
-                    val filterArea = list.filter { it.parentId == thanaId } as MutableList<AllDistrictListsModel>
+                    val filterArea = allLocationList.filter { it.parentId == thanaId } as MutableList<AllDistrictListsModel>
                     isAriaAvailable = filterArea.isNotEmpty()
                     Timber.d("filterArea $filterArea")
 

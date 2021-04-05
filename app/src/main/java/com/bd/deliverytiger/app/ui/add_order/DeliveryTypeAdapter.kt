@@ -6,12 +6,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
 import com.bd.deliverytiger.app.databinding.ItemViewDeliveryTypeBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
+import java.util.*
 
 class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList: MutableList<WeightRangeWiseData> = mutableListOf()
     var onItemClick: ((position: Int, model: WeightRangeWiseData) -> Unit)? = null
     private var selectedItem: Int = -1
+
+    private val options = RequestOptions().signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ItemViewDeliveryTypeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -28,10 +33,12 @@ class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             if (position == selectedItem) {
                 Glide.with(binding.deliveryTypeImage)
                     .load(model.onImageLink)
+                    .apply(options)
                     .into(binding.deliveryTypeImage)
             } else {
                 Glide.with(binding.deliveryTypeImage)
                     .load(model.offImageLink)
+                    .apply(options)
                     .into(binding.deliveryTypeImage)
             }
         }

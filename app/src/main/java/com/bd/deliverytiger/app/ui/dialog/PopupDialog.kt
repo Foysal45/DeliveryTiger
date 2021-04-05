@@ -13,6 +13,8 @@ import com.bd.deliverytiger.app.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.bumptech.glide.signature.ObjectKey
+import java.util.*
 
 class PopupDialog : DialogFragment() {
 
@@ -44,6 +46,7 @@ class PopupDialog : DialogFragment() {
         Glide.with(requireContext())
             .asBitmap()
             .load(imageUrl)
+            .signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
             .into(object : CustomTarget<Bitmap?>() {
                 override fun onLoadCleared(placeholder: Drawable?) {}
 
