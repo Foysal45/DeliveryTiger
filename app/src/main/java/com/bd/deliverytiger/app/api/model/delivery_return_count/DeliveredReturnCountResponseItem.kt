@@ -4,13 +4,13 @@ package com.bd.deliverytiger.app.api.model.delivery_return_count
 import com.google.gson.annotations.SerializedName
 
 data class DeliveredReturnCountResponseItem(
-    @SerializedName("Delivered")
+    @SerializedName("delivered")
     var delivered: Int = 0,
-    @SerializedName("Return")
+    @SerializedName("return")
     var returned: Int = 0,
-    @SerializedName("DeliveredPercentage")
+    @SerializedName("deliveredPercentage")
     var deliveredPercentage: Int = 0,
-    @SerializedName("ReturnPercentagee")
+    @SerializedName("returnPercentagee")
     var returnPercentagee: Int = 0,
 
 )

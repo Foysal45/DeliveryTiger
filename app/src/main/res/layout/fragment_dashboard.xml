@@ -440,7 +440,8 @@
                                         android:layout_gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/text_14"
+                                        android:textSize="@dimen/text_16"
+                                        android:textStyle="bold"
                                         android:text="০%" />
 
                                 </LinearLayout>
@@ -498,8 +499,10 @@
                                         android:layout_gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/text_14"
-                                        android:text="০%" />
+                                        android:textSize="@dimen/text_16"
+                                        android:text="০%"
+                                        android:textStyle="bold"
+                                        />
 
                                 </LinearLayout>
 

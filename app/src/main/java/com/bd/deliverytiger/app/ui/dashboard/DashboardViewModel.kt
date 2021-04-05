@@ -276,7 +276,12 @@ class DashboardViewModel(private val repository: AppRepository) : ViewModel() {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {
                     is NetworkResponse.Success -> {
-                        responseBody.value = response.body.model
+                        if (response.body.model != null) {
+                            responseBody.value = response.body.model
+                        } else {
+                            responseBody.value = listOf()
+                        }
+
                     }
                     is NetworkResponse.ServerError -> {
                         val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
@@ -436,8 +441,9 @@ class DashboardViewModel(private val repository: AppRepository) : ViewModel() {
                         responseBody.value = response.body
                     }
                     is NetworkResponse.ServerError -> {
-                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
-                        viewState.value = ViewState.ShowMessage(message)
+                        //val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        //viewState.value = ViewState.ShowMessage(message)
+                        responseBody.value = InstantPaymentStatusData()
                     }
                     is NetworkResponse.NetworkError -> {
                         val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"

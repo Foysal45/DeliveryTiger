@@ -879,14 +879,19 @@ class DashboardFragment : Fragment() {
         //binding?.clearDateRangeImage?.visibility = View.VISIBLE
     }
 
-    private fun fetchDeliveredReturnCount(requestBody: DeliveredReturnedCountRequest){
+    private fun fetchDeliveredReturnCount(requestBody: DeliveredReturnedCountRequest) {
+
         viewModel.fetchDeliveredCount(requestBody).observe(viewLifecycleOwner, Observer { list->
-            dateRangeFilterList.clear()
-            dateRangeFilterList.addAll(list)
-            binding?.filterCountDeliveryPercent?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().deliveredPercentage)}%"
-            binding?.filterCountDelivery?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().delivered)} টি"
-            binding?.filterCountReturnPercent?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().returnPercentagee)}%"
-            binding?.filterCountReturn?.text = "${DigitConverter.toBanglaDigit(dateRangeFilterList.first().returned)} টি"
+            if (list.isNotEmpty()) {
+                dateRangeFilterList.clear()
+                dateRangeFilterList.addAll(list)
+                val model = dateRangeFilterList.first()
+
+                binding?.filterCountDeliveryPercent?.text = "${DigitConverter.toBanglaDigit(model.deliveredPercentage)}%"
+                binding?.filterCountDelivery?.text = "${DigitConverter.toBanglaDigit(model.delivered)} টি"
+                binding?.filterCountReturnPercent?.text = "${DigitConverter.toBanglaDigit(model.returnPercentagee)}%"
+                binding?.filterCountReturn?.text = "${DigitConverter.toBanglaDigit(model.returned)} টি"
+            }
         })
     }
 
