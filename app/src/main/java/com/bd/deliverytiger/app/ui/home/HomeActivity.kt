@@ -744,7 +744,7 @@ class HomeActivity : AppCompatActivity(),
                 } else {
 
                     try {
-                        val fragment = WebViewFragment.newInstance(AppConstant.EXPRESS_SERVICE_URL, getString(R.string.expressService))
+                        val fragment = WebViewFragment.newInstance(AppConstant.DISTRICT_WIDE_SERVICE_URL, getString(R.string.expressService))
                         addFragment(fragment, WebViewFragment.tag)
                     } catch (e: Exception) {
                         e.printStackTrace()

@@ -15,6 +15,7 @@ object AppConstant {
     const val COMMUNICATION_URL = "https://deliverytiger.com.bd/contact-us-for-app"
     const val TERMS_URL = "https://deliverytiger.com.bd/terms-and-conditions"
     const val EXPRESS_SERVICE_URL = "https://deliverytiger.com.bd/service-and-express"
+    const val DISTRICT_WIDE_SERVICE_URL = "https://deliverytiger.com.bd/districtwise-service-and-speed"
 
     const val TEST_BANNER = "https://static.ajkerdeal.com/images/merchant/same_day_delivery.jpg"
     const val CHARGE_CALCULATOR = "https://deliverytiger.com.bd/price-calculator-for-app"

@@ -187,6 +187,9 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
                     onPaymentRequestClick?.invoke(adapterPosition, dataList[adapterPosition])
                 }
             }
+            binding.paymentMessageLayout.setOnClickListener {
+
+            }
         }
     }
 

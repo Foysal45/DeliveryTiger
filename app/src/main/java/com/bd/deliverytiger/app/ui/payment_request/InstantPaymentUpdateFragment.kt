@@ -27,6 +27,8 @@ class InstantPaymentUpdateFragment : Fragment() {
     private var binding: FragmentInstantPaymentUpdateBinding? = null
     private val viewModel: InstantPaymentUpdateViewModel by inject()
 
+    private var formattedDate: String = ""
+
     companion object {
         fun newInstance(): InstantPaymentUpdateFragment = InstantPaymentUpdateFragment()
         val tag: String = InstantPaymentUpdateFragment::class.java.name
@@ -77,7 +79,7 @@ class InstantPaymentUpdateFragment : Fragment() {
                 binding?.paymentRequestDate?.text = "এক্টিভ করা হয়নি"
                 binding?.requestFormLayout?.visibility = View.VISIBLE
             } else {
-                val formattedDate = DigitConverter.toBanglaDate(model.preferredPaymentCycleDate, "yyyy-MM-dd")
+                formattedDate = DigitConverter.toBanglaDate(model.preferredPaymentCycleDate, "yyyy-MM-dd")
                 binding?.paymentRequestDate?.text = formattedDate
                 binding?.requestFormLayout?.visibility = View.GONE
             }
@@ -93,6 +95,12 @@ class InstantPaymentUpdateFragment : Fragment() {
             } else {
                 binding?.lastPaymentRequestDate?.text = DigitConverter.formatDate(model.lastRequestDate, "dd-MM-yyyy HH:mm:ss", "dd MMM',' yyyy hh:mm a")
                 binding?.status?.text = if (model.lastPaymentStatus == 0) "${model.lastPaymentAmount}৳ (Processing)" else "${model.lastPaymentAmount}৳ (Paid)"
+                binding?.requestFormLayout?.visibility = View.GONE
+                if (formattedDate.isNotEmpty()) {
+                    binding?.paymentRequestDate?.text = formattedDate
+                } else {
+                    binding?.paymentRequestDate?.text = "এক্টিভ করা হয়েছে"
+                }
             }
         })
     }
