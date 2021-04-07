@@ -887,9 +887,9 @@ class DashboardFragment : Fragment() {
                 dateRangeFilterList.addAll(list)
                 val model = dateRangeFilterList.first()
 
-                binding?.filterCountDeliveryPercent?.text = "${DigitConverter.toBanglaDigit(model.deliveredPercentage)}%"
+                binding?.filterCountDeliveryPercent?.text = DigitConverter.toBanglaDigit(model.deliveredPercentage)
                 binding?.filterCountDelivery?.text = "${DigitConverter.toBanglaDigit(model.delivered)} টি"
-                binding?.filterCountReturnPercent?.text = "${DigitConverter.toBanglaDigit(model.returnPercentagee)}%"
+                binding?.filterCountReturnPercent?.text = DigitConverter.toBanglaDigit(model.returnPercentagee)
                 binding?.filterCountReturn?.text = "${DigitConverter.toBanglaDigit(model.returned)} টি"
             }
         })

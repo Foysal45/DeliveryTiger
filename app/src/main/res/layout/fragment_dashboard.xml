@@ -330,6 +330,20 @@
 
                     </LinearLayout>
 
+                    <com.smarteist.autoimageslider.SliderView
+                        android:id="@+id/sliderView"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="18dp"
+                        android:layout_marginBottom="18dp"
+
+                        android:visibility="gone"
+                        app:sliderIndicatorMarginBottom="3dp"
+                        app:sliderIndicatorRadius="2dp"
+                        tools:visibility="visible" />
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/deliveredReturnLayout"
                         android:layout_width="match_parent"
@@ -343,12 +357,33 @@
                         tools:ignore="UselessParent"
                         tools:visibility="visible">
 
+                        <TextView
+                            android:id="@+id/titleDeliveryReturn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/title_oval_shape"
+                            android:padding="5dp"
+                            android:text="ডেলিভারি ও রিটার্ন ট্রেন্ড"
+                            android:textSize="@dimen/text_14"
+                            android:textColor="@color/white"
+                            android:textAlignment="center"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <View
+                            android:id="@+id/separator"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/separator"
+                            app:layout_constraintTop_toBottomOf="@id/titleDeliveryReturn" />
+
                         <LinearLayout
                             android:id="@+id/datePickerLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/separator"
                             app:layout_constraintEnd_toEndOf="parent"
                             tools:ignore="UseCompoundDrawables"
                             android:gravity="center_vertical"
@@ -408,7 +443,6 @@
                                 android:layout_gravity="center_horizontal"
                                 android:layout_marginEnd="8dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/bg_oval_shape"
                                 android:gravity="center"
                                 android:paddingTop="6dp"
                                 android:orientation="vertical"
@@ -417,7 +451,9 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:paddingTop="4dp"
+                                    android:layout_gravity="center"
+                                    android:background="@drawable/bg_top_oval_shape"
+                                    android:padding="5dp"
                                     android:orientation="horizontal">
 
                                     <TextView
@@ -428,35 +464,68 @@
                                         android:gravity="end"
                                         android:maxLines="1"
                                         android:paddingEnd="4dp"
+                                        android:text="ডেলিভারি হয়েছে"
                                         android:textColor="@color/white"
-                                        android:textSize="14sp"
-                                        android:text="ডেলিভারি হয়েছে" />
+                                        android:textSize="14sp" />
 
-                                    <TextView
-                                        android:id="@+id/filterCountDeliveryPercent"
+                                    <LinearLayout
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
-                                        android:layout_gravity="center"
-                                        android:maxLines="1"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/text_16"
-                                        android:textStyle="bold"
-                                        android:text="০%" />
+                                        android:layout_gravity="center_horizontal"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:maxLines="1"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_14"
+                                            android:text="("/>
+
+                                        <TextView
+                                            android:id="@+id/filterCountDeliveryPercent"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:maxLines="1"
+                                            android:textColor="@color/yellow"
+                                            android:textSize="@dimen/text_14"
+                                            android:text="০" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:maxLines="1"
+                                            android:textColor="@color/yellow"
+                                            android:textSize="@dimen/text_12"
+                                            android:text="%" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:maxLines="1"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_14"
+                                            android:text=")"/>
+
+                                    </LinearLayout>
 
                                 </LinearLayout>
 
                                 <TextView
                                     android:id="@+id/filterCountDelivery"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="0dp"
+                                    android:padding="5dp"
+                                    android:gravity="center_horizontal"
                                     android:layout_weight="1"
                                     android:layout_gravity="center"
+                                    android:background="@drawable/bg_bottom_oval_shape"
                                     android:maxLines="1"
                                     android:textSize="@dimen/text_16"
                                     android:textStyle="bold"
                                     android:text="০টি"
-                                    android:textColor="@color/white" />
+                                    android:textColor="@color/black_80" />
 
                             </LinearLayout>
 
@@ -467,7 +536,6 @@
                                 android:layout_marginStart="8dp"
                                 android:layout_weight="1"
                                 android:paddingTop="6dp"
-                                android:background="@drawable/bg_oval_shape"
                                 android:gravity="center"
                                 android:orientation="vertical"
                                 tools:ignore="UselessParent">
@@ -475,7 +543,8 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:paddingTop="4dp"
+                                    android:background="@drawable/bg_top_oval_shape"
+                                    android:padding="5dp"
                                     android:orientation="horizontal">
 
                                     <TextView
@@ -491,32 +560,67 @@
                                         android:textSize="14sp"
                                         android:text="রিটার্ন হয়েছে"/>
 
-                                    <TextView
-                                        android:id="@+id/filterCountReturnPercent"
+                                    <LinearLayout
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
-                                        android:layout_gravity="center"
-                                        android:maxLines="1"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/text_16"
-                                        android:text="০%"
-                                        android:textStyle="bold"
-                                        />
+                                        android:orientation="horizontal"
+                                        android:layout_gravity="center_horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:maxLines="1"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_14"
+                                            android:text="("
+                                            />
+
+                                        <TextView
+                                            android:id="@+id/filterCountReturnPercent"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:maxLines="1"
+                                            android:textColor="@color/yellow"
+                                            android:textSize="@dimen/text_14"
+                                            android:text="০"
+                                            />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:maxLines="1"
+                                            android:textColor="@color/yellow"
+                                            android:textSize="@dimen/text_12"
+                                            android:text="%"
+                                            />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:maxLines="1"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_14"
+                                            android:text=")"
+                                            />
+
+                                    </LinearLayout>
 
                                 </LinearLayout>
 
                                 <TextView
                                     android:id="@+id/filterCountReturn"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="0dp"
+                                    android:background="@drawable/bg_bottom_oval_shape"
                                     android:layout_weight="1"
-                                    android:layout_gravity="center"
+                                    android:padding="5dp"
+                                    android:gravity="center_horizontal"
                                     android:maxLines="1"
                                     android:textSize="@dimen/text_16"
                                     android:textStyle="bold"
                                     android:text="০টি"
-                                    android:textColor="@color/white" />
+                                    android:textColor="@color/black_80" />
 
                             </LinearLayout>
 
@@ -610,20 +714,6 @@
                         </LinearLayout>
 
                     </LinearLayout>-->
-
-                    <com.smarteist.autoimageslider.SliderView
-                        android:id="@+id/sliderView"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginStart="18dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="18dp"
-                        android:layout_marginBottom="18dp"
-
-                        android:visibility="gone"
-                        app:sliderIndicatorMarginBottom="3dp"
-                        app:sliderIndicatorRadius="2dp"
-                        tools:visibility="visible" />
 
 
                     <!--<FrameLayout
