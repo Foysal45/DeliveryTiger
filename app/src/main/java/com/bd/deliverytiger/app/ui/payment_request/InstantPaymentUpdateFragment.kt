@@ -27,6 +27,7 @@ class InstantPaymentUpdateFragment : Fragment() {
     private var binding: FragmentInstantPaymentUpdateBinding? = null
     private val viewModel: InstantPaymentUpdateViewModel by inject()
 
+    private var preferredPaymentCycle = ""
     private var formattedDate: String = ""
 
     companion object {
@@ -48,7 +49,7 @@ class InstantPaymentUpdateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fetchCourierUsersInformation()
+        fetchInstantPaymentActivation()
         fetchInstantPaymentStatus()
 
         binding?.enablePaymentRequestButton?.setOnClickListener{
@@ -73,19 +74,6 @@ class InstantPaymentUpdateFragment : Fragment() {
 
     }
 
-    private fun fetchCourierUsersInformation() {
-        viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {  model->
-            if (model.preferredPaymentCycle != "instant") {
-                binding?.paymentRequestDate?.text = "এক্টিভ করা হয়নি"
-                binding?.requestFormLayout?.visibility = View.VISIBLE
-            } else {
-                formattedDate = DigitConverter.toBanglaDate(model.preferredPaymentCycleDate, "yyyy-MM-dd")
-                binding?.paymentRequestDate?.text = formattedDate
-                binding?.requestFormLayout?.visibility = View.GONE
-            }
-        })
-    }
-
     private fun fetchInstantPaymentStatus() {
         //58649
         viewModel.fetchDTMerchantInstantPaymentStatus(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
@@ -95,11 +83,33 @@ class InstantPaymentUpdateFragment : Fragment() {
             } else {
                 binding?.lastPaymentRequestDate?.text = DigitConverter.formatDate(model.lastRequestDate, "dd-MM-yyyy HH:mm:ss", "dd MMM',' yyyy hh:mm a")
                 binding?.status?.text = if (model.lastPaymentStatus == 0) "${model.lastPaymentAmount}৳ (Processing)" else "${model.lastPaymentAmount}৳ (Paid)"
+            }
+        })
+    }
+
+    private fun fetchInstantPaymentActivation() {
+        viewModel.getInstantPaymentActivationStatus(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            if (model.hasInstantPayment == 1) {
+                binding?.paymentRequestDate?.text = "এক্টিভ করা হয়েছে"
                 binding?.requestFormLayout?.visibility = View.GONE
-                if (formattedDate.isNotEmpty()) {
+            } else {
+                fetchCourierUsersInformation()
+            }
+        })
+    }
+
+    private fun fetchCourierUsersInformation() {
+        viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {  model->
+            preferredPaymentCycle = model.preferredPaymentCycle ?: ""
+
+            if (preferredPaymentCycle != "instant") {
+                binding?.paymentRequestDate?.text = "এক্টিভ করা হয়নি"
+                binding?.requestFormLayout?.visibility = View.VISIBLE
+            } else {
+                if (!model.preferredPaymentCycleDate.isNullOrEmpty()) {
+                    formattedDate = DigitConverter.toBanglaDate(model.preferredPaymentCycleDate, "yyyy-MM-dd")
                     binding?.paymentRequestDate?.text = formattedDate
-                } else {
-                    binding?.paymentRequestDate?.text = "এক্টিভ করা হয়েছে"
+                    binding?.requestFormLayout?.visibility = View.GONE
                 }
             }
         })
