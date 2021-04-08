@@ -298,7 +298,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 extraDeliveryCharge = 0.0
                 offerType = "freedelivery"
             } else {
-                payShipmentCharge = model.chargeAmount
+                payShipmentCharge = model.chargeAmount // TotalCharge = deliveryCharge + extraDeliveryCharge
                 deliveryCharge = model.deliveryCharge
                 extraDeliveryCharge = model.extraDeliveryCharge
                 offerType = ""
