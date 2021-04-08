@@ -97,6 +97,8 @@ class AppRepository(
 
     suspend fun fetchDTMerchantInstantPaymentStatus(courierUserId: Int) = apiInterfaceADM.fetchDTMerchantInstantPaymentStatus(courierUserId)
 
+    suspend fun getInstantPaymentActivationStatus(courierUserId: Int) = apiInterfaceADM.getInstantPaymentActivationStatus(courierUserId)
+
     //******************** ADCORE ********************//
 
     suspend fun getBannerInfo() = apiInterfaceCore.getBannerInfo()
