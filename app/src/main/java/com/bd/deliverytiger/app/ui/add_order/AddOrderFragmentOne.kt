@@ -1076,6 +1076,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                                 filterDeliveryTypeList = model2.weightRangeWiseData.filterNot { it.type == "express" }
                             }
                             deliveryTypeAdapter.initLoad(filterDeliveryTypeList)
+                            //Reset change
+                            payShipmentCharge = 0.0
+                            deliveryCharge = 0.0
+                            extraDeliveryCharge = 0.0
+                            calculateTotalPrice()
+                            // select pre selected
+                            deliveryTypeAdapter.selectPreSelection()
                         }
                     }
                 }
