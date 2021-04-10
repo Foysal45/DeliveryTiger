@@ -30,7 +30,7 @@ class ReferralViewModel(private val repository: AppRepository): ViewModel() {
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
-                            responseBody.value = response.body.model
+                            responseBody.value = response.body.model!!
                         }
                     }
                     is NetworkResponse.ServerError -> {
@@ -64,7 +64,7 @@ class ReferralViewModel(private val repository: AppRepository): ViewModel() {
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
-                            responseBody.value = response.body.model
+                            responseBody.value = response.body.model!!
                         }
                     }
                     is NetworkResponse.ServerError -> {

@@ -67,7 +67,7 @@ class MapViewModel(private val repository: AppRepository): ViewModel() {
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
-                            responseData.value = response.body.model
+                            responseData.value = response.body.model!!
                         }
                     }
                     is NetworkResponse.ServerError -> {
@@ -101,7 +101,7 @@ class MapViewModel(private val repository: AppRepository): ViewModel() {
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
-                            responseData.value = response.body.model
+                            responseData.value = response.body.model!!
                         }
                     }
                     is NetworkResponse.ServerError -> {
@@ -135,7 +135,7 @@ class MapViewModel(private val repository: AppRepository): ViewModel() {
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
-                            responseData.value = response.body.model
+                            responseData.value = response.body.model!!
                         }
                     }
                     is NetworkResponse.ServerError -> {
@@ -169,7 +169,7 @@ class MapViewModel(private val repository: AppRepository): ViewModel() {
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
-                            responseData.value = response.body.model
+                            responseData.value = response.body.model!!
                         }
                     }
                     is NetworkResponse.ServerError -> {

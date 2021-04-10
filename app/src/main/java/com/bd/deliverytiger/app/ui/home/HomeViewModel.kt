@@ -36,7 +36,7 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
-                            bannerInfo.value = response.body.model
+                            bannerInfo.value = response.body.model!!
                         }
                     }
                     is NetworkResponse.ServerError -> {

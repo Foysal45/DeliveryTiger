@@ -29,7 +29,7 @@ class CollectionHistoryViewModel(private val repository: AppRepository): ViewMod
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
-                            responseBody.value = response.body.model
+                            responseBody.value = response.body.model!!
                         }
                     }
                     is NetworkResponse.ServerError -> {

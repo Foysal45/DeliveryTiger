@@ -52,7 +52,7 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
             override fun onResponse(call: Call<GenericResponse<Boolean>>, response: Response<GenericResponse<Boolean>>) {
                 viewState.value = ViewState.ProgressState(false)
                 if (response.isSuccessful && response.body() != null) {
-                    responseBody.value = response.body()!!.model
+                    responseBody.value = response.body()!!.model!!
                 } else {
                     viewState.value = ViewState.ShowMessage(message)
                 }
@@ -108,7 +108,7 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
-                            responseBody.value = response.body.model
+                            responseBody.value = response.body.model!!
                         } else {
 
                         }
@@ -142,7 +142,7 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {
                     is NetworkResponse.Success -> {
-                        responseData.value = response.body.model
+                        responseData.value = response.body.model!!
                     }
                     is NetworkResponse.ServerError -> {
                         val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
@@ -203,7 +203,7 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
-                            responseData.value = response.body.model
+                            responseData.value = response.body.model!!
                         }
                     }
                     is NetworkResponse.ServerError -> {
@@ -238,7 +238,7 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
             override fun onResponse(call: Call<GenericResponse<BreakableChargeData>>, response: Response<GenericResponse<BreakableChargeData>>) {
                 if (response.isSuccessful && response.body() != null) {
                     if (response.body()!!.model != null) {
-                        responseBody.value = response.body()!!.model
+                        responseBody.value = response.body()!!.model!!
                     } else {
                         viewState.value = ViewState.ProgressState(false)
                         viewState.value = ViewState.ShowMessage(message)
@@ -265,7 +265,7 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
             override fun onResponse(call: Call<GenericResponse<List<PackagingData>>>, response: Response<GenericResponse<List<PackagingData>>>) {
                 if (response.isSuccessful && response.body() != null) {
                     if (response.body()!!.model != null) {
-                        responseBody.value = response.body()!!.model
+                        responseBody.value = response.body()!!.model!!
                     } else {
                         viewState.value = ViewState.ProgressState(false)
                         viewState.value = ViewState.ShowMessage(message)
@@ -292,7 +292,7 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
             override fun onResponse(call: Call<GenericResponse<List<DeliveryChargeResponse>>>, response: Response<GenericResponse<List<DeliveryChargeResponse>>>) {
                 if (response.isSuccessful && response.body() != null) {
                     if (response.body()!!.model != null) {
-                        responseBody.value = response.body()!!.model
+                        responseBody.value = response.body()!!.model!!
                     } else {
                         viewState.value = ViewState.ProgressState(false)
                         viewState.value = ViewState.ShowMessage(message)
@@ -319,7 +319,7 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
             override fun onResponse(call: Call<GenericResponse<OrderResponse>>, response: Response<GenericResponse<OrderResponse>>) {
                 if (response.isSuccessful && response.body() != null){
                     if (response.body()!!.model != null){
-                        responseBody.value = response.body()!!.model
+                        responseBody.value = response.body()!!.model!!
                     } else {
                         viewState.value = ViewState.ProgressState(false)
                         viewState.value = ViewState.ShowMessage(message)

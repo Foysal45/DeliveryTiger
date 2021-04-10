@@ -40,7 +40,7 @@ class ProfileViewModel(private val repository: AppRepository): ViewModel() {
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
-                            responseData.value = response.body.model
+                            responseData.value = response.body.model!!
                         }
                     }
                     is NetworkResponse.ServerError -> {
@@ -100,7 +100,7 @@ class ProfileViewModel(private val repository: AppRepository): ViewModel() {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {
                     is NetworkResponse.Success -> {
-                        responseData.value = response.body.model
+                        responseData.value = response.body.model!!
                     }
                     is NetworkResponse.ServerError -> {
                         val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
@@ -133,7 +133,7 @@ class ProfileViewModel(private val repository: AppRepository): ViewModel() {
             override fun onResponse(call: Call<GenericResponse<LoginResponse>>, response: Response<GenericResponse<LoginResponse>>) {
                 viewState.value = ViewState.ProgressState(false)
                 if (response.isSuccessful && response.body() != null && response.body()?.model != null) {
-                    responseBody.value = response.body()?.model
+                    responseBody.value = response.body()?.model!!
                     SessionManager.updateSession(requestBody)
                     viewState.value = ViewState.ShowMessage("সফলভাবে আপডেট হয়েছে")
                     //viewState.value = ViewState.NextState()
@@ -156,7 +156,7 @@ class ProfileViewModel(private val repository: AppRepository): ViewModel() {
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
-                            responseData.value = response.body.model
+                            responseData.value = response.body.model!!
                         }
                     }
                     is NetworkResponse.ServerError -> {
@@ -223,7 +223,7 @@ class ProfileViewModel(private val repository: AppRepository): ViewModel() {
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
-                            responseData.value = response.body.model
+                            responseData.value = response.body.model!!
                         }
                     }
                     is NetworkResponse.ServerError -> {
