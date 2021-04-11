@@ -342,7 +342,9 @@
                         android:visibility="gone"
                         app:sliderIndicatorMarginBottom="3dp"
                         app:sliderIndicatorRadius="2dp"
-                        tools:visibility="visible" />
+                        tools:visibility="visible"
+                        tools:background="@color/black_15"
+                        />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/deliveredReturnLayout"
@@ -490,7 +492,7 @@
                                             android:maxLines="1"
                                             android:textColor="@color/yellow"
                                             android:textSize="@dimen/text_14"
-                                            android:text="০" />
+                                            android:text="-" />
 
                                         <TextView
                                             android:layout_width="wrap_content"
@@ -524,7 +526,8 @@
                                     android:maxLines="1"
                                     android:textSize="@dimen/text_16"
                                     android:textStyle="bold"
-                                    android:text="০টি"
+                                    android:text="-"
+                                    tools:text="০টি"
                                     android:textColor="@color/black_80" />
 
                             </LinearLayout>
@@ -583,7 +586,7 @@
                                             android:maxLines="1"
                                             android:textColor="@color/yellow"
                                             android:textSize="@dimen/text_14"
-                                            android:text="০"
+                                            android:text="-"
                                             />
 
                                         <TextView
@@ -619,7 +622,8 @@
                                     android:maxLines="1"
                                     android:textSize="@dimen/text_16"
                                     android:textStyle="bold"
-                                    android:text="০টি"
+                                    android:text="-"
+                                    tools:text="০টি"
                                     android:textColor="@color/black_80" />
 
                             </LinearLayout>

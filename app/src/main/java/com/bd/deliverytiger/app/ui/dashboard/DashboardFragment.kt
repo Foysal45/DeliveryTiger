@@ -149,14 +149,15 @@ class DashboardFragment : Fragment() {
 
     private fun manageDeliveryReturnDashboard(){
 
-        val calendar = Calendar.getInstance()
+        //Fetch 7 days data
+        /*val calendar = Calendar.getInstance()
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         toDate = simpleDateFormat.format(calendar.time)
         calendar.add(Calendar.DAY_OF_YEAR, -6)
         fromDate = simpleDateFormat.format(calendar.time)
         setDateRangePickerTitle()
         val requestBody = DeliveredReturnedCountRequest(fromDate, toDate, SessionManager.courierUserId)
-        fetchDeliveredReturnCount(requestBody)
+        fetchDeliveredReturnCount(requestBody)*/
 
         binding?.dateRangePicker?.setOnClickListener {
             dateRangePicker()
