@@ -9,5 +9,7 @@ data class DeliveryChargeRequest(
     @SerializedName("thanaId")
     var thanaId: Int,
     @SerializedName("areaId")
-    var areaId: Int = 0
+    var areaId: Int = 0,
+    @SerializedName("serviceType")
+    var serviceType: String = "" // alltoall citytocity
 )

@@ -34,11 +34,13 @@ class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 Glide.with(binding.deliveryTypeImage)
                     .load(model.onImageLink)
                     .apply(options)
+                    .dontAnimate()
                     .into(binding.deliveryTypeImage)
             } else {
                 Glide.with(binding.deliveryTypeImage)
                     .load(model.offImageLink)
                     .apply(options)
+                    .dontAnimate()
                     .into(binding.deliveryTypeImage)
             }
         }

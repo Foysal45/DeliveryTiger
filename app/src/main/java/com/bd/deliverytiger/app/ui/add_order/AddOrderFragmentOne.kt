@@ -202,6 +202,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     private var merchantDistrict: Int = 0
     private var selectedDeliveryType = ""
+    private var serviceType: String = "alltoall"
 
     private var binding: FragmentAddOrderFragmentOneBinding? = null
     private val viewModel: AddOrderViewModel by inject()
@@ -717,7 +718,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     }
 
                     val sadarThana = filteredThanaLists.first()
-                    getDeliveryCharge(districtId, sadarThana.districtId, 0)
+                    // Check same city logic
+                    //ToDo: Enable it after test
+                    //serviceType = if (merchantDistrict == districtId) { "citytocity" } else "alltoall"
+                    getDeliveryCharge(districtId, sadarThana.districtId, 0, serviceType)
                     if (districtId == 14) {
                         codChargePercentage = codChargePercentageInsideDhaka
                     } else {
@@ -742,14 +746,14 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     } else {
                         etAriaPostOfficeLayout.visibility = View.GONE
                     }
-                    getDeliveryCharge(districtId, thanaId, 0)
+                    getDeliveryCharge(districtId, thanaId, 0, serviceType)
                     Timber.d("filterArea $filteredAreaLists")
                 }
                 3 -> {
                     areaId = model.id
                     if (!model.displayPostalCode.isNullOrEmpty()){
                         etAriaPostOffice.setText("${model.displayNameBangla} ${"${model.displayPostalCode}"}")
-                        getDeliveryCharge(districtId, thanaId, areaId)
+                        getDeliveryCharge(districtId, thanaId, areaId, serviceType)
                     }else
                         etAriaPostOffice.setText(model.displayNameBangla)
                     }
@@ -1039,9 +1043,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     }
 
-    private fun getDeliveryCharge(districtId: Int, thanaId: Int, areaId: Int) {
+    private fun getDeliveryCharge(districtId: Int, thanaId: Int, areaId: Int, serviceType: String) {
 
-        viewModel.getDeliveryCharge(DeliveryChargeRequest(districtId, thanaId, areaId)).observe(viewLifecycleOwner, Observer { list ->
+        viewModel.getDeliveryCharge(DeliveryChargeRequest(districtId, thanaId, areaId, serviceType)).observe(viewLifecycleOwner, Observer { list ->
 
             val weightList: MutableList<String> = mutableListOf()
             weightList.add("ওজন (কেজি)")
@@ -1241,7 +1245,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                         collectionThanaId = model.thanaId
                     }
                     if (districtId == collectionDistrictId) {
-                        getDeliveryCharge(14, 10026, 0)
+                        getDeliveryCharge(14, 10026, 0, serviceType)
                     }
                     /*deliveryTypeAdapter.clearSelectedItemPosition()
                     deliveryTypeAdapter.notifyDataSetChanged()
