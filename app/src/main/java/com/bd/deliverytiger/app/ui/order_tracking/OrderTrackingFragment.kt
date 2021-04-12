@@ -52,8 +52,10 @@ class OrderTrackingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding?.merchantInfoLayout?.visibility = View.VISIBLE
         if (containerType == "login") {
             binding?.complainBtn?.visibility = View.GONE
+            binding?.merchantInfoLayout?.visibility = View.GONE
         }
 
         dataAdapter = OrderTrackingNewAdapter()
@@ -86,6 +88,8 @@ class OrderTrackingFragment : Fragment() {
             Timber.d("trackBtn called")
             trackOrder()
         }
+        binding?.merchantName?.text = "${SessionManager.companyName} (${SessionManager.courierUserId})"
+        binding?.merchantMobile?.text = SessionManager.mobile
 
         if (orderID.isNotEmpty()) {
             getOrderTrackingList(orderID)
