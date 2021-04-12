@@ -365,7 +365,8 @@
                             android:padding="5dp"
                             android:text="ডেলিভারি ও রিটার্ন ট্রেন্ড"
                             android:textSize="@dimen/text_14"
-                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            android:textColor="@color/yellow"
                             android:textAlignment="center"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -395,7 +396,7 @@
                                 android:layout_height="40dp"
                                 android:layout_weight="1"
                                 android:background="@drawable/bg_add_order_edit_text"
-                                android:hint="ডেট রেঞ্জ সিলেক্ট"
+                                android:hint="ডেট রেঞ্জ সিলেক্ট করুন"
                                 android:gravity="center_vertical"
                                 android:includeFontPadding="false"
                                 android:paddingStart="16dp"
@@ -403,7 +404,7 @@
                                 android:paddingEnd="16dp"
                                 android:paddingBottom="8dp"
                                 android:textColor="@color/black_80"
-                                android:textColorHint="@color/gray_500"
+                                android:textColorHint="@color/red"
                                 android:textSize="@dimen/text_14"
                                 app:drawableEndCompat="@drawable/ic_date" />
 
