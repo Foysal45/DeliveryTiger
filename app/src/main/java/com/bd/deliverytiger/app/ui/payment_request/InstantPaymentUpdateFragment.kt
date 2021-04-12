@@ -82,7 +82,7 @@ class InstantPaymentUpdateFragment : Fragment() {
                 binding?.status?.text = "-"
             } else {
                 binding?.lastPaymentRequestDate?.text = DigitConverter.formatDate(model.lastRequestDate, "dd-MM-yyyy HH:mm:ss", "dd MMM',' yyyy hh:mm a")
-                binding?.status?.text = if (model.lastPaymentStatus == 0) "${model.lastPaymentAmount}৳ (Processing)" else "${model.lastPaymentAmount}৳ (Paid)"
+                binding?.status?.text = if (model.lastPaymentStatus == 0) "${model.lastPaymentAmount}৳ (Processing)" else "৳ ${DigitConverter.toBanglaDigit(model.lastPaymentAmount, true)} (Paid)"
             }
         })
     }
