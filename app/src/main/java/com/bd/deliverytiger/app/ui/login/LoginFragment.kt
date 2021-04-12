@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.BuildConfig

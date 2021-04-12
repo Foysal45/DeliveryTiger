@@ -227,6 +227,7 @@ class DashboardFragment : Fragment() {
     private fun initClickLister() {
         binding?.swipeRefresh?.setOnRefreshListener {
             getDashBoardData(selectedMonth, selectedYear)
+            fetchCODData()
             fetchCollection()
             //fetchCurrentBalance()
         }

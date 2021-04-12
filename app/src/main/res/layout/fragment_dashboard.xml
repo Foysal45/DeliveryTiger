@@ -337,8 +337,6 @@
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="18dp"
-                        android:layout_marginBottom="18dp"
-
                         android:visibility="gone"
                         app:sliderIndicatorMarginBottom="3dp"
                         app:sliderIndicatorRadius="2dp"
@@ -640,6 +638,7 @@
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="18dp"
+                        android:layout_marginBottom="18dp"
                         android:contentDescription="@string/cd"
                         android:src="@drawable/bg_banner_referral"
                         android:visibility="gone"
