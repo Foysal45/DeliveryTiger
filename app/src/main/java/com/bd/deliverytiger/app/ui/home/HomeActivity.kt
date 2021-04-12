@@ -271,7 +271,7 @@ class HomeActivity : AppCompatActivity(),
         initService()
         appUpdateManager()
         UserLogger.logAppOpen()
-
+        SessionManager.versionName = appVersion()
         setKeyboardVisibilityListener() { isShown ->
             viewModel.keyboardVisibility.value = isShown
         }

@@ -216,6 +216,11 @@ fun isEnglishLetterOnly(text: String): Boolean {
     return text.matches(match)
 }
 
+fun isAlphaNumericPassword(text: String): Boolean {
+    //(?!^[0-9]$)(?!^[a-zA-Z]$)^([a-zA-Z0-9]{8,20})$
+    return text.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*^#?&]{8,20}$".toRegex())
+}
+
 fun generateNameInitial(name: String?): String {
     if (name.isNullOrEmpty()) return ""
     var initial: String = ""
@@ -229,11 +234,21 @@ fun generateNameInitial(name: String?): String {
 }
 
 fun Activity.appVersion(): String {
-    val pInfo: PackageInfo = packageManager.getPackageInfo(packageName, 0)
-    return pInfo.versionName
+    return try {
+        val pInfo: PackageInfo = packageManager.getPackageInfo(packageName, 0)
+        pInfo.versionName
+    } catch (e: Exception) {
+        e.printStackTrace()
+        ""
+    }
 }
 
 fun Fragment.appVersion(): String {
-    val pInfo: PackageInfo? = this.context?.packageManager?.getPackageInfo(this.context?.packageName ?: "", 0)
-    return pInfo?.versionName ?: ""
+    return try {
+        val pInfo: PackageInfo? = this.context?.packageManager?.getPackageInfo(this.context?.packageName ?: "", 0)
+        pInfo?.versionName ?: ""
+    } catch (e: Exception) {
+        e.printStackTrace()
+        ""
+    }
 }

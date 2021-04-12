@@ -32,6 +32,7 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="password_pattern">কমপক্ষে একটি নম্বর, একটি অক্ষর, দৈর্ঘ্যে ৮-২০ হতে হবে</string>
 
     <string name="give_order_id">অর্ডার আইডি / মোবাইল নম্বর লিখুন</string>
     <string name="give_right_order_id">সঠিক অর্ডার আইডি লিখুন</string>

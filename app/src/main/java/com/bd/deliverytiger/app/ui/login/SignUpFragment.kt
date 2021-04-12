@@ -24,6 +24,7 @@ import com.bd.deliverytiger.app.api.model.terms.TermsModel
 import com.bd.deliverytiger.app.utils.Validator
 import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
 import com.bd.deliverytiger.app.utils.VariousTask.showShortToast
+import com.bd.deliverytiger.app.utils.isAlphaNumericPassword
 import com.bd.deliverytiger.app.utils.toast
 import retrofit2.Call
 import retrofit2.Callback
@@ -239,6 +240,9 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     private fun validate(): Boolean {
         hideSoftKeyBoard(requireActivity())
         var go = true
+        val password = etSignUpPassword.text.toString().trim()
+        val confirmPassword = etSignUpConfirmPassword.text.toString().trim()
+
         if (etCompanyName.text.toString().isEmpty()) {
             showShortToast(context, getString(R.string.write_name))
             go = false
@@ -252,10 +256,13 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
             showShortToast(context, getString(R.string.write_proper_phone_number_recharge))
             go = false
             etSignUpMobileNo.requestFocus()
-        } else if (etSignUpPassword.text.toString().isEmpty()) {
+        } else if (password.isEmpty()) {
             showShortToast(context, getString(R.string.write_password))
             go = false
-        } else if (etSignUpPassword.text.toString() != etSignUpConfirmPassword.text.toString()) {
+        } else if (!isAlphaNumericPassword(password)) {
+            showShortToast(context, getString(R.string.password_pattern))
+            go = false
+        } else if (password != confirmPassword) {
             showShortToast(context, getString(R.string.match_pass))
             go = false
         } else if (referCodeET.text.toString().isNotEmpty()) {
@@ -285,7 +292,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
 
         val companyName = etCompanyName.text.toString()
         val mobile = etSignUpMobileNo.text.toString()
-        val password = etSignUpPassword.text.toString()
+        val password = etSignUpPassword.text.toString().trim()
         val referCode = referCodeET.text.toString()
         val bkashNumber = bkashNumberET.text.toString().trim()
         val knowingSource: String = if (knownSourceSpinner.selectedItemPosition == 0) "" else knownSourceSpinner.selectedItem.toString()

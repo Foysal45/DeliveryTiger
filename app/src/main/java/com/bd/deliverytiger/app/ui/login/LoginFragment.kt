@@ -207,15 +207,7 @@ class LoginFragment: Fragment() {
     }
 
     private fun saveAppVersion() {
-        try {
-            val pInfo = context?.packageManager?.getPackageInfo(context?.packageName ?: "com.bd.deliverytiger.app", 0)
-            val version = pInfo?.versionName ?: "version"
-            SessionManager.versionName = version
-
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        }
-
+        SessionManager.versionName = appVersion()
     }
 
     private fun goToHomeActivity() {
