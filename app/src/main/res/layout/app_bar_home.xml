@@ -106,6 +106,7 @@
                         app:layout_constraintEnd_toStartOf="@id/home_toolbar_notification"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_search"
+                        app:tint="#333"
                         tools:visibility="visible" />
 
                     <ImageView

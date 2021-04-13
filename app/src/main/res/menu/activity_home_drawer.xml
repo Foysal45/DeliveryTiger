@@ -70,7 +70,7 @@
 
         <item
             android:id="@+id/nav_express_service"
-            android:icon="@drawable/ic_express"
+            android:icon="@drawable/ic_speed_time"
             android:title="@string/expressService" />
 
         <item

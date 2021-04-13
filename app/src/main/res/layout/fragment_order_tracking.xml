@@ -194,7 +194,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/trackText"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/order_track_search" />
+                        app:srcCompat="@drawable/ic_search" />
 
                     <TextView
                         android:id="@+id/trackText"
