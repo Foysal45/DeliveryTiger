@@ -263,9 +263,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         orderPlaceBtn.setOnClickListener(this)
 
         // Fetch Charge Data
+        getCourierUsersInformation()
         getAllDistrictsList()
         getBreakableCharge()
-        getCourierUsersInformation()
         fetchOfferCharge()
         getPackagingCharge()
         fetchDTOrderGenericLimit()
@@ -719,8 +719,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
                     val sadarThana = filteredThanaLists.first()
                     // Check same city logic
-                    //ToDo: Enable it after test
-                    //serviceType = if (merchantDistrict == districtId) { "citytocity" } else "alltoall"
+                    serviceType = if (merchantDistrict == districtId) { "citytocity" } else "alltoall"
                     getDeliveryCharge(districtId, sadarThana.districtId, 0, serviceType)
                     if (districtId == 14) {
                         codChargePercentage = codChargePercentageInsideDhaka
@@ -1046,6 +1045,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private fun getDeliveryCharge(districtId: Int, thanaId: Int, areaId: Int, serviceType: String) {
 
         viewModel.getDeliveryCharge(DeliveryChargeRequest(districtId, thanaId, areaId, serviceType)).observe(viewLifecycleOwner, Observer { list ->
+            if (list.isEmpty()) {
+                this.serviceType = "alltoall"
+                getDeliveryCharge(districtId, thanaId, areaId, this.serviceType)
+                return@Observer
+            }
 
             val weightList: MutableList<String> = mutableListOf()
             weightList.add("ওজন (কেজি)")

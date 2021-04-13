@@ -34,7 +34,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
-class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
+class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
     private val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
@@ -166,14 +166,15 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
     fun getAllDistrictFromApi(districtId: Int): LiveData<List<DistrictDeliveryChargePayLoad>> {
         viewState.value = ViewState.ProgressState(true)
         val responseBody = MutableLiveData<List<DistrictDeliveryChargePayLoad>>()
-        repository.getAllDistrictFromApi(districtId).enqueue(object : Callback<DeliveryChargePayLoad>{
+        repository.getAllDistrictFromApi(districtId).enqueue(object : Callback<DeliveryChargePayLoad> {
             override fun onFailure(call: Call<DeliveryChargePayLoad>, t: Throwable) {
                 viewState.value = ViewState.ProgressState(false)
                 viewState.value = ViewState.ShowMessage(message)
             }
+
             override fun onResponse(call: Call<DeliveryChargePayLoad>, response: Response<DeliveryChargePayLoad>) {
                 viewState.value = ViewState.ProgressState(false)
-                if (response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     if (response.body()!!.data != null) {
                         if (!response.body()!!.data!!.districtInfo.isNullOrEmpty()) {
                             responseBody.value = response.body()!!.data!!.districtInfo
@@ -290,15 +291,10 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
             }
 
             override fun onResponse(call: Call<GenericResponse<List<DeliveryChargeResponse>>>, response: Response<GenericResponse<List<DeliveryChargeResponse>>>) {
+                viewState.value = ViewState.ProgressState(false)
                 if (response.isSuccessful && response.body() != null) {
-                    if (response.body()!!.model != null) {
-                        responseBody.value = response.body()!!.model!!
-                    } else {
-                        viewState.value = ViewState.ProgressState(false)
-                        viewState.value = ViewState.ShowMessage(message)
-                    }
+                    responseBody.value = response.body()!!.model!!
                 } else {
-                    viewState.value = ViewState.ProgressState(false)
                     viewState.value = ViewState.ShowMessage(message)
                 }
             }
@@ -317,8 +313,8 @@ class AddOrderViewModel(private val repository: AppRepository): ViewModel() {
             }
 
             override fun onResponse(call: Call<GenericResponse<OrderResponse>>, response: Response<GenericResponse<OrderResponse>>) {
-                if (response.isSuccessful && response.body() != null){
-                    if (response.body()!!.model != null){
+                if (response.isSuccessful && response.body() != null) {
+                    if (response.body()!!.model != null) {
                         responseBody.value = response.body()!!.model!!
                     } else {
                         viewState.value = ViewState.ProgressState(false)
