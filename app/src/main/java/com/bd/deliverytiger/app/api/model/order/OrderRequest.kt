@@ -59,6 +59,8 @@ data class OrderRequest(
     var isOpenBox: Boolean,
     @SerializedName("orderFrom")
     var orderFrom: String = "android",
+    @SerializedName("version")
+    var version: String = "",
     @SerializedName("isActive")
     var isActive: Boolean = true,
 
@@ -81,5 +83,7 @@ data class OrderRequest(
     @SerializedName("offerType")
     var offerType: String = "",
     @SerializedName("relationType")
-    var relationType: String = ""
+    var relationType: String = "",
+    @SerializedName("serviceType")
+    var serviceType: String = ""
 )

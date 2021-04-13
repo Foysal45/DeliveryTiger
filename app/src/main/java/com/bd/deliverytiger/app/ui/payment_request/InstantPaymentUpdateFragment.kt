@@ -79,10 +79,18 @@ class InstantPaymentUpdateFragment : Fragment() {
         viewModel.fetchDTMerchantInstantPaymentStatus(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
             if (model.lastRequestDate.isNullOrEmpty()) {
                 binding?.lastPaymentRequestDate?.text = "-"
-                binding?.status?.text = "-"
+                binding?.lastPaymentDate?.text = "-"
+                binding?.lastPaymentAmount?.text = "-"
             } else {
                 binding?.lastPaymentRequestDate?.text = DigitConverter.formatDate(model.lastRequestDate, "dd-MM-yyyy HH:mm:ss", "dd MMM',' yyyy hh:mm a")
-                binding?.status?.text = if (model.lastPaymentStatus == 0) "${model.lastPaymentAmount}৳ (Processing)" else "৳ ${DigitConverter.toBanglaDigit(model.lastPaymentAmount, true)} (Paid)"
+                binding?.lastPaymentAmount?.text = if (model.lastPaymentStatus == 0)
+                    "${model.lastPaymentAmount}৳ (Processing)"
+                else "৳ ${DigitConverter.toBanglaDigit(model.lastPaymentAmount, true)} (Paid)"
+                if (model.lastPaymentDate.isNullOrEmpty()) {
+                    binding?.lastPaymentDate?.text = "-"
+                } else {
+                    binding?.lastPaymentDate?.text = DigitConverter.formatDate(model.lastPaymentDate, "dd-MM-yyyy HH:mm:ss", "dd MMM',' yyyy hh:mm a")
+                }
             }
         })
     }

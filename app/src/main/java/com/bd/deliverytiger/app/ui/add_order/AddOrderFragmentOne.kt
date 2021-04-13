@@ -1343,8 +1343,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             payCollectionAmount, payDeliveryCharge, SessionManager.courierUserId,
             payBreakableCharge, additionalNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge, packingName,
             payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,
-            "android-${SessionManager.versionName}", true, collectionDistrictId, collectionThanaId,
-            deliveryDate, collectionDate, isOfficeDrop,payActualPackagePrice, timeSlotId, selectedCollectionSlotDate, offerType, relationType
+            "android", SessionManager.versionName, true, collectionDistrictId, collectionThanaId,
+            deliveryDate, collectionDate, isOfficeDrop,payActualPackagePrice, timeSlotId, selectedCollectionSlotDate, offerType, relationType, serviceType
         )
 
 
