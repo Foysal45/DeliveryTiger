@@ -150,43 +150,6 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/complaintTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/inputLayout"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:textSize="18sp"
-            android:textColor="@color/black_90"
-            android:textStyle="bold"
-            android:text="পূর্বের সকল কমপ্লেইন"
-            android:visibility="gone"
-            tools:visibility="visible"
-            />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            app:layout_constraintTop_toBottomOf="@id/complaintTitle"
-            app:layout_constraintBottom_toTopOf="@+id/helpLineContactLayout"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-
-            tools:itemCount="4"
-            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_view_complain"
-            tools:orientation="vertical"
-            tools:spanCount="2"
-            tools:visibility="visible"
-            />
-
         <LinearLayout
             android:id="@+id/helpLineContactLayout"
             android:layout_width="match_parent"
@@ -201,8 +164,7 @@
             android:layout_marginBottom="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerview"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputLayout"
             android:visibility="gone"
             tools:visibility="visible">
 
@@ -229,6 +191,42 @@
 
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/complaintTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/helpLineContactLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:textSize="18sp"
+            android:textColor="@color/black_90"
+            android:textStyle="bold"
+            android:text="পূর্বের সকল কমপ্লেইন"
+            android:visibility="gone"
+            tools:visibility="visible"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            app:layout_constraintTop_toBottomOf="@id/complaintTitle"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+
+            tools:itemCount="4"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_view_complain"
+            tools:orientation="vertical"
+            tools:spanCount="2"
+            tools:visibility="visible"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
