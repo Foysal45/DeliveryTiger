@@ -97,7 +97,6 @@ class OrderTrackingFragment : Fragment() {
 
         binding?.trackBtn?.setOnClickListener {
             Timber.d("trackBtn called")
-            binding?.helpLineContactLayout?.visibility = View.GONE
             trackOrder()
         }
         binding?.merchantName?.text = "${SessionManager.companyName} (${SessionManager.courierUserId})"
