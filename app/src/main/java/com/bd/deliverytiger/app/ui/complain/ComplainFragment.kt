@@ -54,6 +54,18 @@ class ComplainFragment(): Fragment() {
 
         binding?.orderCodeTV?.setText(orderId)
 
+        viewModel.fetchHelpLineNumbers().observe(viewLifecycleOwner, Observer { model->
+            if (model.helpLine2.isNullOrEmpty()){
+                binding?.helpLineContactLayout?.visibility = View.GONE
+            }else{
+                binding?.helpLineContactLayout?.visibility = View.VISIBLE
+                binding?.helpLineNumber?.text = DigitConverter.toBanglaDigit(model.helpLine2)
+                binding?.helpLineNumber?.setOnClickListener{
+                    callHelplineNumber(model.helpLine2!!)
+                }
+            }
+        })
+
         binding?.submitBtn?.setOnClickListener {
             hideKeyboard()
             if (validate()) {

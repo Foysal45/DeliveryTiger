@@ -84,7 +84,7 @@ class OrderTrackingFragment : Fragment() {
             getOrderTrackingList(orderID)
         }
         viewModel.fetchHelpLineNumbers().observe(viewLifecycleOwner, Observer { model->
-            if (model.helpLine2 == ""){
+            if (model.helpLine2.isNullOrEmpty()){
                 binding?.helpLineContactLayout?.visibility = View.GONE
             }else{
                 binding?.helpLineContactLayout?.visibility = View.VISIBLE

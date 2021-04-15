@@ -109,7 +109,7 @@ class LoginFragment: Fragment() {
         }
 
         viewModel.fetchHelpLineNumbers().observe(viewLifecycleOwner, Observer { model->
-            if (model.helpLine1 == ""){
+            if (model.helpLine1.isNullOrEmpty()){
                 helpLineContactLayout.visibility = View.GONE
             }else{
                 helpLineContactLayout.visibility = View.VISIBLE

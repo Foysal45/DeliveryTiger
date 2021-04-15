@@ -47,7 +47,7 @@ class UserRoleSelectionFragment : Fragment() {
         }
 
         viewModel.fetchHelpLineNumbers().observe(viewLifecycleOwner, Observer { model->
-            if (model.helpLine1 == ""){
+            if (model.helpLine1.isNullOrEmpty()){
                 binding?.helpLineContactLayout?.visibility = View.GONE
             }else{
                 binding?.helpLineContactLayout?.visibility = View.VISIBLE
