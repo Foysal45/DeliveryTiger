@@ -190,4 +190,7 @@ class AppRepository(
     suspend fun fetchDeliveredReturnedCount(requestBody: DeliveredReturnedCountRequest) = apiInterfaceCore.fetchDeliveredReturnedCount(requestBody)
 
     suspend fun fetchDeliveredReturnedCountWiseDetails(requestBody: DeliveryDetailsRequest) = apiInterfaceCore.fetchDeliveredReturnedCountWiseDetails(requestBody)
+
+    suspend fun fetchHelpLineNumbers() = apiInterfaceCore.fetchHelpLineNumbers()
+
 }

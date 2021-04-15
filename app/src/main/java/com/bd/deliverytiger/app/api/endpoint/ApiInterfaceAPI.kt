@@ -4,6 +4,7 @@ import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.ResponseHeader
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
+import com.bd.deliverytiger.app.api.model.helpline_number.HelpLineNumberModel
 import com.bd.deliverytiger.app.api.model.image_upload.ClassifiedImageUploadResponse
 import com.bd.deliverytiger.app.api.model.location.LocationResponse
 import com.bd.deliverytiger.app.api.model.login.OTPCheckResponse

@@ -3,11 +3,13 @@ package com.bd.deliverytiger.app.utils
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
@@ -160,6 +162,16 @@ val <T> T.exhaustive: T
 
 fun Context.dpToPx(value: Float): Int {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, this.resources.displayMetrics).toInt()
+}
+
+fun Fragment.callHelplineNumber(number: String) {
+    try {
+        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$number"))
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+    } catch (e: Exception) {
+        requireContext().toast("Could not find an activity to place the call")
+    }
 }
 
 fun Context.isConnectedToNetwork(): Boolean {

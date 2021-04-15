@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.api.endpoint
 
 import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.GenericResponse
+import com.bd.deliverytiger.app.api.model.ResponseHeader
 import com.bd.deliverytiger.app.api.model.accounts.BalanceInfo
 import com.bd.deliverytiger.app.api.model.balance_load.BalanceLimitResponse
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceMainResponse
@@ -26,6 +27,7 @@ import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsR
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
 import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
+import com.bd.deliverytiger.app.api.model.helpline_number.HelpLineNumberModel
 import com.bd.deliverytiger.app.api.model.instant_payment_update.InstantPaymentUpdateResponse
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
@@ -201,4 +203,7 @@ interface ApiInterfaceCore {
 
     @POST("api/Fetch/GetDeliveredReturnedCountWiseDetails")
     suspend fun fetchDeliveredReturnedCountWiseDetails(@Body requestBody: DeliveryDetailsRequest): NetworkResponse<GenericResponse<List<DeliveryDetailsResponse>>, ErrorResponse>
+
+    @GET("api/Dashboard/GetHelpLineNumbers")
+    suspend fun fetchHelpLineNumbers(): NetworkResponse<GenericResponse<HelpLineNumberModel>, ErrorResponse>
 }

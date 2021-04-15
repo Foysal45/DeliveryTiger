@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
@@ -30,6 +32,7 @@ import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,9 +44,13 @@ import timber.log.Timber
  */
 class LoginFragment: Fragment() {
 
+    private val viewModel: AuthViewModel by inject()
+
     private val logTag = "LoginFragmentTag"
 
     private lateinit var alertLayout: LinearLayout
+    private lateinit var helpLineContactLayout: LinearLayout
+    private lateinit var helpLineNumber: TextView
     private lateinit var alertMsgTV: TextView
     private lateinit var mobileET: EditText
     private lateinit var passwordET: EditText
@@ -74,6 +81,8 @@ class LoginFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         alertLayout = view.findViewById(R.id.alert_msg_layout)
+        helpLineContactLayout = view.findViewById(R.id.helpLineContactLayout)
+        helpLineNumber = view.findViewById(R.id.helpLineNumber)
         alertMsgTV = view.findViewById(R.id.alert_msg_tv)
         mobileET = view.findViewById(R.id.etLoginMobileNo)
         passwordET = view.findViewById(R.id.etLoginPassword)
@@ -98,6 +107,18 @@ class LoginFragment: Fragment() {
                 Timber.d("applicationLog FirebaseToken:\n$token")
             }
         }
+
+        viewModel.fetchHelpLineNumbers().observe(viewLifecycleOwner, Observer { model->
+            if (model.helpLine1 == ""){
+                helpLineContactLayout.visibility = View.GONE
+            }else{
+                helpLineContactLayout.visibility = View.VISIBLE
+                helpLineNumber.text = DigitConverter.toBanglaDigit(model.helpLine1)
+                helpLineNumber.setOnClickListener{
+                    callHelplineNumber(model.helpLine1!!)
+                }
+            }
+        })
 
         if (isSessionOut) {
 

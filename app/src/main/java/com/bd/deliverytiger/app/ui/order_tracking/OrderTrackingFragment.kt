@@ -83,9 +83,21 @@ class OrderTrackingFragment : Fragment() {
             binding?.recyclerView?.adapter = dataAdapter
             getOrderTrackingList(orderID)
         }
+        viewModel.fetchHelpLineNumbers().observe(viewLifecycleOwner, Observer { model->
+            if (model.helpLine2 == ""){
+                binding?.helpLineContactLayout?.visibility = View.GONE
+            }else{
+                binding?.helpLineContactLayout?.visibility = View.VISIBLE
+                binding?.helpLineNumber?.text = DigitConverter.toBanglaDigit(model.helpLine2)
+                binding?.helpLineNumber?.setOnClickListener{
+                    callHelplineNumber(model.helpLine2!!)
+                }
+            }
+        })
 
         binding?.trackBtn?.setOnClickListener {
             Timber.d("trackBtn called")
+            binding?.helpLineContactLayout?.visibility = View.GONE
             trackOrder()
         }
         binding?.merchantName?.text = "${SessionManager.companyName} (${SessionManager.courierUserId})"

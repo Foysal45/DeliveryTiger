@@ -211,6 +211,46 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <LinearLayout
+                    android:id="@+id/helpLineContactLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_stroke2"
+                    android:padding="8dp"
+                    android:layout_marginStart="@dimen/left_right_margin"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="@dimen/left_right_margin"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/trackBtn"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="আমাদের সার্ভিস সম্পর্কে জানতে কল করুন"
+                        android:textSize="@dimen/text_16"
+                        android:textColor="@color/black_70"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/helpLineNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_call"
+                        android:drawablePadding="2dp"
+                        android:drawableTint="@color/red"
+                        android:text="01894811444"
+                        android:textSize="@dimen/text_16"
+                        android:textColor="@color/red"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"/>
+
+
+                </LinearLayout>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/trackInfoLayout"
                     android:layout_width="match_parent"
