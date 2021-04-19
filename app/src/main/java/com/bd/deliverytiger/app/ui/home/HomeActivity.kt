@@ -246,27 +246,7 @@ class HomeActivity : AppCompatActivity(),
             addOrderFragment()
         }
 
-        viewModel.getBannerInfo().observe(this, Observer { model ->
-
-            val popupModel = model.popUpModel
-            if (popupModel.showPopUp) {
-                // No frequency show all time
-                if (popupModel.popUpFrequency == 0) {
-                    showPopupDialog(popupModel.popUpUrl)
-                } else {
-                    val calender = Calendar.getInstance()
-                    val dayOfYear = calender.get(Calendar.DAY_OF_YEAR)
-                    if (SessionManager.popupDateOfYear != dayOfYear) {
-                        SessionManager.popupShowCount = 0
-                    }
-                    if (popupModel.popUpFrequency > SessionManager.popupShowCount) {
-                        SessionManager.popupShowCount = SessionManager.popupShowCount + 1
-                        SessionManager.popupDateOfYear = dayOfYear
-                        showPopupDialog(popupModel.popUpUrl)
-                    }
-                }
-            }
-        })
+        loadBannerInfo()
 
         initService()
         appUpdateManager()
@@ -964,6 +944,35 @@ class HomeActivity : AppCompatActivity(),
             }
         } catch (e: Exception) {
         }
+    }
+
+    private fun loadBannerInfo() {
+        var flag = false
+        viewModel.getBannerInfo().observe(this, Observer { model ->
+            if (model != null) {
+                if (flag) return@Observer
+                flag = true
+            }
+            Timber.d("showPopupDialog getBannerInfo called")
+            val popupModel = model.popUpModel
+            if (popupModel.showPopUp) {
+                // No frequency show all time
+                if (popupModel.popUpFrequency == 0) {
+                    showPopupDialog(popupModel.popUpUrl)
+                } else {
+                    val calender = Calendar.getInstance()
+                    val dayOfYear = calender.get(Calendar.DAY_OF_YEAR)
+                    if (SessionManager.popupDateOfYear != dayOfYear) {
+                        SessionManager.popupShowCount = 0
+                    }
+                    if (popupModel.popUpFrequency > SessionManager.popupShowCount) {
+                        SessionManager.popupShowCount = SessionManager.popupShowCount + 1
+                        SessionManager.popupDateOfYear = dayOfYear
+                        showPopupDialog(popupModel.popUpUrl)
+                    }
+                }
+            }
+        })
     }
 
     private fun showPopupDialog(imageUrl: String?) {

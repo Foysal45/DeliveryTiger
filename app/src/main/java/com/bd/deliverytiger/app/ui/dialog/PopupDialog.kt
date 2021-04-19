@@ -24,7 +24,7 @@ class PopupDialog : DialogFragment() {
         fun newInstance(imageUrl: String?): PopupDialog = PopupDialog().apply {
             this.imageUrl = imageUrl
         }
-        val tag = PopupDialog::class.java.name
+        val tag: String = PopupDialog::class.java.name
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +56,11 @@ class PopupDialog : DialogFragment() {
                 }
             })
 
-        closeLayout.setOnClickListener { dismiss() }
+        closeLayout.setOnClickListener {
+            if (isResumed) {
+                dismiss()
+            }
+        }
 
     }
 

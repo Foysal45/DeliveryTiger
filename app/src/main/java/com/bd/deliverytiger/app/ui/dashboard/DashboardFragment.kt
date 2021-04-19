@@ -201,8 +201,13 @@ class DashboardFragment : Fragment() {
     }
 
     private fun fetchBannerData() {
-
+        var flag = false
         homeViewModel.bannerInfo.observe(viewLifecycleOwner, Observer { model ->
+            if (model != null) {
+                if (flag) return@Observer
+                flag = true
+            }
+            Timber.d("showPopupDialog fetchBannerData called")
             //showOrderPopup = model.showOrderPopup
             instantPaymentOTPLimit = model.instantPaymentOTPLimit
             instantPaymentHourLimit = model.instantPaymentHourLimitRange ?: "12-24"
