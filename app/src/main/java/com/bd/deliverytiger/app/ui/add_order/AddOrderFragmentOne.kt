@@ -32,6 +32,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
@@ -514,6 +515,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 merchantCalculatedCollectionAmount = model.calculatedCollectionAmount
                 merchantServiceCharge = model.serviceCharge
                 adjustBalance = model.adjustBalance
+
+                if (BuildConfig.DEBUG) {
+                    isMerchantCreditAvailable()
+                }
             })
         })
 
@@ -540,10 +545,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         val totalAdjustBalance = merchantCredit  + merchantCalculatedCollectionAmount + adjustBalance
         val shipmentCharge = payShipmentCharge.toInt()
         val isMerchantCreditAvailable = totalAdjustBalance > shipmentCharge
-        timber.log.Timber.tag("adjustBalance").d( "credit: $merchantCredit + calculatedCollectionAmount: $merchantCalculatedCollectionAmount + adjustBalance: $adjustBalance = totalAdjustBalance $totalAdjustBalance")
-        timber.log.Timber.tag("adjustBalance").d( "service charge: $merchantServiceCharge")
-        timber.log.Timber.tag("adjustBalance").d( "shipment charge: $shipmentCharge")
-        timber.log.Timber.tag("adjustBalance").d( "isMerchantCreditAvailable: $totalAdjustBalance > $shipmentCharge $isMerchantCreditAvailable")
+        Timber.tag("adjustBalance").d( "(credit:) $merchantCredit + (calculatedCollectionAmount:) $merchantCalculatedCollectionAmount + (adjustBalance:) $adjustBalance = (totalAdjustBalance:) $totalAdjustBalance")
+        Timber.tag("adjustBalance").d( "service charge: $merchantServiceCharge")
+        Timber.tag("adjustBalance").d( "shipment charge: $shipmentCharge")
+        Timber.tag("adjustBalance").d( "isMerchantCreditAvailable: $totalAdjustBalance > $shipmentCharge $isMerchantCreditAvailable")
         return isMerchantCreditAvailable
     }
 
