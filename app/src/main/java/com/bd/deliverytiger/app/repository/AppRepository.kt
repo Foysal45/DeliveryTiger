@@ -24,6 +24,7 @@ import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionAnswer
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
+import com.bd.deliverytiger.app.api.model.service_selection.GetServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -108,6 +109,10 @@ class AppRepository(
     fun getAllDistrictFromApi(id: Int) = apiInterfaceCore.getAllDistrictFromApi(id)
 
     suspend fun loadAllDistricts() = apiInterfaceCore.loadAllDistricts()
+
+    suspend fun loadAllServiceDistricts(requestBody: GetServiceDistrictsRequest) = apiInterfaceCore.loadAllServiceDistricts(requestBody)
+
+    suspend fun getDTService() = apiInterfaceCore.getDTService()
 
     fun getMerchantCredit(courierUserId: Int) = apiInterfaceCore.getMerchantCredit(courierUserId)
 

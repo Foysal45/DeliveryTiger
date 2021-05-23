@@ -19,6 +19,7 @@
     <string name="select_thana">থানা নির্বাচন করুন</string>
     <string name="select_aria">এরিয়া/পোস্ট অফিস সিলেক্ট করুন</string>
     <string name="no_aria">এরিয়া/পোস্ট অফিস নেই</string>
+    <string name="service_info_dummy_data"> <font color='#ed1c24'>২৪ ঘন্টায়</font><font color='#000000'>(১০০ টাকা)</font><font color='#ed1c24'> ঢাকা </font><font color='#000000'>(৩৫ টাকা)</font></string>
 
     <string name="api_connect_error">দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে "\n" কিছুক্ষণ পর আবার চেষ্টা করুন</string>
     <string name="error_msg">দুঃখিত,কিছুক্ষণ পর আবার চেষ্টা করুন</string>

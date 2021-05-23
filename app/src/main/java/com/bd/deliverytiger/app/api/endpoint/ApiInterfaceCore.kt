@@ -50,6 +50,8 @@ import com.bd.deliverytiger.app.api.model.rider.RiderInfo
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionAnswer
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionAnswerResponse
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionModel
+import com.bd.deliverytiger.app.api.model.service_selection.GetServiceDistrictsRequest
+import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoDataModel
 import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.haroldadmin.cnradapter.NetworkResponse
 import retrofit2.Call
@@ -79,6 +81,12 @@ interface ApiInterfaceCore {
 
     @GET("api/Fetch/LoadAllDistricts")
     suspend fun loadAllDistricts(): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>
+
+    @POST("api/Fetch/GetServiceDistricts")
+    suspend fun loadAllServiceDistricts(@Body requestBody: GetServiceDistrictsRequest): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>
+
+    @GET("api/Fetch/GetDTServices")
+    suspend fun getDTService(): NetworkResponse<GenericResponse<List<ServiceInfoDataModel>>, ErrorResponse>
 
     @GET("api/Fetch/GetMerchantCredit/{courierUserId}")
     fun getMerchantCredit(@Path("courierUserId") courierUserId: Int): Call<GenericResponse<Boolean>>

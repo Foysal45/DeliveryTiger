@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/itemMainLay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:background="#F0F8FF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/serviceTypeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="সদর এক্সপ্রেস"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textColor="@color/colorPrimary"/>
+
+        <TextView
+            android:id="@+id/serviceInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="@string/service_info_dummy_data"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textColor="@color/red"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            >
+
+            <EditText
+                android:id="@+id/etDistrict"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_view_height"
+                android:background="@drawable/bg_white_curve"
+                android:focusable="false"
+                android:hint="জেলা নির্বাচন করুন"
+                android:importantForAutofill="no"
+                android:inputType="phone"
+                android:paddingStart="16dp"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:contentDescription="@string/cd"
+                app:layout_constraintEnd_toEndOf="@id/etDistrict"
+                app:layout_constraintTop_toTopOf="@id/etDistrict"
+                app:layout_constraintBottom_toBottomOf="@id/etDistrict"
+                app:srcCompat="@drawable/ic_arrow_drop_down"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="@string/cd"
+                app:layout_constraintEnd_toEndOf="@id/etDistrict"
+                app:layout_constraintTop_toTopOf="@id/etDistrict"
+                app:layout_constraintBottom_toBottomOf="@id/etDistrict"
+                app:srcCompat="@drawable/ic_star"
+                app:tint="@color/red"
+                />
+
+            <ProgressBar
+                android:id="@+id/progressBar1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:layout_constraintEnd_toEndOf="@id/etDistrict"
+                app:layout_constraintTop_toTopOf="@id/etDistrict"
+                app:layout_constraintBottom_toBottomOf="@id/etDistrict"
+                android:layout_marginEnd="16dp"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="২০ টি জেলা সদরে"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textColor="@color/colorPrimary"/>
+
+    </LinearLayout>
+
+    <View
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/divider"
+        app:layout_constraintTop_toBottomOf="@id/itemMainLay" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

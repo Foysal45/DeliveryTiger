@@ -46,6 +46,7 @@ import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.bd.deliverytiger.app.databinding.FragmentAddOrderFragmentOneBinding
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
+import com.bd.deliverytiger.app.ui.add_order.service_wise_bottom_sheet.ServicesSelectionBottomSheet
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
@@ -264,6 +265,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         orderPlaceBtn.setOnClickListener(this)
 
         // Fetch Charge Data
+        goToServiceSelectionBottomSheet()
         getCourierUsersInformation()
         getAllDistrictsList()
         getBreakableCharge()
@@ -1001,6 +1003,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             codChargePercentageOutsideDhaka = model.codChargePercentage
         })
 
+    }
+
+    private fun goToServiceSelectionBottomSheet(){
+        val tag = ServicesSelectionBottomSheet.tag
+        val dialog = ServicesSelectionBottomSheet.newInstance()
+        dialog.show(childFragmentManager, tag)
     }
 
     private fun getCourierUsersInformation() {

@@ -9,6 +9,7 @@ import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.ui.add_order.AddOrderViewModel
 import com.bd.deliverytiger.app.ui.add_order.AddProductViewModel
 import com.bd.deliverytiger.app.ui.add_order.OrderSuccessViewModel
+import com.bd.deliverytiger.app.ui.add_order.service_wise_bottom_sheet.ServiceSelectionBottomSheetViewModel
 import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadViewModel
 import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillViewModel
 import com.bd.deliverytiger.app.ui.bill_pay_history.ServiceBillHistoryViewModel
@@ -88,5 +89,6 @@ val appModule = module {
     viewModel { DeliveryDetailsViewModel(get()) }
     viewModel { InstantPaymentUpdateViewModel(get()) }
     viewModel { AuthViewModel(get()) }
+    viewModel { ServiceSelectionBottomSheetViewModel(get()) }
 
 }
