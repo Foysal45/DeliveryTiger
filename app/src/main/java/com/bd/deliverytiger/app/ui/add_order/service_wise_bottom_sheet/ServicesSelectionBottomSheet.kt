@@ -8,26 +8,35 @@ import android.widget.FrameLayout
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
+import com.bd.deliverytiger.app.api.model.location.LocationData
+import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoDataModel
 import com.bd.deliverytiger.app.databinding.FragmentServicesSelectionBottomSheetBinding
+import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
 import com.bd.deliverytiger.app.utils.hideKeyboard
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_services_selection_bottom_sheet.*
 import org.koin.android.ext.android.inject
+import timber.log.Timber
+import java.util.*
 import kotlin.concurrent.thread
 
 class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
 
     private var binding: FragmentServicesSelectionBottomSheetBinding? = null
-    private val viewModel: ServiceSelectionBottomSheetViewModel by inject()
     private  var dataAdapter: ServiceSelectionBottomSheetAdapter = ServiceSelectionBottomSheetAdapter()
+    private val viewModel: ServiceSelectionBottomSheetViewModel by inject()
 
-    var onCategoryPicked: ((position: Int) -> Unit)? = null
+    private lateinit var dataLists:  List<ServiceInfoDataModel>
+
+    var onServiceSelected: ((position: Int, service: ServiceInfoDataModel, district: LocationData ) -> Unit)? = null
 
     companion object {
 
-        fun newInstance(): ServicesSelectionBottomSheet = ServicesSelectionBottomSheet().apply {
+        fun newInstance(dataLists: List<ServiceInfoDataModel>): ServicesSelectionBottomSheet = ServicesSelectionBottomSheet().apply {
+            this.dataLists = dataLists
         }
 
         val tag: String = ServicesSelectionBottomSheet::class.java.name
@@ -35,7 +44,7 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme2)
+        setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -48,6 +57,7 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initView()
+        initClickLister()
         initServiceData()
 
     }
@@ -62,10 +72,37 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
+    private fun initClickLister() {
+       dataAdapter.onDistrictSelectionClick = {_, model ->
+           goToDistrictSelectDialogue(model)
+       }
+    }
+
     private fun initServiceData(){
-        viewModel.fetchServiceInfo().observe(viewLifecycleOwner, Observer {
-            dataAdapter.initLoad(it)
-        })
+        dataAdapter.initLoad(dataLists)
+    }
+
+    private fun goToDistrictSelectDialogue(serviceInfo: ServiceInfoDataModel) {
+
+        val locationList: MutableList<LocationData> = mutableListOf()
+        serviceInfo.districtList.forEach { model ->
+            locationList.add(
+                LocationData(
+                    model.districtId,
+                    model.districtBng,
+                    model.district,
+                    model.postalCode,
+                    model.district!!.toLowerCase(Locale.US)
+                )
+            )
+        }
+
+        val dialog = LocationSelectionDialog.newInstance(locationList)
+        dialog.show(childFragmentManager, LocationSelectionDialog.tag)
+        dialog.onLocationPicked = {position, district ->
+            onServiceSelected?.invoke(position, serviceInfo, district)
+            dismiss()
+        }
     }
 
     override fun onStart() {

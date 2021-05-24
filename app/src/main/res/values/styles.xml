@@ -66,7 +66,7 @@
     <style name="BaseBottomSheetDialog2" parent="@style/Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
         <item name="bottomSheetStyle">@style/BottomSheet</item>
-        <item name="android:windowSoftInputMode">adjustResize|stateVisible</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateHidden</item>
     </style>
 
     <style name="BottomSheetDialogTheme2" parent="BaseBottomSheetDialog2">

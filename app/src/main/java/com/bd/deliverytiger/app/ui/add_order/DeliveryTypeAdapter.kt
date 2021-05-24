@@ -73,6 +73,14 @@ class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
+    fun selectByDeliveryRangeId(rangeId: Int) {
+        val index = dataList.indexOfFirst { it.deliveryRangeId == rangeId }
+        if (index != -1) {
+            selectedItem = index
+            onItemClick?.invoke(selectedItem, dataList[selectedItem])
+        }
+    }
+
     fun clearSelection(){
         selectedItem = -1
     }

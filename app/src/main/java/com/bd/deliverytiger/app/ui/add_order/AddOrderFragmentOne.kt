@@ -43,6 +43,7 @@ import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
+import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoDataModel
 import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.bd.deliverytiger.app.databinding.FragmentAddOrderFragmentOneBinding
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
@@ -205,6 +206,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var merchantDistrict: Int = 0
     private var selectedDeliveryType = ""
     private var serviceType: String = "alltoall"
+    private var selectedServiceType: Int = 0
 
     private var binding: FragmentAddOrderFragmentOneBinding? = null
     private val viewModel: AddOrderViewModel by inject()
@@ -265,7 +267,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         orderPlaceBtn.setOnClickListener(this)
 
         // Fetch Charge Data
-        goToServiceSelectionBottomSheet()
+        loadServiceType()
         getCourierUsersInformation()
         getAllDistrictsList()
         getBreakableCharge()
@@ -708,32 +710,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         dialog.onLocationPicked = { _, model ->
             when (operationFlag) {
                 1 -> {
-                    etDistrict.setText(model.displayNameBangla)
-                    districtId = model.id
-
-                    thanaId = 0
-                    areaId = 0
-                    etAriaPostOffice.setText("")
-                    etThana.setText("")
-                    etAriaPostOfficeLayout.visibility = View.GONE
-
-                    val filterList = allLocationList.filter { it.parentId == districtId }
-                    filteredThanaLists.clear()
-                    if (filterList.isNotEmpty()) {
-                        val sortedList = filterList.sortedBy { it.districtPriority } as MutableList<AllDistrictListsModel>
-                        filteredThanaLists.addAll(sortedList)
-                    }
-
-                    val sadarThana = filteredThanaLists.first()
-                    // Check same city logic
-                    serviceType = if (merchantDistrict == districtId) { "citytocity" } else "alltoall"
-                    getDeliveryCharge(districtId, sadarThana.districtId, 0, serviceType)
-                    if (districtId == 14) {
-                        codChargePercentage = codChargePercentageInsideDhaka
-                    } else {
-                        codChargePercentage = codChargePercentageOutsideDhaka
-                    }
-                    calculateTotalPrice()
+                    updateUIAfterDistrict(model)
                 }
                 2 -> {
                     etThana.setText(model.displayNameBangla)
@@ -766,6 +743,35 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 }
             }
 
+    }
+
+    private fun updateUIAfterDistrict(model: LocationData) {
+        etDistrict.setText(model.displayNameBangla)
+        districtId = model.id
+
+        thanaId = 0
+        areaId = 0
+        etAriaPostOffice.setText("")
+        etThana.setText("")
+        etAriaPostOfficeLayout.visibility = View.GONE
+
+        val filterList = allLocationList.filter { it.parentId == districtId }
+        filteredThanaLists.clear()
+        if (filterList.isNotEmpty()) {
+            val sortedList = filterList.sortedBy { it.districtPriority } as MutableList<AllDistrictListsModel>
+            filteredThanaLists.addAll(sortedList)
+        }
+
+        val sadarThana = filteredThanaLists.first()
+        // Check same city logic
+        serviceType = if (merchantDistrict == districtId) { "citytocity" } else "alltoall"
+        getDeliveryCharge(districtId, sadarThana.districtId, 0, serviceType)
+        if (districtId == 14) {
+            codChargePercentage = codChargePercentageInsideDhaka
+        } else {
+            codChargePercentage = codChargePercentageOutsideDhaka
+        }
+        calculateTotalPrice()
     }
 
 
@@ -1005,12 +1011,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     }
 
-    private fun goToServiceSelectionBottomSheet(){
-        val tag = ServicesSelectionBottomSheet.tag
-        val dialog = ServicesSelectionBottomSheet.newInstance()
-        dialog.show(childFragmentManager, tag)
-    }
-
     private fun getCourierUsersInformation() {
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
             collectionChargeApi = model.collectionCharge
@@ -1104,6 +1104,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                             calculateTotalPrice()
                             // select pre selected
                             deliveryTypeAdapter.selectPreSelection()
+                            if (selectedServiceType != 0) {
+                                deliveryTypeAdapter.selectByDeliveryRangeId(selectedServiceType)
+                            }
                         }
                     }
                 }
@@ -1589,6 +1592,34 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         additionalNote = "This is test order from IT"
     }
 
+    private fun loadServiceType() {
+        viewModel.fetchServiceInfo().observe(viewLifecycleOwner, Observer { serviceTypeList ->
+            Timber.d("loadServiceTypeDebug $serviceTypeList")
+            goToServiceSelectionBottomSheet(serviceTypeList)
+        })
+    }
 
+    private fun goToServiceSelectionBottomSheet(dataLists: List<ServiceInfoDataModel>){
+        val tag = ServicesSelectionBottomSheet.tag
+        val dialog = ServicesSelectionBottomSheet.newInstance(dataLists)
+        dialog.show(childFragmentManager, tag)
+        dialog.onServiceSelected = { position, service, district ->
+            if (service.deliveryRangeId.isNotEmpty()) {
+                if (district.id == 14) {
+                    // first dhaka
+                    selectedServiceType = service.deliveryRangeId.first()
+                } else {
+                    // last outside dhaka
+                    selectedServiceType = service.deliveryRangeId.last()
+                }
+                deliveryTypeRV.isVisible = false
+            } else {
+                deliveryTypeRV.isVisible = true
+                // default
+                selectedServiceType = 0
+            }
+            updateUIAfterDistrict(district)
+        }
+    }
 
 }
