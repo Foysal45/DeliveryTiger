@@ -30,6 +30,11 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="AlertDialogTheme" parent="Base.Theme.AppCompat.Light.Dialog.Alert">
+        <item name="windowFixedWidthMajor">60%</item>
+        <item name="windowFixedWidthMinor">60%</item>
+    </style>
+
     <!-- set the rounded drawable as background to your bottom sheet -->
     <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/bg_bottom_sheet_bg</item>
