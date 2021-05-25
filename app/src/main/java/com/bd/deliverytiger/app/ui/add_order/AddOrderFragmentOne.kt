@@ -1058,7 +1058,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private fun getDeliveryCharge(districtId: Int, thanaId: Int, areaId: Int, serviceType: String) {
 
         viewModel.getDeliveryCharge(DeliveryChargeRequest(districtId, thanaId, areaId, serviceType)).observe(viewLifecycleOwner, Observer { list ->
-            if (list.isEmpty()) {
+
+            if (serviceType == "citytocity" && list.isEmpty()) {
                 this.serviceType = "alltoall"
                 getDeliveryCharge(districtId, thanaId, areaId, this.serviceType)
                 return@Observer
@@ -1107,6 +1108,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                             if (selectedServiceType != 0) {
                                 deliveryTypeAdapter.selectByDeliveryRangeId(selectedServiceType)
                             }
+                        } else {
+                            deliveryTypeAdapter.clearList()
                         }
                     }
                 }

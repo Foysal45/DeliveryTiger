@@ -81,6 +81,12 @@ class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
+    fun clearList() {
+        selectedItem = -1
+        dataList.clear()
+        notifyDataSetChanged()
+    }
+
     fun clearSelection(){
         selectedItem = -1
     }
