@@ -788,6 +788,9 @@ class HomeActivity : AppCompatActivity(),
             R.id.nav_survey -> {
                 startActivity(Intent(this, SurveyActivity::class.java))
             }
+            R.id.nav_balance_load -> {
+                addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
+            }
             R.id.nav_logout -> {
 
                 SessionManager.clearSession()

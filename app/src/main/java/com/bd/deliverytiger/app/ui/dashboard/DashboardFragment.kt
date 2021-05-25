@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.ui.dashboard
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -249,12 +250,12 @@ class DashboardFragment : Fragment() {
             addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
         }
         binding?.balanceLoadLayout?.setOnClickListener {
-
-            if (netAmount >= 0) {
+            showQuickOrderDialog()
+           /* if (netAmount >= 0) {
                 addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
             } else {
                 serviceChargeDialog()
-            }
+            }*/
         }
         binding?.orderBtn?.setOnClickListener {
             binding?.progressBar?.visibility = View.VISIBLE
@@ -936,6 +937,12 @@ class DashboardFragment : Fragment() {
         val fragment = WebViewFragment.newInstance(url, "ডেলিভারি টাইগার")
         val tag = WebViewFragment.tag
         addFragment(fragment, tag)
+    }
+
+    private fun showQuickOrderDialog() {
+        val customDialog = Dialog(requireActivity(), R.style.AlertDialogTheme)
+        customDialog.setContentView(R.layout.item_view_custom_quick_order_dialogue)
+        customDialog.show()
     }
 
     private fun serviceChargeDialog() {

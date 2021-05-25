@@ -49,6 +49,12 @@
             />
 
         <item
+            android:id="@+id/nav_balance_load"
+            android:icon="@drawable/ic_bill_pay_history"
+            android:title="ব্যালেন্স লোড"
+            />
+
+        <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_profile"
             android:title="প্রোফাইল আপডেট" />
