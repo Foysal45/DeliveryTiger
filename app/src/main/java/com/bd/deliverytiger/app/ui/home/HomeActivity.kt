@@ -16,8 +16,8 @@ import android.os.IBinder
 import android.provider.Settings
 import android.util.TypedValue
 import android.view.*
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -789,7 +789,15 @@ class HomeActivity : AppCompatActivity(),
                 startActivity(Intent(this, SurveyActivity::class.java))
             }
             R.id.nav_balance_load -> {
-                addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
+                if (SessionManager.netAmount >=0 ){
+                    addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
+                }else{
+                    alert("নির্দেশনা", "আপনার সার্ভিস চার্জ (প্রি-পেইড) ৳${DigitConverter.toBanglaDigit(SessionManager.netAmount)} বকেয়া রয়েছে। সার্ভিস চার্জ পে করুন।", false, "সার্ভিস চার্জ পে","") {
+                        if (it == AlertDialog.BUTTON_POSITIVE) {
+                            addFragment(ServiceBillPayFragment.newInstance(), ServiceBillPayFragment.tag)
+                        }
+                    }.show()
+                }
             }
             R.id.nav_logout -> {
 

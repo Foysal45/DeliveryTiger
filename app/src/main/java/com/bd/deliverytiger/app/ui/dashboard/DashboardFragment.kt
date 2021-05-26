@@ -594,6 +594,7 @@ class DashboardFragment : Fragment() {
         viewModel.fetchUnpaidCOD(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
 
             netAmount = model.netAdjustedAmount
+            SessionManager.netAmount = netAmount
             availability = model.availability
             availabilityMessage = model.availabilityMessage
             //netAmount = 6000

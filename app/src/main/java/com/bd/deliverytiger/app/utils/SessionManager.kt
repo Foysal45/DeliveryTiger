@@ -248,6 +248,16 @@ object SessionManager {
             }
         }
 
+    var netAmount: Int
+        get() {
+            return pref.getInt("netAdjustedAmount", 0)
+        }
+        set(value) {
+            pref.edit {
+                putInt("netAdjustedAmount", value)
+            }
+        }
+
     var address: String
         get() {
             return pref.getString("address", "")!!
