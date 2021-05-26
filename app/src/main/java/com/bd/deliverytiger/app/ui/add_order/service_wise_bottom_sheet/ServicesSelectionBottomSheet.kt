@@ -5,23 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
 import com.bd.deliverytiger.app.api.model.location.LocationData
-import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoDataModel
+import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.databinding.FragmentServicesSelectionBottomSheetBinding
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
-import com.bd.deliverytiger.app.utils.hideKeyboard
+import com.bd.deliverytiger.app.utils.toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.fragment_services_selection_bottom_sheet.*
 import org.koin.android.ext.android.inject
-import timber.log.Timber
 import java.util.*
 import kotlin.concurrent.thread
+import androidx.lifecycle.Observer
 
 class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
 
@@ -29,14 +27,14 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
     private  var dataAdapter: ServiceSelectionBottomSheetAdapter = ServiceSelectionBottomSheetAdapter()
     private val viewModel: ServiceSelectionBottomSheetViewModel by inject()
 
-    private lateinit var dataLists:  List<ServiceInfoDataModel>
+    private lateinit var dataList:  List<ServiceInfoData>
 
-    var onServiceSelected: ((position: Int, service: ServiceInfoDataModel, district: LocationData ) -> Unit)? = null
+    var onServiceSelected: ((position: Int, service: ServiceInfoData, district: LocationData ) -> Unit)? = null
 
     companion object {
 
-        fun newInstance(dataLists: List<ServiceInfoDataModel>): ServicesSelectionBottomSheet = ServicesSelectionBottomSheet().apply {
-            this.dataLists = dataLists
+        fun newInstance(serviceList: List<ServiceInfoData>): ServicesSelectionBottomSheet = ServicesSelectionBottomSheet().apply {
+            this.dataList = serviceList
         }
 
         val tag: String = ServicesSelectionBottomSheet::class.java.name
@@ -59,14 +57,14 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
         initView()
         initClickLister()
         initServiceData()
-
     }
 
     private fun initView() {
         binding?.recycleView?.let { view ->
             with(view) {
-                setHasFixedSize(false)
+                setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(requireContext())
+                addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
                 adapter = dataAdapter
             }
         }
@@ -79,10 +77,18 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun initServiceData(){
-        dataAdapter.initLoad(dataLists)
+        dataAdapter.initLoad(dataList)
+        viewModel.fetchServiceWiseDistrict(dataList).observe(viewLifecycleOwner, Observer { model ->
+            dataAdapter.updateData(model)
+        })
     }
 
-    private fun goToDistrictSelectDialogue(serviceInfo: ServiceInfoDataModel) {
+    private fun goToDistrictSelectDialogue(serviceInfo: ServiceInfoData) {
+
+        if (serviceInfo.districtList.isEmpty()) {
+            context?.toast("জেলা লোড হচ্ছে অপেক্ষা করুন")
+            return
+        }
 
         val locationList: MutableList<LocationData> = mutableListOf()
         serviceInfo.districtList.forEach { model ->
@@ -92,7 +98,7 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
                     model.districtBng,
                     model.district,
                     model.postalCode,
-                    model.district!!.toLowerCase(Locale.US)
+                    model.district?.toLowerCase(Locale.US) ?: ""
                 )
             )
         }
@@ -108,7 +114,7 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
     override fun onStart() {
         super.onStart()
         val dialog = dialog as BottomSheetDialog?
-        dialog?.setCanceledOnTouchOutside(true)
+        dialog?.setCanceledOnTouchOutside(false)
         val bottomSheet: FrameLayout? = dialog?.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         val metrics = resources.displayMetrics
         if (bottomSheet != null) {
@@ -119,17 +125,17 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
                 }
             }
             BottomSheetBehavior.from(bottomSheet).skipCollapsed = true
-            BottomSheetBehavior.from(bottomSheet).isHideable = true
-            BottomSheetBehavior.from(bottomSheet).addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            BottomSheetBehavior.from(bottomSheet).isHideable = false
+            /*BottomSheetBehavior.from(bottomSheet).addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
                 override fun onSlide(p0: View, p1: Float) {
                     BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_EXPANDED
                 }
                 override fun onStateChanged(p0: View, p1: Int) {
-                    /*if (p1 == BottomSheetBehavior.STATE_DRAGGING) {
+                    *//*if (p1 == BottomSheetBehavior.STATE_DRAGGING) {
                         BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_EXPANDED
-                    }*/
+                    }*//*
                 }
-            })
+            })*/
         }
     }
 

@@ -12,8 +12,6 @@ import com.bd.deliverytiger.app.di.appModule
 import com.bd.deliverytiger.app.interfaces.Session
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.login.LoginActivity
-import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin

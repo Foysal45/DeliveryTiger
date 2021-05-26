@@ -3,18 +3,14 @@ package com.bd.deliverytiger.app.ui.add_order
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
-import android.graphics.Rect
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -43,7 +39,7 @@ import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
-import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoDataModel
+import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.bd.deliverytiger.app.databinding.FragmentAddOrderFragmentOneBinding
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
@@ -119,6 +115,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var areaId = 0
     private var customersAddress = ""
     private var additionalNote = ""
+    private val serviceTypeList: MutableList<ServiceInfoData> = mutableListOf()
     private val districtList: ArrayList<DistrictDeliveryChargePayLoad> = ArrayList()
     private val allLocationList: MutableList<AllDistrictListsModel> = mutableListOf()
     private var filteredDistrictLists: MutableList<AllDistrictListsModel> = mutableListOf()
@@ -127,6 +124,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private val thanaOrAriaList: ArrayList<ThanaPayLoad> = ArrayList()
     private var isAriaAvailable = true
     private var isProfileComplete: Boolean = false
+    private var serviceTypeSelected: Boolean = false
 
     // Step 2
     private val packagingDataList: MutableList<PackagingData> = mutableListOf()
@@ -266,10 +264,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         orderPlaceBtn.setOnClickListener(this)
 
-        // Fetch Charge Data
-        loadServiceType()
+        // Order is important
         getCourierUsersInformation()
-        getAllDistrictsList()
         getBreakableCharge()
         fetchOfferCharge()
         getPackagingCharge()
@@ -414,23 +410,23 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             collectionAmountET.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.red))
         }
 
-       /* togglePickupGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
-            if (isChecked) {
-                when (checkedId) {
-                    R.id.toggleButtonPickup1 ->
-                    {
-                        isOfficeDrop = true
-                        calculateTotalPrice()
-                        pickupAddressLayout.visibility = View.GONE
-                    }
-                    R.id.toggleButtonPickup2 -> {
-                        isOfficeDrop = false
-                        pickupAddressLayout.visibility = View.VISIBLE
-                        calculateTotalPrice()
-                    }
-                }
-            }
-        }*/
+        /* togglePickupGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+             if (isChecked) {
+                 when (checkedId) {
+                     R.id.toggleButtonPickup1 ->
+                     {
+                         isOfficeDrop = true
+                         calculateTotalPrice()
+                         pickupAddressLayout.visibility = View.GONE
+                     }
+                     R.id.toggleButtonPickup2 -> {
+                         isOfficeDrop = false
+                         pickupAddressLayout.visibility = View.VISIBLE
+                         calculateTotalPrice()
+                     }
+                 }
+             }
+         }*/
 
         checkBoxBreakable.setOnCheckedChangeListener { compoundButton, isChecked ->
             isBreakable = isChecked
@@ -498,7 +494,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             }
         })
 
-        homeViewModel.keyboardVisibility.observe(viewLifecycleOwner, Observer { isShown->
+        homeViewModel.keyboardVisibility.observe(viewLifecycleOwner, Observer { isShown ->
             Timber.d("isShown $isShown")
             if (isShown) {
                 binding?.paymentOverViewLayout?.isVisible = false
@@ -508,6 +504,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         })
 
         SessionManager.orderSource = "DetailOrder"
+
+        if (BuildConfig.DEBUG) {
+            mockUserData()
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -546,13 +546,14 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     private fun isMerchantCreditAvailable(): Boolean {
-        val totalAdjustBalance = merchantCredit  + merchantCalculatedCollectionAmount + adjustBalance
+        val totalAdjustBalance = merchantCredit + merchantCalculatedCollectionAmount + adjustBalance
         val shipmentCharge = payShipmentCharge.toInt()
         val isMerchantCreditAvailable = totalAdjustBalance > shipmentCharge
-        Timber.tag("adjustBalance").d( "(credit:) $merchantCredit + (calculatedCollectionAmount:) $merchantCalculatedCollectionAmount + (adjustBalance:) $adjustBalance = (totalAdjustBalance:) $totalAdjustBalance")
-        Timber.tag("adjustBalance").d( "service charge: $merchantServiceCharge")
-        Timber.tag("adjustBalance").d( "shipment charge: $shipmentCharge")
-        Timber.tag("adjustBalance").d( "isMerchantCreditAvailable: $totalAdjustBalance > $shipmentCharge $isMerchantCreditAvailable")
+        Timber.tag("adjustBalance")
+            .d("(credit:) $merchantCredit + (calculatedCollectionAmount:) $merchantCalculatedCollectionAmount + (adjustBalance:) $adjustBalance = (totalAdjustBalance:) $totalAdjustBalance")
+        Timber.tag("adjustBalance").d("service charge: $merchantServiceCharge")
+        Timber.tag("adjustBalance").d("shipment charge: $shipmentCharge")
+        Timber.tag("adjustBalance").d("isMerchantCreditAvailable: $totalAdjustBalance > $shipmentCharge $isMerchantCreditAvailable")
         return isMerchantCreditAvailable
     }
 
@@ -561,15 +562,15 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         var missingValues = "নতুন অর্ডার করার আগে প্রোফাইল-এ "
         var isMissing = false
         if (model.companyName.isNullOrEmpty()) {
-            if(!isMissing) isMissing = true
+            if (!isMissing) isMissing = true
             missingValues += "মার্চেন্ট/কোম্পানি নাম, "
         }
         if (model.mobile.isNullOrEmpty()) {
-            if(!isMissing) isMissing = true
+            if (!isMissing) isMissing = true
             missingValues += "মোবাইল নাম্বার, "
         }
         if (model.bkashNumber.isNullOrEmpty()) {
-            if(!isMissing) isMissing = true
+            if (!isMissing) isMissing = true
             missingValues += "বিকাশ নম্বর (পেমেন্ট গ্রহনের জন্য), "
         }
         /*if (model.address.isNullOrEmpty()) {
@@ -577,11 +578,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             missingValues += "বিস্তারিত কালেকশন ঠিকানা (বাড়ি/রোড/হোল্ডিং), "
         }*/
         if (model.emailAddress.isNullOrEmpty()) {
-            if(!isMissing) isMissing = true
+            if (!isMissing) isMissing = true
             missingValues += "ইমেইল "
         }
         if (!SessionManager.isPickupLocationAdded) {
-            if(!isMissing) isMissing = true
+            if (!isMissing) isMissing = true
             missingValues += "পিকআপ লোকেশন "
         }
 
@@ -649,7 +650,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun pickupBottomSheet(){
+    private fun pickupBottomSheet() {
         val tag: String = CollectionInfoBottomSheet.tag
         val dialog: CollectionInfoBottomSheet = CollectionInfoBottomSheet.newInstance(weightRangeId)
         dialog.show(childFragmentManager, tag)
@@ -674,6 +675,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private fun orderPlaceProcess() {
         //timber.log.Timber.tag("orderDebug").d("ThanaId: $thanaId")
         when {
+            merchantDistrict == 14 && !serviceTypeSelected -> goToServiceSelectionBottomSheet(serviceTypeList)
             !isCollection && !isMerchantCreditAvailable() -> showCreditLimitAlert()
             !isProfileComplete -> checkProfileData()
             //!isCollection && adjustBalance <= (merchantCredit/2) -> showCreditLimitReachAlert()
@@ -694,13 +696,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         val locationList: MutableList<LocationData> = mutableListOf()
         list.forEach { model ->
             locationList.add(
-                    LocationData(
-                            model.districtId,
-                            model.districtBng,
-                            model.district,
-                            model.postalCode,
-                            model.district!!.toLowerCase(Locale.US)
-                    )
+                LocationData(
+                    model.districtId,
+                    model.districtBng,
+                    model.district,
+                    model.postalCode,
+                    model.district!!.toLowerCase(Locale.US)
+                )
             )
         }
 
@@ -719,9 +721,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     etAriaPostOffice.setText("")
 
                     val filterArea = allLocationList.filter { it.parentId == thanaId } as MutableList<AllDistrictListsModel>
-                    isAriaAvailable = filterArea.isNotEmpty()
                     Timber.d("filterArea $filterArea")
-
+                    isAriaAvailable = filterArea.isNotEmpty()
                     if (isAriaAvailable) {
                         filteredAreaLists.clear()
                         filteredAreaLists.addAll(filterArea.sortedBy { it.districtPriority })
@@ -729,30 +730,30 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     } else {
                         etAriaPostOfficeLayout.visibility = View.GONE
                     }
+
                     getDeliveryCharge(districtId, thanaId, 0, serviceType)
                     Timber.d("filterArea $filteredAreaLists")
                 }
                 3 -> {
                     areaId = model.id
-                    if (!model.displayPostalCode.isNullOrEmpty()){
+                    if (!model.displayPostalCode.isNullOrEmpty()) {
                         etAriaPostOffice.setText("${model.displayNameBangla} ${"${model.displayPostalCode}"}")
                         getDeliveryCharge(districtId, thanaId, areaId, serviceType)
-                    }else
+                    } else
                         etAriaPostOffice.setText(model.displayNameBangla)
-                    }
                 }
             }
+        }
 
     }
 
     private fun updateUIAfterDistrict(model: LocationData) {
-        etDistrict.setText(model.displayNameBangla)
-        districtId = model.id
 
-        thanaId = 0
+        districtId = model.id
+        etDistrict.setText(model.displayNameBangla)
+
         areaId = 0
         etAriaPostOffice.setText("")
-        etThana.setText("")
         etAriaPostOfficeLayout.visibility = View.GONE
 
         val filterList = allLocationList.filter { it.parentId == districtId }
@@ -761,10 +762,25 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             val sortedList = filterList.sortedBy { it.districtPriority } as MutableList<AllDistrictListsModel>
             filteredThanaLists.addAll(sortedList)
         }
-
         val sadarThana = filteredThanaLists.first()
+        thanaId = sadarThana.districtId
+        etThana.setText(sadarThana.districtBng)
+
+        val filterArea = allLocationList.filter { it.parentId == thanaId } as MutableList<AllDistrictListsModel>
+        Timber.d("filterArea $filterArea")
+        isAriaAvailable = filterArea.isNotEmpty()
+        if (isAriaAvailable) {
+            filteredAreaLists.clear()
+            filteredAreaLists.addAll(filterArea.sortedBy { it.districtPriority })
+            etAriaPostOfficeLayout.visibility = View.VISIBLE
+        } else {
+            etAriaPostOfficeLayout.visibility = View.GONE
+        }
+
         // Check same city logic
-        serviceType = if (merchantDistrict == districtId) { "citytocity" } else "alltoall"
+        serviceType = if (merchantDistrict == districtId) {
+            "citytocity"
+        } else "alltoall"
         getDeliveryCharge(districtId, sadarThana.districtId, 0, serviceType)
         if (districtId == 14) {
             codChargePercentage = codChargePercentageInsideDhaka
@@ -775,46 +791,46 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
 
-   /* private fun getDistrictThanaOrAria(id: Int, track: Int) {
-        hideKeyboard()
-        //track = 1 district , track = 2 thana, track = 3 aria
-        val dialog = progressDialog()
-        dialog.show()
-        viewModel.getAllDistrictFromApi(id).observe(viewLifecycleOwner, Observer {
-            dialog.dismiss()
-            if (track == 1) {
-                districtList.addAll(it)
-                goToDistrict()
-            } else if (track == 2) {
-                thanaOrAriaList.clear()
-                thanaOrAriaList.addAll(it[0].thanaHome!!)
-                if (thanaOrAriaList.isNotEmpty()) {
-                    //customAlertDialog(thanaOrAriaList, 1)
-                    val mList: ArrayList<CustomModel> = ArrayList()
-                    for ((index, model) in thanaOrAriaList.withIndex()) {
-                        mList.add(CustomModel(model.thanaId, model.thanaBng + "", model.thana + "", index))
-                    }
-                    thanaAriaSelect(thanaOrAriaList, 2, mList, "থানা নির্বাচন করুন")
-                }
-            } else if (track == 3) {
-                thanaOrAriaList.clear()
-                thanaOrAriaList.addAll(it[0].thanaHome!!)
-                if (thanaOrAriaList.isNotEmpty()) {
-                    // customAlertDialog(thanaOrAriaList, 2)
-                    val mList: ArrayList<CustomModel> = ArrayList()
-                    var temp = 0
-                    for ((index, model) in thanaOrAriaList.withIndex()) {
-                        temp = 0
-                        if (model.postalCode != null && model.postalCode?.isNotEmpty()!!) {
-                            temp = model.postalCode?.trim()?.toInt()!!
-                        }
-                        mList.add(CustomModel(temp, model.thanaBng + "", model.thana + "", index))
-                    }
-                    thanaAriaSelect(thanaOrAriaList, 3, mList, "এরিয়া/পোস্ট অফিস নির্বাচন করুন")
-                }
-            }
-        })
-    }*/
+    /* private fun getDistrictThanaOrAria(id: Int, track: Int) {
+         hideKeyboard()
+         //track = 1 district , track = 2 thana, track = 3 aria
+         val dialog = progressDialog()
+         dialog.show()
+         viewModel.getAllDistrictFromApi(id).observe(viewLifecycleOwner, Observer {
+             dialog.dismiss()
+             if (track == 1) {
+                 districtList.addAll(it)
+                 goToDistrict()
+             } else if (track == 2) {
+                 thanaOrAriaList.clear()
+                 thanaOrAriaList.addAll(it[0].thanaHome!!)
+                 if (thanaOrAriaList.isNotEmpty()) {
+                     //customAlertDialog(thanaOrAriaList, 1)
+                     val mList: ArrayList<CustomModel> = ArrayList()
+                     for ((index, model) in thanaOrAriaList.withIndex()) {
+                         mList.add(CustomModel(model.thanaId, model.thanaBng + "", model.thana + "", index))
+                     }
+                     thanaAriaSelect(thanaOrAriaList, 2, mList, "থানা নির্বাচন করুন")
+                 }
+             } else if (track == 3) {
+                 thanaOrAriaList.clear()
+                 thanaOrAriaList.addAll(it[0].thanaHome!!)
+                 if (thanaOrAriaList.isNotEmpty()) {
+                     // customAlertDialog(thanaOrAriaList, 2)
+                     val mList: ArrayList<CustomModel> = ArrayList()
+                     var temp = 0
+                     for ((index, model) in thanaOrAriaList.withIndex()) {
+                         temp = 0
+                         if (model.postalCode != null && model.postalCode?.isNotEmpty()!!) {
+                             temp = model.postalCode?.trim()?.toInt()!!
+                         }
+                         mList.add(CustomModel(temp, model.thanaBng + "", model.thana + "", index))
+                     }
+                     thanaAriaSelect(thanaOrAriaList, 3, mList, "এরিয়া/পোস্ট অফিস নির্বাচন করুন")
+                 }
+             }
+         })
+     }*/
 
     /*private fun goToDistrict() {
 
@@ -1015,6 +1031,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
             collectionChargeApi = model.collectionCharge
             merchantDistrict = model.districtId
+            if (merchantDistrict == 14) {
+                loadServiceType()
+            }
+            getAllDistrictsList()
         })
     }
 
@@ -1104,9 +1124,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                             extraDeliveryCharge = 0.0
                             calculateTotalPrice()
                             // select pre selected
-                            deliveryTypeAdapter.selectPreSelection()
                             if (selectedServiceType != 0) {
                                 deliveryTypeAdapter.selectByDeliveryRangeId(selectedServiceType)
+                            } else {
+                                deliveryTypeAdapter.selectPreSelection()
                             }
                         } else {
                             deliveryTypeAdapter.clearList()
@@ -1117,42 +1138,44 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         })
     }
 
-    private fun getAllDistrictsList(){
-        binding?.progressBar1?.isVisible = true
-        viewModel.loadAllDistricts().observe(viewLifecycleOwner, Observer { list->
-            binding?.progressBar1?.isVisible = false
-            allLocationList.clear()
-            allLocationList.addAll(list)
+    private fun getAllDistrictsList() {
 
-            filteredDistrictLists.clear()
-            filteredDistrictLists.addAll(allLocationList.filter { it.parentId == 0 })
+        etDistrict.setOnClickListener {
+            goToDistrictSelectDialogue(filteredDistrictLists, 0, 1)
+        }
 
-            etDistrict.setOnClickListener {
-                goToDistrictSelectDialogue(filteredDistrictLists, 0,  1)
+        etThana.setOnClickListener {
+            if (districtId != 0) {
+                //Timber.d("ThanaDebug $districtId $allLocationList")
+                goToDistrictSelectDialogue(filteredThanaLists, 0, 2)
+            } else {
+                context?.toast(getString(R.string.select_dist))
             }
+        }
 
-            etThana.setOnClickListener {
-                if (districtId != 0) {
-                    //Timber.d("ThanaDebug $districtId $allLocationList")
-                    goToDistrictSelectDialogue(filteredThanaLists, 0,  2)
+        etAriaPostOffice.setOnClickListener {
+            if (isAriaAvailable) {
+                if (thanaId != 0) {
+                    goToDistrictSelectDialogue(filteredAreaLists, 0, 3)
                 } else {
-                    context?.toast(getString(R.string.select_dist))
+                    context?.toast(getString(R.string.select_thana))
                 }
+            } else {
+                context?.toast(getString(R.string.no_aria))
             }
+        }
 
-            etAriaPostOffice.setOnClickListener {
-                if (isAriaAvailable) {
-                    if (thanaId != 0) {
-                        goToDistrictSelectDialogue(filteredAreaLists, 0,  3)
-                    } else {
-                        context?.toast(getString(R.string.select_thana))
-                    }
-                } else {
-                    context?.toast(getString(R.string.no_aria))
-                }
-            }
+        if (merchantDistrict != 14) {
+            binding?.progressBar1?.isVisible = true
+            viewModel.loadAllDistricts().observe(viewLifecycleOwner, Observer { list ->
+                binding?.progressBar1?.isVisible = false
+                allLocationList.clear()
+                allLocationList.addAll(list)
 
-        })
+                filteredDistrictLists.clear()
+                filteredDistrictLists.addAll(allLocationList.filter { it.parentId == 0 })
+            })
+        }
     }
 
     private fun getPickupLocation() {
@@ -1367,7 +1390,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             payBreakableCharge, additionalNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge, packingName,
             payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,
             "android", SessionManager.versionName, true, collectionDistrictId, collectionThanaId,
-            deliveryDate, collectionDate, isOfficeDrop,payActualPackagePrice, timeSlotId, selectedCollectionSlotDate, offerType, relationType, serviceType
+            deliveryDate, collectionDate, isOfficeDrop, payActualPackagePrice, timeSlotId, selectedCollectionSlotDate, offerType, relationType, serviceType
         )
 
 
@@ -1402,16 +1425,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         else if (districtId == 0) {
             go = false
             context?.toast(getString(R.string.select_dist))
-        }
-        else if (thanaId == 0) {
+        } else if (thanaId == 0) {
             go = false
             context?.toast(getString(R.string.select_thana))
-        }
-        else if (isAriaAvailable && areaId == 0) {
+        } else if (isAriaAvailable && areaId == 0) {
             go = false
             context?.toast(getString(R.string.select_aria))
-        }
-        else if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
+        } else if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
             go = false
             context?.toast(getString(R.string.write_yr_address))
             etCustomersAddress.requestFocus()
@@ -1561,8 +1581,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     private fun showCreditLimitAlert() {
-        val msg = "আপনার প্রি-পেইড অর্ডার করার জন্য পর্যাপ্ত ব্যালান্স নেই। আপনার বর্তমান ব্যালান্স <font color='#00844A'>${DigitConverter.toBanglaDigit(adjustBalance, true)}</font> টাকা। অনুগ্রহপূর্বক ব্যালান্স লোড করুন।"
-        alert("নির্দেশনা", HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY), false, "ব্যালান্স লোড", "",){
+        val msg = "আপনার প্রি-পেইড অর্ডার করার জন্য পর্যাপ্ত ব্যালান্স নেই। আপনার বর্তমান ব্যালান্স <font color='#00844A'>${
+            DigitConverter.toBanglaDigit(
+                adjustBalance,
+                true
+            )
+        }</font> টাকা। অনুগ্রহপূর্বক ব্যালান্স লোড করুন।"
+        alert("নির্দেশনা", HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY), false, "ব্যালান্স লোড", "") {
             if (it == AlertDialog.BUTTON_POSITIVE) {
                 if (activity != null) {
                     (activity as HomeActivity).goToBalanceLoad()
@@ -1572,7 +1597,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     }
 
     private fun showCreditLimitReachAlert() {
-        alert("নির্দেশনা", "আপনার ব্যালান্স (৳${DigitConverter.toBanglaDigit(adjustBalance)}) প্রায় শেষ। আপনি আর অল্প কিছু সংখ্যক প্রি-পেইড অর্ডার করতে পারবেন। অনুগ্রহপূর্বক ব্যালান্স রিচার্জ করুন।", false, "ঠিক আছে", ""){
+        alert(
+            "নির্দেশনা",
+            "আপনার ব্যালান্স (৳${DigitConverter.toBanglaDigit(adjustBalance)}) প্রায় শেষ। আপনি আর অল্প কিছু সংখ্যক প্রি-পেইড অর্ডার করতে পারবেন। অনুগ্রহপূর্বক ব্যালান্স রিচার্জ করুন।",
+            false,
+            "ঠিক আছে",
+            ""
+        ) {
             if (it == AlertDialog.BUTTON_POSITIVE) {
                 submitOrder()
             }
@@ -1584,45 +1615,54 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         binding = null
     }
 
-    private fun mockUserData() {
-        customerName = "Test Customer Name"
-        mobileNo = "01555555555"
-        alternativeMobileNo = "01555555556"
-        districtId = 14
-        thanaId = 10026
-        areaId = 0
-        customersAddress = "Test Customer Address from IT"
-        additionalNote = "This is test order from IT"
-    }
-
     private fun loadServiceType() {
-        viewModel.fetchServiceInfo().observe(viewLifecycleOwner, Observer { serviceTypeList ->
-            Timber.d("loadServiceTypeDebug $serviceTypeList")
-            goToServiceSelectionBottomSheet(serviceTypeList)
+        viewModel.fetchServiceInfo().observe(viewLifecycleOwner, Observer { list ->
+            serviceTypeList.clear()
+            serviceTypeList.addAll(list)
+            goToServiceSelectionBottomSheet(list)
         })
     }
 
-    private fun goToServiceSelectionBottomSheet(dataLists: List<ServiceInfoDataModel>){
+    private fun goToServiceSelectionBottomSheet(dataLists: List<ServiceInfoData>) {
         val tag = ServicesSelectionBottomSheet.tag
         val dialog = ServicesSelectionBottomSheet.newInstance(dataLists)
         dialog.show(childFragmentManager, tag)
-        dialog.onServiceSelected = { position, service, district ->
+        dialog.onServiceSelected = { _, service, district ->
+
+            serviceTypeSelected = true
+            allLocationList.clear()
+            allLocationList.addAll(service.locationList)
+            filteredDistrictLists.clear()
+            filteredDistrictLists.addAll(service.districtList)
+
             if (service.deliveryRangeId.isNotEmpty()) {
-                if (district.id == 14) {
-                    // first dhaka
+                if (district.id == 14) { // first dhaka
                     selectedServiceType = service.deliveryRangeId.first()
-                } else {
-                    // last outside dhaka
+                } else { // last outside dhaka
                     selectedServiceType = service.deliveryRangeId.last()
                 }
                 deliveryTypeRV.isVisible = false
             } else {
                 deliveryTypeRV.isVisible = true
-                // default
-                selectedServiceType = 0
+                selectedServiceType = 0 // default
             }
             updateUIAfterDistrict(district)
         }
+    }
+
+    private fun mockUserData() {
+        etCustomerName.setText("Test Customer ABC")
+        etAddOrderMobileNo.setText("01555555555")
+        etAlternativeMobileNo.setText("01555555556")
+        etCustomersAddress.setText("Test Customer Address from IT")
+        productNameET.setText("testITAndroid")
+        collectionAmountET.setText("500")
+        actualPackageAmountET.setText("500")
+        checkTerms.isChecked = true
+        additionalNote = "Test order from IT"
+        //districtId = 14
+        //thanaId = 10026
+        //areaId = 0
     }
 
 }

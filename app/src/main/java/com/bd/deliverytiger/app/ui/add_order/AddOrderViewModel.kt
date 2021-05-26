@@ -20,8 +20,8 @@ import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.referral.OfferData
-import com.bd.deliverytiger.app.api.model.service_selection.GetServiceDistrictsRequest
-import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoDataModel
+import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
+import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.SessionManager
@@ -499,9 +499,9 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
         return responseData
     }
 
-    fun fetchServiceInfo(): LiveData<List<ServiceInfoDataModel>> {
+    fun fetchServiceInfoWithDistrict(): LiveData<List<ServiceInfoData>> {
         viewState.value = ViewState.ProgressState(true)
-        val responseData = MutableLiveData<List<ServiceInfoDataModel>>()
+        val responseData = MutableLiveData<List<ServiceInfoData>>()
 
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.getDTService()
@@ -510,8 +510,8 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
                     val serviceTypeList = response.body.model!!
                     serviceTypeList.forEach { model ->
                         if (model.deliveryRangeId.isNotEmpty()){
-                            val districtRequest = GetServiceDistrictsRequest(model.deliveryRangeId)
-                            val serviceDistrictResponse = repository.loadAllServiceDistricts(districtRequest)
+                            val districtRequest = ServiceDistrictsRequest(model.deliveryRangeId)
+                            val serviceDistrictResponse = repository.fetchServiceDistricts(districtRequest)
                             if (serviceDistrictResponse is NetworkResponse.Success) {
                                 val districtList = serviceDistrictResponse.body.model
                                 if (!districtList.isNullOrEmpty()) {
@@ -550,12 +550,39 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
         return responseData
     }
 
-    fun loadAllDistricts(requestBody: GetServiceDistrictsRequest): LiveData<List<AllDistrictListsModel>> {
+    fun fetchServiceInfo() : LiveData<List<ServiceInfoData>>{
+        viewState.value = ViewState.ProgressState(true)
+        val responseData = MutableLiveData<List<ServiceInfoData>>()
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getDTService()
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        val serviceTypeList = response.body.model!!
+                        responseData.value = serviceTypeList
+                    }
+                    is NetworkResponse.ServerError -> {
+                        viewState.value = ViewState.ShowMessage(serverErrorMessage)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        viewState.value = ViewState.ShowMessage(networkErrorMessage)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        viewState.value = ViewState.ShowMessage(unknownErrorMessage)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
+    }
+
+    fun fetchServiceDistricts(requestBody: ServiceDistrictsRequest): LiveData<List<AllDistrictListsModel>> {
         viewState.value = ViewState.ProgressState(true)
         val responseData = MutableLiveData<List<AllDistrictListsModel>>()
-
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.loadAllServiceDistricts(requestBody)
+            val response = repository.fetchServiceDistricts(requestBody)
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {

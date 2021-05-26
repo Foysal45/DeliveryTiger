@@ -250,12 +250,12 @@ class DashboardFragment : Fragment() {
             addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
         }
         binding?.balanceLoadLayout?.setOnClickListener {
-            showQuickOrderDialog()
-           /* if (netAmount >= 0) {
+            //showQuickOrderDialog()
+            if (netAmount >= 0) {
                 addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
             } else {
                 serviceChargeDialog()
-            }*/
+            }
         }
         binding?.orderBtn?.setOnClickListener {
             binding?.progressBar?.visibility = View.VISIBLE

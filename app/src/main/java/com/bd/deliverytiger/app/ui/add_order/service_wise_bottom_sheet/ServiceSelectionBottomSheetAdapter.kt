@@ -6,15 +6,16 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoDataModel
+import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.databinding.ItemViewServiceListsBinding
 import com.bd.deliverytiger.app.utils.DigitConverter
 
 class ServiceSelectionBottomSheetAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val dataList: MutableList<ServiceInfoDataModel> = mutableListOf()
-    var onDistrictSelectionClick: ((position: Int, model: ServiceInfoDataModel) -> Unit)? = null
+    private val dataList: MutableList<ServiceInfoData> = mutableListOf()
+    var onDistrictSelectionClick: ((position: Int, model: ServiceInfoData) -> Unit)? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -38,7 +39,7 @@ class ServiceSelectionBottomSheetAdapter: RecyclerView.Adapter<RecyclerView.View
             }else{
                 binding.serviceRangeArea.text = "${DigitConverter.toBanglaDigit(model.districtList.count())} টি জেলা সদরে"
             }
-
+            binding.progressBar.isVisible = model.districtList.isEmpty()
         }
     }
 
@@ -48,15 +49,19 @@ class ServiceSelectionBottomSheetAdapter: RecyclerView.Adapter<RecyclerView.View
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     onDistrictSelectionClick?.invoke(position, dataList[position])
-                    notifyDataSetChanged()
                 }
             }
         }
     }
 
-    fun initLoad(list: List<ServiceInfoDataModel>) {
+    fun initLoad(list: List<ServiceInfoData>) {
         dataList.clear()
         dataList.addAll(list)
+        notifyDataSetChanged()
+    }
+
+    fun updateData(model: ServiceInfoData) {
+        dataList[model.index].districtList = model.districtList
         notifyDataSetChanged()
     }
 

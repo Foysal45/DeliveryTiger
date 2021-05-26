@@ -52,6 +52,7 @@
             android:id="@+id/nav_balance_load"
             android:icon="@drawable/ic_bill_pay_history"
             android:title="ব্যালেন্স লোড"
+            android:visible="false"
             />
 
         <item

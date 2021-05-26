@@ -36,7 +36,7 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
     private lateinit var searchBtn: ImageView
     private lateinit var placeListRV: RecyclerView
     private var progressBar: ProgressBar? = null
-    private lateinit var extraSpace: View
+    //private lateinit var extraSpace: View
 
 
     private var handler = Handler(Looper.getMainLooper())
@@ -77,7 +77,7 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
         searchBtn = view.findViewById(R.id.search_btn)
         placeListRV = view.findViewById(R.id.place_list_rv)
         progressBar = view.findViewById(R.id.progress_bar)
-        extraSpace = view.findViewById(R.id.extraSpace)
+        //extraSpace = view.findViewById(R.id.extraSpace)
 
 
         val locationAdapter = LocationDistrictAdapter(dataList)

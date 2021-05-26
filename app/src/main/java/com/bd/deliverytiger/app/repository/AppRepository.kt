@@ -10,7 +10,6 @@ import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
-import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsResponse
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
@@ -24,7 +23,7 @@ import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionAnswer
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
-import com.bd.deliverytiger.app.api.model.service_selection.GetServiceDistrictsRequest
+import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -110,7 +109,7 @@ class AppRepository(
 
     suspend fun loadAllDistricts() = apiInterfaceCore.loadAllDistricts()
 
-    suspend fun loadAllServiceDistricts(requestBody: GetServiceDistrictsRequest) = apiInterfaceCore.loadAllServiceDistricts(requestBody)
+    suspend fun fetchServiceDistricts(requestBody: ServiceDistrictsRequest) = apiInterfaceCore.fetchServiceDistricts(requestBody)
 
     suspend fun getDTService() = apiInterfaceCore.getDTService()
 
