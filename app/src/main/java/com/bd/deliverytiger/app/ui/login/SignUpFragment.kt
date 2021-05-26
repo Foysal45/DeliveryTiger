@@ -25,6 +25,7 @@ import com.bd.deliverytiger.app.utils.Validator
 import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
 import com.bd.deliverytiger.app.utils.VariousTask.showShortToast
 import com.bd.deliverytiger.app.utils.isAlphaNumericPassword
+import com.bd.deliverytiger.app.utils.isExistSpecialCharacter
 import com.bd.deliverytiger.app.utils.toast
 import retrofit2.Call
 import retrofit2.Callback
@@ -247,8 +248,11 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
             showShortToast(context, getString(R.string.write_name))
             go = false
             etCompanyName.requestFocus()
-        }
-        if (etSignUpMobileNo.text.toString().isEmpty()) {
+        }else if (!isExistSpecialCharacter(etCompanyName.text.toString())){
+            showShortToast(context, getString(R.string.write_correct_name))
+            go = false
+            etCompanyName.requestFocus()
+        }else if (etSignUpMobileNo.text.toString().isEmpty()) {
             showShortToast(context, getString(R.string.write_phone_number))
             go = false
             etSignUpMobileNo.requestFocus()

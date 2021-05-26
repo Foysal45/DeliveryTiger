@@ -233,6 +233,14 @@ fun isAlphaNumericPassword(text: String): Boolean {
     return text.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*^#?&]{8,20}$".toRegex())
 }
 
+fun isExistSpecialCharacter(text: String): Boolean {
+    return text.matches(("[a-zA-Z0-9.?]*").toRegex())
+}
+
+fun isValidFacebookPage(text: String): Boolean {
+    return text.matches(("((http|https)://)?(www[.])?facebook.com/.+").toRegex())
+}
+
 fun generateNameInitial(name: String?): String {
     if (name.isNullOrEmpty()) return ""
     var initial: String = ""

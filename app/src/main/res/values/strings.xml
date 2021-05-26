@@ -8,6 +8,7 @@
     <string name="reset_password">Reset your password</string>
     <string name="write_proper_phone_number_recharge">সঠিক ফোন নাম্বার লিখুন</string>
     <string name="write_name">নাম লিখুন</string>
+    <string name="write_correct_name">শুধু লেটার এবং  ডিজিট ব্যবহার করতে পারবেন</string>
     <string name="write_phone_number">মোবাইল নাম্বার লিখুন</string>
     <string name="write_alt_phone_number">বিকল্প মোবাইল নাম্বার লিখুন</string>
     <string name="write_yr_name">কাস্টমারের নাম লিখুন</string>

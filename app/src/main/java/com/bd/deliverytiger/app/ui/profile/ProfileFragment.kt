@@ -320,6 +320,12 @@ class ProfileFragment : Fragment() {
             return false
         }
 
+        /* if (!isExistSpecialCharacter(companyName)) {
+            context?.toast("সঠিক মার্চেন্ট/কোম্পানি  নাম লিখুন")
+            binding?.companyName?.requestFocus()
+            return false
+        }*/
+
         contactPersonName = binding?.contactPersonName?.text?.trim().toString()
         if (contactPersonName.isEmpty()) {
             context?.toast("কন্টাক্ট পারসনের নাম লিখুন")
@@ -367,6 +373,12 @@ class ProfileFragment : Fragment() {
 
         webLink = binding?.pageLink?.text?.trim().toString()
         fbLink = binding?.fbLink?.text?.trim().toString()
+
+        if (!isValidFacebookPage(fbLink)) {
+            context?.toast("সঠিক ফেইসবুক পেইজ লিংক দিন")
+            binding?.emailAddress?.requestFocus()
+            return false
+        }
 
         /*if (!isAddingNewLocation && !isPickupLocationSelected) {
             context?.toast("কালেকশন লোকেশন সিলেক্ট করুন")
