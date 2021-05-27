@@ -146,7 +146,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
 
         progressDialog?.show()
         val mobile = etSignUpMobileNo.text.toString()
-        loginInterface.getUserInfo(UserInfoRequest(mobile)).enqueue(object : Callback<GenericResponse<LoginResponse>> {
+        checkReferrer.getUserInfo(UserInfoRequest(mobile)).enqueue(object : Callback<GenericResponse<LoginResponse>> {
             override fun onFailure(call: Call<GenericResponse<LoginResponse>>, t: Throwable) {
                 progressDialog?.dismiss()
                 context?.toast("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন")
