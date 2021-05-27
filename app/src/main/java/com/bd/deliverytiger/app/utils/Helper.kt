@@ -234,11 +234,11 @@ fun isAlphaNumericPassword(text: String): Boolean {
 }
 
 fun isExistSpecialCharacter(text: String): Boolean {
-    return text.matches(("[a-zA-Z0-9.?]*").toRegex())
+    return text.matches("^[A-Za-z\\d ]+$".toRegex())
 }
 
 fun isValidFacebookPage(text: String): Boolean {
-    return text.matches(("((http|https)://)?(www[.])?facebook.com/.+").toRegex())
+    return text.matches("((http|https)://)?(www[.])?facebook.com/.+".toRegex())
 }
 
 fun generateNameInitial(name: String?): String {
