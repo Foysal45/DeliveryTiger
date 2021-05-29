@@ -26,6 +26,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
@@ -127,6 +128,37 @@ fun Activity.alert(title: CharSequence? = null, message: CharSequence? = null, s
     return dialog
 }
 
+
+fun Fragment.customAlert(titleText: String, descriptionText: String, noBtnText: String, yesBtnText: String, listener: ((type: Int) -> Unit)? = null) {
+
+    val builder = MaterialAlertDialogBuilder(requireContext())
+    val view = layoutInflater.inflate(R.layout.dialog_instant_live, null)
+    val title = view.findViewById<TextView>(R.id.title)
+    val description = view.findViewById<TextView>(R.id.description)
+    val noBtn = view.findViewById<MaterialButton>(R.id.noBtn)
+    val yesBtn = view.findViewById<MaterialButton>(R.id.yesBtn)
+
+    title.text = titleText
+    description.text = descriptionText
+    noBtn.text = noBtnText
+    yesBtn.text = yesBtnText
+
+    builder.setView(view)
+
+    val dialog = builder.create()
+    dialog.show()
+
+    noBtn.setOnClickListener() {
+        dialog.dismiss()
+        listener?.invoke(2)
+    }
+    yesBtn.setOnClickListener() {
+        dialog.dismiss()
+        listener?.invoke(1)
+    }
+}
+
+
 fun Context.toast(msg: String?, time: Int = Toast.LENGTH_SHORT) {
     if (!msg.isNullOrEmpty()) {
         val toast = Toast.makeText(this, msg, time)
@@ -221,6 +253,11 @@ fun Bundle.bundleToString(): String {
     return this.keySet().joinToString(", ", "{", "}") { key ->
         "$key=${this[key]}"
     }
+}
+
+fun isIntRange(text: String): Boolean {
+    val match = "[0-9,]*".toRegex()
+    return text.matches(match)
 }
 
 fun isEnglishLetterOnly(text: String): Boolean {

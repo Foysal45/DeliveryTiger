@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_live_schedule"
+    app:startDestination="@+id/nav_insert_live_schedule">
+    
+    <fragment
+        android:id="@+id/nav_insert_live_schedule"
+        android:name="com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleFragment"
+        android:label="লাইভ শিডিউল"
+        tools:layout="@layout/fragment_live_schedule"
+        />
+
+</navigation>

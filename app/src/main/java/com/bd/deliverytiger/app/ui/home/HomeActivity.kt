@@ -35,6 +35,7 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.broadcast.ConnectivityReceiver
 import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.log.UserLogger
+import com.bd.deliverytiger.app.log.UserLogger.logGenie
 import com.bd.deliverytiger.app.services.LocationUpdatesService
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
@@ -53,6 +54,7 @@ import com.bd.deliverytiger.app.ui.dialog.PopupDialog
 import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
+import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivity
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment
@@ -729,6 +731,14 @@ class HomeActivity : AppCompatActivity(),
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
+                }
+            }
+            R.id.nav_live_home -> {
+                try {
+                    startActivity(Intent(this, LiveHomeActivity::class.java))
+                    logGenie("navigation_change_information")
+                } catch (e: Exception) {
+                    Toast.makeText(applicationContext, "Check Internet Connection", Toast.LENGTH_SHORT).show()
                 }
             }
             R.id.nav_terms -> {

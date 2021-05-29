@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.NonNull
 import androidx.core.content.edit
+import com.bd.deliverytiger.app.api.model.live.profile.ProfileData
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 
@@ -59,6 +60,21 @@ object SessionManager {
             putString("thanaName", model.thanaName)
             putString("areaName", model.areaName)
             putInt("credit", model.credit.toInt())
+        }
+    }
+
+    fun updateProfile(model: ProfileData) {
+
+        pref.edit {
+            putBoolean(Is_LOGIN, true)
+            putInt("ProfileId", model.customerId)
+            putString("Name", model.name)
+            putBoolean("FacebookPageLinkEnable", model.facebookPageLinkEnable)
+            putString("FBStreamURL", model.fbStreamUrl)
+            putString("FBStreamKey", model.fbStreamKey)
+            putString("YoutubeStreamKey", model.youtubeStreamKey)
+            putString("YoutubeStreamURL", model.youtubeStreamUrl)
+
         }
     }
 
@@ -441,6 +457,79 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putInt("instantPaymentAmount", value)
+            }
+        }
+
+    //Live
+
+
+    var profileId: Int
+        get() {
+            return pref.getInt("ProfileId", 0)
+        }
+        set(value) {
+            pref.edit {
+                putInt("ProfileId", value)
+            }
+        }
+
+    var name: String
+        get() {
+            return pref.getString("Name", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("Name", value)
+            }
+        }
+
+    var facebookPageLinkEnable: Boolean
+        get() {
+            return pref.getBoolean("FacebookPageLinkEnable", false)
+        }
+        set(value) {
+            pref.edit {
+                putBoolean("FacebookPageLinkEnable", value)
+            }
+        }
+
+    var fbStreamURL: String
+        get() {
+            return pref.getString("FBStreamURL", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("FBStreamURL", value)
+            }
+        }
+
+    var fbStreamKey: String
+        get() {
+            return pref.getString("FBStreamKey", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("FBStreamKey", value)
+            }
+        }
+
+    var youtubeStreamKey: String
+        get() {
+            return pref.getString("YoutubeStreamKey", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("YoutubeStreamKey", value)
+            }
+        }
+
+    var youtubeStreamURL: String
+        get() {
+            return pref.getString("YoutubeStreamURL", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("YoutubeStreamURL", value)
             }
         }
 }

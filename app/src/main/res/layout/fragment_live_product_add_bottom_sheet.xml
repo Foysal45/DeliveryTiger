@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    >
+    
+    <TextView
+        android:id="@+id/titleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="12dp"
+        android:text="প্রোডাক্ট যোগ করুন"
+        android:textColor="@color/black_80"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator"
+        app:layout_constraintTop_toBottomOf="@id/titleTV" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/action3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp"
+        android:drawableEnd="@drawable/ic_add"
+        android:text="ডিল ম্যানেজমেন্ট থেকে প্রোডাক্ট অ্যাড করুন"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/actionButtonColor"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        />
+    
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/action1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp"
+        android:drawableEnd="@drawable/ic_image_upload"
+        android:text="লাইভ শিডিউলে নতুন প্রোডাক্ট অ্যাড করুন"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/actionButtonColor"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        />
+    
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/action2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp"
+        android:drawableEnd="@drawable/ic_image_select"
+        android:text="পূর্বের লাইভে দেখানো প্রোডাক্ট সিলেক্ট করুন"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/actionButtonColor"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        />
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        />
+
+</LinearLayout>

@@ -21,6 +21,8 @@ import com.bd.deliverytiger.app.ui.complain.ComplainViewModel
 import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
 import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsViewModel
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
+import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivityViewModel
+import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivityViewModelNew
 import com.bd.deliverytiger.app.ui.login.AuthViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingViewModel
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsViewModel
@@ -90,5 +92,7 @@ val appModule = module {
     viewModel { InstantPaymentUpdateViewModel(get()) }
     viewModel { AuthViewModel(get()) }
     viewModel { ServiceSelectionBottomSheetViewModel(get()) }
+    viewModel { LiveHomeActivityViewModel(get()) }
+    viewModel { LiveHomeActivityViewModelNew(get()) }
 
 }

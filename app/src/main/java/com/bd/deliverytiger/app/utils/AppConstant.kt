@@ -30,6 +30,9 @@ object AppConstant {
 
     const val FAQ_URL = "https://deliverytiger.com.bd/instant-payment-faq"
 
+    const val CHANNEL5 = "" //"rtmp://54.254.65.20:1935/app/live"
+    const val CHANNEL6 = ""//"rtmp://65.1.27.170:1935/ajkerdeal/live"
+
     const val GPS_REQUEST = 1001
 
     const val BIG_IMAGE_WIDTH = 1000
