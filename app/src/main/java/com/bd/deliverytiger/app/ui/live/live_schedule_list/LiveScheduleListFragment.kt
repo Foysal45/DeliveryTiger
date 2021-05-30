@@ -58,7 +58,7 @@ class LiveScheduleListFragment(): Fragment() {
 
     private var isReplayList: Boolean = false
 
-    private lateinit var sessionManager: SessionManager
+
 
     companion object {
         fun newInstance(): LiveScheduleListFragment = LiveScheduleListFragment()
@@ -74,7 +74,7 @@ class LiveScheduleListFragment(): Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sessionManager.init(requireContext())
+
         liveType = LiveType.ALL
 
         (activity as LiveHomeActivity).updateToolbarTitle("আমার লাইভ")
@@ -111,14 +111,16 @@ class LiveScheduleListFragment(): Fragment() {
                                 "liveId" to model.id,
                                 "suggestedPrice" to model.suggestedPrice
                             )
-                            findNavController().navigate(R.id.nav_live_product_add, bundle)
+                            //Todo: Remove Cmnt 2
+                           // findNavController().navigate(R.id.nav_live_product_add, bundle)
                         }
                         2 -> {
                             // GOTO product add from previous
                             val bundle = bundleOf(
                                 "liveId" to model.id
                             )
-                            findNavController().navigate(R.id.nav_product_lists, bundle)
+                            //Todo: Remove Cmnt 3
+                            //findNavController().navigate(R.id.nav_product_lists, bundle)
                         }
                         3 -> {
                             // GOTO product add from Deal Management
@@ -144,7 +146,8 @@ class LiveScheduleListFragment(): Fragment() {
                 val bundle = bundleOf(
                     "liveId" to model.id
                 )
-                findNavController().navigate(R.id.nav_live_order_list, bundle)
+                //Todo: Remove Cmnt 5
+                // findNavController().navigate(R.id.nav_live_order_list, bundle)
             } else {
                 context?.toast("কোনো অর্ডার পাওয়া যায়নি")
             }
@@ -219,9 +222,7 @@ class LiveScheduleListFragment(): Fragment() {
             }
         })
 
-        var userId = sessionManager.profileId
-        //TODO make it dynamic
-        userId = sessionManager.profileId
+        var userId = SessionManager.courierUserId
         //userId = 328702
         //viewModel.fetchUserSchedule(userId, "merchant", 0, 20)
 
@@ -248,12 +249,12 @@ class LiveScheduleListFragment(): Fragment() {
                     if (!isLoading && currentItemCount <= lastVisibleItem + visibleThreshold) {
                         isLoading = true
                         //TODO make it Dynamic
-                        var userId = sessionManager.profileId
+                        var userId = SessionManager.courierUserId
                         //userId = 328702
                         if (liveType == LiveType.REPLAY) {
                             viewModel.fetchUserScheduleReplay(userId, "merchant", currentItemCount, 20)
                         } else {
-                            viewModel.fetchUserSchedule(sessionManager.profileId, "merchant", currentItemCount, 20)
+                            viewModel.fetchUserSchedule(SessionManager.courierUserId, "merchant", currentItemCount, 20)
                         }
                     }
                 }
@@ -269,7 +270,7 @@ class LiveScheduleListFragment(): Fragment() {
                 var isEmpty = false
 
                 //TODO make it Dynamic
-                var userId = sessionManager.profileId
+                val userId = SessionManager.courierUserId
                 //userId = 328702
                 when (tab?.position) {
                     0 -> {
@@ -357,7 +358,7 @@ class LiveScheduleListFragment(): Fragment() {
 
         binding?.swipeRefreshLayout?.setOnRefreshListener {
             //TODO make it dynamic
-            var userId = sessionManager.profileId
+            val userId = SessionManager.courierUserId
             //userId = 328702
             if (liveType == LiveType.REPLAY) {
                 viewModel.fetchUserScheduleReplay(userId, "merchant", 0, 20)
@@ -372,7 +373,7 @@ class LiveScheduleListFragment(): Fragment() {
         if (result.resultCode == Activity.RESULT_OK) {
             instantLive = result.data?.getBooleanExtra("instantLive", false) ?: false
             liveId = result.data?.getIntExtra("liveId", 0) ?: 0
-            viewModel.fetchUserSchedule(sessionManager.profileId, "merchant", 0, 20)
+            viewModel.fetchUserSchedule(SessionManager.courierUserId, "merchant", 0, 20)
             Timber.d("scheduleRequest $instantLive $liveId")
         }
     }
@@ -500,7 +501,8 @@ class LiveScheduleListFragment(): Fragment() {
         val bundle = bundleOf(
             "liveId" to model.id
         )
-        findNavController().navigate(R.id.nav_live_schedule_product_list, bundle)
+        //Todo: Remove Cmnt 4
+        //findNavController().navigate(R.id.nav_live_schedule_product_list, bundle)
 
     }
 
@@ -522,7 +524,7 @@ class LiveScheduleListFragment(): Fragment() {
         super.onResume()
         val handler = Handler(Looper.getMainLooper())
         //TODO make it dynamic
-        var userId = sessionManager.profileId
+        var userId = SessionManager.courierUserId
         //userId = 328702
 
         handler.postDelayed({

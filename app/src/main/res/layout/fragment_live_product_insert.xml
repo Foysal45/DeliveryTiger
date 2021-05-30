@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+    
+            <!--<TextView
+                android:id="@+id/productListTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="প্রোডাক্ট যোগ করুন"
+                android:textColor="@color/black_90"
+                android:textSize="16sp"
+                tools:visibility="visible"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                />-->
+    
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                
+        
+                tools:itemCount="1"
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_view_catalog_item"
+                tools:orientation="vertical"
+                tools:spanCount="3"
+                tools:visibility="visible" />
+    
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addProductBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="আরো"
+                android:padding="0dp"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_add"
+                app:iconTint="@color/blue"
+                app:backgroundTint="@null"
+                app:iconGravity="end"
+                app:iconSize="24dp"
+                app:iconPadding="0dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/bg_live_add_product"
+                
+                />
+            
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_gravity="center_horizontal"
+                >
+    
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/uploadBtn"
+                    android:layout_width="250dp"
+                    android:layout_height="56dp"
+                    android:text="আপলোড করুন"
+                    android:drawableEnd="@drawable/ic_image_upload"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/checkout_tab_color"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+    
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:indeterminateTint="@color/white"
+                    android:progressTint="@color/white"
+                    android:elevation="4dp"
+                    app:layout_constraintBottom_toBottomOf="@id/uploadBtn"
+                    app:layout_constraintEnd_toEndOf="@id/uploadBtn"
+                    app:layout_constraintHorizontal_bias="0.15"
+                    app:layout_constraintStart_toStartOf="@id/uploadBtn"
+                    app:layout_constraintTop_toTopOf="@id/uploadBtn"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    />
+    
+            </androidx.constraintlayout.widget.ConstraintLayout>
+    
+            
+        </LinearLayout>
+        
+    </androidx.core.widget.NestedScrollView>
+    
+    
+</androidx.constraintlayout.widget.ConstraintLayout>

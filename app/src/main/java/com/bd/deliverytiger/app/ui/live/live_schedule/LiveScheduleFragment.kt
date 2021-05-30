@@ -33,10 +33,12 @@ import com.bd.deliverytiger.app.api.model.live.live_schedule.PriceTemp
 import com.bd.deliverytiger.app.api.model.live.live_schedule.ScheduleData
 import com.bd.deliverytiger.app.api.model.live.live_schedule.ScheduleRequest
 import com.bd.deliverytiger.app.api.model.live.live_schedule_insert.LiveScheduleInsertRequest
+import com.bd.deliverytiger.app.api.model.live.live_schedule_list.MyLiveSchedule
 import com.bd.deliverytiger.app.api.model.live.share_sms.SMSBody
 import com.bd.deliverytiger.app.api.model.live.share_sms.SMSRequest
 import com.bd.deliverytiger.app.databinding.FragmentLiveScheduleBinding
 import com.bd.deliverytiger.app.log.UserLogger
+import com.bd.deliverytiger.app.ui.live.share.LiveShareFragment
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -203,14 +205,14 @@ class LiveScheduleFragment(): Fragment() {
         }
 
         binding?.addContactBtn?.setOnClickListener {
-           /* val dialog = LiveShareFragment.newInstance(MyLiveSchedule(), instantLive)
+            val dialog = LiveShareFragment.newInstance(MyLiveSchedule(), instantLive)
             dialog.show(childFragmentManager, LiveShareFragment.tag)
             dialog.onShare = { shareMsg, numberList ->
                 liveShareMsg = shareMsg
                 selectedNumberList.clear()
                 selectedNumberList.addAll(numberList)
                 dialog.dismiss()
-            }*/
+            }
         }
 
         binding?.paymentGroup?.setOnCheckedChangeListener { group, checkedId ->
@@ -426,7 +428,8 @@ class LiveScheduleFragment(): Fragment() {
                         "liveId" to liveId,
                         "suggestedPrice" to priceRange
                     )
-                    findNavController().navigate(R.id.nav_live_product_add, bundle)
+                    //Todo: Remove Cmnt 1
+                    //findNavController().navigate(R.id.nav_live_product_add, bundle)
                 }
             }
         }

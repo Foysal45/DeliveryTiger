@@ -41,4 +41,8 @@ object AppConstant {
     const val SMALL_IMAGE_HEIGHT = 300
     const val MINI_IMAGE_WIDTH = 110
     const val MINI_IMAGE_HEIGHT = 110
+    const val LIVE_BIG_IMAGE_WIDTH = 500
+    const val LIVE_BIG_IMAGE_HEIGHT = 500
+    const val LIVE_SMALL_IMAGE_WIDTH = 300
+    const val LIVE_SMALL_IMAGE_HEIGHT = 300
 }

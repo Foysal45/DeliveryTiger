@@ -23,6 +23,12 @@ import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsViewModel
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivityViewModel
 import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivityViewModelNew
+import com.bd.deliverytiger.app.ui.live.live_order_list.LiveOrderListViewModel
+import com.bd.deliverytiger.app.ui.live.live_product_insert.LiveProductInsertViewModel
+import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleViewModel
+import com.bd.deliverytiger.app.ui.live.live_schedule_list.LiveScheduleListViewModel
+import com.bd.deliverytiger.app.ui.live.share.LiveShareViewModel
+import com.bd.deliverytiger.app.ui.live.stream.LiveActivityViewModel
 import com.bd.deliverytiger.app.ui.login.AuthViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingViewModel
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsViewModel
@@ -94,5 +100,11 @@ val appModule = module {
     viewModel { ServiceSelectionBottomSheetViewModel(get()) }
     viewModel { LiveHomeActivityViewModel(get()) }
     viewModel { LiveHomeActivityViewModelNew(get()) }
+    viewModel { LiveScheduleListViewModel(get()) }
+    viewModel { LiveScheduleViewModel(get()) }
+    viewModel { LiveShareViewModel(get()) }
+    viewModel { LiveOrderListViewModel(get()) }
+    viewModel { LiveActivityViewModel(get()) }
+    viewModel { LiveProductInsertViewModel(get()) }
 
 }

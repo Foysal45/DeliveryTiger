@@ -38,9 +38,15 @@
     <color name="hint">#66000000</color>
     <color name="bg_cod_top_lay">#99F1F1F3</color>
 
+    <color name="gray">#afadad</color>
+    <color name="gray_50">#fafafa</color>
+    <color name="gray_100">#f5f5f5</color>
+    <color name="gray_200">#4De0e0e0</color>
+    <color name="gray_300">#e0e0e0</color>
+    <color name="gray_500">#999999</color>
+
     <color name="divider">#1A000000</color>
     <color name="background">#f0f0f0</color>
-    <color name="gray_500">#999999</color>
     <color name="drawer_icon_color">#9ca5b4</color>
 
     <color name="bg_rv">#08000000</color>
@@ -73,6 +79,8 @@
     <color name="network_state_poor">#FF5722</color>
     <color name="network_state_moderate">#FFC107</color>
     <color name="network_state_good">#00e676</color>
+
+    <color name="appColor">#e74c3c</color>
 
 
 </resources>

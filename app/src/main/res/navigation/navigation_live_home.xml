@@ -32,7 +32,7 @@
         tools:layout="@layout/fragment_live_deal_management"
         />
     
-    <fragment
+<!--    <fragment
         android:id="@+id/nav_live_product_add"
         android:name="com.ajkerdeal.app.ajkerdealseller.ui.live.live_product_insert.LiveProductInsertFragment"
         android:label="লাইভে প্রোডাক্ট অ্যাড"
@@ -51,16 +51,16 @@
         android:name="com.ajkerdeal.app.ajkerdealseller.ui.live.live_order_list.LiveOrderListFragment"
         android:label="লাইভ অর্ডার লিস্ট"
         tools:layout="@layout/fragment_live_order_list"
-        />
+        />-->
     
     <fragment
         android:id="@+id/nav_live_share"
-        android:name="com.ajkerdeal.app.ajkerdealseller.ui.live.share.LiveShareFragment"
+        android:name="com.bd.deliverytiger.app.ui.live.share.LiveShareFragment"
         android:label="লাইভ শেয়ার"
         tools:layout="@layout/fragment_live_share"
         />
     
-    <fragment
+<!--    <fragment
         android:id="@+id/nav_order_management"
         android:name="com.ajkerdeal.app.ajkerdealseller.ui.live.order_management.LiveOrderManagementFragment"
         android:label="অর্ডার ম্যানেজমেন্ট"
@@ -79,6 +79,6 @@
         android:name="com.ajkerdeal.app.ajkerdealseller.ui.live.profile.LiveProfileFragment"
         android:label="প্রোফাইল"
         tools:layout="@layout/fragment_live_profile"
-        />
+        />-->
     
 </navigation>

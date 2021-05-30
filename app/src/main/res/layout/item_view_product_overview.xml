@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp">
+    
+    <ImageView
+        android:id="@+id/preview"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_live_product_preview_border"
+        android:contentDescription="@string/cd"
+        android:padding="1dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_logo_ad1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/preview"
+        app:layout_constraintStart_toStartOf="@id/preview"
+        app:layout_constraintTop_toBottomOf="@id/preview"
+        tools:text="৳ 922" />
+    
+    <ImageView
+        android:id="@+id/deleteBtn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:contentDescription="@string/cd"
+        android:src="@drawable/ic_cancel"
+        app:layout_constraintBottom_toTopOf="@id/preview"
+        app:layout_constraintEnd_toEndOf="@id/preview"
+        app:layout_constraintStart_toEndOf="@id/preview"
+        app:layout_constraintTop_toTopOf="@id/preview" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

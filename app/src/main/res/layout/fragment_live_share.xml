@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+    
+    <TextView
+        android:id="@+id/titleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="12dp"
+        android:text="লাইভ শেয়ার"
+        android:textColor="@color/black_80"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator"
+        app:layout_constraintTop_toBottomOf="@id/titleTV" />
+    
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        >
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+            
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/shareMsgLayout"
+                style="@style/TextInputLayoutStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:counterEnabled="true"
+                android:hint="ম্যাসেজ লিখুন"
+                app:counterMaxLength="70">
+                
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/shareMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/black_80"
+                    android:textSize="14sp"
+                    android:maxLength="70"
+                    />
+            
+            </com.google.android.material.textfield.TextInputLayout>
+            
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/receiverLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/shareMsgLayout"
+                android:visibility="gone"
+                tools:visibility="visible">
+                
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/receiverNumberLayout"
+                    style="@style/TextInputLayoutStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:hint="শেয়ার মোবাইল নম্বর"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/sendSMS"
+                    app:endIconMode="clear_text"
+                    >
+                    
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/receiverNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:gravity="top"
+                        android:imeOptions="actionNext"
+                        android:importantForAutofill="no"
+                        android:inputType="textMultiLine"
+                        android:minLines="2"
+                        android:textColor="@color/black_80"
+                        android:textSize="14sp" />
+                
+                </com.google.android.material.textfield.TextInputLayout>
+                
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/sendSMS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#1A9AD9"
+                    android:textSize="16sp"
+                    android:text="সেন্ড"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/receiverNumber"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:ignore="NotSibling" />
+            
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            
+            <LinearLayout
+                android:id="@+id/addContactBtn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/layout_button_background"
+                app:layout_constraintTop_toBottomOf="@+id/receiverLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:clickable="true"
+                android:gravity="center"
+                android:layout_marginTop="24dp"
+                android:focusable="true"
+                android:elevation="2dp"
+                >
+                
+                <ImageView
+                    android:id="@+id/addContactIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@string/cd"
+                    android:src="@drawable/ic_phone_book"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:tint="@color/white" />
+                
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="কাস্টমারকে"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    />
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:text="ফ্রি SMS"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FEDC00"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:text="সেন্ড করুন"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    />
+            
+            </LinearLayout>
+            
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/sendSocial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#1A7FC3"
+                android:textSize="16sp"
+                android:text="সোশ্যাল মিডিয়ায় শেয়ার করুন"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_share_fill"
+                app:iconGravity="textStart"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="24dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+        
+        </LinearLayout>
+    
+    </androidx.core.widget.NestedScrollView>
+    
+</LinearLayout>

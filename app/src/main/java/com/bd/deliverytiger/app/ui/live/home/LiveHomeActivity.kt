@@ -40,7 +40,6 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import java.util.*
 
 @SuppressLint("SetTextI18n")
 class LiveHomeActivity : AppCompatActivity() {
@@ -61,15 +60,13 @@ class LiveHomeActivity : AppCompatActivity() {
     private var displayUserId = 0
     private val permissions = arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-    private lateinit var sessionManager: SessionManager
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLiveHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.appBar.toolbar)
 
-        sessionManager.init(this)
+        SessionManager.init(this)
 
         navController = findNavController(R.id.navHostFragment)
         //val appBarConfiguration = AppBarConfiguration.Builder().setFallbackOnNavigateUpListener(fallbackListener).build()
@@ -235,10 +232,10 @@ class LiveHomeActivity : AppCompatActivity() {
         val userName: TextView = navHeaderView.findViewById(R.id.name)
         val userPhone: TextView = navHeaderView.findViewById(R.id.phone)
 
-        userName.text = sessionManager.companyName
-        userPhone.text = sessionManager.mobile
+        userName.text = SessionManager.companyName
+        userPhone.text = SessionManager.mobile
         Glide.with(this)
-            .load(sessionManager.profileImgUri)
+            .load(SessionManager.profileImgUri)
             .apply(RequestOptions().placeholder(R.drawable.ic_person_circle).error(R.drawable.ic_person_circle).circleCrop())
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .skipMemoryCache(true)
@@ -351,12 +348,12 @@ class LiveHomeActivity : AppCompatActivity() {
 
 
     private fun updateSessionManager() {
-        var userId = sessionManager.profileId
+        val userId = SessionManager.courierUserId
         //userId = 328702
         //userId = 1100
         viewModel.fetchLiveUserProfile(userId, this).observe(this, { data->
             Timber.d("requestBody $data")
-            sessionManager.updateProfile(data)
+            SessionManager.updateProfile(data)
         })
     }
 

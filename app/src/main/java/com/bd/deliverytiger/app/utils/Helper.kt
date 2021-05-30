@@ -12,6 +12,7 @@ import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -258,6 +259,27 @@ fun Bundle.bundleToString(): String {
 fun isIntRange(text: String): Boolean {
     val match = "[0-9,]*".toRegex()
     return text.matches(match)
+}
+
+fun cleanPhoneNumber(number: String?): String {
+    if (number == null) return ""
+    val modNumber = number.replace("""[\s-]+""".toRegex(),"")
+    if (modNumber.contains("+")) {
+        return modNumber.substring((modNumber.length-11),modNumber.length)
+    }
+    return modNumber
+}
+
+fun goToSetting(context: Context) {
+    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + context.packageName)).apply {
+        addCategory(Intent.CATEGORY_DEFAULT)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+        addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+    }.also {
+        context.startActivity(it)
+    }
+
 }
 
 fun isEnglishLetterOnly(text: String): Boolean {

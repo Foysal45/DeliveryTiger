@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.core.content.res.ResourcesCompat
 import com.bd.deliverytiger.app.R
@@ -20,9 +19,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.roundToInt
 
-fun createNewFile(context: Context, type: FileType = FileType.Video): File? {
+fun createNewFile(context: Context, type: com.bd.deliverytiger.app.enums.FileType = FileType.Video): File? {
 
     return try {
         val storageDir: File = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
