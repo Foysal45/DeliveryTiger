@@ -272,3 +272,23 @@ fun Fragment.appVersion(): String {
         ""
     }
 }
+
+fun Activity.appVersionCode(): Int {
+    return try {
+        val pInfo: PackageInfo = packageManager.getPackageInfo(packageName, 0)
+        pInfo.versionCode
+    } catch (e: Exception) {
+        e.printStackTrace()
+        0
+    }
+}
+
+fun Fragment.appVersionCode(): Int {
+    return try {
+        val pInfo: PackageInfo? = this.context?.packageManager?.getPackageInfo(this.context?.packageName ?: "", 0)
+        pInfo?.versionCode ?: 0
+    } catch (e: Exception) {
+        e.printStackTrace()
+        0
+    }
+}
