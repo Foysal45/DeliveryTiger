@@ -90,8 +90,6 @@ class LiveScheduleFragment(): Fragment() {
     private var instantLive: Boolean = false
     private var listPosition: Int = -1
 
-    private lateinit var sessionManager: SessionManager
-
     companion object {
         fun newInstance(): LiveScheduleFragment = LiveScheduleFragment()
         val tag: String = LiveScheduleFragment::class.java.name
@@ -105,8 +103,6 @@ class LiveScheduleFragment(): Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        sessionManager.init(requireContext())
 
         instantLive = activity?.intent?.getBooleanExtra("instantLive", false) ?: false
 
@@ -232,8 +228,8 @@ class LiveScheduleFragment(): Fragment() {
                     //context?.toast( "checkButtonFB checked")
                     isFacebook = true
                     binding?.fbStreamLayout?.isVisible = true
-                    binding?.fbStreamUrl?.setText(sessionManager.fbStreamURL)
-                    binding?.fbStreamKey?.setText(sessionManager.fbStreamKey)
+                    binding?.fbStreamUrl?.setText(SessionManager.fbStreamURL)
+                    binding?.fbStreamKey?.setText(SessionManager.fbStreamKey)
                     binding?.nestedScrollView?.post {
                         binding?.nestedScrollView?.fullScroll(View.FOCUS_DOWN)
                         binding?.fbStreamLayout?.requestFocus()
@@ -256,8 +252,8 @@ class LiveScheduleFragment(): Fragment() {
                     //context?.toast( "checkButtonYT checked")
                     isYoutube = true
                     binding?.youtubeStreamLayout?.isVisible = true
-                    binding?.youtubeStreamUrl?.setText(sessionManager.youtubeStreamURL)
-                    binding?.youtubeStreamKey?.setText(sessionManager.youtubeStreamKey)
+                    binding?.youtubeStreamUrl?.setText(SessionManager.youtubeStreamURL)
+                    binding?.youtubeStreamKey?.setText(SessionManager.youtubeStreamKey)
                     binding?.nestedScrollView?.post {
                         binding?.nestedScrollView?.fullScroll(View.FOCUS_DOWN)
                         binding?.youtubeStreamUrl?.requestFocus()
@@ -343,7 +339,7 @@ class LiveScheduleFragment(): Fragment() {
     }
 
     private fun insertSchedule() {
-        var userId = sessionManager.profileId
+        var userId = SessionManager.courierUserId
 
         val model = LiveScheduleInsertRequest(
             liveDate, fromTime, toTime,
@@ -393,7 +389,7 @@ class LiveScheduleFragment(): Fragment() {
                     val smsRequest = SMSRequest(
                         liveId,
                         requestBody.size,
-                        sessionManager.profileId,
+                        SessionManager.courierUserId,
                         requestBody
                     )
                     viewModel.shareSMS(smsRequest).observe(viewLifecycleOwner, Observer { flag ->
@@ -615,10 +611,10 @@ class LiveScheduleFragment(): Fragment() {
         youtubeStreamUrl = "rtmp://x.rtmp.youtube.com/live2"
         youtubeStreamKey = "cukx-j5q6-r2um-qx22-bbkb"
 
-        sessionManager.fbStreamURL = fbStreamUrl
-        sessionManager.fbStreamKey = fbStreamKey
-        sessionManager.youtubeStreamURL = youtubeStreamUrl
-        sessionManager.youtubeStreamKey = youtubeStreamKey
+        SessionManager.fbStreamURL = fbStreamUrl
+        SessionManager.fbStreamKey = fbStreamKey
+        SessionManager.youtubeStreamURL = youtubeStreamUrl
+        SessionManager.youtubeStreamKey = youtubeStreamKey
 
         binding?.titleName?.setText("Live with Nirob")
         priceAdapter.addItem(PriceTemp(100))

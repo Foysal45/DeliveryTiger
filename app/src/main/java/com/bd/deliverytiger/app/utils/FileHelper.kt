@@ -20,7 +20,7 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun createNewFile(context: Context, type: com.bd.deliverytiger.app.enums.FileType = FileType.Video): File? {
+fun createNewFile(context: Context, type: FileType = FileType.Video): File? {
 
     return try {
         val storageDir: File = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

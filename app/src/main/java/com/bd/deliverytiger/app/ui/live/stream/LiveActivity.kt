@@ -21,15 +21,27 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.EventListener
+import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.services.ConnectCheckerRtp
+import com.bd.deliverytiger.app.api.model.firebase.FirebaseSettings
+import com.bd.deliverytiger.app.api.model.live.firebase.LikeCount
+import com.bd.deliverytiger.app.api.model.live.firebase.LiveProductEvent
+import com.bd.deliverytiger.app.api.model.live.firebase.ViewCount
 import com.bd.deliverytiger.app.api.model.live.live_channel_medialive.ChannelUpdateRequest
+import com.bd.deliverytiger.app.api.model.live.live_started_notify.LiveStartedNotifyRequest
+import com.bd.deliverytiger.app.api.model.live.live_status.LiveStatusUpdateRequest
 import com.bd.deliverytiger.app.broadcast.ConnectivityReceiver
 import com.bd.deliverytiger.app.databinding.ActivityLiveBinding
+import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.live.chat.ChatAdapter
 import com.bd.deliverytiger.app.ui.live.chat.ChatBoxBottomSheet
 import com.bd.deliverytiger.app.ui.live.chat.model.ChatData
+import com.bd.deliverytiger.app.ui.live.live_product_insert.quick_insert.ProductHighlightAdapter
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseApp
@@ -135,7 +147,7 @@ class LiveActivity : AppCompatActivity(),
         binding = ActivityLiveBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        selectedTrackIndex = SessionManager.selectedVideoQualityTrackIndex
+        selectedTrackIndex = SessionManager.getSelectedVideoQualityTrackIndex
 
         liveId = intent?.getIntExtra("liveId", 0) ?: 0
         rmmpUrl = intent?.getStringExtra("rtmpUrl") ?: AppConstant.CHANNEL5
@@ -268,14 +280,14 @@ class LiveActivity : AppCompatActivity(),
     }
 
     private fun initCamera() {
-        val model = sessionManager.streamConfig
+        val model = SessionManager.getStreamConfig()
         //val model = StreamSettingData()
         val resolution = if (model.resolutionId == -1) {
             var defaultIndex = cameraBase.resolutionsBack.indexOfLast { it.height == 720 }
             if (defaultIndex == -1) {
                 defaultIndex = 0
             }
-            sessionManager.updateResolutionId(defaultIndex)
+            SessionManager.updateResolutionId(defaultIndex)
             cameraBase.resolutionsBack[defaultIndex]
         } else {
             cameraBase.resolutionsBack[model.resolutionId]
@@ -283,8 +295,8 @@ class LiveActivity : AppCompatActivity(),
 
         //val width = resolution.width
         //val height = resolution.height
-        resolutionWidth = sessionManager.streamConfig.resolutionWidth
-        resolutionHeight = sessionManager.streamConfig.resolutionHeight
+        resolutionWidth = SessionManager.getStreamConfig().resolutionWidth
+        resolutionHeight = SessionManager.getStreamConfig().resolutionHeight
 
         //resolutionWidth = 720
         //resolutionHeight = 480
@@ -569,11 +581,11 @@ class LiveActivity : AppCompatActivity(),
                     StreamSettingData(2, 400, 426, 240)
                 }
             }
-            sessionManager.saveStreamConfig(model)
+
             Timber.d("logTrack $model")
             //Timber.d("logTrack ${SessionManager.getStreamConfig()}")
 
-            sessionManager.selectedVideoQualityTrackIndex = selectedTrackIndex
+            SessionManager.getSelectedVideoQualityTrackIndex = selectedTrackIndex
 
             restartCamera()
         }
@@ -767,7 +779,7 @@ class LiveActivity : AppCompatActivity(),
             })
         } else {
 
-            var userId = sessionManager.userId.toString()
+            var userId = SessionManager.courierUserId.toString()
             val requestBody1 = ChannelUpdateRequest(
                 userId, liveId.toString(), title,
                 facebook, youtube,
@@ -1320,7 +1332,7 @@ class LiveActivity : AppCompatActivity(),
     }
 
     private fun sendLiveStartedNotification() {
-        val requestBody = LiveStartedNotifyRequest(sessionManager.userId, liveId.toString())
+        val requestBody = LiveStartedNotifyRequest(SessionManager.courierUserId, liveId.toString())
         viewModel.liveStartedNotify(requestBody)
     }
 

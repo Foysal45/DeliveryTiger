@@ -11,12 +11,8 @@ import androidx.lifecycle.viewModelScope
 import com.bd.deliverytiger.app.api.model.live.live_product_insert.LiveProductInsertData
 import com.bd.deliverytiger.app.api.model.live.live_product_list.LiveProductData
 import com.bd.deliverytiger.app.api.model.live.live_product_list.LiveProductRequest
-import com.bd.deliverytiger.app.enums.FileType
 import com.bd.deliverytiger.app.repository.AppRepository
-import com.bd.deliverytiger.app.utils.AppConstant
-import com.bd.deliverytiger.app.utils.ScalingUtilities
-import com.bd.deliverytiger.app.utils.ViewState
-import com.bd.deliverytiger.app.utils.createNewFile
+import com.bd.deliverytiger.app.utils.*
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

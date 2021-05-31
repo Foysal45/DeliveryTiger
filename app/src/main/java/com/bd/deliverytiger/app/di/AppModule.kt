@@ -21,12 +21,17 @@ import com.bd.deliverytiger.app.ui.complain.ComplainViewModel
 import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
 import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsViewModel
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
+import com.bd.deliverytiger.app.ui.live.deal_management.LiveDealManagementViewModel
 import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivityViewModel
 import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivityViewModelNew
 import com.bd.deliverytiger.app.ui.live.live_order_list.LiveOrderListViewModel
 import com.bd.deliverytiger.app.ui.live.live_product_insert.LiveProductInsertViewModel
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleViewModel
 import com.bd.deliverytiger.app.ui.live.live_schedule_list.LiveScheduleListViewModel
+import com.bd.deliverytiger.app.ui.live.live_schedule_product.LiveScheduleProductListViewModel
+import com.bd.deliverytiger.app.ui.live.order_management.LiveOrderManagementViewModel
+import com.bd.deliverytiger.app.ui.live.product_gallery.AllProductListViewModel
+import com.bd.deliverytiger.app.ui.live.profile.LiveProfileFragmentViewModel
 import com.bd.deliverytiger.app.ui.live.share.LiveShareViewModel
 import com.bd.deliverytiger.app.ui.live.stream.LiveActivityViewModel
 import com.bd.deliverytiger.app.ui.login.AuthViewModel
@@ -55,6 +60,7 @@ val appModule = module {
     single(named("adcore")) { retrofitInstance(AppConstant.BASE_URL_ADCORE, get(), get()) }
     single(named("adm")) { retrofitInstance(AppConstant.BASE_URL_ADM, get(), get()) }
     single(named("api")) { retrofitInstance(AppConstant.BASE_URL_API, get(), get()) }
+    single(named("merchant")) { retrofitInstance(AppConstant.BASE_URL_MERCHANT, get(), get()) }
     single(named("ana")) { retrofitInstance(AppConstant.BASE_URL_ANA, get(), get()) }
     single(named("bridge")) { retrofitInstance(AppConstant.BASE_URL_BRIDGE, get(), get()) }
     single(named("lambda")) { retrofitInstance(AppConstant.BASE_URL_LAMBDA, get(), get()) }
@@ -63,12 +69,13 @@ val appModule = module {
     single { ApiInterfaceADM(get(named("adm"))) }
     single { ApiInterfaceCore(get(named("adcore"))) }
     single { ApiInterfaceAPI(get(named("api"))) }
+    single { ApiInterfaceMerchant(get(named("merchant"))) }
     single { ApiInterfaceBRIDGE(get(named("bridge"))) }
     single { ApiInterfaceLambda(get(named("lambda"))) }
     single { ApiInterfaceBariKoi(get(named("bariKoi"))) }
     single { ApiInterfaceANA(get(named("ana"))) }
 
-    single { AppRepository(get(), get(), get(), get(), get(), get(), get()) }
+    single { AppRepository(get(), get(), get(), get(), get(), get(), get(), get()) }
 
     single { HomeViewModel(get()) }
 
@@ -106,5 +113,10 @@ val appModule = module {
     viewModel { LiveOrderListViewModel(get()) }
     viewModel { LiveActivityViewModel(get()) }
     viewModel { LiveProductInsertViewModel(get()) }
+    viewModel { LiveScheduleProductListViewModel(get()) }
+    viewModel { AllProductListViewModel(get()) }
+    viewModel { LiveProfileFragmentViewModel(get()) }
+    viewModel { LiveDealManagementViewModel(get()) }
+    viewModel { LiveOrderManagementViewModel(get()) }
 
 }

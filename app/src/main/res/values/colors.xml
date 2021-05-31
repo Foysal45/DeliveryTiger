@@ -44,6 +44,7 @@
     <color name="gray_200">#4De0e0e0</color>
     <color name="gray_300">#e0e0e0</color>
     <color name="gray_500">#999999</color>
+    <color name="action_icon_background">#40000000</color>
 
     <color name="divider">#1A000000</color>
     <color name="background">#f0f0f0</color>
@@ -54,6 +55,7 @@
     <color name="negative">#FF8E34</color>
     <color name="neutral">#E1F3F3</color>
     <color name="red">#E84545</color>
+    <color name="red_900">#B71C1C</color>
     <color name="yellow">#FFFF00</color>
     <color name="ashColor">#7F95A3</color>
     <color name="header_layout_color">#FFE284</color>

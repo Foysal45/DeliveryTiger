@@ -17,6 +17,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.live.live_product_insert.LiveProductInsertData
+import com.bd.deliverytiger.app.databinding.FragmentLiveProductBottomSheetBinding
+import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -30,7 +34,6 @@ class LiveProductBottomSheet(): BottomSheetDialogFragment() {
     var onProductAddClicked: ((model: LiveProductInsertData) -> Unit)? = null
 
     private var coverUrl: String = ""
-    private lateinit var sessionManager: SessionManager
 
     companion object {
         fun newInstance(): LiveProductBottomSheet = LiveProductBottomSheet().apply {
@@ -79,8 +82,6 @@ class LiveProductBottomSheet(): BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sessionManager = SessionManager(requireContext())
-
         binding?.coverPhotoUpload?.setOnClickListener {
             pickUpImage()
         }
@@ -109,7 +110,7 @@ class LiveProductBottomSheet(): BottomSheetDialogFragment() {
             return
         }
 
-        val model = LiveProductInsertData(price, price,"", coverUrl, sessionManager.userId)
+        val model = LiveProductInsertData(price, price,"", coverUrl, SessionManager.courierUserId)
 
         onProductAddClicked?.invoke(model)
 

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    
+    <androidx.cardview.widget.CardView
+        android:id="@+id/searchCard"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="3dp">
+            
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/filterTypeSpinner"
+                style="@style/Widget.AppCompat.TextView.SpinnerItem"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                
+                android:drawSelectorOnTop="true"
+                android:entries="@array/order_management_filter"
+                android:padding="0dp"
+                android:spinnerMode="dropdown"
+                app:backgroundTint="#464646"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            
+            <EditText
+                android:id="@+id/searchET"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/bg_order_management_filter"
+                android:hint="এখানে লিখুন..."
+                android:imeOptions="actionSearch"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textColorHint="#C2C2C2"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/searchBtn"
+                app:layout_constraintStart_toEndOf="@id/filterTypeSpinner"
+                app:layout_constraintTop_toTopOf="parent" />
+            
+            <ImageView
+                android:id="@+id/searchBtn"
+                android:layout_width="30dp"
+                android:layout_height="36dp"
+                android:contentDescription="@string/cd"
+                android:padding="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_search_black_24dp"
+                app:tint="@color/black_100" />
+        
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+    
+    <TextView
+        android:id="@+id/countTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textColor="#505050"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchCard"
+        tools:text="মোট ১০ টি অর্ডার পাওয়া গিয়েছে"
+        tools:visibility="visible" />
+    
+    <LinearLayout
+        android:id="@+id/filterClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchCard"
+        tools:visibility="visible">
+        
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:contentDescription="@string/cd"
+            app:srcCompat="@drawable/ic_clear_filter" />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:includeFontPadding="false"
+            android:text="ক্লিয়ার"
+            android:textColor="#468FCC"
+            android:textSize="14sp" />
+    
+    </LinearLayout>
+    
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipsGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/countTV"
+        app:singleLine="true"
+        tools:visibility="visible">
+        
+        <com.google.android.material.chip.Chip
+            android:id="@+id/searchKey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            app:chipBackgroundColor="@color/blue"
+            app:closeIcon="@drawable/ic_close"
+            app:closeIconEnabled="true"
+            app:closeIconTint="@color/white"
+            tools:text="search key"
+            tools:visibility="visible" />
+        
+        <com.google.android.material.chip.Chip
+            android:id="@+id/dateRangeKey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            app:chipBackgroundColor="@color/blue"
+            app:closeIcon="@drawable/ic_close"
+            app:closeIconEnabled="true"
+            app:closeIconTint="@color/white"
+            tools:text="search key"
+            tools:visibility="visible" />
+    </com.google.android.material.chip.ChipGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

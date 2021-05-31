@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardCornerRadius="4dp"
+        app:cardBackgroundColor="@color/white"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="8dp"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <com.bd.deliverytiger.app.utils.CustomTextView
+                    android:id="@+id/item_order_date_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textSize="12sp"
+                    android:textColor="#727272"
+
+                    tools:text="২৭ নভেম্বর, ২০১৮"
+                    />
+
+                <ImageView
+                    android:id="@+id/item_order_booking_icon"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/item_order_date_text"
+                    android:contentDescription="@string/cd"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="5dp"
+                    app:srcCompat="@drawable/ic_package" />
+
+                <com.bd.deliverytiger.app.utils.CustomTextView
+                    android:id="@+id/item_order_booking_code_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/item_order_booking_icon"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textSize="12sp"
+                    android:textColor="#727272"
+
+                    tools:text="১৮৪৮১৫১"
+                    />
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    >
+                    <ImageView
+                        android:id="@+id/advPaymentFlag"
+                        android:layout_width="40dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:layout_gravity="center_vertical"
+                        android:contentDescription="@string/cd"
+                        app:srcCompat="@drawable/ic_adv_payment"
+
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        />
+
+                    <ImageView
+                        android:id="@+id/item_order_group_buy"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:layout_gravity="center_vertical"
+                        android:contentDescription="@string/cd"
+                        app:srcCompat="@drawable/ic_group_buy"
+
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        />
+
+                    <ImageView
+                        android:id="@+id/item_order_event"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:layout_gravity="center_vertical"
+                        android:contentDescription="@string/cd"
+                        app:srcCompat="@drawable/ic_event"
+
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        />
+
+                    <ImageView
+                        android:id="@+id/item_order_note"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:layout_gravity="center_vertical"
+                        android:contentDescription="@string/cd"
+                        app:srcCompat="@drawable/ic_note"
+
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        />
+
+                    <ImageView
+                        android:id="@+id/item_order_print"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:contentDescription="@string/cd"
+                        android:layout_marginStart="3dp"
+                        app:srcCompat="@drawable/ic_print"
+                        app:tint="@color/colorPrimary"
+                        />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#EBEEF1"
+                android:layout_marginTop="5dp"
+                />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <ImageView
+                        android:id="@+id/item_order_image"
+                        android:layout_width="50dp"
+                        android:layout_height="44dp"
+                        android:layout_gravity="center_horizontal"
+                        android:contentDescription="@string/cd"
+
+                        tools:srcCompat="@drawable/testfour" />
+
+                    <com.bd.deliverytiger.app.utils.CustomTextView
+                        android:id="@+id/item_order_deal_code_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="4dp"
+                        android:textColor="#727272"
+                        android:textSize="12sp"
+                        tools:text="৪২৭১০২"
+                        />
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp"
+                    >
+
+
+
+                    <com.bd.deliverytiger.app.utils.CustomTextView
+                        android:id="@+id/item_order_deal_title_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textColor="#468FCC"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        tools:text="নিভিয়া বডি লোশন স্মুথ মিল্ক"
+                        />
+
+                    <com.bd.deliverytiger.app.utils.CustomTextView
+                        android:id="@+id/item_order_status_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:textColor="#727272"
+                        android:textSize="12sp"
+                        tools:text="সর্বশেষ স্ট্যাটাসঃ status"
+                        />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/item_order_action_recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:clipToPadding="false"
+
+                        tools:itemCount="5"
+                        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        tools:listitem="@layout/item_view_order_action"
+                        tools:orientation="horizontal"
+                        tools:spanCount="1"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <com.bd.deliverytiger.app.utils.CustomTextView
+                android:id="@+id/item_order_note_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_order_card_note"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textSize="12sp"
+                android:textColor="#727272"
+                tools:text="সেইম প্রোডাক্ট ইন্ডিয়ান ইউনিলিভারেরটা স্টকে আনুন, ভালো বিক্রি হবে"
+
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

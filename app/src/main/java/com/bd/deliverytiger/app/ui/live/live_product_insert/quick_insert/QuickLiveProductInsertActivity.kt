@@ -25,14 +25,19 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.firebase.FirebaseSettings
+import com.bd.deliverytiger.app.api.model.live.firebase.LiveProductEvent
 import com.bd.deliverytiger.app.api.model.live.live_product_insert.LiveProductInsertData
+import com.bd.deliverytiger.app.api.model.live.live_product_list.LiveProductData
 import com.bd.deliverytiger.app.databinding.ActivityQuickLiveProductInsertBinding
 import com.bd.deliverytiger.app.ui.live.live_product_insert.LiveProductInsertViewModel
-import com.bd.deliverytiger.app.utils.FileUtils
-import com.bd.deliverytiger.app.utils.SessionManager
+import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -43,7 +48,10 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.kroegerama.imgpicker.BottomSheetImagePicker
 import com.kroegerama.imgpicker.ButtonType
+import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraView
+import com.otaliastudios.cameraview.PictureResult
+import com.otaliastudios.cameraview.controls.Mode
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.io.FileOutputStream
@@ -85,8 +93,6 @@ class QuickLiveProductInsertActivity : AppCompatActivity(), BottomSheetImagePick
         super.onCreate(savedInstanceState)
         binding = ActivityQuickLiveProductInsertBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        sessionManager = SessionManager(this)
 
         liveId = intent?.getIntExtra("liveId", 0) ?: 0
         suggestedPrice = intent?.getStringExtra("suggestedPrice") ?: ""
@@ -345,7 +351,7 @@ class QuickLiveProductInsertActivity : AppCompatActivity(), BottomSheetImagePick
         }
 
         productList.clear()
-        productList.add(LiveProductInsertData(price, price, "", productImage, sessionManager.userId, liveId))
+        productList.add(LiveProductInsertData(price, price, "", productImage, SessionManager.courierUserId, liveId))
 
         viewModel.insertLiveProducts(this@QuickLiveProductInsertActivity, productList).observe(this, Observer { uploadStatus ->
             if (uploadStatus) {

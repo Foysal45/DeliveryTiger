@@ -8,18 +8,24 @@ import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
+import com.bd.deliverytiger.app.api.model.deal_management.DealManagementRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
 import com.bd.deliverytiger.app.api.model.live.brand.BrandRequest
 import com.bd.deliverytiger.app.api.model.live.catalog.CatalogRequest
+import com.bd.deliverytiger.app.api.model.live.live_channel.ChannelActionRequest
+import com.bd.deliverytiger.app.api.model.live.live_channel_medialive.ChannelUpdateRequest
 import com.bd.deliverytiger.app.api.model.live.live_deal_management.InsertDealManagementRequestBody
 import com.bd.deliverytiger.app.api.model.live.live_product_insert.LiveProductInsertData
+import com.bd.deliverytiger.app.api.model.live.live_product_insert.ProductGalleryData
 import com.bd.deliverytiger.app.api.model.live.live_product_list.LiveProductRequest
 import com.bd.deliverytiger.app.api.model.live.live_schedule.ScheduleRequest
 import com.bd.deliverytiger.app.api.model.live.live_schedule_insert.LiveScheduleInsertRequest
 import com.bd.deliverytiger.app.api.model.live.live_started_notify.LiveStartedNotifyRequest
 import com.bd.deliverytiger.app.api.model.live.live_status.LiveStatusUpdateRequest
+import com.bd.deliverytiger.app.api.model.live.my_products_lists.MyProductsRequest
+import com.bd.deliverytiger.app.api.model.live.order_management.OrderManagementPendingRequestBody
 import com.bd.deliverytiger.app.api.model.live.profile.ProfileData
 import com.bd.deliverytiger.app.api.model.live.share_sms.SMSRequest
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
@@ -45,6 +51,7 @@ class AppRepository(
     private val apiInterfaceAPI: ApiInterfaceAPI,
     private val apiInterfaceBridge: ApiInterfaceBRIDGE,
     private val apiInterfaceLambda: ApiInterfaceLambda,
+    private val apiInterfaceMerchant: ApiInterfaceMerchant,
     private val apiInterfaceBariKoi: ApiInterfaceBariKoi,
     private val apiInterfaceANA: ApiInterfaceANA
 ) {
@@ -89,6 +96,8 @@ class AppRepository(
 
     suspend fun insertFromOrderManagement(requestBody: InsertDealManagementRequestBody) = apiInterfaceAPI.insertFromOrderManagement(requestBody)
 
+    suspend fun fetchOrderManagementPendingList(requestBody: OrderManagementPendingRequestBody) = apiInterfaceAPI.fetchOrderManagementPendingList(requestBody)
+
     //SMS
     suspend fun shareSMS(requestBody: SMSRequest) = apiInterfaceAPI.shareSMS(requestBody)
 
@@ -112,9 +121,21 @@ class AppRepository(
 
     suspend fun liveStartedNotify(requestBody: LiveStartedNotifyRequest) = apiInterfaceAPI.liveStartedNotify(requestBody)
 
+    suspend fun fetchProducts(requestBody: MyProductsRequest) = apiInterfaceAPI.fetchProducts(requestBody)
+
+    suspend fun insertProductByID(responseBody: List<ProductGalleryData>) = apiInterfaceAPI.insertProductByID(responseBody)
+
+    //******************** ApiInterfaceMerchant ********************//
+
+    suspend fun fetchDealManagementData(requestBody: DealManagementRequest) = apiInterfaceMerchant.fetchDealManagementData(requestBody)
+
     //******************** Analytics ********************//
 
     suspend fun logSMS(requestBody: SMSLogRequest) = apiInterfaceANA.logSMS(requestBody)
+
+    suspend fun channelAction(requestBody: ChannelActionRequest) = apiInterfaceANA.channelAction(requestBody)
+
+    suspend fun channelUpdate(requestBody: ChannelUpdateRequest) = apiInterfaceANA.channelUpdate(requestBody)
 
     //******************** BRIDGE ********************//
 

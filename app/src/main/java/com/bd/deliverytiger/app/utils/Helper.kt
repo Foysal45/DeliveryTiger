@@ -159,6 +159,34 @@ fun Fragment.customAlert(titleText: String, descriptionText: String, noBtnText: 
     }
 }
 
+fun Activity.customAlert(titleText: String, descriptionText: String, noBtnText: String, yesBtnText: String, listener: ((type: Int) -> Unit)? = null) {
+
+    val builder = MaterialAlertDialogBuilder(this)
+    val view = layoutInflater.inflate(R.layout.dialog_instant_live, null)
+    val title = view.findViewById<TextView>(R.id.title)
+    val description = view.findViewById<TextView>(R.id.description)
+    val noBtn = view.findViewById<MaterialButton>(R.id.noBtn)
+    val yesBtn = view.findViewById<MaterialButton>(R.id.yesBtn)
+
+    title.text = titleText
+    description.text = descriptionText
+    noBtn.text = noBtnText
+    yesBtn.text = yesBtnText
+
+    builder.setView(view)
+
+    val dialog = builder.create()
+    dialog.show()
+
+    noBtn.setOnClickListener() {
+        dialog.dismiss()
+        listener?.invoke(2)
+    }
+    yesBtn.setOnClickListener() {
+        dialog.dismiss()
+        listener?.invoke(1)
+    }
+}
 
 fun Context.toast(msg: String?, time: Int = Toast.LENGTH_SHORT) {
     if (!msg.isNullOrEmpty()) {
@@ -227,6 +255,12 @@ fun Context.isConnectedToNetwork(): Boolean {
         isConnected = connectivityManager?.activeNetworkInfo?.isConnectedOrConnecting == true
     }
     return isConnected
+}
+
+fun isUrlSafeString(text: String): Boolean {
+
+    val match = "[a-zA-Z0-9 \\-_]*".toRegex()
+    return text.matches(match)
 }
 
 fun getFileContentType(filePath: String): String? {
