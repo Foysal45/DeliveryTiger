@@ -669,6 +669,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             }
             calculateTotalPrice()
             isCollectionTypeSelected = true
+            orderPlaceBtn.performClick()
         }
     }
 
