@@ -197,4 +197,6 @@ class AppRepository(
 
     suspend fun fetchHelpLineNumbers() = apiInterfaceCore.fetchHelpLineNumbers()
 
+    suspend fun updateOrderInfo(orderId: String, requestBody: UpdateOrderReqBody) = apiInterfaceCore.updateOrderInfo(orderId, requestBody)
+
 }

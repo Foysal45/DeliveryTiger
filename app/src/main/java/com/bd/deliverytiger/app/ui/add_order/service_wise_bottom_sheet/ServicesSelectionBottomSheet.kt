@@ -27,7 +27,7 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
     private  var dataAdapter: ServiceSelectionBottomSheetAdapter = ServiceSelectionBottomSheetAdapter()
     private val viewModel: ServiceSelectionBottomSheetViewModel by inject()
 
-    private lateinit var dataList:  List<ServiceInfoData>
+    private var dataList: List<ServiceInfoData>? = null
 
     var onServiceSelected: ((position: Int, service: ServiceInfoData, district: LocationData ) -> Unit)? = null
 
@@ -77,8 +77,9 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun initServiceData(){
-        dataAdapter.initLoad(dataList)
-        viewModel.fetchServiceWiseDistrict(dataList).observe(viewLifecycleOwner, Observer { model ->
+        dataList ?: return
+        dataAdapter.initLoad(dataList!!)
+        viewModel.fetchServiceWiseDistrict(dataList!!).observe(viewLifecycleOwner, Observer { model ->
             dataAdapter.updateData(model)
         })
     }

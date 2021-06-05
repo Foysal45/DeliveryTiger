@@ -31,11 +31,13 @@ import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.MaterialDatePicker
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.lifecycle.Observer
 
 class AllOrdersFragment : Fragment() {
 
@@ -87,6 +89,8 @@ class AllOrdersFragment : Fragment() {
 
     private var sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
     private var isFromDashBoard: Boolean = false
+
+    private val viewModel: AllOrderViewModel by inject()
 
     companion object {
         fun newInstance(shouldOpenFilter: Boolean = false, isFromDashBoard: Boolean = false): AllOrdersFragment = AllOrdersFragment().apply {
@@ -173,7 +177,14 @@ class AllOrdersFragment : Fragment() {
         })
 
         allOrdersAdapter.onOrderItemClick = { position ->
-            addOrderTrackFragment(courierOrderViewModelList!![position]?.courierOrdersId.toString())
+            //addOrderTrackFragment(courierOrderViewModelList!![position]?.courierOrdersId.toString())
+            val model = courierOrderViewModelList[position]
+            val orderUpdateReqBody = UpdateOrderReqBody(
+                model.courierAddressContactInfo?.mobile,
+                model.courierAddressContactInfo?.otherMobile,
+                model.courierAddressContactInfo?.address,
+            )
+            updateOrderApiCall("DT-505521", orderUpdateReqBody,0)
         }
 
         allOrdersAdapter.onEditItemClick = { position ->
@@ -525,7 +536,22 @@ class AllOrdersFragment : Fragment() {
     }
 
     private fun updateOrderApiCall(orderId: String,updateOrderReqBody: UpdateOrderReqBody, indexPos: Int){
-        val placeOrderInterface = RetrofitSingleton.getInstance(requireContext()).create(PlaceOrderInterface::class.java)
+
+        viewModel.updateOrderInfo(orderId, updateOrderReqBody).observe(viewLifecycleOwner, Observer { model ->
+            if (model != null) {
+                courierOrderViewModelList[indexPos].courierAddressContactInfo?.apply {
+                    mobile = updateOrderReqBody.mobile
+                    otherMobile = updateOrderReqBody.otherMobile
+                    address = updateOrderReqBody.address
+                }
+                allOrdersAdapter.notifyItemChanged(indexPos)
+                context?.toast(getString(R.string.update_success))
+            } else {
+                context?.toast(getString(R.string.error_msg))
+            }
+        })
+
+        /*val placeOrderInterface = RetrofitSingleton.getInstance(requireContext()).create(PlaceOrderInterface::class.java)
         placeOrderInterface.placeOrderUpdate(orderId,updateOrderReqBody).enqueue(object :Callback<GenericResponse<UpdateOrderResponse>>{
             override fun onFailure(call: Call<GenericResponse<UpdateOrderResponse>>, t: Throwable) {
 
@@ -548,7 +574,7 @@ class AllOrdersFragment : Fragment() {
                }
             }
 
-        })
+        })*/
     }
 
     private fun goToMap(hubModel: HubInfo) {

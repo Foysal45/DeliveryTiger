@@ -292,3 +292,9 @@ fun Fragment.appVersionCode(): Int {
         0
     }
 }
+
+inline fun <T> sdk24orAbove(onSdk24: (flag: Boolean) -> T): T {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        onSdk24(true)
+    } else onSdk24(false)
+}

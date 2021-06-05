@@ -128,10 +128,10 @@ interface ApiInterfaceCore {
     suspend fun addPickupLocations(@Body requestBody: PickupLocation): NetworkResponse<GenericResponse<PickupLocation>, ErrorResponse>
 
     @PUT("api/Update/UpdatePickupLocations/{id}")
-    suspend fun  updatePickupLocations(@Path("id") id: Int, @Body requestBody: PickupLocation): NetworkResponse<GenericResponse<PickupLocation>, ErrorResponse>
+    suspend fun updatePickupLocations(@Path("id") id: Int, @Body requestBody: PickupLocation): NetworkResponse<GenericResponse<PickupLocation>, ErrorResponse>
 
     @DELETE("api/Delete/DeletePickupLocations/{id}")
-    suspend fun  deletePickupLocations(@Path("id") id: Int): NetworkResponse<GenericResponse<Int>, ErrorResponse>
+    suspend fun deletePickupLocations(@Path("id") id: Int): NetworkResponse<GenericResponse<Int>, ErrorResponse>
 
     @GET("api/Fetch/GetMerchantCollectionCharge/{courierUserId}")
     fun getCollectionCharge(@Path("courierUserId") courierUserId: Int): Call<GenericResponse<Int>>
@@ -170,7 +170,7 @@ interface ApiInterfaceCore {
     suspend fun fetchPriceList(@Path("districtId") districtId: Int, @Path("deliveryRangeId") deliveryRangeId: Int): NetworkResponse<GenericResponse<List<WeightPrice>>, ErrorResponse>
 
     @POST("api/Fetch/LoadCourierOrderAmountDetailsV2")
-     suspend fun fetchServiceBillDetails(@Body requestBody: BillingServiceReqBody): NetworkResponse<GenericResponse<BillingServiceMainResponse>, ErrorResponse>
+    suspend fun fetchServiceBillDetails(@Body requestBody: BillingServiceReqBody): NetworkResponse<GenericResponse<BillingServiceMainResponse>, ErrorResponse>
 
     @POST("api/Fetch/GetCodCollections")
     suspend fun fetchCODCollectionDetails(@Body requestBody: CODReqBody): NetworkResponse<GenericResponse<CODResponse>, ErrorResponse>
@@ -194,7 +194,8 @@ interface ApiInterfaceCore {
     suspend fun fetchReturnStatement(
         @Path("courierUserId") courierUserId: Int,
         @Path("index") index: Int,
-        @Path("count") count: Int): NetworkResponse<GenericResponse<List<ReturnStatementData>> ,ErrorResponse>
+        @Path("count") count: Int
+    ): NetworkResponse<GenericResponse<List<ReturnStatementData>>, ErrorResponse>
 
     @GET("api/Fetch/GetSurveyQuestion")
     suspend fun fetchSurveyQuestion(): NetworkResponse<GenericResponse<List<SurveyQuestionModel>>, ErrorResponse>
@@ -213,4 +214,10 @@ interface ApiInterfaceCore {
 
     @GET("api/Dashboard/GetHelpLineNumbers")
     suspend fun fetchHelpLineNumbers(): NetworkResponse<GenericResponse<HelpLineNumberModel>, ErrorResponse>
+
+    @PUT("api/Update/UpdateCourierOrdersApp/{orderId}")
+    suspend fun updateOrderInfo(
+        @Path("orderId") orderId: String,
+        @Body requestBody: UpdateOrderReqBody
+    ): NetworkResponse<GenericResponse<UpdateOrderResponse>, ErrorResponse>
 }

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.databinding.ItemViewServiceListsBinding
 import com.bd.deliverytiger.app.utils.DigitConverter
+import com.bd.deliverytiger.app.utils.sdk24orAbove
 
 class ServiceSelectionBottomSheetAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -25,15 +26,25 @@ class ServiceSelectionBottomSheetAdapter: RecyclerView.Adapter<RecyclerView.View
 
     override fun getItemCount(): Int = dataList.size
 
-    @SuppressLint("SetTextI18n")
-    @RequiresApi(Build.VERSION_CODES.N)
+    @SuppressLint("SetTextI18n", "NewApi")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewHolder) {
             val model = dataList[position]
             val binding = holder.binding
 
-            binding.serviceTypeTitle.text =  Html.fromHtml(model.serviceTypeName,  Html.FROM_HTML_MODE_COMPACT)
-            binding.serviceInfo.text = Html.fromHtml( model.serviceInfo,  Html.FROM_HTML_MODE_COMPACT)
+            //binding.serviceTypeTitle.text =  Html.fromHtml(model.serviceTypeName,  Html.FROM_HTML_MODE_LEGACY)
+            //binding.serviceInfo.text = Html.fromHtml( model.serviceInfo,  Html.FROM_HTML_MODE_LEGACY)
+
+            sdk24orAbove { flag ->
+                if (flag) {
+                    binding.serviceTypeTitle.text =  Html.fromHtml(model.serviceTypeName,  Html.FROM_HTML_MODE_LEGACY)
+                    binding.serviceInfo.text = Html.fromHtml( model.serviceInfo,  Html.FROM_HTML_MODE_LEGACY)
+                } else {
+                    binding.serviceTypeTitle.text =  Html.fromHtml( model.serviceTypeName)
+                    binding.serviceInfo.text = Html.fromHtml( model.serviceInfo)
+                }
+            }
+
             if (model.deliveryRangeId.isEmpty()){
                 binding.serviceRangeArea.text = "সারাদেশে"
             }else{
