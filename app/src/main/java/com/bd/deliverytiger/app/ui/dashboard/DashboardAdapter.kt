@@ -160,7 +160,9 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
 
         init {
             itemView.setOnClickListener {
-                onItemClick?.invoke(adapterPosition, dataList[adapterPosition])
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                    onItemClick?.invoke(absoluteAdapterPosition, dataList[absoluteAdapterPosition])
+                }
             }
         }
     }
@@ -168,8 +170,8 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
     internal inner class ViewModel1(val binding: ItemViewDashboardPaymentBinding): RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onPayDetailsClick?.invoke(adapterPosition, dataList[adapterPosition])
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                    onPayDetailsClick?.invoke(absoluteAdapterPosition, dataList[absoluteAdapterPosition])
                 }
             }
         }
@@ -178,13 +180,13 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
     internal inner class ViewModel2(val binding: ItemViewDashboardUnpaidCodBinding): RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onCODCollectionClick?.invoke(adapterPosition, dataList[adapterPosition])
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                    onCODCollectionClick?.invoke(absoluteAdapterPosition, dataList[absoluteAdapterPosition])
                 }
             }
             binding.actionLayout.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onPaymentRequestClick?.invoke(adapterPosition, dataList[adapterPosition])
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                    onPaymentRequestClick?.invoke(absoluteAdapterPosition, dataList[absoluteAdapterPosition])
                 }
             }
             binding.paymentMessageLayout.setOnClickListener {
