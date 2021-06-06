@@ -532,7 +532,7 @@ class AllOrdersFragment : Fragment() {
 
         viewModel.updateOrderInfo(orderId, updateOrderReqBody).observe(viewLifecycleOwner, Observer { model ->
             if (model != null) {
-                courierOrderViewModelList[indexPos].courierAddressContactInfo?.apply {
+                courierOrderViewModelList.getOrNull(indexPos)?.courierAddressContactInfo?.apply {
                     mobile = updateOrderReqBody.mobile
                     otherMobile = updateOrderReqBody.otherMobile
                     address = updateOrderReqBody.address
