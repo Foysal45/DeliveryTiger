@@ -14,6 +14,7 @@ import com.bd.deliverytiger.app.utils.DigitConverter
 
 class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOrderViewModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    var onItemClick: ((position: Int) -> Unit)? = null
     var onOrderItemClick: ((position: Int) -> Unit)? = null
     var onEditItemClick: ((position: Int) -> Unit)? = null
     var onLocationBtnClick: ((model: CourierOrderViewModel, position: Int) -> Unit)? = null
@@ -114,15 +115,18 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
     inner class ViewHolder(val binding: ItemViewAllOrderBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
+            binding.root.setOnClickListener {
+                onItemClick?.invoke(absoluteAdapterPosition)
+            }
             binding.trackBtn.setOnClickListener {
-                onOrderItemClick?.invoke(adapterPosition)
+                onOrderItemClick?.invoke(absoluteAdapterPosition)
             }
             binding.editBtn.setOnClickListener {
-                onEditItemClick?.invoke(adapterPosition)
+                onEditItemClick?.invoke(absoluteAdapterPosition)
             }
             binding.hubLocationBtn.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onLocationBtnClick?.invoke(dataList[adapterPosition], adapterPosition)
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                    onLocationBtnClick?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
                 }
             }
         }

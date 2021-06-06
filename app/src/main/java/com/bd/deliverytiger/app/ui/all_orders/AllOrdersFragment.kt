@@ -23,6 +23,7 @@ import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderResponse
+import com.bd.deliverytiger.app.ui.all_orders.details_bottomsheet.AllOrdersDetailsDialog
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
@@ -176,6 +177,10 @@ class AllOrdersFragment : Fragment() {
             }
         })
 
+        allOrdersAdapter.onItemClick = { position ->
+            showAllOrdersDetailsBottomSheet(courierOrderViewModelList, position)
+        }
+
         allOrdersAdapter.onOrderItemClick = { position ->
             addOrderTrackFragment(courierOrderViewModelList!![position]?.courierOrdersId.toString())
         }
@@ -210,6 +215,12 @@ class AllOrdersFragment : Fragment() {
             dateRangePicker()
         }
 
+    }
+
+    private fun showAllOrdersDetailsBottomSheet(data: MutableList<CourierOrderViewModel>, index: Int) {
+        val tag: String = AllOrdersDetailsDialog.tag
+        val dialog: AllOrdersDetailsDialog = AllOrdersDetailsDialog.newInstance(data, index)
+        dialog.show(childFragmentManager, tag)
     }
 
     private fun dateRangePicker() {
@@ -489,6 +500,10 @@ class AllOrdersFragment : Fragment() {
         val inflater: LayoutInflater = LayoutInflater.from(context)
         val dialogView: View = inflater.inflate(R.layout.custom_order_alert_lay, null)
         dialogBuilder.setView(dialogView)
+        val etAlertAddOrderCustomerName: TextView =
+            dialogView.findViewById(R.id.etAlertAddOrderCustomerName)
+        val etAlertAddOrderProductName: TextView =
+            dialogView.findViewById(R.id.etAlertAddOrderProductName)
         val etAlertAddOrderMobileNo: TextView =
             dialogView.findViewById(R.id.etAlertAddOrderMobileNo)
         val etAlertAlternativeMobileNo: TextView =
@@ -497,10 +512,11 @@ class AllOrdersFragment : Fragment() {
             dialogView.findViewById(R.id.etAlertCustomersAddress)
         val btnAlertSubmit: Button = dialogView.findViewById(R.id.btnAlertSubmit)
 
-
-        etAlertAddOrderMobileNo.setText(updateOrderReqBody.mobile)
-        etAlertAlternativeMobileNo.setText(updateOrderReqBody.otherMobile)
-        etAlertCustomersAddress.setText(updateOrderReqBody.address)
+        etAlertAddOrderCustomerName.text = "Name"
+        etAlertAddOrderProductName.text = "Invoice"
+        etAlertAddOrderMobileNo.text = updateOrderReqBody.mobile
+        etAlertAlternativeMobileNo.text = updateOrderReqBody.otherMobile
+        etAlertCustomersAddress.text = updateOrderReqBody.address
 
         val dialog = dialogBuilder.create()
         dialog.show()

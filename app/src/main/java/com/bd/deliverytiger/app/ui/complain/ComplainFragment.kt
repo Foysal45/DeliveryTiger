@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentComplainBinding
+import com.bd.deliverytiger.app.ui.complain.complain_history.ComplainHistoryBottomSheet
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
 import org.koin.android.ext.android.inject
@@ -124,6 +125,16 @@ class ComplainFragment(): Fragment() {
             //addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         }
 
+        dataAdapter.onItemClicked = {
+            goToComplainHistoryBottomSheet()
+        }
+
+    }
+
+    private fun goToComplainHistoryBottomSheet() {
+        val tag = ComplainHistoryBottomSheet.tag
+        val dialog = ComplainHistoryBottomSheet.newInstance()
+        dialog.show(childFragmentManager, tag)
     }
 
     private fun fetchComplain() {

@@ -39,6 +39,7 @@ import com.bd.deliverytiger.app.services.LocationUpdatesService
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadFragment
+import com.bd.deliverytiger.app.ui.balance_load_history.BalanceLoadHistoryFragment
 import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.bill_pay_history.ServiceBillPayHistoryFragment
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
@@ -624,6 +625,11 @@ class HomeActivity : AppCompatActivity(),
                 } else {
                     addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
                 }
+            }
+            R.id.nav_balance_load_history -> {
+
+                addFragment(BalanceLoadHistoryFragment.newInstance(), BalanceLoadHistoryFragment.tag)
+
             }
             R.id.nav_payment_request -> {
                 val currentFragment =
