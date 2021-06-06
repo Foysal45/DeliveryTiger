@@ -177,14 +177,7 @@ class AllOrdersFragment : Fragment() {
         })
 
         allOrdersAdapter.onOrderItemClick = { position ->
-            //addOrderTrackFragment(courierOrderViewModelList!![position]?.courierOrdersId.toString())
-            val model = courierOrderViewModelList[position]
-            val orderUpdateReqBody = UpdateOrderReqBody(
-                model.courierAddressContactInfo?.mobile,
-                model.courierAddressContactInfo?.otherMobile,
-                model.courierAddressContactInfo?.address,
-            )
-            updateOrderApiCall("DT-505521", orderUpdateReqBody,0)
+            addOrderTrackFragment(courierOrderViewModelList!![position]?.courierOrdersId.toString())
         }
 
         allOrdersAdapter.onEditItemClick = { position ->
