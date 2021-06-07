@@ -99,6 +99,8 @@ class AppRepository(
 
     suspend fun getInstantPaymentActivationStatus(courierUserId: Int) = apiInterfaceADM.getInstantPaymentActivationStatus(courierUserId)
 
+    suspend fun getComplainHistory(bookingCode: Int) = apiInterfaceADM.getComplainHistory(bookingCode)
+
     //******************** ADCORE ********************//
 
     suspend fun getBannerInfo() = apiInterfaceCore.getBannerInfo()

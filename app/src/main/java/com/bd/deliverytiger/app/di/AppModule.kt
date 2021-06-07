@@ -12,6 +12,7 @@ import com.bd.deliverytiger.app.ui.add_order.OrderSuccessViewModel
 import com.bd.deliverytiger.app.ui.add_order.service_wise_bottom_sheet.ServiceSelectionBottomSheetViewModel
 import com.bd.deliverytiger.app.ui.all_orders.AllOrderViewModel
 import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadViewModel
+import com.bd.deliverytiger.app.ui.balance_load_history.BalanceLoadHistoryViewModel
 import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillViewModel
 import com.bd.deliverytiger.app.ui.bill_pay_history.ServiceBillHistoryViewModel
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeViewModel
@@ -19,6 +20,7 @@ import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionViewModel
 import com.bd.deliverytiger.app.ui.collection_history.CollectionHistoryViewModel
 import com.bd.deliverytiger.app.ui.collector_tracking.MapViewModel
 import com.bd.deliverytiger.app.ui.complain.ComplainViewModel
+import com.bd.deliverytiger.app.ui.complain.complain_history.ComplainHistoryViewModel
 import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
 import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsViewModel
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
@@ -92,5 +94,7 @@ val appModule = module {
     viewModel { AuthViewModel(get()) }
     viewModel { ServiceSelectionBottomSheetViewModel(get()) }
     viewModel { AllOrderViewModel(get()) }
+    viewModel { BalanceLoadHistoryViewModel(get()) }
+    viewModel { ComplainHistoryViewModel(get()) }
 
 }

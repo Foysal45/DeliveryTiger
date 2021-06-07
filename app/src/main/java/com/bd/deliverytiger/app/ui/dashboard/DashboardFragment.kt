@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -10,6 +11,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
@@ -944,6 +947,15 @@ class DashboardFragment : Fragment() {
         val customDialog = Dialog(requireActivity(), R.style.AlertDialogTheme)
         customDialog.setContentView(R.layout.item_view_custom_quick_order_dialogue)
         customDialog.show()
+        val numberOfParcel = customDialog.findViewById(R.id.numberOfParcel) as TextView
+        val submitBtn = customDialog.findViewById(R.id.btnSubmit) as Button
+        submitBtn.setOnClickListener {
+            if (numberOfParcel.text.isNullOrEmpty()){
+                context?.toast("Please give Number of Parcel")
+            }else{
+                customDialog.dismiss()
+            }
+        }
     }
 
     private fun serviceChargeDialog() {

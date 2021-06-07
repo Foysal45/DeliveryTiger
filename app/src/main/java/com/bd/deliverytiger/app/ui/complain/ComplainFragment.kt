@@ -126,14 +126,14 @@ class ComplainFragment(): Fragment() {
         }
 
         dataAdapter.onItemClicked = {
-            goToComplainHistoryBottomSheet()
+            goToComplainHistoryBottomSheet(it.orderId)
         }
 
     }
 
-    private fun goToComplainHistoryBottomSheet() {
+    private fun goToComplainHistoryBottomSheet(bookingCode: Int) {
         val tag = ComplainHistoryBottomSheet.tag
-        val dialog = ComplainHistoryBottomSheet.newInstance()
+        val dialog = ComplainHistoryBottomSheet.newInstance(bookingCode)
         dialog.show(childFragmentManager, tag)
     }
 
