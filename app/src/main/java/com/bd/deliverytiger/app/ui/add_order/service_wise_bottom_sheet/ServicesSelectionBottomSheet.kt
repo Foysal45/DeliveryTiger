@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.ui.add_order.service_wise_bottom_sheet
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,12 +25,13 @@ import androidx.lifecycle.Observer
 class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
 
     private var binding: FragmentServicesSelectionBottomSheetBinding? = null
-    private  var dataAdapter: ServiceSelectionBottomSheetAdapter = ServiceSelectionBottomSheetAdapter()
+    private var dataAdapter: ServiceSelectionBottomSheetAdapter = ServiceSelectionBottomSheetAdapter()
     private val viewModel: ServiceSelectionBottomSheetViewModel by inject()
 
     private var dataList: List<ServiceInfoData>? = null
 
-    var onServiceSelected: ((position: Int, service: ServiceInfoData, district: LocationData ) -> Unit)? = null
+    var onServiceSelected: ((position: Int, service: ServiceInfoData, district: LocationData) -> Unit)? = null
+    var onClose: ((type: Int) -> Unit)? = null
 
     companion object {
 
@@ -71,12 +73,18 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun initClickLister() {
-       dataAdapter.onDistrictSelectionClick = {_, model ->
-           goToDistrictSelectDialogue(model)
-       }
+        dataAdapter.onDistrictSelectionClick = { _, model ->
+            goToDistrictSelectDialogue(model)
+        }
+        binding?.backBtn?.setOnClickListener {
+            onClose?.invoke(0)
+        }
+        binding?.closeBtn?.setOnClickListener {
+            onClose?.invoke(1)
+        }
     }
 
-    private fun initServiceData(){
+    private fun initServiceData() {
         dataList ?: return
         dataAdapter.initLoad(dataList!!)
         viewModel.fetchServiceWiseDistrict(dataList!!).observe(viewLifecycleOwner, Observer { model ->
@@ -106,7 +114,7 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
 
         val dialog = LocationSelectionDialog.newInstance(locationList)
         dialog.show(childFragmentManager, LocationSelectionDialog.tag)
-        dialog.onLocationPicked = {position, district ->
+        dialog.onLocationPicked = { position, district ->
             onServiceSelected?.invoke(position, serviceInfo, district)
             dismiss()
         }
@@ -138,6 +146,11 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
                 }
             })*/
         }
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        onClose?.invoke(0)
     }
 
     override fun onDestroyView() {

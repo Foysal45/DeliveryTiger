@@ -1649,6 +1649,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             }
             updateUIAfterDistrict(district)
         }
+        dialog.onClose = { type ->
+            Timber.d("dialog.onClose $type")
+            activity?.onBackPressed()
+        }
     }
 
     private fun mockUserData() {
