@@ -5,15 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.api.model.balance_load.BalanceLimitResponse
 import com.bd.deliverytiger.app.databinding.FragmentBalanceLoadHistoryBinding
+import com.bd.deliverytiger.app.utils.SessionManager
+import com.bd.deliverytiger.app.utils.ViewState
+import com.bd.deliverytiger.app.utils.hideKeyboard
+import com.bd.deliverytiger.app.utils.toast
+import org.koin.android.ext.android.inject
 
 
 class BalanceLoadHistoryFragment : Fragment() {
 
     private var binding: FragmentBalanceLoadHistoryBinding? = null
     private var dataAdapter : BalanceLoadHistoryAdapter = BalanceLoadHistoryAdapter()
+    private val viewModel: BalanceLoadHistoryViewModel by inject()
 
     companion object {
         fun newInstance(): BalanceLoadHistoryFragment = BalanceLoadHistoryFragment().apply {}
@@ -29,6 +36,7 @@ class BalanceLoadHistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         initView()
+        initClickLister()
         initData()
     }
 
@@ -42,8 +50,31 @@ class BalanceLoadHistoryFragment : Fragment() {
         }
     }
 
-    private fun initData(){
+    private fun initClickLister(){
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is ViewState.ShowMessage -> {
+                    requireContext().toast(state.message)
+                }
+                is ViewState.KeyboardState -> {
+                    hideKeyboard()
+                }
+                is ViewState.ProgressState -> {
+                    if (state.isShow) {
+                        binding?.progressBar?.visibility = View.VISIBLE
+                    } else {
+                        binding?.progressBar?.visibility = View.GONE
+                    }
+                }
+            }
+        })
         dataAdapter.initLoad(listOf(BalanceLimitResponse(500,0)))
+    }
+
+    private fun initData(){
+        viewModel.getComplainHistory(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {
+            //dataAdapter.initLoad()
+        })
     }
 
     override fun onDestroyView() {
