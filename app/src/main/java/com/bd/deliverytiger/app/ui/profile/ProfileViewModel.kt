@@ -62,45 +62,19 @@ class ProfileViewModel(private val repository: AppRepository): ViewModel() {
         return responseData
     }
 
-    fun getAllDistrictFromApi(districtId: Int): LiveData<List<DistrictDeliveryChargePayLoad>> {
-        viewState.value = ViewState.ProgressState(true)
-        val responseBody = MutableLiveData<List<DistrictDeliveryChargePayLoad>>()
-        repository.getAllDistrictFromApi(districtId).enqueue(object : Callback<DeliveryChargePayLoad> {
-            override fun onFailure(call: Call<DeliveryChargePayLoad>, t: Throwable) {
-                viewState.value = ViewState.ProgressState(false)
-                viewState.value = ViewState.ShowMessage(message)
-            }
-            override fun onResponse(call: Call<DeliveryChargePayLoad>, response: Response<DeliveryChargePayLoad>) {
-                viewState.value = ViewState.ProgressState(false)
-                if (response.isSuccessful && response.body() != null){
-                    if (response.body()!!.data != null) {
-                        if (!response.body()!!.data!!.districtInfo.isNullOrEmpty()) {
-                            responseBody.value = response.body()!!.data!!.districtInfo
-                        } else {
-                            viewState.value = ViewState.ShowMessage(message)
-                        }
-                    } else {
-                        viewState.value = ViewState.ShowMessage(message)
-                    }
-                } else {
-                    viewState.value = ViewState.ShowMessage(message)
-                }
-            }
-        })
-        return responseBody
-    }
-
-    fun loadAllDistricts(): LiveData<List<AllDistrictListsModel>> {
+    fun loadAllDistrictsById(id: Int): LiveData<List<AllDistrictListsModel>> {
         viewState.value = ViewState.ProgressState(true)
         val responseData = MutableLiveData<List<AllDistrictListsModel>>()
 
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.loadAllDistricts()
+            val response = repository.loadAllDistrictsById(id)
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {
                     is NetworkResponse.Success -> {
-                        responseData.value = response.body.model!!
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model!!
+                        }
                     }
                     is NetworkResponse.ServerError -> {
                         val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"

@@ -696,17 +696,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         val locationList: MutableList<LocationData> = mutableListOf()
         list.forEach { model ->
-            locationList.add(
-                LocationData(
-                    model.districtId,
-                    model.districtBng,
-                    model.district,
-                    model.postalCode,
-                    model.district!!.toLowerCase(Locale.US)
-                )
-            )
+            locationList.add(LocationData.from(model))
         }
-
 
         val dialog = LocationSelectionDialog.newInstance(locationList)
         dialog.show(childFragmentManager, LocationSelectionDialog.tag)
@@ -1249,12 +1240,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun getDistrictThanaOrAria(districtId: Int) {
 
-        viewModel.getAllDistrictFromApi(districtId).observe(viewLifecycleOwner, Observer { list ->
-            setUpCollectionSpinner(null, list.first().thanaHome, 2)
-        })
-    }
 
     private fun setUpCollectionSpinner(pickupParentList: List<PickupLocation>?, thanaOrAriaList: List<ThanaPayLoad>?, optionFlag: Int) {
 

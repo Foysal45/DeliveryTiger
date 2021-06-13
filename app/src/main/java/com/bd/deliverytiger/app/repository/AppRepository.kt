@@ -27,6 +27,7 @@ import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequ
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.http.Path
 
 class AppRepository(
     private val apiInterfaceADM: ApiInterfaceADM,
@@ -107,7 +108,7 @@ class AppRepository(
 
     suspend fun getDashboardStatusGroup(requestBody: DashBoardReqBody) = apiInterfaceCore.getDashboardStatusGroup(requestBody)
 
-    fun getAllDistrictFromApi(id: Int) = apiInterfaceCore.getAllDistrictFromApi(id)
+    suspend fun loadAllDistrictsById(id: Int) = apiInterfaceCore.loadAllDistrictsById(id)
 
     suspend fun loadAllDistricts() = apiInterfaceCore.loadAllDistricts()
 

@@ -75,8 +75,8 @@ interface ApiInterfaceCore {
     @GET("api/Dashboard/GetCollection/{courierUserId}")
     suspend fun fetchCollection(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<DashboardData>, ErrorResponse>
 
-    @GET("api/Other/GetAllDistrictFromApi/{id}")
-    fun getAllDistrictFromApi(@Path("id") id: Int): Call<DeliveryChargePayLoad>
+    @GET("api/Fetch/LoadAllDistrictsById/{id}")
+    suspend fun loadAllDistrictsById(@Path("id") id: Int): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>
 
     @GET("api/Fetch/LoadAllDistricts")
     suspend fun loadAllDistricts(): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>

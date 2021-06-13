@@ -101,15 +101,7 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
 
         val locationList: MutableList<LocationData> = mutableListOf()
         serviceInfo.districtList.forEach { model ->
-            locationList.add(
-                LocationData(
-                    model.districtId,
-                    model.districtBng,
-                    model.district,
-                    model.postalCode,
-                    model.district?.toLowerCase(Locale.US) ?: ""
-                )
-            )
+            locationList.add(LocationData.from(model))
         }
 
         val dialog = LocationSelectionDialog.newInstance(locationList)

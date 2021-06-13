@@ -168,34 +168,7 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
         return responseData
     }
 
-    fun getAllDistrictFromApi(districtId: Int): LiveData<List<DistrictDeliveryChargePayLoad>> {
-        viewState.value = ViewState.ProgressState(true)
-        val responseBody = MutableLiveData<List<DistrictDeliveryChargePayLoad>>()
-        repository.getAllDistrictFromApi(districtId).enqueue(object : Callback<DeliveryChargePayLoad> {
-            override fun onFailure(call: Call<DeliveryChargePayLoad>, t: Throwable) {
-                viewState.value = ViewState.ProgressState(false)
-                viewState.value = ViewState.ShowMessage(message)
-            }
 
-            override fun onResponse(call: Call<DeliveryChargePayLoad>, response: Response<DeliveryChargePayLoad>) {
-                viewState.value = ViewState.ProgressState(false)
-                if (response.isSuccessful && response.body() != null) {
-                    if (response.body()!!.data != null) {
-                        if (!response.body()!!.data!!.districtInfo.isNullOrEmpty()) {
-                            responseBody.value = response.body()!!.data!!.districtInfo
-                        } else {
-                            viewState.value = ViewState.ShowMessage(message)
-                        }
-                    } else {
-                        viewState.value = ViewState.ShowMessage(message)
-                    }
-                } else {
-                    viewState.value = ViewState.ShowMessage(message)
-                }
-            }
-        })
-        return responseBody
-    }
 
     fun getPickupLocations(courierUserId: Int): LiveData<List<PickupLocation>> {
 

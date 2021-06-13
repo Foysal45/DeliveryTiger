@@ -1,7 +1,9 @@
 package com.bd.deliverytiger.app.api.model.district
 
 
+import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 data class AllDistrictListsModel(
     @SerializedName("districtId")
