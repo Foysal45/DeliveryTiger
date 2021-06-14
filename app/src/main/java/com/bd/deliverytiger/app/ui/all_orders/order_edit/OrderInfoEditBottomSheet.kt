@@ -12,8 +12,7 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.databinding.FragmentOrderInfoEditBottomSheetBinding
-import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
-import com.bd.deliverytiger.app.utils.SessionManager
+import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -26,6 +25,7 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
     private var binding: FragmentOrderInfoEditBottomSheetBinding? = null
     private val viewModel: OrderInfoEditViewModel by inject()
     private var model: CourierOrderViewModel = CourierOrderViewModel()
+    private var isCollectionLocationSelected = model.courierPrice?.officeDrop
 
     var onCollectionTypeSelected: ((isPickup: Boolean, pickupLocation: PickupLocation) -> Unit)? = null
 
@@ -88,10 +88,15 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
 
     private fun spinnerDataBinding(list: List<PickupLocation>){
         val pickupList: MutableList<String> = mutableListOf()
-        pickupList.add("পিক আপ লোকেশন")
-        list.forEach {
-            pickupList.add(it.thanaName ?: "")
+        if (model.courierAddressContactInfo?.thanaName?.isNotEmpty() == true){
+            pickupList.add(model.courierAddressContactInfo?.thanaName ?: "")
+        }else{
+            pickupList.add("পিক আপ লোকেশন")
         }
+
+       /* list.forEach {
+            pickupList.add(it.thanaName ?: "")
+        }*/
         val pickupAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, pickupList)
         binding?.spinnerCollectionLocation?.adapter = pickupAdapter
         binding?.spinnerCollectionLocation?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -108,6 +113,10 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
 
     private fun initClickLister() {
 
+        binding?.btUpdate?.setOnClickListener {
+            updateOrder()
+        }
+
         binding?.toggleButtonPickupGroup?.setOnSelectListener { button ->
             when (button.id) {
                 R.id.toggleButtonPickup1 -> {
@@ -121,12 +130,53 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
                     } else {
                         binding?.msg?.isVisible = false
                         binding?.pickupAddressLayout?.visibility = View.VISIBLE
-                        binding?.chargeMsgLayout?.visibility = View.VISIBLE
+                        binding?.chargeMsgLayout?.visibility = View.GONE
                     }
                 }
             }
         }
 
+    }
+
+    private fun updateOrder(){
+        if (!validate()){
+            return
+        }
+        context?.toast("সফলভাবে আপডেট হয়েছে")
+    }
+
+    private fun validate(): Boolean {
+
+        val name = binding?.etCustomerName?.text.toString()
+        val mobile = binding?.etOrderMobileNo?.text.toString()
+        val address = binding?.etCustomersAddress?.text.toString()
+        val collectionAmount =binding?.collectionAmount?.text.toString()
+
+        if (name.isNullOrEmpty()){
+            context?.showToast(getString(R.string.write_yr_name))
+            return false
+        }
+        if (mobile.isNullOrEmpty()){
+            context?.showToast(getString(R.string.write_phone_number))
+            return false
+        }else if (!Validator.isValidMobileNumber(mobile) || mobile.length < 11) {
+            context?.toast(getString(R.string.write_proper_phone_number_recharge))
+            return false
+        }
+        if (address.isNullOrEmpty()){
+            context?.showToast(getString(R.string.write_yr_address))
+            return false
+        }
+        if (model.courierOrderInfo?.orderType == "Delivery Taka Collection" && collectionAmount.isNullOrEmpty() ){
+            context?.showToast("কালেকশন অ্যামাউন্ট লিখুন")
+            return false
+        }
+        if (isCollectionLocationSelected == true) {
+            context?.showToast("কালেকশন লোকেশন নির্বাচন করুন")
+            return false
+        }
+
+        return true
     }
 
     override fun onStart() {

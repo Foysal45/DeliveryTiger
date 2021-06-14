@@ -65,35 +65,6 @@ class AllOrdersDetailsDialog : BottomSheetDialogFragment() {
         binding?.orderType?.text = model.courierOrderInfo?.orderType
         binding?.status?.text = model.status
 
-        if (model.buttonFlag) {
-            binding?.editBtn?.visibility = View.VISIBLE
-        } else {
-            binding?.editBtn?.visibility = View.GONE
-        }
-        if (model.statusId == 60 || model.statusId == 19 || model.statusId == 15) {
-
-            if (model.statusId == 60 || model.statusId == 19) {
-                binding?.hubLocationBtn?.visibility = View.VISIBLE
-                binding?.hubName?.text = "${model.hubViewModel?.name}-এ আছে"
-                binding?.trackBtn?.visibility = View.GONE
-            }
-            if (model.statusId == 15) {
-                binding?.key1?.text = "ডেলিভারি তারিখ"
-                val formattedDate1 = DigitConverter.toBanglaDate(model.courierOrderDateDetails?.updatedOnDate, "MM-dd-yyyy HH:mm:ss")
-                binding?.date?.text = formattedDate1
-            }
-
-        } else {
-            binding?.hubLocationBtn?.visibility = View.GONE
-            binding?.trackBtn?.visibility = View.VISIBLE
-            binding?.key1?.text = "তারিখ"
-
-        }
-
-        binding?.trackBtn?.setOnClickListener {
-            addOrderTrackFragment(model.courierOrdersId.toString())
-        }
-
     }
 
     private fun initCustomerData(){
