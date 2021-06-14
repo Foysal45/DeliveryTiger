@@ -443,4 +443,24 @@ object SessionManager {
                 putInt("instantPaymentAmount", value)
             }
         }
+
+    var retentionManagerName: String
+        get() {
+            return pref.getString("retentionManagerName", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("retentionManagerName", value)
+            }
+        }
+
+    var retentionManagerNumber: String
+        get() {
+            return pref.getString("retentionManagerNumber", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("retentionManagerNumber", value)
+            }
+        }
 }

@@ -912,6 +912,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
             collectionChargeApi = model.collectionCharge
             merchantDistrict = model.districtId
+            SessionManager.retentionManagerName = model?.adminUsers?.fullName ?: ""
+            SessionManager.retentionManagerNumber = model?.adminUsers?.mobile ?: ""
             if (merchantDistrict == 14) {
                 loadServiceType()
             } else {

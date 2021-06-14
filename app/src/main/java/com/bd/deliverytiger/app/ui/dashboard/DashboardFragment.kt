@@ -489,10 +489,15 @@ class DashboardFragment : Fragment() {
                 .into(view)
         }
 
-        binding?.retentionManagerName?.text = "Md Jubayer Alam"
-        binding?.retentionManagerNumber?.text = "099-0438747"
+        binding?.retentionManagerName?.text = SessionManager.retentionManagerName
+        val number = SessionManager.retentionManagerNumber
+        binding?.retentionManagerNumber?.text = number
         binding?.callBtn?.setOnClickListener {
-            callHelplineNumber("121")
+            if (number.isNotEmpty()) {
+                callHelplineNumber(number)
+            } else {
+                context?.toast("কোনো মোবাইল নম্বর অ্যাড করা হয়নি")
+            }
         }
     }
 
