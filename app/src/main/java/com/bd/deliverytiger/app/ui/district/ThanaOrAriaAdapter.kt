@@ -11,7 +11,7 @@ import com.bd.deliverytiger.app.api.model.district.ThanaPayLoad
 
 class ThanaOrAriaAdapter(private var context: Context,private var thanaOrAriaList: ArrayList<ThanaPayLoad>): RecyclerView.Adapter<ThanaOrAriaAdapter.mViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): mViewHolder {
-       return mViewHolder(LayoutInflater.from(context).inflate(R.layout.district_select_layout,parent,false))
+       return mViewHolder(LayoutInflater.from(context).inflate(R.layout.item_view_location,parent,false))
     }
 
     override fun getItemCount(): Int {

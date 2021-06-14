@@ -110,8 +110,6 @@ class AppRepository(
 
     suspend fun loadAllDistrictsById(id: Int) = apiInterfaceCore.loadAllDistrictsById(id)
 
-    suspend fun loadAllDistricts() = apiInterfaceCore.loadAllDistricts()
-
     suspend fun fetchServiceDistricts(requestBody: ServiceDistrictsRequest) = apiInterfaceCore.fetchServiceDistricts(requestBody)
 
     suspend fun getDTService() = apiInterfaceCore.getDTService()

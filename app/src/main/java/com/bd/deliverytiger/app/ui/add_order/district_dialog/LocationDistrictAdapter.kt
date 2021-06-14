@@ -4,60 +4,46 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.location.LocationData
+import com.bd.deliverytiger.app.databinding.ItemViewLocationBinding
 
 
-class LocationDistrictAdapter(private var dataList: MutableList<LocationData>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class LocationDistrictAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private val dataList: MutableList<LocationData> = mutableListOf()
     var onItemClicked: ((position: Int, value: LocationData) -> Unit)? = null
 
-    /**
-     * onCreateViewHolder
-     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.district_select_layout,
-                parent,
-                false
-            )
-        )
+        return ViewHolder(ItemViewLocationBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    /**
-     * getItemCount
-     */
-    override fun getItemCount(): Int {
-        return dataList.size
-    }
+    override fun getItemCount(): Int = dataList.size
 
-    /**
-     * onBindViewHolder
-     */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
         if (holder is ViewHolder) {
             val model = dataList[position]
-            holder.displayNameBangla.text = model.displayNameBangla
-            holder.displayNameEnglish.text = model.displayNameEng
+            val binding = holder.binding
+
+            binding.locationName.text = model.displayNameBangla
+            binding.locationNameEng.text = model.displayNameEng
+
+            val backgroundColor = if (model.isDeactivate)
+                ContextCompat.getColor(binding.parent.context, R.color.black_15)
+            else ContextCompat.getColor(binding.parent.context, R.color.white)
+            binding.parent.setBackgroundColor(backgroundColor)
         }
     }
 
-    /**
-     * ViewHolder
-     */
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
-        internal val displayNameBangla: TextView = view.findViewById(R.id.locationName)
-        internal val displayNameEnglish: TextView = view.findViewById(R.id.locationNameEng)
+    inner class ViewHolder(val binding: ItemViewLocationBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            view.setOnClickListener {
-                val index = adapterPosition
-                if (index >= 0 && index < dataList.size) {
-                    onItemClicked?.invoke(index, dataList[index])
+            binding.root.setOnClickListener {
+                val position = absoluteAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onItemClicked?.invoke(position, dataList[position])
                 }
             }
         }

@@ -102,7 +102,7 @@
 
         tools:itemCount="5"
         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/district_select_layout"
+        tools:listitem="@layout/item_view_location"
         tools:orientation="vertical" />
 
     <View

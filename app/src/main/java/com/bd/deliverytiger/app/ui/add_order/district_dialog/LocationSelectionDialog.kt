@@ -80,7 +80,8 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
         //extraSpace = view.findViewById(R.id.extraSpace)
 
 
-        val locationAdapter = LocationDistrictAdapter(dataList)
+        val locationAdapter = LocationDistrictAdapter()
+        locationAdapter.setDataList(dataList)
         with(placeListRV) {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
@@ -135,7 +136,7 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
             progressBar?.visibility = View.GONE
             return
         }
-        val lowerCaseSearchKey = searchKey.toLowerCase(Locale.US)
+        val lowerCaseSearchKey = searchKey.lowercase(Locale.US)
         val filteredList = dataListCopy.filter { model ->
             (model.searchKey.contains(lowerCaseSearchKey))
         }

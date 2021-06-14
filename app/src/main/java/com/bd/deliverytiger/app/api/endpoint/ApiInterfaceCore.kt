@@ -78,9 +78,6 @@ interface ApiInterfaceCore {
     @GET("api/Fetch/LoadAllDistrictsById/{id}")
     suspend fun loadAllDistrictsById(@Path("id") id: Int): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>
 
-    @GET("api/Fetch/LoadAllDistricts")
-    suspend fun loadAllDistricts(): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>
-
     @POST("api/Fetch/GetServiceDistricts")
     suspend fun fetchServiceDistricts(@Body requestBody: ServiceDistrictsRequest): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>
 

@@ -13,7 +13,7 @@ class ListAdapter(var mContext: Context, var list: ArrayList<CustomModel>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DistViewHolder {
         return DistViewHolder(
             LayoutInflater.from(mContext).inflate(
-                R.layout.district_select_layout,
+                R.layout.item_view_location,
                 parent,
                 false
             )

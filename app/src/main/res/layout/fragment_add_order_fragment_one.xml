@@ -201,6 +201,18 @@
                         app:tint="@color/red"
                         />
 
+                    <ProgressBar
+                        android:id="@+id/progressBar2"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="@id/etThana"
+                        app:layout_constraintTop_toTopOf="@id/etThana"
+                        app:layout_constraintBottom_toBottomOf="@id/etThana"
+                        android:layout_marginEnd="16dp"
+                        />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -251,6 +263,18 @@
                         app:layout_constraintBottom_toBottomOf="@id/etAriaPostOffice"
                         app:srcCompat="@drawable/ic_star"
                         app:tint="@color/red"
+                        />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar3"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="@id/etAriaPostOffice"
+                        app:layout_constraintTop_toTopOf="@id/etAriaPostOffice"
+                        app:layout_constraintBottom_toBottomOf="@id/etAriaPostOffice"
+                        android:layout_marginEnd="16dp"
                         />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
