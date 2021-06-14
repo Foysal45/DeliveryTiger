@@ -4,6 +4,7 @@ import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.accounts.AccountDetailsResponse
 import com.bd.deliverytiger.app.api.model.accounts.AccountsData
 import com.bd.deliverytiger.app.api.model.accounts.AdvanceBalanceData
+import com.bd.deliverytiger.app.api.model.balance_load.BalanceLoadHistoryData
 import com.bd.deliverytiger.app.api.model.bill_pay_history.BillPayHistoryResponse
 import com.bd.deliverytiger.app.api.model.complain.ComplainData
 import com.bd.deliverytiger.app.api.model.complain.ComplainHistoryData
@@ -82,5 +83,8 @@ interface ApiInterfaceADM {
 
     @GET("api/Complain/GetAllCommentsForOnlyDTComplain/{bookingCode}")
     suspend fun getComplainHistory(@Path("bookingCode") bookingCode: Int): NetworkResponse<List<ComplainHistoryData>, ErrorResponse>
+
+    @GET("api/account/reports/MerchantBalanceLoadHistory/{merchantID}")
+    suspend fun merchantBalanceLoadHistory(@Path("merchantID") merchantID: Int): NetworkResponse<List<BalanceLoadHistoryData>, ErrorResponse>
 
 }

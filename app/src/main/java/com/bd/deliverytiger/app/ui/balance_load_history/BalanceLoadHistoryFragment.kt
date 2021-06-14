@@ -68,12 +68,16 @@ class BalanceLoadHistoryFragment : Fragment() {
                 }
             }
         })
-        dataAdapter.initLoad(listOf(BalanceLimitResponse(500,0)))
     }
 
     private fun initData(){
-        viewModel.getComplainHistory(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer {
-            //dataAdapter.initLoad()
+        viewModel.merchantBalanceLoadHistory(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list->
+           if (!list.isNullOrEmpty()){
+               binding?.emptyView?.visibility = View.GONE
+               dataAdapter.initLoad(list)
+           }else{
+               binding?.emptyView?.visibility = View.VISIBLE
+           }
         })
     }
 

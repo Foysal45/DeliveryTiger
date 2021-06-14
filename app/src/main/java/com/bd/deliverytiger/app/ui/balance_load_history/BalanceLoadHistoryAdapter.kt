@@ -4,13 +4,13 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bd.deliverytiger.app.api.model.balance_load.BalanceLimitResponse
+import com.bd.deliverytiger.app.api.model.balance_load.BalanceLoadHistoryData
 import com.bd.deliverytiger.app.databinding.ItemViewBalanceHistoryListBinding
 
 class BalanceLoadHistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val dataList: MutableList<BalanceLimitResponse> = mutableListOf()
-    var onItemClick: ((dataList: BalanceLimitResponse, position: Int) -> Unit)? = null
+    private val dataList: MutableList<BalanceLoadHistoryData> = mutableListOf()
+    var onItemClick: ((dataList: BalanceLoadHistoryData, position: Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding: ItemViewBalanceHistoryListBinding = ItemViewBalanceHistoryListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -25,10 +25,10 @@ class BalanceLoadHistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             val model = dataList[position]
             val binding = holder.binding
 
-            binding.date.text ="6 May 2021"
-            binding.bkashTransactionNo.text = "ID9856325"
+            binding.date.text = model.advanceDate
+            binding.bkashTransactionNo.text = model.transactionId
             binding.paymentMedium.text = "Bkash"
-            binding.totalAmount.text = model.minAmount.toString()
+            binding.totalAmount.text = "${model.advanceAmount}"
 
         }
     }
@@ -43,13 +43,13 @@ class BalanceLoadHistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
         }
     }
 
-    fun initLoad(list: List<BalanceLimitResponse>) {
+    fun initLoad(list: List<BalanceLoadHistoryData>) {
         dataList.clear()
         dataList.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun pagingLoad(list: List<BalanceLimitResponse>) {
+    fun pagingLoad(list: List<BalanceLoadHistoryData>) {
         val currentIndex = dataList.size
         val newDataCount = list.size
         dataList.addAll(list)

@@ -32,6 +32,7 @@ import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentUpdateViewModel
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementViewModel
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailViewModel
 import com.bd.deliverytiger.app.ui.profile.ProfileViewModel
+import com.bd.deliverytiger.app.ui.quick_order.QuickOrderRequestViewModel
 import com.bd.deliverytiger.app.ui.referral.ReferralViewModel
 import com.bd.deliverytiger.app.ui.return_statement.ReturnStatementViewModel
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeViewModel
@@ -98,5 +99,6 @@ val appModule = module {
     viewModel { BalanceLoadHistoryViewModel(get()) }
     viewModel { ComplainHistoryViewModel(get()) }
     viewModel { OrderInfoEditViewModel(get()) }
+    viewModel { QuickOrderRequestViewModel(get()) }
 
 }

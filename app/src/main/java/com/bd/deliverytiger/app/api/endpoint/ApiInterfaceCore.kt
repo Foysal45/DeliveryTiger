@@ -23,7 +23,6 @@ import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnC
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsResponse
-import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
 import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
 import com.bd.deliverytiger.app.api.model.helpline_number.HelpLineNumberModel
@@ -41,6 +40,9 @@ import com.bd.deliverytiger.app.api.model.order_track.OrderTrackResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
+import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequest
+import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequestResponse
+import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
 import com.bd.deliverytiger.app.api.model.referral.OfferData
 import com.bd.deliverytiger.app.api.model.referral.RefereeInfo
 import com.bd.deliverytiger.app.api.model.referral.ReferrerInfo
@@ -217,4 +219,13 @@ interface ApiInterfaceCore {
         @Path("orderId") orderId: String,
         @Body requestBody: UpdateOrderReqBody
     ): NetworkResponse<GenericResponse<UpdateOrderResponse>, ErrorResponse>
+
+    //Quick Order Request
+    @GET("api/Fetch/GetCollectionTimeSlot")
+    suspend fun getCollectionTimeSlot(): NetworkResponse<GenericResponse<List<QuickOrderTimeSlotData>>, ErrorResponse>
+
+    @POST("/api/Entry/AddOrderRequest")
+    suspend fun quickOrderRequest(@Body requestBody: QuickOrderRequest): NetworkResponse<GenericResponse<QuickOrderRequestResponse>, ErrorResponse>
+
+
 }

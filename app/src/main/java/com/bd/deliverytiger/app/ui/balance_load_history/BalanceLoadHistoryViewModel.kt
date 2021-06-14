@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bd.deliverytiger.app.api.model.complain.ComplainHistoryData
+import com.bd.deliverytiger.app.api.model.balance_load.BalanceLoadHistoryData
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -17,13 +17,13 @@ class BalanceLoadHistoryViewModel(private val repository: AppRepository): ViewMo
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
 
-    fun getComplainHistory(bookingCode: Int): LiveData<List<ComplainHistoryData>> {
+    fun merchantBalanceLoadHistory(merchantID: Int): LiveData<List<BalanceLoadHistoryData>> {
 
         viewState.value = ViewState.ProgressState(true)
-        val responseBody = MutableLiveData<List<ComplainHistoryData>>()
+        val responseBody = MutableLiveData<List<BalanceLoadHistoryData>>()
 
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getComplainHistory(bookingCode)
+            val response = repository.merchantBalanceLoadHistory(merchantID)
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {

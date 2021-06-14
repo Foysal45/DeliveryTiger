@@ -45,6 +45,7 @@ import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsFragment
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
+import com.bd.deliverytiger.app.ui.quick_order.QuickOrderRequestBottomSheet
 import com.bd.deliverytiger.app.ui.referral.ReferralFragment
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
@@ -255,12 +256,13 @@ class DashboardFragment : Fragment() {
             addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
         }
         binding?.balanceLoadLayout?.setOnClickListener {
-            //showQuickOrderDialog()
+            showQuickOrderBottomSheet()
+            /*showQuickOrderDialog()
             if (netAmount >= 0) {
                 addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
             } else {
                 serviceChargeDialog()
-            }
+            }*/
         }
         binding?.orderBtn?.setOnClickListener {
             binding?.progressBar?.visibility = View.VISIBLE
@@ -966,6 +968,12 @@ class DashboardFragment : Fragment() {
         val fragment = WebViewFragment.newInstance(url, "ডেলিভারি টাইগার")
         val tag = WebViewFragment.tag
         addFragment(fragment, tag)
+    }
+
+    private fun showQuickOrderBottomSheet() {
+        val tag: String = QuickOrderRequestBottomSheet.tag
+        val dialog: QuickOrderRequestBottomSheet = QuickOrderRequestBottomSheet.newInstance()
+        dialog.show(childFragmentManager, tag)
     }
 
     private fun showQuickOrderDialog() {

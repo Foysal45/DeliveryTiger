@@ -104,7 +104,6 @@
                 android:text="অ্যামাউন্ট"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
-                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/key2" />
 
@@ -114,7 +113,6 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/text_14"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/key2"
                 tools:text="৯৯৯ ৳" />
