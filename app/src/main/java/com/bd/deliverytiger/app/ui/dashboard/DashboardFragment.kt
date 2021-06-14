@@ -53,6 +53,7 @@ import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -127,6 +128,7 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initDashboard()
+        initRetentionManagerData()
         fetchBannerData()
         fetchCODData()
         fetchCollection()
@@ -473,6 +475,24 @@ class DashboardFragment : Fragment() {
             setHasFixedSize(false)
             layoutManager = gridLayoutManager
             adapter = dashboardAdapter
+        }
+    }
+
+    private fun initRetentionManagerData(){
+
+        binding?.retentionManagerImage?.let { view ->
+            Glide.with(view)
+                .load("https://static.ajkerdeal.com/images/admin_users/${SessionManager.profileImgUri}.jpg")
+                .apply(RequestOptions().placeholder(R.drawable.ic_avater_demo).error(R.drawable.ic_avater_demo).circleCrop())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(view)
+        }
+
+        binding?.retentionManagerName?.text = "Md Jubayer Alam"
+        binding?.retentionManagerNumber?.text = "099-0438747"
+        binding?.callBtn?.setOnClickListener {
+            callHelplineNumber("121")
         }
     }
 

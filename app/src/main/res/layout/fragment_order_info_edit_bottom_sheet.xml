@@ -48,7 +48,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/separator"
-            app:layout_constraintBottom_toTopOf="@+id/btnAlertSubmit">
+            app:layout_constraintBottom_toTopOf="@+id/btUpdate">
 
             <EditText
                 android:id="@+id/etCustomerName"
@@ -136,8 +136,6 @@
                 android:textSize="@dimen/text_14"
                 android:visibility="gone"
                 tools:visibility="visible"
-                app:drawableEndCompat="@drawable/ic_star"
-                app:drawableTint="@color/red"
                 android:layout_gravity="end"
                 />
 
@@ -222,23 +220,12 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:contentDescription="@string/cd"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/spinnerCollectionLocation"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_arrow_drop_down" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:contentDescription="@string/cd"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/spinnerCollectionLocation"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_star"
-                    app:tint="@color/red" />
+                    app:srcCompat="@drawable/ic_arrow_drop_down" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -286,7 +273,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btnAlertSubmit"
+            android:id="@+id/btUpdate"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginStart="@dimen/left_right_margin"
