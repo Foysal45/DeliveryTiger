@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.balance_load.BalanceLimitResponse
 import com.bd.deliverytiger.app.databinding.FragmentBalanceLoadHistoryBinding
+import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.ViewState
 import com.bd.deliverytiger.app.utils.hideKeyboard
@@ -27,10 +29,15 @@ class BalanceLoadHistoryFragment : Fragment() {
         val tag: String = BalanceLoadHistoryFragment::class.java.name
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return FragmentBalanceLoadHistoryBinding.inflate(inflater, container, false).also {
             binding = it
         }.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle(getString(R.string.balance_load_history_statement))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

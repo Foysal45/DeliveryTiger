@@ -15,13 +15,6 @@
             android:icon="@drawable/ic_service_charge"
             android:title="@string/service_bill_pay" />
 
-
-        <item
-            android:id="@+id/nav_balance_load_history"
-            android:icon="@drawable/ic_bill_pay_history"
-            android:title="@string/balance_load_history_statement" />
-
-
         <item
             android:id="@+id/nav_payment_history"
             android:icon="@drawable/ic_history_cod"
@@ -36,6 +29,11 @@
             android:id="@+id/nav_return_statement"
             android:icon="@drawable/ic_bill_pay_history"
             android:title="@string/return_statement" />
+
+        <item
+            android:id="@+id/nav_balance_load_history"
+            android:icon="@drawable/ic_bill_pay_history"
+            android:title="@string/balance_load_history_statement" />
 
         <item
             android:id="@+id/nav_payment_request"

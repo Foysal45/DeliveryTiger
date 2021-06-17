@@ -6,6 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.api.model.balance_load.BalanceLoadHistoryData
 import com.bd.deliverytiger.app.databinding.ItemViewBalanceHistoryListBinding
+import com.bd.deliverytiger.app.utils.DigitConverter
+import java.text.SimpleDateFormat
+import java.util.*
 
 class BalanceLoadHistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -25,7 +28,7 @@ class BalanceLoadHistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             val model = dataList[position]
             val binding = holder.binding
 
-            binding.date.text = model.advanceDate
+            binding.date.text = DigitConverter.formatDate(model.advanceDate, "MM/dd/yyyy", "yyyy-MM-dd")
             binding.bkashTransactionNo.text = model.transactionId
             binding.paymentMedium.text = "Bkash"
             binding.totalAmount.text = "${model.advanceAmount}"

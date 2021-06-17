@@ -356,7 +356,8 @@ class HomeActivity : AppCompatActivity(),
                 currentFragment is OrderTrackingFragment ||
                 currentFragment is ReturnStatementFragment || currentFragment is ReturnStatementDetailsFragment ||
                 currentFragment is InstantPaymentUpdateFragment ||
-                currentFragment is DeliveryDetailsFragment
+                currentFragment is DeliveryDetailsFragment ||
+                currentFragment is BalanceLoadHistoryFragment
             ) {
                 addProductBtnVisibility(false)
             } else {
