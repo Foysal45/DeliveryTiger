@@ -30,9 +30,8 @@ class BalanceLoadHistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
 
             binding.date.text = DigitConverter.formatDate(model.advanceDate, "MM/dd/yyyy", "yyyy-MM-dd")
             binding.bkashTransactionNo.text = model.transactionId
-            binding.paymentMedium.text = "Bkash"
-            binding.totalAmount.text = "${model.advanceAmount}"
-
+            binding.paymentMedium.text = "বিকাশ"
+            binding.totalAmount.text = "${DigitConverter.toBanglaDigit(model.advanceAmount)} ৳"
         }
     }
 
