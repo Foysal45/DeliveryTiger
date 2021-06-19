@@ -214,6 +214,9 @@ class HomeActivity : AppCompatActivity(),
         }*/
 
         FirebaseMessaging.getInstance().subscribeToTopic("DeliveryTigerTopic")
+        if (BuildConfig.DEBUG) {
+            FirebaseMessaging.getInstance().subscribeToTopic("DeliveryTigerTopicTest")
+        }
 
         //addHomeFragment()
         addDashBoardFragment()
