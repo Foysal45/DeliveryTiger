@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.core.text.HtmlCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
@@ -21,12 +22,10 @@ import com.bd.deliverytiger.app.api.endpoint.OtherApiInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.login.*
 import com.bd.deliverytiger.app.api.model.terms.TermsModel
-import com.bd.deliverytiger.app.utils.Validator
+import com.bd.deliverytiger.app.databinding.FragmentSignUpBinding
+import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
 import com.bd.deliverytiger.app.utils.VariousTask.showShortToast
-import com.bd.deliverytiger.app.utils.isAlphaNumericPassword
-import com.bd.deliverytiger.app.utils.isExistSpecialCharacter
-import com.bd.deliverytiger.app.utils.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -53,8 +52,10 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     private lateinit var otherApiInterface: OtherApiInterface
     private var progressDialog: ProgressDialog? = null
 
-    private var isInstantPayment: Boolean = false
     private var preferredPaymentCycle: String = ""
+    private var preferredPaymentMedium: String = ""
+
+    private var binding: FragmentSignUpBinding? = null
 
     companion object {
         fun newInstance(): SignUpFragment = SignUpFragment()
@@ -62,7 +63,9 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_sign_up, container, false)
+        return FragmentSignUpBinding.inflate(inflater, container, false).also {
+            binding = it
+        }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -97,19 +100,40 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     private fun initClickListener() {
         btnSignUp.setOnClickListener(this)
         tvLogin.setOnClickListener(this)
-        paymentGroup.setOnCheckedChangeListener { group, checkedId ->
+        paymentGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.paymentWeekly -> {
-                    isInstantPayment = false
                     preferredPaymentCycle = "week"
+                    binding?.paymentMedium?.isVisible = true
                     bkashNumberET.visibility = View.GONE
                     instantPaymentLayout.visibility = View.GONE
                 }
                 R.id.paymentInstant -> {
-                    isInstantPayment = true
                     preferredPaymentCycle = "instant"
+                    binding?.paymentMedium?.isVisible = false
                     bkashNumberET.visibility = View.VISIBLE
                     instantPaymentLayout.visibility = View.VISIBLE
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        bkashNumberET.requestFocus()
+                    }, 200L)
+                    preferredPaymentMedium = ""
+                }
+            }
+        }
+        binding?.paymentMedium?.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.eft -> {
+                    preferredPaymentMedium = "EFT"
+                    binding?.EFTInfoLayout?.isVisible = true
+                    bkashNumberET.isVisible = false
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        binding?.accountName?.requestFocus()
+                    }, 200L)
+                }
+                R.id.bkash -> {
+                    preferredPaymentMedium = "bkash"
+                    binding?.EFTInfoLayout?.isVisible = false
+                    bkashNumberET.isVisible = true
                     Handler(Looper.getMainLooper()).postDelayed({
                         bkashNumberET.requestFocus()
                     }, 200L)
@@ -239,57 +263,108 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     }
 
     private fun validate(): Boolean {
-        hideSoftKeyBoard(requireActivity())
-        var go = true
+
+        hideKeyboard()
         val password = etSignUpPassword.text.toString().trim()
         val confirmPassword = etSignUpConfirmPassword.text.toString().trim()
 
         if (etCompanyName.text.toString().isEmpty()) {
-            showShortToast(context, getString(R.string.write_name))
-            go = false
+            context?.toast(getString(R.string.write_name))
             etCompanyName.requestFocus()
-        }else if (!isExistSpecialCharacter(etCompanyName.text.toString())){
-            showShortToast(context, getString(R.string.write_correct_name))
-            go = false
+            return false
+        }
+        if (!isExistSpecialCharacter(etCompanyName.text.toString())){
+            context?.toast(getString(R.string.write_correct_name))
             etCompanyName.requestFocus()
-        }else if (etSignUpMobileNo.text.toString().isEmpty()) {
+            return false
+        }
+        if (etSignUpMobileNo.text.toString().isEmpty()) {
             showShortToast(context, getString(R.string.write_phone_number))
-            go = false
             etSignUpMobileNo.requestFocus()
-        } else if (!Validator.isValidMobileNumber(etSignUpMobileNo.text.toString()) || etSignUpMobileNo.text.toString().length < 11) {
+            return false
+        }
+        if (!Validator.isValidMobileNumber(etSignUpMobileNo.text.toString()) || etSignUpMobileNo.text.toString().length < 11) {
             showShortToast(context, getString(R.string.write_proper_phone_number_recharge))
-            go = false
             etSignUpMobileNo.requestFocus()
-        } else if (password.isEmpty()) {
+            return false
+        }
+        if (password.isEmpty()) {
             showShortToast(context, getString(R.string.write_password))
-            go = false
-        } else if (!isAlphaNumericPassword(password)) {
+            return false
+        }
+        if (!isAlphaNumericPassword(password)) {
             showShortToast(context, getString(R.string.password_pattern))
-            go = false
-        } else if (password != confirmPassword) {
+            return false
+        }
+        if (password != confirmPassword) {
             showShortToast(context, getString(R.string.match_pass))
-            go = false
-        } else if (referCodeET.text.toString().isNotEmpty()) {
+            return false
+        }
+        if (referCodeET.text.toString().isNotEmpty()) {
             val referCode = referCodeET.text.toString().trim()
             if (!Validator.isValidMobileNumber(referCode) || referCode.length < 11) {
                 showShortToast(context, "সঠিক রেফার কোড লিখুন")
-                go = false
                 referCodeET.requestFocus()
+                return false
             }
         }
-        else if (preferredPaymentCycle.isEmpty()) {
+        if (preferredPaymentCycle.isEmpty()) {
             showShortToast(context, "পেমেন্ট টাইপ সিলেক্ট করুন")
-            go = false
+            return false
         }
-        else if (isInstantPayment) {
+        if (preferredPaymentCycle == "instant") {
             val bkashNumber = bkashNumberET.text.toString().trim()
             if (!Validator.isValidMobileNumber(bkashNumber) || bkashNumber.length < 11){
                 showShortToast(context, "সঠিক বিকাশ মোবাইল নম্বর লিখুন")
-                go = false
                 bkashNumberET.requestFocus()
+                return false
             }
         }
-        return go
+        if (preferredPaymentCycle == "week") {
+
+            if (preferredPaymentMedium.isEmpty()) {
+                showShortToast(context, "পেমেন্ট টাইপ সিলেক্ট করুন")
+                return false
+            }
+
+            val accountName = binding?.accountName?.text?.toString()?.trim() ?: ""
+            val accountNumber = binding?.accountNumber?.text?.toString()?.trim() ?: ""
+            val bankName = binding?.bankName?.text?.toString()?.trim() ?: ""
+            val branchName = binding?.branchName?.text?.toString()?.trim() ?: ""
+            val routingNumber = binding?.routingNumber?.text?.toString()?.trim() ?: ""
+            val bkashNumber = bkashNumberET.text.toString().trim()
+
+            if (preferredPaymentMedium == "EFT") {
+                if (accountName.isEmpty()) {
+                    context?.toast("একাউন্ট নাম লিখুন")
+                    return false
+                }
+                if (accountNumber.isEmpty()) {
+                    context?.toast("একাউন্ট নম্বর লিখুন")
+                    return false
+                }
+                if (bankName.isEmpty()) {
+                    context?.toast("ব্যাক নাম লিখুন")
+                    return false
+                }
+                if (branchName.isEmpty()) {
+                    context?.toast("ব্রাঞ্চ নাম লিখুন")
+                    return false
+                }
+                if (routingNumber.isEmpty()) {
+                    context?.toast("রাউটিং নম্বর লিখুন")
+                    return false
+                }
+            } else if (preferredPaymentMedium == "bkash") {
+                if (!Validator.isValidMobileNumber(bkashNumber) || bkashNumber.length < 11){
+                    showShortToast(context, "সঠিক বিকাশ মোবাইল নম্বর লিখুন")
+                    bkashNumberET.requestFocus()
+                    return false
+                }
+            }
+        }
+
+        return true
     }
 
     private fun goToSignUpOTP() {
@@ -299,6 +374,11 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         val password = etSignUpPassword.text.toString().trim()
         val referCode = referCodeET.text.toString()
         val bkashNumber = bkashNumberET.text.toString().trim()
+        val accountName = binding?.accountName?.text?.toString()?.trim() ?: ""
+        val accountNumber = binding?.accountNumber?.text?.toString()?.trim() ?: ""
+        val bankName = binding?.bankName?.text?.toString()?.trim() ?: ""
+        val branchName = binding?.branchName?.text?.toString()?.trim() ?: ""
+        val routingNumber = binding?.routingNumber?.text?.toString()?.trim() ?: ""
         val knowingSource: String = if (knownSourceSpinner.selectedItemPosition == 0) "" else knownSourceSpinner.selectedItem.toString()
 
         val fragment = SignUpOTPFragment.newInstance(companyName, mobile, password, referCode, bkashNumber, preferredPaymentCycle, knowingSource)

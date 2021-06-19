@@ -1169,10 +1169,16 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     if (!preSelect) {
                         goToLocationSelectionDialog(filteredAreaLists, locationType)
                     } else {
-                        val sadarArea = list.first()
-                        areaId = sadarArea.districtId
-                        etAriaPostOffice.setText(sadarArea.districtBng)
-                        getDeliveryCharge(districtId, thanaId, areaId, serviceType)
+                        if (list.isNotEmpty()) {
+                            val sadarArea = list.first()
+                            areaId = sadarArea.districtId
+                            etAriaPostOffice.setText(sadarArea.districtBng)
+                            getDeliveryCharge(districtId, thanaId, areaId, serviceType)
+                        } else {
+                            areaId = 0
+                            etAriaPostOffice.setText("")
+                            etAriaPostOfficeLayout.visibility = View.GONE
+                        }
                     }
                 }
             }
