@@ -37,6 +37,7 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
     private val sdf1 = SimpleDateFormat("dd MMM, yyyy", Locale.US)
 
     private var selectedDate = ""
+    private var totalParcel = 0
     private var selectedTimeSLotID= 0
     private var selectedPickupLocationDistrictId = 0
     private var selectedPickupLocationThanaId = 0
@@ -79,13 +80,25 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
                 adapter = dataAdapter
             }
         }
-
+        totalParcel = binding?.numberOfParcel?.text.toString().toInt()
     }
 
     private fun initClickLister() {
 
         binding?.submitBtn?.setOnClickListener {
             updateOrder()
+        }
+
+        binding?.parcelCountIncrease?.setOnClickListener {
+            totalParcel+=1
+            binding?.numberOfParcel?.setText(DigitConverter.toBanglaDigit(totalParcel))
+        }
+
+        binding?.parcelCountDecrease?.setOnClickListener {
+            if (totalParcel > 1){
+                totalParcel-=1
+            }
+            binding?.numberOfParcel?.setText(DigitConverter.toBanglaDigit(totalParcel))
         }
 
         binding?.collectionToday?.setOnClickListener {
@@ -98,8 +111,7 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
             binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
         }
 
-        dataAdapter.onItemClick = { model, position, view ->
-            view.setBackgroundResource(R.drawable.bg_time_slot_selected)
+        dataAdapter.onItemClick = { model, position ->
         }
 
         binding?.orderRequestDatePicker?.setOnClickListener {
@@ -141,9 +153,9 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
 
     private fun validate(): Boolean {
 
-        val numberOfParcel = binding?.numberOfParcel?.text.toString()
+        totalParcel = binding?.numberOfParcel?.text.toString().toInt()
 
-        if (numberOfParcel.isNullOrEmpty()){
+        if (totalParcel == 0){
             context?.toast("Please Insert Number of parcel")
             return false
         }

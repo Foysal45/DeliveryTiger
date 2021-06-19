@@ -19,7 +19,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="8dp"
             android:padding="8dp"
-            android:text="কুইক অর্ডার"
+            android:text="কুইক বুকিং"
             android:textColor="@color/red"
             android:textSize="@dimen/text_16"
             android:textStyle="bold"
@@ -28,28 +28,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/separator"/>
 
-        <View
-            android:id="@+id/separator"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/separator"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_tv"/>
-
         <LinearLayout
             android:id="@+id/pickupLocationLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
-            android:padding="2dp"
+            android:padding="8dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/separator">
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -68,6 +55,18 @@
 
         </LinearLayout>
 
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/separator"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_tv"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/parcelCountLayout"
             android:layout_width="match_parent"
@@ -80,7 +79,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/productCollectionDateLayout"
-            app:layout_constraintTop_toBottomOf="@+id/pickupLocationLayout">
+            app:layout_constraintTop_toBottomOf="@+id/separator">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,15 +94,13 @@
                 >
 
                 <ImageView
+                    android:id="@+id/parcelCountDecrease"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
                     app:tint="@color/positive"
                     android:src="@drawable/ic_remove"
-                    android:contentDescription="@string/cd"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    android:contentDescription="@string/cd"/>
 
                 <TextView
                     android:id="@+id/numberOfParcel"
@@ -111,7 +108,10 @@
                     android:layout_height="40dp"
                     android:textStyle="bold"
                     android:gravity="center"
+                    android:enabled="true"
                     android:text="১"
+                    android:maxLength="3"
+                    android:inputType="number"
                     android:includeFontPadding="false"
                     android:textColor="@color/black_90"
                     android:textSize="16sp"
@@ -120,6 +120,7 @@
                     />
 
                 <ImageView
+                    android:id="@+id/parcelCountIncrease"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
@@ -172,7 +173,7 @@
                 <TextView
                     android:id="@+id/collectionToday"
                     android:layout_width="wrap_content"
-                    android:layout_height="34dp"
+                    android:layout_height="40dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginStart="16dp"
                     android:layout_weight="2"
@@ -185,7 +186,7 @@
                 <TextView
                     android:id="@+id/collectionTomorrow"
                     android:layout_width="wrap_content"
-                    android:layout_height="34dp"
+                    android:layout_height="40dp"
                     android:layout_marginStart="8dp"
                     android:layout_weight="2"
                     android:gravity="center"
@@ -199,7 +200,7 @@
                 <ImageView
                     android:id="@+id/orderRequestDatePicker"
                     android:layout_width="wrap_content"
-                    android:layout_height="34dp"
+                    android:layout_height="40dp"
 
                     android:layout_marginStart="6dp"
                     android:layout_weight="1"
