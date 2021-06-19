@@ -5,9 +5,10 @@ import android.os.Parcel
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequest
@@ -21,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
@@ -28,6 +30,7 @@ import kotlin.concurrent.thread
 class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
 
     private var binding: FragmentQuickOrderRequestBottomSheetBinding? = null
+    private var dataAdapter: QuickOrderTimeSlotAdapter = QuickOrderTimeSlotAdapter()
     private val viewModel: QuickOrderRequestViewModel by inject()
 
     private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
@@ -63,20 +66,40 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initData()
+        initView()
         fetchPickupLocation()
         initClickLister()
     }
 
-    private fun initData(){
-
+    private fun initView(){
+        binding?.recyclerViewTime?.let { view ->
+            with(view) {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                adapter = dataAdapter
+            }
+        }
 
     }
 
     private fun initClickLister() {
 
-        binding?.btnSubmit?.setOnClickListener {
+        binding?.submitBtn?.setOnClickListener {
             updateOrder()
+        }
+
+        binding?.collectionToday?.setOnClickListener {
+            binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
+            binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+        }
+
+        binding?.collectionTomorrow?.setOnClickListener {
+            binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
+            binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+        }
+
+        dataAdapter.onItemClick = { model, position, view ->
+            view.setBackgroundResource(R.drawable.bg_time_slot_selected)
         }
 
         binding?.orderRequestDatePicker?.setOnClickListener {
@@ -107,58 +130,14 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
 
     private fun fetchPickupLocation(){
         viewModel.getCollectionTimeSlot().observe(viewLifecycleOwner, Observer { list ->
-            spinnerTimeSlotDataBinding(list)
+            dataAdapter.initLoad(list)
+            Timber.d("debugData fetch-> $list")
         })
         viewModel.getPickupLocations(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list ->
-            spinnerLocationDataBinding(list)
+            binding?.picUpUpLocation?.text = list.first().thanaName
         })
     }
 
-    private fun spinnerLocationDataBinding(list: List<PickupLocation>){
-        val pickupList: MutableList<String> = mutableListOf()
-        pickupList.add("পিক আপ লোকেশন")
-
-        list.forEach {
-            pickupList.add(it.thanaName ?: "")
-        }
-        val pickupAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, pickupList)
-        binding?.spinnerPickupLocation?.adapter = pickupAdapter
-        binding?.spinnerPickupLocation?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position != 0) {
-                    val model = list[position-1]
-                    selectedPickupLocationDistrictId = model.districtId
-                    selectedPickupLocationThanaId = model.thanaId
-                    onCollectionTypeSelected?.invoke(true, model)
-                }
-            }
-        }
-    }
-
-    private fun spinnerTimeSlotDataBinding(list: List<QuickOrderTimeSlotData>){
-        val timeSlotList: MutableList<String> = mutableListOf()
-
-        timeSlotList.add("টাইম রেঞ্জ সিলেক্ট করুন")
-
-        list.forEach {
-            timeSlotList.add("${DigitConverter.toBanglaDigit(it.startTime)}-${DigitConverter.toBanglaDigit(it.endTime)}")
-        }
-        val pickupAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, timeSlotList)
-        binding?.spinnerTimeSlot?.adapter = pickupAdapter
-        binding?.spinnerTimeSlot?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position != 0) {
-                    val model = list[position-1]
-                    selectedTimeSLotID = model.collectionTimeSlotId
-                    onCollectionTimeSlotSelected?.invoke(true, model)
-                }
-            }
-        }
-    }
 
     private fun validate(): Boolean {
 
@@ -226,30 +205,27 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
         picker.show(childFragmentManager, "Picker")
         picker.addOnPositiveButtonClickListener {
             selectedDate = sdf.format(it)
-            setDatePickerTitle()
         }
     }
 
-    private fun setDatePickerTitle(){
-        binding?.orderRequestDatePicker?.text = selectedDate
-    }
 
     override fun onStart() {
         super.onStart()
-        val dialog = dialog as BottomSheetDialog?
+        val dialog: BottomSheetDialog? = dialog as BottomSheetDialog?
         dialog?.setCanceledOnTouchOutside(false)
         val bottomSheet: FrameLayout? = dialog?.findViewById(com.google.android.material.R.id.design_bottom_sheet)
-        val metrics = resources.displayMetrics
         if (bottomSheet != null) {
-            BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_COLLAPSED
+            BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_EXPANDED
             thread {
                 activity?.runOnUiThread {
-                    BottomSheetBehavior.from(bottomSheet).peekHeight = metrics.heightPixels
+                    val dynamicHeight = binding?.parent?.height ?: 500
+                    BottomSheetBehavior.from(bottomSheet).peekHeight = dynamicHeight
                 }
             }
-            BottomSheetBehavior.from(bottomSheet).skipCollapsed = true
-            BottomSheetBehavior.from(bottomSheet).isHideable = false
-
+            with(BottomSheetBehavior.from(bottomSheet)) {
+                skipCollapsed = true
+                isHideable = false
+            }
         }
     }
 

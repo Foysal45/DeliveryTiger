@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/parent"
     tools:context=".ui.quick_order.QuickOrderRequestBottomSheet">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +20,7 @@
             android:layout_marginTop="8dp"
             android:padding="8dp"
             android:text="কুইক অর্ডার"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/red"
             android:textSize="@dimen/text_16"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,6 +32,8 @@
             android:id="@+id/separator"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginTop="8dp"
             android:background="@color/separator"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,131 +41,253 @@
             app:layout_constraintTop_toBottomOf="@+id/title_tv"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/pickupLocationLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
-            android:paddingBottom="24dp"
-            android:orientation="vertical"
+            android:padding="2dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/separator">
 
-            <EditText
-                android:id="@+id/numberOfParcel"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_view_height"
-                android:layout_marginTop="@dimen/fab_margin"
-                android:background="@drawable/bg_add_order_edit_text"
-                android:hint="কয়টি পার্সেল"
-                android:importantForAutofill="no"
-                android:inputType="number"
-                android:maxLength="5"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/text_14" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:tint="@color/positive"
+                android:src="@drawable/ic_edit_square"
+                android:contentDescription="@string/cd" />
 
             <TextView
-                android:id="@+id/orderRequestDatePicker"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_view_height"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/bg_spinner"
-                android:hint="ডেট সিলেক্ট করুন"
-                android:gravity="center_vertical"
-                android:includeFontPadding="false"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp"
-                android:textColor="@color/black_90"
-                android:textColorHint="@color/gray_500"
-                android:textSize="@dimen/text_14"
-                app:drawableEndCompat="@drawable/ic_date"
-                app:drawableTint="@color/gray_500"/>
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+                android:id="@+id/picUpUpLocation"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/fab_margin">
-
-                <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/spinnerTimeSlot"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/login_view_height"
-                    android:background="@drawable/bg_add_order_edit_text"
-                    android:overlapAnchor="false"
-                    android:spinnerMode="dropdown"
-                    android:theme="@style/custom_spinner_style"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    tools:entries="@array/spinner_array_collection_location" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:contentDescription="@string/cd"
-                    app:layout_constraintBottom_toBottomOf="@id/spinnerTimeSlot"
-                    app:layout_constraintEnd_toEndOf="@id/spinnerTimeSlot"
-                    app:layout_constraintTop_toTopOf="@id/spinnerTimeSlot"
-                    app:srcCompat="@drawable/ic_arrow_drop_down" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/fab_margin">
-
-                <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/spinnerPickupLocation"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/login_view_height"
-                    android:background="@drawable/bg_add_order_edit_text"
-                    android:overlapAnchor="false"
-                    android:spinnerMode="dropdown"
-                    android:theme="@style/custom_spinner_style"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    tools:entries="@array/spinner_array_collection_location" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:contentDescription="@string/cd"
-                    app:layout_constraintBottom_toBottomOf="@id/spinnerPickupLocation"
-                    app:layout_constraintEnd_toEndOf="@id/spinnerPickupLocation"
-                    app:layout_constraintTop_toTopOf="@id/spinnerPickupLocation"
-                    app:srcCompat="@drawable/ic_arrow_drop_down" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSubmit"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:backgroundTint="@color/colorPrimary"
-                android:padding="8dp"
-                android:text="সাবমিট করুন"
-                android:layout_marginTop="@dimen/fab_margin"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-
+                android:layout_marginStart="4dp"
+                android:text="ধানমন্ডি"
+                android:textSize="16sp"/>
 
         </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/parcelCountLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_corner_round_shape"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/productCollectionDateLayout"
+            app:layout_constraintTop_toBottomOf="@+id/pickupLocationLayout">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:gravity="center"
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    app:tint="@color/positive"
+                    android:src="@drawable/ic_remove"
+                    android:contentDescription="@string/cd"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    android:id="@+id/numberOfParcel"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:text="১"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/black_90"
+                    android:textSize="16sp"
+                    android:padding="3dp"
+                    android:background="@drawable/bg_time_slot_unselected"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    app:tint="@color/positive"
+                    android:src="@drawable/ic_add"
+                    android:contentDescription="@string/cd"/>
+
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="কয়টি পার্সেল"
+            android:background="@color/white"
+            android:layout_marginStart="16dp"
+            android:padding="3dp"
+            app:layout_constraintBottom_toTopOf="@+id/parcelCountLayout"
+            app:layout_constraintStart_toStartOf="@+id/parcelCountLayout"
+            app:layout_constraintTop_toTopOf="@+id/parcelCountLayout"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/productCollectionDateLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_corner_round_shape"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/productCollectionTimeLayout"
+            app:layout_constraintTop_toBottomOf="@+id/parcelCountLayout">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:weightSum="5"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+
+                <TextView
+                    android:id="@+id/collectionToday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:background="@drawable/bg_time_slot_unselected"
+                    android:text="আজ"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/collectionTomorrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:background="@drawable/bg_time_slot_unselected"
+
+                    android:text="কাল"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"/>
+
+
+                <ImageView
+                    android:id="@+id/orderRequestDatePicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    app:tint="@color/ashColor"
+                    android:src="@drawable/ic_date"
+                    android:contentDescription="@string/cd" />
+
+
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="প্রোডাক্ট কবে কালেকশন হবে"
+            android:background="@color/white"
+            android:layout_marginStart="16dp"
+            android:padding="3dp"
+            app:layout_constraintBottom_toTopOf="@+id/productCollectionDateLayout"
+            app:layout_constraintStart_toStartOf="@+id/productCollectionDateLayout"
+            app:layout_constraintTop_toTopOf="@+id/productCollectionDateLayout"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/productCollectionTimeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_corner_round_shape"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/submitBtn"
+            app:layout_constraintTop_toBottomOf="@+id/productCollectionDateLayout">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+
+                android:padding="3dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.666"
+                app:layout_constraintStart_toStartOf="parent"
+
+                app:layout_constraintTop_toTopOf="parent"
+                tools:itemCount="5"
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_view_time_slot"
+                tools:orientation="horizontal" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="প্রোডাক্ট কলেকশনের সময় "
+            android:background="@color/white"
+            android:layout_marginStart="16dp"
+            android:padding="3dp"
+            app:layout_constraintBottom_toTopOf="@+id/productCollectionTimeLayout"
+            app:layout_constraintStart_toStartOf="@+id/productCollectionTimeLayout"
+            app:layout_constraintTop_toTopOf="@+id/productCollectionTimeLayout"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/submitBtn"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="@dimen/text_14"
+            android:text="সাবমিট করুন"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/red"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintStart_toStartOf="@+id/productCollectionTimeLayout"
+            app:layout_constraintEnd_toEndOf="@+id/productCollectionTimeLayout"
+            app:layout_constraintTop_toBottomOf="@+id/productCollectionTimeLayout"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

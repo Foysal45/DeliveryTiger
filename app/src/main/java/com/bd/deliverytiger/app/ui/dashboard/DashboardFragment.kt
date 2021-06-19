@@ -976,21 +976,6 @@ class DashboardFragment : Fragment() {
         dialog.show(childFragmentManager, tag)
     }
 
-    private fun showQuickOrderDialog() {
-        val customDialog = Dialog(requireActivity(), R.style.AlertDialogTheme)
-        customDialog.setContentView(R.layout.item_view_custom_quick_order_dialogue)
-        customDialog.show()
-        val numberOfParcel = customDialog.findViewById(R.id.numberOfParcel) as TextView
-        val submitBtn = customDialog.findViewById(R.id.btnSubmit) as Button
-        submitBtn.setOnClickListener {
-            if (numberOfParcel.text.isNullOrEmpty()){
-                context?.toast("Please give Number of Parcel")
-            }else{
-                customDialog.dismiss()
-            }
-        }
-    }
-
     private fun serviceChargeDialog() {
         alert("নির্দেশনা", "আপনার সার্ভিস চার্জ (প্রি-পেইড) ৳${DigitConverter.toBanglaDigit(netAmount)} বকেয়া রয়েছে। সার্ভিস চার্জ পে করুন।", false, "সার্ভিস চার্জ পে","") {
             if (it == AlertDialog.BUTTON_POSITIVE) {

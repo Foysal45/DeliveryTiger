@@ -13,5 +13,9 @@ data class QuickOrderTimeSlotData(
     @SerializedName("ordering")
     var ordering: Int = 0,
     @SerializedName("isActive")
-    var isActive: Boolean = false
+    var isActive: Boolean = false,
+    @SerializedName("orderLimit")
+    var orderLimit: Int = 0,
+    @SerializedName("cutOffTime")
+    var cutOffTime: String? = ""
 )
