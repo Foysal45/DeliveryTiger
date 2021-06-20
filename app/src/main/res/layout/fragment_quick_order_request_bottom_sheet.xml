@@ -23,9 +23,9 @@
             android:textColor="@color/red"
             android:textSize="@dimen/text_16"
             android:textStyle="bold"
+            android:layout_marginStart="18dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/separator"/>
 
         <LinearLayout
@@ -33,6 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:padding="8dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +42,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:tint="@color/positive"
+                app:tint="@color/colorPrimary"
                 android:src="@drawable/ic_edit_square"
                 android:contentDescription="@string/cd" />
 
@@ -74,7 +75,7 @@
             android:padding="12dp"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:background="@drawable/bg_corner_round_shape"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -98,39 +99,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    app:tint="@color/positive"
+                    app:tint="@color/colorPrimary"
                     android:src="@drawable/ic_remove"
                     android:contentDescription="@string/cd"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/numberOfParcel"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:textStyle="bold"
                     android:gravity="center"
                     android:enabled="true"
-                    android:text="১"
                     android:maxLength="3"
                     android:inputType="number"
                     android:includeFontPadding="false"
                     android:textColor="@color/black_90"
                     android:textSize="16sp"
-                    android:padding="3dp"
+                    android:padding="4dp"
                     android:background="@drawable/bg_time_slot_unselected"
-                    />
+                    android:backgroundTint="#e6e7e9"
+                    android:importantForAutofill="no"
+                    tools:text="৯৯"
+                    tools:ignore="LabelFor" />
 
                 <ImageView
                     android:id="@+id/parcelCountIncrease"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    app:tint="@color/positive"
+                    app:tint="@color/colorPrimary"
                     android:src="@drawable/ic_add"
                     android:contentDescription="@string/cd"/>
 
-
             </LinearLayout>
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -139,6 +140,8 @@
             android:layout_height="wrap_content"
             android:hint="কয়টি পার্সেল"
             android:background="@color/white"
+            android:textSize="16sp"
+            android:textColor="@color/black_80"
             android:layout_marginStart="16dp"
             android:padding="3dp"
             app:layout_constraintBottom_toTopOf="@+id/parcelCountLayout"
@@ -204,7 +207,7 @@
 
                     android:layout_marginStart="6dp"
                     android:layout_weight="1"
-                    app:tint="@color/ashColor"
+                    app:tint="#a8a9ad"
                     android:src="@drawable/ic_date"
                     android:contentDescription="@string/cd" />
 
@@ -282,7 +285,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginBottom="16dp"
             android:textSize="@dimen/text_14"
-            android:text="সাবমিট করুন"
+            android:text="পার্সেল বুকিং দিন"
             android:textColor="@color/white"
             android:backgroundTint="@color/red"
             android:layout_gravity="center_horizontal"

@@ -11,5 +11,15 @@ data class UpdateOrderReqBody(
     @SerializedName("otherMobile")
     var otherMobile: String? = "",
     @SerializedName("address")
-    var address: String? = ""
+    var address: String? = "",
+    @SerializedName("collectionName")
+    var collectionName: String? = "",
+    @SerializedName("collectionAmount")
+    var collectionAmount: Double? = null,
+    @SerializedName("codCharge")
+    var codCharge: Double? = null,
+    @SerializedName("officeDrop")
+    var officeDrop: Boolean = false,
+    @SerializedName("collectionCharge")
+    var collectionCharge: Double? = null,
 )

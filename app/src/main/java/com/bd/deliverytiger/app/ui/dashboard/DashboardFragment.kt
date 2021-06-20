@@ -157,14 +157,14 @@ class DashboardFragment : Fragment() {
     private fun manageDeliveryReturnDashboard(){
 
         //Fetch 7 days data
-        /*val calendar = Calendar.getInstance()
+        val calendar = Calendar.getInstance()
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         toDate = simpleDateFormat.format(calendar.time)
-        calendar.add(Calendar.DAY_OF_YEAR, -6)
+        calendar.add(Calendar.DAY_OF_MONTH, -30)
         fromDate = simpleDateFormat.format(calendar.time)
         setDateRangePickerTitle()
         val requestBody = DeliveredReturnedCountRequest(fromDate, toDate, SessionManager.courierUserId)
-        fetchDeliveredReturnCount(requestBody)*/
+        fetchDeliveredReturnCount(requestBody)
 
         binding?.dateRangePicker?.setOnClickListener {
             dateRangePicker()
@@ -355,6 +355,10 @@ class DashboardFragment : Fragment() {
 
         binding?.referBtn?.setOnClickListener {
             addFragment(ReferralFragment.newInstance(), ReferralFragment.tag)
+        }
+
+        binding?.callCollectorBtn?.setOnClickListener {
+            context?.toast("Under development")
         }
 
        /* binding?.dateRangePicker?.setOnClickListener {

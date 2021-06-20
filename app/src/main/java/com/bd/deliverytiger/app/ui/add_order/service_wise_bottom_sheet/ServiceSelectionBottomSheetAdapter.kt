@@ -45,11 +45,11 @@ class ServiceSelectionBottomSheetAdapter: RecyclerView.Adapter<RecyclerView.View
                 }
             }
 
-            if (model.deliveryRangeId.isEmpty()){
+            /*if (model.deliveryRangeId.isEmpty()){
                 binding.serviceRangeArea.text = "সারাদেশে"
             }else{
                 binding.serviceRangeArea.text = "${DigitConverter.toBanglaDigit(model.districtList.count())} টি জেলা সদরে"
-            }
+            }*/
             binding.progressBar.isVisible = model.districtList.isEmpty()
         }
     }

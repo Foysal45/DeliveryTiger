@@ -38,7 +38,7 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
     private val sdf1 = SimpleDateFormat("dd MMM, yyyy", Locale.US)
 
     private var selectedDate = ""
-    private var totalParcel = 0
+    private var totalParcel = 1
     private var selectedTimeSLotID = 0
     private var selectedPickupLocationDistrictId = 0
     private var selectedPickupLocationThanaId = 0
@@ -81,7 +81,7 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
                 adapter = dataAdapter
             }
         }
-        totalParcel = binding?.numberOfParcel?.text.toString().toInt()
+        binding?.numberOfParcel?.setText("1")
     }
 
     private fun initClickLister() {
@@ -96,14 +96,14 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
 
         binding?.parcelCountIncrease?.setOnClickListener {
             totalParcel+=1
-            binding?.numberOfParcel?.setText(DigitConverter.toBanglaDigit(totalParcel))
+            binding?.numberOfParcel?.setText(totalParcel.toString())
         }
 
         binding?.parcelCountDecrease?.setOnClickListener {
             if (totalParcel > 1){
                 totalParcel-=1
             }
-            binding?.numberOfParcel?.setText(DigitConverter.toBanglaDigit(totalParcel))
+            binding?.numberOfParcel?.setText(totalParcel.toString())
         }
 
         binding?.collectionToday?.setOnClickListener {

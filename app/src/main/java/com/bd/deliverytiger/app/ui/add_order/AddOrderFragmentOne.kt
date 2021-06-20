@@ -1116,7 +1116,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         } else {
             isLocationLoading = true
         }
-        when(locationType) {
+        when (locationType) {
             LocationType.DISTRICT -> {
                 binding?.progressBar1?.isVisible = true
             }
@@ -1150,15 +1150,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     if (!preSelect) {
                         goToLocationSelectionDialog(filteredThanaLists, locationType)
                     } else {
-                        val sadarThana = list.first()
-                        thanaId = sadarThana.districtId
-                        etThana.setText(sadarThana.districtBng)
-                        isAriaAvailable = sadarThana.isCity
-                        if (isAriaAvailable) {
-                            etAriaPostOfficeLayout.visibility = View.VISIBLE
+                        if (list.isNotEmpty()) {
+                            val sadarThana = list.first()
+                            thanaId = sadarThana.districtId
+                            etThana.setText(sadarThana.districtBng)
                             fetchLocationById(thanaId, LocationType.AREA, true)
-                        } else {
-                            etAriaPostOfficeLayout.visibility = View.GONE
                             getDeliveryCharge(districtId, thanaId, 0, serviceType)
                         }
                     }
@@ -1166,19 +1162,21 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 LocationType.AREA -> {
                     filteredAreaLists.clear()
                     filteredAreaLists.addAll(list)
-                    if (!preSelect) {
-                        goToLocationSelectionDialog(filteredAreaLists, locationType)
-                    } else {
-                        if (list.isNotEmpty()) {
+                    isAriaAvailable = filteredAreaLists.isNotEmpty()
+                    if (isAriaAvailable) {
+                        etAriaPostOfficeLayout.visibility = View.VISIBLE
+                        if (!preSelect) {
+                            goToLocationSelectionDialog(filteredAreaLists, locationType)
+                        } else {
                             val sadarArea = list.first()
                             areaId = sadarArea.districtId
                             etAriaPostOffice.setText(sadarArea.districtBng)
                             getDeliveryCharge(districtId, thanaId, areaId, serviceType)
-                        } else {
-                            areaId = 0
-                            etAriaPostOffice.setText("")
-                            etAriaPostOfficeLayout.visibility = View.GONE
                         }
+                    } else {
+                        etAriaPostOfficeLayout.visibility = View.GONE
+                        areaId = 0
+                        etAriaPostOffice.setText("")
                     }
                 }
             }
@@ -1218,14 +1216,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
                     val locationModel = list[position]
                     showLocationAlert(locationModel, LocationType.THANA)
-
-                    isAriaAvailable = locationModel.isCity
-                    if (isAriaAvailable) {
-                        etAriaPostOfficeLayout.visibility = View.VISIBLE
-                    } else {
-                        etAriaPostOfficeLayout.visibility = View.GONE
-                    }
                     getDeliveryCharge(districtId, thanaId, 0, serviceType)
+                    if (filteredAreaLists.isEmpty()) {
+                        fetchLocationById(thanaId, LocationType.AREA, true)
+                    }
 
                 }
                 LocationType.AREA -> {
@@ -1261,7 +1255,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             showLocationAlert(district, LocationType.DISTRICT)
         }
 
-        serviceType = if (merchantDistrict == districtId) { "citytocity" } else "alltoall"
+        serviceType = if (merchantDistrict == districtId) {
+            "citytocity"
+        } else "alltoall"
         codChargePercentage = if (districtId == 14) {
             codChargePercentageInsideDhaka
         } else {
@@ -1306,14 +1302,14 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     private fun showLocationAlert(model: AllDistrictListsModel, locationType: LocationType) {
         if (model.isActiveForCorona) {
-            val msg = when(locationType) {
+            val msg = when (locationType) {
                 LocationType.DISTRICT -> "${model.districtBng} জেলায় ডেলিভারি সার্ভিস সাময়িকভাবে বন্ধ রয়েছে।"
                 LocationType.THANA -> "${model.districtBng} থানায় ডেলিভারি সার্ভিস সাময়িকভাবে বন্ধ রয়েছে।"
                 LocationType.AREA -> "${model.districtBng} এরিয়ায় ডেলিভারি সার্ভিস সাময়িকভাবে বন্ধ রয়েছে।"
             }
             alert(getString(R.string.instruction), msg) {
                 if (it == AlertDialog.BUTTON_POSITIVE) {
-                    when(locationType) {
+                    when (locationType) {
                         LocationType.DISTRICT -> {
                             districtId = 0
                             etDistrict.setText("")

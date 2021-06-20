@@ -37,7 +37,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="5dp"
+        >
 
         <EditText
             android:id="@+id/etDistrict"
@@ -80,7 +82,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
+    <!--<TextView
         android:id="@+id/serviceRangeArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -91,7 +93,8 @@
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp"
-        tools:text="২০ টি জেলা সদরে" />
+        tools:text="২০ টি জেলা সদরে"
+        />-->
 
 </LinearLayout>
 

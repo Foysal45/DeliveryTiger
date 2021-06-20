@@ -25,9 +25,9 @@ import androidx.lifecycle.Observer
 class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
 
     private var binding: FragmentServicesSelectionBottomSheetBinding? = null
-    private var dataAdapter: ServiceSelectionBottomSheetAdapter = ServiceSelectionBottomSheetAdapter()
     private val viewModel: ServiceSelectionBottomSheetViewModel by inject()
 
+    private var dataAdapter: ServiceSelectionBottomSheetAdapter = ServiceSelectionBottomSheetAdapter()
     private var dataList: List<ServiceInfoData>? = null
 
     var onServiceSelected: ((position: Int, service: ServiceInfoData, district: LocationData) -> Unit)? = null

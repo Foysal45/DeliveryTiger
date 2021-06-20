@@ -208,29 +208,35 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
 
     fun getBreakableCharge(): LiveData<BreakableChargeData> {
         viewState.value = ViewState.ProgressState(true)
-        val responseBody = MutableLiveData<BreakableChargeData>()
+        val responseData = MutableLiveData<BreakableChargeData>()
 
-        repository.getBreakableCharge().enqueue(object : Callback<GenericResponse<BreakableChargeData>> {
-            override fun onFailure(call: Call<GenericResponse<BreakableChargeData>>, t: Throwable) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getBreakableCharge()
+            withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
-                viewState.value = ViewState.ShowMessage(message)
-            }
-
-            override fun onResponse(call: Call<GenericResponse<BreakableChargeData>>, response: Response<GenericResponse<BreakableChargeData>>) {
-                if (response.isSuccessful && response.body() != null) {
-                    if (response.body()!!.model != null) {
-                        responseBody.value = response.body()!!.model!!
-                    } else {
-                        viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model!!
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
                         viewState.value = ViewState.ShowMessage(message)
                     }
-                } else {
-                    viewState.value = ViewState.ProgressState(false)
-                    viewState.value = ViewState.ShowMessage(message)
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
                 }
             }
-        })
-        return responseBody
+        }
+        return responseData
     }
 
     fun getPackagingCharge(): LiveData<List<PackagingData>> {

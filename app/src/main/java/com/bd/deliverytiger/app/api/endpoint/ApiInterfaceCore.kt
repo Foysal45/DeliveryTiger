@@ -90,7 +90,7 @@ interface ApiInterfaceCore {
     fun getMerchantCredit(@Path("courierUserId") courierUserId: Int): Call<GenericResponse<Boolean>>
 
     @GET("api/Fetch/GetBreakableCharge")
-    fun getBreakableCharge(): Call<GenericResponse<BreakableChargeData>>
+    suspend fun getBreakableCharge(): NetworkResponse<GenericResponse<BreakableChargeData>, ErrorResponse>
 
     @GET("api/Fetch/GetPackagingChargeRange/{onlyActive}")
     fun getPackagingCharge(@Path("onlyActive") onlyActive: Boolean = true): Call<GenericResponse<List<PackagingData>>>

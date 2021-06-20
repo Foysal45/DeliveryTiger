@@ -86,6 +86,7 @@
                         android:layout_marginEnd="16dp"
                         android:baselineAligned="false"
                         android:orientation="horizontal"
+                        android:gravity="center"
                         android:visibility="gone"
                         tools:visibility="visible">
 
@@ -136,32 +137,49 @@
 
                         </LinearLayout>
 
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/callCollectorBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:text="কালেক্টর\nকল করুন"
+                            app:icon="@drawable/ic_call"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            app:iconGravity="start"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="18dp"
+                            android:paddingTop="0dp"
+                            android:paddingBottom="0dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginStart="16dp"
+                            />
+
                         <LinearLayout
                             android:id="@+id/collectorTrackBtn"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="40dp"
                             android:layout_marginStart="4dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_collector_track"
+
                             android:gravity="center"
-                            android:orientation="horizontal"
-                            tools:ignore="UselessParent">
+                            android:orientation="vertical"
+                            tools:ignore="UseCompoundDrawables,UselessParent">
 
                             <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:contentDescription="@string/cd"
-                                android:src="@drawable/ic_track"
-                                app:tint="@color/colorPrimary" />
+                                android:src="@drawable/ic_location1"
+                                app:tint="@color/collector" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
                                 android:ellipsize="end"
                                 android:maxLines="1"
-                                android:text="কালেক্টর ট্র্যাক করুন"
-                                android:textColor="@color/colorPrimary"
+                                android:text="ট্র্যাক"
+                                android:textColor="@color/black_70"
                                 android:textSize="14sp" />
 
                         </LinearLayout>
@@ -665,7 +683,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="আপনার একাউন্ট ম্যানেজার এর তথ্য"
+                                android:text="আপনার একাউন্ট ম্যানেজার"
                                 android:textColor="@color/white"
                                 android:textSize="14sp" />
 
@@ -867,7 +885,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="কুইক অর্ডার"
+                        android:text="কুইক বুকিং"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"

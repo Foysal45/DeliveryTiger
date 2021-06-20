@@ -10,8 +10,10 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
+import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.databinding.FragmentOrderInfoEditBottomSheetBinding
+import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationType
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -24,14 +26,29 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
 
     private var binding: FragmentOrderInfoEditBottomSheetBinding? = null
     private val viewModel: OrderInfoEditViewModel by inject()
+
     private var model: CourierOrderViewModel = CourierOrderViewModel()
-    private var isCollectionLocationSelected = model.courierPrice?.officeDrop
+
+    private var codChargePercentage: Double = 0.0
+    private var codChargePercentageInsideDhaka: Double = 0.0
+    private var codChargePercentageOutsideDhaka: Double = 0.0
+    private var codChargeMin: Int = 0
+
+    private var collectionChargeApi: Double = 0.0
+    private var merchantDistrict: Int = 0
+
+    private var collectionDistrictId: Int = 0
+    private var collectionThanaId: Int = 0
+    private var collectionAddress: String = ""
+
+    private val updateOrderReqBody = UpdateOrderReqBody()
+    private var officeDropSelected: Boolean = false
 
     var onCollectionTypeSelected: ((isPickup: Boolean, pickupLocation: PickupLocation) -> Unit)? = null
 
     companion object {
 
-        fun newInstance(model:  CourierOrderViewModel): OrderInfoEditBottomSheet = OrderInfoEditBottomSheet().apply {
+        fun newInstance(model: CourierOrderViewModel): OrderInfoEditBottomSheet = OrderInfoEditBottomSheet().apply {
             this.model = model
         }
 
@@ -53,62 +70,94 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initData()
+        getBreakableCharge()
+        getCourierUsersInformation()
         fetchPickupLocation()
         initClickLister()
     }
 
-    private fun initData(){
+    private fun initData() {
         binding?.etCustomerName?.setText(model.customerName)
         binding?.etOrderMobileNo?.setText(model.courierAddressContactInfo?.mobile)
         binding?.etAlternativeMobileNo?.setText(model.courierAddressContactInfo?.otherMobile)
-        binding?.etOrderProductName?.setText(model.courierOrderInfo?.collectionName)
         binding?.etCustomersAddress?.setText(model.courierAddressContactInfo?.address)
+        binding?.etOrderProductName?.setText(model.courierOrderInfo?.collectionName)
 
-        if (model.courierOrderInfo?.orderType == "Delivery Taka Collection"){
+        if (model.courierOrderInfo?.orderType == "Delivery Taka Collection") {
             binding?.collectionAmount?.visibility = View.VISIBLE
-            binding?.collectionAmount?.setText(model.courierPrice?.collectionAmount.toString())
-        }else{
+            val collectionAmount = model.courierPrice?.collectionAmount.toString()
+            binding?.collectionAmount?.setText(collectionAmount)
+        } else {
             binding?.collectionAmount?.visibility = View.GONE
         }
-        if (model.courierPrice?.officeDrop == true){
+
+        if (model.courierPrice?.officeDrop == true) {
+            officeDropSelected = true
             binding?.toggleButtonPickupGroup?.selectButton(R.id.toggleButtonPickup1)
-        }else{
+        } else {
+            officeDropSelected = false
             binding?.toggleButtonPickupGroup?.selectButton(R.id.toggleButtonPickup2)
             binding?.msg?.isVisible = false
             binding?.pickupAddressLayout?.visibility = View.VISIBLE
             binding?.chargeMsgLayout?.visibility = View.GONE
+
         }
     }
 
-    private fun fetchPickupLocation(){
+    private fun fetchPickupLocation() {
         viewModel.getPickupLocations(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list ->
             spinnerDataBinding(list)
         })
     }
 
-    private fun spinnerDataBinding(list: List<PickupLocation>){
+    private fun getBreakableCharge() {
+
+        viewModel.getBreakableCharge().observe(viewLifecycleOwner, Observer { model ->
+            codChargeMin = model.codChargeMin
+            codChargePercentageInsideDhaka = model.codChargeDhakaPercentage
+            codChargePercentageOutsideDhaka = model.codChargePercentage
+
+            codChargePercentage = if (this.model.courierAddressContactInfo?.districtId == 14) {
+                codChargePercentageInsideDhaka
+            } else {
+                codChargePercentageOutsideDhaka
+            }
+        })
+
+    }
+
+    private fun getCourierUsersInformation() {
+        viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            collectionChargeApi = model.collectionCharge
+            merchantDistrict = model.districtId
+        })
+    }
+
+    private fun spinnerDataBinding(list: List<PickupLocation>) {
+
         val pickupList: MutableList<String> = mutableListOf()
-        if (model.courierAddressContactInfo?.thanaName?.isNotEmpty() == true){
-            pickupList.add(model.courierAddressContactInfo?.thanaName ?: "")
-        }else{
-            pickupList.add("পিক আপ লোকেশন")
+        list.forEach {
+            pickupList.add(it.thanaName ?: "")
         }
 
-       /* list.forEach {
-            pickupList.add(it.thanaName ?: "")
-        }*/
         val pickupAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, pickupList)
         binding?.spinnerCollectionLocation?.adapter = pickupAdapter
         binding?.spinnerCollectionLocation?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position != 0) {
-                    val model = list[position-1]
-                    onCollectionTypeSelected?.invoke(true, model)
-                }
+                val model = list[position]
+                collectionDistrictId = model.districtId
+                collectionThanaId = model.thanaId
+                collectionAddress = model.pickupAddress ?: ""
             }
         }
+
+        val selectedIndex = list.indexOfFirst { it.districtId == model.courierAddressContactInfo?.collectAddressDistrictId && it.thanaId == model.courierAddressContactInfo?.collectAddressThanaId }
+        if (selectedIndex != -1) {
+            binding?.spinnerCollectionLocation?.setSelection(selectedIndex)
+        }
+
     }
 
     private fun initClickLister() {
@@ -122,15 +171,17 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
                 R.id.toggleButtonPickup1 -> {
                     binding?.pickupAddressLayout?.visibility = View.GONE
                     binding?.chargeMsgLayout?.visibility = View.GONE
+                    officeDropSelected = true
                 }
                 R.id.toggleButtonPickup2 -> {
-                    if (model.courierOrderInfo?.weightRangeId ?: 0 > 6) {
+                    if ((model.courierOrderInfo?.weightRangeId ?: 0) > 6) {
                         binding?.msg?.isVisible = true
                         binding?.msg?.text = "পার্সেলের ওজন ৫ কেজির উপরে হলে কালেকশন হাবে ড্রপ করতে হবে, হাব ড্রপ সিলেক্ট করুন"
                     } else {
                         binding?.msg?.isVisible = false
                         binding?.pickupAddressLayout?.visibility = View.VISIBLE
                         binding?.chargeMsgLayout?.visibility = View.GONE
+                        officeDropSelected = false
                     }
                 }
             }
@@ -138,42 +189,90 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
 
     }
 
-    private fun updateOrder(){
-        if (!validate()){
+    private fun updateOrder() {
+        if (!validate()) {
             return
         }
-        context?.toast("সফলভাবে আপডেট হয়েছে")
+
+        //context?.toast("সফলভাবে আপডেট হয়েছে")
+        viewModel.updateOrderInfo(model.courierOrdersId ?: "", updateOrderReqBody).observe(viewLifecycleOwner, Observer { model ->
+            if (model != null) {
+                context?.toast(getString(R.string.update_success))
+            } else {
+                context?.toast(getString(R.string.error_msg))
+            }
+        })
     }
 
     private fun validate(): Boolean {
 
-        val name = binding?.etCustomerName?.text.toString()
-        val mobile = binding?.etOrderMobileNo?.text.toString()
-        val address = binding?.etCustomersAddress?.text.toString()
-        val collectionAmount =binding?.collectionAmount?.text.toString()
+        val name = binding?.etCustomerName?.text.toString().trim()
+        val mobile = binding?.etOrderMobileNo?.text.toString().trim()
+        val alternateMobile = binding?.etAlternativeMobileNo?.text.toString().trim()
+        val address = binding?.etCustomersAddress?.text.toString().trim()
+        val referenceInvoice = binding?.etOrderProductName?.text.toString().trim()
+        val collectionAmount = binding?.collectionAmount?.text.toString().trim()
 
-        if (name.isNullOrEmpty()){
+        if (name.isEmpty()) {
             context?.showToast(getString(R.string.write_yr_name))
             return false
         }
-        if (mobile.isNullOrEmpty()){
+        if (mobile.isEmpty()) {
             context?.showToast(getString(R.string.write_phone_number))
             return false
-        }else if (!Validator.isValidMobileNumber(mobile) || mobile.length < 11) {
+        }
+        if (!Validator.isValidMobileNumber(mobile) || mobile.length < 11) {
             context?.toast(getString(R.string.write_proper_phone_number_recharge))
             return false
         }
-        if (address.isNullOrEmpty()){
+        if (alternateMobile.isNotEmpty()) {
+            if (!Validator.isValidMobileNumber(alternateMobile) || alternateMobile.length < 11) {
+                context?.toast(getString(R.string.write_proper_phone_number_recharge))
+                return false
+            }
+        }
+        if (address.isEmpty()) {
             context?.showToast(getString(R.string.write_yr_address))
             return false
         }
-        if (model.courierOrderInfo?.orderType == "Delivery Taka Collection" && collectionAmount.isNullOrEmpty() ){
-            context?.showToast("কালেকশন অ্যামাউন্ট লিখুন")
+        if (referenceInvoice.isEmpty()) {
+            context?.showToast("নিজস্ব রেফারেন্স নম্বর/ইনভয়েস লিখুন")
             return false
         }
-        if (isCollectionLocationSelected == true) {
-            context?.showToast("কালেকশন লোকেশন নির্বাচন করুন")
-            return false
+
+        var payCODCharge = 0.0
+        if (model.courierOrderInfo?.orderType == "Delivery Taka Collection") {
+            if (collectionAmount.isEmpty()) {
+                context?.showToast("কালেকশন অ্যামাউন্ট লিখুন")
+                return false
+            }
+
+            val payCollectionAmount = collectionAmount.toDouble()
+            payCODCharge = (payCollectionAmount / 100.0) * codChargePercentage
+            if (payCODCharge < codChargeMin) {
+                payCODCharge = codChargeMin.toDouble()
+            }
+
+        }
+
+        val payCollectionCharge = if (officeDropSelected) {
+            0.0
+        } else {
+            collectionChargeApi
+        }
+
+
+
+        updateOrderReqBody.apply {
+            this.customerName = name
+            this.mobile = mobile
+            this.otherMobile = alternateMobile
+            this.address = address
+            this.collectionName = referenceInvoice
+            this.collectionAmount = collectionAmount.toDouble()
+            this.codCharge = payCODCharge
+            this.officeDrop = officeDropSelected
+            this.collectionCharge = payCollectionCharge
         }
 
         return true

@@ -101,6 +101,7 @@ class HomeActivity : AppCompatActivity(),
     private lateinit var notificationIV: ImageView
     private lateinit var trackingIV: ImageView
     private lateinit var searchIV: ImageView
+    private lateinit var balanceIV: ImageView
     private lateinit var downloadTV: ImageView
     private lateinit var headerPic: ImageView
     private lateinit var separetor: View
@@ -149,6 +150,7 @@ class HomeActivity : AppCompatActivity(),
         notificationIV = findViewById(R.id.home_toolbar_notification)
         trackingIV = findViewById(R.id.home_toolbar_tracking)
         searchIV = findViewById(R.id.home_toolbar_search)
+        balanceIV = findViewById(R.id.home_toolbar_balance)
         downloadTV = findViewById(R.id.home_toolbar_download)
         separetor = findViewById(R.id.home_toolbar_separator)
         addOrderFab = findViewById(R.id.addOrderFab)
@@ -241,6 +243,9 @@ class HomeActivity : AppCompatActivity(),
         }
         actionBtn.setOnClickListener {
             goToAllOrder(false)
+        }
+        balanceIV.setOnClickListener {
+            goToBalanceLoad()
         }
 
         //Timber.d("BundleLog ${intent.extras?.bundleToString()}")
@@ -371,6 +376,7 @@ class HomeActivity : AppCompatActivity(),
                 trackingIV.visibility = View.GONE
                 searchIV.visibility = View.GONE
                 separetor.visibility = View.GONE
+                balanceIV.visibility = View.GONE
                 addProductBtnVisibility(false)
             }
             /*if (currentFragment is ServiceBillPayFragment) {
@@ -386,6 +392,7 @@ class HomeActivity : AppCompatActivity(),
                 searchIV.visibility = View.VISIBLE
                 separetor.visibility = View.VISIBLE
                 actionBtn.visibility = View.VISIBLE
+                balanceIV.visibility = View.VISIBLE
                 trackingIV.visibility = View.GONE
                 //moveFabBy(100f)
             } else {
@@ -393,6 +400,7 @@ class HomeActivity : AppCompatActivity(),
                 searchIV.visibility = View.GONE
                 separetor.visibility = View.GONE
                 actionBtn.visibility = View.GONE
+                balanceIV.visibility = View.GONE
                 trackingIV.visibility = View.VISIBLE
                 //moveFabBy(24f)
             }
@@ -405,6 +413,7 @@ class HomeActivity : AppCompatActivity(),
                 trackingIV.visibility = View.GONE
                 searchIV.visibility = View.GONE
                 separetor.visibility = View.GONE
+                balanceIV.visibility = View.GONE
                 addProductBtnVisibility(false)
             }
             when (currentFragment) {
@@ -876,6 +885,7 @@ class HomeActivity : AppCompatActivity(),
         addProductBtnVisibility(false)
         searchIV.visibility = View.VISIBLE
         actionBtn.visibility = View.VISIBLE
+        balanceIV.visibility = View.VISIBLE
         trackingIV.visibility = View.GONE
 
         val fragment = DashboardFragment.newInstance()

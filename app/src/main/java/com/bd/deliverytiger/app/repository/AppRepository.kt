@@ -118,7 +118,7 @@ class AppRepository(
 
     fun getMerchantCredit(courierUserId: Int) = apiInterfaceCore.getMerchantCredit(courierUserId)
 
-    fun getBreakableCharge() = apiInterfaceCore.getBreakableCharge()
+    suspend fun getBreakableCharge() = apiInterfaceCore.getBreakableCharge()
 
     fun getPackagingCharge() = apiInterfaceCore.getPackagingCharge()
 
