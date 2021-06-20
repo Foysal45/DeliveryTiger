@@ -4,14 +4,16 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
 import com.bd.deliverytiger.app.databinding.ItemViewTimeSlotBinding
-import timber.log.Timber
 
 class QuickOrderTimeSlotAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList: MutableList<QuickOrderTimeSlotData> = mutableListOf()
     var onItemClick: ((model:QuickOrderTimeSlotData, position: Int) -> Unit)? = null
+
+    var selectedPosition: Int = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding: ItemViewTimeSlotBinding = ItemViewTimeSlotBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -28,19 +30,28 @@ class QuickOrderTimeSlotAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>()
             val binding = holder.binding
 
             binding.timeSlot.text = "${model.startTime}"
-
+            if (selectedPosition == position) {
+                binding.timeSlot.setBackgroundResource(R.drawable.bg_time_slot_selected)
+            }else{
+                binding.timeSlot.setBackgroundResource(R.drawable.bg_time_slot_unselected)
+            }
         }
     }
 
     inner class ViewHolder(val binding: ItemViewTimeSlotBinding ) : RecyclerView.ViewHolder(binding.root) {
-
         init {
             binding.root.setOnClickListener {
                 if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                    selectedPosition = absoluteAdapterPosition
                     onItemClick?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
+                    notifyDataSetChanged()
                 }
             }
         }
+    }
+
+    fun setSelectedPositions(position: Int) {
+        selectedPosition = position
     }
 
     fun initLoad(list: List<QuickOrderTimeSlotData>) {

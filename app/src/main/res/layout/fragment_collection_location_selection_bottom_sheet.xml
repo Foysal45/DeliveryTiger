@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/terms_sheet_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="8dp"
+        android:text="কালেকশন লোকেশন"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_16"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/terms_sheet_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/separator" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pickupAddressLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:visibility="visible">
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinnerCollectionLocation"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_view_height"
+            android:background="@drawable/bg_spinner"
+            android:overlapAnchor="false"
+            android:spinnerMode="dropdown"
+            android:theme="@style/custom_spinner_style"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:entries="@array/spinner_array_collection_location" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:contentDescription="@string/cd"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/spinnerCollectionLocation"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:contentDescription="@string/cd"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/spinnerCollectionLocation"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_star"
+            app:tint="@color/red" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/chargeMsgLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+
+        <TextView
+            android:id="@+id/chargeMsg1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:textSize="14sp"
+            android:text="*৫ টাকা " />
+
+        <TextView
+            android:id="@+id/chargeMsg2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:textSize="14sp"
+            android:text="Pick-Up"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/chargeMsg3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:textSize="14sp"
+            android:text=" চার্জ যোগ হবে"/>
+
+    </LinearLayout>
+
+</LinearLayout>

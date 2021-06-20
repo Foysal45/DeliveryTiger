@@ -15,6 +15,7 @@ import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequest
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
 import com.bd.deliverytiger.app.databinding.FragmentQuickOrderRequestBottomSheetBinding
 import com.bd.deliverytiger.app.ui.all_orders.order_edit.OrderInfoEditBottomSheet
+import com.bd.deliverytiger.app.ui.quick_order.collection_location.CollectionLocationSelectionBottomSheet
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -38,7 +39,7 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
 
     private var selectedDate = ""
     private var totalParcel = 0
-    private var selectedTimeSLotID= 0
+    private var selectedTimeSLotID = 0
     private var selectedPickupLocationDistrictId = 0
     private var selectedPickupLocationThanaId = 0
 
@@ -89,6 +90,10 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
             updateOrder()
         }
 
+        binding?.pickupLocationLayout?.setOnClickListener {
+            showCollectionLocationSelectionBottomSheet()
+        }
+
         binding?.parcelCountIncrease?.setOnClickListener {
             totalParcel+=1
             binding?.numberOfParcel?.setText(DigitConverter.toBanglaDigit(totalParcel))
@@ -104,20 +109,48 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
         binding?.collectionToday?.setOnClickListener {
             binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
             binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+            val calender = Calendar.getInstance()
+            calender.add(Calendar.DAY_OF_MONTH, 0)
+            val todayDate = calender.timeInMillis
+            selectedDate = sdf.format(todayDate)
+            Timber.d("selectedDate $selectedDate")
         }
 
         binding?.collectionTomorrow?.setOnClickListener {
             binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
             binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+            val calender = Calendar.getInstance()
+            calender.add(Calendar.DAY_OF_MONTH, 1)
+            val tomorrowDate = calender.timeInMillis
+            selectedDate = sdf.format(tomorrowDate)
+            Timber.d("selectedDate $selectedDate")
         }
 
-        dataAdapter.onItemClick = { model, position ->
+        dataAdapter.onItemClick = { model, position  ->
+
+            selectedTimeSLotID = model.collectionTimeSlotId
+            dataAdapter.setSelectedPositions(position)
+
         }
 
         binding?.orderRequestDatePicker?.setOnClickListener {
             datePicker()
         }
 
+    }
+
+    private fun showCollectionLocationSelectionBottomSheet() {
+        val tag: String = CollectionLocationSelectionBottomSheet.tag
+        val dialog: CollectionLocationSelectionBottomSheet = CollectionLocationSelectionBottomSheet.newInstance()
+        dialog.show(childFragmentManager, tag)
+        dialog.onCollectionTypeSelected = { isPickup, pickupLocation ->
+            if (isPickup){
+                binding?.picUpUpLocation?.text = pickupLocation.thanaName
+                selectedPickupLocationDistrictId = pickupLocation.districtId
+                selectedPickupLocationThanaId = pickupLocation.thanaId
+                dialog.dismiss()
+            }
+        }
     }
 
     private fun updateOrder(){
@@ -135,7 +168,9 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
             selectedTimeSLotID
         )
         viewModel.quickOrderRequest(requestBody).observe(viewLifecycleOwner, Observer {
-            context?.toast("Request Accepted")
+            alert("নির্দেশনা", "আপনার কুইক বুকিং এর রিকোয়েস্ট টি গ্রহণ করা হয়েছে ।", false, "ঠিক আছে", "ক্যানসেল"){
+
+            }.show()
             dialog?.dismiss()
         })
     }
@@ -147,6 +182,8 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
         })
         viewModel.getPickupLocations(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list ->
             binding?.picUpUpLocation?.text = list.first().thanaName
+            selectedPickupLocationDistrictId = list.first().districtId
+            selectedPickupLocationThanaId = list.first().thanaId
         })
     }
 
@@ -212,11 +249,14 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
             setTitleText("Select date")
             setCalendarConstraints(calendarConstraints.build())
         }
+        binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+        binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
 
         val picker = builder.build()
         picker.show(childFragmentManager, "Picker")
         picker.addOnPositiveButtonClickListener {
             selectedDate = sdf.format(it)
+            Timber.d("selectedDate $selectedDate")
         }
     }
 
