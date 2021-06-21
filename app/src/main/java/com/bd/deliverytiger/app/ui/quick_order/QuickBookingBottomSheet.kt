@@ -170,6 +170,10 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
             }
         })
 
+        binding?.parent?.setOnClickListener {
+            hideKeyboard()
+        }
+
     }
 
     private fun showCollectionLocationSelectionBottomSheet() {
