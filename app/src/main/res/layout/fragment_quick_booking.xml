@@ -1,4 +1,4 @@
-
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/parent"
-    tools:context=".ui.quick_order.QuickOrderRequestBottomSheet">
+    tools:context=".ui.quick_order.QuickBookingBottomSheet">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="ধানমন্ডি"
+                tools:text="ধানমন্ডি"
                 android:textSize="16sp"/>
 
         </LinearLayout>
@@ -109,9 +109,7 @@
                     android:layout_height="40dp"
                     android:textStyle="bold"
                     android:gravity="center"
-                    android:enabled="true"
-                    android:maxLength="3"
-                    android:inputType="number"
+                    android:inputType="numberPassword"
                     android:includeFontPadding="false"
                     android:textColor="@color/black_90"
                     android:textSize="16sp"
@@ -119,6 +117,7 @@
                     android:background="@drawable/bg_time_slot_unselected"
                     android:backgroundTint="#e6e7e9"
                     android:importantForAutofill="no"
+                    android:focusableInTouchMode="true"
                     tools:text="৯৯"
                     tools:ignore="LabelFor" />
 
@@ -167,19 +166,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="5dp"
-                android:weightSum="5"
+                android:gravity="center"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
 
-
                 <TextView
                     android:id="@+id/collectionToday"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="40dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginStart="16dp"
-                    android:layout_weight="2"
                     android:gravity="center"
                     android:background="@drawable/bg_time_slot_unselected"
                     android:text="আজ"
@@ -188,13 +185,11 @@
 
                 <TextView
                     android:id="@+id/collectionTomorrow"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="8dp"
-                    android:layout_weight="2"
                     android:gravity="center"
                     android:background="@drawable/bg_time_slot_unselected"
-
                     android:text="কাল"
                     android:textColor="@color/white"
                     android:textStyle="bold"/>
@@ -202,19 +197,14 @@
 
                 <ImageView
                     android:id="@+id/orderRequestDatePicker"
-                    android:layout_width="wrap_content"
+                    android:layout_width="40dp"
                     android:layout_height="40dp"
-
-                    android:layout_marginStart="6dp"
-                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
                     app:tint="#a8a9ad"
                     android:src="@drawable/ic_date"
                     android:contentDescription="@string/cd" />
 
-
-
             </LinearLayout>
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -250,15 +240,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-
                 android:padding="5dp"
-                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.666"
                 app:layout_constraintStart_toStartOf="parent"
-
                 app:layout_constraintTop_toTopOf="parent"
+
                 tools:itemCount="5"
                 tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_view_time_slot"
@@ -294,6 +281,19 @@
             app:layout_constraintTop_toBottomOf="@+id/productCollectionTimeLayout"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:indeterminateTint="@color/white"
+            app:layout_constraintTop_toTopOf="@id/submitBtn"
+            app:layout_constraintBottom_toBottomOf="@id/submitBtn"
+            app:layout_constraintStart_toStartOf="@id/submitBtn"
+            android:elevation="4dp"
+            android:layout_marginStart="4dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

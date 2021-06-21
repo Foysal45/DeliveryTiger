@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequest
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
-import com.bd.deliverytiger.app.databinding.FragmentQuickOrderRequestBottomSheetBinding
+import com.bd.deliverytiger.app.databinding.FragmentQuickBookingBinding
 import com.bd.deliverytiger.app.ui.all_orders.order_edit.OrderInfoEditBottomSheet
 import com.bd.deliverytiger.app.ui.quick_order.collection_location.CollectionLocationSelectionBottomSheet
 import com.bd.deliverytiger.app.utils.*
@@ -28,9 +29,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
 
-class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
+class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
 
-    private var binding: FragmentQuickOrderRequestBottomSheetBinding? = null
+    private var binding: FragmentQuickBookingBinding? = null
     private var dataAdapter: QuickOrderTimeSlotAdapter = QuickOrderTimeSlotAdapter()
     private val viewModel: QuickOrderRequestViewModel by inject()
 
@@ -42,13 +43,16 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
     private var selectedTimeSLotID = 0
     private var selectedPickupLocationDistrictId = 0
     private var selectedPickupLocationThanaId = 0
+    private var selectedPickupLocationThana: String = ""
+    private var selectedTime: String = ""
+
 
     var onCollectionTypeSelected: ((isPickup: Boolean, pickupLocation: PickupLocation) -> Unit)? = null
     var onCollectionTimeSlotSelected: ((isPickup: Boolean, pickupLocation: QuickOrderTimeSlotData) -> Unit)? = null
 
     companion object {
 
-        fun newInstance(): QuickOrderRequestBottomSheet = QuickOrderRequestBottomSheet().apply {
+        fun newInstance(): QuickBookingBottomSheet = QuickBookingBottomSheet().apply {
         }
 
         val tag: String = OrderInfoEditBottomSheet::class.java.name
@@ -60,7 +64,7 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return FragmentQuickOrderRequestBottomSheetBinding.inflate(inflater, container, false).also {
+        return FragmentQuickBookingBinding.inflate(inflater, container, false).also {
             binding = it
         }.root
     }
@@ -70,6 +74,7 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
 
         initView()
         fetchPickupLocation()
+        fetchCollectionTimeSlot()
         initClickLister()
     }
 
@@ -82,6 +87,8 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
             }
         }
         binding?.numberOfParcel?.setText("1")
+        binding?.numberOfParcel?.clearFocus()
+        binding?.numberOfParcel?.transformationMethod = null
     }
 
     private fun initClickLister() {
@@ -106,11 +113,16 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
             binding?.numberOfParcel?.setText(totalParcel.toString())
         }
 
+        binding?.numberOfParcel?.doAfterTextChanged { text ->
+            val string = text.toString()
+            totalParcel = string.toIntOrNull() ?: 1
+            binding?.numberOfParcel?.setSelection(string.length)
+        }
+
         binding?.collectionToday?.setOnClickListener {
             binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
             binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
             val calender = Calendar.getInstance()
-            calender.add(Calendar.DAY_OF_MONTH, 0)
             val todayDate = calender.timeInMillis
             selectedDate = sdf.format(todayDate)
             Timber.d("selectedDate $selectedDate")
@@ -127,15 +139,36 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
         }
 
         dataAdapter.onItemClick = { model, position  ->
-
+            Timber.d("timeDebug clicked $position")
             selectedTimeSLotID = model.collectionTimeSlotId
-            dataAdapter.setSelectedPositions(position)
-
         }
 
         binding?.orderRequestDatePicker?.setOnClickListener {
             datePicker()
         }
+
+        binding?.numberOfParcel?.setOnClickListener {
+            binding?.numberOfParcel?.requestFocus()
+            binding?.numberOfParcel?.requestFocusFromTouch()
+        }
+
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is ViewState.ShowMessage -> {
+                    requireContext().toast(state.message)
+                }
+                is ViewState.KeyboardState -> {
+                    hideKeyboard()
+                }
+                is ViewState.ProgressState -> {
+                    if (state.isShow) {
+                        binding?.progressBar?.visibility = View.VISIBLE
+                    } else {
+                        binding?.progressBar?.visibility = View.GONE
+                    }
+                }
+            }
+        })
 
     }
 
@@ -148,6 +181,7 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
                 binding?.picUpUpLocation?.text = pickupLocation.thanaName
                 selectedPickupLocationDistrictId = pickupLocation.districtId
                 selectedPickupLocationThanaId = pickupLocation.thanaId
+                selectedPickupLocationThana = pickupLocation.thanaName ?: ""
                 dialog.dismiss()
             }
         }
@@ -167,26 +201,29 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
             selectedDate,
             selectedTimeSLotID
         )
+        binding?.submitBtn?.isEnabled = false
         viewModel.quickOrderRequest(requestBody).observe(viewLifecycleOwner, Observer {
-            alert("নির্দেশনা", "আপনার কুইক বুকিং এর রিকোয়েস্ট টি গ্রহণ করা হয়েছে ।", false, "ঠিক আছে", "ক্যানসেল"){
-
+            binding?.submitBtn?.isEnabled = true
+            alert("নির্দেশনা", "পার্সেল বুকিং গ্রহণ করা হয়েছে। $selectedPickupLocationThana থেকে পার্সেল কালেক্ট করা হবে।", false, "ঠিক আছে", "ক্যানসেল"){
             }.show()
-            dialog?.dismiss()
         })
     }
 
     private fun fetchPickupLocation(){
-        viewModel.getCollectionTimeSlot().observe(viewLifecycleOwner, Observer { list ->
-            dataAdapter.initLoad(list)
-            Timber.d("debugData fetch-> $list")
-        })
         viewModel.getPickupLocations(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list ->
-            binding?.picUpUpLocation?.text = list.first().thanaName
-            selectedPickupLocationDistrictId = list.first().districtId
-            selectedPickupLocationThanaId = list.first().thanaId
+            val model = list.first()
+            binding?.picUpUpLocation?.text = model.thanaName
+            selectedPickupLocationDistrictId = model.districtId
+            selectedPickupLocationThanaId = model.thanaId
+            selectedPickupLocationThana = model.thanaName ?: ""
         })
     }
 
+    private fun fetchCollectionTimeSlot() {
+        viewModel.getCollectionTimeSlot().observe(viewLifecycleOwner, Observer { list ->
+            dataAdapter.initLoad(list)
+        })
+    }
 
     private fun validate(): Boolean {
 
@@ -196,7 +233,7 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
             context?.toast("Please Insert Number of parcel")
             return false
         }
-        if (selectedDate.isNullOrEmpty()){
+        if (selectedDate.isEmpty()){
             context?.toast("Select Date")
             return false
         }
@@ -257,9 +294,11 @@ class QuickOrderRequestBottomSheet  : BottomSheetDialogFragment() {
         picker.addOnPositiveButtonClickListener {
             selectedDate = sdf.format(it)
             Timber.d("selectedDate $selectedDate")
+            binding?.collectionTomorrow?.text = selectedDate
+            binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
+            binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
         }
     }
-
 
     override fun onStart() {
         super.onStart()

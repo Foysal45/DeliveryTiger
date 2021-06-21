@@ -1,18 +1,13 @@
 package com.bd.deliverytiger.app.ui.dashboard
 
 import android.annotation.SuppressLint
-import android.app.Dialog
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
@@ -34,7 +29,6 @@ import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
-import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadFragment
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
 import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
@@ -45,7 +39,7 @@ import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsFragment
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
-import com.bd.deliverytiger.app.ui.quick_order.QuickOrderRequestBottomSheet
+import com.bd.deliverytiger.app.ui.quick_order.QuickBookingBottomSheet
 import com.bd.deliverytiger.app.ui.referral.ReferralFragment
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
@@ -975,8 +969,8 @@ class DashboardFragment : Fragment() {
     }
 
     private fun showQuickOrderBottomSheet() {
-        val tag: String = QuickOrderRequestBottomSheet.tag
-        val dialog: QuickOrderRequestBottomSheet = QuickOrderRequestBottomSheet.newInstance()
+        val tag: String = QuickBookingBottomSheet.tag
+        val dialog: QuickBookingBottomSheet = QuickBookingBottomSheet.newInstance()
         dialog.show(childFragmentManager, tag)
     }
 

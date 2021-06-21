@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
 import com.bd.deliverytiger.app.databinding.ItemViewTimeSlotBinding
+import com.bd.deliverytiger.app.utils.DigitConverter
 
 class QuickOrderTimeSlotAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -29,7 +30,9 @@ class QuickOrderTimeSlotAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>()
             val model = dataList[position]
             val binding = holder.binding
 
-            binding.timeSlot.text = "${model.startTime}"
+            val timeMsg = DigitConverter.formatTimeRange(model.startTime, model.endTime)
+            binding.timeSlot.text = timeMsg
+
             if (selectedPosition == position) {
                 binding.timeSlot.setBackgroundResource(R.drawable.bg_time_slot_selected)
             }else{
