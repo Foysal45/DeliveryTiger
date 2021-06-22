@@ -1559,7 +1559,16 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private fun validate(): Boolean {
         var go = true
         getAllViewData()
-        if (customerName.isEmpty()) {
+        if (districtId == 0) {
+            go = false
+            context?.toast(getString(R.string.select_dist))
+        } else if (thanaId == 0) {
+            go = false
+            context?.toast(getString(R.string.select_thana))
+        } else if (isAriaAvailable && areaId == 0) {
+            go = false
+            context?.toast(getString(R.string.select_aria))
+        } else if (customerName.isEmpty()) {
             context?.toast(getString(R.string.write_yr_name))
             go = false
             etCustomerName.requestFocus()
@@ -1576,16 +1585,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             context?.toast(context!!, getString(R.string.write_alt_phone_number))
             etAlternativeMobileNo.requestFocus()
         }*/
-        else if (districtId == 0) {
-            go = false
-            context?.toast(getString(R.string.select_dist))
-        } else if (thanaId == 0) {
-            go = false
-            context?.toast(getString(R.string.select_thana))
-        } else if (isAriaAvailable && areaId == 0) {
-            go = false
-            context?.toast(getString(R.string.select_aria))
-        } else if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
+          else if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
             go = false
             context?.toast(getString(R.string.write_yr_address))
             etCustomersAddress.requestFocus()

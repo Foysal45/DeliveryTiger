@@ -279,8 +279,11 @@ class AllOrdersFragment : Fragment() {
                         paymentPaid = response.body()!!.model.adCourierPaymentInfo?.paymentPaid?.toInt() ?: 0
                         paymentReady = response.body()!!.model.adCourierPaymentInfo?.paymentReady?.toInt() ?: 0
 
-                        courierOrderViewModelList?.addAll(response.body()!!.model.courierOrderViewModel!!)
-                        totalLoadedData = courierOrderViewModelList!!.size
+                        if (index == 0) {
+                            courierOrderViewModelList.clear()
+                        }
+                        courierOrderViewModelList.addAll(response.body()!!.model.courierOrderViewModel!!)
+                        totalLoadedData = courierOrderViewModelList.size
 
                         allOrdersAdapter.notifyDataSetChanged()
                         isMoreDataAvailable =
@@ -498,6 +501,20 @@ class AllOrdersFragment : Fragment() {
         val tag = OrderInfoEditBottomSheet.tag
         val dialog = OrderInfoEditBottomSheet.newInstance(model)
         dialog.show(childFragmentManager, tag)
+        dialog.onUpdate = { orderId, requestBody ->
+            dialog.dismiss()
+            val progressDialog = progressDialog()
+            progressDialog.show()
+            viewModel.updateOrderInfo(orderId, requestBody).observe(viewLifecycleOwner, Observer { model ->
+                progressDialog.dismiss()
+                if (model != null) {
+                    context?.toast(getString(R.string.update_success))
+                    getAllOrders(0, 20)
+                } else {
+                    context?.toast(getString(R.string.error_msg))
+                }
+            })
+        }
 
        /* val dialogBuilder = AlertDialog.Builder(context)
         val inflater: LayoutInflater = LayoutInflater.from(context)

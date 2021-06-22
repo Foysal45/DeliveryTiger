@@ -44,7 +44,7 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
     private val updateOrderReqBody = UpdateOrderReqBody()
     private var officeDropSelected: Boolean = false
 
-    var onCollectionTypeSelected: ((isPickup: Boolean, pickupLocation: PickupLocation) -> Unit)? = null
+    var onUpdate: ((orderId: String, requestBody: UpdateOrderReqBody) -> Unit)? = null
 
     companion object {
 
@@ -94,6 +94,7 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
         if (model.courierPrice?.officeDrop == true) {
             officeDropSelected = true
             binding?.toggleButtonPickupGroup?.selectButton(R.id.toggleButtonPickup1)
+            binding?.toggleButtonPickupGroup?.isVisible = false
         } else {
             officeDropSelected = false
             binding?.toggleButtonPickupGroup?.selectButton(R.id.toggleButtonPickup2)
@@ -194,17 +195,21 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
             return
         }
 
+        onUpdate?.invoke(model.courierOrdersId ?: "", updateOrderReqBody)
+
         //context?.toast("সফলভাবে আপডেট হয়েছে")
-        viewModel.updateOrderInfo(model.courierOrdersId ?: "", updateOrderReqBody).observe(viewLifecycleOwner, Observer { model ->
+        /*viewModel.updateOrderInfo(model.courierOrdersId ?: "", updateOrderReqBody).observe(viewLifecycleOwner, Observer { model ->
             if (model != null) {
                 context?.toast(getString(R.string.update_success))
             } else {
                 context?.toast(getString(R.string.error_msg))
             }
-        })
+        })*/
     }
 
     private fun validate(): Boolean {
+
+        hideKeyboard()
 
         val name = binding?.etCustomerName?.text.toString().trim()
         val mobile = binding?.etOrderMobileNo?.text.toString().trim()
@@ -247,7 +252,12 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
                 return false
             }
 
+            val serviceChange = model.courierPrice?.totalServiceCharge ?: 0.0
             val payCollectionAmount = collectionAmount.toDouble()
+            if (payCollectionAmount < serviceChange) {
+                context?.showToast("কালেকশন অ্যামাউন্ট সার্ভিস চার্জ (${DigitConverter.toBanglaDigit(serviceChange, true)}) থেকে বেশি হতে হবে")
+                return false
+            }
             payCODCharge = (payCollectionAmount / 100.0) * codChargePercentage
             if (payCODCharge < codChargeMin) {
                 payCODCharge = codChargeMin.toDouble()

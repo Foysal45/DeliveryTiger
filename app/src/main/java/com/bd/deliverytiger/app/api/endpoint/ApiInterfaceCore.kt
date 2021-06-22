@@ -215,7 +215,7 @@ interface ApiInterfaceCore {
     @GET("api/Dashboard/GetHelpLineNumbers")
     suspend fun fetchHelpLineNumbers(): NetworkResponse<GenericResponse<HelpLineNumberModel>, ErrorResponse>
 
-    @PUT("api/Update/UpdateCourierOrdersApp/{orderId}")
+    @PUT("api/Update/UpdateCourierOrdersAppV2/{orderId}")
     suspend fun updateOrderInfo(
         @Path("orderId") orderId: String,
         @Body requestBody: UpdateOrderReqBody
