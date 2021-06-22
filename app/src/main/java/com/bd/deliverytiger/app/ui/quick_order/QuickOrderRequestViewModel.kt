@@ -8,6 +8,7 @@ import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequest
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequestResponse
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
+import com.bd.deliverytiger.app.api.model.quick_order.TimeSlotRequest
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -58,13 +59,13 @@ class QuickOrderRequestViewModel(private val repository: AppRepository) : ViewMo
         return responseData
     }
 
-    fun getCollectionTimeSlot(): LiveData<List<QuickOrderTimeSlotData>> {
+    fun getCollectionTimeSlot(requestBody: TimeSlotRequest): LiveData<List<QuickOrderTimeSlotData>> {
 
         viewState.value = ViewState.ProgressState(true)
         val responseData = MutableLiveData<List<QuickOrderTimeSlotData>>()
 
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getCollectionTimeSlot()
+            val response = repository.getCollectionTimeSlot(requestBody)
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {

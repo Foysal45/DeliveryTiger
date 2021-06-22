@@ -141,7 +141,7 @@
                             android:id="@+id/callCollectorBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
-                            android:text="কালেক্টর\nকল করুন"
+                            android:text="কালেক্টর\nকল"
                             app:icon="@drawable/ic_call"
                             android:insetTop="0dp"
                             android:insetBottom="0dp"

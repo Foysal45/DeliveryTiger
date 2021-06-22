@@ -14,6 +14,7 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequest
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
+import com.bd.deliverytiger.app.api.model.quick_order.TimeSlotRequest
 import com.bd.deliverytiger.app.databinding.FragmentQuickBookingBinding
 import com.bd.deliverytiger.app.ui.all_orders.order_edit.OrderInfoEditBottomSheet
 import com.bd.deliverytiger.app.ui.quick_order.collection_location.CollectionLocationSelectionBottomSheet
@@ -86,9 +87,14 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
                 adapter = dataAdapter
             }
         }
+
         binding?.numberOfParcel?.setText("1")
         binding?.numberOfParcel?.clearFocus()
         binding?.numberOfParcel?.transformationMethod = null
+
+        val calender = Calendar.getInstance()
+        val todayDate = calender.timeInMillis
+        selectedDate = sdf.format(todayDate)
     }
 
     private fun initClickLister() {
@@ -126,6 +132,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
             val todayDate = calender.timeInMillis
             selectedDate = sdf.format(todayDate)
             Timber.d("selectedDate $selectedDate")
+            fetchCollectionTimeSlot()
         }
 
         binding?.collectionTomorrow?.setOnClickListener {
@@ -136,6 +143,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
             val tomorrowDate = calender.timeInMillis
             selectedDate = sdf.format(tomorrowDate)
             Timber.d("selectedDate $selectedDate")
+            fetchCollectionTimeSlot()
         }
 
         dataAdapter.onItemClick = { model, position  ->
@@ -207,6 +215,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
         )
         binding?.submitBtn?.isEnabled = false
         viewModel.quickOrderRequest(requestBody).observe(viewLifecycleOwner, Observer {
+            dialog?.dismiss()
             binding?.submitBtn?.isEnabled = true
             alert("নির্দেশনা", "পার্সেল বুকিং গ্রহণ করা হয়েছে। $selectedPickupLocationThana থেকে পার্সেল কালেক্ট করা হবে।", false, "ঠিক আছে", "ক্যানসেল"){
             }.show()
@@ -224,7 +233,8 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
     }
 
     private fun fetchCollectionTimeSlot() {
-        viewModel.getCollectionTimeSlot().observe(viewLifecycleOwner, Observer { list ->
+        val requestBody = TimeSlotRequest(selectedDate)
+        viewModel.getCollectionTimeSlot(requestBody).observe(viewLifecycleOwner, Observer { list ->
             dataAdapter.initLoad(list)
         })
     }
@@ -301,13 +311,14 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
             binding?.collectionTomorrow?.text = selectedDate
             binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
             binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+            fetchCollectionTimeSlot()
         }
     }
 
     override fun onStart() {
         super.onStart()
         val dialog: BottomSheetDialog? = dialog as BottomSheetDialog?
-        dialog?.setCanceledOnTouchOutside(false)
+        dialog?.setCanceledOnTouchOutside(true)
         val bottomSheet: FrameLayout? = dialog?.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         if (bottomSheet != null) {
             BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_EXPANDED

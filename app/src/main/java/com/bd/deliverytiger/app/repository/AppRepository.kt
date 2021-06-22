@@ -21,6 +21,7 @@ import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsReques
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequest
+import com.bd.deliverytiger.app.api.model.quick_order.TimeSlotRequest
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionAnswer
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
@@ -203,7 +204,7 @@ class AppRepository(
     suspend fun updateOrderInfo(orderId: String, requestBody: UpdateOrderReqBody) = apiInterfaceCore.updateOrderInfo(orderId, requestBody)
 
     //Quick Order
-    suspend fun getCollectionTimeSlot() = apiInterfaceCore.getCollectionTimeSlot()
+    suspend fun getCollectionTimeSlot(requestBody: TimeSlotRequest) = apiInterfaceCore.getCollectionTimeSlot(requestBody)
 
     suspend fun quickOrderRequest(requestBody: QuickOrderRequest) = apiInterfaceCore.quickOrderRequest(requestBody)
 

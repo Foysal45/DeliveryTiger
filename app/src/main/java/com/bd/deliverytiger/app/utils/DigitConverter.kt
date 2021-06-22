@@ -112,9 +112,8 @@ object DigitConverter {
                 hour24 = inputTime.split(":").first().toInt()
             }
             val timePhase = when (hour24) {
-                in 0..12 -> "সকাল"
-                in 13..15 -> "দুপুর"
-                in 16..18 -> "বিকাল"
+                in 0..14 -> "সকাল"
+                in 15..17 -> "দুপুর"
                 in 18..24 -> "রাত"
                 else -> ""
             }

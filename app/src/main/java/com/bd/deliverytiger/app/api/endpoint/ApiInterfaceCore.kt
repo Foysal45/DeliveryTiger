@@ -43,6 +43,7 @@ import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequest
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequestResponse
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
+import com.bd.deliverytiger.app.api.model.quick_order.TimeSlotRequest
 import com.bd.deliverytiger.app.api.model.referral.OfferData
 import com.bd.deliverytiger.app.api.model.referral.RefereeInfo
 import com.bd.deliverytiger.app.api.model.referral.ReferrerInfo
@@ -221,8 +222,8 @@ interface ApiInterfaceCore {
     ): NetworkResponse<GenericResponse<UpdateOrderResponse>, ErrorResponse>
 
     //Quick Order Request
-    @GET("api/Fetch/GetCollectionTimeSlot")
-    suspend fun getCollectionTimeSlot(): NetworkResponse<GenericResponse<List<QuickOrderTimeSlotData>>, ErrorResponse>
+    @POST("api/Fetch/GetCollectionTimeSlotByTime")
+    suspend fun getCollectionTimeSlot(@Body requestBody: TimeSlotRequest): NetworkResponse<GenericResponse<List<QuickOrderTimeSlotData>>, ErrorResponse>
 
     @POST("/api/Entry/AddOrderRequest")
     suspend fun quickOrderRequest(@Body requestBody: QuickOrderRequest): NetworkResponse<GenericResponse<QuickOrderRequestResponse>, ErrorResponse>
