@@ -54,7 +54,7 @@
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 app:barrierDirection="end"
-                app:constraint_referenced_ids="key1,key2,key3" />
+                app:constraint_referenced_ids="key1,key2" />
 
             <TextView
                 android:id="@+id/key1"
