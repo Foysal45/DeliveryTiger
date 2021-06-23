@@ -63,6 +63,7 @@ import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentUpdateFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
+import com.bd.deliverytiger.app.ui.quick_order.quick_order_history.QuickOrderListFragment
 import com.bd.deliverytiger.app.ui.referral.ReferralFragment
 import com.bd.deliverytiger.app.ui.return_statement.ReturnStatementFragment
 import com.bd.deliverytiger.app.ui.return_statement.details.ReturnStatementDetailsFragment
@@ -807,6 +808,14 @@ class HomeActivity : AppCompatActivity(),
             }
             R.id.nav_survey -> {
                 startActivity(Intent(this, SurveyActivity::class.java))
+            }
+            R.id.nav_all_quick_order -> {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is QuickOrderListFragment) {
+                    Timber.d("QuickOrderListFragment already exist")
+                } else {
+                    addFragment(QuickOrderListFragment.newInstance(), QuickOrderListFragment.tag)
+                }
             }
             R.id.nav_balance_load -> {
                 if (SessionManager.netAmount >=0 ){

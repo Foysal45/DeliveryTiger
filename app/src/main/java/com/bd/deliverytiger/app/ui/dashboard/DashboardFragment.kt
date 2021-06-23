@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.ui.dashboard
 
 import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -8,6 +9,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
+import com.bd.deliverytiger.app.api.model.collector_info.CollectorInfoRequest
 import com.bd.deliverytiger.app.api.model.config.BannerModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
@@ -28,6 +31,7 @@ import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
+import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationType
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
 import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillPayFragment
@@ -101,7 +105,7 @@ class DashboardFragment : Fragment() {
     private var availabilityMessage: String = ""
 
     private var collectionToday: Int = 0
-
+    private var isQuickBookingEnable: Boolean = false
 
     private var isBannerEnable: Boolean = false
     private var worker: Runnable? = null
@@ -123,6 +127,7 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initDashboard()
+        getCourierUsersInformation()
         initRetentionManagerData()
         fetchBannerData()
         fetchCODData()
@@ -352,7 +357,7 @@ class DashboardFragment : Fragment() {
         }
 
         binding?.callCollectorBtn?.setOnClickListener {
-            context?.toast("Under development")
+            getRidersOfficeInfo()
         }
 
        /* binding?.dateRangePicker?.setOnClickListener {
@@ -572,6 +577,39 @@ class DashboardFragment : Fragment() {
             binding?.monthSpinner?.setSelection(1)
         }, 300L)
         */
+    }
+
+    private fun getCourierUsersInformation() {
+        viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+
+            isQuickBookingEnable = model.isQuickOrderActive
+            SessionManager.retentionManagerName = model?.adminUsers?.fullName ?: ""
+            SessionManager.retentionManagerNumber = model?.adminUsers?.mobile ?: ""
+            if (isQuickBookingEnable) {
+                binding?.balanceLoadLayout?.visibility = View.VISIBLE
+                binding?.orderBtn?.layoutParams?.width = 0
+            } else {
+                binding?.orderBtn?.layoutParams?.width = LinearLayout.LayoutParams.MATCH_PARENT
+                binding?.balanceLoadLayout?.visibility = View.GONE
+            }
+
+        })
+    }
+
+    private fun getRidersOfficeInfo() {
+        viewModel.getRidersOfficeInfo(CollectorInfoRequest(SessionManager.courierUserId)).observe(viewLifecycleOwner, Observer { model ->
+
+            if (model == null) {
+                context?.toast("কোনো তথ্য নেই")
+            } else {
+                if (model.mobile.isNullOrEmpty()){
+                    callHelplineNumber(model.officeInfoViewModel?.customerCareMobile ?: "")
+                }else{
+                    callHelplineNumber(model.mobile ?: "")
+                }
+            }
+
+        })
     }
 
     private fun fetchCollection() {

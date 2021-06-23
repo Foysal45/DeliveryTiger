@@ -15,6 +15,8 @@ import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.collection_history.CollectionData
+import com.bd.deliverytiger.app.api.model.collector_info.CollectorInfoRequest
+import com.bd.deliverytiger.app.api.model.collector_info.CollectorInformation
 import com.bd.deliverytiger.app.api.model.config.BannerResponse
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
@@ -44,6 +46,8 @@ import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequest
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequestResponse
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
 import com.bd.deliverytiger.app.api.model.quick_order.TimeSlotRequest
+import com.bd.deliverytiger.app.api.model.quick_order.quick_order_history.QuickOrderList
+import com.bd.deliverytiger.app.api.model.quick_order.quick_order_history.QuickOrderListRequest
 import com.bd.deliverytiger.app.api.model.referral.OfferData
 import com.bd.deliverytiger.app.api.model.referral.RefereeInfo
 import com.bd.deliverytiger.app.api.model.referral.ReferrerInfo
@@ -215,6 +219,9 @@ interface ApiInterfaceCore {
     @GET("api/Dashboard/GetHelpLineNumbers")
     suspend fun fetchHelpLineNumbers(): NetworkResponse<GenericResponse<HelpLineNumberModel>, ErrorResponse>
 
+    @POST("api/Fetch/GetRidersOfficeInfo")
+    suspend fun getRidersOfficeInfo(@Body requestBody: CollectorInfoRequest): NetworkResponse<GenericResponse<CollectorInformation>, ErrorResponse>
+
     @PUT("api/Update/UpdateCourierOrdersAppV2/{orderId}")
     suspend fun updateOrderInfo(
         @Path("orderId") orderId: String,
@@ -225,8 +232,11 @@ interface ApiInterfaceCore {
     @POST("api/Fetch/GetCollectionTimeSlotByTime")
     suspend fun getCollectionTimeSlot(@Body requestBody: TimeSlotRequest): NetworkResponse<GenericResponse<List<QuickOrderTimeSlotData>>, ErrorResponse>
 
-    @POST("/api/Entry/AddOrderRequest")
+    @POST("api/Entry/AddOrderRequest")
     suspend fun quickOrderRequest(@Body requestBody: QuickOrderRequest): NetworkResponse<GenericResponse<QuickOrderRequestResponse>, ErrorResponse>
+
+    @POST("api/Bondhu/GetMerchantQuickOrders")
+    suspend fun getMerchantQuickOrders(@Body requestBody: QuickOrderListRequest): NetworkResponse<GenericResponse<List<QuickOrderList>>, ErrorResponse>
 
 
 }
