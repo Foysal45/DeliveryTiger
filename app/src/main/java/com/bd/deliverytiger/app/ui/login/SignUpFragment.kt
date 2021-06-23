@@ -85,6 +85,10 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         referTitle = view.findViewById(R.id.referTitle)
         knownSourceSpinner = view.findViewById(R.id.spinnerAboutDeliveryTiger)
 
+        binding?.accountNumber?.transformationMethod = null
+        binding?.routingNumber?.transformationMethod = null
+
+
         loginInterface = RetrofitSingletonAPI.getInstance(requireContext()).create(LoginInterface::class.java)
         checkReferrer = RetrofitSingleton.getInstance(requireContext()).create(LoginInterface::class.java)
         otherApiInterface = RetrofitSingleton.getInstance(requireContext()).create(OtherApiInterface::class.java)
@@ -381,7 +385,10 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         val routingNumber = binding?.routingNumber?.text?.toString()?.trim() ?: ""
         val knowingSource: String = if (knownSourceSpinner.selectedItemPosition == 0) "" else knownSourceSpinner.selectedItem.toString()
 
-        val fragment = SignUpOTPFragment.newInstance(companyName, mobile, password, referCode, bkashNumber, preferredPaymentCycle, knowingSource)
+        val fragment = SignUpOTPFragment.newInstance(companyName, mobile, password, referCode,
+            bkashNumber, preferredPaymentCycle, knowingSource,
+            accountName, accountNumber, bankName, branchName, routingNumber
+        )
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpOTPFragment.tag)
         ft?.commit()

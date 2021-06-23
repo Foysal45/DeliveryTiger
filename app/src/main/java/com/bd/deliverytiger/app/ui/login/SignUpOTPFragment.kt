@@ -44,9 +44,17 @@ class SignUpOTPFragment : Fragment() {
     private var bkashNumber: String = ""
     private var preferredPaymentCycle: String = ""
     private var knowingSource: String = ""
+    private var accountName = ""
+    private var accountNumber = ""
+    private var bankName = ""
+    private var branchName = ""
+    private var routingNumber = ""
 
     companion object {
-        fun newInstance(companyName: String, userMobile: String, userPassword: String, referCode: String, bkashNumber: String, preferredPaymentCycle: String, knowingSource: String): SignUpOTPFragment = SignUpOTPFragment().apply {
+        fun newInstance(companyName: String, userMobile: String, userPassword: String, referCode: String,
+                        bkashNumber: String, preferredPaymentCycle: String, knowingSource: String,
+                        accountName: String, accountNumber: String, bankName: String, branchName: String, routingNumber: String
+        ): SignUpOTPFragment = SignUpOTPFragment().apply {
             this.companyName = companyName
             this.userMobile = userMobile
             this.userPassword = userPassword
@@ -54,9 +62,14 @@ class SignUpOTPFragment : Fragment() {
             this.bkashNumber = bkashNumber
             this.preferredPaymentCycle = preferredPaymentCycle
             this.knowingSource = knowingSource
+            this.accountName = accountName
+            this.accountNumber = accountNumber
+            this.bankName = bankName
+            this.branchName = branchName
+            this.routingNumber = routingNumber
         }
 
-        val tag = SignUpOTPFragment::class.java.name
+        val tag: String = SignUpOTPFragment::class.java.name
     }
 
     override fun onAttach(context: Context) {
@@ -153,7 +166,11 @@ class SignUpOTPFragment : Fragment() {
     private fun registerUser() {
 
         val loginInterface = RetrofitSingleton.getInstance(mContext).create(LoginInterface::class.java)
-        val signUpReqBody = SignUpReqBody(userMobile, userPassword, referCode, bkashNumber, preferredPaymentCycle, knowingSource, companyName)
+        val signUpReqBody = SignUpReqBody(
+            userMobile, userPassword, referCode,
+            bkashNumber, preferredPaymentCycle, knowingSource, companyName,
+            accountName, accountNumber, bankName, branchName, routingNumber
+        )
         loginInterface.userUserRegister(signUpReqBody).enqueue(object : Callback<GenericResponse<SignUpResponse>> {
             override fun onFailure(call: Call<GenericResponse<SignUpResponse>>, t: Throwable) {
                 //Timber.e("userUserRegister", "failed " + t.message)
