@@ -13,7 +13,6 @@ data class ServiceInfoData(
     var deliveryRangeId: List<Int> = listOf(),
 
     // private
-    var locationList: List<AllDistrictListsModel> = listOf(),
     var districtList: List<AllDistrictListsModel> = listOf(),
     var index: Int = 0
 )

@@ -256,6 +256,7 @@ class HomeActivity : AppCompatActivity(),
         }
 
         loadBannerInfo()
+        fetchOrderServiceType()
 
         initService()
         appUpdateManager()
@@ -1010,6 +1011,10 @@ class HomeActivity : AppCompatActivity(),
         val tag = PopupDialog.tag
         val dialog = PopupDialog.newInstance(imageUrl)
         dialog.show(supportFragmentManager, tag)
+    }
+
+    private fun fetchOrderServiceType() {
+        viewModel.fetchOrderServiceInfo()
     }
 
     /*private fun moveFabBy(value: Float) {

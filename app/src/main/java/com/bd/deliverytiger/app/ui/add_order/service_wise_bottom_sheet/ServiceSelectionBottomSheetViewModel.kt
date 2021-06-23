@@ -39,7 +39,6 @@ class ServiceSelectionBottomSheetViewModel(private val repository: AppRepository
                             if (!locationList.isNullOrEmpty()) {
                                 val districtList = locationList.filter { it.parentId == 0 }
                                 model.apply {
-                                    this.locationList = locationList
                                     this.districtList = districtList
                                     this.index = index
                                 }
@@ -56,7 +55,6 @@ class ServiceSelectionBottomSheetViewModel(private val repository: AppRepository
                             val locationList = allDistrictResponse.body.model
                             if (!locationList.isNullOrEmpty()) {
                                 model.apply {
-                                    this.locationList = locationList
                                     this.districtList = locationList
                                     this.index = index
                                 }

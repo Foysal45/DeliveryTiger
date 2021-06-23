@@ -1025,11 +1025,16 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     //#region Service Type Selection (for Dhaka only)
     private fun loadServiceType() {
-        viewModel.fetchServiceInfo().observe(viewLifecycleOwner, Observer { list ->
+        homeViewModel.serviceInfoList.observe(viewLifecycleOwner, Observer { list ->
             serviceTypeList.clear()
             serviceTypeList.addAll(list)
             goToServiceSelectionBottomSheet(list)
         })
+        /*viewModel.fetchServiceInfo().observe(viewLifecycleOwner, Observer { list ->
+            serviceTypeList.clear()
+            serviceTypeList.addAll(list)
+            goToServiceSelectionBottomSheet(list)
+        })*/
     }
 
     private fun goToServiceSelectionBottomSheet(dataLists: List<ServiceInfoData>) {

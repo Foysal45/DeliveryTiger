@@ -87,9 +87,9 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
     private fun initServiceData() {
         dataList ?: return
         dataAdapter.initLoad(dataList!!)
-        viewModel.fetchServiceWiseDistrict(dataList!!).observe(viewLifecycleOwner, Observer { model ->
+        /*viewModel.fetchServiceWiseDistrict(dataList!!).observe(viewLifecycleOwner, Observer { model ->
             dataAdapter.updateData(model)
-        })
+        })*/
     }
 
     private fun goToDistrictSelectDialogue(serviceInfo: ServiceInfoData) {
