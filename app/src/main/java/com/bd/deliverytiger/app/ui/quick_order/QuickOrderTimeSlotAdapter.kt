@@ -55,6 +55,7 @@ class QuickOrderTimeSlotAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>()
 
     fun setSelectedPositions(position: Int) {
         selectedPosition = position
+        notifyDataSetChanged()
     }
 
     fun initLoad(list: List<QuickOrderTimeSlotData>) {

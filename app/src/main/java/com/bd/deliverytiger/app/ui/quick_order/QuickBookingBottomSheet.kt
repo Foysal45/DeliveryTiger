@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
@@ -28,6 +29,7 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
 class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
@@ -46,6 +48,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
     private var selectedPickupLocationThanaId = 0
     private var selectedPickupLocationThana: String = ""
     private var selectedTime: String = ""
+    private var isTodaySelected: Boolean = false
 
 
     var onCollectionTypeSelected: ((isPickup: Boolean, pickupLocation: PickupLocation) -> Unit)? = null
@@ -95,6 +98,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
         val calender = Calendar.getInstance()
         val todayDate = calender.timeInMillis
         selectedDate = sdf.format(todayDate)
+        isTodaySelected = true
     }
 
     private fun initClickLister() {
@@ -133,6 +137,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
             selectedDate = sdf.format(todayDate)
             Timber.d("selectedDate $selectedDate")
             fetchCollectionTimeSlot()
+            isTodaySelected = true
         }
 
         binding?.collectionTomorrow?.setOnClickListener {
@@ -144,11 +149,39 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
             selectedDate = sdf.format(tomorrowDate)
             Timber.d("selectedDate $selectedDate")
             fetchCollectionTimeSlot()
+            isTodaySelected = false
         }
 
         dataAdapter.onItemClick = { model, position  ->
-            Timber.d("timeDebug clicked $position")
             selectedTimeSLotID = model.collectionTimeSlotId
+
+            if (isTodaySelected && !model.cutOffTime.isNullOrEmpty()) {
+
+                try {
+                    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+                    val cutOffTimeStamp = sdf.parse("$selectedDate ${model.cutOffTime}")
+                    //val cutOffTimeStamp = sdf.parse("$selectedDate 12:00:00")
+                    val endTimeStamp = sdf.parse("$selectedDate ${model.endTime}")
+                    val currentTimeStamp = Date()
+                    if (currentTimeStamp.after(cutOffTimeStamp)) {
+
+                        val timeDiff = endTimeStamp!!.time - currentTimeStamp.time
+                        val minute = TimeUnit.MILLISECONDS.toMinutes(timeDiff)
+
+                        val msg = "এই টাইম স্লটে পরবর্তী ${DigitConverter.toBanglaDigit(minute.toString())} মিনিট এর মধ্যে কালেক্টর আসতে পারবেন না। অনুগ্রহ করে পরবর্তী টাইম স্লট সিলেক্ট করে অর্ডার করুন।"
+                        alert("নির্দেশনা", msg) {
+                            if (it == AlertDialog.BUTTON_POSITIVE) {
+                                selectedTimeSLotID = 0
+                                dataAdapter.setSelectedPositions(-1)
+                            }
+                        }.show()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+
         }
 
         binding?.orderRequestDatePicker?.setOnClickListener {
@@ -271,7 +304,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
 
         var calender = Calendar.getInstance()
         val calendarConstraints = CalendarConstraints.Builder().apply {
-            calender.add(Calendar.DAY_OF_MONTH, -1)
+            //calender.add(Calendar.DAY_OF_MONTH, -1)
             val startDate = calender.timeInMillis
             setStart(startDate)
 
@@ -312,6 +345,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
             binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
             binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
             fetchCollectionTimeSlot()
+            isTodaySelected = false
         }
     }
 
