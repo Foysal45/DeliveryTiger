@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.quick_order.quick_order_history.QuickOrderListRequest
 import com.bd.deliverytiger.app.databinding.FragmentQuickOrderListBinding
+import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.quick_order.QuickOrderRequestViewModel
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -44,6 +45,11 @@ class QuickOrderListFragment : Fragment() {
         initView()
         initClickLister()
         fetchQuickOrderLists(selectedDate)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle(getString(R.string.quick_booking_list))
     }
 
     private fun initView() {

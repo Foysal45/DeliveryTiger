@@ -61,9 +61,9 @@
             />
 
         <item
-            android:id="@+id/nav_all_quick_order"
+            android:id="@+id/nav_quick_booking_list"
             android:icon="@drawable/ic_bill_pay_history"
-            android:title="সকল কুইক অর্ডার"
+            android:title="@string/quick_booking_list"
             android:visible="true"
             />
 

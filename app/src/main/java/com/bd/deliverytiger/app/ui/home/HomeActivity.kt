@@ -367,7 +367,7 @@ class HomeActivity : AppCompatActivity(),
                 currentFragment is ReturnStatementFragment || currentFragment is ReturnStatementDetailsFragment ||
                 currentFragment is InstantPaymentUpdateFragment ||
                 currentFragment is DeliveryDetailsFragment ||
-                currentFragment is BalanceLoadHistoryFragment
+                currentFragment is BalanceLoadHistoryFragment || currentFragment is QuickOrderListFragment
             ) {
                 addProductBtnVisibility(false)
             } else {
@@ -809,7 +809,7 @@ class HomeActivity : AppCompatActivity(),
             R.id.nav_survey -> {
                 startActivity(Intent(this, SurveyActivity::class.java))
             }
-            R.id.nav_all_quick_order -> {
+            R.id.nav_quick_booking_list -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is QuickOrderListFragment) {
                     Timber.d("QuickOrderListFragment already exist")

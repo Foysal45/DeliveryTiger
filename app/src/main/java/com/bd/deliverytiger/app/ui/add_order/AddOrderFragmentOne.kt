@@ -1158,7 +1158,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                         if (list.isNotEmpty()) {
                             val sadarThana = list.first()
                             thanaId = sadarThana.districtId
-                            etThana.setText(sadarThana.districtBng)
+                            //etThana.setText(sadarThana.districtBng)
                             fetchLocationById(thanaId, LocationType.AREA, true)
                             getDeliveryCharge(districtId, thanaId, 0, serviceType)
                         }
@@ -1175,7 +1175,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                         } else {
                             val sadarArea = list.first()
                             areaId = sadarArea.districtId
-                            etAriaPostOffice.setText(sadarArea.districtBng)
+                            //etAriaPostOffice.setText(sadarArea.districtBng)
                             getDeliveryCharge(districtId, thanaId, areaId, serviceType)
                         }
                     } else {
@@ -1567,10 +1567,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         if (districtId == 0) {
             go = false
             context?.toast(getString(R.string.select_dist))
-        } else if (thanaId == 0) {
+        } else if (thanaId == 0 || etThana.text.toString().isEmpty()) {
             go = false
             context?.toast(getString(R.string.select_thana))
-        } else if (isAriaAvailable && areaId == 0) {
+        } else if (isAriaAvailable && (areaId == 0 || etAriaPostOffice.text.toString().isEmpty())) {
             go = false
             context?.toast(getString(R.string.select_aria))
         } else if (customerName.isEmpty()) {
