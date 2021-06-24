@@ -128,7 +128,6 @@ class DashboardFragment : Fragment() {
 
         initDashboard()
         getCourierUsersInformation()
-        initRetentionManagerData()
         fetchBannerData()
         fetchCODData()
         fetchCollection()
@@ -483,7 +482,7 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun initRetentionManagerData(){
+    private fun initRetentionManagerData(retentionManagerName: String, retentionManagerNumber: String){
 
         binding?.retentionManagerImage?.let { view ->
             Glide.with(view)
@@ -494,12 +493,11 @@ class DashboardFragment : Fragment() {
                 .into(view)
         }
 
-        binding?.retentionManagerName?.text = SessionManager.retentionManagerName
-        val number = SessionManager.retentionManagerNumber
-        binding?.retentionManagerNumber?.text = number
+        binding?.retentionManagerName?.text = retentionManagerName
+        binding?.retentionManagerNumber?.text = retentionManagerNumber
         binding?.callBtn?.setOnClickListener {
-            if (number.isNotEmpty()) {
-                callHelplineNumber(number)
+            if (retentionManagerNumber.isNotEmpty()) {
+                callHelplineNumber(retentionManagerNumber)
             } else {
                 context?.toast("কোনো মোবাইল নম্বর অ্যাড করা হয়নি")
             }
@@ -583,8 +581,7 @@ class DashboardFragment : Fragment() {
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
 
             isQuickBookingEnable = model.isQuickOrderActive
-            SessionManager.retentionManagerName = model?.adminUsers?.fullName ?: ""
-            SessionManager.retentionManagerNumber = model?.adminUsers?.mobile ?: ""
+            initRetentionManagerData(model?.adminUsers?.fullName ?: "", model?.adminUsers?.mobile ?: "")
             if (isQuickBookingEnable) {
                 binding?.balanceLoadLayout?.visibility = View.VISIBLE
                 binding?.orderBtn?.layoutParams?.width = 0

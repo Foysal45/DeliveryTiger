@@ -27,10 +27,10 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="Date" />
+                android:text="কালেকশন তারিখ" />
 
             <TextView
-                android:id="@+id/date"
+                android:id="@+id/collectionDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
@@ -54,7 +54,7 @@
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 app:barrierDirection="end"
-                app:constraint_referenced_ids="key1,key2" />
+                app:constraint_referenced_ids="key1,key2,key3" />
 
             <TextView
                 android:id="@+id/key1"
@@ -104,6 +104,31 @@
                 app:layout_constraintStart_toEndOf="@id/barrier"
                 app:layout_constraintTop_toBottomOf="@id/parcelCount"
                 tools:text="আদাবর" />
+
+            <TextView
+                android:id="@+id/key3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="রিকোয়েস্ট তারিখ"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/order_info_value_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/key2" />
+
+            <TextView
+                android:id="@+id/requestDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:ellipsize="end"
+                android:gravity="end"
+                android:maxLines="1"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/order_info_value_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/barrier"
+                app:layout_constraintTop_toBottomOf="@id/address"
+                tools:text="23 June, 2021" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

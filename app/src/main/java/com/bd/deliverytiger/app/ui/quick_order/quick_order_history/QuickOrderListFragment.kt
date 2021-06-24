@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.quick_order.quick_order_history.QuickOrderListRequest
 import com.bd.deliverytiger.app.databinding.FragmentQuickOrderListBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.quick_order.QuickOrderRequestViewModel
+import com.bd.deliverytiger.app.utils.DigitConverter
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.android.ext.android.inject
@@ -26,8 +28,8 @@ class QuickOrderListFragment : Fragment() {
     private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
     private val sdf1 = SimpleDateFormat("dd MMM, yyyy", Locale.US)
 
-    private var selectedDate = "2001-03-23"
-    private var selectedDateFormatted = "2001-03-23"
+    private var fromDate = "2001-01-01"
+    private var toDate = "2001-01-01"
 
     companion object {
         fun newInstance(): QuickOrderListFragment = QuickOrderListFragment().apply {}
@@ -43,8 +45,8 @@ class QuickOrderListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         initView()
+        initData()
         initClickLister()
-        fetchQuickOrderLists(selectedDate)
     }
 
     override fun onResume() {
@@ -62,14 +64,24 @@ class QuickOrderListFragment : Fragment() {
         }
     }
 
+    private fun initData(){
+        val calendar = Calendar.getInstance()
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        toDate = simpleDateFormat.format(calendar.time)
+        fromDate = simpleDateFormat.format(calendar.time)
+        //setDateRangePickerTitle()
+        val requestBody = QuickOrderListRequest(fromDate, toDate, SessionManager.courierUserId)
+        fetchQuickOrderLists(requestBody)
+    }
+
     private fun initClickLister() {
         binding?.dateRangePicker?.setOnClickListener {
             dateRangePicker()
         }
     }
 
-        private fun fetchQuickOrderLists(date: String) {
-        val requestBody  = QuickOrderListRequest(date, date, SessionManager.courierUserId)
+        private fun fetchQuickOrderLists(requestBody: QuickOrderListRequest) {
+
         viewModel.getMerchantQuickOrders(requestBody).observe(viewLifecycleOwner, Observer { list->
             if (list.isNullOrEmpty()){
                 binding?.ivEmpty?.visibility = View.VISIBLE
@@ -81,21 +93,24 @@ class QuickOrderListFragment : Fragment() {
     }
 
     private fun dateRangePicker() {
-        val builder = MaterialDatePicker.Builder.datePicker()
+        val builder = MaterialDatePicker.Builder.dateRangePicker()
         builder.setTheme(R.style.CustomMaterialCalendarTheme)
-        builder.setTitleText("Select date")
+        builder.setTitleText("ডেট রেঞ্জ সিলেক্ট করুন")
         val picker = builder.build()
         picker.show(childFragmentManager, "Picker")
         picker.addOnPositiveButtonClickListener {
-            selectedDate = sdf.format(it)
-            selectedDateFormatted = sdf1.format(it)
+
+            fromDate = sdf.format(it.first)
+            toDate = sdf.format(it.second)
             setDateRangePickerTitle()
-            fetchQuickOrderLists(selectedDate)
+            val requestBody = QuickOrderListRequest(fromDate, toDate, SessionManager.courierUserId)
+            fetchQuickOrderLists(requestBody)
         }
     }
 
     private fun setDateRangePickerTitle(){
-        binding?.dateRangePicker?.text = selectedDateFormatted
+        val msg = "${DigitConverter.toBanglaDate(fromDate, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate, "yyyy-MM-dd")}"
+        binding?.dateRangePicker?.text = msg
     }
 
     override fun onDestroyView() {

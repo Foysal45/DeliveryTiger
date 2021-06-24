@@ -1,13 +1,12 @@
 package com.bd.deliverytiger.app.ui.quick_order.quick_order_history
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.api.model.quick_order.quick_order_history.QuickOrderList
 import com.bd.deliverytiger.app.databinding.ItemViewAllQuickOrderBinding
+import com.bd.deliverytiger.app.utils.DigitConverter
 
 class QuickOrderListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -27,7 +26,10 @@ class QuickOrderListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val model = dataList[position]
             val binding = holder.binding
 
-            binding.date.text = "23 June, 2021"
+            val collectionDate = model.collectionDate?.split("T")?.first()
+            val requestDate = model.requestDate?.split("T")?.first()
+            binding.collectionDate.text = DigitConverter.toBanglaDate(collectionDate, "yyyy-MM-dd")
+            binding.requestDate.text = DigitConverter.toBanglaDate(requestDate, "yyyy-MM-dd")
             binding.parcelCount.text = "${model.requestOrderAmount}"
             binding.address.text = "${model.districtsViewModel?.thana}"
 
