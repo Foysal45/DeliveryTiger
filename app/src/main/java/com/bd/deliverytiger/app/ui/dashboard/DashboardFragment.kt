@@ -579,7 +579,8 @@ class DashboardFragment : Fragment() {
 
     private fun getCourierUsersInformation() {
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
-
+            SessionManager.collectionCharge = model.collectionCharge.toInt()
+            SessionManager.merchantDistrict = model.districtId
             isQuickBookingEnable = model.isQuickOrderActive
             initRetentionManagerData(model?.adminUsers?.fullName ?: "", model?.adminUsers?.mobile ?: "")
             if (isQuickBookingEnable) {

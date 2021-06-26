@@ -158,15 +158,6 @@ object SessionManager {
             }
         }
 
-    var collectionCharge: Double
-        get() {
-            return pref.getFloat("collectionCharge", 0f).toDouble()
-        }
-        set(value) {
-            pref.edit {
-                putFloat("collectionCharge", value.toFloat())
-            }
-        }
 
     var returnCharge: Double
         get() {
@@ -441,6 +432,26 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putInt("instantPaymentAmount", value)
+            }
+        }
+
+    var collectionCharge: Int
+        get() {
+            return pref.getInt("collectionCharge", 0)
+        }
+        set(value) {
+            pref.edit {
+                putInt("collectionCharge", value)
+            }
+        }
+
+    var merchantDistrict: Int
+        get() {
+            return pref.getInt("merchantDistrict", 0)
+        }
+        set(value) {
+            pref.edit {
+                putInt("merchantDistrict", value)
             }
         }
 
