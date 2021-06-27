@@ -203,6 +203,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var selectedDeliveryType = ""
     private var serviceType: String = "alltoall"
     private var selectedServiceType: Int = 0
+    private var isCity: Boolean = false
 
     private var isLocationLoading: Boolean = false
 
@@ -1155,7 +1156,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                         if (list.isNotEmpty()) {
                             val sadarThana = list.first()
                             thanaId = sadarThana.districtId
-                            //etThana.setText(sadarThana.districtBng)
+                            if (selectedServiceType == 14 || selectedServiceType == 17 || selectedServiceType == 18) {
+                                etThana.setText(sadarThana.districtBng)
+                                etThana.isEnabled = isCity
+                            }
                             fetchLocationById(thanaId, LocationType.AREA, true)
                             getDeliveryCharge(districtId, thanaId, 0, serviceType)
                         }
@@ -1255,6 +1259,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         val selectedDistrict = filteredDistrictLists.find { it.districtId == districtId }
         selectedDistrict?.let { district ->
             showLocationAlert(district, LocationType.DISTRICT)
+            isCity = district.isCity
         }
 
         serviceType = if (merchantDistrict == districtId) {

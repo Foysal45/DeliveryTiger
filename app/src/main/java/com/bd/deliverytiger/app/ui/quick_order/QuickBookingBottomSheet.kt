@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.ui.quick_order
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcel
 import android.view.LayoutInflater
@@ -53,6 +54,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
 
     var onCollectionTypeSelected: ((isPickup: Boolean, pickupLocation: PickupLocation) -> Unit)? = null
     var onCollectionTimeSlotSelected: ((isPickup: Boolean, pickupLocation: QuickOrderTimeSlotData) -> Unit)? = null
+    var onClose: ((type: Int) -> Unit)? = null
 
     companion object {
 
@@ -78,7 +80,6 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
 
         initView()
         fetchPickupLocation()
-        fetchCollectionTimeSlot()
         initClickLister()
     }
 
@@ -99,6 +100,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
         val todayDate = calender.timeInMillis
         selectedDate = sdf.format(todayDate)
         isTodaySelected = true
+        fetchCollectionTimeSlot()
     }
 
     private fun initClickLister() {
@@ -136,8 +138,8 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
             val todayDate = calender.timeInMillis
             selectedDate = sdf.format(todayDate)
             Timber.d("selectedDate $selectedDate")
-            fetchCollectionTimeSlot()
             isTodaySelected = true
+            fetchCollectionTimeSlot()
         }
 
         binding?.collectionTomorrow?.setOnClickListener {
@@ -148,8 +150,8 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
             val tomorrowDate = calender.timeInMillis
             selectedDate = sdf.format(tomorrowDate)
             Timber.d("selectedDate $selectedDate")
-            fetchCollectionTimeSlot()
             isTodaySelected = false
+            fetchCollectionTimeSlot()
         }
 
         dataAdapter.onItemClick = { model, position  ->
@@ -266,10 +268,17 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
     }
 
     private fun fetchCollectionTimeSlot() {
-        val requestBody = TimeSlotRequest(selectedDate)
-        viewModel.getCollectionTimeSlot(requestBody).observe(viewLifecycleOwner, Observer { list ->
-            dataAdapter.initLoad(list)
-        })
+        if (isTodaySelected) {
+            viewModel.currentTimeSlot.observe(viewLifecycleOwner, Observer { list ->
+                Timber.d("timeSlotDebug current time slot")
+                dataAdapter.initLoad(list)
+            })
+        } else {
+            viewModel.upcomingTimeSlot.observe(viewLifecycleOwner, Observer { list ->
+                Timber.d("timeSlotDebug upcoming time slot")
+                dataAdapter.initLoad(list)
+            })
+        }
     }
 
     private fun validate(): Boolean {
@@ -344,8 +353,8 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
             binding?.collectionTomorrow?.text = selectedDate
             binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
             binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
-            fetchCollectionTimeSlot()
             isTodaySelected = false
+            fetchCollectionTimeSlot()
         }
     }
 
@@ -372,6 +381,11 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        onClose?.invoke(0)
     }
 
 }

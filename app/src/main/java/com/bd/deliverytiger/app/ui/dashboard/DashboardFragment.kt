@@ -1008,6 +1008,11 @@ class DashboardFragment : Fragment() {
         val tag: String = QuickBookingBottomSheet.tag
         val dialog: QuickBookingBottomSheet = QuickBookingBottomSheet.newInstance()
         dialog.show(childFragmentManager, tag)
+        dialog.onClose = {
+            Handler(Looper.getMainLooper()).postDelayed({
+                hideKeyboard()
+            }, 200L)
+        }
     }
 
     private fun serviceChargeDialog() {

@@ -18,6 +18,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 class QuickOrderRequestViewModel(private val repository: AppRepository) : ViewModel() {
 
@@ -26,6 +28,21 @@ class QuickOrderRequestViewModel(private val repository: AppRepository) : ViewMo
     val serverErrorMessage = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
     val networkErrorMessage = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
     val unknownErrorMessage = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+
+    private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+
+    val currentTimeSlot: LiveData<List<QuickOrderTimeSlotData>> by lazy {
+        val calender = Calendar.getInstance()
+        val selectedDate = sdf.format(calender.timeInMillis)
+        getCollectionTimeSlot(TimeSlotRequest(selectedDate))
+    }
+
+    val upcomingTimeSlot: LiveData<List<QuickOrderTimeSlotData>> by lazy {
+        val calender = Calendar.getInstance()
+        calender.add(Calendar.DAY_OF_MONTH, 1)
+        val selectedDate = sdf.format(calender.timeInMillis)
+        getCollectionTimeSlot(TimeSlotRequest(selectedDate))
+    }
 
     fun quickOrderRequest(requestBody: QuickOrderRequest): LiveData<QuickOrderRequestResponse> {
 
@@ -95,7 +112,7 @@ class QuickOrderRequestViewModel(private val repository: AppRepository) : ViewMo
         return responseData
     }
 
-    fun getCollectionTimeSlot(requestBody: TimeSlotRequest): LiveData<List<QuickOrderTimeSlotData>> {
+    private fun getCollectionTimeSlot(requestBody: TimeSlotRequest): LiveData<List<QuickOrderTimeSlotData>> {
 
         viewState.value = ViewState.ProgressState(true)
         val responseData = MutableLiveData<List<QuickOrderTimeSlotData>>()
