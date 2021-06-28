@@ -30,7 +30,7 @@ class QuickOrderListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val requestDate = model.requestDate?.split("T")?.first()
             binding.collectionDate.text = DigitConverter.toBanglaDate(collectionDate, "yyyy-MM-dd")
             binding.requestDate.text = DigitConverter.toBanglaDate(requestDate, "yyyy-MM-dd")
-            binding.parcelCount.text = "${model.requestOrderAmount}"
+            binding.parcelCount.text = "${DigitConverter.toBanglaDigit(model.requestOrderAmount)} টি"
             binding.address.text = "${model.districtsViewModel?.thana}"
             binding.totalCollectedOrder.text = "${DigitConverter.toBanglaDigit(model.totalOrder)}/${DigitConverter.toBanglaDigit(model.requestOrderAmount)} টি"
             binding.status.text = model.actionViewModel?.buttonName
@@ -38,7 +38,6 @@ class QuickOrderListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     internal inner class ViewModel(val binding: ItemViewAllQuickOrderBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener {
