@@ -179,6 +179,36 @@ object SessionManager {
             }
         }
 
+    var codChargeMin: Int
+        get() {
+            return pref.getInt("codChargeMin", 10)
+        }
+        set(value) {
+            pref.edit {
+                putInt("codChargeMin", value)
+            }
+        }
+
+    var codChargePercentageInsideDhaka: Double
+        get() {
+            return pref.getFloat("codChargePercentageInsideDhaka", 1f).toDouble()
+        }
+        set(value) {
+            pref.edit {
+                putFloat("codChargePercentageInsideDhaka", value.toFloat())
+            }
+        }
+
+    var codChargePercentageOutsideDhaka: Double
+        get() {
+            return pref.getFloat("codChargePercentageOutsideDhaka", 1f).toDouble()
+        }
+        set(value) {
+            pref.edit {
+                putFloat("codChargePercentageOutsideDhaka", value.toFloat())
+            }
+        }
+
     var courierUserId: Int
         get() {
             return pref.getInt(Key_UserId, 0)

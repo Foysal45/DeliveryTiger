@@ -12,6 +12,7 @@ import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.databinding.FragmentAllOrderDetailsDialogueBinding
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.utils.DigitConverter
+import com.bd.deliverytiger.app.utils.SessionManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -91,9 +92,15 @@ class AllOrdersDetailsDialog : BottomSheetDialogFragment() {
     @SuppressLint("SetTextI18n")
     private fun initServiceChargeData(){
         val model = dataList[index]
-
         binding?.shipmentTV?.text = "${DigitConverter.toBanglaDigit(model.courierPrice?.deliveryCharge, true)} ৳"
-        binding?.key003?.text = "COD চার্জঃ (1.5% × ${DigitConverter.toBanglaDigit(model.courierPrice?.collectionAmount, true)} ৳)"
+
+        val codChargePercentage = if (model.courierAddressContactInfo?.districtId == 14) {
+            SessionManager.codChargePercentageInsideDhaka
+        } else {
+            SessionManager.codChargePercentageOutsideDhaka
+        }
+        val codMsg = "COD চার্জঃ (সর্বনিম্ন ${DigitConverter.toBanglaDigit(SessionManager.codChargeMin)}৳) (${DigitConverter.toBanglaDigit(codChargePercentage)}% × ${DigitConverter.toBanglaDigit(model.courierPrice?.collectionAmount, true)} ৳)"
+        binding?.key003?.text = codMsg
         binding?.codChargeTV?.text = "${DigitConverter.toBanglaDigit(model.courierPrice?.codCharge, true)} ৳"
         binding?.breakableChargeTV?.text = "${DigitConverter.toBanglaDigit(model.courierPrice?.breakableCharge, true)} ৳"
         binding?.collectionChargeTV?.text = "${DigitConverter.toBanglaDigit(model.courierPrice?.collectionCharge, true)} ৳"

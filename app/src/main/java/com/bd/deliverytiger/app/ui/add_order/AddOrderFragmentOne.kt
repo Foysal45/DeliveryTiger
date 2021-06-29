@@ -905,6 +905,9 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             bigProductCharge = model.bigProductCharge
             codChargePercentageInsideDhaka = model.codChargeDhakaPercentage
             codChargePercentageOutsideDhaka = model.codChargePercentage
+            SessionManager.codChargePercentageInsideDhaka = codChargePercentageInsideDhaka
+            SessionManager.codChargePercentageOutsideDhaka = codChargePercentageOutsideDhaka
+            SessionManager.codChargeMin = codChargeMin
         })
 
     }
