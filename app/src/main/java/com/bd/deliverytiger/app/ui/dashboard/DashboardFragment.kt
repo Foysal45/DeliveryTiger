@@ -482,11 +482,11 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun initRetentionManagerData(retentionManagerName: String, retentionManagerNumber: String){
+    private fun initRetentionManagerData(userId: Int, retentionManagerName: String, retentionManagerNumber: String){
 
         binding?.retentionManagerImage?.let { view ->
             Glide.with(view)
-                .load("https://static.ajkerdeal.com/images/admin_users/${SessionManager.profileImgUri}.jpg")
+                .load("https://static.ajkerdeal.com/images/admin_users/$userId.jpg")
                 .apply(RequestOptions().placeholder(R.drawable.ic_avater_demo).error(R.drawable.ic_avater_demo).circleCrop())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
@@ -582,7 +582,7 @@ class DashboardFragment : Fragment() {
             SessionManager.collectionCharge = model.collectionCharge.toInt()
             SessionManager.merchantDistrict = model.districtId
             isQuickBookingEnable = model.isQuickOrderActive
-            initRetentionManagerData(model?.adminUsers?.fullName ?: "", model?.adminUsers?.mobile ?: "")
+            initRetentionManagerData(model?.adminUsers?.userId ?: 0, model?.adminUsers?.fullName ?: "", model?.adminUsers?.mobile ?: "")
             if (isQuickBookingEnable) {
                 binding?.balanceLoadLayout?.visibility = View.VISIBLE
                 binding?.orderBtn?.layoutParams?.width = 0
