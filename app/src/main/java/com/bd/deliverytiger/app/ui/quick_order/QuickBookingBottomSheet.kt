@@ -50,6 +50,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
     private var selectedPickupLocationThana: String = ""
     private var selectedTime: String = ""
     private var isTodaySelected: Boolean = false
+    private var selectedTimeSLot: String = ""
 
 
     var onCollectionTypeSelected: ((isPickup: Boolean, pickupLocation: PickupLocation) -> Unit)? = null
@@ -156,6 +157,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
 
         dataAdapter.onItemClick = { model, position  ->
             selectedTimeSLotID = model.collectionTimeSlotId
+            selectedTimeSLot = DigitConverter.formatTimeRange(model.startTime, model.endTime)
 
             if (isTodaySelected && !model.cutOffTime.isNullOrEmpty()) {
 
@@ -252,7 +254,9 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
         viewModel.quickOrderRequest(requestBody).observe(viewLifecycleOwner, Observer {
             dialog?.dismiss()
             binding?.submitBtn?.isEnabled = true
-            alert("নির্দেশনা", "পার্সেল বুকিং গ্রহণ করা হয়েছে। $selectedPickupLocationThana থেকে পার্সেল কালেক্ট করা হবে।", false, "ঠিক আছে", "ক্যানসেল"){
+
+            val msg = "পার্সেল বুকিং গ্রহণ করা হয়েছে। ${DigitConverter.toBanglaDate(selectedDate, "yyyy-MM-dd", true)}, $selectedTimeSLot মধ্যে $selectedPickupLocationThana থেকে পার্সেল কালেক্ট করা হবে।\nপার্সেল কালেকশন ঠিক সময়ে না হলে কল করুন 01894811222 নম্বরে।"
+            alert("নির্দেশনা", msg, false, "ঠিক আছে", "ক্যানসেল"){
             }.show()
         })
     }

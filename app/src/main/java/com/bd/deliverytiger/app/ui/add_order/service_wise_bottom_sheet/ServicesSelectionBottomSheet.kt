@@ -115,7 +115,7 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
     override fun onStart() {
         super.onStart()
         val dialog = dialog as BottomSheetDialog?
-        dialog?.setCanceledOnTouchOutside(false)
+        dialog?.setCanceledOnTouchOutside(true)
         val bottomSheet: FrameLayout? = dialog?.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         val metrics = resources.displayMetrics
         if (bottomSheet != null) {
