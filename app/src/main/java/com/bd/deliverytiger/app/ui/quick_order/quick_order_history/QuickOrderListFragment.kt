@@ -13,8 +13,7 @@ import com.bd.deliverytiger.app.api.model.quick_order.quick_order_history.QuickO
 import com.bd.deliverytiger.app.databinding.FragmentQuickOrderListBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.quick_order.QuickOrderRequestViewModel
-import com.bd.deliverytiger.app.utils.DigitConverter
-import com.bd.deliverytiger.app.utils.SessionManager
+import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
@@ -23,7 +22,7 @@ import java.util.*
 class QuickOrderListFragment : Fragment() {
     private var binding: FragmentQuickOrderListBinding? = null
     private val viewModel: QuickOrderRequestViewModel by inject()
-    private  var dataAdapter: QuickOrderListAdapter = QuickOrderListAdapter()
+    private var dataAdapter: QuickOrderListAdapter = QuickOrderListAdapter()
 
     private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
     private val sdf1 = SimpleDateFormat("dd MMM, yyyy", Locale.US)
@@ -64,7 +63,7 @@ class QuickOrderListFragment : Fragment() {
         }
     }
 
-    private fun initData(){
+    private fun initData() {
         val calendar = Calendar.getInstance()
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         toDate = simpleDateFormat.format(calendar.time)
@@ -78,16 +77,34 @@ class QuickOrderListFragment : Fragment() {
         binding?.dateRangePicker?.setOnClickListener {
             dateRangePicker()
         }
+
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is ViewState.ShowMessage -> {
+                    context?.toast(state.message)
+                }
+                is ViewState.KeyboardState -> {
+                    hideKeyboard()
+                }
+                is ViewState.ProgressState -> {
+                    if (state.isShow) {
+                        binding?.progressBar?.visibility = View.VISIBLE
+                    } else {
+                        binding?.progressBar?.visibility = View.GONE
+                    }
+                }
+            }
+        })
     }
 
-        private fun fetchQuickOrderLists(requestBody: QuickOrderListRequest) {
+    private fun fetchQuickOrderLists(requestBody: QuickOrderListRequest) {
 
-        viewModel.getMerchantQuickOrders(requestBody).observe(viewLifecycleOwner, Observer { list->
-            if (list.isNullOrEmpty()){
-                binding?.ivEmpty?.visibility = View.VISIBLE
-            }else{
+        viewModel.getMerchantQuickOrders(requestBody).observe(viewLifecycleOwner, Observer { list ->
+            if (list.isNullOrEmpty()) {
+                binding?.emptyView?.visibility = View.VISIBLE
+            } else {
                 dataAdapter.initLoad(list)
-                binding?.ivEmpty?.visibility = View.GONE
+                binding?.emptyView?.visibility = View.GONE
             }
         })
     }
@@ -108,7 +125,7 @@ class QuickOrderListFragment : Fragment() {
         }
     }
 
-    private fun setDateRangePickerTitle(){
+    private fun setDateRangePickerTitle() {
         val msg = "${DigitConverter.toBanglaDate(fromDate, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate, "yyyy-MM-dd")}"
         binding?.dateRangePicker?.text = msg
     }

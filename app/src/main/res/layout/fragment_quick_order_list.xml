@@ -59,9 +59,9 @@
         tools:listitem="@layout/item_view_all_quick_order" />
 
     <ProgressBar
-        android:id="@+id/allOrderProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +70,7 @@
         tools:visibility="visible" />
 
     <ImageView
-        android:id="@+id/ivEmpty"
+        android:id="@+id/emptyView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/cd"

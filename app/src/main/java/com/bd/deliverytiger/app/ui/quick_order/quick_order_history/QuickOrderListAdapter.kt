@@ -29,8 +29,8 @@ class QuickOrderListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val collectionDate = model.collectionDate?.split("T")?.first()
             val requestDate = model.requestDate?.split("T")?.first()
             binding.collectionDate.text = DigitConverter.toBanglaDate(collectionDate, "yyyy-MM-dd")
-            binding.requestDate.text = DigitConverter.toBanglaDate(requestDate, "yyyy-MM-dd")
-            binding.parcelCount.text = "${DigitConverter.toBanglaDigit(model.requestOrderAmount)} টি"
+            binding.parcelCount.text = DigitConverter.toBanglaDate(requestDate, "yyyy-MM-dd")
+            binding.requestDate.text = "${DigitConverter.toBanglaDigit(model.requestOrderAmount)} টি"
             binding.address.text = "${model.districtsViewModel?.thana}"
             binding.totalCollectedOrder.text = "${DigitConverter.toBanglaDigit(model.totalOrder)}/${DigitConverter.toBanglaDigit(model.requestOrderAmount)} টি"
             binding.status.text = model.actionViewModel?.buttonName
