@@ -18,17 +18,16 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlin.concurrent.thread
 
+@SuppressLint("SetTextI18n")
 class AllOrdersDetailsDialog : BottomSheetDialogFragment() {
 
     private var binding: FragmentAllOrderDetailsDialogueBinding? = null
-    private var dataList: MutableList<CourierOrderViewModel> = mutableListOf()
-    private var index: Int = 0
+    private var dataModel: CourierOrderViewModel? = null
 
     companion object {
 
-        fun newInstance(data: MutableList<CourierOrderViewModel>, position: Int): AllOrdersDetailsDialog = AllOrdersDetailsDialog().apply {
-            dataList = data
-            index = position
+        fun newInstance(model: CourierOrderViewModel?): AllOrdersDetailsDialog = AllOrdersDetailsDialog().apply {
+            dataModel = model
         }
         val tag: String = AllOrdersDetailsDialog::class.java.name
     }
@@ -54,9 +53,9 @@ class AllOrdersDetailsDialog : BottomSheetDialogFragment() {
 
     }
 
-    @SuppressLint("SetTextI18n")
+
     private fun initOrderData(){
-        val model = dataList[index]
+        val model = dataModel ?: return
 
         binding?.orderId?.text = model.courierOrdersId.toString()
         val formattedDate = DigitConverter.toBanglaDate(model.courierOrderDateDetails?.orderDate, "MM-dd-yyyy HH:mm:ss")
@@ -69,7 +68,7 @@ class AllOrdersDetailsDialog : BottomSheetDialogFragment() {
     }
 
     private fun initCustomerData(){
-        val model = dataList[index]
+        val model = dataModel ?: return
 
         binding?.customerName?.text = model.customerName
         var mobile = "${model.courierAddressContactInfo?.mobile}"
@@ -89,9 +88,10 @@ class AllOrdersDetailsDialog : BottomSheetDialogFragment() {
         }
 
     }
-    @SuppressLint("SetTextI18n")
+
     private fun initServiceChargeData(){
-        val model = dataList[index]
+        val model = dataModel ?: return
+
         binding?.shipmentTV?.text = "${DigitConverter.toBanglaDigit(model.courierPrice?.deliveryCharge, true)} ৳"
 
         val codChargePercentage = if (model.courierAddressContactInfo?.districtId == 14) {
@@ -135,15 +135,6 @@ class AllOrdersDetailsDialog : BottomSheetDialogFragment() {
                 }
             })
         }
-    }
-
-    private fun addOrderTrackFragment(orderId: String) {
-        dialog?.dismiss()
-        val fragment = OrderTrackingFragment.newInstance(orderId)
-        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.mainActivityContainer, fragment, OrderTrackingFragment.tag)
-        ft?.addToBackStack(OrderTrackingFragment.tag)
-        ft?.commit()
     }
 
     override fun onDestroyView() {

@@ -175,8 +175,8 @@ class AllOrdersFragment : Fragment() {
             }
         })
 
-        allOrdersAdapter.onItemClick = { position ->
-            showAllOrdersDetailsBottomSheet(courierOrderViewModelList, position)
+        allOrdersAdapter.onItemClick = { model, position ->
+            showAllOrdersDetailsBottomSheet(model)
         }
 
         allOrdersAdapter.onOrderItemClick = { position ->
@@ -216,9 +216,9 @@ class AllOrdersFragment : Fragment() {
 
     }
 
-    private fun showAllOrdersDetailsBottomSheet(data: MutableList<CourierOrderViewModel>, index: Int) {
+    private fun showAllOrdersDetailsBottomSheet(model: CourierOrderViewModel) {
         val tag: String = AllOrdersDetailsDialog.tag
-        val dialog: AllOrdersDetailsDialog = AllOrdersDetailsDialog.newInstance(data, index)
+        val dialog: AllOrdersDetailsDialog = AllOrdersDetailsDialog.newInstance(model)
         dialog.show(childFragmentManager, tag)
     }
 

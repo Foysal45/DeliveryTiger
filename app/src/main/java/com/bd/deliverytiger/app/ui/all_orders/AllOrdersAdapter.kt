@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.databinding.ItemViewAllOrderBinding
@@ -15,7 +14,7 @@ import com.bd.deliverytiger.app.utils.DigitConverter
 
 class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOrderViewModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var onItemClick: ((position: Int) -> Unit)? = null
+    var onItemClick: ((model: CourierOrderViewModel, position: Int) -> Unit)? = null
     var onOrderItemClick: ((position: Int) -> Unit)? = null
     var onEditItemClick: ((position: Int) -> Unit)? = null
     var onLocationBtnClick: ((model: CourierOrderViewModel, position: Int) -> Unit)? = null
@@ -120,7 +119,9 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
 
         init {
             binding.root.setOnClickListener {
-                onItemClick?.invoke(absoluteAdapterPosition)
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                    onItemClick?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
+                }
             }
             binding.trackBtn.setOnClickListener {
                 onOrderItemClick?.invoke(absoluteAdapterPosition)
