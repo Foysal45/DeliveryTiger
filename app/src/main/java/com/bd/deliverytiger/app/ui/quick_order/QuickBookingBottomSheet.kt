@@ -255,7 +255,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
             dialog?.dismiss()
             binding?.submitBtn?.isEnabled = true
 
-            val msg = "পার্সেল বুকিং গ্রহণ করা হয়েছে। ${DigitConverter.toBanglaDate(selectedDate, "yyyy-MM-dd", true)}, $selectedTimeSLot মধ্যে $selectedPickupLocationThana থেকে পার্সেল কালেক্ট করা হবে।\nপার্সেল কালেকশন ঠিক সময়ে না হলে কল করুন 01894811222 নম্বরে।"
+            val msg = "পার্সেল বুকিং গ্রহণ করা হয়েছে। ${DigitConverter.toBanglaDate(selectedDate, "yyyy-MM-dd", true)}, $selectedTimeSLot মধ্যে $selectedPickupLocationThana থেকে পার্সেল কালেক্ট করা হবে।\nপার্সেল কালেকশন ঠিক সময়ে না হলে কল করুন 01894804833 নম্বরে।"
             alert("নির্দেশনা", msg, false, "ঠিক আছে", "ক্যানসেল"){
             }.show()
         })
