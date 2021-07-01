@@ -17,7 +17,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
 
     private var binding: FragmentDetailsBottomSheetBinding? = null
 
-    private lateinit var bundle: Bundle
+    private var bundle: Bundle? = null
     private var payShipmentCharge: Double = 0.0
     private var deliveryCharge: Double = 0.0
     private var extraDeliveryCharge: Double = 0.0
@@ -52,19 +52,21 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        with(bundle) {
-            payShipmentCharge = getDouble("payShipmentCharge", 0.0)
-            deliveryCharge = getDouble("deliveryCharge", 0.0)
-            extraDeliveryCharge = getDouble("extraDeliveryCharge", 0.0)
-            payCODCharge = getDouble("payCODCharge", 0.0)
-            payBreakableCharge = getDouble("payBreakableCharge", 0.0)
-            payCollectionCharge = getDouble("payCollectionCharge", 0.0)
-            payPackagingCharge = getDouble("payPackagingCharge", 0.0)
-            codChargePercentage = getDouble("codChargePercentage", 0.0)
-            bigProductCharge = getDouble("bigProductCharge", 0.0)
-            boroProductCheck = getBoolean("boroProductCheck", false)
-            productType = getString("productType", "")
-            total = getDouble("total", 0.0)
+        bundle?.let {
+            with(it) {
+                payShipmentCharge = getDouble("payShipmentCharge", 0.0)
+                deliveryCharge = getDouble("deliveryCharge", 0.0)
+                extraDeliveryCharge = getDouble("extraDeliveryCharge", 0.0)
+                payCODCharge = getDouble("payCODCharge", 0.0)
+                payBreakableCharge = getDouble("payBreakableCharge", 0.0)
+                payCollectionCharge = getDouble("payCollectionCharge", 0.0)
+                payPackagingCharge = getDouble("payPackagingCharge", 0.0)
+                codChargePercentage = getDouble("codChargePercentage", 0.0)
+                bigProductCharge = getDouble("bigProductCharge", 0.0)
+                boroProductCheck = getBoolean("boroProductCheck", false)
+                productType = getString("productType", "")
+                total = getDouble("total", 0.0)
+            }
         }
 
         binding?.shipmentTV?.text = "${DigitConverter.toBanglaDigit(deliveryCharge, true)} ৳"
