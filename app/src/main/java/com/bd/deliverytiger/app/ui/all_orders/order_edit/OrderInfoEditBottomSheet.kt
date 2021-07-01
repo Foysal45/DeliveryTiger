@@ -253,7 +253,7 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
             }
 
             val serviceChange = model.courierPrice?.totalServiceCharge ?: 0.0
-            val payCollectionAmount = collectionAmount.toDouble()
+            val payCollectionAmount = collectionAmount.toDoubleOrNull() ?: 0.0
             if (payCollectionAmount < serviceChange) {
                 context?.showToast("কালেকশন অ্যামাউন্ট সার্ভিস চার্জ (${DigitConverter.toBanglaDigit(serviceChange, true)}) থেকে বেশি হতে হবে")
                 return false
@@ -279,7 +279,7 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
             this.otherMobile = alternateMobile
             this.address = address
             this.collectionName = referenceInvoice
-            this.collectionAmount = collectionAmount.toDouble()
+            this.collectionAmount = collectionAmount.toDoubleOrNull() ?: 0.0
             this.codCharge = payCODCharge
             this.officeDrop = officeDropSelected
             this.collectionCharge = payCollectionCharge
