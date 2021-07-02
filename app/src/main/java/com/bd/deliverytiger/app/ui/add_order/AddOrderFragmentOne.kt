@@ -1222,6 +1222,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     etThana.setText(model.displayNameBangla)
                     areaId = 0
                     etAriaPostOffice.setText("")
+                    filteredAreaLists.clear()
 
                     val locationModel = list[position]
                     showLocationAlert(locationModel, LocationType.THANA)
