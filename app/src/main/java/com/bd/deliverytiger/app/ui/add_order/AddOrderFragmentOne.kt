@@ -1212,8 +1212,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     filteredThanaLists.clear()
                     filteredAreaLists.clear()
 
-                    val locationModel = list[position]
-                    showLocationAlert(locationModel, LocationType.DISTRICT)
+                    if (list.isNotEmpty()) {
+                        val locationModel = list[position]
+                        showLocationAlert(locationModel, LocationType.DISTRICT)
+                    }
                 }
                 LocationType.THANA -> {
                     thanaId = model.id
@@ -1222,13 +1224,13 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     etAriaPostOffice.setText("")
                     filteredAreaLists.clear()
 
-                    val locationModel = list[position]
-                    showLocationAlert(locationModel, LocationType.THANA)
-                    getDeliveryCharge(districtId, thanaId, 0, serviceType)
-                    if (filteredAreaLists.isEmpty()) {
-                        fetchLocationById(thanaId, LocationType.AREA, true)
+                    if (list.isNotEmpty()) {
+                        val locationModel = list[position]
+                        showLocationAlert(locationModel, LocationType.THANA)
                     }
 
+                    getDeliveryCharge(districtId, thanaId, 0, serviceType)
+                    fetchLocationById(thanaId, LocationType.AREA, true)
                 }
                 LocationType.AREA -> {
                     areaId = model.id
@@ -1239,8 +1241,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     }
                     etAriaPostOffice.setText(areaName)
 
-                    val locationModel = list[position]
-                    showLocationAlert(locationModel, LocationType.AREA)
+                    if (list.isNotEmpty()) {
+                        val locationModel = list[position]
+                        showLocationAlert(locationModel, LocationType.AREA)
+                    }
 
                     getDeliveryCharge(districtId, thanaId, areaId, serviceType)
                 }
