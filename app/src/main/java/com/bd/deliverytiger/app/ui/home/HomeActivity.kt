@@ -1138,7 +1138,7 @@ class HomeActivity : AppCompatActivity(),
         override fun onReceive(context: Context?, intent: Intent?) {
             val location: Location? = intent?.getParcelableExtra(LocationUpdatesService.EXTRA_LOCATION)
             if (location != null) {
-                timber.log.Timber.tag("LocationLog").d("current location broadcast ${location.latitude},${location.longitude}")
+                Timber.tag("LocationLog").d("current location broadcast ${location.latitude},${location.longitude}")
                 currentLocation = location
                 viewModel.currentLocation.value = location
                 foregroundService?.removeLocationUpdates()
