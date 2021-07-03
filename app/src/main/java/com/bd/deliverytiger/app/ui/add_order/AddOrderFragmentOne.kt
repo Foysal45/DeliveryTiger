@@ -914,7 +914,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     private fun getCourierUsersInformation() {
 
-        collectionChargeApi = SessionManager.collectionCharge.toDouble()
+        collectionChargeApi = SessionManager.collectionCharge
         merchantDistrict = SessionManager.merchantDistrict
         if (merchantDistrict == 14) {
             loadServiceType()

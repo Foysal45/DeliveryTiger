@@ -465,13 +465,13 @@ object SessionManager {
             }
         }
 
-    var collectionCharge: Int
+    var collectionCharge: Double
         get() {
-            return pref.getInt("collectionCharge", 0)
+            return pref.getFloat("collectionCharge", 0.0f).toDouble()
         }
         set(value) {
             pref.edit {
-                putInt("collectionCharge", value)
+                putFloat("collectionCharge", value.toFloat())
             }
         }
 
