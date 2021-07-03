@@ -527,17 +527,19 @@ class ProfileFragment : Fragment() {
                 //Timber.d("HomeActivityLog 2 ", myBitmap.allocationByteCount.toString()+" "+ myBitmap.byteCount.toString())
             }
         } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == GALLERY_REQ_CODE) {
-            val imageStream: InputStream = activity?.contentResolver?.openInputStream(Uri.parse(data?.data.toString()))!!
-            val scImg = scaledBitmapImage(BitmapFactory.decodeStream(imageStream))
-            binding?.profilePic?.setImageDrawable(getCircularImage(context, scImg))
-
-            SessionManager.profileImgUri = saveImage(scImg)
+            val imageStream: InputStream? = activity?.contentResolver?.openInputStream(Uri.parse(data?.data.toString()))
+            imageStream?.let {
+                val scImg = scaledBitmapImage(BitmapFactory.decodeStream(imageStream))
+                binding?.profilePic?.setImageDrawable(getCircularImage(context, scImg))
+                SessionManager.profileImgUri = saveImage(scImg)
+            }
         }
     }
 
