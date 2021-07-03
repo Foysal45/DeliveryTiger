@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -276,11 +277,13 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
             viewModel.currentTimeSlot.observe(viewLifecycleOwner, Observer { list ->
                 Timber.d("timeSlotDebug current time slot")
                 dataAdapter.initLoad(list)
+                binding?.emptyView?.isVisible = list.isEmpty()
             })
         } else {
             viewModel.upcomingTimeSlot.observe(viewLifecycleOwner, Observer { list ->
                 Timber.d("timeSlotDebug upcoming time slot")
                 dataAdapter.initLoad(list)
+                binding?.emptyView?.isVisible = list.isEmpty()
             })
         }
     }
