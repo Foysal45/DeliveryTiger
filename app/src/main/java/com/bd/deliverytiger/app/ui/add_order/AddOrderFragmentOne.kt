@@ -1057,9 +1057,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 } else { // last outside dhaka
                     selectedServiceType = service.deliveryRangeId.last()
                 }
-                deliveryTypeRV.isVisible = false
             } else {
-                deliveryTypeRV.isVisible = true
                 selectedServiceType = 0 // default
             }
             updateUIAfterDistrict(district)
