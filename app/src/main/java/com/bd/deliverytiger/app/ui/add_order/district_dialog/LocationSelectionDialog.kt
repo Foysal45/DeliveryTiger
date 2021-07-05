@@ -45,14 +45,14 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
     private var dataList: MutableList<LocationData> = mutableListOf()
     private var dataListCopy: MutableList<LocationData> = mutableListOf()
 
-    var onLocationPicked: ((position: Int, model: LocationData) -> Unit)? = null
+    var onLocationPicked: ((model: LocationData) -> Unit)? = null
 
     companion object {
 
         @JvmStatic
         fun newInstance(dataList: MutableList<LocationData>): LocationSelectionDialog = LocationSelectionDialog().apply {
-                this.dataList = dataList
-            }
+            this.dataList = dataList
+        }
 
         @JvmField
         val tag: String = LocationSelectionDialog::class.java.name
@@ -89,7 +89,7 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
         }
         locationAdapter.onItemClicked = { position, value ->
             hideKeyboard()
-            onLocationPicked?.invoke(position,value)
+            onLocationPicked?.invoke(value)// position will change during search
             dismiss()
         }
 

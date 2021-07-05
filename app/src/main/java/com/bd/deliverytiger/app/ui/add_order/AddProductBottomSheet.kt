@@ -146,7 +146,7 @@ class AddProductBottomSheet : BottomSheetDialogFragment() {
 
                 val dialog = LocationSelectionDialog.newInstance(locationList)
                 dialog.show(childFragmentManager, LocationSelectionDialog.tag)
-                dialog.onLocationPicked = { _, model ->
+                dialog.onLocationPicked = { model ->
                     selectedDistrictId = model.id
                     districtName = model.displayNameBangla!!
                     binding?.etDistrict?.setText(districtName)

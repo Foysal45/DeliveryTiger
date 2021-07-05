@@ -30,7 +30,7 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
     private var dataAdapter: ServiceSelectionBottomSheetAdapter = ServiceSelectionBottomSheetAdapter()
     private var dataList: List<ServiceInfoData>? = null
 
-    var onServiceSelected: ((position: Int, service: ServiceInfoData, district: LocationData) -> Unit)? = null
+    var onServiceSelected: ((service: ServiceInfoData, district: LocationData) -> Unit)? = null
     var onClose: ((type: Int) -> Unit)? = null
 
     companion object {
@@ -106,8 +106,8 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
 
         val dialog = LocationSelectionDialog.newInstance(locationList)
         dialog.show(childFragmentManager, LocationSelectionDialog.tag)
-        dialog.onLocationPicked = { position, district ->
-            onServiceSelected?.invoke(position, serviceInfo, district)
+        dialog.onLocationPicked = { model ->
+            onServiceSelected?.invoke(serviceInfo, model)
             dismiss()
         }
     }

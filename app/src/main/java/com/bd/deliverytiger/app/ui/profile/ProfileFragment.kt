@@ -234,7 +234,7 @@ class ProfileFragment : Fragment() {
 
         val dialog = LocationSelectionDialog.newInstance(locationList)
         dialog.show(childFragmentManager, LocationSelectionDialog.tag)
-        dialog.onLocationPicked = { _, model ->
+        dialog.onLocationPicked = { model ->
             when (operationFlag) {
                 1 -> {
                     districtId = model.id

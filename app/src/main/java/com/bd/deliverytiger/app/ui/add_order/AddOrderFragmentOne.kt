@@ -1042,7 +1042,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         val tag = ServicesSelectionBottomSheet.tag
         val dialog = ServicesSelectionBottomSheet.newInstance(dataLists)
         dialog.show(childFragmentManager, tag)
-        dialog.onServiceSelected = { _, service, district ->
+        dialog.onServiceSelected = { service, district ->
 
             val districtList = service.districtList
             serviceTypeSelected = true
@@ -1199,7 +1199,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
         val dialog = LocationSelectionDialog.newInstance(locationList)
         dialog.show(childFragmentManager, LocationSelectionDialog.tag)
-        dialog.onLocationPicked = { position, model ->
+        dialog.onLocationPicked = { model ->
             when (locationType) {
                 LocationType.DISTRICT -> {
                     districtId = model.id
@@ -1213,8 +1213,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     filteredAreaLists.clear()
 
                     if (list.isNotEmpty()) {
-                        val locationModel = list[position]
-                        showLocationAlert(locationModel, LocationType.DISTRICT)
+                        val locationModel = list.find { it.districtId == model.id }
+                        locationModel?.let {
+                            showLocationAlert(it, LocationType.DISTRICT)
+                        }
                     }
                 }
                 LocationType.THANA -> {
@@ -1224,13 +1226,15 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     etAriaPostOffice.setText("")
                     filteredAreaLists.clear()
 
-                    if (list.isNotEmpty()) {
-                        val locationModel = list[position]
-                        showLocationAlert(locationModel, LocationType.THANA)
-                    }
-
                     getDeliveryCharge(districtId, thanaId, 0, serviceType)
                     fetchLocationById(thanaId, LocationType.AREA, true)
+
+                    if (list.isNotEmpty()) {
+                        val locationModel = list.find { it.districtId == model.id }
+                        locationModel?.let {
+                            showLocationAlert(it, LocationType.THANA)
+                        }
+                    }
                 }
                 LocationType.AREA -> {
                     areaId = model.id
@@ -1241,12 +1245,14 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                     }
                     etAriaPostOffice.setText(areaName)
 
-                    if (list.isNotEmpty()) {
-                        val locationModel = list[position]
-                        showLocationAlert(locationModel, LocationType.AREA)
-                    }
-
                     getDeliveryCharge(districtId, thanaId, areaId, serviceType)
+
+                    if (list.isNotEmpty()) {
+                        val locationModel = list.find { it.districtId == model.id }
+                        locationModel?.let {
+                            showLocationAlert(it, LocationType.AREA)
+                        }
+                    }
                 }
             }
         }
