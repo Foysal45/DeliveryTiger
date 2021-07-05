@@ -11,16 +11,17 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequest
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
-import com.bd.deliverytiger.app.api.model.quick_order.TimeSlotRequest
 import com.bd.deliverytiger.app.databinding.FragmentQuickBookingBinding
 import com.bd.deliverytiger.app.ui.all_orders.order_edit.OrderInfoEditBottomSheet
 import com.bd.deliverytiger.app.ui.quick_order.collection_location.CollectionLocationSelectionBottomSheet
+import com.bd.deliverytiger.app.ui.quick_order.quick_order_history.QuickOrderListFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -53,9 +54,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
     private var isTodaySelected: Boolean = false
     private var selectedTimeSLot: String = ""
 
-
-    var onCollectionTypeSelected: ((isPickup: Boolean, pickupLocation: PickupLocation) -> Unit)? = null
-    var onCollectionTimeSlotSelected: ((isPickup: Boolean, pickupLocation: QuickOrderTimeSlotData) -> Unit)? = null
+    var onOrderPlace: ((msg: String) -> Unit)? = null
     var onClose: ((type: Int) -> Unit)? = null
 
     companion object {
@@ -108,7 +107,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
     private fun initClickLister() {
 
         binding?.submitBtn?.setOnClickListener {
-            updateOrder()
+            quickOrderRequestSubmit()
         }
 
         binding?.pickupLocationLayout?.setOnClickListener {
@@ -174,7 +173,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
                         val minute = TimeUnit.MILLISECONDS.toMinutes(timeDiff)
 
                         val msg = "এই টাইম স্লটে পরবর্তী ${DigitConverter.toBanglaDigit(minute.toString())} মিনিট এর মধ্যে কালেক্টর আসতে পারবেন না। অনুগ্রহ করে পরবর্তী টাইম স্লট সিলেক্ট করে অর্ডার করুন।"
-                        alert("নির্দেশনা", msg) {
+                        alert(getString(R.string.instruction), msg, false, getString(R.string.ok), getString(R.string.cancel)) {
                             if (it == AlertDialog.BUTTON_POSITIVE) {
                                 selectedTimeSLotID = 0
                                 dataAdapter.setSelectedPositions(-1)
@@ -237,7 +236,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
         }
     }
 
-    private fun updateOrder(){
+    private fun quickOrderRequestSubmit(){
         if (!validate()){
             return
         }
@@ -253,12 +252,18 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
         )
         binding?.submitBtn?.isEnabled = false
         viewModel.quickOrderRequest(requestBody).observe(viewLifecycleOwner, Observer {
-            dialog?.dismiss()
             binding?.submitBtn?.isEnabled = true
-
-            val msg = "পার্সেল বুকিং গ্রহণ করা হয়েছে। ${DigitConverter.toBanglaDate(selectedDate, "yyyy-MM-dd", true)}, $selectedTimeSLot মধ্যে $selectedPickupLocationThana থেকে পার্সেল কালেক্ট করা হবে।\nপার্সেল কালেকশন ঠিক সময়ে না হলে কল করুন 01894804833 নম্বরে।"
-            alert("নির্দেশনা", msg, false, "ঠিক আছে", "ক্যানসেল"){
-            }.show()
+            dialog?.dismiss()
+            val msg = "পার্সেল বুকিং গ্রহণ করা হয়েছে। " +
+                    "${DigitConverter.toBanglaDate(selectedDate, "yyyy-MM-dd", true)}, $selectedTimeSLot টার মধ্যে $selectedPickupLocationThana থেকে পার্সেল কালেক্ট করা হবে।\n\n" +
+                    "পার্সেলে সুস্পষ্টভাবে লেখা থাকতে হবে:\n" +
+                    "• কাস্টমের নাম,\n" +
+                    "• কাস্টমের মোবাইল,\n" +
+                    "• কাস্টমের বিস্তারিত ঠিকানা,\n" +
+                    "• ডেলিভারি সার্ভিস টাইপ (রেগুলার/নেক্সট ডে),\n" +
+                    "• অ্যাডভান্স পেইড/COD এমাউন্ট (প্রযোজ্য ক্ষেত্রে)\n\n" +
+                    "পার্সেল কালেকশন ঠিক সময়ে না হলে কল করুন 01894804833 নম্বরে।"
+            onOrderPlace?.invoke(msg)
         })
     }
 

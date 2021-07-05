@@ -44,6 +44,7 @@ import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
 import com.bd.deliverytiger.app.ui.quick_order.QuickBookingBottomSheet
+import com.bd.deliverytiger.app.ui.quick_order.quick_order_history.QuickOrderListFragment
 import com.bd.deliverytiger.app.ui.referral.ReferralFragment
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
@@ -1012,6 +1013,13 @@ class DashboardFragment : Fragment() {
             Handler(Looper.getMainLooper()).postDelayed({
                 hideKeyboard()
             }, 200L)
+        }
+        dialog.onOrderPlace = { msg ->
+            alert(getString(R.string.instruction), msg, true, getString(R.string.ok), "সকল কুইক বুকিং"){
+                if (it == AlertDialog.BUTTON_NEGATIVE) {
+                    addFragment(QuickOrderListFragment.newInstance(), QuickOrderListFragment.tag)
+                }
+            }.show()
         }
     }
 
