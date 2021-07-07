@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
@@ -12,6 +13,7 @@ import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturne
 import com.bd.deliverytiger.app.api.model.quick_order.quick_order_history.QuickOrderListRequest
 import com.bd.deliverytiger.app.databinding.FragmentQuickOrderListBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
+import com.bd.deliverytiger.app.ui.quick_order.QuickBookingTimeSlotBottomSheet
 import com.bd.deliverytiger.app.ui.quick_order.QuickOrderRequestViewModel
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -74,8 +76,32 @@ class QuickOrderListFragment : Fragment() {
     }
 
     private fun initClickLister() {
+
         binding?.dateRangePicker?.setOnClickListener {
             dateRangePicker()
+        }
+
+        dataAdapter.onDelete = { model, _ ->
+            alert(getString(R.string.instruction), "কুইক বুকিং রিকোয়েস্টটি ডিলিট করতে চান?", false) {
+                if (it == AlertDialog.BUTTON_POSITIVE) {
+                    context?.toast("Under dev")
+                }
+            }.show()
+        }
+
+        dataAdapter.onEdit = { model, _ ->
+
+            val dialog = QuickBookingTimeSlotBottomSheet.newInstance(
+                model.orderRequestId,
+                model.collectionTimeSlot?.collectionTimeSlotId ?: 0,
+                model.collectionDate ?: ""
+            )
+            val tag = QuickBookingTimeSlotBottomSheet.tag
+            dialog.show(childFragmentManager, tag)
+            dialog.onUpdate = {
+                val requestBody = QuickOrderListRequest(fromDate, toDate, SessionManager.courierUserId)
+                fetchQuickOrderLists(requestBody)
+            }
         }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->

@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.api.model.quick_order.quick_order_history
 
 
+import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
 import com.google.gson.annotations.SerializedName
 
 data class QuickOrderList(
@@ -27,7 +28,7 @@ data class QuickOrderList(
     @SerializedName("totalOrder")
     var totalOrder: Int = 0,
     @SerializedName("collectionTimeSlot")
-    var collectionTimeSlot: String? = "",
+    var collectionTimeSlot: QuickOrderTimeSlotData? = QuickOrderTimeSlotData(),
     @SerializedName("districtsViewModel")
     var districtsViewModel: DistrictsViewModel? = DistrictsViewModel(),
     @SerializedName("actionModel")

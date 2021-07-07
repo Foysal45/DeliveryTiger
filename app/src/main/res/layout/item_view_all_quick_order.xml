@@ -22,12 +22,12 @@
                 android:id="@+id/dateTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="কালেকশন তারিখ"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/text_14"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="কালেকশন তারিখ" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/collectionDate"
@@ -36,10 +36,41 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/text_14"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/actionLayout"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="23 June, 2021" />
 
+            <LinearLayout
+                android:id="@+id/actionLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/deleteBtn"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="4dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/cd"
+                    app:srcCompat="@drawable/ic_delete"
+                    app:tint="@color/colorPrimary"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/editBtn"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="4dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/cd"
+                    app:srcCompat="@drawable/all_order_edit"
+                    app:tint="@color/colorPrimary"
+                    tools:visibility="visible" />
+
+            </LinearLayout>
 
             <View
                 android:id="@+id/separator"

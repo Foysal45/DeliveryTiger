@@ -42,10 +42,7 @@ import com.bd.deliverytiger.app.api.model.order_track.OrderTrackResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
-import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequest
-import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequestResponse
-import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
-import com.bd.deliverytiger.app.api.model.quick_order.TimeSlotRequest
+import com.bd.deliverytiger.app.api.model.quick_order.*
 import com.bd.deliverytiger.app.api.model.quick_order.quick_order_history.QuickOrderList
 import com.bd.deliverytiger.app.api.model.quick_order.quick_order_history.QuickOrderListRequest
 import com.bd.deliverytiger.app.api.model.referral.OfferData
@@ -237,6 +234,9 @@ interface ApiInterfaceCore {
 
     @POST("api/Bondhu/GetMerchantQuickOrders")
     suspend fun getMerchantQuickOrders(@Body requestBody: QuickOrderListRequest): NetworkResponse<GenericResponse<List<QuickOrderList>>, ErrorResponse>
+
+    @PUT("api/QuickOrder/UpdateMultipleTimeSlot")
+    suspend fun updateMultipleTimeSlot(@Body requestBody: List<TimeSlotUpdateRequest>): NetworkResponse<GenericResponse<Int>, ErrorResponse>
 
 
 }

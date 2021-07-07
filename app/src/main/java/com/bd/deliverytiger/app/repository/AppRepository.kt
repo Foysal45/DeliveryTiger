@@ -23,6 +23,7 @@ import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequest
 import com.bd.deliverytiger.app.api.model.quick_order.TimeSlotRequest
+import com.bd.deliverytiger.app.api.model.quick_order.TimeSlotUpdateRequest
 import com.bd.deliverytiger.app.api.model.quick_order.quick_order_history.QuickOrderListRequest
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionAnswer
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
@@ -31,6 +32,7 @@ import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequ
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.http.Body
 
 class AppRepository(
     private val apiInterfaceADM: ApiInterfaceADM,
@@ -213,6 +215,8 @@ class AppRepository(
     suspend fun quickOrderRequest(requestBody: QuickOrderRequest) = apiInterfaceCore.quickOrderRequest(requestBody)
 
     suspend fun getMerchantQuickOrders(requestBody: QuickOrderListRequest) = apiInterfaceCore.getMerchantQuickOrders(requestBody)
+
+    suspend fun updateMultipleTimeSlot(requestBody: List<TimeSlotUpdateRequest>) = apiInterfaceCore.updateMultipleTimeSlot(requestBody)
 
 
 }

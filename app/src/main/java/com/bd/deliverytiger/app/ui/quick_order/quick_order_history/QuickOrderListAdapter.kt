@@ -3,6 +3,7 @@ package com.bd.deliverytiger.app.ui.quick_order.quick_order_history
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.api.model.quick_order.quick_order_history.QuickOrderList
 import com.bd.deliverytiger.app.databinding.ItemViewAllQuickOrderBinding
@@ -11,7 +12,11 @@ import com.bd.deliverytiger.app.utils.DigitConverter
 class QuickOrderListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList: MutableList<QuickOrderList> = mutableListOf()
-    var onItemClick: ((dataList: QuickOrderList, position: Int) -> Unit)? = null
+
+    var onItemClick: ((model: QuickOrderList, position: Int) -> Unit)? = null
+    var onDelete: ((model: QuickOrderList, position: Int) -> Unit)? = null
+    var onEdit: ((model: QuickOrderList, position: Int) -> Unit)? = null
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding: ItemViewAllQuickOrderBinding = ItemViewAllQuickOrderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -35,6 +40,7 @@ class QuickOrderListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.totalCollectedOrder.text = "${DigitConverter.toBanglaDigit(model.totalOrder)}/${DigitConverter.toBanglaDigit(model.requestOrderAmount)} টি"
             binding.status.text = model.actionViewModel?.buttonName
 
+            binding.actionLayout.isVisible = model.status == 0
         }
     }
 
@@ -43,6 +49,16 @@ class QuickOrderListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.root.setOnClickListener {
                 if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
                     onItemClick?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
+                }
+            }
+            binding.deleteBtn.setOnClickListener {
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                    onDelete?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
+                }
+            }
+            binding.editBtn.setOnClickListener {
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                    onEdit?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
                 }
             }
         }
