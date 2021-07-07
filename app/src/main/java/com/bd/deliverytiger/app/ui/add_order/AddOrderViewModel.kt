@@ -56,6 +56,13 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
         getCollectionTimeSlot(TimeSlotRequest(selectedDate))
     }
 
+    val upcomingTimeSlot: LiveData<List<QuickOrderTimeSlotData>> by lazy {
+        val calender = Calendar.getInstance()
+        calender.add(Calendar.DAY_OF_MONTH, 1)
+        val selectedDate = sdf.format(calender.timeInMillis)
+        getCollectionTimeSlot(TimeSlotRequest(selectedDate))
+    }
+
     fun getMerchantCredit(): LiveData<Boolean> {
 
         viewState.value = ViewState.ProgressState(true)
@@ -388,39 +395,6 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
         return responseBody
     }*/
 
-    fun fetchCollectionTimeSlot(): LiveData<List<TimeSlotData>> {
-
-        val responseData: MutableLiveData<List<TimeSlotData>> = MutableLiveData()
-
-        viewState.value = ViewState.ProgressState(true)
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.fetchCollectionTimeSlot()
-            withContext(Dispatchers.Main) {
-                viewState.value = ViewState.ProgressState(false)
-                when (response) {
-                    is NetworkResponse.Success -> {
-                        if (response.body.model != null) {
-                            responseData.value = response.body.model
-                        }
-                    }
-                    is NetworkResponse.ServerError -> {
-                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
-                        viewState.value = ViewState.ShowMessage(message)
-                    }
-                    is NetworkResponse.NetworkError -> {
-                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
-                        viewState.value = ViewState.ShowMessage(message)
-                    }
-                    is NetworkResponse.UnknownError -> {
-                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
-                        viewState.value = ViewState.ShowMessage(message)
-                        Timber.d(response.error)
-                    }
-                }
-            }
-        }
-        return responseData
-    }
 
     fun fetchDTOrderGenericLimit(): LiveData<GenericLimitData> {
 

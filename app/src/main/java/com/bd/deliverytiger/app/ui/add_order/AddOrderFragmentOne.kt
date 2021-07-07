@@ -33,14 +33,11 @@ import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
-import com.bd.deliverytiger.app.api.model.district.ThanaPayLoad
 import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
-import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
-import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.bd.deliverytiger.app.databinding.FragmentAddOrderFragmentOneBinding
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationType
@@ -59,7 +56,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 @SuppressLint("SetTextI18n")
-class AddOrderFragmentOne : Fragment(), View.OnClickListener {
+class AddOrderFragmentOne : Fragment() {
 
     //Step 1
     private lateinit var etCustomerName: EditText
@@ -222,6 +219,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         val tag: String = AddOrderFragmentOne::class.java.name
     }
 
+    //#region Life cycle
+
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentAddOrderFragmentOneBinding.inflate(inflater, container, false).also {
             binding = it
@@ -269,19 +270,33 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         spinnerCollectionLocation = view.findViewById(R.id.spinnerCollectionLocation)
         orderPlaceBtn = view.findViewById(R.id.orderPlaceBtn)
 
-        orderPlaceBtn.setOnClickListener(this)
-
+        initView()
+        initClickLister()
         // Order is important
         getCourierUsersInformation()
+        fetchMerchantBalanceInfo()
         getBreakableCharge()
         fetchOfferCharge()
         getPackagingCharge()
         fetchDTOrderGenericLimit()
         getPickupLocation()
-        initView()
-        getCollectionTimeSlot()
-        //fetchCollectionTimeSlot()
+        fetchCollectionTimeSlot()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle("নতুন অর্ডার")
+        //isProfileComplete = checkProfileData()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+    //#endregion
+
+    //#region init
+    private fun initView(){
 
         deliveryTypeAdapter = DeliveryTypeAdapter()
         with(deliveryTypeRV) {
@@ -291,6 +306,26 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             layoutAnimation = null
             adapter = deliveryTypeAdapter
         }
+
+        binding?.recyclerViewTime?.let { view ->
+            with(view) {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                adapter = timeSlotDataAdapter
+            }
+        }
+
+        checkTermsTV.text = HtmlCompat.fromHtml("আমি <font color='#00844A'>শর্তাবলী</font> মেনে নিলাম", HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+        val calender = Calendar.getInstance()
+        val todayDate = calender.timeInMillis
+        selectedDate = sdf.format(todayDate)
+
+        SessionManager.orderSource = "DetailOrder"
+    }
+
+    private fun initClickLister() {
+
         deliveryTypeAdapter.onItemClick = { position, model ->
 
             deliveryType = "${model.deliveryType} ${model.days}"
@@ -419,24 +454,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             collectionAmountET.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.red))
         }
 
-        /* togglePickupGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
-             if (isChecked) {
-                 when (checkedId) {
-                     R.id.toggleButtonPickup1 ->
-                     {
-                         isOfficeDrop = true
-                         calculateTotalPrice()
-                         pickupAddressLayout.visibility = View.GONE
-                     }
-                     R.id.toggleButtonPickup2 -> {
-                         isOfficeDrop = false
-                         pickupAddressLayout.visibility = View.VISIBLE
-                         calculateTotalPrice()
-                     }
-                 }
-             }
-         }*/
-
         checkBoxBreakable.setOnCheckedChangeListener { compoundButton, isChecked ->
             isBreakable = isChecked
             calculateTotalPrice()
@@ -449,8 +466,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 }
             }
         }
-
-        checkTermsTV.text = HtmlCompat.fromHtml("আমি <font color='#00844A'>শর্তাবলী</font> মেনে নিলাম", HtmlCompat.FROM_HTML_MODE_LEGACY)
         checkTerms.setOnCheckedChangeListener { compoundButton, b ->
             isAgreeTerms = b
         }
@@ -496,6 +511,40 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             datePicker(3)
         }
 
+        orderPlaceBtn.setOnClickListener {
+            orderPlaceProcess()
+        }
+
+        timeSlotDataAdapter.onItemClick = { model, position  ->
+            timeSlotId = model.collectionTimeSlotId
+            selectedCollectionSlotDate = selectedDate
+            /*if (!model.cutOffTime.isNullOrEmpty()) {
+                try {
+                    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+                    val cutOffTimeStamp = sdf.parse("$selectedDate ${model.cutOffTime}")
+                    //val cutOffTimeStamp = sdf.parse("$selectedDate 12:00:00")
+                    val endTimeStamp = sdf.parse("$selectedDate ${model.endTime}")
+                    val currentTimeStamp = Date()
+                    Timber.d("currentTimeDebug $selectedCollectionSlotDate")
+                    if (currentTimeStamp.after(cutOffTimeStamp)) {
+
+                        val timeDiff = endTimeStamp!!.time - currentTimeStamp.time
+                        val minute = TimeUnit.MILLISECONDS.toMinutes(timeDiff)
+
+                        val msg = "এই টাইম স্লটে পরবর্তী ${DigitConverter.toBanglaDigit(minute.toString())} মিনিট এর মধ্যে কালেক্টর আসতে পারবেন না। অনুগ্রহ করে পরবর্তী টাইম স্লট সিলেক্ট করে অর্ডার করুন।"
+                        alert(getString(R.string.instruction), msg, false, getString(R.string.ok), getString(R.string.cancel)) {
+                            if (it == AlertDialog.BUTTON_POSITIVE) {
+                                timeSlotId = 0
+                                timeSlotDataAdapter.setSelectedPositions(-1)
+                            }
+                        }.show()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }*/
+        }
+
         homeViewModel.refreshEvent.observe(viewLifecycleOwner, Observer { tag ->
             if (tag == "OrderPlace") {
                 homeViewModel.refreshEvent.value = ""
@@ -510,29 +559,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             } else {
                 binding?.paymentOverViewLayout?.isVisible = true
             }
-        })
-
-        SessionManager.orderSource = "DetailOrder"
-
-        if (BuildConfig.DEBUG) {
-            mockUserData()
-        }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        viewModel.fetchMerchantCurrentAdvanceBalance(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { advBalance ->
-            viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, advBalance.balance).observe(viewLifecycleOwner, Observer { model ->
-                merchantCredit = model.credit
-                merchantCalculatedCollectionAmount = model.calculatedCollectionAmount
-                merchantServiceCharge = model.serviceCharge
-                adjustBalance = model.adjustBalance
-
-                if (BuildConfig.DEBUG) {
-                    isMerchantCreditAvailable()
-                }
-            })
         })
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
@@ -552,7 +578,12 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
                 }
             }
         })
+
+        if (BuildConfig.DEBUG) {
+            mockUserData()
+        }
     }
+    //#endregion
 
     private fun isMerchantCreditAvailable(): Boolean {
         val totalAdjustBalance = merchantCredit + merchantCalculatedCollectionAmount + adjustBalance
@@ -619,20 +650,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         ft?.commit()
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as HomeActivity).setToolbarTitle("নতুন অর্ডার")
-        //isProfileComplete = checkProfileData()
-    }
-
-    override fun onClick(p0: View?) {
-        when (p0) {
-            orderPlaceBtn -> {
-                orderPlaceProcess()
-            }
-        }
-    }
-
     private fun pickupBottomSheet() {
         val tag: String = CollectionInfoBottomSheet.tag
         val dialog: CollectionInfoBottomSheet = CollectionInfoBottomSheet.newInstance(weightRangeId)
@@ -674,191 +691,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         customersAddress = etCustomersAddress.text.toString()
         additionalNote = etAdditionalNote.text.toString()
     }
-
-    private fun initView(){
-        binding?.recyclerViewTime?.let { view ->
-            with(view) {
-                setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                adapter = timeSlotDataAdapter
-            }
-        }
-
-        val calender = Calendar.getInstance()
-        val todayDate = calender.timeInMillis
-        selectedDate = sdf.format(todayDate)
-
-        timeSlotDataAdapter.onItemClick = { model, position  ->
-            timeSlotId = model.collectionTimeSlotId
-            selectedCollectionSlotDate = selectedDate
-
-            if (!model.cutOffTime.isNullOrEmpty()) {
-
-                try {
-                    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
-                    val cutOffTimeStamp = sdf.parse("$selectedDate ${model.cutOffTime}")
-                    //val cutOffTimeStamp = sdf.parse("$selectedDate 12:00:00")
-                    val endTimeStamp = sdf.parse("$selectedDate ${model.endTime}")
-                    val currentTimeStamp = Date()
-                    Timber.d("currentTimeDebug $selectedCollectionSlotDate")
-                    if (currentTimeStamp.after(cutOffTimeStamp)) {
-
-                        val timeDiff = endTimeStamp!!.time - currentTimeStamp.time
-                        val minute = TimeUnit.MILLISECONDS.toMinutes(timeDiff)
-
-                        val msg = "এই টাইম স্লটে পরবর্তী ${DigitConverter.toBanglaDigit(minute.toString())} মিনিট এর মধ্যে কালেক্টর আসতে পারবেন না। অনুগ্রহ করে পরবর্তী টাইম স্লট সিলেক্ট করে অর্ডার করুন।"
-                        alert(getString(R.string.instruction), msg, false, getString(R.string.ok), getString(R.string.cancel)) {
-                            if (it == AlertDialog.BUTTON_POSITIVE) {
-                                timeSlotId = 0
-                                timeSlotDataAdapter.setSelectedPositions(-1)
-                            }
-                        }.show()
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-
-
-        }
-    }
-
-    private fun getCollectionTimeSlot() {
-        viewModel.currentTimeSlot.observe(viewLifecycleOwner, Observer { list ->
-            Timber.d("timeSlotDebug current time slot")
-            timeSlotDataAdapter.initLoad(list)
-            binding?.emptyView?.isVisible = list.isEmpty()
-        })
-    }
-
-    /*private fun goToDistrictSelectDialogue(list: MutableList<AllDistrictListsModel>, parentId: Int, operationFlag: Int) {
-
-        val locationList: MutableList<LocationData> = mutableListOf()
-        list.forEach { model ->
-            locationList.add(LocationData.from(model))
-        }
-
-        val dialog = LocationSelectionDialog.newInstance(locationList)
-        dialog.show(childFragmentManager, LocationSelectionDialog.tag)
-        dialog.onLocationPicked = { _, model ->
-            when (operationFlag) {
-                1 -> {
-                    updateUIAfterDistrict(model)
-                }
-                2 -> {
-                    etThana.setText(model.displayNameBangla)
-                    thanaId = model.id
-                    areaId = 0
-                    etAriaPostOffice.setText("")
-
-                    val filterArea = allLocationList.filter { it.parentId == thanaId } as MutableList<AllDistrictListsModel>
-                    Timber.d("filterArea $filterArea")
-                    isAriaAvailable = filterArea.isNotEmpty()
-                    if (isAriaAvailable) {
-                        filteredAreaLists.clear()
-                        filteredAreaLists.addAll(filterArea.sortedBy { it.districtPriority })
-                        etAriaPostOfficeLayout.visibility = View.VISIBLE
-                    } else {
-                        etAriaPostOfficeLayout.visibility = View.GONE
-                    }
-
-                    getDeliveryCharge(districtId, thanaId, 0, serviceType)
-                    Timber.d("filterArea $filteredAreaLists")
-                }
-                3 -> {
-                    areaId = model.id
-                    if (!model.displayPostalCode.isNullOrEmpty()) {
-                        etAriaPostOffice.setText("${model.displayNameBangla} ${"${model.displayPostalCode}"}")
-                        getDeliveryCharge(districtId, thanaId, areaId, serviceType)
-                    } else
-                        etAriaPostOffice.setText(model.displayNameBangla)
-                }
-            }
-        }
-
-    }*/
-
-    /*private fun goToDistrict() {
-
-        val distFrag = DistrictSelectFragment.newInstance(requireContext(), districtList)
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
-        ft?.add(R.id.mainActivityContainer, distFrag, DistrictSelectFragment.tag)
-        ft?.addToBackStack(DistrictSelectFragment.tag)
-        ft?.commit()
-
-        distFrag.setOnClick(object : DistrictSelectFragment.DistrictClick {
-            override fun onClick(position: Int, name: String, clickedID: Int) {
-                //Timber.e("etDistrictSearch 6 - ", "$name $clickedID")
-                etDistrict.setText(name)
-                districtId = clickedID
-
-                thanaId = 0
-                areaId = 0
-                etAriaPostOffice.setText("")
-                etThana.setText("")
-                etAriaPostOfficeLayout.visibility = View.GONE
-
-                if (districtId == 14) {
-                    getDeliveryCharge(districtId, 10026, 0) // Fetch data if any district selected
-                    codChargePercentage = codChargePercentageInsideDhaka
-                } else {
-                    getDeliveryCharge(1, 10137, 0)
-                    codChargePercentage = codChargePercentageOutsideDhaka
-                }
-                calculateTotalPrice()
-            }
-        })
-    }*/
-
-    /*private fun thanaAriaSelect(thanaOrAriaList: ArrayList<ThanaPayLoad>, track: Int, list: ArrayList<CustomModel>, title: String) {
-        //track = 1 district , track = 2 thana, track = 3 aria
-        val distFrag = DistrictThanaAriaSelectFragment.newInstance(requireContext(), list, title)
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
-        ft?.add(R.id.mainActivityContainer, distFrag, DistrictSelectFragment.tag)
-        ft?.addToBackStack(DistrictSelectFragment.tag)
-        ft?.commit()
-
-        distFrag.onItemClick = { adapterPosition: Int, name: String, id: Int, listPostion ->
-            //Timber.e("distFrag1", adapterPosition.toString() + " " + listPostion.toString() + " " + name + " " + id + " " + thanaOrAriaList[listPostion].postalCode + " s")
-
-            if (track == 1) {
-
-            } else if (track == 2) {
-                isAriaAvailable = thanaOrAriaList[listPostion].hasArea == 1
-                etThana.setText(thanaOrAriaList[listPostion].thanaBng)
-                thanaId = thanaOrAriaList[listPostion].thanaId
-                areaId = 0
-                etAriaPostOffice.setText("")
-                if (isAriaAvailable) {
-                    etAriaPostOfficeLayout.visibility = View.VISIBLE
-                } else {
-                    etAriaPostOfficeLayout.visibility = View.GONE
-                }
-                if (districtId == merchantDistrict) {
-                    getDeliveryCharge(14, 10026, 0)
-                } else {
-                    getDeliveryCharge(districtId, thanaId, 0)
-                }
-            } else if (track == 3) {
-                if (thanaOrAriaList[listPostion].postalCode != null) {
-                    if (thanaOrAriaList[listPostion].postalCode!!.isNotEmpty()) {
-                        areaId = thanaOrAriaList[listPostion].thanaId
-                        etAriaPostOffice.setText(thanaOrAriaList[listPostion].thanaBng + " (" + thanaOrAriaList[listPostion].postalCode + ")")
-                        getDeliveryCharge(districtId, thanaId, areaId)
-                    } else {
-                        areaId = 0
-                        // isAriaAvailable = false
-                        etAriaPostOffice.setText(thanaOrAriaList[listPostion].thanaBng)
-                    }
-                } else {
-                    areaId = 0
-                    etAriaPostOffice.setText(thanaOrAriaList[listPostion].thanaBng)
-                }
-            }
-        }
-    }*/
 
     private fun datePicker(dateTypeFlag: Int) {
 
@@ -986,6 +818,21 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             fetchLocationById(0, LocationType.DISTRICT, false)
         }
         initLocationListener()
+    }
+
+    private fun fetchMerchantBalanceInfo() {
+        viewModel.fetchMerchantCurrentAdvanceBalance(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { advBalance ->
+            viewModel.fetchMerchantBalanceInfo(SessionManager.courierUserId, advBalance.balance).observe(viewLifecycleOwner, Observer { model ->
+                merchantCredit = model.credit
+                merchantCalculatedCollectionAmount = model.calculatedCollectionAmount
+                merchantServiceCharge = model.serviceCharge
+                adjustBalance = model.adjustBalance
+
+                if (BuildConfig.DEBUG) {
+                    isMerchantCreditAvailable()
+                }
+            })
+        })
     }
 
     private fun getPackagingCharge() {
@@ -1422,6 +1269,16 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
 
     //#endregion
 
+    //#region Time Slot
+    private fun fetchCollectionTimeSlot() {
+        viewModel.upcomingTimeSlot.observe(viewLifecycleOwner, Observer { list ->
+            Timber.d("timeSlotDebug current time slot")
+            timeSlotDataAdapter.initLoad(list)
+            binding?.emptyView?.isVisible = list.isEmpty()
+        })
+    }
+    //#endregion
+
     private fun getPickupLocation() {
 
         viewModel.getPickupLocations(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list ->
@@ -1455,93 +1312,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             isShipmentChargeFree = model.isDeliveryCharge
             relationType = model.relationType
         })
-    }
-
-    private fun fetchCollectionTimeSlot() {
-        viewModel.fetchCollectionTimeSlot().observe(viewLifecycleOwner, Observer { list ->
-            setUpCollectionSlotSpinner(list)
-        })
-    }
-
-    private fun setUpCollectionSlotSpinner(list: List<TimeSlotData>) {
-
-        val slotList: MutableList<String> = mutableListOf()
-        slotList.add("সিলেক্ট কালেকশন টাইম")
-        val sdf24 = SimpleDateFormat("HH:mm:ss", Locale.US)
-        val sdf12 = SimpleDateFormat("hh:mm a", Locale.US)
-        list.forEach { data ->
-            try {
-                val startTime = sdf12.format(sdf24.parse(data.startTime))
-                val endTime = sdf12.format(sdf24.parse(data.endTime))
-                slotList.add("$startTime - $endTime")
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-        val collectionSlotAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, slotList)
-        collectionTimeSlotSpinner.adapter = collectionSlotAdapter
-        collectionTimeSlotSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                if (p2 != 0) {
-                    val model = list[p2 - 1]
-                    timeSlotId = model.collectionTimeSlotId
-                    selectedCollectionSlotDate = "$collectionSlotDate ${model.endTime}"
-                }
-            }
-        }
-    }
-
-    private fun setUpCollectionSpinner(pickupParentList: List<PickupLocation>?, thanaOrAriaList: List<ThanaPayLoad>?, optionFlag: Int) {
-
-        val pickupList: MutableList<String> = mutableListOf()
-        pickupList.add("পিক আপ লোকেশন")
-        if (optionFlag == 1) {
-            pickupParentList?.forEach {
-                pickupList.add(it.thanaName ?: "")
-            }
-        } else if (optionFlag == 2) {
-            thanaOrAriaList?.forEach {
-                pickupList.add(it.thanaBng ?: "")
-            }
-        }
-
-        val pickupAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, pickupList)
-        spinnerCollectionLocation.adapter = pickupAdapter
-        spinnerCollectionLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-
-                if (position != 0) {
-                    if (optionFlag == 1) {
-                        val model = pickupParentList!![position - 1]
-                        collectionAddress = model.pickupAddress ?: ""
-                        collectionAddressET.setText(collectionAddress)
-                        collectionDistrictId = model.districtId
-                        collectionThanaId = model.thanaId
-                    } else if (optionFlag == 2) {
-                        val model = thanaOrAriaList!![position - 1]
-                        collectionAddress = ""
-                        collectionAddressET.setText(collectionAddress)
-                        collectionDistrictId = 14
-                        collectionThanaId = model.thanaId
-                    }
-                    if (districtId == collectionDistrictId) {
-                        getDeliveryCharge(14, 10026, 0, serviceType)
-                    }
-                    /*deliveryTypeAdapter.clearSelectedItemPosition()
-                    deliveryTypeAdapter.notifyDataSetChanged()
-                    deliveryType = ""
-                    payShipmentCharge = 0.0*/
-
-                    isCollectionLocationSelected = true
-                    calculateTotalPrice()
-                } else {
-                    isCollectionLocationSelected = false
-                }
-            }
-        }
     }
 
     private fun calculateTotalPrice() {
@@ -1744,12 +1514,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
             context?.showToast("প্যাকেজিং নির্বাচন করুন")
             return false
         }
-
-        if (timeSlotId == 0) {
-            context?.toast(getString(R.string.select_yr_time_slot))
-            return false
-        }
-
         if (deliveryType.isEmpty()) {
             context?.showToast("ডেলিভারি টাইপ নির্বাচন করুন")
             return false
@@ -1768,6 +1532,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }
         if (isCollection && payCollectionAmount <= total) {
             context?.showToast("কালেকশন অ্যামাউন্ট সার্ভিস চার্জ থেকে বেশি হতে হবে")
+            return false
+        }
+
+        if (timeSlotId == 0) {
+            context?.toast(getString(R.string.select_yr_time_slot))
             return false
         }
 
@@ -1852,11 +1621,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }.show()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
-    }
-
+    //#region Test
     private fun mockUserData() {
         etCustomerName.setText("Test Customer ABC")
         etAddOrderMobileNo.setText("01555555555")
@@ -1871,5 +1636,6 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         //thanaId = 10026
         //areaId = 0
     }
+    //#endregion
 
 }
