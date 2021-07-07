@@ -19,6 +19,8 @@ import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
+import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
+import com.bd.deliverytiger.app.api.model.quick_order.TimeSlotRequest
 import com.bd.deliverytiger.app.api.model.referral.OfferData
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
@@ -35,6 +37,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
 
@@ -43,6 +47,14 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
     val serverErrorMessage = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
     val networkErrorMessage = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
     val unknownErrorMessage = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+
+    private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+
+    val currentTimeSlot: LiveData<List<QuickOrderTimeSlotData>> by lazy {
+        val calender = Calendar.getInstance()
+        val selectedDate = sdf.format(calender.timeInMillis)
+        getCollectionTimeSlot(TimeSlotRequest(selectedDate))
+    }
 
     fun getMerchantCredit(): LiveData<Boolean> {
 
@@ -171,6 +183,39 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
         return responseData
     }
 
+    private fun getCollectionTimeSlot(requestBody: TimeSlotRequest): LiveData<List<QuickOrderTimeSlotData>> {
+
+        viewState.value = ViewState.ProgressState(true)
+        val responseData = MutableLiveData<List<QuickOrderTimeSlotData>>()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getCollectionTimeSlot(requestBody)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model!!
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
+    }
 
     fun getPickupLocations(courierUserId: Int): LiveData<List<PickupLocation>> {
 

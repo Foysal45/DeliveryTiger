@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
@@ -55,6 +56,7 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 @SuppressLint("SetTextI18n")
 class AddOrderFragmentOne : Fragment(), View.OnClickListener {
@@ -189,7 +191,10 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var collectionThanaId: Int = 0
     private var collectionSlotDate: String = ""
     private var selectedCollectionSlotDate: String = ""
+    private var selectedDate: String = ""
     private var timeSlotId: Int = 0
+
+    private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
     private var isPickupLocationListAvailable: Boolean = false
     private var isPickupLocationFirstLoad: Boolean = false
@@ -208,6 +213,7 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
     private var isLocationLoading: Boolean = false
 
     private var binding: FragmentAddOrderFragmentOneBinding? = null
+    private var timeSlotDataAdapter: AddOrderTimeSlotAdapter = AddOrderTimeSlotAdapter()
     private val viewModel: AddOrderViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
 
@@ -272,6 +278,8 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         getPackagingCharge()
         fetchDTOrderGenericLimit()
         getPickupLocation()
+        initView()
+        getCollectionTimeSlot()
         //fetchCollectionTimeSlot()
 
 
@@ -665,6 +673,62 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         alternativeMobileNo = etAlternativeMobileNo.text.toString()
         customersAddress = etCustomersAddress.text.toString()
         additionalNote = etAdditionalNote.text.toString()
+    }
+
+    private fun initView(){
+        binding?.recyclerViewTime?.let { view ->
+            with(view) {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                adapter = timeSlotDataAdapter
+            }
+        }
+
+        val calender = Calendar.getInstance()
+        val todayDate = calender.timeInMillis
+        selectedDate = sdf.format(todayDate)
+
+        timeSlotDataAdapter.onItemClick = { model, position  ->
+            timeSlotId = model.collectionTimeSlotId
+            selectedCollectionSlotDate = selectedDate
+
+            if (!model.cutOffTime.isNullOrEmpty()) {
+
+                try {
+                    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+                    val cutOffTimeStamp = sdf.parse("$selectedDate ${model.cutOffTime}")
+                    //val cutOffTimeStamp = sdf.parse("$selectedDate 12:00:00")
+                    val endTimeStamp = sdf.parse("$selectedDate ${model.endTime}")
+                    val currentTimeStamp = Date()
+                    Timber.d("currentTimeDebug $selectedCollectionSlotDate")
+                    if (currentTimeStamp.after(cutOffTimeStamp)) {
+
+                        val timeDiff = endTimeStamp!!.time - currentTimeStamp.time
+                        val minute = TimeUnit.MILLISECONDS.toMinutes(timeDiff)
+
+                        val msg = "এই টাইম স্লটে পরবর্তী ${DigitConverter.toBanglaDigit(minute.toString())} মিনিট এর মধ্যে কালেক্টর আসতে পারবেন না। অনুগ্রহ করে পরবর্তী টাইম স্লট সিলেক্ট করে অর্ডার করুন।"
+                        alert(getString(R.string.instruction), msg, false, getString(R.string.ok), getString(R.string.cancel)) {
+                            if (it == AlertDialog.BUTTON_POSITIVE) {
+                                timeSlotId = 0
+                                timeSlotDataAdapter.setSelectedPositions(-1)
+                            }
+                        }.show()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+
+        }
+    }
+
+    private fun getCollectionTimeSlot() {
+        viewModel.currentTimeSlot.observe(viewLifecycleOwner, Observer { list ->
+            Timber.d("timeSlotDebug current time slot")
+            timeSlotDataAdapter.initLoad(list)
+            binding?.emptyView?.isVisible = list.isEmpty()
+        })
     }
 
     /*private fun goToDistrictSelectDialogue(list: MutableList<AllDistrictListsModel>, parentId: Int, operationFlag: Int) {
@@ -1678,6 +1742,11 @@ class AddOrderFragmentOne : Fragment(), View.OnClickListener {
         }
         if (!isPackagingSelected) {
             context?.showToast("প্যাকেজিং নির্বাচন করুন")
+            return false
+        }
+
+        if (timeSlotId == 0) {
+            context?.toast(getString(R.string.select_yr_time_slot))
             return false
         }
 
