@@ -6,6 +6,7 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.Parcel
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -49,6 +50,8 @@ import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -190,6 +193,7 @@ class AddOrderFragmentOne : Fragment() {
     private var selectedCollectionSlotDate: String = ""
     private var selectedDate: String = ""
     private var timeSlotId: Int = 0
+    private var isTodaySelected: Boolean = false
 
     private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
@@ -320,7 +324,8 @@ class AddOrderFragmentOne : Fragment() {
         val calender = Calendar.getInstance()
         val todayDate = calender.timeInMillis
         selectedDate = sdf.format(todayDate)
-
+        isTodaySelected = true
+        fetchCollectionTimeSlot()
         SessionManager.orderSource = "DetailOrder"
     }
 
@@ -515,17 +520,44 @@ class AddOrderFragmentOne : Fragment() {
             orderPlaceProcess()
         }
 
+        binding?.orderRequestDatePicker?.setOnClickListener {
+            datePicker()
+        }
+
+        binding?.collectionToday?.setOnClickListener {
+            binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
+            binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+            val calender = Calendar.getInstance()
+            val todayDate = calender.timeInMillis
+            selectedDate = sdf.format(todayDate)
+            Timber.d("selectedDate $selectedDate")
+            isTodaySelected = true
+            fetchCollectionTimeSlot()
+        }
+
+        binding?.collectionTomorrow?.setOnClickListener {
+            binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
+            binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+            val calender = Calendar.getInstance()
+            calender.add(Calendar.DAY_OF_MONTH, 1)
+            val tomorrowDate = calender.timeInMillis
+            selectedDate = sdf.format(tomorrowDate)
+            Timber.d("selectedDate $selectedDate")
+            isTodaySelected = false
+            fetchCollectionTimeSlot()
+        }
+
         timeSlotDataAdapter.onItemClick = { model, position  ->
             timeSlotId = model.collectionTimeSlotId
             selectedCollectionSlotDate = selectedDate
-            /*if (!model.cutOffTime.isNullOrEmpty()) {
+            if (isTodaySelected && !model.cutOffTime.isNullOrEmpty()) {
+
                 try {
                     val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
                     val cutOffTimeStamp = sdf.parse("$selectedDate ${model.cutOffTime}")
                     //val cutOffTimeStamp = sdf.parse("$selectedDate 12:00:00")
                     val endTimeStamp = sdf.parse("$selectedDate ${model.endTime}")
                     val currentTimeStamp = Date()
-                    Timber.d("currentTimeDebug $selectedCollectionSlotDate")
                     if (currentTimeStamp.after(cutOffTimeStamp)) {
 
                         val timeDiff = endTimeStamp!!.time - currentTimeStamp.time
@@ -542,7 +574,7 @@ class AddOrderFragmentOne : Fragment() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-            }*/
+            }
         }
 
         homeViewModel.refreshEvent.observe(viewLifecycleOwner, Observer { tag ->
@@ -691,6 +723,56 @@ class AddOrderFragmentOne : Fragment() {
         customersAddress = etCustomersAddress.text.toString()
         additionalNote = etAdditionalNote.text.toString()
     }
+
+    private fun datePicker() {
+
+        var calender = Calendar.getInstance()
+        val calendarConstraints = CalendarConstraints.Builder().apply {
+            //calender.add(Calendar.DAY_OF_MONTH, -1)
+            val startDate = calender.timeInMillis
+            setStart(startDate)
+
+            calender = Calendar.getInstance()
+            calender.add(Calendar.DAY_OF_MONTH, 7)
+            val endDate = calender.timeInMillis
+            setEnd(endDate)
+            setValidator(object: CalendarConstraints.DateValidator {
+                override fun describeContents(): Int {
+                    return 0
+                }
+
+                override fun writeToParcel(p0: Parcel?, p1: Int) {
+
+                }
+
+                override fun isValid(date: Long): Boolean {
+                    return date in startDate..endDate
+                }
+
+            })
+        }
+
+        val builder = MaterialDatePicker.Builder.datePicker().apply {
+            setTheme(R.style.CustomMaterialCalendarTheme)
+            setTitleText("Select date")
+            setCalendarConstraints(calendarConstraints.build())
+        }
+        binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+        binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+
+        val picker = builder.build()
+        picker.show(childFragmentManager, "Picker")
+        picker.addOnPositiveButtonClickListener {
+            selectedDate = sdf.format(it)
+            Timber.d("selectedDate $selectedDate")
+            binding?.collectionTomorrow?.text = selectedDate
+            binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
+            binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+            isTodaySelected = false
+            fetchCollectionTimeSlot()
+        }
+    }
+
 
     private fun datePicker(dateTypeFlag: Int) {
 
@@ -1271,11 +1353,19 @@ class AddOrderFragmentOne : Fragment() {
 
     //#region Time Slot
     private fun fetchCollectionTimeSlot() {
-        viewModel.upcomingTimeSlot.observe(viewLifecycleOwner, Observer { list ->
-            Timber.d("timeSlotDebug current time slot")
-            timeSlotDataAdapter.initLoad(list)
-            binding?.emptyView?.isVisible = list.isEmpty()
-        })
+        if (isTodaySelected) {
+            viewModel.currentTimeSlot.observe(viewLifecycleOwner, Observer { list ->
+                Timber.d("timeSlotDebug current time slot")
+                timeSlotDataAdapter.initLoad(list)
+                binding?.emptyView?.isVisible = list.isEmpty()
+            })
+        } else {
+            viewModel.upcomingTimeSlot.observe(viewLifecycleOwner, Observer { list ->
+                Timber.d("timeSlotDebug upcoming time slot")
+                timeSlotDataAdapter.initLoad(list)
+                binding?.emptyView?.isVisible = list.isEmpty()
+            })
+        }
     }
     //#endregion
 

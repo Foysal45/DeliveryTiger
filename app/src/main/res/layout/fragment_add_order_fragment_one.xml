@@ -816,6 +816,81 @@
                     android:layout_marginTop="@dimen/fab_margin">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/productCollectionDateLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp"
+                        android:background="@drawable/bg_corner_round_shape"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="5dp"
+                            android:gravity="center"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
+
+                            <TextView
+                                android:id="@+id/collectionToday"
+                                android:layout_width="100dp"
+                                android:layout_height="40dp"
+                                android:layout_marginEnd="4dp"
+                                android:layout_marginStart="16dp"
+                                android:gravity="center"
+                                android:background="@drawable/bg_time_slot_selected"
+                                android:text="আজ"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:id="@+id/collectionTomorrow"
+                                android:layout_width="100dp"
+                                android:layout_height="40dp"
+                                android:layout_marginStart="8dp"
+                                android:gravity="center"
+                                android:background="@drawable/bg_time_slot_unselected"
+                                android:text="কাল"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"/>
+
+
+                            <ImageView
+                                android:id="@+id/orderRequestDatePicker"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginStart="16dp"
+                                app:tint="#a8a9ad"
+                                android:src="@drawable/ic_date"
+                                android:contentDescription="@string/cd" />
+
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="প্রোডাক্ট কবে কালেকশন হবে"
+                        android:background="@color/white"
+                        android:layout_marginStart="16dp"
+                        android:padding="3dp"
+                        app:layout_constraintBottom_toTopOf="@+id/productCollectionDateLayout"
+                        app:layout_constraintStart_toStartOf="@+id/productCollectionDateLayout"
+                        app:layout_constraintTop_toTopOf="@+id/productCollectionDateLayout"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/productCollectionTimeLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -866,7 +941,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="প্রোডাক্ট কলেকশনের সময় "
+                        android:hint="কখন কালেকশন হবে?"
                         android:background="@color/white"
                         android:layout_marginStart="16dp"
                         android:padding="3dp"

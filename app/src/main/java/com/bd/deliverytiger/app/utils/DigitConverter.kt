@@ -111,12 +111,12 @@ object DigitConverter {
             if (timeArray.isNotEmpty()) {
                 hour24 = inputTime.split(":").first().toInt()
             }
-            val timePhase = when (hour24) {
+            /*val timePhase = when (hour24) {
                 in 0..14 -> "সকাল"
                 in 15..17 -> "দুপুর"
                 in 18..24 -> "রাত"
                 else -> ""
-            }
+            }*/
 
             var time112 = ""
             val time1 = sdf1.parse(inputTime)
@@ -130,7 +130,7 @@ object DigitConverter {
                 time212 = sdf2.format(time2)
             }
 
-            return "$timePhase\n${engCahrReplacer(time112)} - ${engCahrReplacer(time212)}"
+            return "${engCahrReplacer(time112)} - ${engCahrReplacer(time212)}"
         } catch (e: Exception) {
             e.printStackTrace()
             return ""

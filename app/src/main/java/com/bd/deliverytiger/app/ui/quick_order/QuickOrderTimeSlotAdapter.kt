@@ -30,7 +30,7 @@ class QuickOrderTimeSlotAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>()
             val model = dataList[position]
             val binding = holder.binding
 
-            val timeMsg = DigitConverter.formatTimeRange(model.startTime, model.endTime)
+            val timeMsg = "${model.slotName}\n${DigitConverter.formatTimeRange(model.startTime, model.endTime)}"
             binding.timeSlot.text = timeMsg
 
             if (selectedPosition == position) {

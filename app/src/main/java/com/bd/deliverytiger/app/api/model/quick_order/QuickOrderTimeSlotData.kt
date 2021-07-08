@@ -17,5 +17,7 @@ data class QuickOrderTimeSlotData(
     @SerializedName("orderLimit")
     var orderLimit: Int = 0,
     @SerializedName("cutOffTime")
-    var cutOffTime: String? = ""
+    var cutOffTime: String? = "",
+    @SerializedName("slotName")
+    var slotName: String? = ""
 )
