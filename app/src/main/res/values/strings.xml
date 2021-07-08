@@ -121,6 +121,7 @@
     <string name="instruction">নির্দেশনা</string>
     <string name="ok">ঠিক আছে</string>
     <string name="cancel">ক্যানসেল</string>
+    <string name="yes_delete">হ্যাঁ, ডিলিট</string>
 
     <string name="area_close">জেলায়/থানায়/এরিয়ায় ডেলিভারি সার্ভিস সাময়িকভাবে বন্ধ রয়েছে।</string>
 

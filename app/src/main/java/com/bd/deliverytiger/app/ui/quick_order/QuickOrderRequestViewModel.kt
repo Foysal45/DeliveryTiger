@@ -156,6 +156,44 @@ class QuickOrderRequestViewModel(private val repository: AppRepository) : ViewMo
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
                             responseData.value = response.body.model > 0
+                        } else {
+                            responseData.value = false
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
+    }
+
+    fun deleteOrderRequest(orderRequestId: Int) : LiveData<Boolean>{
+
+        viewState.value = ViewState.ProgressState(true)
+        val responseData = MutableLiveData<Boolean>()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.deleteOrderRequest(orderRequestId)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model > 0
+                        } else {
+                            responseData.value = false
                         }
                     }
                     is NetworkResponse.ServerError -> {

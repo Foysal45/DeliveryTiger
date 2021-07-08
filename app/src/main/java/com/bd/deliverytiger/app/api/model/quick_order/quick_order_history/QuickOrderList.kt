@@ -28,7 +28,7 @@ data class QuickOrderList(
     @SerializedName("totalOrder")
     var totalOrder: Int = 0,
     @SerializedName("collectionTimeSlot")
-    var collectionTimeSlot: QuickOrderTimeSlotData? = QuickOrderTimeSlotData(),
+    var collectionTimeSlot: String? = "",
     @SerializedName("districtsViewModel")
     var districtsViewModel: DistrictsViewModel? = DistrictsViewModel(),
     @SerializedName("actionModel")

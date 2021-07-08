@@ -238,5 +238,8 @@ interface ApiInterfaceCore {
     @PUT("api/QuickOrder/UpdateMultipleTimeSlot")
     suspend fun updateMultipleTimeSlot(@Body requestBody: List<TimeSlotUpdateRequest>): NetworkResponse<GenericResponse<Int>, ErrorResponse>
 
+    @DELETE("api/QuickOrder/DeleteOrderRequest/{orderRequestId}")
+    suspend fun deleteOrderRequest(@Path("orderRequestId") orderRequestId: Int): NetworkResponse<GenericResponse<Int>, ErrorResponse>
+
 
 }

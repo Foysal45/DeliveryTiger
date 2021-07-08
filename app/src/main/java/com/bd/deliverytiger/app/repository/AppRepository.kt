@@ -33,6 +33,7 @@ import com.bd.deliverytiger.app.api.model.sms.SMSModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
+import retrofit2.http.Path
 
 class AppRepository(
     private val apiInterfaceADM: ApiInterfaceADM,
@@ -217,6 +218,8 @@ class AppRepository(
     suspend fun getMerchantQuickOrders(requestBody: QuickOrderListRequest) = apiInterfaceCore.getMerchantQuickOrders(requestBody)
 
     suspend fun updateMultipleTimeSlot(requestBody: List<TimeSlotUpdateRequest>) = apiInterfaceCore.updateMultipleTimeSlot(requestBody)
+
+    suspend fun deleteOrderRequest(orderRequestId: Int) = apiInterfaceCore.deleteOrderRequest(orderRequestId)
 
 
 }

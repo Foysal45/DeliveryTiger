@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
@@ -22,6 +23,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class QuickOrderListFragment : Fragment() {
+
     private var binding: FragmentQuickOrderListBinding? = null
     private val viewModel: QuickOrderRequestViewModel by inject()
     private var dataAdapter: QuickOrderListAdapter = QuickOrderListAdapter()
@@ -82,9 +84,9 @@ class QuickOrderListFragment : Fragment() {
         }
 
         dataAdapter.onDelete = { model, _ ->
-            alert(getString(R.string.instruction), "কুইক বুকিং রিকোয়েস্টটি ডিলিট করতে চান?", false) {
+            alert(getString(R.string.instruction), "কুইক বুকিং রিকোয়েস্টটি ডিলিট করতে চান?", true, getString(R.string.yes_delete), getString(R.string.cancel)) {
                 if (it == AlertDialog.BUTTON_POSITIVE) {
-                    context?.toast("Under dev")
+                    deleteOrderRequest(model.orderRequestId)
                 }
             }.show()
         }
@@ -93,7 +95,7 @@ class QuickOrderListFragment : Fragment() {
 
             val dialog = QuickBookingTimeSlotBottomSheet.newInstance(
                 model.orderRequestId,
-                model.collectionTimeSlot?.collectionTimeSlotId ?: 0,
+                model.collectionTimeSlotId,
                 model.collectionDate ?: ""
             )
             val tag = QuickBookingTimeSlotBottomSheet.tag
@@ -131,6 +133,16 @@ class QuickOrderListFragment : Fragment() {
             } else {
                 dataAdapter.initLoad(list)
                 binding?.emptyView?.visibility = View.GONE
+            }
+        })
+    }
+
+    private fun deleteOrderRequest(orderRequestId: Int) {
+        viewModel.deleteOrderRequest(orderRequestId).observe(viewLifecycleOwner, Observer { flag ->
+            if (flag) {
+                context?.toast("বুকিং রিকুয়েস্ট ক্যানসেল হয়েছে")
+                dataAdapter.deleteByRequestId(orderRequestId)
+                binding?.emptyView?.isVisible = dataAdapter.itemCount == 0
             }
         })
     }

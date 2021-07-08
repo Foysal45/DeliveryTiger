@@ -76,4 +76,12 @@ class QuickOrderListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         dataList.addAll(list)
         notifyItemRangeInserted(currentIndex, newDataCount)
     }
+
+    fun deleteByRequestId(orderRequestId: Int) {
+        val index = dataList.indexOfFirst { it.orderRequestId == orderRequestId }
+        if (index != -1) {
+            dataList.removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
 }
