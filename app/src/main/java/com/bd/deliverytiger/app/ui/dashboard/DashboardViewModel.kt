@@ -143,22 +143,36 @@ class DashboardViewModel(private val repository: AppRepository) : ViewModel() {
 
     fun updateStatusLocation(courierUserId: Int): LiveData<Boolean> {
 
+        viewState.value = ViewState.ProgressState(true)
         val responseData: MutableLiveData<Boolean> = MutableLiveData()
-        viewModelScope.launch(Dispatchers.IO){
 
-            repository.updateCourierStatus(StatusLocationRequest(courierUserId)).enqueue(object : Callback<ResponseHeader<Int>> {
-                override fun onFailure(call: Call<ResponseHeader<Int>>, t: Throwable) {
-                    viewState.value = ViewState.ShowMessage(message)
-                }
-                override fun onResponse(call: Call<ResponseHeader<Int>>, response: Response<ResponseHeader<Int>>) {
-                    if (response.isSuccessful && response.body() != null) {
-                        responseData.value = response.body()!!.data == 1
-                    } else {
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.updateCourierStatusDT(StatusLocationRequest(courierUserId))
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model == 1
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
                         viewState.value = ViewState.ShowMessage(message)
                     }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
                 }
-            })
+            }
         }
+
         return responseData
     }
 

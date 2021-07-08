@@ -50,8 +50,6 @@ class AppRepository(
 
     suspend fun checkOTP(mobileNo: String, OPTCode: String) = apiInterfaceAPI.checkOTP(mobileNo, OPTCode)
 
-    fun updateCourierStatus(requestBody: StatusLocationRequest) = apiInterfaceAPI.updateCourierStatus(requestBody)
-
     suspend fun uploadProductInfo(ProductUploadReqBody: RequestBody) = apiInterfaceAPI.uploadProductInfo(ProductUploadReqBody)
 
     suspend fun fetchAllDistricts() = apiInterfaceAPI.fetchAllDistricts()
@@ -209,6 +207,8 @@ class AppRepository(
     suspend fun getRidersOfficeInfo(requestBody: CollectorInfoRequest) = apiInterfaceCore.getRidersOfficeInfo(requestBody)
 
     suspend fun updateOrderInfo(orderId: String, requestBody: UpdateOrderReqBody) = apiInterfaceCore.updateOrderInfo(orderId, requestBody)
+
+    suspend fun updateCourierStatusDT(requestBody: StatusLocationRequest) = apiInterfaceCore.updateCourierStatusDT(requestBody)
 
     //Quick Order
     suspend fun getCollectionTimeSlot(requestBody: TimeSlotRequest) = apiInterfaceCore.getCollectionTimeSlot(requestBody)

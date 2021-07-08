@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.api.endpoint
 
 import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.GenericResponse
+import com.bd.deliverytiger.app.api.model.ResponseHeader
 import com.bd.deliverytiger.app.api.model.accounts.BalanceInfo
 import com.bd.deliverytiger.app.api.model.balance_load.BalanceLimitResponse
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceMainResponse
@@ -17,6 +18,7 @@ import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.collection_history.CollectionData
 import com.bd.deliverytiger.app.api.model.collector_info.CollectorInfoRequest
 import com.bd.deliverytiger.app.api.model.collector_info.CollectorInformation
+import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.config.BannerResponse
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
@@ -240,6 +242,9 @@ interface ApiInterfaceCore {
 
     @DELETE("api/QuickOrder/DeleteOrderRequest/{orderRequestId}")
     suspend fun deleteOrderRequest(@Path("orderRequestId") orderRequestId: Int): NetworkResponse<GenericResponse<Int>, ErrorResponse>
+
+    @POST("api/Bondhu/AddLatLag")
+    suspend fun updateCourierStatusDT(@Body requestBody: StatusLocationRequest): NetworkResponse<GenericResponse<Int>, ErrorResponse>
 
 
 }

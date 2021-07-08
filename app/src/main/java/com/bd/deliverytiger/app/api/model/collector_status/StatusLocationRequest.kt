@@ -4,15 +4,15 @@ package com.bd.deliverytiger.app.api.model.collector_status
 import com.google.gson.annotations.SerializedName
 
 data class StatusLocationRequest(
-    @SerializedName("MerchantId")
+    @SerializedName("merchantId")
     var merchantId: Int = 0,
-    @SerializedName("Confirmation")
+    @SerializedName("confirmation")
     var confirmation: String = "no",
-    @SerializedName("DeliveryUserId")
+    @SerializedName("deliveryUserId")
     var deliveryUserId: Int = 0,
-    @SerializedName("Latitude")
+    @SerializedName("latitude")
     var latitude: String = "",
-    @SerializedName("Longitude")
+    @SerializedName("longitude")
     var longitude: String = ""
 
 )

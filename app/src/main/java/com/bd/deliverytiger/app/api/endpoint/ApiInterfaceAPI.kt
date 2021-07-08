@@ -34,9 +34,6 @@ interface ApiInterfaceAPI {
     @GET("Recover/CheckOTP/{mobileNo}/{OTP}")
     suspend fun checkOTP(@Path("mobileNo") mobileNo: String, @Path("OTP") OPTCode: String): NetworkResponse<OTPCheckResponse, ErrorResponse>
 
-    @POST("api/SelfDelivery/AddLatLag")
-    fun updateCourierStatus(@Body requestBody: StatusLocationRequest): Call<ResponseHeader<Int>>
-
     @Multipart
     @POST("api/Classified/V1/ProductUpload")
     suspend fun uploadProductInfo(@Part("Data") ProductUploadReqBody: RequestBody): NetworkResponse<ResponseHeader<ProductUploadResponse>, ErrorResponse>
