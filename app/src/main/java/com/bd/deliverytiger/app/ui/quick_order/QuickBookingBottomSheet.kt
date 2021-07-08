@@ -362,7 +362,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
         picker.addOnPositiveButtonClickListener {
             selectedDate = sdf.format(it)
             Timber.d("selectedDate $selectedDate")
-            binding?.collectionTomorrow?.text = selectedDate
+            binding?.collectionTomorrow?.text = DigitConverter.toBanglaDate(selectedDate, "yyyy-MM-dd", true)
             binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
             binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
             isTodaySelected = false

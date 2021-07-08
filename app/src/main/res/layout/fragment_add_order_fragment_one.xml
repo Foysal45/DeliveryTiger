@@ -876,7 +876,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="প্রোডাক্ট কবে কালেকশন হবে"
+                        android:hint=" কবে কালেকশন হবে? "
                         android:background="@color/white"
                         android:layout_marginStart="16dp"
                         android:padding="3dp"
@@ -941,7 +941,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="কখন কালেকশন হবে?"
+                        android:hint=" কখন কালেকশন হবে? "
                         android:background="@color/white"
                         android:layout_marginStart="16dp"
                         android:padding="3dp"
