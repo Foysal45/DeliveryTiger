@@ -151,7 +151,10 @@
             android:id="@+id/productCollectionDateLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
+            android:paddingTop="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginTop="24dp"
@@ -161,50 +164,65 @@
             app:layout_constraintBottom_toTopOf="@+id/productCollectionTimeLayout"
             app:layout_constraintTop_toBottomOf="@+id/parcelCountLayout">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:padding="5dp"
-                android:gravity="center"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <TextView
                     android:id="@+id/collectionToday"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
                     android:layout_height="40dp"
+                    android:paddingStart="5dp"
                     android:layout_marginEnd="4dp"
-                    android:layout_marginStart="16dp"
                     android:gravity="center"
                     android:background="@drawable/bg_time_slot_selected"
                     android:text="আজ"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/collectionTomorrow"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <TextView
                     android:id="@+id/collectionTomorrow"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="8dp"
                     android:gravity="center"
                     android:background="@drawable/bg_time_slot_unselected"
                     android:text="কাল"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/orderRequestDatePicker"
+                    app:layout_constraintStart_toEndOf="@+id/collectionToday"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
 
                 <ImageView
                     android:id="@+id/orderRequestDatePicker"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+
                     android:layout_marginStart="16dp"
                     app:tint="#a8a9ad"
                     android:src="@drawable/ic_date"
-                    android:contentDescription="@string/cd" />
+                    android:contentDescription="@string/cd"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/collectionTomorrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
