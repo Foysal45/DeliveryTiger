@@ -24,7 +24,7 @@ class ComplainHistoryViewModel(private val repository: AppRepository): ViewModel
         val responseBody = MutableLiveData<List<ComplainHistoryData>>()
 
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getComplainHistory(bookingCode)
+            val response = repository.getComplainHistory(bookingCode, 1)
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {

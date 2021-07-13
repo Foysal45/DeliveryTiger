@@ -104,7 +104,7 @@ class AppRepository(
 
     suspend fun getInstantPaymentActivationStatus(courierUserId: Int) = apiInterfaceADM.getInstantPaymentActivationStatus(courierUserId)
 
-    suspend fun getComplainHistory(bookingCode: Int) = apiInterfaceADM.getComplainHistory(bookingCode)
+    suspend fun getComplainHistory(bookingCode: Int, isVisibleToMerchant: Int) = apiInterfaceADM.getComplainHistory(bookingCode, isVisibleToMerchant)
 
     suspend fun merchantBalanceLoadHistory(merchantID: Int) = apiInterfaceADM.merchantBalanceLoadHistory(merchantID)
 

@@ -81,8 +81,8 @@ interface ApiInterfaceADM {
     @GET("api/account/reports/GetInstantPaymentActivationStatus/{courierUserId}")
     suspend fun getInstantPaymentActivationStatus(@Path("courierUserId") courierUserId: Int): NetworkResponse<InstantPaymentActivationStatusResponse, ErrorResponse>
 
-    @GET("api/Complain/GetAllCommentsForOnlyDTComplain/{bookingCode}")
-    suspend fun getComplainHistory(@Path("bookingCode") bookingCode: Int): NetworkResponse<List<ComplainHistoryData>, ErrorResponse>
+    @GET("api/Complain/GetAllCommentsForOnlyDTComplain/{bookingCode}/{isVisibleToMerchant}")
+    suspend fun getComplainHistory(@Path("bookingCode") bookingCode: Int, @Path("isVisibleToMerchant") isVisibleToMerchant: Int): NetworkResponse<List<ComplainHistoryData>, ErrorResponse>
 
     @GET("api/account/reports/MerchantBalanceLoadHistory/{merchantID}")
     suspend fun merchantBalanceLoadHistory(@Path("merchantID") merchantID: Int): NetworkResponse<List<BalanceLoadHistoryData>, ErrorResponse>
