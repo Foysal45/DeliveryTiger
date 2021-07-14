@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.ActionBar
 import android.graphics.Color
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
@@ -13,12 +14,14 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.accepted_orders.AcceptedOrder
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.collector_info.CollectorInfoRequest
 import com.bd.deliverytiger.app.api.model.config.BannerModel
@@ -64,6 +67,7 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 @SuppressLint("SetTextI18n")
 class DashboardFragment : Fragment() {
@@ -81,6 +85,7 @@ class DashboardFragment : Fragment() {
     private val calenderNow = Calendar.getInstance()
     private val viewList: MutableList<String> = mutableListOf()
     private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+    private var sdf1 = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
     private var dayOfYear = 0
     private var today = 0
     private var currentMonth = 0
@@ -112,6 +117,7 @@ class DashboardFragment : Fragment() {
     private var worker: Runnable? = null
     private var handler = Handler(Looper.getMainLooper())
     private var paymentDashboardModel: DashboardData = DashboardData(dashboardSpanCount = 2, viewType = 1)
+    private var countDownTimer: CountDownTimer? = null
 
     companion object {
         fun newInstance(): DashboardFragment = DashboardFragment().apply {}
@@ -132,6 +138,7 @@ class DashboardFragment : Fragment() {
         fetchBannerData()
         fetchCODData()
         fetchCollection()
+        fetchAcceptedOrder()
         //fetchCurrentBalance()
         initClickLister()
         //showDeliveryChargeCalculator()
@@ -151,6 +158,7 @@ class DashboardFragment : Fragment() {
         worker?.let {
             handler.removeCallbacks(it)
         }
+        countDownTimer?.cancel()
     }
 
     private fun manageDeliveryReturnDashboard(){
@@ -240,6 +248,7 @@ class DashboardFragment : Fragment() {
             getDashBoardData(selectedMonth, selectedYear)
             fetchCODData()
             fetchCollection()
+            fetchAcceptedOrder()
             //fetchCurrentBalance()
         }
         binding?.retryBtn?.setOnClickListener {
@@ -653,6 +662,56 @@ class DashboardFragment : Fragment() {
                 SessionManager.collectorAttendanceDateOfYear = 0
             }
         })
+    }
+
+    private fun fetchAcceptedOrder() {
+        viewModel.fetchAcceptedCourierOrders(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            showTimer(model)
+        })
+    }
+
+    private fun showTimer(model: AcceptedOrder) {
+
+        countDownTimer?.cancel()
+        val endTime = model.collectionTimeSlot?.endTime ?: "00:00:00"
+        if (endTime == "00:00:00") return
+        try {
+            val endDate = DigitConverter.formatDate(model.riderAcceptDate, "yyyy-MM-dd", "yyyy-MM-dd")
+            val endTimeStamp = sdf1.parse("$endDate $endTime")
+            Timber.d("timeDebug $endDate $endTime")
+            if (endTimeStamp == null) return
+                val timeDifference = endTimeStamp.time - Date().time
+                Timber.d("timeDebug timeDifference $timeDifference ${endTimeStamp.time}")
+                if (timeDifference > 0) {
+                    binding?.collectorTimerLayout?.isVisible = true
+                    countDownTimer = object: CountDownTimer(timeDifference,1000L) {
+                        override fun onTick(millisUntilFinished: Long) {
+                            val hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished).toInt() % 24
+                            val minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished).toInt() % 60
+                            val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished).toInt() % 60
+
+                            val message = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+                            //val message = String.format("%02d:%02d", minutes, seconds)
+                            binding?.timeCounter?.text = DigitConverter.toBanglaDigit(message)
+                            /*if (hours < 1) {
+                                holder.binding.timeText.setTextColor(ContextCompat.getColor(holder.binding.timeText.context, R.color.crimson))
+                            } else {
+                                holder.binding.timeText.setTextColor(ContextCompat.getColor(holder.binding.timeText.context, R.color.colorPrimary))
+                            }*/
+                        }
+
+                        override fun onFinish() {
+                            binding?.timeCounter?.text = "০০:০০:০০"
+                            binding?.collectorTimerLayout?.isVisible = false
+                        }
+                    }.start()
+                } else {
+                    binding?.collectorTimerLayout?.isVisible = false
+                }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun fetchCODData() {

@@ -187,6 +187,50 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/collectorTimerLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/bg_stroke1"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="কালেক্টর"
+                            android:textColor="@color/black_90"
+                            android:textSize="14sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/timeCounter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="75dp"
+                            tools:text="৯৯:৯৯:৯৯"
+                            android:textColor="@color/orange"
+                            android:textSize="18sp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="4dp"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ঘন্টার মধ্যে আসবে"
+                            android:textColor="@color/black_90"
+                            android:textSize="14sp"
+                            />
+
+                    </LinearLayout>
+
                     <!--<androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="24dp"

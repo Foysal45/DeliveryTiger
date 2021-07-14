@@ -3,6 +3,7 @@ package com.bd.deliverytiger.app.api.endpoint
 import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.ResponseHeader
+import com.bd.deliverytiger.app.api.model.accepted_orders.AcceptedOrder
 import com.bd.deliverytiger.app.api.model.accounts.BalanceInfo
 import com.bd.deliverytiger.app.api.model.balance_load.BalanceLimitResponse
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceMainResponse
@@ -246,5 +247,7 @@ interface ApiInterfaceCore {
     @POST("api/Bondhu/AddLatLag")
     suspend fun updateCourierStatusDT(@Body requestBody: StatusLocationRequest): NetworkResponse<GenericResponse<Int>, ErrorResponse>
 
+    @GET("api/Fetch/GetAcceptedCourierOrders/{courierUserId}")
+    suspend fun fetchAcceptedCourierOrders(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<AcceptedOrder>, ErrorResponse>
 
 }

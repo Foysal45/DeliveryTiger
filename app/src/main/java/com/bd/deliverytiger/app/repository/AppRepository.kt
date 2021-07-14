@@ -210,6 +210,8 @@ class AppRepository(
 
     suspend fun updateCourierStatusDT(requestBody: StatusLocationRequest) = apiInterfaceCore.updateCourierStatusDT(requestBody)
 
+    suspend fun fetchAcceptedCourierOrders(courierUserId: Int) = apiInterfaceCore.fetchAcceptedCourierOrders(courierUserId)
+
     //Quick Order
     suspend fun getCollectionTimeSlot(requestBody: TimeSlotRequest) = apiInterfaceCore.getCollectionTimeSlot(requestBody)
 
