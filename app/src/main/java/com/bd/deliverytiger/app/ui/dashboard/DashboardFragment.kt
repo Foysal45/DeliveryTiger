@@ -68,6 +68,7 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.math.floor
 
 @SuppressLint("SetTextI18n")
 class DashboardFragment : Fragment() {
@@ -684,14 +685,22 @@ class DashboardFragment : Fragment() {
                 Timber.d("timeDebug timeDifference $timeDifference ${endTimeStamp.time}")
                 if (timeDifference > 0) {
                     binding?.collectorTimerLayout?.isVisible = true
-                    countDownTimer = object: CountDownTimer(timeDifference,1000L) {
+                    binding?.clock?.let { image ->
+                        Glide.with(image).load(R.raw.gif_watch).into(image)
+                    }
+                    countDownTimer = object: CountDownTimer(timeDifference,1000L * 60 * 10) { // 10 min
                         override fun onTick(millisUntilFinished: Long) {
                             val hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished).toInt() % 24
                             val minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished).toInt() % 60
-                            val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished).toInt() % 60
+                            //val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished).toInt() % 60
+                            //val message = String.format("%02d:%02d:%02d", hours, minutes, seconds)
 
-                            val message = String.format("%02d:%02d:%02d", hours, minutes, seconds)
-                            //val message = String.format("%02d:%02d", minutes, seconds)
+                            val roundMinute = if (minutes > 10) minutes - (minutes % 10) else minutes
+                            val message = if (hours == 0) {
+                                String.format("%d মিনিটের", roundMinute)
+                            } else {
+                                String.format("%d ঘণ্টা %d মিনিটের", hours, roundMinute)
+                            }
                             binding?.timeCounter?.text = DigitConverter.toBanglaDigit(message)
                             /*if (hours < 1) {
                                 holder.binding.timeText.setTextColor(ContextCompat.getColor(holder.binding.timeText.context, R.color.crimson))
@@ -701,7 +710,7 @@ class DashboardFragment : Fragment() {
                         }
 
                         override fun onFinish() {
-                            binding?.timeCounter?.text = "০০:০০:০০"
+                            binding?.timeCounter?.text = "০ ঘণ্টা ০ মিনিটের"
                             binding?.collectorTimerLayout?.isVisible = false
                         }
                     }.start()

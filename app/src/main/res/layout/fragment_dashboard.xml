@@ -85,8 +85,8 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:baselineAligned="false"
-                        android:orientation="horizontal"
                         android:gravity="center"
+                        android:orientation="horizontal"
                         android:visibility="gone"
                         tools:visibility="visible">
 
@@ -141,21 +141,20 @@
                             android:id="@+id/callCollectorBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
-                            android:text="কালেক্টর কল"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
                             android:insetTop="0dp"
                             android:insetBottom="0dp"
+                            android:paddingStart="8dp"
+                            android:paddingTop="0dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="0dp"
+                            android:text="কালেক্টর কল"
                             android:textColor="@color/white"
                             android:textSize="14sp"
-                            android:paddingStart="8dp"
-                            android:paddingEnd="10dp"
-                            android:paddingTop="0dp"
-                            android:paddingBottom="0dp"
-                            android:layout_marginEnd="10dp"
-                            android:layout_marginStart="10dp"
-                            app:iconGravity="start"
-                            app:iconSize="20dp"
                             app:icon="@drawable/ic_call"
-                            />
+                            app:iconGravity="start"
+                            app:iconSize="20dp" />
 
                         <LinearLayout
                             android:id="@+id/collectorTrackBtn"
@@ -190,16 +189,22 @@
                     <LinearLayout
                         android:id="@+id/collectorTimerLayout"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="30dp"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:background="@drawable/bg_stroke1"
-                        android:visibility="gone"
-                        tools:visibility="visible"
-                        android:orientation="horizontal"
                         android:gravity="center"
-                        >
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <ImageView
+                            android:id="@+id/clock"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="@string/cd"
+                            android:src="@drawable/ic_express"
+                            />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -207,84 +212,33 @@
                             android:text="কালেক্টর"
                             android:textColor="@color/black_90"
                             android:textSize="14sp"
+                            android:layout_marginStart="6dp"
                             />
 
                         <TextView
                             android:id="@+id/timeCounter"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:minWidth="75dp"
-                            tools:text="৯৯:৯৯:৯৯"
-                            android:textColor="@color/orange"
-                            android:textSize="18sp"
                             android:layout_marginStart="5dp"
                             android:layout_marginEnd="4dp"
-                            />
+                            android:textColor="@color/orange"
+                            android:textSize="16sp"
+                            tools:text="২ ঘণ্টা ১০ মিনিটের" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="ঘন্টার মধ্যে আসবে"
+                            android:text="মধ্যে আসবে"
                             android:textColor="@color/black_90"
-                            android:textSize="14sp"
-                            />
+                            android:textSize="14sp" />
 
                     </LinearLayout>
-
-                    <!--<androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:background="@drawable/bg_solid2">
-
-                        <ImageView
-                            android:id="@+id/dateRangePicker"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_marginStart="12dp"
-                            android:contentDescription="@string/cd"
-                            android:src="@drawable/ic_date_search"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <androidx.appcompat.widget.AppCompatSpinner
-                            android:id="@+id/monthSpinner"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="60dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="12dp"
-                            android:layout_marginBottom="8dp"
-                            android:background="@drawable/bg_solid3"
-                            android:overlapAnchor="false"
-                            android:spinnerMode="dropdown"
-                            android:theme="@style/custom_spinner_style"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/dateRangePicker"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:entries="@array/arrayMonth" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:contentDescription="@string/cd"
-                            app:layout_constraintBottom_toBottomOf="@id/monthSpinner"
-                            app:layout_constraintEnd_toEndOf="@id/monthSpinner"
-                            app:layout_constraintTop_toTopOf="@id/monthSpinner"
-                            app:srcCompat="@drawable/ic_arrow_drop_down" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp">
 
                         <androidx.recyclerview.widget.RecyclerView
@@ -346,8 +300,7 @@
                                 android:layout_height="28dp"
                                 android:contentDescription="@string/cd"
                                 android:src="@drawable/ic_tracking"
-                                app:tint="@color/white"
-                                />
+                                app:tint="@color/white" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -403,9 +356,8 @@
                         android:visibility="gone"
                         app:sliderIndicatorMarginBottom="3dp"
                         app:sliderIndicatorRadius="2dp"
-                        tools:visibility="visible"
                         tools:background="@color/black_15"
-                        />
+                        tools:visibility="visible" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/deliveredReturnLayout"
@@ -427,12 +379,12 @@
                             android:background="@drawable/title_oval_shape"
                             android:padding="5dp"
                             android:text="ডেলিভারি ও রিটার্ন ট্রেন্ড"
+                            android:textAlignment="center"
+                            android:textColor="@color/yellow"
                             android:textSize="@dimen/text_14"
                             android:textStyle="bold"
-                            android:textColor="@color/yellow"
-                            android:textAlignment="center"
-                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <View
@@ -446,12 +398,11 @@
                             android:id="@+id/datePickerLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            app:layout_constraintTop_toBottomOf="@+id/separator"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            tools:ignore="UseCompoundDrawables"
                             android:gravity="center_vertical"
-                            >
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/separator"
+                            tools:ignore="UseCompoundDrawables">
 
                             <TextView
                                 android:id="@+id/dateRangePicker"
@@ -459,8 +410,8 @@
                                 android:layout_height="40dp"
                                 android:layout_weight="1"
                                 android:background="@drawable/bg_add_order_edit_text"
-                                android:hint="ডেট রেঞ্জ সিলেক্ট করুন"
                                 android:gravity="center_vertical"
+                                android:hint="ডেট রেঞ্জ সিলেক্ট করুন"
                                 android:includeFontPadding="false"
                                 android:paddingStart="16dp"
                                 android:paddingTop="8dp"
@@ -475,14 +426,14 @@
                                 android:id="@+id/clearDateRangeImage"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
+                                android:layout_gravity="center"
                                 android:layout_marginStart="2dp"
                                 android:layout_marginEnd="4dp"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_close_white_24dp"
-                                app:tint="@color/black_80"
                                 android:contentDescription="@string/cd"
+                                android:src="@drawable/ic_close_white_24dp"
                                 android:visibility="gone"
-                                tools:visibility="gone"/>
+                                app:tint="@color/black_80"
+                                tools:visibility="gone" />
 
                         </LinearLayout>
 
@@ -493,12 +444,12 @@
                             android:layout_marginTop="12dp"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
+                            android:baselineAligned="false"
                             android:orientation="horizontal"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/datePickerLayout"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            android:baselineAligned="false">
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/datePickerLayout">
 
                             <LinearLayout
                                 android:id="@+id/deliveryFilterLayout"
@@ -508,8 +459,8 @@
                                 android:layout_marginEnd="8dp"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:paddingTop="6dp"
                                 android:orientation="vertical"
+                                android:paddingTop="6dp"
                                 tools:ignore="UselessParent">
 
                                 <LinearLayout
@@ -517,8 +468,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:background="@drawable/bg_top_oval_shape"
-                                    android:padding="5dp"
-                                    android:orientation="horizontal">
+                                    android:orientation="horizontal"
+                                    android:padding="5dp">
 
                                     <TextView
                                         android:id="@+id/titleDelivery"
@@ -535,42 +486,42 @@
                                     <LinearLayout
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_weight="1"
                                         android:layout_gravity="center_horizontal"
+                                        android:layout_weight="1"
                                         android:orientation="horizontal">
 
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:maxLines="1"
+                                            android:text="("
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/text_14"
-                                            android:text="("/>
+                                            android:textSize="@dimen/text_14" />
 
                                         <TextView
                                             android:id="@+id/filterCountDeliveryPercent"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:maxLines="1"
+                                            android:text="-"
                                             android:textColor="@color/yellow"
-                                            android:textSize="@dimen/text_14"
-                                            android:text="-" />
+                                            android:textSize="@dimen/text_14" />
 
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:maxLines="1"
+                                            android:text="%"
                                             android:textColor="@color/yellow"
-                                            android:textSize="@dimen/text_12"
-                                            android:text="%" />
+                                            android:textSize="@dimen/text_12" />
 
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:maxLines="1"
+                                            android:text=")"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/text_14"
-                                            android:text=")"/>
+                                            android:textSize="@dimen/text_14" />
 
                                     </LinearLayout>
 
@@ -580,17 +531,17 @@
                                     android:id="@+id/filterCountDelivery"
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
-                                    android:padding="5dp"
-                                    android:gravity="center_horizontal"
-                                    android:layout_weight="1"
                                     android:layout_gravity="center"
+                                    android:layout_weight="1"
                                     android:background="@drawable/bg_bottom_oval_shape"
+                                    android:gravity="center_horizontal"
                                     android:maxLines="1"
+                                    android:padding="5dp"
+                                    android:text="-"
+                                    android:textColor="@color/black_80"
                                     android:textSize="@dimen/text_16"
                                     android:textStyle="bold"
-                                    android:text="-"
-                                    tools:text="০টি"
-                                    android:textColor="@color/black_80" />
+                                    tools:text="০টি" />
 
                             </LinearLayout>
 
@@ -600,17 +551,17 @@
                                 android:layout_gravity="center_horizontal"
                                 android:layout_marginStart="8dp"
                                 android:layout_weight="1"
-                                android:paddingTop="6dp"
                                 android:gravity="center"
                                 android:orientation="vertical"
+                                android:paddingTop="6dp"
                                 tools:ignore="UselessParent">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/bg_top_oval_shape"
-                                    android:padding="5dp"
-                                    android:orientation="horizontal">
+                                    android:orientation="horizontal"
+                                    android:padding="5dp">
 
                                     <TextView
                                         android:id="@+id/titleReturn"
@@ -621,53 +572,49 @@
                                         android:maxLines="1"
                                         android:paddingStart="8dp"
                                         android:paddingEnd="4dp"
+                                        android:text="রিটার্ন হয়েছে"
                                         android:textColor="@color/white"
-                                        android:textSize="14sp"
-                                        android:text="রিটার্ন হয়েছে"/>
+                                        android:textSize="14sp" />
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
                                         android:layout_weight="1"
-                                        android:orientation="horizontal"
-                                        android:layout_gravity="center_horizontal">
+                                        android:orientation="horizontal">
 
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:maxLines="1"
-                                            android:textColor="@color/white"
-                                            android:textSize="@dimen/text_14"
                                             android:text="("
-                                            />
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_14" />
 
                                         <TextView
                                             android:id="@+id/filterCountReturnPercent"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:maxLines="1"
-                                            android:textColor="@color/yellow"
-                                            android:textSize="@dimen/text_14"
                                             android:text="-"
-                                            />
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:maxLines="1"
                                             android:textColor="@color/yellow"
-                                            android:textSize="@dimen/text_12"
-                                            android:text="%"
-                                            />
+                                            android:textSize="@dimen/text_14" />
 
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:maxLines="1"
-                                            android:textColor="@color/white"
-                                            android:textSize="@dimen/text_14"
+                                            android:text="%"
+                                            android:textColor="@color/yellow"
+                                            android:textSize="@dimen/text_12" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:maxLines="1"
                                             android:text=")"
-                                            />
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_14" />
 
                                     </LinearLayout>
 
@@ -677,16 +624,16 @@
                                     android:id="@+id/filterCountReturn"
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
-                                    android:background="@drawable/bg_bottom_oval_shape"
                                     android:layout_weight="1"
-                                    android:padding="5dp"
+                                    android:background="@drawable/bg_bottom_oval_shape"
                                     android:gravity="center_horizontal"
                                     android:maxLines="1"
+                                    android:padding="5dp"
+                                    android:text="-"
+                                    android:textColor="@color/black_80"
                                     android:textSize="@dimen/text_16"
                                     android:textStyle="bold"
-                                    android:text="-"
-                                    tools:text="০টি"
-                                    android:textColor="@color/black_80" />
+                                    tools:text="০টি" />
 
                             </LinearLayout>
 
@@ -698,15 +645,14 @@
                         android:id="@+id/referBtn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="18dp"
+                        android:adjustViewBounds="true"
                         android:contentDescription="@string/cd"
                         android:src="@drawable/bg_banner_referral"
                         android:visibility="gone"
-                        tools:visibility="visible"
-                        />
+                        tools:visibility="visible" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -721,9 +667,9 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="5dp"
                             android:background="@drawable/bang_lay_pending_query"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:padding="5dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -789,17 +735,17 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="40dp"
                                     android:layout_marginEnd="0dp"
+                                    android:insetTop="0dp"
+                                    android:insetBottom="0dp"
                                     android:text="কল"
                                     android:textAllCaps="false"
                                     android:textColor="@color/white"
                                     android:textSize="14sp"
                                     app:backgroundTint="@color/colorPrimary"
                                     app:icon="@drawable/ic_call"
-                                    android:insetTop="0dp"
-                                    android:insetBottom="0dp"
-                                    app:layout_constraintTop_toTopOf="parent"
                                     app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent" />
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -909,11 +855,11 @@
                 android:id="@+id/actionLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:baselineAligned="false"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:baselineAligned="false">
+                app:layout_constraintStart_toStartOf="parent">
 
                 <LinearLayout
                     android:id="@+id/balanceLoadLayout"
@@ -923,31 +869,30 @@
                     android:background="@color/orange"
                     android:gravity="center"
                     android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     tools:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:includeFontPadding="false"
                         android:text="কুইক বুকিং"
                         android:textColor="@color/white"
                         android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:includeFontPadding="false"
-                        />
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/accountBalance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:includeFontPadding="false"
                         android:text="(৳ ০)"
                         android:textColor="@color/white"
                         android:textSize="16sp"
-                        android:includeFontPadding="false"
-                        android:visibility="gone"
-                         />
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
@@ -958,13 +903,13 @@
                     android:layout_weight="0.55"
                     android:background="@color/colorPrimary"
                     android:gravity="center"
+                    android:orientation="horizontal"
                     android:text="নতুন অর্ডার"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:icon="@drawable/ic_add"
                     app:iconGravity="textStart"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
             </LinearLayout>
 
