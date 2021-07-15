@@ -167,20 +167,18 @@
                             tools:ignore="UseCompoundDrawables,UselessParent">
 
                             <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
                                 android:contentDescription="@string/cd"
-                                android:src="@drawable/ic_location1"
-                                app:tint="@color/collector" />
+                                android:src="@drawable/ic_rider" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:maxLines="1"
+                                android:includeFontPadding="false"
                                 android:text="ট্র্যাক"
-                                android:textColor="@color/black_70"
-                                android:textSize="14sp" />
+                                android:textColor="@color/black_80"
+                                android:textSize="12sp" />
 
                         </LinearLayout>
 
@@ -203,17 +201,15 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:contentDescription="@string/cd"
-                            android:src="@drawable/ic_express"
-                            />
+                            android:src="@drawable/ic_express" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
                             android:text="কালেক্টর"
                             android:textColor="@color/black_90"
-                            android:textSize="14sp"
-                            android:layout_marginStart="6dp"
-                            />
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/timeCounter"
@@ -241,8 +237,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:background="@drawable/bg_stroke2"
-                        >
+                        android:background="@drawable/bg_stroke2">
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recyclerview"
@@ -265,17 +260,16 @@
                             android:id="@+id/paymentHistoryBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="পূর্বের সকল পেমেন্ট"
-                            android:textSize="14sp"
-                            android:textColor="#016E3D"
                             android:paddingStart="14dp"
-                            android:paddingEnd="2dp"
                             android:paddingTop="0dp"
+                            android:paddingEnd="2dp"
                             android:paddingBottom="12dp"
-                            app:layout_constraintTop_toBottomOf="@id/recyclerview"
+                            android:text="পূর্বের সকল পেমেন্ট"
+                            android:textColor="#016E3D"
+                            android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            />
+                            app:layout_constraintTop_toBottomOf="@id/recyclerview" />
 
                         <ImageView
                             android:id="@+id/paymentHistoryArrow"
@@ -284,10 +278,9 @@
                             android:layout_marginTop="3dp"
                             android:contentDescription="@string/cd"
                             android:src="@drawable/ic_arrow_right"
-                            app:tint="@color/colorPrimary"
-                            app:layout_constraintTop_toBottomOf="@id/recyclerview"
                             app:layout_constraintStart_toEndOf="@id/paymentHistoryBtn"
-                             />
+                            app:layout_constraintTop_toBottomOf="@id/recyclerview"
+                            app:tint="@color/colorPrimary" />
 
                         <ImageView
                             android:id="@+id/retryBtn"
