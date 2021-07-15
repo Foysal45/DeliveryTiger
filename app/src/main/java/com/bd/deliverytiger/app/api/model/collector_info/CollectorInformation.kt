@@ -15,17 +15,15 @@ data class CollectorInformation(
     @SerializedName("isNowOffline")
     var isNowOffline: Boolean = false,
     @SerializedName("latitude")
-    var latitude: Any? = Any(),
+    var latitude: String? = "",
     @SerializedName("longitude")
-    var longitude: Any? = Any(),
+    var longitude: String? = "",
     @SerializedName("updatedOn")
     var updatedOn: String? = "",
     @SerializedName("isPermanentRider")
     var isPermanentRider: Boolean = false,
     @SerializedName("firebaseToken")
-    var firebaseToken: Any? = Any(),
+    var firebaseToken: String? = "",
     @SerializedName("riderType")
-    var riderType: Any? = Any(),
-    @SerializedName("officeInfoViewModel")
-    var officeInfoViewModel: OfficeInfoViewModel? = OfficeInfoViewModel()
+    var riderType: String? = ""
 )

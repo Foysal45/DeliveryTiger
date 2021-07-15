@@ -46,6 +46,7 @@ import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsFragment
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
+import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.quick_order.QuickBookingBottomSheet
 import com.bd.deliverytiger.app.ui.quick_order.quick_order_history.QuickOrderListFragment
 import com.bd.deliverytiger.app.ui.referral.ReferralFragment
@@ -257,15 +258,19 @@ class DashboardFragment : Fragment() {
         }
         binding?.collectorTrackBtn?.setOnClickListener {
             addFragment(MapFragment.newInstance(null), MapFragment.tag)
+            UserLogger.logGenie("Dashboard_Collector_Track")
         }
         binding?.orderTrackingBtn?.setOnClickListener {
             addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
+            UserLogger.logGenie("Dashboard_Order_Track")
         }
         binding?.complainBtn?.setOnClickListener {
             addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
+            UserLogger.logGenie("Dashboard_Complain")
         }
         binding?.balanceLoadLayout?.setOnClickListener {
             showQuickOrderBottomSheet()
+            UserLogger.logGenie("Dashboard_Quick_Order")
             /*showQuickOrderDialog()
             if (netAmount >= 0) {
                 addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
@@ -281,7 +286,7 @@ class DashboardFragment : Fragment() {
                 if (netAmount >= 0) {
                     binding?.progressBar?.visibility = View.GONE
                     addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
-                    UserLogger.logGenie("AddOrder")
+                    UserLogger.logGenie("Dashboard_AddOrder")
                 } else {
                     serviceChargeDialog()
                 }
@@ -293,27 +298,35 @@ class DashboardFragment : Fragment() {
                 when (model?.dashboardRouteUrl) {
                     "add-order" -> {
                         addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+                        UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "billing-service" -> {
                         addFragment(ServiceChargeFragment.newInstance(), ServiceChargeFragment.tag)
+                        UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "order-tracking" -> {
                         addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
+                        UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "shipment-charge" -> {
                         addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
+                        UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "all-order" -> {
                         goToAllOrder(model.name ?: "", model.dashboardStatusFilter, selectedStartDate, selectedEndDate)
+                        UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "cod-collection" -> {
                         addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
+                        UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "return" -> {
                         returnDialog()
+                        UserLogger.logGenie("Dashboard_ReturnDialog")
                     }
                     else -> {
                         addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
+                        UserLogger.logGenie("Dashboard_AllOrder")
                     }
                 }
             } else {
@@ -326,6 +339,7 @@ class DashboardFragment : Fragment() {
             } else {
                 context?.toast("পর্যাপ্ত তথ্য নেই")
             }
+            UserLogger.logGenie("Dashboard_PaymentDetails")
         }
         dashboardAdapter.onCODCollectionClick = { position, model ->
             if (netAmount == 0) {
@@ -333,6 +347,7 @@ class DashboardFragment : Fragment() {
             } else {
                 addFragment(UnpaidCODFragment.newInstance(), UnpaidCODFragment.tag)
             }
+            UserLogger.logGenie("Dashboard_UnpaidCOD")
         }
         dashboardAdapter.onPaymentRequestClick = { position, model ->
 
@@ -360,14 +375,22 @@ class DashboardFragment : Fragment() {
             } else {
                 context?.toast("পর্যাপ্ত তথ্য নেই")
             }
+            UserLogger.logGenie("Dashboard_Collection_History")
         }
 
         binding?.referBtn?.setOnClickListener {
             addFragment(ReferralFragment.newInstance(), ReferralFragment.tag)
+            UserLogger.logGenie("Dashboard_Referral")
         }
 
         binding?.callCollectorBtn?.setOnClickListener {
             getRidersOfficeInfo()
+            UserLogger.logGenie("Dashboard_CollectorCall")
+        }
+
+        binding?.paymentHistoryBtn?.setOnClickListener {
+            addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
+            UserLogger.logGenie("Dashboard_PaymentStatement")
         }
 
        /* binding?.dateRangePicker?.setOnClickListener {
@@ -611,10 +634,11 @@ class DashboardFragment : Fragment() {
             if (model == null) {
                 context?.toast("কোনো তথ্য নেই")
             } else {
-                if (model.mobile.isNullOrEmpty()){
-                    callHelplineNumber(model.officeInfoViewModel?.customerCareMobile ?: "")
-                }else{
+                if (model.mobile.isNullOrEmpty()) {
+                    context?.toast("কালেক্টর মোবাইল নাম্বার তথ্য নেই")
+                } else {
                     callHelplineNumber(model.mobile ?: "")
+                    UserLogger.logGenie("Dashboard_CollectorCall_${model.mobile}")
                 }
             }
 
@@ -656,6 +680,7 @@ class DashboardFragment : Fragment() {
                                 binding?.switchCollector?.isEnabled = false
                             }
                         })
+                        UserLogger.logGenie("Dashboard_CollectorAbsent")
                     }
                 }
             } else {
@@ -695,11 +720,17 @@ class DashboardFragment : Fragment() {
                             //val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished).toInt() % 60
                             //val message = String.format("%02d:%02d:%02d", hours, minutes, seconds)
 
-                            val roundMinute = if (minutes > 10) minutes - (minutes % 10) else minutes
+                            val fraction = minutes % 10
+                            val roundMinute = if (fraction == 0) minutes else minutes + (10 - fraction) // 45 -> 50
+                            Timber.d("timeDebug onTick hour $hours minute $minutes fraction $fraction roundMinute $roundMinute")
                             val message = if (hours == 0) {
                                 String.format("%d মিনিটের", roundMinute)
                             } else {
-                                String.format("%d ঘণ্টা %d মিনিটের", hours, roundMinute)
+                                if (roundMinute == 0) {
+                                    String.format("%d ঘন্টার", hours)
+                                } else {
+                                    String.format("%d ঘণ্টা %d মিনিটের", hours, roundMinute)
+                                }
                             }
                             binding?.timeCounter?.text = DigitConverter.toBanglaDigit(message)
                             /*if (hours < 1) {
@@ -717,7 +748,6 @@ class DashboardFragment : Fragment() {
                 } else {
                     binding?.collectorTimerLayout?.isVisible = false
                 }
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -840,12 +870,12 @@ class DashboardFragment : Fragment() {
         button1.setOnClickListener {
             dialog.dismiss()
             addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
-            UserLogger.logGenie("NormalOrder")
+            UserLogger.logGenie("Dashboard_NormalOrder")
         }
         button2.setOnClickListener {
             dialog.dismiss()
             addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
-            UserLogger.logGenie("DetailOrder")
+            UserLogger.logGenie("Dashboard_DetailOrder")
         }
     }
 
@@ -858,6 +888,7 @@ class DashboardFragment : Fragment() {
             dialog.dismiss()
             if (model.count > 0) {
                 goToAllOrder(model.name ?: "", model.dashboardStatusFilter, selectedStartDate, selectedEndDate)
+                UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
             } else {
                 context?.toast("পর্যাপ্ত তথ্য নেই")
             }

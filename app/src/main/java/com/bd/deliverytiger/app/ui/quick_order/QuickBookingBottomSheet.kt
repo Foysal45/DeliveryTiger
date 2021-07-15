@@ -172,7 +172,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
                         val timeDiff = endTimeStamp!!.time - currentTimeStamp.time
                         val minute = TimeUnit.MILLISECONDS.toMinutes(timeDiff)
 
-                        val msg = "এই টাইম স্লটে পরবর্তী ${DigitConverter.toBanglaDigit(minute.toString())} মিনিট এর মধ্যে কালেক্টর আসতে পারবেন না। অনুগ্রহ করে পরবর্তী টাইম স্লট সিলেক্ট করে অর্ডার করুন।"
+                        val msg = "এই টাইম স্লটে আজ আর অর্ডার করতে পারবেন না। অনুগ্রহ করে পরবর্তী টাইম স্লট সিলেক্ট করে অর্ডার করুন।"
                         alert(getString(R.string.instruction), msg, false, getString(R.string.ok), getString(R.string.cancel)) {
                             if (it == AlertDialog.BUTTON_POSITIVE) {
                                 selectedTimeSLotID = 0
