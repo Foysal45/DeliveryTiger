@@ -965,7 +965,6 @@ class HomeActivity : AppCompatActivity(),
     }
 
     fun goToBalanceLoad() {
-        onBackPressed()
         addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
     }
 
