@@ -16,8 +16,8 @@ android {
         applicationId "com.bd.deliverytiger.app"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 29 // play store 28
-        versionName "1.8.13" // play store 1.8.12
+        versionCode 30 // play store 29
+        versionName "1.8.14-debug" // play store 1.8.13
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
