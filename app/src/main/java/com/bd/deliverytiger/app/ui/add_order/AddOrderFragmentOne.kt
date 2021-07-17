@@ -411,6 +411,7 @@ class AddOrderFragmentOne : Fragment() {
             }
 
             calculateTotalPrice()
+            fetchCollectionTimeSlot()
 
             /*if (model.deliveryType.contains("Postal", true)) {
                 alert("নির্দেশনা", alertMsg) {
@@ -1061,7 +1062,6 @@ class AddOrderFragmentOne : Fragment() {
                 selectedServiceType = 0 // default
             }
             updateUIAfterDistrict(district)
-            fetchCollectionTimeSlot()
         }
         dialog.onClose = { type ->
             Timber.d("dialog.onClose $type")
@@ -1367,7 +1367,7 @@ class AddOrderFragmentOne : Fragment() {
                 timeSlotList.clear()
                 timeSlotList.addAll(list)
                 if (timeSlotList.isNotEmpty()) {
-                    if (serviceId == 1) {
+                    if (deliveryRangeId == 14 || deliveryRangeId == 17) {
                         timeSlotList.removeLast()
                     }
                 }
