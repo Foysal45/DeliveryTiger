@@ -38,6 +38,7 @@ import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
+import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.databinding.FragmentAddOrderFragmentOneBinding
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
@@ -117,6 +118,8 @@ class AddOrderFragmentOne : Fragment() {
     private var customersAddress = ""
     private var additionalNote = ""
 
+    private var serviceId: Int = 0
+    private val serviceWiseDeliveryRangeList: MutableList<Int> = mutableListOf()
     private val serviceTypeList: MutableList<ServiceInfoData> = mutableListOf()
     private var filteredDistrictLists: MutableList<AllDistrictListsModel> = mutableListOf()
     private var filteredThanaLists: MutableList<AllDistrictListsModel> = mutableListOf()
@@ -128,6 +131,7 @@ class AddOrderFragmentOne : Fragment() {
 
     // Step 2
     private val packagingDataList: MutableList<PackagingData> = mutableListOf()
+    private val timeSlotList : MutableList<QuickOrderTimeSlotData> = mutableListOf()
 
     private var codChargePercentage: Double = 0.0
     private var codChargeMin: Int = 0
@@ -1044,7 +1048,10 @@ class AddOrderFragmentOne : Fragment() {
             filteredThanaLists.clear()
             filteredAreaLists.clear()
 
-            if (service.deliveryRangeId.isNotEmpty()) {
+            serviceId = service.serviceId
+            serviceWiseDeliveryRangeList.clear()
+            serviceWiseDeliveryRangeList.addAll(service.deliveryRangeId)
+            if (serviceWiseDeliveryRangeList.isNotEmpty()) {
                 if (district.id == 14) { // first dhaka
                     selectedServiceType = service.deliveryRangeId.first()
                 } else { // last outside dhaka
@@ -1054,6 +1061,7 @@ class AddOrderFragmentOne : Fragment() {
                 selectedServiceType = 0 // default
             }
             updateUIAfterDistrict(district)
+            fetchCollectionTimeSlot()
         }
         dialog.onClose = { type ->
             Timber.d("dialog.onClose $type")
@@ -1356,14 +1364,24 @@ class AddOrderFragmentOne : Fragment() {
         if (isTodaySelected) {
             viewModel.currentTimeSlot.observe(viewLifecycleOwner, Observer { list ->
                 Timber.d("timeSlotDebug current time slot")
-                timeSlotDataAdapter.initLoad(list)
-                binding?.emptyView?.isVisible = list.isEmpty()
+                timeSlotList.clear()
+                timeSlotList.addAll(list)
+                if (timeSlotList.isNotEmpty()) {
+                    if (serviceId == 1) {
+                        timeSlotList.removeLast()
+                    }
+                }
+                timeSlotDataAdapter.initLoad(timeSlotList)
+                binding?.emptyView?.isVisible = timeSlotList.isEmpty()
             })
         } else {
             viewModel.upcomingTimeSlot.observe(viewLifecycleOwner, Observer { list ->
                 Timber.d("timeSlotDebug upcoming time slot")
-                timeSlotDataAdapter.initLoad(list)
-                binding?.emptyView?.isVisible = list.isEmpty()
+                timeSlotList.clear()
+                timeSlotList.addAll(list)
+
+                timeSlotDataAdapter.initLoad(timeSlotList)
+                binding?.emptyView?.isVisible = timeSlotList.isEmpty()
             })
         }
     }

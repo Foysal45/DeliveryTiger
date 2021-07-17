@@ -5,6 +5,8 @@ import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
 import com.google.gson.annotations.SerializedName
 
 data class ServiceInfoData(
+    @SerializedName("serviceId")
+    var serviceId: Int = 0,
     @SerializedName("serviceTypeName")
     var serviceTypeName: String? = "",
     @SerializedName("serviceInfo")

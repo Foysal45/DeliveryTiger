@@ -947,7 +947,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            android:text="এই মুহূর্তে কোনো টাইম স্লট নেই"
+                            android:text="নির্বাচিত তারিখে এখন কোনো টাইম স্লট নেই"
                             android:textSize="14sp"
                             android:textColor="@color/black_90"
                             android:visibility="gone"
