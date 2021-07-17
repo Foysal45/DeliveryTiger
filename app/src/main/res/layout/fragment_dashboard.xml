@@ -161,23 +161,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
                             android:layout_marginStart="4dp"
-
                             android:gravity="center"
                             android:orientation="vertical"
                             tools:ignore="UseCompoundDrawables,UselessParent">
 
                             <ImageView
-                                android:layout_width="26dp"
-                                android:layout_height="26dp"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
                                 android:contentDescription="@string/cd"
                                 android:src="@drawable/ic_rider" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:includeFontPadding="false"
                                 android:text="ট্র্যাক"
-                                android:textColor="@color/black_80"
+                                android:textColor="@color/colorPrimary"
                                 android:textSize="12sp" />
 
                         </LinearLayout>
@@ -262,25 +260,16 @@
                             android:layout_height="wrap_content"
                             android:paddingStart="14dp"
                             android:paddingTop="0dp"
-                            android:paddingEnd="2dp"
+                            android:paddingEnd="14dp"
                             android:paddingBottom="12dp"
                             android:text="পূর্বের সকল পেমেন্ট"
-                            android:textColor="#016E3D"
+                            android:textColor="@color/orange"
                             android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/recyclerview" />
 
-                        <ImageView
-                            android:id="@+id/paymentHistoryArrow"
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
-                            android:layout_marginTop="3dp"
-                            android:contentDescription="@string/cd"
-                            android:src="@drawable/ic_arrow_right"
-                            app:layout_constraintStart_toEndOf="@id/paymentHistoryBtn"
-                            app:layout_constraintTop_toBottomOf="@id/recyclerview"
-                            app:tint="@color/colorPrimary" />
 
                         <ImageView
                             android:id="@+id/retryBtn"
