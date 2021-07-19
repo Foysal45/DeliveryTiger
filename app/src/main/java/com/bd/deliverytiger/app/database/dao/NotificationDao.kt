@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.database.dao
 
 import androidx.room.*
 import com.bd.deliverytiger.app.fcm.FCMData
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NotificationDao {
@@ -11,6 +12,9 @@ interface NotificationDao {
 
     @Query("SELECT * FROM notification_table")
     suspend fun getAllNotification(): List<FCMData>
+
+    @Query("SELECT * FROM notification_table")
+    fun getAllNotificationFlow(): Flow<List<FCMData>>
 
     @Query("SELECT * FROM notification_table WHERE uid = :id")
     suspend fun getNotificationById(id: Int): FCMData

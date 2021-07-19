@@ -64,6 +64,8 @@ class AppRepository(
 
     suspend fun getAllNotification() = notificationDao.getAllNotification()
 
+    fun getAllNotificationFlow() = notificationDao.getAllNotificationFlow()
+
     suspend fun getNotificationById(id: Int) = notificationDao.getNotificationById(id)
 
     suspend fun deleteNotificationById(id: Int) = notificationDao.deleteNotificationById(id)

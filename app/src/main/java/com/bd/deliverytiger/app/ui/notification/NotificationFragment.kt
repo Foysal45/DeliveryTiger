@@ -94,11 +94,18 @@ class NotificationFragment : Fragment() {
     }
 
     private fun fetchNotificationData() {
-        viewModel.getAllNotification().observe(viewLifecycleOwner, Observer { list ->
+
+        viewModel.notificationList.observe(viewLifecycleOwner, Observer { list ->
             binding?.swipeRefresh?.isRefreshing = false
             dataAdapter.initLoad(list)
             binding?.emptyView?.isVisible = list.isEmpty()
         })
+
+        /*viewModel.getAllNotification().observe(viewLifecycleOwner, Observer { list ->
+            binding?.swipeRefresh?.isRefreshing = false
+            dataAdapter.initLoad(list)
+            binding?.emptyView?.isVisible = list.isEmpty()
+        })*/
     }
 
     private fun addFragment(fragment: Fragment, tag: String) {

@@ -1,9 +1,6 @@
 package com.bd.deliverytiger.app.ui.notification
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
@@ -15,6 +12,8 @@ class NotificationViewModel(private val repository: AppRepository) : ViewModel()
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
     val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+
+    val notificationList = repository.getAllNotificationFlow().asLiveData()
 
     fun getAllNotification(): LiveData<List<FCMData>> {
 
