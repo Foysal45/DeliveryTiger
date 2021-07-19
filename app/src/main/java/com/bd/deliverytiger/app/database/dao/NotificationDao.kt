@@ -10,10 +10,10 @@ interface NotificationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(model: FCMData): Long
 
-    @Query("SELECT * FROM notification_table")
+    @Query("SELECT * FROM notification_table ORDER BY uid DESC")
     suspend fun getAllNotification(): List<FCMData>
 
-    @Query("SELECT * FROM notification_table")
+    @Query("SELECT * FROM notification_table ORDER BY uid DESC")
     fun getAllNotificationFlow(): Flow<List<FCMData>>
 
     @Query("SELECT * FROM notification_table WHERE uid = :id")
