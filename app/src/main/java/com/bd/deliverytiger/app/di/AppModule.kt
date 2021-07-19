@@ -5,6 +5,7 @@ import com.bd.deliverytiger.app.api.RetrofitUtils.createOkHttpClient
 import com.bd.deliverytiger.app.api.RetrofitUtils.getGson
 import com.bd.deliverytiger.app.api.RetrofitUtils.retrofitInstance
 import com.bd.deliverytiger.app.api.endpoint.*
+import com.bd.deliverytiger.app.database.AppDatabase
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.ui.add_order.AddOrderViewModel
 import com.bd.deliverytiger.app.ui.add_order.AddProductViewModel
@@ -26,6 +27,7 @@ import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
 import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsViewModel
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.login.AuthViewModel
+import com.bd.deliverytiger.app.ui.notification.NotificationViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingViewModel
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsViewModel
 import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentUpdateViewModel
@@ -65,7 +67,9 @@ val appModule = module {
     single { ApiInterfaceBariKoi(get(named("bariKoi"))) }
     single { ApiInterfaceANA(get(named("ana"))) }
 
-    single { AppRepository(get(), get(), get(), get(), get(), get(), get()) }
+    single { AppDatabase.invoke(get()) }
+
+    single { AppRepository(get(), get(), get(), get(), get(), get(), get(), get()) }
 
     single { HomeViewModel(get()) }
 
@@ -100,5 +104,6 @@ val appModule = module {
     viewModel { ComplainHistoryViewModel(get()) }
     viewModel { OrderInfoEditViewModel(get()) }
     viewModel { QuickOrderRequestViewModel(get()) }
+    viewModel { NotificationViewModel(get()) }
 
 }

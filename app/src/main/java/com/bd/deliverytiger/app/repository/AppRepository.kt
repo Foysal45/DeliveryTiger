@@ -30,6 +30,9 @@ import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequ
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
+import com.bd.deliverytiger.app.database.AppDatabase
+import com.bd.deliverytiger.app.database.dao.NotificationDao
+import com.bd.deliverytiger.app.fcm.FCMData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -42,8 +45,31 @@ class AppRepository(
     private val apiInterfaceBridge: ApiInterfaceBRIDGE,
     private val apiInterfaceLambda: ApiInterfaceLambda,
     private val apiInterfaceBariKoi: ApiInterfaceBariKoi,
-    private val apiInterfaceANA: ApiInterfaceANA
+    private val apiInterfaceANA: ApiInterfaceANA,
+    private val database: AppDatabase
 ) {
+
+    //#region AppDatabase
+    private val notificationDao: NotificationDao = database.notificationDao()
+
+    suspend fun insert(model: FCMData): Long {
+        return if (model.uid == 0) {
+            notificationDao.upsert(model)
+        } else {
+            updateNotification(model).toLong()
+        }
+    }
+
+    suspend fun updateNotification(model: FCMData): Int = notificationDao.updateNotification(model)
+
+    suspend fun getAllNotification() = notificationDao.getAllNotification()
+
+    suspend fun getNotificationById(id: Int) = notificationDao.getNotificationById(id)
+
+    suspend fun deleteNotificationById(id: Int) = notificationDao.deleteNotificationById(id)
+
+    suspend fun deleteAllNotification() = notificationDao.deleteAllNotification()
+    //#endregion
 
     //******************** API ********************//
     suspend fun sendOTP(requestBody: OTPRequestModel) = apiInterfaceAPI.sendOTP(requestBody)

@@ -44,7 +44,7 @@ class NotificationPreviewFragment : Fragment() {
         bigImageTV = view.findViewById(R.id.bigImage)
 
         titleTV.text = toHTML(model?.title ?: "")
-        descriptionTV.text = toHTML(model?.description ?: "")
+        descriptionTV.text = toHTML(model?.body ?: "")
 
         if (!model?.bigText.isNullOrEmpty()) {
             bigTextTV.visibility = View.VISIBLE

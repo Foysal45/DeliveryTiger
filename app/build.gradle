@@ -112,6 +112,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.google.firebase:firebase-dynamic-links-ktx'
 
+    def room_version = "2.3.0"
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+
     implementation 'com.google.android.play:core-ktx:1.8.1'
 
     implementation 'com.squareup.retrofit2:retrofit:2.8.2'

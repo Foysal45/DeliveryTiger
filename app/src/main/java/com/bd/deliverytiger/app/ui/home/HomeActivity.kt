@@ -9,10 +9,7 @@ import android.graphics.Rect
 import android.location.Location
 import android.net.ConnectivityManager
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.IBinder
+import android.os.*
 import android.provider.Settings
 import android.util.TypedValue
 import android.view.*
@@ -228,6 +225,7 @@ class HomeActivity : AppCompatActivity(),
             addOrderFragment()
         }
         notificationIV.setOnClickListener {
+            openRightDrawer()
             goToNotification()
         }
         trackingIV.setOnClickListener {
@@ -283,12 +281,13 @@ class HomeActivity : AppCompatActivity(),
                     val notificationType = bundleExt.getString("notificationType")
                     if (!notificationType.isNullOrEmpty()) {
                         val fcmModel: FCMData = FCMData(
+                            0,
                             bundleExt.getString("notificationType"),
                             bundleExt.getString("title"),
                             bundleExt.getString("body"),
                             bundleExt.getString("imageUrl"),
-                            "",
                             bundleExt.getString("bigText"),
+                            ""
                         )
                         Timber.d("BundleLog FCMData $fcmModel")
                         goToNotificationPreview(fcmModel)
@@ -379,6 +378,7 @@ class HomeActivity : AppCompatActivity(),
                 searchIV.visibility = View.GONE
                 separetor.visibility = View.GONE
                 balanceIV.visibility = View.GONE
+                notificationIV.visibility = View.GONE
                 addProductBtnVisibility(false)
             }
             /*if (currentFragment is ServiceBillPayFragment) {
@@ -395,6 +395,7 @@ class HomeActivity : AppCompatActivity(),
                 separetor.visibility = View.VISIBLE
                 actionBtn.visibility = View.VISIBLE
                 balanceIV.visibility = View.VISIBLE
+                notificationIV.visibility = View.VISIBLE
                 trackingIV.visibility = View.GONE
                 //moveFabBy(100f)
             } else {
@@ -403,6 +404,7 @@ class HomeActivity : AppCompatActivity(),
                 separetor.visibility = View.GONE
                 actionBtn.visibility = View.GONE
                 balanceIV.visibility = View.GONE
+                notificationIV.visibility = View.GONE
                 trackingIV.visibility = View.VISIBLE
                 //moveFabBy(24f)
             }
@@ -416,6 +418,7 @@ class HomeActivity : AppCompatActivity(),
                 searchIV.visibility = View.GONE
                 separetor.visibility = View.GONE
                 balanceIV.visibility = View.GONE
+                notificationIV.visibility = View.GONE
                 addProductBtnVisibility(false)
             }
             when (currentFragment) {
@@ -540,6 +543,15 @@ class HomeActivity : AppCompatActivity(),
             drawerLayout.closeDrawer(GravityCompat.START)
         }
         drawerLayout.openDrawer(GravityCompat.END)
+    }
+
+    fun closeDrawer() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+            drawerLayout.closeDrawer(GravityCompat.END)
+        }
     }
 
     private fun manageNavigationItemSelection(id: Int) {
@@ -896,6 +908,7 @@ class HomeActivity : AppCompatActivity(),
         searchIV.visibility = View.VISIBLE
         actionBtn.visibility = View.VISIBLE
         balanceIV.visibility = View.VISIBLE
+        notificationIV.visibility = View.VISIBLE
         trackingIV.visibility = View.GONE
 
         val fragment = DashboardFragment.newInstance()
@@ -921,22 +934,17 @@ class HomeActivity : AppCompatActivity(),
     }
 
     private fun goToNotification() {
-
-        openRightDrawer()
-
-        Handler().postDelayed({
-
-            val currentFragment = supportFragmentManager.findFragmentById(R.id.container_drawer)
+        Handler(Looper.getMainLooper()).postDelayed({
+            val fragment = NotificationFragment.newInstance()
+            val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
+            ft.replace(R.id.container_drawer, fragment, NotificationFragment.tag)
+            ft.commit()
+            /*val currentFragment = supportFragmentManager.findFragmentById(R.id.container_drawer)
             if (currentFragment is NotificationFragment) {
                 Timber.d("NotificationFragment already exist")
             } else {
-                val fragment = NotificationFragment.newInstance()
-                val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
-                ft.replace(R.id.container_drawer, fragment, NotificationFragment.tag)
-                ft.commit()
-            }
+            }*/
         }, 300L)
-
     }
 
     private fun goToOrderTracking() {
