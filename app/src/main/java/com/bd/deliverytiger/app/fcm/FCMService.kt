@@ -124,14 +124,17 @@ class FCMService: FirebaseMessagingService() {
         }
 
         when(type){
-            "0" -> { // Default
+            // Default
+            "0" -> {
                 notificationManager.notify(notificationId, builder.build())
             }
-            "1" -> { // Big text
+            // Big text
+            "1" -> {
                 builder.setStyle(NotificationCompat.BigTextStyle().bigText(bigText))
                 notificationManager.notify(notificationId, builder.build())
             }
-            "2" -> { //Banner
+            //Banner
+            "2" -> {
                 Glide.with(applicationContext)
                     .asBitmap()
                     .load(imageUrl)
@@ -150,7 +153,8 @@ class FCMService: FirebaseMessagingService() {
                         }
                     })
             }
-            "3" -> { // BigTextWithSideImage
+            // BigTextWithSideImage
+            "3" -> {
                 Glide.with(applicationContext)
                     .asBitmap()
                     .load(imageUrl)
@@ -167,10 +171,9 @@ class FCMService: FirebaseMessagingService() {
                         }
                     })
             }
+            // Notification message handle
             else -> {
-
-                // Notification message handle
-                timber.log.Timber.d("Notification message handle called")
+                Timber.d("Notification message handle called")
                 builder.setContentTitle(title).setContentText(body)
                 if (imageUrl.isNotEmpty()) {
                     Glide.with(applicationContext)
@@ -197,7 +200,6 @@ class FCMService: FirebaseMessagingService() {
                 }
             }
         }
-
     }
 
     override fun onNewToken(p0: String) {
