@@ -14,6 +14,7 @@ import com.bd.deliverytiger.app.utils.DigitConverter
 
 class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOrderViewModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    var onItemClick: ((model: CourierOrderViewModel, position: Int) -> Unit)? = null
     var onOrderItemClick: ((position: Int) -> Unit)? = null
     var onEditItemClick: ((position: Int) -> Unit)? = null
     var onLocationBtnClick: ((model: CourierOrderViewModel, position: Int) -> Unit)? = null
@@ -66,6 +67,9 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
             } else {
                 holder.binding.editBtn.visibility = View.GONE
             }
+            /*if (BuildConfig.DEBUG) {
+                holder.binding.editBtn.visibility = View.VISIBLE
+            }*/
 
             // 19 LP থেকে ফেরতকৃত প্রোডাক্টটি DT হেড অফিস গ্রহন করেছে
             // 60 রিটার্ন প্রোডাক্ট হাব থেকে সংগ্রহ করুন
@@ -114,15 +118,20 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
     inner class ViewHolder(val binding: ItemViewAllOrderBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
+            binding.root.setOnClickListener {
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                    onItemClick?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
+                }
+            }
             binding.trackBtn.setOnClickListener {
-                onOrderItemClick?.invoke(adapterPosition)
+                onOrderItemClick?.invoke(absoluteAdapterPosition)
             }
             binding.editBtn.setOnClickListener {
-                onEditItemClick?.invoke(adapterPosition)
+                onEditItemClick?.invoke(absoluteAdapterPosition)
             }
             binding.hubLocationBtn.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onLocationBtnClick?.invoke(dataList[adapterPosition], adapterPosition)
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                    onLocationBtnClick?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
                 }
             }
         }

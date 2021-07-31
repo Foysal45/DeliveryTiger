@@ -17,9 +17,20 @@ data class SignUpReqBody(
     var knowingSource: String = "",
     @SerializedName("companyName")
     var companyName: String = "company name",
+
+    @SerializedName("accountName")
+    var accountName: String = "",
+    @SerializedName("accountNumber")
+    var accountNumber: String = "",
+    @SerializedName("bankName")
+    var bankName: String = "",
+    @SerializedName("branchName")
+    var branchName: String = "",
+    @SerializedName("routingNumber")
+    var routingNumber: String = "",
+
     @SerializedName("registrationFrom")
     var registrationFrom: String = "app",
-
     @SerializedName("userName")
     var userName: String = "user name",
     @SerializedName("address")

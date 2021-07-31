@@ -80,7 +80,7 @@
         app:layout_constraintVertical_weight="1"
         tools:itemCount="10"
         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/district_select_layout"
+        tools:listitem="@layout/item_view_location"
         tools:orientation="vertical">
 
     </androidx.recyclerview.widget.RecyclerView>
@@ -98,7 +98,7 @@
         app:layout_constraintVertical_weight="1"
         tools:itemCount="10"
         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/district_select_layout"
+        tools:listitem="@layout/item_view_location"
         tools:orientation="vertical">
 
     </androidx.recyclerview.widget.RecyclerView>

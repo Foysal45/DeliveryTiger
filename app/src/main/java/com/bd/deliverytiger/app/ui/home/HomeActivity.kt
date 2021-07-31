@@ -9,10 +9,7 @@ import android.graphics.Rect
 import android.location.Location
 import android.net.ConnectivityManager
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.IBinder
+import android.os.*
 import android.provider.Settings
 import android.util.TypedValue
 import android.view.*
@@ -40,6 +37,7 @@ import com.bd.deliverytiger.app.services.LocationUpdatesService
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadFragment
+import com.bd.deliverytiger.app.ui.balance_load_history.BalanceLoadHistoryFragment
 import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.bill_pay_history.ServiceBillPayHistoryFragment
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
@@ -64,6 +62,7 @@ import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentUpdateFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
+import com.bd.deliverytiger.app.ui.quick_order.quick_order_history.QuickOrderListFragment
 import com.bd.deliverytiger.app.ui.referral.ReferralFragment
 import com.bd.deliverytiger.app.ui.return_statement.ReturnStatementFragment
 import com.bd.deliverytiger.app.ui.return_statement.details.ReturnStatementDetailsFragment
@@ -102,6 +101,7 @@ class HomeActivity : AppCompatActivity(),
     private lateinit var notificationIV: ImageView
     private lateinit var trackingIV: ImageView
     private lateinit var searchIV: ImageView
+    private lateinit var balanceIV: ImageView
     private lateinit var downloadTV: ImageView
     private lateinit var headerPic: ImageView
     private lateinit var separetor: View
@@ -150,6 +150,7 @@ class HomeActivity : AppCompatActivity(),
         notificationIV = findViewById(R.id.home_toolbar_notification)
         trackingIV = findViewById(R.id.home_toolbar_tracking)
         searchIV = findViewById(R.id.home_toolbar_search)
+        balanceIV = findViewById(R.id.home_toolbar_balance)
         downloadTV = findViewById(R.id.home_toolbar_download)
         separetor = findViewById(R.id.home_toolbar_separator)
         addOrderFab = findViewById(R.id.addOrderFab)
@@ -215,6 +216,9 @@ class HomeActivity : AppCompatActivity(),
         }*/
 
         FirebaseMessaging.getInstance().subscribeToTopic("DeliveryTigerTopic")
+        if (BuildConfig.DEBUG) {
+            FirebaseMessaging.getInstance().subscribeToTopic("DeliveryTigerTopicTest")
+        }
 
         //addHomeFragment()
         addDashBoardFragment()
@@ -223,6 +227,7 @@ class HomeActivity : AppCompatActivity(),
             addOrderFragment()
         }
         notificationIV.setOnClickListener {
+            openRightDrawer()
             goToNotification()
         }
         trackingIV.setOnClickListener {
@@ -240,6 +245,9 @@ class HomeActivity : AppCompatActivity(),
         actionBtn.setOnClickListener {
             goToAllOrder(false)
         }
+        balanceIV.setOnClickListener {
+            goToBalanceLoad()
+        }
 
         //Timber.d("BundleLog ${intent.extras?.bundleToString()}")
         onNewIntent(intent)
@@ -249,6 +257,7 @@ class HomeActivity : AppCompatActivity(),
         }
 
         loadBannerInfo()
+        fetchOrderServiceType()
 
         initService()
         appUpdateManager()
@@ -274,12 +283,13 @@ class HomeActivity : AppCompatActivity(),
                     val notificationType = bundleExt.getString("notificationType")
                     if (!notificationType.isNullOrEmpty()) {
                         val fcmModel: FCMData = FCMData(
+                            0,
                             bundleExt.getString("notificationType"),
                             bundleExt.getString("title"),
                             bundleExt.getString("body"),
                             bundleExt.getString("imageUrl"),
-                            "",
                             bundleExt.getString("bigText"),
+                            ""
                         )
                         Timber.d("BundleLog FCMData $fcmModel")
                         goToNotificationPreview(fcmModel)
@@ -357,7 +367,8 @@ class HomeActivity : AppCompatActivity(),
                 currentFragment is OrderTrackingFragment ||
                 currentFragment is ReturnStatementFragment || currentFragment is ReturnStatementDetailsFragment ||
                 currentFragment is InstantPaymentUpdateFragment ||
-                currentFragment is DeliveryDetailsFragment
+                currentFragment is DeliveryDetailsFragment ||
+                currentFragment is BalanceLoadHistoryFragment || currentFragment is QuickOrderListFragment
             ) {
                 addProductBtnVisibility(false)
             } else {
@@ -368,6 +379,8 @@ class HomeActivity : AppCompatActivity(),
                 trackingIV.visibility = View.GONE
                 searchIV.visibility = View.GONE
                 separetor.visibility = View.GONE
+                balanceIV.visibility = View.GONE
+                notificationIV.visibility = View.GONE
                 addProductBtnVisibility(false)
             }
             /*if (currentFragment is ServiceBillPayFragment) {
@@ -383,6 +396,8 @@ class HomeActivity : AppCompatActivity(),
                 searchIV.visibility = View.VISIBLE
                 separetor.visibility = View.VISIBLE
                 actionBtn.visibility = View.VISIBLE
+                balanceIV.visibility = View.VISIBLE
+                notificationIV.visibility = View.VISIBLE
                 trackingIV.visibility = View.GONE
                 //moveFabBy(100f)
             } else {
@@ -390,6 +405,8 @@ class HomeActivity : AppCompatActivity(),
                 searchIV.visibility = View.GONE
                 separetor.visibility = View.GONE
                 actionBtn.visibility = View.GONE
+                balanceIV.visibility = View.GONE
+                notificationIV.visibility = View.GONE
                 trackingIV.visibility = View.VISIBLE
                 //moveFabBy(24f)
             }
@@ -402,6 +419,8 @@ class HomeActivity : AppCompatActivity(),
                 trackingIV.visibility = View.GONE
                 searchIV.visibility = View.GONE
                 separetor.visibility = View.GONE
+                balanceIV.visibility = View.GONE
+                notificationIV.visibility = View.GONE
                 addProductBtnVisibility(false)
             }
             when (currentFragment) {
@@ -528,6 +547,15 @@ class HomeActivity : AppCompatActivity(),
         drawerLayout.openDrawer(GravityCompat.END)
     }
 
+    fun closeDrawer() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+            drawerLayout.closeDrawer(GravityCompat.END)
+        }
+    }
+
     private fun manageNavigationItemSelection(id: Int) {
         when (id) {
             R.id.nav_header_profile_edit -> {
@@ -626,6 +654,11 @@ class HomeActivity : AppCompatActivity(),
                 } else {
                     addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
                 }
+            }
+            R.id.nav_balance_load_history -> {
+
+                addFragment(BalanceLoadHistoryFragment.newInstance(), BalanceLoadHistoryFragment.tag)
+
             }
             R.id.nav_payment_request -> {
                 val currentFragment =
@@ -798,6 +831,14 @@ class HomeActivity : AppCompatActivity(),
             R.id.nav_survey -> {
                 startActivity(Intent(this, SurveyActivity::class.java))
             }
+            R.id.nav_quick_booking_list -> {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is QuickOrderListFragment) {
+                    Timber.d("QuickOrderListFragment already exist")
+                } else {
+                    addFragment(QuickOrderListFragment.newInstance(), QuickOrderListFragment.tag)
+                }
+            }
             R.id.nav_balance_load -> {
                 if (SessionManager.netAmount >=0 ){
                     addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
@@ -876,6 +917,8 @@ class HomeActivity : AppCompatActivity(),
         addProductBtnVisibility(false)
         searchIV.visibility = View.VISIBLE
         actionBtn.visibility = View.VISIBLE
+        balanceIV.visibility = View.VISIBLE
+        notificationIV.visibility = View.VISIBLE
         trackingIV.visibility = View.GONE
 
         val fragment = DashboardFragment.newInstance()
@@ -901,22 +944,17 @@ class HomeActivity : AppCompatActivity(),
     }
 
     private fun goToNotification() {
-
-        openRightDrawer()
-
-        Handler().postDelayed({
-
-            val currentFragment = supportFragmentManager.findFragmentById(R.id.container_drawer)
+        Handler(Looper.getMainLooper()).postDelayed({
+            val fragment = NotificationFragment.newInstance()
+            val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
+            ft.replace(R.id.container_drawer, fragment, NotificationFragment.tag)
+            ft.commit()
+            /*val currentFragment = supportFragmentManager.findFragmentById(R.id.container_drawer)
             if (currentFragment is NotificationFragment) {
                 Timber.d("NotificationFragment already exist")
             } else {
-                val fragment = NotificationFragment.newInstance()
-                val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
-                ft.replace(R.id.container_drawer, fragment, NotificationFragment.tag)
-                ft.commit()
-            }
+            }*/
         }, 300L)
-
     }
 
     private fun goToOrderTracking() {
@@ -945,7 +983,6 @@ class HomeActivity : AppCompatActivity(),
     }
 
     fun goToBalanceLoad() {
-        onBackPressed()
         addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
     }
 
@@ -1002,6 +1039,10 @@ class HomeActivity : AppCompatActivity(),
         dialog.show(supportFragmentManager, tag)
     }
 
+    private fun fetchOrderServiceType() {
+        viewModel.fetchOrderServiceInfo()
+    }
+
     /*private fun moveFabBy(value: Float) {
         timber.log.Timber.d("moveFabBy: $value")
         val param = addOrderFab.layoutParams as ViewGroup.MarginLayoutParams
@@ -1015,7 +1056,11 @@ class HomeActivity : AppCompatActivity(),
         appUpdateManager = AppUpdateManagerFactory.create(this)
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
-                appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE, this, requestCodeAppUpdate)
+                try {
+                    appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE, this, requestCodeAppUpdate)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }
@@ -1024,7 +1069,11 @@ class HomeActivity : AppCompatActivity(),
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
             // For IMMEDIATE
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, requestCodeAppUpdate)
+                try {
+                    appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, requestCodeAppUpdate)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }
@@ -1106,7 +1155,7 @@ class HomeActivity : AppCompatActivity(),
         override fun onReceive(context: Context?, intent: Intent?) {
             val location: Location? = intent?.getParcelableExtra(LocationUpdatesService.EXTRA_LOCATION)
             if (location != null) {
-                timber.log.Timber.tag("LocationLog").d("current location broadcast ${location.latitude},${location.longitude}")
+                Timber.tag("LocationLog").d("current location broadcast ${location.latitude},${location.longitude}")
                 currentLocation = location
                 viewModel.currentLocation.value = location
                 foregroundService?.removeLocationUpdates()

@@ -17,9 +17,11 @@ data class CourierPrice(
     @SerializedName("returnCharge")
     var returnCharge: Double? = null,
     @SerializedName("packagingName")
-    var packagingName: Any? = null,
+    var packagingName: String? = null,
     @SerializedName("packagingCharge")
     var packagingCharge: Double? = null,
+    @SerializedName("officeDrop")
+    var officeDrop: Boolean = false,
     @SerializedName("totalServiceCharge")
     var totalServiceCharge: Double? = null,
     @SerializedName("totalAmount")

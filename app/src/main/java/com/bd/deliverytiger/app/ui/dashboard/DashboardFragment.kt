@@ -1,25 +1,29 @@
 package com.bd.deliverytiger.app.ui.dashboard
 
 import android.annotation.SuppressLint
-import android.app.Dialog
+import android.app.ActionBar
 import android.graphics.Color
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.accepted_orders.AcceptedOrder
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
+import com.bd.deliverytiger.app.api.model.collector_info.CollectorInfoRequest
 import com.bd.deliverytiger.app.api.model.config.BannerModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
@@ -30,8 +34,8 @@ import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
+import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationType
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
-import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadFragment
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
 import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillPayFragment
 import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
@@ -42,6 +46,9 @@ import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsFragment
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
+import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
+import com.bd.deliverytiger.app.ui.quick_order.QuickBookingBottomSheet
+import com.bd.deliverytiger.app.ui.quick_order.quick_order_history.QuickOrderListFragment
 import com.bd.deliverytiger.app.ui.referral.ReferralFragment
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
 import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
@@ -50,6 +57,7 @@ import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -60,6 +68,8 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.math.floor
 
 @SuppressLint("SetTextI18n")
 class DashboardFragment : Fragment() {
@@ -77,6 +87,7 @@ class DashboardFragment : Fragment() {
     private val calenderNow = Calendar.getInstance()
     private val viewList: MutableList<String> = mutableListOf()
     private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+    private var sdf1 = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
     private var dayOfYear = 0
     private var today = 0
     private var currentMonth = 0
@@ -102,12 +113,13 @@ class DashboardFragment : Fragment() {
     private var availabilityMessage: String = ""
 
     private var collectionToday: Int = 0
-
+    private var isQuickBookingEnable: Boolean = false
 
     private var isBannerEnable: Boolean = false
     private var worker: Runnable? = null
     private var handler = Handler(Looper.getMainLooper())
     private var paymentDashboardModel: DashboardData = DashboardData(dashboardSpanCount = 2, viewType = 1)
+    private var countDownTimer: CountDownTimer? = null
 
     companion object {
         fun newInstance(): DashboardFragment = DashboardFragment().apply {}
@@ -124,9 +136,11 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initDashboard()
+        getCourierUsersInformation()
         fetchBannerData()
         fetchCODData()
         fetchCollection()
+        fetchAcceptedOrder()
         //fetchCurrentBalance()
         initClickLister()
         //showDeliveryChargeCalculator()
@@ -146,19 +160,20 @@ class DashboardFragment : Fragment() {
         worker?.let {
             handler.removeCallbacks(it)
         }
+        countDownTimer?.cancel()
     }
 
     private fun manageDeliveryReturnDashboard(){
 
         //Fetch 7 days data
-        /*val calendar = Calendar.getInstance()
+        val calendar = Calendar.getInstance()
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         toDate = simpleDateFormat.format(calendar.time)
-        calendar.add(Calendar.DAY_OF_YEAR, -6)
+        calendar.add(Calendar.DAY_OF_MONTH, -30)
         fromDate = simpleDateFormat.format(calendar.time)
         setDateRangePickerTitle()
         val requestBody = DeliveredReturnedCountRequest(fromDate, toDate, SessionManager.courierUserId)
-        fetchDeliveredReturnCount(requestBody)*/
+        fetchDeliveredReturnCount(requestBody)
 
         binding?.dateRangePicker?.setOnClickListener {
             dateRangePicker()
@@ -235,6 +250,7 @@ class DashboardFragment : Fragment() {
             getDashBoardData(selectedMonth, selectedYear)
             fetchCODData()
             fetchCollection()
+            fetchAcceptedOrder()
             //fetchCurrentBalance()
         }
         binding?.retryBtn?.setOnClickListener {
@@ -242,20 +258,25 @@ class DashboardFragment : Fragment() {
         }
         binding?.collectorTrackBtn?.setOnClickListener {
             addFragment(MapFragment.newInstance(null), MapFragment.tag)
+            UserLogger.logGenie("Dashboard_Collector_Track")
         }
         binding?.orderTrackingBtn?.setOnClickListener {
             addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
+            UserLogger.logGenie("Dashboard_Order_Track")
         }
         binding?.complainBtn?.setOnClickListener {
             addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
+            UserLogger.logGenie("Dashboard_Complain")
         }
         binding?.balanceLoadLayout?.setOnClickListener {
-            //showQuickOrderDialog()
+            showQuickOrderBottomSheet()
+            UserLogger.logGenie("Dashboard_Quick_Order")
+            /*showQuickOrderDialog()
             if (netAmount >= 0) {
                 addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
             } else {
                 serviceChargeDialog()
-            }
+            }*/
         }
         binding?.orderBtn?.setOnClickListener {
             binding?.progressBar?.visibility = View.VISIBLE
@@ -265,7 +286,7 @@ class DashboardFragment : Fragment() {
                 if (netAmount >= 0) {
                     binding?.progressBar?.visibility = View.GONE
                     addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
-                    UserLogger.logGenie("AddOrder")
+                    UserLogger.logGenie("Dashboard_AddOrder")
                 } else {
                     serviceChargeDialog()
                 }
@@ -277,27 +298,35 @@ class DashboardFragment : Fragment() {
                 when (model?.dashboardRouteUrl) {
                     "add-order" -> {
                         addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+                        UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "billing-service" -> {
                         addFragment(ServiceChargeFragment.newInstance(), ServiceChargeFragment.tag)
+                        UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "order-tracking" -> {
                         addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
+                        UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "shipment-charge" -> {
                         addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
+                        UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "all-order" -> {
                         goToAllOrder(model.name ?: "", model.dashboardStatusFilter, selectedStartDate, selectedEndDate)
+                        UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "cod-collection" -> {
                         addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
+                        UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "return" -> {
                         returnDialog()
+                        UserLogger.logGenie("Dashboard_ReturnDialog")
                     }
                     else -> {
                         addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
+                        UserLogger.logGenie("Dashboard_AllOrder")
                     }
                 }
             } else {
@@ -310,6 +339,7 @@ class DashboardFragment : Fragment() {
             } else {
                 context?.toast("পর্যাপ্ত তথ্য নেই")
             }
+            UserLogger.logGenie("Dashboard_PaymentDetails")
         }
         dashboardAdapter.onCODCollectionClick = { position, model ->
             if (netAmount == 0) {
@@ -317,6 +347,7 @@ class DashboardFragment : Fragment() {
             } else {
                 addFragment(UnpaidCODFragment.newInstance(), UnpaidCODFragment.tag)
             }
+            UserLogger.logGenie("Dashboard_UnpaidCOD")
         }
         dashboardAdapter.onPaymentRequestClick = { position, model ->
 
@@ -344,10 +375,22 @@ class DashboardFragment : Fragment() {
             } else {
                 context?.toast("পর্যাপ্ত তথ্য নেই")
             }
+            UserLogger.logGenie("Dashboard_Collection_History")
         }
 
         binding?.referBtn?.setOnClickListener {
             addFragment(ReferralFragment.newInstance(), ReferralFragment.tag)
+            UserLogger.logGenie("Dashboard_Referral")
+        }
+
+        binding?.callCollectorBtn?.setOnClickListener {
+            getRidersOfficeInfo()
+            UserLogger.logGenie("Dashboard_CollectorCall")
+        }
+
+        binding?.paymentHistoryBtn?.setOnClickListener {
+            addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
+            UserLogger.logGenie("Dashboard_PaymentStatement")
         }
 
        /* binding?.dateRangePicker?.setOnClickListener {
@@ -473,6 +516,28 @@ class DashboardFragment : Fragment() {
         }
     }
 
+    private fun initRetentionManagerData(userId: Int, retentionManagerName: String, retentionManagerNumber: String){
+
+        binding?.retentionManagerImage?.let { view ->
+            Glide.with(view)
+                .load("https://static.ajkerdeal.com/images/admin_users/$userId.jpg")
+                .apply(RequestOptions().placeholder(R.drawable.ic_avater_demo).error(R.drawable.ic_avater_demo).circleCrop())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(view)
+        }
+
+        binding?.retentionManagerName?.text = retentionManagerName
+        binding?.retentionManagerNumber?.text = retentionManagerNumber
+        binding?.callBtn?.setOnClickListener {
+            if (retentionManagerNumber.isNotEmpty()) {
+                callHelplineNumber(retentionManagerNumber)
+            } else {
+                context?.toast("কোনো মোবাইল নম্বর অ্যাড করা হয়নি")
+            }
+        }
+    }
+
     private fun setSpinner(monthDuration: Int) {
         //val calender = Calendar.getInstance()
         currentYear = calenderNow.get(Calendar.YEAR)
@@ -546,6 +611,40 @@ class DashboardFragment : Fragment() {
         */
     }
 
+    private fun getCourierUsersInformation() {
+        viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            SessionManager.collectionCharge = model.collectionCharge
+            SessionManager.merchantDistrict = model.districtId
+            isQuickBookingEnable = model.isQuickOrderActive
+            initRetentionManagerData(model?.adminUsers?.userId ?: 0, model?.adminUsers?.fullName ?: "", model?.adminUsers?.mobile ?: "")
+            if (isQuickBookingEnable) {
+                binding?.balanceLoadLayout?.visibility = View.VISIBLE
+                binding?.orderBtn?.layoutParams?.width = 0
+            } else {
+                binding?.orderBtn?.layoutParams?.width = LinearLayout.LayoutParams.MATCH_PARENT
+                binding?.balanceLoadLayout?.visibility = View.GONE
+            }
+
+        })
+    }
+
+    private fun getRidersOfficeInfo() {
+        viewModel.getRidersOfficeInfo(CollectorInfoRequest(SessionManager.courierUserId)).observe(viewLifecycleOwner, Observer { model ->
+
+            if (model == null) {
+                context?.toast("কোনো তথ্য নেই")
+            } else {
+                if (model.mobile.isNullOrEmpty()) {
+                    context?.toast("কালেক্টর মোবাইল নাম্বার তথ্য নেই")
+                } else {
+                    callHelplineNumber(model.mobile ?: "")
+                    UserLogger.logGenie("Dashboard_CollectorCall_${model.mobile}")
+                }
+            }
+
+        })
+    }
+
     private fun fetchCollection() {
 
         viewModel.fetchCollection(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
@@ -581,6 +680,7 @@ class DashboardFragment : Fragment() {
                                 binding?.switchCollector?.isEnabled = false
                             }
                         })
+                        UserLogger.logGenie("Dashboard_CollectorAbsent")
                     }
                 }
             } else {
@@ -588,6 +688,69 @@ class DashboardFragment : Fragment() {
                 SessionManager.collectorAttendanceDateOfYear = 0
             }
         })
+    }
+
+    private fun fetchAcceptedOrder() {
+        viewModel.fetchAcceptedCourierOrders(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            showTimer(model)
+        })
+    }
+
+    private fun showTimer(model: AcceptedOrder) {
+
+        countDownTimer?.cancel()
+        val endTime = model.collectionTimeSlot?.endTime ?: "00:00:00"
+        if (endTime == "00:00:00") return
+        try {
+            val endDate = DigitConverter.formatDate(model.riderAcceptDate, "yyyy-MM-dd", "yyyy-MM-dd")
+            val endTimeStamp = sdf1.parse("$endDate $endTime")
+            Timber.d("timeDebug $endDate $endTime")
+            if (endTimeStamp == null) return
+                val timeDifference = endTimeStamp.time - Date().time
+                Timber.d("timeDebug timeDifference $timeDifference ${endTimeStamp.time}")
+                if (timeDifference > 0) {
+                    binding?.collectorTimerLayout?.isVisible = true
+                    binding?.clock?.let { image ->
+                        Glide.with(image).load(R.raw.gif_watch).into(image)
+                    }
+                    countDownTimer = object: CountDownTimer(timeDifference,1000L * 60 * 10) { // 10 min
+                        override fun onTick(millisUntilFinished: Long) {
+                            val hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished).toInt() % 24
+                            val minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished).toInt() % 60
+                            //val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished).toInt() % 60
+                            //val message = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+
+                            val fraction = minutes % 10
+                            val roundMinute = if (fraction == 0) minutes else minutes + (10 - fraction) // 45 -> 50
+                            Timber.d("timeDebug onTick hour $hours minute $minutes fraction $fraction roundMinute $roundMinute")
+                            val message = if (hours == 0) {
+                                String.format("%d মিনিটের", roundMinute)
+                            } else {
+                                if (roundMinute == 0) {
+                                    String.format("%d ঘন্টার", hours)
+                                } else {
+                                    String.format("%d ঘণ্টা %d মিনিটের", hours, roundMinute)
+                                }
+                            }
+                            binding?.timeCounter?.text = DigitConverter.toBanglaDigit(message)
+                            /*if (hours < 1) {
+                                holder.binding.timeText.setTextColor(ContextCompat.getColor(holder.binding.timeText.context, R.color.crimson))
+                            } else {
+                                holder.binding.timeText.setTextColor(ContextCompat.getColor(holder.binding.timeText.context, R.color.colorPrimary))
+                            }*/
+                        }
+
+                        override fun onFinish() {
+                            binding?.timeCounter?.text = "০ ঘণ্টা ০ মিনিটের"
+                            binding?.collectorTimerLayout?.isVisible = false
+                        }
+                    }.start()
+                } else {
+                    binding?.collectorTimerLayout?.isVisible = false
+                }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun fetchCODData() {
@@ -707,12 +870,12 @@ class DashboardFragment : Fragment() {
         button1.setOnClickListener {
             dialog.dismiss()
             addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
-            UserLogger.logGenie("NormalOrder")
+            UserLogger.logGenie("Dashboard_NormalOrder")
         }
         button2.setOnClickListener {
             dialog.dismiss()
             addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
-            UserLogger.logGenie("DetailOrder")
+            UserLogger.logGenie("Dashboard_DetailOrder")
         }
     }
 
@@ -725,6 +888,7 @@ class DashboardFragment : Fragment() {
             dialog.dismiss()
             if (model.count > 0) {
                 goToAllOrder(model.name ?: "", model.dashboardStatusFilter, selectedStartDate, selectedEndDate)
+                UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
             } else {
                 context?.toast("পর্যাপ্ত তথ্য নেই")
             }
@@ -940,10 +1104,22 @@ class DashboardFragment : Fragment() {
         addFragment(fragment, tag)
     }
 
-    private fun showQuickOrderDialog() {
-        val customDialog = Dialog(requireActivity(), R.style.AlertDialogTheme)
-        customDialog.setContentView(R.layout.item_view_custom_quick_order_dialogue)
-        customDialog.show()
+    private fun showQuickOrderBottomSheet() {
+        val tag: String = QuickBookingBottomSheet.tag
+        val dialog: QuickBookingBottomSheet = QuickBookingBottomSheet.newInstance()
+        dialog.show(childFragmentManager, tag)
+        dialog.onClose = {
+            Handler(Looper.getMainLooper()).postDelayed({
+                hideKeyboard()
+            }, 200L)
+        }
+        dialog.onOrderPlace = { msg ->
+            alert(getString(R.string.instruction), msg, true, getString(R.string.ok), "সকল কুইক বুকিং"){
+                if (it == AlertDialog.BUTTON_NEGATIVE) {
+                    addFragment(QuickOrderListFragment.newInstance(), QuickOrderListFragment.tag)
+                }
+            }.show()
+        }
     }
 
     private fun serviceChargeDialog() {

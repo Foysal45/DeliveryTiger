@@ -4,6 +4,7 @@ import com.bd.deliverytiger.app.api.endpoint.*
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
+import com.bd.deliverytiger.app.api.model.collector_info.CollectorInfoRequest
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
@@ -37,13 +38,22 @@ import com.bd.deliverytiger.app.api.model.order_track.OrderTrackReqBody
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsRequest
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
+import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderRequest
+import com.bd.deliverytiger.app.api.model.quick_order.TimeSlotRequest
+import com.bd.deliverytiger.app.api.model.quick_order.TimeSlotUpdateRequest
+import com.bd.deliverytiger.app.api.model.quick_order.quick_order_history.QuickOrderListRequest
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionAnswer
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequest
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
+import com.bd.deliverytiger.app.database.AppDatabase
+import com.bd.deliverytiger.app.database.dao.NotificationDao
+import com.bd.deliverytiger.app.fcm.FCMData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.http.Body
+import retrofit2.http.Path
 
 class AppRepository(
     private val apiInterfaceADM: ApiInterfaceADM,
@@ -53,15 +63,38 @@ class AppRepository(
     private val apiInterfaceLambda: ApiInterfaceLambda,
     private val apiInterfaceMerchant: ApiInterfaceMerchant,
     private val apiInterfaceBariKoi: ApiInterfaceBariKoi,
-    private val apiInterfaceANA: ApiInterfaceANA
+    private val apiInterfaceANA: ApiInterfaceANA,
+    private val database: AppDatabase
 ) {
+
+    //#region AppDatabase
+    private val notificationDao: NotificationDao = database.notificationDao()
+
+    suspend fun insert(model: FCMData): Long {
+        return if (model.uid == 0) {
+            notificationDao.upsert(model)
+        } else {
+            updateNotification(model).toLong()
+        }
+    }
+
+    suspend fun updateNotification(model: FCMData): Int = notificationDao.updateNotification(model)
+
+    suspend fun getAllNotification() = notificationDao.getAllNotification()
+
+    fun getAllNotificationFlow() = notificationDao.getAllNotificationFlow()
+
+    suspend fun getNotificationById(id: Int) = notificationDao.getNotificationById(id)
+
+    suspend fun deleteNotificationById(id: Int) = notificationDao.deleteNotificationById(id)
+
+    suspend fun deleteAllNotification() = notificationDao.deleteAllNotification()
+    //#endregion
 
     //******************** API ********************//
     suspend fun sendOTP(requestBody: OTPRequestModel) = apiInterfaceAPI.sendOTP(requestBody)
 
     suspend fun checkOTP(mobileNo: String, OPTCode: String) = apiInterfaceAPI.checkOTP(mobileNo, OPTCode)
-
-    fun updateCourierStatus(requestBody: StatusLocationRequest) = apiInterfaceAPI.updateCourierStatus(requestBody)
 
     suspend fun uploadProductInfo(ProductUploadReqBody: RequestBody) = apiInterfaceAPI.uploadProductInfo(ProductUploadReqBody)
 
@@ -181,15 +214,17 @@ class AppRepository(
 
     suspend fun getInstantPaymentActivationStatus(courierUserId: Int) = apiInterfaceADM.getInstantPaymentActivationStatus(courierUserId)
 
+    suspend fun getComplainHistory(bookingCode: Int, isVisibleToMerchant: Int) = apiInterfaceADM.getComplainHistory(bookingCode, isVisibleToMerchant)
+
+    suspend fun merchantBalanceLoadHistory(merchantID: Int) = apiInterfaceADM.merchantBalanceLoadHistory(merchantID)
+
     //******************** ADCORE ********************//
 
     suspend fun getBannerInfo() = apiInterfaceCore.getBannerInfo()
 
     suspend fun getDashboardStatusGroup(requestBody: DashBoardReqBody) = apiInterfaceCore.getDashboardStatusGroup(requestBody)
 
-    fun getAllDistrictFromApi(id: Int) = apiInterfaceCore.getAllDistrictFromApi(id)
-
-    suspend fun loadAllDistricts() = apiInterfaceCore.loadAllDistricts()
+    suspend fun loadAllDistrictsById(id: Int) = apiInterfaceCore.loadAllDistrictsById(id)
 
     suspend fun fetchServiceDistricts(requestBody: ServiceDistrictsRequest) = apiInterfaceCore.fetchServiceDistricts(requestBody)
 
@@ -197,7 +232,7 @@ class AppRepository(
 
     fun getMerchantCredit(courierUserId: Int) = apiInterfaceCore.getMerchantCredit(courierUserId)
 
-    fun getBreakableCharge() = apiInterfaceCore.getBreakableCharge()
+    suspend fun getBreakableCharge() = apiInterfaceCore.getBreakableCharge()
 
     fun getPackagingCharge() = apiInterfaceCore.getPackagingCharge()
 
@@ -278,5 +313,25 @@ class AppRepository(
     suspend fun fetchDeliveredReturnedCountWiseDetails(requestBody: DeliveryDetailsRequest) = apiInterfaceCore.fetchDeliveredReturnedCountWiseDetails(requestBody)
 
     suspend fun fetchHelpLineNumbers() = apiInterfaceCore.fetchHelpLineNumbers()
+
+    suspend fun getRidersOfficeInfo(requestBody: CollectorInfoRequest) = apiInterfaceCore.getRidersOfficeInfo(requestBody)
+
+    suspend fun updateOrderInfo(orderId: String, requestBody: UpdateOrderReqBody) = apiInterfaceCore.updateOrderInfo(orderId, requestBody)
+
+    suspend fun updateCourierStatusDT(requestBody: StatusLocationRequest) = apiInterfaceCore.updateCourierStatusDT(requestBody)
+
+    suspend fun fetchAcceptedCourierOrders(courierUserId: Int) = apiInterfaceCore.fetchAcceptedCourierOrders(courierUserId)
+
+    //Quick Order
+    suspend fun getCollectionTimeSlot(requestBody: TimeSlotRequest) = apiInterfaceCore.getCollectionTimeSlot(requestBody)
+
+    suspend fun quickOrderRequest(requestBody: QuickOrderRequest) = apiInterfaceCore.quickOrderRequest(requestBody)
+
+    suspend fun getMerchantQuickOrders(requestBody: QuickOrderListRequest) = apiInterfaceCore.getMerchantQuickOrders(requestBody)
+
+    suspend fun updateMultipleTimeSlot(requestBody: List<TimeSlotUpdateRequest>) = apiInterfaceCore.updateMultipleTimeSlot(requestBody)
+
+    suspend fun deleteOrderRequest(orderRequestId: Int) = apiInterfaceCore.deleteOrderRequest(orderRequestId)
+
 
 }

@@ -78,7 +78,7 @@
         app:iconGravity="textStart"
         android:text="পূর্ববর্তী ধাপ"
         android:textAlignment="center"
-        android:textColor="@color/ef_white"
+        android:textColor="@color/white"
         android:backgroundTint="@color/ashColor"
         app:layout_constraintStart_toStartOf="parent"
        app:layout_constraintBottom_toTopOf="@+id/progressBar"

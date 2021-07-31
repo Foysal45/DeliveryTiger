@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.api.model.login
 
 
+import com.bd.deliverytiger.app.api.model.courier_info.AdminUser
 import com.google.gson.annotations.SerializedName
 
 data class LoginResponse(
@@ -59,5 +60,7 @@ data class LoginResponse(
     @SerializedName("thanaName")
     var thanaName: String? = "",
     @SerializedName("areaName")
-    var areaName: String? = ""
+    var areaName: String? = "",
+    @SerializedName("adminUsers")
+    var adminUsers: AdminUser? = AdminUser()
 )

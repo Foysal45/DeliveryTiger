@@ -40,7 +40,7 @@
             android:id="@+id/rvListOfThanaOrAria"
             android:layout_width="match_parent"
             tools:itemCount="20"
-            tools:listitem="@layout/district_select_layout"
+            tools:listitem="@layout/item_view_location"
             android:layout_height="wrap_content"
             android:background="@color/white" />
     </LinearLayout>

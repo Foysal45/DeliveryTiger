@@ -31,6 +31,11 @@
             android:title="@string/return_statement" />
 
         <item
+            android:id="@+id/nav_balance_load_history"
+            android:icon="@drawable/ic_bill_pay_history"
+            android:title="@string/balance_load_history_statement" />
+
+        <item
             android:id="@+id/nav_payment_request"
             android:icon="@drawable/ic_history_cod"
             android:title="@string/instant_payment" />
@@ -50,9 +55,16 @@
 
         <item
             android:id="@+id/nav_balance_load"
-            android:icon="@drawable/ic_bill_pay_history"
+            android:icon="@drawable/ic_balance"
             android:title="ব্যালেন্স লোড"
-            android:visible="false"
+            android:visible="true"
+            />
+
+        <item
+            android:id="@+id/nav_quick_booking_list"
+            android:icon="@drawable/ic_bill_pay_history"
+            android:title="@string/quick_booking_list"
+            android:visible="true"
             />
 
         <item

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="5dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="4dp"
+        app:contentPadding="12dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/dateTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="কালেকশন তারিখ"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_14"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/collectionDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_14"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/actionLayout"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="23 June, 2021" />
+
+            <LinearLayout
+                android:id="@+id/actionLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/deleteBtn"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="4dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/cd"
+                    app:srcCompat="@drawable/ic_delete"
+                    app:tint="@color/colorPrimary"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/editBtn"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="4dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/cd"
+                    app:srcCompat="@drawable/all_order_edit"
+                    app:tint="@color/colorPrimary"
+                    tools:visibility="visible" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/separator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/separator"
+                app:layout_constraintTop_toBottomOf="@id/dateTitle" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                app:barrierDirection="end"
+                app:constraint_referenced_ids="key1,key2,key3,key4,key5" />
+
+            <TextView
+                android:id="@+id/key1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="রিকোয়েস্ট তারিখ"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/order_info_value_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/separator" />
+
+            <TextView
+                android:id="@+id/parcelCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/order_info_value_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/separator"
+                tools:text="23 June, 2021" />
+
+            <TextView
+                android:id="@+id/key2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="কালেকশন এড্রেস"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/order_info_value_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/key1" />
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:ellipsize="end"
+                android:gravity="end"
+                android:maxLines="1"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/order_info_value_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/barrier"
+                app:layout_constraintTop_toBottomOf="@id/key1"
+                tools:text="আদাবর" />
+
+            <TextView
+                android:id="@+id/key3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="পার্সেল সংখ্যা"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/order_info_value_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/key2" />
+
+            <TextView
+                android:id="@+id/requestDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:ellipsize="end"
+                android:gravity="end"
+                android:maxLines="1"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/order_info_value_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/barrier"
+                app:layout_constraintTop_toBottomOf="@id/key2"
+                tools:text="৫ টি" />
+
+            <TextView
+                android:id="@+id/key4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="কলেক্টেড পার্সেল"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/order_info_value_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/key3" />
+
+            <TextView
+                android:id="@+id/totalCollectedOrder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:ellipsize="end"
+                android:gravity="end"
+                android:maxLines="2"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/order_info_value_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/barrier"
+                app:layout_constraintTop_toBottomOf="@id/key3"
+                tools:text="৫/৫ টি" />
+
+            <TextView
+                android:id="@+id/key5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="স্ট্যাটাস"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/order_info_value_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/key4" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:ellipsize="end"
+                android:gravity="end"
+                android:maxLines="2"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/order_info_value_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/barrier"
+                app:layout_constraintTop_toBottomOf="@id/key4"
+                tools:text="কালেক্ট করা হয়েছে" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

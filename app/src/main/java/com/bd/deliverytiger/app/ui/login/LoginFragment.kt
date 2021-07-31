@@ -185,10 +185,13 @@ class LoginFragment: Fragment() {
                 if (response.isSuccessful && response.body() != null && isAdded) {
                     if (response.body()!!.model != null) {
 
-                        SessionManager.createSession(response.body()!!.model)
+                        val model = response.body()!!.model
+                        SessionManager.createSession(model)
                         SessionManager.isRememberMe = true
                         SessionManager.loginId = mobile
                         SessionManager.loginPassword = password
+                        SessionManager.retentionManagerName = model.adminUsers?.fullName ?: ""
+                        SessionManager.retentionManagerNumber = model.adminUsers?.mobile ?: ""
                         Timber.d( "Password saved")
 
                         Timber.d("Token: ${SessionManager.accessToken}")

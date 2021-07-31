@@ -16,8 +16,8 @@ android {
         applicationId "com.bd.deliverytiger.app"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 24 // play store 23
-        versionName "1.8.8-debug" // play store 1.8.7
+        versionCode 30 // play store 29
+        versionName "1.8.14-debug" // play store 1.8.13
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -91,18 +91,19 @@ dependencies {
     implementation files('libs/poi-3.9.jar')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.5.0'
+    implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'androidx.activity:activity-ktx:1.2.3'
-    implementation 'androidx.fragment:fragment-ktx:1.3.4'
+    implementation 'androidx.fragment:fragment-ktx:1.3.5'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'com.google.android.material:material:1.4.0-beta01'
-    implementation 'androidx.recyclerview:recyclerview:1.2.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation "androidx.preference:preference-ktx:1.1.1"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    implementation platform('com.google.firebase:firebase-bom:28.0.1')
+    implementation platform('com.google.firebase:firebase-bom:28.2.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-perf-ktx'
@@ -112,17 +113,19 @@ dependencies {
     implementation 'com.google.firebase:firebase-dynamic-links-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
+    def room_version = "2.3.0"
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+
     implementation 'com.google.android.play:core-ktx:1.8.1'
 
     implementation 'com.squareup.retrofit2:retrofit:2.8.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
-    implementation 'com.github.haroldadmin:NetworkResponseAdapter:4.0.0'
+    implementation 'com.github.haroldadmin:NetworkResponseAdapter:4.2.1'
 
     implementation 'com.github.bumptech.glide:glide:4.12.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     kapt 'com.github.bumptech.glide:compiler:4.12.0'
     //implementation 'com.caverock:androidsvg:1.2.1'
 
@@ -150,38 +153,20 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
 
-    implementation 'com.facebook.shimmer:shimmer:0.5.0'
-    implementation 'com.github.smarteist:autoimageslider:1.3.9'
-    implementation 'com.github.esafirm.android-image-picker:imagepicker:2.4.5'
-    implementation 'id.zelory:compressor:3.0.1'
-    implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.2'
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-
     implementation 'com.facebook.android:facebook-core:8.1.0'
     implementation 'com.facebook.android:facebook-marketing:4.42.0'
-    //implementation 'com.facebook.android:facebook-applinks:8.1.0'
 
-    def nav_version = "2.3.5"
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation 'com.github.dhaval2404:imagepicker:2.1'
+    implementation 'id.zelory:compressor:3.0.1'
 
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    implementation 'com.github.smarteist:autoimageslider:1.3.9'
+    implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.2'
     implementation 'nl.bryanderidder:themed-toggle-button-group:1.3.4'
-    implementation 'com.github.broakenmedia:MultiContactPicker:1.8.5'
-    implementation 'com.kroegerama:bottomsheet-imagepicker:1.1.2'
 
-    implementation 'com.github.pedroSG94.rtmp-rtsp-stream-client-java:rtplibrary:1.9.9'
-    implementation 'com.airbnb.android:lottie:3.7.0'
-
-    //ProgressBar
-    implementation "ir.alirezaiyan:levelprogressbar:1.0.2"
-
-    //Came
-    api 'com.otaliastudios:cameraview:2.6.4'
-
-    implementation 'com.github.pedroSG94.rtmp-rtsp-stream-client-java:rtplibrary:1.9.9'
-
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test:runner:1.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }

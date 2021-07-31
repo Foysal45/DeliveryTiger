@@ -19,6 +19,8 @@ import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
+import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
+import com.bd.deliverytiger.app.api.model.quick_order.TimeSlotRequest
 import com.bd.deliverytiger.app.api.model.referral.OfferData
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
@@ -35,6 +37,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
 
@@ -43,6 +47,21 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
     val serverErrorMessage = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
     val networkErrorMessage = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
     val unknownErrorMessage = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+
+    private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+
+    val currentTimeSlot: LiveData<List<QuickOrderTimeSlotData>> by lazy {
+        val calender = Calendar.getInstance()
+        val selectedDate = sdf.format(calender.timeInMillis)
+        getCollectionTimeSlot(TimeSlotRequest(selectedDate))
+    }
+
+    val upcomingTimeSlot: LiveData<List<QuickOrderTimeSlotData>> by lazy {
+        val calender = Calendar.getInstance()
+        calender.add(Calendar.DAY_OF_MONTH, 1)
+        val selectedDate = sdf.format(calender.timeInMillis)
+        getCollectionTimeSlot(TimeSlotRequest(selectedDate))
+    }
 
     fun getMerchantCredit(): LiveData<Boolean> {
 
@@ -137,17 +156,54 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
         return responseBody
     }
 
-    fun loadAllDistricts(): LiveData<List<AllDistrictListsModel>> {
+    fun loadAllDistrictsById(id: Int): LiveData<List<AllDistrictListsModel>> {
         viewState.value = ViewState.ProgressState(true)
         val responseData = MutableLiveData<List<AllDistrictListsModel>>()
 
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.loadAllDistricts()
+            val response = repository.loadAllDistrictsById(id)
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {
                     is NetworkResponse.Success -> {
-                        responseData.value = response.body.model!!
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model!!
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        responseData.value = listOf()
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
+    }
+
+    private fun getCollectionTimeSlot(requestBody: TimeSlotRequest): LiveData<List<QuickOrderTimeSlotData>> {
+
+        viewState.value = ViewState.ProgressState(true)
+        val responseData = MutableLiveData<List<QuickOrderTimeSlotData>>()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getCollectionTimeSlot(requestBody)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model!!
+                        }
                     }
                     is NetworkResponse.ServerError -> {
                         val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
@@ -166,35 +222,6 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
             }
         }
         return responseData
-    }
-
-    fun getAllDistrictFromApi(districtId: Int): LiveData<List<DistrictDeliveryChargePayLoad>> {
-        viewState.value = ViewState.ProgressState(true)
-        val responseBody = MutableLiveData<List<DistrictDeliveryChargePayLoad>>()
-        repository.getAllDistrictFromApi(districtId).enqueue(object : Callback<DeliveryChargePayLoad> {
-            override fun onFailure(call: Call<DeliveryChargePayLoad>, t: Throwable) {
-                viewState.value = ViewState.ProgressState(false)
-                viewState.value = ViewState.ShowMessage(message)
-            }
-
-            override fun onResponse(call: Call<DeliveryChargePayLoad>, response: Response<DeliveryChargePayLoad>) {
-                viewState.value = ViewState.ProgressState(false)
-                if (response.isSuccessful && response.body() != null) {
-                    if (response.body()!!.data != null) {
-                        if (!response.body()!!.data!!.districtInfo.isNullOrEmpty()) {
-                            responseBody.value = response.body()!!.data!!.districtInfo
-                        } else {
-                            viewState.value = ViewState.ShowMessage(message)
-                        }
-                    } else {
-                        viewState.value = ViewState.ShowMessage(message)
-                    }
-                } else {
-                    viewState.value = ViewState.ShowMessage(message)
-                }
-            }
-        })
-        return responseBody
     }
 
     fun getPickupLocations(courierUserId: Int): LiveData<List<PickupLocation>> {
@@ -233,29 +260,35 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
 
     fun getBreakableCharge(): LiveData<BreakableChargeData> {
         viewState.value = ViewState.ProgressState(true)
-        val responseBody = MutableLiveData<BreakableChargeData>()
+        val responseData = MutableLiveData<BreakableChargeData>()
 
-        repository.getBreakableCharge().enqueue(object : Callback<GenericResponse<BreakableChargeData>> {
-            override fun onFailure(call: Call<GenericResponse<BreakableChargeData>>, t: Throwable) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getBreakableCharge()
+            withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
-                viewState.value = ViewState.ShowMessage(message)
-            }
-
-            override fun onResponse(call: Call<GenericResponse<BreakableChargeData>>, response: Response<GenericResponse<BreakableChargeData>>) {
-                if (response.isSuccessful && response.body() != null) {
-                    if (response.body()!!.model != null) {
-                        responseBody.value = response.body()!!.model!!
-                    } else {
-                        viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseData.value = response.body.model!!
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
                         viewState.value = ViewState.ShowMessage(message)
                     }
-                } else {
-                    viewState.value = ViewState.ProgressState(false)
-                    viewState.value = ViewState.ShowMessage(message)
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
                 }
             }
-        })
-        return responseBody
+        }
+        return responseData
     }
 
     fun getPackagingCharge(): LiveData<List<PackagingData>> {
@@ -334,7 +367,6 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
         return responseBody
     }
 
-
     /*fun fetchCollectionTimeSlot(): LiveData<Int> {
 
         viewState.value = ViewState.ProgressState(true)
@@ -363,39 +395,6 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
         return responseBody
     }*/
 
-    fun fetchCollectionTimeSlot(): LiveData<List<TimeSlotData>> {
-
-        val responseData: MutableLiveData<List<TimeSlotData>> = MutableLiveData()
-
-        viewState.value = ViewState.ProgressState(true)
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.fetchCollectionTimeSlot()
-            withContext(Dispatchers.Main) {
-                viewState.value = ViewState.ProgressState(false)
-                when (response) {
-                    is NetworkResponse.Success -> {
-                        if (response.body.model != null) {
-                            responseData.value = response.body.model
-                        }
-                    }
-                    is NetworkResponse.ServerError -> {
-                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
-                        viewState.value = ViewState.ShowMessage(message)
-                    }
-                    is NetworkResponse.NetworkError -> {
-                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
-                        viewState.value = ViewState.ShowMessage(message)
-                    }
-                    is NetworkResponse.UnknownError -> {
-                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
-                        viewState.value = ViewState.ShowMessage(message)
-                        Timber.d(response.error)
-                    }
-                }
-            }
-        }
-        return responseData
-    }
 
     fun fetchDTOrderGenericLimit(): LiveData<GenericLimitData> {
 
@@ -499,57 +498,6 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
         return responseData
     }
 
-    fun fetchServiceInfoWithDistrict(): LiveData<List<ServiceInfoData>> {
-        viewState.value = ViewState.ProgressState(true)
-        val responseData = MutableLiveData<List<ServiceInfoData>>()
-
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getDTService()
-            when (response) {
-                is NetworkResponse.Success -> {
-                    val serviceTypeList = response.body.model!!
-                    serviceTypeList.forEach { model ->
-                        if (model.deliveryRangeId.isNotEmpty()){
-                            val districtRequest = ServiceDistrictsRequest(model.deliveryRangeId)
-                            val serviceDistrictResponse = repository.fetchServiceDistricts(districtRequest)
-                            if (serviceDistrictResponse is NetworkResponse.Success) {
-                                val districtList = serviceDistrictResponse.body.model
-                                if (!districtList.isNullOrEmpty()) {
-                                    val districtParentList = districtList.filter { it.parentId == 0 }
-                                    model.districtList = districtParentList
-                                }
-                            }
-                        } else {
-                            val allDistrictResponse = repository.loadAllDistricts()
-                            if (allDistrictResponse is NetworkResponse.Success) {
-                                val allDistrictList = allDistrictResponse.body.model
-                                if (!allDistrictList.isNullOrEmpty()) {
-                                    val districtList = allDistrictList.filter { it.parentId == 0 }
-                                    model.districtList = districtList
-                                }
-                            }
-                        }
-                    }
-                    responseData.postValue(serviceTypeList)
-                }
-                is NetworkResponse.ServerError -> {
-                    viewState.postValue(ViewState.ShowMessage(serverErrorMessage))
-                }
-                is NetworkResponse.NetworkError -> {
-                    viewState.postValue(ViewState.ShowMessage(networkErrorMessage))
-                }
-                is NetworkResponse.UnknownError -> {
-                    viewState.postValue(ViewState.ShowMessage(unknownErrorMessage))
-                    Timber.d(response.error)
-                }
-            }
-            withContext(Dispatchers.Main) {
-                viewState.value = ViewState.ProgressState(false)
-            }
-        }
-        return responseData
-    }
-
     fun fetchServiceInfo() : LiveData<List<ServiceInfoData>>{
         viewState.value = ViewState.ProgressState(true)
         val responseData = MutableLiveData<List<ServiceInfoData>>()
@@ -578,31 +526,5 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
         return responseData
     }
 
-    fun fetchServiceDistricts(requestBody: ServiceDistrictsRequest): LiveData<List<AllDistrictListsModel>> {
-        viewState.value = ViewState.ProgressState(true)
-        val responseData = MutableLiveData<List<AllDistrictListsModel>>()
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.fetchServiceDistricts(requestBody)
-            withContext(Dispatchers.Main) {
-                viewState.value = ViewState.ProgressState(false)
-                when (response) {
-                    is NetworkResponse.Success -> {
-                        responseData.value = response.body.model!!
-                    }
-                    is NetworkResponse.ServerError -> {
-                        viewState.value = ViewState.ShowMessage(serverErrorMessage)
-                    }
-                    is NetworkResponse.NetworkError -> {
-                        viewState.value = ViewState.ShowMessage(networkErrorMessage)
-                    }
-                    is NetworkResponse.UnknownError -> {
-                        viewState.value = ViewState.ShowMessage(unknownErrorMessage)
-                        Timber.d(response.error)
-                    }
-                }
-            }
-        }
-        return responseData
-    }
 
 }

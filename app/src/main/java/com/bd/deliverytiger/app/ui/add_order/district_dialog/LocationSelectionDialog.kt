@@ -45,14 +45,14 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
     private var dataList: MutableList<LocationData> = mutableListOf()
     private var dataListCopy: MutableList<LocationData> = mutableListOf()
 
-    var onLocationPicked: ((position: Int, model: LocationData) -> Unit)? = null
+    var onLocationPicked: ((model: LocationData) -> Unit)? = null
 
     companion object {
 
         @JvmStatic
         fun newInstance(dataList: MutableList<LocationData>): LocationSelectionDialog = LocationSelectionDialog().apply {
-                this.dataList = dataList
-            }
+            this.dataList = dataList
+        }
 
         @JvmField
         val tag: String = LocationSelectionDialog::class.java.name
@@ -80,7 +80,8 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
         //extraSpace = view.findViewById(R.id.extraSpace)
 
 
-        val locationAdapter = LocationDistrictAdapter(dataList)
+        val locationAdapter = LocationDistrictAdapter()
+        locationAdapter.setDataList(dataList)
         with(placeListRV) {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
@@ -88,7 +89,7 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
         }
         locationAdapter.onItemClicked = { position, value ->
             hideKeyboard()
-            onLocationPicked?.invoke(position,value)
+            onLocationPicked?.invoke(value)// position will change during search
             dismiss()
         }
 
@@ -135,7 +136,7 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
             progressBar?.visibility = View.GONE
             return
         }
-        val lowerCaseSearchKey = searchKey.toLowerCase(Locale.US)
+        val lowerCaseSearchKey = searchKey.lowercase(Locale.US)
         val filteredList = dataListCopy.filter { model ->
             (model.searchKey.contains(lowerCaseSearchKey))
         }

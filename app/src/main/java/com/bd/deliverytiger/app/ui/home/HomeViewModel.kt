@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bd.deliverytiger.app.api.model.accounts.AdvanceBalanceData
 import com.bd.deliverytiger.app.api.model.config.BannerResponse
+import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
+import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -17,6 +19,10 @@ import timber.log.Timber
 
 class HomeViewModel(private val repository: AppRepository): ViewModel() {
 
+    val serverErrorMessage = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+    val networkErrorMessage = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+    val unknownErrorMessage = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
     val bannerInfo = MutableLiveData<BannerResponse>()
 
@@ -25,6 +31,8 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
     val refreshEvent = MutableLiveData<String>("")
 
     val keyboardVisibility = MutableLiveData<Boolean>(false)
+
+    val serviceInfoList = MutableLiveData<List<ServiceInfoData>>()
 
     fun getBannerInfo(): LiveData<BannerResponse> {
 
@@ -89,6 +97,56 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
             }
         }
         return responseData
+    }
+
+    fun fetchOrderServiceInfo() {
+        //viewState.value = ViewState.ProgressState(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getDTService()
+            if (response is NetworkResponse.Success) {
+                val serviceList = response.body.model
+                serviceList.forEachIndexed { index, model ->
+                    if (model.deliveryRangeId.isNotEmpty()){
+                        if (model.districtList.isEmpty()){
+                            val districtRequest = ServiceDistrictsRequest(model.deliveryRangeId)
+                            val serviceDistrictResponse = repository.fetchServiceDistricts(districtRequest)
+                            if (serviceDistrictResponse is NetworkResponse.Success) {
+                                val locationList = serviceDistrictResponse.body.model
+                                if (!locationList.isNullOrEmpty()) {
+                                    val districtList = locationList.filter { it.parentId == 0 }
+                                    model.apply {
+                                        this.districtList = districtList
+                                        this.index = index
+                                    }
+                                    /*withContext(Dispatchers.Main) {
+                                        serviceInfoList.value = model
+                                    }*/
+                                }
+                            }
+                        }
+                    } else {
+                        if (model.districtList.isEmpty()) {
+                            val allDistrictResponse = repository.loadAllDistrictsById(0)
+                            if (allDistrictResponse is NetworkResponse.Success) {
+                                val locationList = allDistrictResponse.body.model
+                                if (!locationList.isNullOrEmpty()) {
+                                    model.apply {
+                                        this.districtList = locationList
+                                        this.index = index
+                                    }
+                                    /*withContext(Dispatchers.Main) {
+                                        serviceInfoList.value = model
+                                    }*/
+                                }
+                            }
+                        }
+                    }
+                }
+                withContext(Dispatchers.Main) {
+                    serviceInfoList.value = serviceList
+                }
+            }
+        }
     }
 
 }

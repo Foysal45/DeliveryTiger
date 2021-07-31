@@ -13,7 +13,7 @@ class DistrictSelectAdapter(var mContext: Context, var districtList: ArrayList<D
     RecyclerView.Adapter<DistrictSelectAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.district_select_layout, parent, false))
+        return ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_view_location, parent, false))
     }
 
     override fun getItemCount(): Int {

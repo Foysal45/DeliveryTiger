@@ -5,28 +5,32 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.databinding.FragmentDeliveryDetailsBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.DigitConverter
+import com.bd.deliverytiger.app.utils.ViewState
+import com.bd.deliverytiger.app.utils.hideKeyboard
+import com.bd.deliverytiger.app.utils.toast
 import org.koin.android.ext.android.inject
 
 class DeliveryDetailsFragment : Fragment() {
 
     private var binding : FragmentDeliveryDetailsBinding? = null
-    private  var dataAdapter: DeliveryDetailsAdapter = DeliveryDetailsAdapter()
     private val viewModel: DeliveryDetailsViewModel by inject()
 
-    private lateinit var dataRequestBody: DeliveryDetailsRequest
-    var title = ""
-    var total = 0
+    private  var dataAdapter: DeliveryDetailsAdapter = DeliveryDetailsAdapter()
+    private var dataRequestBody: DeliveryDetailsRequest? = null
+    private var title = ""
+    private var total = 0
 
     companion object{
-        fun newInstance(dataRequestBody: DeliveryDetailsRequest, totalCount: Int): DeliveryDetailsFragment = DeliveryDetailsFragment().apply {
+        fun newInstance(dataRequestBody: DeliveryDetailsRequest?, totalCount: Int): DeliveryDetailsFragment = DeliveryDetailsFragment().apply {
             this.dataRequestBody = dataRequestBody
-            total = totalCount
+            this.total = totalCount
         }
         val tag: String = DeliveryDetailsFragment::class.java.name
     }
@@ -40,7 +44,7 @@ class DeliveryDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        title = if (dataRequestBody.type == "return"){
+        title = if (dataRequestBody?.type == "return"){
             "রিটার্নে আছে (${DigitConverter.toBanglaDigit(total)} টি)"
         }else{
             "ডেলিভারি হয়েছে (${DigitConverter.toBanglaDigit(total)} টি)"
@@ -51,19 +55,21 @@ class DeliveryDetailsFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = dataAdapter
         }
+
         fetchDetailsData()
-    }
 
-    private fun fetchDetailsData() {
-
-        viewModel.fetchAllDataList(dataRequestBody).observe(viewLifecycleOwner, Observer {  list->
-            dataAdapter.initLoad(list)
-            if (list.isNullOrEmpty()){
-                binding?.emptyView?.visibility = View.VISIBLE
-            }else{
-                binding?.emptyView?.visibility = View.GONE
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is ViewState.ShowMessage -> {
+                    requireContext().toast(state.message)
+                }
+                is ViewState.KeyboardState -> {
+                    hideKeyboard()
+                }
+                is ViewState.ProgressState -> {
+                    binding?.progressBar?.isVisible = state.isShow
+                }
             }
-
         })
     }
 
@@ -72,8 +78,17 @@ class DeliveryDetailsFragment : Fragment() {
         (activity as HomeActivity).setToolbarTitle(title)
     }
 
+    private fun fetchDetailsData() {
+        dataRequestBody?.let { request ->
+            viewModel.fetchAllDataList(request).observe(viewLifecycleOwner, Observer {  list->
+                dataAdapter.initLoad(list)
+                binding?.emptyView?.isVisible = list.isNullOrEmpty()
+            })
+        }
+    }
+
     override fun onDestroy() {
-        binding = null
         super.onDestroy()
+        binding = null
     }
 }

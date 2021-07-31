@@ -39,7 +39,6 @@ class ServiceSelectionBottomSheetViewModel(private val repository: AppRepository
                             if (!locationList.isNullOrEmpty()) {
                                 val districtList = locationList.filter { it.parentId == 0 }
                                 model.apply {
-                                    this.locationList = locationList
                                     this.districtList = districtList
                                     this.index = index
                                 }
@@ -51,14 +50,12 @@ class ServiceSelectionBottomSheetViewModel(private val repository: AppRepository
                     }
                 } else {
                     if (model.districtList.isEmpty()) {
-                        val allDistrictResponse = repository.loadAllDistricts()
+                        val allDistrictResponse = repository.loadAllDistrictsById(0)
                         if (allDistrictResponse is NetworkResponse.Success) {
                             val locationList = allDistrictResponse.body.model
                             if (!locationList.isNullOrEmpty()) {
-                                val districtList = locationList.filter { it.parentId == 0 }
                                 model.apply {
-                                    this.locationList = locationList
-                                    this.districtList = districtList
+                                    this.districtList = locationList
                                     this.index = index
                                 }
                                 withContext(Dispatchers.Main) {
@@ -66,61 +63,6 @@ class ServiceSelectionBottomSheetViewModel(private val repository: AppRepository
                                 }
                             }
                         }
-                    }
-                }
-            }
-        }
-        return responseData
-    }
-
-    fun fetchServiceDistricts(requestBody: ServiceDistrictsRequest): LiveData<List<AllDistrictListsModel>> {
-        viewState.value = ViewState.ProgressState(true)
-        val responseData = MutableLiveData<List<AllDistrictListsModel>>()
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.fetchServiceDistricts(requestBody)
-            withContext(Dispatchers.Main) {
-                viewState.value = ViewState.ProgressState(false)
-                when (response) {
-                    is NetworkResponse.Success -> {
-                        responseData.value = response.body.model!!
-                    }
-                    is NetworkResponse.ServerError -> {
-                        viewState.value = ViewState.ShowMessage(serverErrorMessage)
-                    }
-                    is NetworkResponse.NetworkError -> {
-                        viewState.value = ViewState.ShowMessage(networkErrorMessage)
-                    }
-                    is NetworkResponse.UnknownError -> {
-                        viewState.value = ViewState.ShowMessage(unknownErrorMessage)
-                        Timber.d(response.error)
-                    }
-                }
-            }
-        }
-        return responseData
-    }
-
-    fun loadAllDistricts(): LiveData<List<AllDistrictListsModel>> {
-        viewState.value = ViewState.ProgressState(true)
-        val responseData = MutableLiveData<List<AllDistrictListsModel>>()
-
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.loadAllDistricts()
-            withContext(Dispatchers.Main) {
-                viewState.value = ViewState.ProgressState(false)
-                when (response) {
-                    is NetworkResponse.Success -> {
-                        responseData.value = response.body.model!!
-                    }
-                    is NetworkResponse.ServerError -> {
-                        viewState.value = ViewState.ShowMessage(serverErrorMessage)
-                    }
-                    is NetworkResponse.NetworkError -> {
-                        viewState.value = ViewState.ShowMessage(networkErrorMessage)
-                    }
-                    is NetworkResponse.UnknownError -> {
-                        viewState.value = ViewState.ShowMessage(unknownErrorMessage)
-                        Timber.d(response.error)
                     }
                 }
             }

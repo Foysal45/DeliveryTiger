@@ -5,12 +5,16 @@ import com.bd.deliverytiger.app.api.RetrofitUtils.createOkHttpClient
 import com.bd.deliverytiger.app.api.RetrofitUtils.getGson
 import com.bd.deliverytiger.app.api.RetrofitUtils.retrofitInstance
 import com.bd.deliverytiger.app.api.endpoint.*
+import com.bd.deliverytiger.app.database.AppDatabase
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.ui.add_order.AddOrderViewModel
 import com.bd.deliverytiger.app.ui.add_order.AddProductViewModel
 import com.bd.deliverytiger.app.ui.add_order.OrderSuccessViewModel
 import com.bd.deliverytiger.app.ui.add_order.service_wise_bottom_sheet.ServiceSelectionBottomSheetViewModel
+import com.bd.deliverytiger.app.ui.all_orders.AllOrderViewModel
+import com.bd.deliverytiger.app.ui.all_orders.order_edit.OrderInfoEditViewModel
 import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadViewModel
+import com.bd.deliverytiger.app.ui.balance_load_history.BalanceLoadHistoryViewModel
 import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillViewModel
 import com.bd.deliverytiger.app.ui.bill_pay_history.ServiceBillHistoryViewModel
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeViewModel
@@ -18,6 +22,7 @@ import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionViewModel
 import com.bd.deliverytiger.app.ui.collection_history.CollectionHistoryViewModel
 import com.bd.deliverytiger.app.ui.collector_tracking.MapViewModel
 import com.bd.deliverytiger.app.ui.complain.ComplainViewModel
+import com.bd.deliverytiger.app.ui.complain.complain_history.ComplainHistoryViewModel
 import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
 import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsViewModel
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
@@ -35,12 +40,14 @@ import com.bd.deliverytiger.app.ui.live.profile.LiveProfileFragmentViewModel
 import com.bd.deliverytiger.app.ui.live.share.LiveShareViewModel
 import com.bd.deliverytiger.app.ui.live.stream.LiveActivityViewModel
 import com.bd.deliverytiger.app.ui.login.AuthViewModel
+import com.bd.deliverytiger.app.ui.notification.NotificationViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingViewModel
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsViewModel
 import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentUpdateViewModel
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementViewModel
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailViewModel
 import com.bd.deliverytiger.app.ui.profile.ProfileViewModel
+import com.bd.deliverytiger.app.ui.quick_order.QuickOrderRequestViewModel
 import com.bd.deliverytiger.app.ui.referral.ReferralViewModel
 import com.bd.deliverytiger.app.ui.return_statement.ReturnStatementViewModel
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeViewModel
@@ -76,6 +83,9 @@ val appModule = module {
     single { ApiInterfaceANA(get(named("ana"))) }
 
     single { AppRepository(get(), get(), get(), get(), get(), get(), get(), get()) }
+    single { AppDatabase.invoke(get()) }
+
+    single { AppRepository(get(), get(), get(), get(), get(), get(), get(), get()) }
 
     single { HomeViewModel(get()) }
 
@@ -105,6 +115,12 @@ val appModule = module {
     viewModel { InstantPaymentUpdateViewModel(get()) }
     viewModel { AuthViewModel(get()) }
     viewModel { ServiceSelectionBottomSheetViewModel(get()) }
+    viewModel { AllOrderViewModel(get()) }
+    viewModel { BalanceLoadHistoryViewModel(get()) }
+    viewModel { ComplainHistoryViewModel(get()) }
+    viewModel { OrderInfoEditViewModel(get()) }
+    viewModel { QuickOrderRequestViewModel(get()) }
+    viewModel { NotificationViewModel(get()) }
     viewModel { LiveHomeActivityViewModel(get()) }
     viewModel { LiveHomeActivityViewModelNew(get()) }
     viewModel { LiveScheduleListViewModel(get()) }

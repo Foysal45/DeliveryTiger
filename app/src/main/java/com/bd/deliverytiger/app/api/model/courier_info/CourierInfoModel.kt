@@ -84,6 +84,10 @@ data class CourierInfoModel(
     var preferredPaymentCycleDate: String? = "",
     @SerializedName("preferredPaymentCycle")
     var preferredPaymentCycle: String? = "",
+    @SerializedName("adminUsers")
+    var adminUsers: AdminUser? = AdminUser(),
+    @SerializedName("isQuickOrderActive")
+    var isQuickOrderActive: Boolean = false,
 
     //Internal
     var isOfferTaken: Boolean = false

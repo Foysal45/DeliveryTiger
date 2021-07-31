@@ -191,15 +191,6 @@ object SessionManager {
             }
         }
 
-    var collectionCharge: Double
-        get() {
-            return pref.getFloat("collectionCharge", 0f).toDouble()
-        }
-        set(value) {
-            pref.edit {
-                putFloat("collectionCharge", value.toFloat())
-            }
-        }
 
     var returnCharge: Double
         get() {
@@ -218,6 +209,36 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putFloat("maxCodCharge", value.toFloat())
+            }
+        }
+
+    var codChargeMin: Int
+        get() {
+            return pref.getInt("codChargeMin", 10)
+        }
+        set(value) {
+            pref.edit {
+                putInt("codChargeMin", value)
+            }
+        }
+
+    var codChargePercentageInsideDhaka: Double
+        get() {
+            return pref.getFloat("codChargePercentageInsideDhaka", 1f).toDouble()
+        }
+        set(value) {
+            pref.edit {
+                putFloat("codChargePercentageInsideDhaka", value.toFloat())
+            }
+        }
+
+    var codChargePercentageOutsideDhaka: Double
+        get() {
+            return pref.getFloat("codChargePercentageOutsideDhaka", 1f).toDouble()
+        }
+        set(value) {
+            pref.edit {
+                putFloat("codChargePercentageOutsideDhaka", value.toFloat())
             }
         }
 
@@ -499,6 +520,46 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putInt("instantPaymentAmount", value)
+            }
+        }
+
+    var collectionCharge: Double
+        get() {
+            return pref.getFloat("collectionCharge", 0.0f).toDouble()
+        }
+        set(value) {
+            pref.edit {
+                putFloat("collectionCharge", value.toFloat())
+            }
+        }
+
+    var merchantDistrict: Int
+        get() {
+            return pref.getInt("merchantDistrict", 0)
+        }
+        set(value) {
+            pref.edit {
+                putInt("merchantDistrict", value)
+            }
+        }
+
+    var retentionManagerName: String
+        get() {
+            return pref.getString("retentionManagerName", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("retentionManagerName", value)
+            }
+        }
+
+    var retentionManagerNumber: String
+        get() {
+            return pref.getString("retentionManagerNumber", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("retentionManagerNumber", value)
             }
         }
 

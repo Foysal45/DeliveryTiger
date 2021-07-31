@@ -2,6 +2,8 @@ package com.bd.deliverytiger.app.api.endpoint
 
 import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.GenericResponse
+import com.bd.deliverytiger.app.api.model.ResponseHeader
+import com.bd.deliverytiger.app.api.model.accepted_orders.AcceptedOrder
 import com.bd.deliverytiger.app.api.model.accounts.BalanceInfo
 import com.bd.deliverytiger.app.api.model.balance_load.BalanceLimitResponse
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceMainResponse
@@ -15,6 +17,9 @@ import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.collection_history.CollectionData
+import com.bd.deliverytiger.app.api.model.collector_info.CollectorInfoRequest
+import com.bd.deliverytiger.app.api.model.collector_info.CollectorInformation
+import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.config.BannerResponse
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
@@ -23,7 +28,6 @@ import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnC
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsResponse
-import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
 import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
 import com.bd.deliverytiger.app.api.model.helpline_number.HelpLineNumberModel
@@ -41,6 +45,9 @@ import com.bd.deliverytiger.app.api.model.order_track.OrderTrackResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
+import com.bd.deliverytiger.app.api.model.quick_order.*
+import com.bd.deliverytiger.app.api.model.quick_order.quick_order_history.QuickOrderList
+import com.bd.deliverytiger.app.api.model.quick_order.quick_order_history.QuickOrderListRequest
 import com.bd.deliverytiger.app.api.model.referral.OfferData
 import com.bd.deliverytiger.app.api.model.referral.RefereeInfo
 import com.bd.deliverytiger.app.api.model.referral.ReferrerInfo
@@ -75,11 +82,8 @@ interface ApiInterfaceCore {
     @GET("api/Dashboard/GetCollection/{courierUserId}")
     suspend fun fetchCollection(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<DashboardData>, ErrorResponse>
 
-    @GET("api/Other/GetAllDistrictFromApi/{id}")
-    fun getAllDistrictFromApi(@Path("id") id: Int): Call<DeliveryChargePayLoad>
-
-    @GET("api/Fetch/LoadAllDistricts")
-    suspend fun loadAllDistricts(): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>
+    @GET("api/Fetch/LoadAllDistrictsById/{id}")
+    suspend fun loadAllDistrictsById(@Path("id") id: Int): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>
 
     @POST("api/Fetch/GetServiceDistricts")
     suspend fun fetchServiceDistricts(@Body requestBody: ServiceDistrictsRequest): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>
@@ -91,7 +95,7 @@ interface ApiInterfaceCore {
     fun getMerchantCredit(@Path("courierUserId") courierUserId: Int): Call<GenericResponse<Boolean>>
 
     @GET("api/Fetch/GetBreakableCharge")
-    fun getBreakableCharge(): Call<GenericResponse<BreakableChargeData>>
+    suspend fun getBreakableCharge(): NetworkResponse<GenericResponse<BreakableChargeData>, ErrorResponse>
 
     @GET("api/Fetch/GetPackagingChargeRange/{onlyActive}")
     fun getPackagingCharge(@Path("onlyActive") onlyActive: Boolean = true): Call<GenericResponse<List<PackagingData>>>
@@ -128,10 +132,10 @@ interface ApiInterfaceCore {
     suspend fun addPickupLocations(@Body requestBody: PickupLocation): NetworkResponse<GenericResponse<PickupLocation>, ErrorResponse>
 
     @PUT("api/Update/UpdatePickupLocations/{id}")
-    suspend fun  updatePickupLocations(@Path("id") id: Int, @Body requestBody: PickupLocation): NetworkResponse<GenericResponse<PickupLocation>, ErrorResponse>
+    suspend fun updatePickupLocations(@Path("id") id: Int, @Body requestBody: PickupLocation): NetworkResponse<GenericResponse<PickupLocation>, ErrorResponse>
 
     @DELETE("api/Delete/DeletePickupLocations/{id}")
-    suspend fun  deletePickupLocations(@Path("id") id: Int): NetworkResponse<GenericResponse<Int>, ErrorResponse>
+    suspend fun deletePickupLocations(@Path("id") id: Int): NetworkResponse<GenericResponse<Int>, ErrorResponse>
 
     @GET("api/Fetch/GetMerchantCollectionCharge/{courierUserId}")
     fun getCollectionCharge(@Path("courierUserId") courierUserId: Int): Call<GenericResponse<Int>>
@@ -170,7 +174,7 @@ interface ApiInterfaceCore {
     suspend fun fetchPriceList(@Path("districtId") districtId: Int, @Path("deliveryRangeId") deliveryRangeId: Int): NetworkResponse<GenericResponse<List<WeightPrice>>, ErrorResponse>
 
     @POST("api/Fetch/LoadCourierOrderAmountDetailsV2")
-     suspend fun fetchServiceBillDetails(@Body requestBody: BillingServiceReqBody): NetworkResponse<GenericResponse<BillingServiceMainResponse>, ErrorResponse>
+    suspend fun fetchServiceBillDetails(@Body requestBody: BillingServiceReqBody): NetworkResponse<GenericResponse<BillingServiceMainResponse>, ErrorResponse>
 
     @POST("api/Fetch/GetCodCollections")
     suspend fun fetchCODCollectionDetails(@Body requestBody: CODReqBody): NetworkResponse<GenericResponse<CODResponse>, ErrorResponse>
@@ -194,7 +198,8 @@ interface ApiInterfaceCore {
     suspend fun fetchReturnStatement(
         @Path("courierUserId") courierUserId: Int,
         @Path("index") index: Int,
-        @Path("count") count: Int): NetworkResponse<GenericResponse<List<ReturnStatementData>> ,ErrorResponse>
+        @Path("count") count: Int
+    ): NetworkResponse<GenericResponse<List<ReturnStatementData>>, ErrorResponse>
 
     @GET("api/Fetch/GetSurveyQuestion")
     suspend fun fetchSurveyQuestion(): NetworkResponse<GenericResponse<List<SurveyQuestionModel>>, ErrorResponse>
@@ -213,4 +218,36 @@ interface ApiInterfaceCore {
 
     @GET("api/Dashboard/GetHelpLineNumbers")
     suspend fun fetchHelpLineNumbers(): NetworkResponse<GenericResponse<HelpLineNumberModel>, ErrorResponse>
+
+    @POST("api/Fetch/GetRidersOfficeInfo")
+    suspend fun getRidersOfficeInfo(@Body requestBody: CollectorInfoRequest): NetworkResponse<GenericResponse<CollectorInformation>, ErrorResponse>
+
+    @PUT("api/Update/UpdateCourierOrdersAppV2/{orderId}")
+    suspend fun updateOrderInfo(
+        @Path("orderId") orderId: String,
+        @Body requestBody: UpdateOrderReqBody
+    ): NetworkResponse<GenericResponse<UpdateOrderResponse>, ErrorResponse>
+
+    //Quick Order Request
+    @POST("api/Fetch/GetCollectionTimeSlotByTime")
+    suspend fun getCollectionTimeSlot(@Body requestBody: TimeSlotRequest): NetworkResponse<GenericResponse<List<QuickOrderTimeSlotData>>, ErrorResponse>
+
+    @POST("api/Entry/AddOrderRequest")
+    suspend fun quickOrderRequest(@Body requestBody: QuickOrderRequest): NetworkResponse<GenericResponse<QuickOrderRequestResponse>, ErrorResponse>
+
+    @POST("api/Bondhu/GetMerchantQuickOrders")
+    suspend fun getMerchantQuickOrders(@Body requestBody: QuickOrderListRequest): NetworkResponse<GenericResponse<List<QuickOrderList>>, ErrorResponse>
+
+    @PUT("api/QuickOrder/UpdateMultipleTimeSlot")
+    suspend fun updateMultipleTimeSlot(@Body requestBody: List<TimeSlotUpdateRequest>): NetworkResponse<GenericResponse<Int>, ErrorResponse>
+
+    @DELETE("api/QuickOrder/DeleteOrderRequest/{orderRequestId}")
+    suspend fun deleteOrderRequest(@Path("orderRequestId") orderRequestId: Int): NetworkResponse<GenericResponse<Int>, ErrorResponse>
+
+    @POST("api/Bondhu/AddLatLag")
+    suspend fun updateCourierStatusDT(@Body requestBody: StatusLocationRequest): NetworkResponse<GenericResponse<Int>, ErrorResponse>
+
+    @GET("api/Fetch/GetAcceptedCourierOrders/{courierUserId}")
+    suspend fun fetchAcceptedCourierOrders(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<AcceptedOrder>, ErrorResponse>
+
 }

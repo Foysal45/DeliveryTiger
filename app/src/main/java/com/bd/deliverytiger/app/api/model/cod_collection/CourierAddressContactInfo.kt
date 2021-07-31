@@ -33,7 +33,16 @@ data class CourierAddressContactInfo(
     @SerializedName("areaPostalCode")
     var areaPostalCode: String? = null,
     @SerializedName("assignedExpressCourierId")
-    var assignedExpressCourierId: Int? = null,
+    var assignedExpressCourierId: Int = 0,
     @SerializedName("assignedCourierId")
-    var assignedCourierId: Int? = null
+    var assignedCourierId: Int = 0,
+    @SerializedName("collectAddressDistrictId")
+    var collectAddressDistrictId: Int = 0,
+    @SerializedName("collectAddressThanaId")
+    var collectAddressThanaId: Int = 0,
+    @SerializedName("collectDistrictName")
+    var collectDistrictName: String? = "",
+    @SerializedName("collectThanaName")
+    var collectThanaName: String? = ""
+
 )

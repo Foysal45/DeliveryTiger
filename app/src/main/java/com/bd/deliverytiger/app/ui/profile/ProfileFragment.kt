@@ -18,11 +18,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
-import com.bd.deliverytiger.app.api.model.district.ThanaPayLoad
+import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
+import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import com.bd.deliverytiger.app.databinding.FragmentProfileBinding
+import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
 import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.district.v2.CustomModel
 import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
@@ -35,8 +36,10 @@ import com.bd.deliverytiger.app.utils.VariousTask.getCircularImage
 import com.bd.deliverytiger.app.utils.VariousTask.saveImage
 import com.bd.deliverytiger.app.utils.VariousTask.scaledBitmapImage
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 import java.io.File
 import java.io.InputStream
+import java.util.*
 
 @SuppressLint("SetTextI18n")
 class ProfileFragment : Fragment() {
@@ -45,8 +48,8 @@ class ProfileFragment : Fragment() {
     private val viewModel: ProfileViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
 
-    private val districtList: ArrayList<DistrictDeliveryChargePayLoad> = ArrayList()
-    private val thanaOrAriaList: ArrayList<ThanaPayLoad> = ArrayList()
+    private val districtList: MutableList<AllDistrictListsModel> = mutableListOf()
+    private val thanaOrAriaList: MutableList<AllDistrictListsModel> = mutableListOf()
     private val GALLERY_REQ_CODE = 101
 
     private var districtId = 0
@@ -200,111 +203,60 @@ class ProfileFragment : Fragment() {
         //track = 1 district , track = 2 thana, track = 3 aria
         val dialog = progressDialog()
         dialog.show()
-        viewModel.getAllDistrictFromApi(id).observe(viewLifecycleOwner, Observer {
+        viewModel.loadAllDistrictsById(id).observe(viewLifecycleOwner, Observer { list ->
             dialog.dismiss()
             when (track) {
                 1 -> {
                     districtList.clear()
-                    districtList.addAll(it)
-                    goToDistrict()
+                    districtList.addAll(list)
+                    goToLocationSelectionDialog(districtList, 1)
                 }
                 2 -> {
                     thanaOrAriaList.clear()
-                    thanaOrAriaList.addAll(it[0].thanaHome!!)
-                    if (thanaOrAriaList.isNotEmpty()) {
-                        //customAlertDialog(thanaOrAriaList, 1)
-                        val mList: ArrayList<CustomModel> = ArrayList()
-                        for ((index, model) in thanaOrAriaList.withIndex()) {
-                            mList.add(CustomModel(model.thanaId, model.thanaBng + "", model.thana + "", index))
-                        }
-                        thanaAriaSelect(thanaOrAriaList, 2, mList, "থানা নির্বাচন করুন")
-                    }
+                    thanaOrAriaList.addAll(list)
+                    goToLocationSelectionDialog(thanaOrAriaList, 2)
                 }
                 3 -> {
                     thanaOrAriaList.clear()
-                    thanaOrAriaList.addAll(it[0].thanaHome!!)
-                    if (thanaOrAriaList.isNotEmpty()) {
-                        // customAlertDialog(thanaOrAriaList, 2)
-                        val mList: ArrayList<CustomModel> = ArrayList()
-                        var temp = 0
-                        for ((index, model) in thanaOrAriaList.withIndex()) {
-                            temp = 0
-                            if (model.postalCode != null && model.postalCode?.isNotEmpty()!!) {
-                                temp = model.postalCode?.toInt()!!
-                            }
-                            mList.add(CustomModel(temp, model.thanaBng + "", model.thana + "", index))
-                        }
-                        thanaAriaSelect(thanaOrAriaList, 3, mList, "এরিয়া/পোস্ট অফিস নির্বাচন করুন")
-                    }
-                }
-                4 -> {
-                    //setUpCollectionSpinner(null, it.first().thanaHome, 2)
+                    thanaOrAriaList.addAll(list)
+                    goToLocationSelectionDialog(thanaOrAriaList, 3)
                 }
             }
         })
     }
 
-    private fun goToDistrict() {
+    private fun goToLocationSelectionDialog(list: MutableList<AllDistrictListsModel>, operationFlag: Int) {
 
-        val distFrag = DistrictSelectFragment.newInstance(requireContext(), districtList)
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
-        ft?.add(R.id.mainActivityContainer, distFrag, DistrictSelectFragment.tag)
-        ft?.addToBackStack(DistrictSelectFragment.tag)
-        ft?.commit()
+        val locationList: MutableList<LocationData> = mutableListOf()
+        list.forEach { model ->
+            locationList.add(LocationData.from(model))
+        }
 
-        distFrag.setOnClick(object : DistrictSelectFragment.DistrictClick {
-            override fun onClick(position: Int, name: String, clickedID: Int) {
-
-                districtId = clickedID
-                thanaId = 0
-                areaId = 0
-                binding?.districtSelect?.setText(name)
-                districtName = name
-
-                binding?.thanaSelect?.setText("")
-                binding?.areaSelect?.setText("")
-                binding?.areaSelect?.visibility = View.GONE
-            }
-        })
-    }
-
-    private fun thanaAriaSelect(thanaOrAriaList: ArrayList<ThanaPayLoad>, track: Int, list: ArrayList<CustomModel>, title: String) {
-        //track = 1 district , track = 2 thana, track = 3 aria
-        val distFrag = DistrictThanaAriaSelectFragment.newInstance(requireContext(), list, title)
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
-        ft?.add(R.id.mainActivityContainer, distFrag, DistrictSelectFragment.tag)
-        ft?.addToBackStack(DistrictSelectFragment.tag)
-        ft?.commit()
-
-        distFrag.onItemClick = { adapterPosition: Int, name: String, id: Int, listPostion ->
-            //Timber.e("distFrag1", adapterPosition.toString()+" "+listPostion.toString() + " " + name + " " + id +" "+thanaOrAriaList[listPostion].postalCode+" s")
-
-            when (track) {
-                2 -> {
-                    val model = thanaOrAriaList[listPostion]
-                    thanaId = model.thanaId
-                    thanaName = model.thanaBng ?: ""
+        val dialog = LocationSelectionDialog.newInstance(locationList)
+        dialog.show(childFragmentManager, LocationSelectionDialog.tag)
+        dialog.onLocationPicked = { model ->
+            when (operationFlag) {
+                1 -> {
+                    districtId = model.id
+                    thanaId = 0
                     areaId = 0
-                    isAriaAvailable = model.hasArea == 1
-                    binding?.thanaSelect?.setText(model.thanaBng)
-                    /*binding?.areaSelect?.setText("")
-                    if (isAriaAvailable) {
-                        binding?.areaSelect?.visibility = View.VISIBLE
-                    } else {
-                        binding?.areaSelect?.visibility = View.GONE
-                    }*/
+                    binding?.districtSelect?.setText(model.displayNameBangla)
+                    districtName = model.displayNameBangla ?: ""
+
+                    binding?.thanaSelect?.setText("")
+                    binding?.areaSelect?.setText("")
+                    binding?.areaSelect?.visibility = View.GONE
+                }
+                2 -> {
+                    thanaId = model.id
+                    thanaName = model.displayNameBangla ?: ""
+                    binding?.thanaSelect?.setText(model.displayNameBangla)
+                    areaId = 0
                 }
                 3 -> {
-                    val model = thanaOrAriaList[listPostion]
-                    areaId = model.thanaId
-                    areaName = model.thanaBng ?: ""
-                    if (!model.postalCode.isNullOrEmpty()) {
-                        binding?.areaSelect?.setText("${model.thanaBng} (${DigitConverter.toBanglaDigit(model.postalCode)})")
-                    } else {
-                        binding?.areaSelect?.setText(model.thanaBng)
-                    }
+                    areaId = model.id
+                    areaName = model.displayNameBangla ?: ""
+                    binding?.areaSelect?.setText(areaName)
                 }
             }
         }
@@ -575,17 +527,19 @@ class ProfileFragment : Fragment() {
                 //Timber.d("HomeActivityLog 2 ", myBitmap.allocationByteCount.toString()+" "+ myBitmap.byteCount.toString())
             }
         } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == GALLERY_REQ_CODE) {
-            val imageStream: InputStream = activity?.contentResolver?.openInputStream(Uri.parse(data?.data.toString()))!!
-            val scImg = scaledBitmapImage(BitmapFactory.decodeStream(imageStream))
-            binding?.profilePic?.setImageDrawable(getCircularImage(context, scImg))
-
-            SessionManager.profileImgUri = saveImage(scImg)
+            val imageStream: InputStream? = activity?.contentResolver?.openInputStream(Uri.parse(data?.data.toString()))
+            imageStream?.let {
+                val scImg = scaledBitmapImage(BitmapFactory.decodeStream(imageStream))
+                binding?.profilePic?.setImageDrawable(getCircularImage(context, scImg))
+                SessionManager.profileImgUri = saveImage(scImg)
+            }
         }
     }
 
@@ -636,7 +590,7 @@ class ProfileFragment : Fragment() {
 
     private fun setUpPickupDistrict() {
 
-        viewModel.loadAllDistricts().observe(viewLifecycleOwner, Observer { list->
+        viewModel.loadAllDistrictsById(0).observe(viewLifecycleOwner, Observer { list->
 
             val filterList = list.filter { it.isPickupLocation }
             val pickupDistrictList: MutableList<String> = mutableListOf()
@@ -664,7 +618,6 @@ class ProfileFragment : Fragment() {
             }
 
         })
-
 
     }
 

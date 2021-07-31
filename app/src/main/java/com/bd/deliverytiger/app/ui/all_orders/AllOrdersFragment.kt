@@ -1,6 +1,5 @@
 package com.bd.deliverytiger.app.ui.all_orders
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,14 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.endpoint.AllOrderInterface
-import com.bd.deliverytiger.app.api.endpoint.PlaceOrderInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
-import com.bd.deliverytiger.app.api.model.order.UpdateOrderResponse
+import com.bd.deliverytiger.app.ui.all_orders.details_bottomsheet.AllOrdersDetailsDialog
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
@@ -31,11 +29,14 @@ import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.MaterialDatePicker
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.lifecycle.Observer
+import com.bd.deliverytiger.app.ui.all_orders.order_edit.OrderInfoEditBottomSheet
 
 class AllOrdersFragment : Fragment() {
 
@@ -87,6 +88,8 @@ class AllOrdersFragment : Fragment() {
 
     private var sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
     private var isFromDashBoard: Boolean = false
+
+    private val viewModel: AllOrderViewModel by inject()
 
     companion object {
         fun newInstance(shouldOpenFilter: Boolean = false, isFromDashBoard: Boolean = false): AllOrdersFragment = AllOrdersFragment().apply {
@@ -172,6 +175,10 @@ class AllOrdersFragment : Fragment() {
             }
         })
 
+        allOrdersAdapter.onItemClick = { model, position ->
+            showAllOrdersDetailsBottomSheet(model)
+        }
+
         allOrdersAdapter.onOrderItemClick = { position ->
             addOrderTrackFragment(courierOrderViewModelList!![position]?.courierOrdersId.toString())
         }
@@ -179,11 +186,12 @@ class AllOrdersFragment : Fragment() {
         allOrdersAdapter.onEditItemClick = { position ->
             val model = courierOrderViewModelList[position]
             val orderUpdateReqBody = UpdateOrderReqBody(
+                model.customerName,
                 model.courierAddressContactInfo?.mobile,
                 model.courierAddressContactInfo?.otherMobile,
-                model.courierAddressContactInfo?.address,
+                model.courierAddressContactInfo?.address
             )
-            editOrder(model.courierOrdersId.toString(), orderUpdateReqBody, position)
+            editOrder(model.courierOrdersId.toString(), model, orderUpdateReqBody, position)
         }
 
         allOrdersAdapter.onLocationBtnClick = { model, position ->
@@ -206,6 +214,12 @@ class AllOrdersFragment : Fragment() {
             dateRangePicker()
         }
 
+    }
+
+    private fun showAllOrdersDetailsBottomSheet(model: CourierOrderViewModel) {
+        val tag: String = AllOrdersDetailsDialog.tag
+        val dialog: AllOrdersDetailsDialog = AllOrdersDetailsDialog.newInstance(model)
+        dialog.show(childFragmentManager, tag)
     }
 
     private fun dateRangePicker() {
@@ -265,8 +279,11 @@ class AllOrdersFragment : Fragment() {
                         paymentPaid = response.body()!!.model.adCourierPaymentInfo?.paymentPaid?.toInt() ?: 0
                         paymentReady = response.body()!!.model.adCourierPaymentInfo?.paymentReady?.toInt() ?: 0
 
-                        courierOrderViewModelList?.addAll(response.body()!!.model.courierOrderViewModel!!)
-                        totalLoadedData = courierOrderViewModelList!!.size
+                        if (index == 0) {
+                            courierOrderViewModelList.clear()
+                        }
+                        courierOrderViewModelList.addAll(response.body()!!.model.courierOrderViewModel!!)
+                        totalLoadedData = courierOrderViewModelList.size
 
                         allOrdersAdapter.notifyDataSetChanged()
                         isMoreDataAvailable =
@@ -479,12 +496,34 @@ class AllOrdersFragment : Fragment() {
 
     }
 
-    private fun editOrder(orderId: String,updateOrderReqBody: UpdateOrderReqBody, indexPosition: Int) {
-        val dialogBuilder = AlertDialog.Builder(context)
+    private fun editOrder(orderId: String, model: CourierOrderViewModel, updateOrderReqBody: UpdateOrderReqBody, indexPosition: Int) {
 
+        val tag = OrderInfoEditBottomSheet.tag
+        val dialog = OrderInfoEditBottomSheet.newInstance(model)
+        dialog.show(childFragmentManager, tag)
+        dialog.onUpdate = { orderId, requestBody ->
+            dialog.dismiss()
+            val progressDialog = progressDialog()
+            progressDialog.show()
+            viewModel.updateOrderInfo(orderId, requestBody).observe(viewLifecycleOwner, Observer { model ->
+                progressDialog.dismiss()
+                if (model != null) {
+                    context?.toast(getString(R.string.update_success))
+                    getAllOrders(0, 20)
+                } else {
+                    context?.toast(getString(R.string.error_msg))
+                }
+            })
+        }
+
+       /* val dialogBuilder = AlertDialog.Builder(context)
         val inflater: LayoutInflater = LayoutInflater.from(context)
         val dialogView: View = inflater.inflate(R.layout.custom_order_alert_lay, null)
         dialogBuilder.setView(dialogView)
+        val etAlertAddOrderCustomerName: TextView =
+            dialogView.findViewById(R.id.etAlertAddOrderCustomerName)
+        val etAlertAddOrderProductName: TextView =
+            dialogView.findViewById(R.id.etAlertAddOrderProductName)
         val etAlertAddOrderMobileNo: TextView =
             dialogView.findViewById(R.id.etAlertAddOrderMobileNo)
         val etAlertAlternativeMobileNo: TextView =
@@ -493,10 +532,11 @@ class AllOrdersFragment : Fragment() {
             dialogView.findViewById(R.id.etAlertCustomersAddress)
         val btnAlertSubmit: Button = dialogView.findViewById(R.id.btnAlertSubmit)
 
-
-        etAlertAddOrderMobileNo.setText(updateOrderReqBody.mobile)
-        etAlertAlternativeMobileNo.setText(updateOrderReqBody.otherMobile)
-        etAlertCustomersAddress.setText(updateOrderReqBody.address)
+        etAlertAddOrderCustomerName.text = "Name"
+        etAlertAddOrderProductName.text = "Invoice"
+        etAlertAddOrderMobileNo.text = updateOrderReqBody.mobile
+        etAlertAlternativeMobileNo.text = updateOrderReqBody.otherMobile
+        etAlertCustomersAddress.text = updateOrderReqBody.address
 
         val dialog = dialogBuilder.create()
         dialog.show()
@@ -521,11 +561,26 @@ class AllOrdersFragment : Fragment() {
                  updateOrderApiCall(orderId,updateOrderReqBody,indexPosition)
                 dialog.dismiss()
             }
-        }
+        }*/
     }
 
     private fun updateOrderApiCall(orderId: String,updateOrderReqBody: UpdateOrderReqBody, indexPos: Int){
-        val placeOrderInterface = RetrofitSingleton.getInstance(requireContext()).create(PlaceOrderInterface::class.java)
+
+        viewModel.updateOrderInfo(orderId, updateOrderReqBody).observe(viewLifecycleOwner, Observer { model ->
+            if (model != null) {
+                courierOrderViewModelList.getOrNull(indexPos)?.courierAddressContactInfo?.apply {
+                    mobile = updateOrderReqBody.mobile
+                    otherMobile = updateOrderReqBody.otherMobile
+                    address = updateOrderReqBody.address
+                }
+                allOrdersAdapter.notifyItemChanged(indexPos)
+                context?.toast(getString(R.string.update_success))
+            } else {
+                context?.toast(getString(R.string.error_msg))
+            }
+        })
+
+        /*val placeOrderInterface = RetrofitSingleton.getInstance(requireContext()).create(PlaceOrderInterface::class.java)
         placeOrderInterface.placeOrderUpdate(orderId,updateOrderReqBody).enqueue(object :Callback<GenericResponse<UpdateOrderResponse>>{
             override fun onFailure(call: Call<GenericResponse<UpdateOrderResponse>>, t: Throwable) {
 
@@ -548,7 +603,7 @@ class AllOrdersFragment : Fragment() {
                }
             }
 
-        })
+        })*/
     }
 
     private fun goToMap(hubModel: HubInfo) {

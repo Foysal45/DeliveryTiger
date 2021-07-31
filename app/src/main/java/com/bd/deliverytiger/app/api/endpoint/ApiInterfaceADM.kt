@@ -4,8 +4,10 @@ import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.accounts.AccountDetailsResponse
 import com.bd.deliverytiger.app.api.model.accounts.AccountsData
 import com.bd.deliverytiger.app.api.model.accounts.AdvanceBalanceData
+import com.bd.deliverytiger.app.api.model.balance_load.BalanceLoadHistoryData
 import com.bd.deliverytiger.app.api.model.bill_pay_history.BillPayHistoryResponse
 import com.bd.deliverytiger.app.api.model.complain.ComplainData
+import com.bd.deliverytiger.app.api.model.complain.ComplainHistoryData
 import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.instant_payment_status.InstantPaymentStatusData
@@ -78,5 +80,11 @@ interface ApiInterfaceADM {
 
     @GET("api/account/reports/GetInstantPaymentActivationStatus/{courierUserId}")
     suspend fun getInstantPaymentActivationStatus(@Path("courierUserId") courierUserId: Int): NetworkResponse<InstantPaymentActivationStatusResponse, ErrorResponse>
+
+    @GET("api/Complain/GetAllCommentsDTComplainForApp/{bookingCode}/{isVisibleToMerchant}")
+    suspend fun getComplainHistory(@Path("bookingCode") bookingCode: Int, @Path("isVisibleToMerchant") isVisibleToMerchant: Int): NetworkResponse<List<ComplainHistoryData>, ErrorResponse>
+
+    @GET("api/account/reports/MerchantBalanceLoadHistory/{merchantID}")
+    suspend fun merchantBalanceLoadHistory(@Path("merchantID") merchantID: Int): NetworkResponse<List<BalanceLoadHistoryData>, ErrorResponse>
 
 }

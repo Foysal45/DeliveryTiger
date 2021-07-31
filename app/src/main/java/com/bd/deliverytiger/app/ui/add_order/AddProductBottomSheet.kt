@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.ui.add_order
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.bd.deliverytiger.app.R
@@ -20,10 +22,9 @@ import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.esafirm.imagepicker.features.ImagePicker
-import com.esafirm.imagepicker.features.ReturnMode
-import com.esafirm.imagepicker.model.Image
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -142,7 +143,7 @@ class AddProductBottomSheet  : BottomSheetDialogFragment() {
 
                 val dialog = LocationSelectionDialog.newInstance(locationList)
                 dialog.show(childFragmentManager, LocationSelectionDialog.tag)
-                dialog.onLocationPicked = { _, model ->
+                dialog.onLocationPicked = { model ->
                     selectedDistrictId = model.id
                     districtName = model.displayNameBangla!!
                     binding?.etDistrict?.setText(districtName)
@@ -229,16 +230,12 @@ class AddProductBottomSheet  : BottomSheetDialogFragment() {
     }
 
     private fun pickUpImage() {
-        ImagePicker.create(this)
-            .returnMode(ReturnMode.ALL)
-            .language("bn")
-            .toolbarImageTitle("ছবি নির্বাচন করুন")
-            .includeVideo(false)
-            .single()
-            .folderMode(true)
-            .toolbarFolderTitle("ফোল্ডার নির্বাচন করুন")
-            .theme(R.style.ImagePickerTheme)
-            .start()
+        ImagePicker.with(this)
+            .cropSquare()
+            //.compress(512)
+            .createIntent { intent ->
+                startForProfileImageResult.launch(intent)
+            }
     }
 
     private fun uploadProduct() {
@@ -311,22 +308,37 @@ class AddProductBottomSheet  : BottomSheetDialogFragment() {
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    private val startForProfileImageResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val resultCode = result.resultCode
+        val data = result.data
+        if (resultCode == Activity.RESULT_OK) {
+            val uri = data?.data!!
+
+            imagePath = uri.path ?: ""
+            binding?.image?.let { view ->
+                Glide.with(requireContext())
+                    .load(imagePath)
+                    .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
+                    .into(view)
+            }
+        } else if (resultCode == ImagePicker.RESULT_ERROR) {
+            context?.toast(ImagePicker.getError(data))
+        }
+    }
+
+    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
 
             val image: Image? = ImagePicker.getFirstImageOrNull(data)
             if (image != null) {
                 imagePath = image.path
                 binding?.image?.let { view ->
-                    Glide.with(requireContext())
-                        .load(imagePath)
-                        .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
-                        .into(view)
+                    Glide.with(requireContext()).load(imagePath).apply(RequestOptions().placeholder(R.drawable.ic_banner_place)).into(view)
                 }
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
-    }
+    }*/
 
     private fun scaleImage(path: String, pictureWidth: Int, pictureHeight: Int, imageName: String? = null): String? {
         var imagePath: String? = null

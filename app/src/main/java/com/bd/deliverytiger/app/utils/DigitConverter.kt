@@ -144,4 +144,41 @@ object DigitConverter {
         }
     }
 
+    fun formatTimeRange(inputTime: String?, inputTime1: String?): String {
+        if (inputTime == null || inputTime1 == null) return ""
+        try {
+            val sdf1 = SimpleDateFormat("HH:mm:ss", Locale.US)
+            val sdf2 = SimpleDateFormat("h:mm", Locale.US)
+
+            var hour24 = -1
+            val timeArray = inputTime.split(":")
+            if (timeArray.isNotEmpty()) {
+                hour24 = inputTime.split(":").first().toInt()
+            }
+            /*val timePhase = when (hour24) {
+                in 0..14 -> "সকাল"
+                in 15..17 -> "দুপুর"
+                in 18..24 -> "রাত"
+                else -> ""
+            }*/
+
+            var time112 = ""
+            val time1 = sdf1.parse(inputTime)
+            if (time1 != null) {
+                time112 = sdf2.format(time1)
+            }
+
+            var time212 = ""
+            val time2 = sdf1.parse(inputTime1)
+            if (time2 != null) {
+                time212 = sdf2.format(time2)
+            }
+
+            return "${engCahrReplacer(time112)} - ${engCahrReplacer(time212)}"
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return ""
+        }
+    }
+
 }
