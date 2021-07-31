@@ -82,10 +82,8 @@ val appModule = module {
     single { ApiInterfaceBariKoi(get(named("bariKoi"))) }
     single { ApiInterfaceANA(get(named("ana"))) }
 
-    single { AppRepository(get(), get(), get(), get(), get(), get(), get(), get()) }
+    single { AppRepository(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     single { AppDatabase.invoke(get()) }
-
-    single { AppRepository(get(), get(), get(), get(), get(), get(), get(), get()) }
 
     single { HomeViewModel(get()) }
 

@@ -16,6 +16,7 @@
     <string name="select_yr_time_slot">টাইম স্লট নির্বাচন করুন </string>
     <string name="write_email_address">আপনার ইমেইল এড্রেস লিখুন</string>
     <string name="update_success">সফলভাবে আপডেট হয়েছে</string>
+    <string name="ef_content_desc_image" translatable="false">Image</string>
 
     <string name="select_dist">জেলা নির্বাচন করুন</string>
     <string name="select_thana">থানা নির্বাচন করুন</string>
