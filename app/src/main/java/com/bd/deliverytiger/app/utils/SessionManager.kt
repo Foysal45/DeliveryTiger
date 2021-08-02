@@ -18,6 +18,7 @@ object SessionManager {
     private val Is_LOGIN = "isLogIn"
     private val Key_accessToken = "accessTokenKey"
     private val Key_UserId = "userIdKey"
+    private val Key_ChannelId = "channelIdKey"
     private val Key_UserName = "userNameKey"
     private val Key_UserEmail = "userEmailKey"
     private val Key_UserPic = "userPicKey"
@@ -245,6 +246,16 @@ object SessionManager {
     var courierUserId: Int
         get() {
             return pref.getInt(Key_UserId, 0)
+        }
+        set(value) {
+            pref.edit {
+                putInt(Key_UserId, value)
+            }
+        }
+
+    var channelId: Int
+        get() {
+            return pref.getInt(Key_ChannelId, 0)
         }
         set(value) {
             pref.edit {

@@ -8,5 +8,8 @@ data class LiveStatusUpdateRequest(
     @SerializedName("StatusName")
     var statusName: String? = "",
     @SerializedName("LiveVideoUrl")
-    var liveVideoUrl: String? = ""
+    var liveVideoUrl: String? = "",
+    @SerializedName("FacebookVideoUrl")
+    var facebookVideoUrl: String? = ""
+
 )

@@ -34,6 +34,7 @@ import com.bd.deliverytiger.app.api.model.live.live_schedule.ScheduleData
 import com.bd.deliverytiger.app.api.model.live.live_schedule.ScheduleRequest
 import com.bd.deliverytiger.app.api.model.live.live_schedule_insert.LiveScheduleInsertRequest
 import com.bd.deliverytiger.app.api.model.live.live_schedule_list.MyLiveSchedule
+import com.bd.deliverytiger.app.api.model.live.live_status.LiveStatusUpdateRequest
 import com.bd.deliverytiger.app.api.model.live.share_sms.SMSBody
 import com.bd.deliverytiger.app.api.model.live.share_sms.SMSRequest
 import com.bd.deliverytiger.app.databinding.FragmentLiveScheduleBinding
@@ -45,6 +46,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.fragment_live_schedule.*
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -67,12 +69,14 @@ class LiveScheduleFragment(): Fragment() {
     private var liveId: Int = 0
     private var liveTitle: String = ""
     private var coverUrl: String = ""
+    private var facebookVideoUrl: String = ""
+    private var videoId: String = ""
 
     private var priceRange: String = ""
     private var paymentMode = "both"
 
-    private var redirectToFB: Boolean = false
-    private var isShowMobile: Boolean = false
+    private var redirectToFB: Boolean = true
+    private var isShowMobile: Boolean = true
     private var ownNumber: String = ""
     private var ownAlternateNumber: String = ""
 
@@ -107,19 +111,17 @@ class LiveScheduleFragment(): Fragment() {
         instantLive = activity?.intent?.getBooleanExtra("instantLive", false) ?: false
 
         if (instantLive) {
-            binding?.uploadBtn?.text = "ইন্সট্যান্ট লাইভ শুরু করুন"
-            (activity as LiveScheduleActivity).updateToolbarTitle("ইন্সট্যান্ট লাইভ")
-            findNavController().currentDestination?.label = "ইন্সট্যান্ট লাইভ"
+            binding?.uploadBtn?.text = "ফেসবুক ভিডিও শেয়ার করুন"
+            (activity as LiveScheduleActivity).updateToolbarTitle("ভিডিও শেয়ার")
+            findNavController().currentDestination?.label = "ভিডিও শেয়ার"
         } else {
             binding?.uploadBtn?.text = "শিডিউল সাবমিট করুন"
             (activity as LiveScheduleActivity).updateToolbarTitle("লাইভ শিডিউল")
             findNavController().currentDestination?.label = "লাইভ শিডিউল"
-            initDatePicker()
-            initTimePicker()
         }
-        initPriceList()
         initClickLister()
-
+        ownNumber = SessionManager.mobile
+        ownAlternateNumber = SessionManager.alterMobile
         //ToDo: remove after test
         if (BuildConfig.DEBUG) {
             //testForm()
@@ -127,39 +129,6 @@ class LiveScheduleFragment(): Fragment() {
     }
 
     private fun initClickLister() {
-
-        binding?.checkButtonThirdParty?.setOnCheckedChangeListener { buttonView, isChecked ->
-            when (isChecked) {
-                true -> {
-                    binding?.facebookPageLinkEnableLayout?.isVisible = true
-                }
-                false -> {
-                    binding?.facebookPageLinkEnableLayout?.isVisible = false
-                }
-            }
-        }
-
-        binding?.checkButtonOwn?.setOnCheckedChangeListener { buttonView, isChecked ->
-            redirectToFB = when (isChecked) {
-                true -> {
-                    true
-                }
-                false -> {
-                    false
-                }
-            }
-        }
-
-        binding?.checkButtonPhoneNumberShare?.setOnCheckedChangeListener { buttonView, isChecked ->
-            isShowMobile = when (isChecked) {
-                true -> {
-                    true
-                }
-                false -> {
-                    false
-                }
-            }
-        }
 
         binding?.coverUploadBtn?.setOnClickListener {
             pickUpImage()
@@ -172,9 +141,9 @@ class LiveScheduleFragment(): Fragment() {
             if (validation()) {
                 if (instantLive) {
                     val titleText = "নির্দেশনা"
-                    val descriptionText = "আপনি ৩০ মিনিটের জন্যে ইনস্ট্যান্ট লাইভ শুরু করতে যাচ্ছেন।"
+                    val descriptionText = "আপনি ফেসবুকের ভিডিও শেয়ার করতে যাচ্ছেন।"
                     val noBtnText = "ক্যানসেল"
-                    val yesBtnText = "লাইভ শুরু"
+                    val yesBtnText = "শেয়ার করুন"
 
                     customAlert(titleText, descriptionText, noBtnText, yesBtnText) {
                         if (it == 1) {
@@ -187,19 +156,6 @@ class LiveScheduleFragment(): Fragment() {
             }
         }
 
-        binding?.addPriceBtn?.setOnClickListener {
-            hideKeyboard()
-            val model = priceAdapter.getList().last()
-            if (model.price > 0) {
-                priceAdapter.addItem(PriceTemp())
-                binding?.recyclerViewPrice?.post(Runnable {
-                    binding?.recyclerViewPrice?.scrollToPosition(priceAdapter.itemCount - 1)
-                })
-            } else {
-                context?.toast("প্রাইস লিখুন")
-            }
-        }
-
         binding?.addContactBtn?.setOnClickListener {
             val dialog = LiveShareFragment.newInstance(MyLiveSchedule(), instantLive)
             dialog.show(childFragmentManager, LiveShareFragment.tag)
@@ -209,75 +165,6 @@ class LiveScheduleFragment(): Fragment() {
                 selectedNumberList.addAll(numberList)
                 dialog.dismiss()
             }
-        }
-
-        binding?.paymentGroup?.setOnCheckedChangeListener { group, checkedId ->
-            when (checkedId) {
-                R.id.bothPayment -> {
-                    paymentMode = "both"
-                }
-                R.id.advPayment -> {
-                    paymentMode = "advance"
-                }
-            }
-        }
-
-        binding?.checkButtonFB?.setOnCheckedChangeListener { buttonView, isChecked ->
-            when (isChecked) {
-                true -> {
-                    //context?.toast( "checkButtonFB checked")
-                    isFacebook = true
-                    binding?.fbStreamLayout?.isVisible = true
-                    binding?.fbStreamUrl?.setText(SessionManager.fbStreamURL)
-                    binding?.fbStreamKey?.setText(SessionManager.fbStreamKey)
-                    binding?.nestedScrollView?.post {
-                        binding?.nestedScrollView?.fullScroll(View.FOCUS_DOWN)
-                        binding?.fbStreamLayout?.requestFocus()
-                    }
-                }
-                false -> {
-                    //context?.toast( "checkButtonFB unchecked")
-                    isFacebook = false
-                    binding?.facebookTV?.isVisible = false
-                    binding?.fbStreamLayout?.isVisible = false
-                    binding?.fbStreamUrl?.setText("")
-                    binding?.fbStreamKey?.setText("")
-                }
-            }
-        }
-
-        binding?.checkButtonYT?.setOnCheckedChangeListener { buttonView, isChecked ->
-            when (isChecked) {
-                true -> {
-                    //context?.toast( "checkButtonYT checked")
-                    isYoutube = true
-                    binding?.youtubeStreamLayout?.isVisible = true
-                    binding?.youtubeStreamUrl?.setText(SessionManager.youtubeStreamURL)
-                    binding?.youtubeStreamKey?.setText(SessionManager.youtubeStreamKey)
-                    binding?.nestedScrollView?.post {
-                        binding?.nestedScrollView?.fullScroll(View.FOCUS_DOWN)
-                        binding?.youtubeStreamUrl?.requestFocus()
-                    }
-                }
-                false -> {
-                    //context?.toast( "checkButtonYT unchecked")
-                    isYoutube = false
-                    binding?.youtubeTV?.isVisible = false
-                    binding?.youtubeStreamLayout?.isVisible = false
-                    binding?.youtubeStreamUrl?.setText("")
-                    binding?.youtubeStreamKey?.setText("")
-                }
-            }
-        }
-
-        binding?.fbAbout?.setOnClickListener {
-            val imageSource = R.drawable.ic_fb_stream_about
-            pictureDialog(imageSource)
-        }
-
-        binding?.ytAbout?.setOnClickListener {
-            val imageSource = R.drawable.ic_yt_stream_about
-            pictureDialog(imageSource)
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
@@ -305,32 +192,6 @@ class LiveScheduleFragment(): Fragment() {
         })
     }
 
-    private fun initPriceList() {
-        priceAdapter = PriceAdapter()
-        priceAdapter.addItem(PriceTemp())
-        priceAdapter.addItem(PriceTemp())
-        priceAdapter.addItem(PriceTemp())
-        priceAdapter.addItem(PriceTemp())
-        priceAdapter.addItem(PriceTemp())
-        with(binding?.recyclerViewPrice!!) {
-            setHasFixedSize(false)
-            isNestedScrollingEnabled = false
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = priceAdapter
-        }
-        priceAdapter.onItemRemove = { model, position ->
-            hideKeyboard()
-            if (priceAdapter.getList().isEmpty()){
-                binding?.recyclerViewPrice?.visibility = View.GONE
-                //binding?.productListTitle?.visibility = View.GONE
-            }
-        }
-        priceAdapter.onMsg = { model, position ->
-            context?.toast("কমপক্ষে একটি প্রাইস থাকতে হবে")
-        }
-    }
-
     private fun instantScheduleTime() {
         scheduleId = 0
         liveDate = sdf.format(Date().time)
@@ -339,22 +200,23 @@ class LiveScheduleFragment(): Fragment() {
     }
 
     private fun insertSchedule() {
-        var userId = SessionManager.courierUserId
+        var userId = 328702//SessionManager.courierUserId
 
         val model = LiveScheduleInsertRequest(
             liveDate, fromTime, toTime,
-            userId, "merchant", 1,
+            userId, "customer", 1,
             userId, scheduleId, liveTitle,
             priceRange, paymentMode, redirectToFB, isShowMobile, ownNumber, ownAlternateNumber,
             fbPageUrl, isFacebook, fbStreamUrl, fbStreamKey,
-            isYoutube, youtubeStreamUrl, youtubeStreamKey, if (instantLive) 1 else 0
+            isYoutube, youtubeStreamUrl, youtubeStreamKey, if (instantLive) 1 else 0,
+            facebookVideoUrl, videoId, "dt-android-${appVersion()}"
         )
         Timber.d("requestBody $model")
 
         viewModel.insertLiveSchedule(model).observe(viewLifecycleOwner, Observer { id ->
             if (id == -1) {
                 if (instantLive) {
-                    context?.toast("আমাদের Instant Live -এর সবকয়টি এই মুহূর্তে ব্যাস্ত আছে, আপনি একটু পর আবার চেষ্টা করুন অথবা Live Schedule নিন")
+                    context?.toast("এই মুহূর্তে সার্ভারের কোনো সমস্যা হচ্ছে, অনুগ্রহপূর্বক একটু পর আবার চেষ্টা করুন।")
                 } else {
                     context?.toast("কারেন্ট লাইভ শিডিউল খালি নেই, অন্য শিডিউল সিলেক্ট করুন")
                 }
@@ -366,18 +228,19 @@ class LiveScheduleFragment(): Fragment() {
                 liveId = id
                 Timber.tag("LiveScheduleFragment").d("insertLiveSchedule with $liveId")
                 insertLiveCover()
+                updateLiveStatus()
             }
         })
     }
 
     private fun insertLiveCover() {
-        val progressDialog = progressDialog("লাইভ শিডিউল তৈরি হচ্ছে, অপেক্ষা করুন")
+        val progressDialog = progressDialog("ভিডিও শেয়ার হচ্ছে, অপেক্ষা করুন")
         progressDialog.setCancelable(false)
         progressDialog.setCanceledOnTouchOutside(false)
         progressDialog.show()
         viewModel.uploadLiveCoverPhoto(requireContext(), liveId, coverUrl).observe(viewLifecycleOwner, Observer { flag ->
             if (flag) {
-                Timber.tag("LiveScheduleFragment").d("Live cover upload")
+                Timber.tag("LiveScheduleFragment").d("Video cover upload")
                 progressDialog.dismiss()
                 //showCompleteDialog(liveId)
                 if (instantLive && selectedNumberList.isNotEmpty()) {
@@ -394,7 +257,7 @@ class LiveScheduleFragment(): Fragment() {
                     )
                     viewModel.shareSMS(smsRequest).observe(viewLifecycleOwner, Observer { flag ->
                         if (flag) {
-                            context?.toast("লাইভ শেয়ার sms পাঠানো হয়েছে")
+                            context?.toast("ভিডিও শেয়ার sms পাঠানো হয়েছে")
                         }
                     })
                 }
@@ -406,6 +269,13 @@ class LiveScheduleFragment(): Fragment() {
                 activity?.setResult(Activity.RESULT_OK, intent)
                 activity?.finish()
             }
+        })
+    }
+
+    private fun updateLiveStatus() {
+        val status = "replay"
+        val requestBody = LiveStatusUpdateRequest(liveId, status, "", facebookVideoUrl)
+        viewModel.updateLiveStatus(requestBody).observe(viewLifecycleOwner, Observer { flag ->
         })
     }
 
@@ -431,94 +301,34 @@ class LiveScheduleFragment(): Fragment() {
         }
     }
 
-    private fun datePicker() {
-        val currentDateStamp = Date().time
-        val constraintsBuilder = CalendarConstraints.Builder()
-        constraintsBuilder.setStart(currentDateStamp)
-        constraintsBuilder.setValidator(object : CalendarConstraints.DateValidator {
-            override fun describeContents(): Int {
-                return 0
-            }
-
-            override fun writeToParcel(p0: Parcel?, p1: Int) {
-                p0?.writeLong(currentDateStamp)
-            }
-
-            override fun isValid(date: Long): Boolean {
-                return date >= currentDateStamp
-            }
-
-        })
-
-        val builder = MaterialDatePicker.Builder.datePicker()
-        builder.setTitleText("ডেট সিলেক্ট করুন")
-        builder.setCalendarConstraints(constraintsBuilder.build())
-        val picker = builder.build()
-        picker.show(childFragmentManager, "Picker")
-        picker.addOnPositiveButtonClickListener { date ->
-            val pickedDate = sdf.format(date)
-            //binding?.dateTV?.text = pickedDate
-            fetchLiveSchedule(pickedDate)
-        }
-    }
-
     private fun validation(): Boolean {
 
         hideKeyboard()
-
+        facebookVideoUrl = binding?.fbVideoUrl?.text?.toString()?.trim() ?: ""
         liveTitle = binding?.titleName?.text?.toString()?.trim() ?: ""
+
         if (liveTitle.isEmpty()) {
-            context?.toast("লাইভ টাইটেল লিখুন")
+            context?.toast("ভিডিও টাইটেল লিখুন")
             return false
         }
 
         if (coverUrl.isEmpty()) {
-            context?.toast("লাইভ কভার ছবি যোগ করুন")
+            context?.toast("ভিডিও কভার ছবি যোগ করুন")
             return false
         }
 
-        var priceString = ""
-        priceAdapter.getList().forEach { model ->
-            if (model.price > 0) {
-                priceString = priceString + model.price + ","
-            }
-        }
-        priceString = priceString.dropLast(1)
-
-        /*var price = ""
-        val price1 = binding?.productPrice1?.text.toString() ?: ""
-        val price2 = binding?.productPrice2?.text.toString() ?: ""
-        val price3 = binding?.productPrice3?.text.toString() ?: ""
-        val price4 = binding?.productPrice4?.text.toString() ?: ""
-        val price5 = binding?.productPrice5?.text.toString() ?: ""
-        if (price1.isNotEmpty()) {
-            price += price1
-
-            if (price2.isNotEmpty()) {
-                price += ","+price2
-            }
-            if (price3.isNotEmpty()) {
-                price += ","+price3
-            }
-            if (price4.isNotEmpty()) {
-                price += ","+price4
-            }
-            if (price5.isNotEmpty()) {
-                price += ","+price5
-            }
-        }*/
-
-        if (priceString.isEmpty()) {
-            context?.toast("প্রোডাক্টের দাম লিখুন")
+        if (facebookVideoUrl.isEmpty()) {
+            context?.toast("ফেসবুক ভিডিও লিংক লিখুন")
             return false
+        } else {
+            if (!validateUrl()) {
+                context?.toast("Link must Contain: \"https://www.facebook.com/\"")
+                return false
+            }
         }
-        Timber.d("LiveProductPriceList $priceString")
 
-        if (!isIntRange(priceString)) {
-            context?.toast("প্রোডাক্টের দাম লিখুন")
-            return false
-        }
-        priceRange = priceString
+
+        priceRange = ""
         Timber.d("LiveProductPriceList $priceRange")
 
         if (fromTime.isEmpty() || toTime.isEmpty()) {
@@ -526,83 +336,29 @@ class LiveScheduleFragment(): Fragment() {
             return false
         }
 
-        if (binding?.checkButtonThirdParty?.isChecked == true) {
-            fbPageUrl = binding?.fbPageUrl?.text.toString().trim()
-            if (fbPageUrl.isEmpty()) {
-                context?.toast("ফেসবুক পেজ লিংক দিন")
-                binding?.fbPageUrl?.requestFocus()
-                return false
-            }
-
-            ownNumber = binding?.ownPhoneNumber?.text.toString().trim()
-            ownAlternateNumber = binding?.ownAlternatePhoneNumber?.text.toString().trim()
-            if (ownNumber.isEmpty()) {
-                context?.toast("আপনার ফোন নম্বরটি দিন")
-                binding?.ownPhoneNumber?.requestFocus()
-                return false
-            } else if (ownNumber.length != 11) {
-                context?.toast("সঠিক ফোন নম্বরটি দিন")
-                binding?.ownPhoneNumber?.requestFocus()
-                return false
-            } else if (ownAlternateNumber.isNotEmpty() && ownAlternateNumber.length != 11) {
-                context?.toast("সঠিক অল্টারনেটিভ ফোন নম্বরটি দিন")
-                binding?.ownAlternatePhoneNumber?.requestFocus()
-                return false
-            }
-        }
-
-
-        if (isFacebook) {
-            fbStreamUrl = binding?.fbStreamUrl?.text?.toString() ?: ""
-            fbStreamKey = binding?.fbStreamKey?.text?.toString() ?: ""
-            if (!fbStreamUrl.startsWith("rtmp")) {
-                context?.toast("Facebook stream url এর শুরুতে \n\"rtmp\" থাকতে হবে")
-                return false
-            }
-            if (fbStreamUrl.isEmpty()) {
-                context?.toast("Facebook stream url লিখুন")
-                return false
-            }
-            //rtmps://live-api-s.facebook.com:443/rtmp/
-            if (!fbStreamUrl.contains("facebook.com")) {
-                context?.toast("সঠিক Facebook stream url লিখুন")
-                return false
-            }
-            if (fbStreamKey.isEmpty()) {
-                context?.toast("Facebook stream key লিখুন")
-                return false
-            }
-        } else {
-            fbStreamUrl = ""
-            fbStreamKey = ""
-        }
-
-        if (isYoutube) {
-            youtubeStreamUrl = binding?.youtubeStreamUrl?.text?.toString() ?: ""
-            youtubeStreamKey = binding?.youtubeStreamKey?.text?.toString() ?: ""
-            if (!youtubeStreamUrl.startsWith("rtmp://")) {
-                context?.toast("Youtube stream url এর শুরুতে \n\"rtmp\" থাকতে হবে")
-                return false
-            }
-            if (youtubeStreamUrl.isEmpty()) {
-                context?.toast("Youtube stream url লিখুন")
-                return false
-            }
-            //rtmp://x.rtmp.youtube.com/live2
-            if (!youtubeStreamUrl.contains("youtube.com")) {
-                context?.toast("সঠিক Youtube stream url লিখুন")
-                return false
-            }
-            if (youtubeStreamKey.isEmpty()) {
-                context?.toast("Youtube stream key লিখুন")
-                return false
-            }
-        } else {
-            youtubeStreamUrl = ""
-            youtubeStreamKey = ""
-        }
-
         return true
+    }
+
+    private fun validateUrl(): Boolean {
+        //Sample https://www.facebook.com/332656306807004/videos/188025879796045
+        Timber.d("URL $facebookVideoUrl")
+
+        if (facebookVideoUrl.isNotEmpty()) {
+            val uri = Uri.parse(facebookVideoUrl)
+            if (facebookVideoUrl.contains("https://www.facebook.com/")) {
+                Timber.d("URL ${uri.scheme} ${uri.host} ${uri.lastPathSegment}${uri.pathSegments}")
+                if (uri.host == "www.facebook.com") {
+                    val segments = uri.pathSegments
+                    if (!segments.isNullOrEmpty()) {
+                        if (segments.size == 3) {
+                            videoId = segments[2]
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+        return false
     }
 
     private fun testForm() {
@@ -637,94 +393,6 @@ class LiveScheduleFragment(): Fragment() {
         }
     }
 
-    private fun initDatePicker() {
-        //val sdf1 = SimpleDateFormat("MMM dd EEE yyyy", Locale.US)
-        val sdf2 = SimpleDateFormat("MMM", Locale.US)
-        val sdf3 = SimpleDateFormat("EEE", Locale.US)
-        val dateList: MutableList<DateData> = mutableListOf()
-        val calender = Calendar.getInstance()
-        liveDate = sdf.format(calender.time)
-        calender.add(Calendar.DATE, -1)
-        for (i in 0..6) {
-            calender.add(Calendar.DATE, 1)
-            //val newDate = sdf1.format(calender.time)
-            val model = DateData(
-                calender.get(Calendar.DAY_OF_MONTH),
-                calender.get(Calendar.MONTH) + 1,
-                calender.get(Calendar.YEAR),
-                sdf2.format(calender.time),
-                sdf3.format(calender.time),
-                sdf.format(calender.time)
-            )
-            dateList.add(model)
-        }
-
-        val dateAdapter = ScheduleDateAdapter()
-
-        binding?.scheduleDateLayout?.isVisible = true
-        //dateAdapter.selectedPosition = 0
-        //fetchLiveSchedule(liveDate)
-
-        dateAdapter.initLoad(dateList)
-        with(binding?.recyclerViewDate!!) {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = dateAdapter
-        }
-        dateAdapter.onItemClicked = { model ->
-            val selectedDate = model.formattedDate
-            fetchLiveSchedule(selectedDate)
-            liveDate = selectedDate
-        }
-    }
-
-    private fun initTimePicker() {
-        timeAdapter = ScheduleTimeAdapter()
-         with(binding?.recyclerViewTime!!) {
-            setHasFixedSize(true)
-            layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
-            adapter = timeAdapter
-        }
-        timeAdapter.onItemClicked = { model ->
-            selectedTime(model)
-        }
-    }
-
-    private fun fetchLiveSchedule(date: String) {
-        val requestBody = ScheduleRequest(date)
-        viewModel.fetchLiveSchedule(requestBody).observe(viewLifecycleOwner, Observer { list ->
-            timeAdapter.initLoad(list)
-            binding?.scheduleTimeLayout?.isVisible = true
-            /*if (!instantLive) {
-            } else {
-                val firstActiveIndex = list.indexOfFirst { it.isTimeActive == 0 }
-                if (firstActiveIndex == -1) {
-                    context?.toast("কারেন্ট লাইভ শিডিউল খালি নেই, অন্য শিডিউল সিলেক্ট করুন")
-                    binding?.scheduleDateLayout?.isVisible = true
-                    binding?.scheduleTimeLayout?.isVisible = true
-                } else {
-                    val model = timeAdapter.modelByIndex(firstActiveIndex)
-                    selectedTime(model)
-                }
-            }*/
-        })
-    }
-
-    private fun selectedTime(model: ScheduleData) {
-        scheduleId = model.id
-        fromTime = model.fromScheduleTime ?: ""
-        toTime = model.toScheduleTime ?: ""
-    }
-
-    /*private fun initSpinner(list: List<ScheduleData>) {
-        val spinnerAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, list)
-        binding?.timeSpinner?.adapter = spinnerAdapter
-        binding?.timeSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {}
-        }
-    }*/
-
     private val getImages = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val fileUri = result?.data?.data
@@ -739,7 +407,7 @@ class LiveScheduleFragment(): Fragment() {
                     .into(view)
             }
 
-            binding?.coverUploadBtn?.text = "লাইভ কভার ছবি পরিবর্তন"
+            binding?.coverUploadBtn?.text = "ভিডিও কভার ছবি পরিবর্তন"
             /*binding?.coverUploadBtn?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.gray_200))
             binding?.coverUploadBtn?.iconTint = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black_30))
             binding?.coverUploadBtn?.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_70))*/

@@ -52,5 +52,28 @@ data class LiveScheduleInsertRequest(
     @SerializedName("YoutubeStream")
     var youtubeStream: String? = "",
     @SerializedName("IsInstantLive")
-    var isInstantLive: Int = 0
+    var isInstantLive: Int = 0,
+
+    @SerializedName("FacebookVideoUrl")
+    var facebookVideoUrl: String? = "",
+    @SerializedName("VideoId")
+    var videoId: String? = "",
+
+    @SerializedName("LiveSource")
+    var liveSource: String? = "dt-android",
+
+    @SerializedName("IsShowComment")
+    var isShowComment: Boolean = true,
+    @SerializedName("IsShowProductCart")
+    var isShowProductCart: Boolean = false,
+    @SerializedName("OrderPlaceFlag")
+    var orderPlaceFlag: Int = 0,
+
+    @SerializedName("CategoryId")
+    var categoryId: Int = 0,
+    @SerializedName("SubCategoryId")
+    var subCategoryId: Int = 0,
+    @SerializedName("SubSubCategoryId")
+    var subSubCategoryId: Int = 0
+
 )

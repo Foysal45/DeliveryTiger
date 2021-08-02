@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:visibility="visible"/>
     
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,6 +36,11 @@
             android:layout_marginBottom="4dp"
             android:contentDescription="@string/cd"
             android:src="@drawable/ic_live_schedule_pick"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
              />
         
         <ImageView
@@ -43,13 +48,30 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:contentDescription="@string/cd"
             android:src="@drawable/ic_live_schedule_live"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
              />
-    
-    </LinearLayout>
+
+        <TextView
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:background="#ef4f24"
+            android:text="ফেসবুকে লাইভ করুন"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="@id/instantLiveLayout"
+            app:layout_constraintBottom_toBottomOf="@id/instantLiveLayout"
+            app:layout_constraintEnd_toEndOf="@id/instantLiveLayout"
+            android:visibility="visible"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     
     <View
         android:id="@+id/separator"
@@ -75,6 +97,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
             >
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
@@ -102,7 +125,7 @@
             android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@color/aDheaderColor"
+            android:background="@color/colorPrimary"
             app:layout_constraintTop_toBottomOf="@id/tabLayout"
             />
     

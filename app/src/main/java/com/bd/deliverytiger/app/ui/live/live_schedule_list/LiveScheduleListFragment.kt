@@ -58,7 +58,7 @@ class LiveScheduleListFragment(): Fragment() {
 
     private var isReplayList: Boolean = false
 
-
+    var userId = SessionManager.channelId
 
     companion object {
         fun newInstance(): LiveScheduleListFragment = LiveScheduleListFragment()
@@ -74,8 +74,10 @@ class LiveScheduleListFragment(): Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //TODO make it Dynamic
+        userId = 328702
 
-        liveType = LiveType.ALL
+        liveType = LiveType.REPLAY
 
         (activity as LiveHomeActivity).updateToolbarTitle("আমার লাইভ")
         findNavController().currentDestination?.label = "আমার লাইভ"
@@ -222,9 +224,8 @@ class LiveScheduleListFragment(): Fragment() {
             }
         })
 
-        var userId = SessionManager.courierUserId
         //userId = 328702
-        //viewModel.fetchUserSchedule(userId, "merchant", 0, 20)
+        //viewModel.fetchUserSchedule(userId, "customer", 0, 20)
 
         binding?.recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -248,13 +249,11 @@ class LiveScheduleListFragment(): Fragment() {
                     //Timber.d("onScrolled: \nItemCount: $currentItemCount  <= lastVisible: $lastVisibleItem ${!isLoading}")
                     if (!isLoading && currentItemCount <= lastVisibleItem + visibleThreshold) {
                         isLoading = true
-                        //TODO make it Dynamic
-                        var userId = SessionManager.courierUserId
-                        //userId = 328702
+
                         if (liveType == LiveType.REPLAY) {
-                            viewModel.fetchUserScheduleReplay(userId, "merchant", currentItemCount, 20)
+                            viewModel.fetchUserScheduleReplay(userId, "customer", currentItemCount, 20)
                         } else {
-                            viewModel.fetchUserSchedule(SessionManager.courierUserId, "merchant", currentItemCount, 20)
+                            viewModel.fetchUserSchedule(SessionManager.courierUserId, "customer", currentItemCount, 20)
                         }
                     }
                 }
@@ -269,15 +268,14 @@ class LiveScheduleListFragment(): Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 var isEmpty = false
 
-                //TODO make it Dynamic
-                val userId = SessionManager.courierUserId
-                //userId = 328702
+
                 when (tab?.position) {
-                    0 -> {
+                    //Changed (0 -> 3) (3 -> 0)
+                    3 -> {
                         liveType = LiveType.ALL
                         if (isReplayList) {
                             isReplayList = false
-                            viewModel.fetchUserSchedule(userId, "merchant", 0, 20)
+                            //viewModel.fetchUserSchedule(userId, "customer", 0, 20)
                         } else {
                             isEmpty = dataAdapter.filter(liveType)
                         }
@@ -286,7 +284,7 @@ class LiveScheduleListFragment(): Fragment() {
                         liveType = LiveType.LIVE
                         if (isReplayList) {
                             isReplayList = false
-                            viewModel.fetchUserSchedule(userId, "merchant", 0, 20)
+                            viewModel.fetchUserSchedule(userId, "customer", 0, 20)
                         } else {
                             isEmpty = dataAdapter.filter(liveType)
                         }
@@ -295,15 +293,15 @@ class LiveScheduleListFragment(): Fragment() {
                         liveType = LiveType.UPCOMING
                         if (isReplayList) {
                             isReplayList = false
-                            viewModel.fetchUserSchedule(userId, "merchant", 0, 20)
+                            viewModel.fetchUserSchedule(userId, "customer", 0, 20)
                         } else {
                             isEmpty = dataAdapter.filter(liveType)
                         }
                     }
-                    3 -> {
+                    0 -> {
                         liveType = LiveType.REPLAY
                         isEmpty = false
-                        viewModel.fetchUserScheduleReplay(userId, "merchant", 0, 20)
+                        viewModel.fetchUserScheduleReplay(userId, "customer", 0, 20)
                         isReplayList = true
                     }
                 }
@@ -357,13 +355,10 @@ class LiveScheduleListFragment(): Fragment() {
         }
 
         binding?.swipeRefreshLayout?.setOnRefreshListener {
-            //TODO make it dynamic
-            val userId = SessionManager.courierUserId
-            //userId = 328702
             if (liveType == LiveType.REPLAY) {
-                viewModel.fetchUserScheduleReplay(userId, "merchant", 0, 20)
+                viewModel.fetchUserScheduleReplay(userId, "customer", 0, 20)
             } else {
-                viewModel.fetchUserSchedule(userId, "merchant", 0, 20)
+                viewModel.fetchUserSchedule(userId, "customer", 0, 20)
             }
         }
 
@@ -373,7 +368,7 @@ class LiveScheduleListFragment(): Fragment() {
         if (result.resultCode == Activity.RESULT_OK) {
             instantLive = result.data?.getBooleanExtra("instantLive", false) ?: false
             liveId = result.data?.getIntExtra("liveId", 0) ?: 0
-            viewModel.fetchUserSchedule(SessionManager.courierUserId, "merchant", 0, 20)
+            viewModel.fetchUserSchedule(SessionManager.courierUserId, "customer", 0, 20)
             Timber.d("scheduleRequest $instantLive $liveId")
         }
     }
@@ -523,12 +518,11 @@ class LiveScheduleListFragment(): Fragment() {
     override fun onResume() {
         super.onResume()
         val handler = Handler(Looper.getMainLooper())
-        //TODO make it dynamic
-        var userId = SessionManager.courierUserId
-        //userId = 328702
+
 
         handler.postDelayed({
-            viewModel.fetchUserSchedule(userId, "merchant", 0, 20)
+            //viewModel.fetchUserSchedule(userId, "customer", 0, 20)
+            viewModel.fetchUserScheduleReplay(userId, "customer", 0, 20)
         }, 1000)
     }
 
