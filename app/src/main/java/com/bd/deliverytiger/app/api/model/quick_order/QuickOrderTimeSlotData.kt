@@ -18,6 +18,12 @@ data class QuickOrderTimeSlotData(
     var orderLimit: Int = 0,
     @SerializedName("cutOffTime")
     var cutOffTime: String? = "",
+    @SerializedName("formattingStartTime")
+    var formattingStartTime: String? = "",
+    @SerializedName("formattingEndTime")
+    var formattingEndTime: String? = "",
+    @SerializedName("formattingCutOffTime")
+    var formattingCutOffTime: String? = "",
     @SerializedName("slotName")
     var slotName: String? = ""
 )
