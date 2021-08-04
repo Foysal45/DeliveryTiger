@@ -35,6 +35,7 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
 import com.bd.deliverytiger.app.api.model.location.LocationData
+import com.bd.deliverytiger.app.api.model.order.OrderPreviewData
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
@@ -43,6 +44,7 @@ import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.databinding.FragmentAddOrderFragmentOneBinding
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationType
+import com.bd.deliverytiger.app.ui.add_order.order_preview.OrderPreviewBottomSheet
 import com.bd.deliverytiger.app.ui.add_order.service_wise_bottom_sheet.ServicesSelectionBottomSheet
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
@@ -1484,7 +1486,12 @@ class AddOrderFragmentOne : Fragment() {
             return
         }
         calculateTotalPrice()
+        val orderPreviewData = OrderPreviewData(customerName, mobileNo, etDistrict.text.toString(), etThana.text.toString(), payCollectionAmount)
+        goToOrderPreviewBottomSheet(orderPreviewData)
 
+    }
+
+    private fun placeOrder(){
         val dialog = ProgressDialog(context)
         dialog.setMessage("অপেক্ষা করুন")
         dialog.setCancelable(false)
@@ -1514,7 +1521,6 @@ class AddOrderFragmentOne : Fragment() {
             SessionManager.totalAmount = total.toInt()
             addOrderSuccessFragment(model)
         })
-
     }
 
     private fun validate(): Boolean {
@@ -1681,6 +1687,23 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         return true
+    }
+
+    private fun goToOrderPreviewBottomSheet(data: OrderPreviewData) {
+        val tag = OrderPreviewBottomSheet.tag
+        val dialog = OrderPreviewBottomSheet.newInstance(data)
+        dialog.show(childFragmentManager, tag)
+        dialog.onConfirmedClick = {
+            if (it == 1){
+                placeOrder()
+            }
+        }
+        dialog.onClose = {
+            if (it == 1){
+                isCollectionTypeSelected = false
+                dialog.dismiss()
+            }
+        }
     }
 
     private fun addOrderSuccessFragment(orderResponse: OrderResponse?) {
