@@ -171,7 +171,7 @@
             android:layout_weight="1"
             android:layout_marginEnd="4dp"
             android:backgroundTint="@color/red"
-            android:text="edit"/>
+            android:text="এডিট"/>
 
 
         <Button
@@ -181,7 +181,7 @@
             android:layout_weight="1"
             android:backgroundTint="@color/colorPrimary"
             android:layout_marginStart="4dp"
-            android:text="Confirm"/>
+            android:text="কনফার্ম"/>
 
     </LinearLayout>
 
