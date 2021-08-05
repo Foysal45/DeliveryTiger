@@ -21,6 +21,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.*
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.live.auth.AuthRequestBody
 import com.bd.deliverytiger.app.api.model.live.live_schedule_list.MyLiveSchedule
 import com.bd.deliverytiger.app.databinding.FragmentLiveScheduleListBinding
 import com.bd.deliverytiger.app.enums.LiveType
@@ -66,7 +67,7 @@ class LiveScheduleListFragment(): Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return FragmentLiveScheduleListBinding.inflate(inflater, container, false).also {
+        return binding?.root ?: FragmentLiveScheduleListBinding.inflate(inflater, container, false).also {
             binding = it
         }.root
     }
@@ -75,12 +76,14 @@ class LiveScheduleListFragment(): Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //TODO make it Dynamic
-        userId = 328702
+        //userId = 328702
+        //SessionManager.channelId = 0
+        customerExistsCheck()
 
         liveType = LiveType.REPLAY
 
-        (activity as LiveHomeActivity).updateToolbarTitle("আমার লাইভ")
         findNavController().currentDestination?.label = "আমার লাইভ"
+        (activity as LiveHomeActivity).updateToolbarTitle("আমার লাইভ")
 
         val dataAdapter = LiveScheduleListAdapter()
         with(binding?.recyclerView!!) {
@@ -224,7 +227,6 @@ class LiveScheduleListFragment(): Fragment() {
             }
         })
 
-        //userId = 328702
         //viewModel.fetchUserSchedule(userId, "customer", 0, 20)
 
         binding?.recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -250,11 +252,14 @@ class LiveScheduleListFragment(): Fragment() {
                     if (!isLoading && currentItemCount <= lastVisibleItem + visibleThreshold) {
                         isLoading = true
 
-                        if (liveType == LiveType.REPLAY) {
-                            viewModel.fetchUserScheduleReplay(userId, "customer", currentItemCount, 20)
-                        } else {
-                            viewModel.fetchUserSchedule(SessionManager.courierUserId, "customer", currentItemCount, 20)
+                        if (userId != 0) {
+                            if (liveType == LiveType.REPLAY) {
+                                viewModel.fetchUserScheduleReplay(userId, "customer", currentItemCount, 20)
+                            } else {
+                                viewModel.fetchUserSchedule(userId, "customer", currentItemCount, 20)
+                            }
                         }
+
                     }
                 }
             }
@@ -301,7 +306,9 @@ class LiveScheduleListFragment(): Fragment() {
                     0 -> {
                         liveType = LiveType.REPLAY
                         isEmpty = false
-                        viewModel.fetchUserScheduleReplay(userId, "customer", 0, 20)
+                        if (userId != 0) {
+                            viewModel.fetchUserScheduleReplay(userId, "customer", 0, 20)
+                        }
                         isReplayList = true
                     }
                 }
@@ -356,7 +363,9 @@ class LiveScheduleListFragment(): Fragment() {
 
         binding?.swipeRefreshLayout?.setOnRefreshListener {
             if (liveType == LiveType.REPLAY) {
-                viewModel.fetchUserScheduleReplay(userId, "customer", 0, 20)
+                if (userId != 0) {
+                    viewModel.fetchUserScheduleReplay(userId, "customer", 0, 20)
+                }
             } else {
                 viewModel.fetchUserSchedule(userId, "customer", 0, 20)
             }
@@ -368,7 +377,7 @@ class LiveScheduleListFragment(): Fragment() {
         if (result.resultCode == Activity.RESULT_OK) {
             instantLive = result.data?.getBooleanExtra("instantLive", false) ?: false
             liveId = result.data?.getIntExtra("liveId", 0) ?: 0
-            viewModel.fetchUserSchedule(SessionManager.courierUserId, "customer", 0, 20)
+            viewModel.fetchUserSchedule(userId, "customer", 0, 20)
             Timber.d("scheduleRequest $instantLive $liveId")
         }
     }
@@ -522,13 +531,33 @@ class LiveScheduleListFragment(): Fragment() {
 
         handler.postDelayed({
             //viewModel.fetchUserSchedule(userId, "customer", 0, 20)
-            viewModel.fetchUserScheduleReplay(userId, "customer", 0, 20)
+            if (userId != 0) {
+                viewModel.fetchUserScheduleReplay(userId, "customer", 0, 20)
+            }
         }, 1000)
     }
 
     override fun onDestroyView() {
         binding = null
         super.onDestroyView()
+    }
+
+    private fun customerExistsCheck() {
+        //TODO make it dynamic
+        var customerMobile = SessionManager.mobile
+        //customerMobile = "01676100969"
+
+        Timber.d("requestBody 1 ${SessionManager.channelId}")
+        if (SessionManager.channelId == 0) {
+            val requestBody = AuthRequestBody("", customerMobile)
+            viewModel.customerAuthenticationCheck(requestBody).observe(viewLifecycleOwner, Observer {
+                userId = SessionManager.channelId
+                if (userId != 0) {
+                    viewModel.fetchUserScheduleReplay(userId, "customer", 0, 20)
+                }
+            })
+        }
+
     }
 
 }

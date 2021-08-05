@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.live.DateData
+import com.bd.deliverytiger.app.api.model.live.auth.SignUpNew
 import com.bd.deliverytiger.app.api.model.live.live_schedule.PriceTemp
 import com.bd.deliverytiger.app.api.model.live.live_schedule.ScheduleData
 import com.bd.deliverytiger.app.api.model.live.live_schedule.ScheduleRequest
@@ -151,7 +152,7 @@ class LiveScheduleFragment(): Fragment() {
                         }
                     }
                 } else {
-                    insertSchedule()
+                    //insertSchedule()
                 }
             }
         }
@@ -200,7 +201,8 @@ class LiveScheduleFragment(): Fragment() {
     }
 
     private fun insertSchedule() {
-        var userId = 328702//SessionManager.courierUserId
+        //var userId = 328702
+        val userId =  SessionManager.channelId
 
         val model = LiveScheduleInsertRequest(
             liveDate, fromTime, toTime,
@@ -303,6 +305,12 @@ class LiveScheduleFragment(): Fragment() {
 
     private fun validation(): Boolean {
 
+        if (SessionManager.channelId == 0) {
+            createChannelId()
+            context?.toast("Creating new channel")
+            return false
+        }
+
         hideKeyboard()
         facebookVideoUrl = binding?.fbVideoUrl?.text?.toString()?.trim() ?: ""
         liveTitle = binding?.titleName?.text?.toString()?.trim() ?: ""
@@ -327,7 +335,6 @@ class LiveScheduleFragment(): Fragment() {
             }
         }
 
-
         priceRange = ""
         Timber.d("LiveProductPriceList $priceRange")
 
@@ -337,6 +344,25 @@ class LiveScheduleFragment(): Fragment() {
         }
 
         return true
+    }
+
+    private fun createChannelId() {
+        //TODO make it dynamic
+        var mobile = SessionManager.mobile
+        //mobile = "01676100969"
+
+        val requestBody = SignUpNew(
+            SessionManager.deviceId, SessionManager.firebaseToken, "", 0, "",
+            "", "", 0, mobile, SessionManager.companyName, mobile, 4
+        )
+
+        viewModel.signUpForLivePlaza(requestBody).observe(viewLifecycleOwner, Observer {
+            if ( it.id != 0 ) {
+                SessionManager.channelId = it.id
+                context?.toast("Channel created with your Phone number as password")
+                binding?.uploadBtn?.performClick()
+            }
+        })
     }
 
     private fun validateUrl(): Boolean {

@@ -6,6 +6,9 @@ import com.bd.deliverytiger.app.api.model.ResponseHeader
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.helpline_number.HelpLineNumberModel
 import com.bd.deliverytiger.app.api.model.image_upload.ClassifiedImageUploadResponse
+import com.bd.deliverytiger.app.api.model.live.auth.AuthRequestBody
+import com.bd.deliverytiger.app.api.model.live.auth.AuthResponseBody
+import com.bd.deliverytiger.app.api.model.live.auth.SignUpNew
 import com.bd.deliverytiger.app.api.model.live.brand.BrandData
 import com.bd.deliverytiger.app.api.model.live.brand.BrandRequest
 import com.bd.deliverytiger.app.api.model.live.catalog.CatalogData
@@ -186,4 +189,11 @@ interface ApiInterfaceAPI {
     // Send Notification
     @POST("Firebase/SentNotificationToFollowers")
     suspend fun liveStartedNotify(@Body requestBody: LiveStartedNotifyRequest): NetworkResponse<LiveStartedNotifyResponse, ErrorResponse>
+
+    //Customer Exists check
+    @POST("CustomerAccess/CustomerAuthenticationCheck")
+    suspend fun customerAuthenticationCheck(@Body requestBody: AuthRequestBody): NetworkResponse<ResponseHeader<AuthResponseBody>, ErrorResponse>
+
+    @POST("CustomerAccess/SignUpNew")
+    suspend fun signUpForLivePlaza(@Body requestBody: SignUpNew): NetworkResponse<AuthResponseBody, ErrorResponse>
 }

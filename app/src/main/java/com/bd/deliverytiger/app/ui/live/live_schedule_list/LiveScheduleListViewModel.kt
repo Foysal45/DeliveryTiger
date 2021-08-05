@@ -5,8 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bd.deliverytiger.app.api.model.PagingModel
+import com.bd.deliverytiger.app.api.model.live.auth.AuthRequestBody
+import com.bd.deliverytiger.app.api.model.live.auth.AuthResponseBody
 import com.bd.deliverytiger.app.api.model.live.live_schedule_list.MyLiveSchedule
 import com.bd.deliverytiger.app.repository.AppRepository
+import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.ViewState
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.Dispatchers
@@ -105,4 +108,47 @@ class LiveScheduleListViewModel(private val repository: AppRepository): ViewMode
         }
         return responseData
     }
+
+    fun customerAuthenticationCheck(requestBody: AuthRequestBody): LiveData<AuthResponseBody> {
+
+        val responseData: MutableLiveData<AuthResponseBody> = MutableLiveData()
+
+        viewState.value = ViewState.ProgressState(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.customerAuthenticationCheck(requestBody)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        val responseBody = response.body.data
+                        Timber.d("requestBody 2 $responseBody")
+                        if (responseBody != null) {
+                            responseData.value = responseBody
+                            if (responseBody.id != 0) {
+                                SessionManager.channelId = responseBody.id
+                                Timber.d("requestBody 2 ${SessionManager.channelId}")
+                            }
+                            Timber.d("requestBody 3 ${SessionManager.channelId}")
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        //val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        //viewState.value = ViewState.ShowMessage(message)
+                        responseData.value = AuthResponseBody()
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
+    }
+
 }

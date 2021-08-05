@@ -65,16 +65,17 @@ class LiveHomeActivity : AppCompatActivity() {
         binding = ActivityLiveHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.appBar.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         SessionManager.init(this)
 
         navController = findNavController(R.id.navHostFragment)
-        //val appBarConfiguration = AppBarConfiguration.Builder().setFallbackOnNavigateUpListener(fallbackListener).build()
+        val appBarConfiguration = AppBarConfiguration.Builder().setFallbackOnNavigateUpListener(fallbackListener).build()
         //binding.toolbar.setupWithNavController(navController, appBarConfiguration)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_live_schedule_list), binding.drawerLayout)
+        //appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_live_schedule_list), binding.drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.navigationView.setupWithNavController(navController)
+        //binding.navigationView.setupWithNavController(navController)
         /*NavigationUI.setupWithNavController(binding.appBar.bottomNavigation, navController)
         binding.appBar.bottomNavigation.setOnNavigationItemSelectedListener { item ->
             if (item.itemId == navController.currentDestination?.id) {
@@ -200,11 +201,13 @@ class LiveHomeActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+        //return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+        onBackPressed()
+        return true
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
+        finish()
     }
 
     private fun drawerListener() {
@@ -348,7 +351,7 @@ class LiveHomeActivity : AppCompatActivity() {
 
 
     private fun updateSessionManager() {
-        val userId = SessionManager.courierUserId
+        val userId = SessionManager.channelId
         //userId = 328702
         //userId = 1100
         viewModel.fetchLiveUserProfile(userId, this).observe(this, { data->

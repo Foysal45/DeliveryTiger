@@ -259,7 +259,7 @@ object SessionManager {
         }
         set(value) {
             pref.edit {
-                putInt(Key_UserId, value)
+                putInt(Key_ChannelId, value)
             }
         }
 

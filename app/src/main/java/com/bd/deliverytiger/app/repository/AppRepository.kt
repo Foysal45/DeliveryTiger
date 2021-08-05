@@ -13,6 +13,8 @@ import com.bd.deliverytiger.app.api.model.deal_management.DealManagementRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
+import com.bd.deliverytiger.app.api.model.live.auth.AuthRequestBody
+import com.bd.deliverytiger.app.api.model.live.auth.SignUpNew
 import com.bd.deliverytiger.app.api.model.live.brand.BrandRequest
 import com.bd.deliverytiger.app.api.model.live.catalog.CatalogRequest
 import com.bd.deliverytiger.app.api.model.live.live_channel.ChannelActionRequest
@@ -101,6 +103,11 @@ class AppRepository(
     suspend fun fetchAllDistricts() = apiInterfaceAPI.fetchAllDistricts()
 
     suspend fun uploadProductImage(data: RequestBody, file: List<MultipartBody.Part>?) = apiInterfaceAPI.uploadProductImage(data, file)
+
+    //Live CustomerExistsCheck
+    suspend fun customerAuthenticationCheck(requestBody: AuthRequestBody) = apiInterfaceAPI.customerAuthenticationCheck(requestBody)
+
+    suspend fun signUpForLivePlaza(requestBody: SignUpNew) = apiInterfaceAPI.signUpForLivePlaza(requestBody)
 
     // Live
     suspend fun getProductList(
