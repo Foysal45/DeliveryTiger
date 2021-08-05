@@ -574,7 +574,10 @@ class AddOrderFragmentOne : Fragment() {
                                 timeSlotId = 0
                                 timeSlotDataAdapter.setSelectedPositions(-1)
                             }
-                        }.show()
+                        }.apply {
+                            setCancelable(false)
+                            show()
+                        }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()

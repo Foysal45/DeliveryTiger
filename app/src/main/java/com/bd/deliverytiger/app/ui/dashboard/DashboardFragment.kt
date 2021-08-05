@@ -825,13 +825,26 @@ class DashboardFragment : Fragment() {
             returnDataList.clear()
             val dashboardList: MutableList<DashboardData> = mutableListOf()
             var returnCount = 0
-            list.forEach() {model ->
-                if (model.statusGroupId == 4) {
-                    dashboardList.add(model)
-                }
-                if (model.statusGroupId == 9 || model.statusGroupId == 10 || model.statusGroupId == 11) {
-                    returnCount += model.count ?: 0
-                    returnDataList.add(model)
+
+            list.forEach { model ->
+                when (model.statusGroupId) {
+                    //"পার্সেলটি সর্টিং এ আছে"
+                    14 -> {
+                        dashboardList.add(model)
+                    }
+                    //"কাস্টমারকে খুঁজে পাওয়া যাচ্ছে না"
+                    15 -> {
+                        dashboardList.add(model)
+                    }
+                    //"শিপমেন্টে আছে"
+                    4 -> {
+                        dashboardList.add(model)
+                    }
+                    //"রিটার্ন পার্সেল এখনো ঢাকায় পৌছায়নি", "রিটার্ন পার্সেল সেন্ট্রাল ওয়্যার হাউসে আছে", "রিটার্ন পার্সেল আপনার নিকটস্থ হাবে আছে"
+                    9, 10, 11 -> {
+                        returnCount += model.count ?: 0
+                        returnDataList.add(model)
+                    }
                 }
             }
             val returnData = DashboardData(

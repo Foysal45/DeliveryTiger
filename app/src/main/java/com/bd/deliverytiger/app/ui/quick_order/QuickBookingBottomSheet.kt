@@ -178,7 +178,10 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
                                 selectedTimeSLotID = 0
                                 dataAdapter.setSelectedPositions(-1)
                             }
-                        }.show()
+                        }.apply {
+                            setCancelable(false)
+                            show()
+                        }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()

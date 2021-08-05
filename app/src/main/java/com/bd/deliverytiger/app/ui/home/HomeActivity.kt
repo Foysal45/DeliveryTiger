@@ -53,6 +53,7 @@ import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivity
+import com.bd.deliverytiger.app.ui.location.LocationUsesBottomSheet
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment
@@ -1117,17 +1118,41 @@ class HomeActivity : AppCompatActivity(),
 
     //################################################## Location & Connectivity ########################################//
 
+    fun showLocationConsent() {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+        val permission1 = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (permission1 == PackageManager.PERMISSION_GRANTED) return
+        if (SessionManager.isLocationConsentShown) return
+
+        val tag = LocationUsesBottomSheet.tag
+        val dialog = LocationUsesBottomSheet.newInstance()
+        dialog.show(supportFragmentManager, tag)
+        dialog.onItemSelected = { flag ->
+            dialog.dismiss()
+            if (flag) {
+                SessionManager.isLocationConsentShown = true
+                if (isLocationPermission()) {
+                    turnOnGPS()
+                }
+            } else {
+                this.toast("App need location permission to work properly", Toast.LENGTH_LONG)
+            }
+        }
+    }
+
     fun fetchCurrentLocation() {
         if (isLocationPermission()) {
+            turnOnGPS()
             val intent = Intent(this, LocationUpdatesService::class.java)
             bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
-            timber.log.Timber.tag("LocationLog").d("fetchCurrentLocation")
+            Timber.tag("LocationLog").d("fetchCurrentLocation")
         }
     }
 
     private fun initService() {
         gpsUtils = GpsUtils(this)
-        turnOnGPS()
+        //turnOnGPS()
         connectivityReceiver = ConnectivityReceiver()
         receiver = MyReceiver()
     }
@@ -1177,7 +1202,6 @@ class HomeActivity : AppCompatActivity(),
     }
 
     private fun turnOnGPS() {
-
         gpsUtils.turnGPSOn {
             isGPS = it
         }

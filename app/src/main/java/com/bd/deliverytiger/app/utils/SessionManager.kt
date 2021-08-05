@@ -574,6 +574,16 @@ object SessionManager {
             }
         }
 
+    var isLocationConsentShown: Boolean
+        get() {
+            return pref.getBoolean("locationConsent", false)
+        }
+        set(value) {
+            pref.edit {
+                putBoolean("locationConsent", value)
+            }
+        }
+
     //Live
 
 
