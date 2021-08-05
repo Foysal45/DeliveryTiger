@@ -116,8 +116,7 @@ class LiveScheduleListFragment(): Fragment() {
                                 "liveId" to model.id,
                                 "suggestedPrice" to model.suggestedPrice
                             )
-                            //Todo: Remove Cmnt 2
-                           // findNavController().navigate(R.id.nav_live_product_add, bundle)
+                            findNavController().navigate(R.id.nav_live_product_add, bundle)
                         }
                         2 -> {
                             // GOTO product add from previous

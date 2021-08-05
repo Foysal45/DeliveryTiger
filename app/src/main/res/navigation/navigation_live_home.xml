@@ -32,14 +32,14 @@
         tools:layout="@layout/fragment_live_deal_management"
         />
     
-<!--    <fragment
+    <fragment
         android:id="@+id/nav_live_product_add"
-        android:name="com.ajkerdeal.app.ajkerdealseller.ui.live.live_product_insert.LiveProductInsertFragment"
+        android:name="com.bd.deliverytiger.app.ui.live.live_product_insert.LiveProductInsertFragment"
         android:label="লাইভে প্রোডাক্ট অ্যাড"
         tools:layout="@layout/fragment_live_product_insert"
         />
     
-    <fragment
+<!--    <fragment
         android:id="@+id/nav_live_schedule_product_list"
         android:name="com.ajkerdeal.app.ajkerdealseller.ui.live.live_schedule_product.LiveScheduleProductListFragment"
         android:label="লাইভ প্রোডাক্ট লিস্ট"

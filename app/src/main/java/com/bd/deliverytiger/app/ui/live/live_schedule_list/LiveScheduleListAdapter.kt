@@ -82,7 +82,7 @@ class LiveScheduleListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
                 }
                 "replay" -> {
 
-                    binding.productCountLayout.visibility = View.VISIBLE
+                    binding.productCountLayout.visibility = View.GONE
 
                     binding.liveTitle.visibility = View.VISIBLE
                     binding.shareLayout.visibility = View.GONE
