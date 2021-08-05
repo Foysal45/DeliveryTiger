@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -77,29 +78,39 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             holder.countText.text = countText
 
 
+            var cardColor = 0
+            var countTextColor = 0
+            //var cardDesign = 0
             when(model.dashboardViewColorType) {
                 "positive" -> {
-                    holder.parentLayout.setBackgroundColor(Color.parseColor("#EEF8EF"))
-                    //holder.designIV.setImageResource(R.drawable.ic_dashboard_design_3)
-                    holder.countTV.setTextColor(Color.parseColor("#66BB6A"))
+                    cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_positive)
+                    countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_positive_text)
+                    //cardDesign = R.drawable.ic_dashboard_design_3
                 }
                 "neutral" -> {
-                    holder.parentLayout.setBackgroundColor(Color.parseColor("#E1F3F3"))
-                    //holder.designIV.setImageResource(R.drawable.ic_dashboard_design_1)
-                    holder.countTV.setTextColor(Color.parseColor("#73B4C8"))
+                    cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_neutral)
+                    countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_neutral_text)
+                    //cardDesign = R.drawable.ic_dashboard_design_1
                 }
                 "negative" -> {
-                    holder.parentLayout.setBackgroundColor(Color.parseColor("#FFEBDB"))
-                    //holder.designIV.setImageResource(R.drawable.ic_dashboard_design_4)
-                    holder.countTV.setTextColor(Color.parseColor("#FF8E34"))
+                    cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_negative)
+                    countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_negative_text)
+                    //cardDesign = R.drawable.ic_dashboard_design_4
                 }
                 "waiting" -> {
-                    holder.parentLayout.setBackgroundColor(Color.parseColor("#FFF4DB"))
-                    //holder.designIV.setImageResource(R.drawable.ic_dashboard_design_2)
-                    holder.countTV.setTextColor(Color.parseColor("#FFB300"))
+                    cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_waiting)
+                    countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_waiting_text)
+                    //cardDesign = R.drawable.ic_dashboard_design_2
+                }
+                else -> { //neutral
+                    cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_neutral)
+                    countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_neutral_text)
+                    //cardDesign = R.drawable.ic_dashboard_design_1
                 }
             }
-
+            holder.parentLayout.setBackgroundColor(cardColor)
+            holder.countTV.setTextColor(countTextColor)
+            //holder.designIV.setImageResource(cardDesign)
             /*Glide.with(holder.iconIV.context)
                 .load(model.dashboardImageUrl)
                 .into(holder.iconIV)*/
