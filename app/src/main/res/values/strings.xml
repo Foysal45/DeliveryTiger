@@ -125,4 +125,8 @@
 
     <string name="area_close">জেলায়/থানায়/এরিয়ায় ডেলিভারি সার্ভিস সাময়িকভাবে বন্ধ রয়েছে।</string>
 
+    <string name="why_location_required">To assign order based on your pickup location automatically, allow Delivery Tiger to use your location data.</string>
+    <string name="how_location_used">Delivery Tiger will use location data to order info on rider app and overall operation progress.</string>
+
+
 </resources>
