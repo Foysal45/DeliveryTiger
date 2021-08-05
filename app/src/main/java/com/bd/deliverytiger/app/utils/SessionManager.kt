@@ -504,4 +504,14 @@ object SessionManager {
                 putString("retentionManagerNumber", value)
             }
         }
+
+    var isLocationConsentShown: Boolean
+        get() {
+            return pref.getBoolean("locationConsent", false)
+        }
+        set(value) {
+            pref.edit {
+                putBoolean("locationConsent", value)
+            }
+        }
 }

@@ -110,6 +110,7 @@ class ProfileFragment : Fragment() {
 
         setUpProfileFromSession()
         getPickupLocation()
+        (activity as HomeActivity).showLocationConsent()
 
         binding?.profilePic?.setOnClickListener {
             getImageFromDevice()
