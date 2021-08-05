@@ -1489,9 +1489,11 @@ class AddOrderFragmentOne : Fragment() {
             return
         }
         calculateTotalPrice()
-        val orderPreviewData = OrderPreviewData(customerName, mobileNo, etDistrict.text.toString(), etThana.text.toString(), payCollectionAmount)
+        val collectionAmount = collectionAmountET.text.toString()
+        val districtName = etDistrict.text.toString()
+        val thanaName = etThana.text.toString()
+        val orderPreviewData = OrderPreviewData(customerName, mobileNo, districtName, thanaName, collectionAmount, isCollection)
         goToOrderPreviewBottomSheet(orderPreviewData)
-
     }
 
     private fun placeOrder(){
@@ -1698,6 +1700,7 @@ class AddOrderFragmentOne : Fragment() {
         dialog.show(childFragmentManager, tag)
         dialog.onConfirmedClick = {
             if (it == 1){
+                dialog.dismiss()
                 placeOrder()
             }
         }
