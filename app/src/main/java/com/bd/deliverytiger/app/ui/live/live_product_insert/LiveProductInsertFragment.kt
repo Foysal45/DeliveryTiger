@@ -139,7 +139,7 @@ class LiveProductInsertFragment(): Fragment() {
     private fun insertProduct(liveId: Int) {
         val productList: MutableList<LiveProductInsertData> = mutableListOf()
 
-        var userId = SessionManager.courierUserId
+        var userId = SessionManager.channelId
         productAdapter.getList().forEach { model ->
             if (model.imageUrl.isNotEmpty() && model.price > 0) {
                 productList.add(

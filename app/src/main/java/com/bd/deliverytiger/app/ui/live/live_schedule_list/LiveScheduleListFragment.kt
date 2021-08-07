@@ -504,8 +504,7 @@ class LiveScheduleListFragment(): Fragment() {
         val bundle = bundleOf(
             "liveId" to model.id
         )
-        //Todo: Remove Cmnt 4
-        //findNavController().navigate(R.id.nav_live_schedule_product_list, bundle)
+        findNavController().navigate(R.id.nav_live_schedule_product_list, bundle)
 
     }
 
@@ -544,7 +543,7 @@ class LiveScheduleListFragment(): Fragment() {
     private fun customerExistsCheck() {
         //TODO make it dynamic
         var customerMobile = SessionManager.mobile
-        //customerMobile = "01676100969"
+        customerMobile = "01676100969"
 
         Timber.d("requestBody 1 ${SessionManager.channelId}")
         if (SessionManager.channelId == 0) {

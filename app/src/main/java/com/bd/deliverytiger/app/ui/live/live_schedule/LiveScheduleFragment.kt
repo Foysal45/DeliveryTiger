@@ -216,13 +216,8 @@ class LiveScheduleFragment(): Fragment() {
         Timber.d("requestBody $model")
 
         viewModel.insertLiveSchedule(model).observe(viewLifecycleOwner, Observer { id ->
-            if (id == -1) {
-                if (instantLive) {
-                    context?.toast("এই মুহূর্তে সার্ভারের কোনো সমস্যা হচ্ছে, অনুগ্রহপূর্বক একটু পর আবার চেষ্টা করুন।")
-                } else {
-                    context?.toast("কারেন্ট লাইভ শিডিউল খালি নেই, অন্য শিডিউল সিলেক্ট করুন")
-                }
-            } else {
+            Timber.d("requestBody $id")
+            if (id > 0) {
                 if (instantLive) UserLogger.logGenie("LiveSchedule_Live_Instant")
                 else UserLogger.logGenie("LiveSchedule_Live_Later")
                 if (isFacebook) UserLogger.logGenie("LiveStream_Facebook")
@@ -231,6 +226,17 @@ class LiveScheduleFragment(): Fragment() {
                 Timber.tag("LiveScheduleFragment").d("insertLiveSchedule with $liveId")
                 insertLiveCover()
                 updateLiveStatus()
+            } else if (id == -2) {
+                val titleText = "নির্দেশনা"
+                val descriptionText = "এই ভিডিওটি ইতিমধ্যে শেয়ার করা হয়েছে।"
+                alert(titleText, descriptionText, false).show()
+
+            } else {
+                if (instantLive) {
+                    context?.toast("এই মুহূর্তে সার্ভারের কোনো সমস্যা হচ্ছে, অনুগ্রহপূর্বক একটু পর আবার চেষ্টা করুন।")
+                } else {
+                    context?.toast("কারেন্ট লাইভ শিডিউল খালি নেই, অন্য শিডিউল সিলেক্ট করুন")
+                }
             }
         })
     }
@@ -264,11 +270,11 @@ class LiveScheduleFragment(): Fragment() {
                     })
                 }
 
-                val intent = Intent().apply {
+                /*val intent = Intent().apply {
                     putExtra("instantLive", instantLive)
                     putExtra("liveId", liveId)
                 }
-                activity?.setResult(Activity.RESULT_OK, intent)
+                activity?.setResult(Activity.RESULT_OK, intent)*/
                 activity?.finish()
             }
         })
@@ -349,7 +355,7 @@ class LiveScheduleFragment(): Fragment() {
     private fun createChannelId() {
         //TODO make it dynamic
         var mobile = SessionManager.mobile
-        //mobile = "01676100969"
+        mobile = "01676100969"
 
         val requestBody = SignUpNew(
             SessionManager.deviceId, SessionManager.firebaseToken, "", 0, "",
