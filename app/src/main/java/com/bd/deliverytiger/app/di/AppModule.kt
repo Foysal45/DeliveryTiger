@@ -26,6 +26,8 @@ import com.bd.deliverytiger.app.ui.complain.complain_history.ComplainHistoryView
 import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
 import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsViewModel
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
+import com.bd.deliverytiger.app.ui.lead_management.LeadManagementViewModel
+import com.bd.deliverytiger.app.ui.lead_management.customer_details_bottomsheet.CustomerDetailsViewModel
 import com.bd.deliverytiger.app.ui.login.AuthViewModel
 import com.bd.deliverytiger.app.ui.notification.NotificationViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingViewModel
@@ -105,5 +107,7 @@ val appModule = module {
     viewModel { OrderInfoEditViewModel(get()) }
     viewModel { QuickOrderRequestViewModel(get()) }
     viewModel { NotificationViewModel(get()) }
+    viewModel { LeadManagementViewModel(get()) }
+    viewModel { CustomerDetailsViewModel(get()) }
 
 }

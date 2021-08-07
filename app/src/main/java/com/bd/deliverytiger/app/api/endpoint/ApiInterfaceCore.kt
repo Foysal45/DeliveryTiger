@@ -33,6 +33,10 @@ import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
 import com.bd.deliverytiger.app.api.model.helpline_number.HelpLineNumberModel
 import com.bd.deliverytiger.app.api.model.instant_payment_update.InstantPaymentUpdateResponse
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
+import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
+import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
+import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetails
+import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
@@ -227,6 +231,12 @@ interface ApiInterfaceCore {
         @Path("orderId") orderId: String,
         @Body requestBody: UpdateOrderReqBody
     ): NetworkResponse<GenericResponse<UpdateOrderResponse>, ErrorResponse>
+
+    @POST("api/Fetch/GetCutomerListForApp")
+    suspend fun fetchCustomerList(@Body requestBody: CustomerInfoRequest): NetworkResponse<GenericResponse<List<CustomerInformation>>, ErrorResponse>
+
+    @POST("api/Fetch/GetCutomerWiseOrdersDetailsForApp")
+    suspend fun fetchCustomerDetailsList(@Body requestBody: CustomerInfoDetailsRequest): NetworkResponse<GenericResponse<List<CustomerInfoDetails>>, ErrorResponse>
 
     //Quick Order Request
     @POST("api/Fetch/GetCollectionTimeSlotByTime")

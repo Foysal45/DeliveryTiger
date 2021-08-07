@@ -29,6 +29,10 @@
             android:id="@+id/nav_return_statement"
             android:icon="@drawable/ic_bill_pay_history"
             android:title="@string/return_statement" />
+        <item
+            android:id="@+id/nav_lead_management"
+            android:icon="@drawable/ic_bill_pay_history"
+            android:title="@string/lead_management" />
 
         <item
             android:id="@+id/nav_balance_load_history"

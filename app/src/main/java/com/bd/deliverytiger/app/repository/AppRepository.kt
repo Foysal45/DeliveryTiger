@@ -12,6 +12,8 @@ import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
+import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
+import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
@@ -237,6 +239,10 @@ class AppRepository(
     suspend fun updateOrderInfo(orderId: String, requestBody: UpdateOrderReqBody) = apiInterfaceCore.updateOrderInfo(orderId, requestBody)
 
     suspend fun updateCourierStatusDT(requestBody: StatusLocationRequest) = apiInterfaceCore.updateCourierStatusDT(requestBody)
+
+    suspend fun fetchCustomerList(requestBody: CustomerInfoRequest) = apiInterfaceCore.fetchCustomerList(requestBody)
+
+    suspend fun fetchCustomerDetailsList(requestBody: CustomerInfoDetailsRequest) = apiInterfaceCore.fetchCustomerDetailsList(requestBody)
 
     suspend fun fetchAcceptedCourierOrders(courierUserId: Int) = apiInterfaceCore.fetchAcceptedCourierOrders(courierUserId)
 

@@ -51,6 +51,7 @@ import com.bd.deliverytiger.app.ui.dialog.PopupDialog
 import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
+import com.bd.deliverytiger.app.ui.lead_management.LeadManagementFragment
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
 import com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment
@@ -816,6 +817,14 @@ class HomeActivity : AppCompatActivity(),
                     Timber.d("ReturnStatementFragment already exist")
                 } else {
                     addFragment(ReturnStatementFragment.newInstance(), ReturnStatementFragment.tag)
+                }
+            }
+            R.id.nav_lead_management -> {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                if (currentFragment is LeadManagementFragment) {
+                    Timber.d("LeadManagementFragment already exist")
+                } else {
+                    addFragment(LeadManagementFragment.newInstance(), LeadManagementFragment.tag)
                 }
             }
             R.id.nav_survey -> {
