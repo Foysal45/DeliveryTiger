@@ -1030,6 +1030,7 @@ class AddOrderFragmentOne : Fragment() {
         override fun afterTextChanged(s: Editable?) {
             if (s != null) {
                 if (s.count() == 11) {
+                    //TODO Remove comment
                     //fetchCustomerInformation(s.toString())
                 }
             }
