@@ -207,7 +207,7 @@ class LiveHomeActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        finish()
+        super.onBackPressed()
     }
 
     private fun drawerListener() {

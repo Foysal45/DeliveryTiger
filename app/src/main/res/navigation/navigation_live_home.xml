@@ -15,22 +15,31 @@
         android:id="@+id/nav_live_schedule_list"
         android:name="com.bd.deliverytiger.app.ui.live.live_schedule_list.LiveScheduleListFragment"
         android:label="আমার লাইভ"
-        tools:layout="@layout/fragment_live_schedule_list"
-        />
+        tools:layout="@layout/fragment_live_schedule_list">
+
+        <action android:id="@+id/nav_liveScheduleList_liveProductAdd"
+            app:destination="@id/nav_live_product_add"
+            />
+
+        <action android:id="@+id/nav_liveScheduleList_liveScheduleProductList"
+            app:destination="@id/nav_live_schedule_product_list"
+            />
+
+    </fragment>
     
     <!--<fragment
         android:id="@+id/nav_video"
         android:name="com.ajkerdeal.app.ajkerdealseller.ui.live.video_pager.VideoFragment"
         android:label="Video"
         tools:layout="@layout/fragment_video"
-        />-->
+        />
 
     <fragment
         android:id="@+id/nav_live_deal_management"
         android:name="com.bd.deliverytiger.app.ui.live.live_schedule_list."
         android:label="ডিল ম্যানেজমেন্ট থেকে প্রোডাক্ট অ্যাড"
         tools:layout="@layout/fragment_live_deal_management"
-        />
+        />-->
     
     <fragment
         android:id="@+id/nav_live_product_add"
@@ -51,7 +60,7 @@
         android:name="com.ajkerdeal.app.ajkerdealseller.ui.live.live_order_list.LiveOrderListFragment"
         android:label="লাইভ অর্ডার লিস্ট"
         tools:layout="@layout/fragment_live_order_list"
-        />-->
+        />
     
     <fragment
         android:id="@+id/nav_live_share"
@@ -60,7 +69,7 @@
         tools:layout="@layout/fragment_live_share"
         />
     
-<!--    <fragment
+    <fragment
         android:id="@+id/nav_order_management"
         android:name="com.ajkerdeal.app.ajkerdealseller.ui.live.order_management.LiveOrderManagementFragment"
         android:label="অর্ডার ম্যানেজমেন্ট"

@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -116,7 +117,7 @@ class LiveScheduleListFragment(): Fragment() {
                                 "liveId" to model.id,
                                 "suggestedPrice" to model.suggestedPrice
                             )
-                            findNavController().navigate(R.id.nav_live_product_add, bundle)
+                            findNavController().navigate(R.id.nav_liveScheduleList_liveProductAdd, bundle)
                         }
                         2 -> {
                             // GOTO product add from previous
@@ -131,7 +132,7 @@ class LiveScheduleListFragment(): Fragment() {
                             val bundle = bundleOf(
                                 "liveId" to model.id
                             )
-                            findNavController().navigate(R.id.nav_live_deal_management, bundle)
+                            //findNavController().navigate(R.id.nav_live_deal_management, bundle)
                         }
                     }
 
@@ -504,7 +505,7 @@ class LiveScheduleListFragment(): Fragment() {
         val bundle = bundleOf(
             "liveId" to model.id
         )
-        findNavController().navigate(R.id.nav_live_schedule_product_list, bundle)
+        findNavController().navigate(R.id.nav_liveScheduleList_liveScheduleProductList, bundle)
 
     }
 
@@ -541,9 +542,7 @@ class LiveScheduleListFragment(): Fragment() {
     }
 
     private fun customerExistsCheck() {
-        //TODO make it dynamic
-        var customerMobile = SessionManager.mobile
-        customerMobile = "01676100969"
+        val customerMobile = SessionManager.mobile
 
         Timber.d("requestBody 1 ${SessionManager.channelId}")
         if (SessionManager.channelId == 0) {
@@ -551,7 +550,10 @@ class LiveScheduleListFragment(): Fragment() {
             viewModel.customerAuthenticationCheck(requestBody).observe(viewLifecycleOwner, Observer {
                 userId = SessionManager.channelId
                 if (userId != 0) {
+                    binding?.emptyView?.isVisible = false
                     viewModel.fetchUserScheduleReplay(userId, "customer", 0, 20)
+                } else {
+                    binding?.emptyView?.isVisible = true
                 }
             })
         }

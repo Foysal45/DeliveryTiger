@@ -353,9 +353,7 @@ class LiveScheduleFragment(): Fragment() {
     }
 
     private fun createChannelId() {
-        //TODO make it dynamic
-        var mobile = SessionManager.mobile
-        mobile = "01676100969"
+        val mobile = SessionManager.mobile
 
         val requestBody = SignUpNew(
             SessionManager.deviceId, SessionManager.firebaseToken, "", 0, "",
