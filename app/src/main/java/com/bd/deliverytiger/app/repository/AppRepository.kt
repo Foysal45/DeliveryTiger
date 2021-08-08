@@ -246,6 +246,8 @@ class AppRepository(
 
     suspend fun fetchAcceptedCourierOrders(courierUserId: Int) = apiInterfaceCore.fetchAcceptedCourierOrders(courierUserId)
 
+    suspend fun getCustomerInfoByMobile(mobile: String) = apiInterfaceCore.getCustomerInfoByMobile(mobile)
+
     //Quick Order
     suspend fun getCollectionTimeSlot(requestBody: TimeSlotRequest) = apiInterfaceCore.getCollectionTimeSlot(requestBody)
 

@@ -214,6 +214,9 @@ interface ApiInterfaceCore {
     @GET("api/Offer/GetOfferByMerchant/{courierUserId}")
     suspend fun isGetOfferByMerchant(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<Boolean>, ErrorResponse>
 
+    @GET("/api/Dashboard/GetCustomerInfoByMobile/{mobile}")
+    suspend fun getCustomerInfoByMobile(@Path("mobile") mobile: String): NetworkResponse<GenericResponse<CustomerInformation>, ErrorResponse>
+
     @POST("api/Fetch/GetDeliveredReturnedCount")
     suspend fun fetchDeliveredReturnedCount(@Body requestBody: DeliveredReturnedCountRequest): NetworkResponse<GenericResponse<List<DeliveredReturnCountResponseItem>>, ErrorResponse>
 

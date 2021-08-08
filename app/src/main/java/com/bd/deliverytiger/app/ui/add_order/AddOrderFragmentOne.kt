@@ -251,6 +251,7 @@ class AddOrderFragmentOne : Fragment() {
         etAriaPostOffice = view.findViewById(R.id.etAriaPostOffice)
         etCustomersAddress = view.findViewById(R.id.etCustomersAddress)
         etAdditionalNote = view.findViewById(R.id.etAdditionalNote)
+        etAddOrderMobileNo.addTextChangedListener(textWatcher)
 
         //Step 2
         productNameET = view.findViewById(R.id.productName)
@@ -1023,6 +1024,28 @@ class AddOrderFragmentOne : Fragment() {
             }
         })
     }
+
+    //#region Auto Populate Customer Info
+    private val textWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            if (s != null) {
+                if (s.count() == 11) {
+                    //fetchCustomerInformation(s.toString())
+                }
+            }
+        }
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        }
+    }
+
+    private fun fetchCustomerInformation(mobile: String){
+        viewModel.getCustomerInfoByMobile(mobile).observe(viewLifecycleOwner, Observer { model->
+            Timber.d("customerInfo $model")
+        })
+    }
+    //#endregion
 
     //#region Service Type Selection (for Dhaka only)
     private fun loadServiceType() {
