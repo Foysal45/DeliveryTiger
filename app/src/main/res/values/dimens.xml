@@ -25,4 +25,5 @@
     <dimen name="order_tracking_start_end">16dp</dimen>
     <dimen name="dashboard_btn_height">60dp</dimen>
     <dimen name="toggleButtonHeight">60dp</dimen>
+    <dimen name="order_preview_margin_top">12dp</dimen>
 </resources>
