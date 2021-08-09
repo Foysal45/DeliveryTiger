@@ -7,7 +7,6 @@ import androidx.core.content.edit
 import com.bd.deliverytiger.app.api.model.live.profile.ProfileData
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
-import com.bd.deliverytiger.app.ui.live.stream.StreamSettingData
 
 object SessionManager {
 
@@ -385,7 +384,7 @@ object SessionManager {
         )
     }
 
-    fun getStreamConfig(): StreamSettingData {
+    /*fun getStreamConfig(): StreamSettingData {
         return StreamSettingData(
             pref.getInt(LIVE_RESOLUTION_ID, 1),
             pref.getInt(LIVE_VIDEO_BIT_RATE, 2500),
@@ -401,7 +400,7 @@ object SessionManager {
             pref.getBoolean(LIVE_IS_NOISE_SUPPRESSOR, false),
             pref.getBoolean(LIVE_IS_FRONT_CAMERA_DEFAULT, false)
         )
-    }
+    }*/
 
     fun updateSession(model: ProfileUpdateReqBody) {
         pref.edit {

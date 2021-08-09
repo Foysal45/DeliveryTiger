@@ -40,7 +40,6 @@ import com.bd.deliverytiger.app.api.model.live.share_sms.SMSBody
 import com.bd.deliverytiger.app.api.model.live.share_sms.SMSRequest
 import com.bd.deliverytiger.app.databinding.FragmentLiveScheduleBinding
 import com.bd.deliverytiger.app.log.UserLogger
-import com.bd.deliverytiger.app.ui.live.share.LiveShareFragment
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -157,7 +156,7 @@ class LiveScheduleFragment(): Fragment() {
             }
         }
 
-        binding?.addContactBtn?.setOnClickListener {
+        /*binding?.addContactBtn?.setOnClickListener {
             val dialog = LiveShareFragment.newInstance(MyLiveSchedule(), instantLive)
             dialog.show(childFragmentManager, LiveShareFragment.tag)
             dialog.onShare = { shareMsg, numberList ->
@@ -166,7 +165,7 @@ class LiveScheduleFragment(): Fragment() {
                 selectedNumberList.addAll(numberList)
                 dialog.dismiss()
             }
-        }
+        }*/
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

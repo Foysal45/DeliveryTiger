@@ -548,8 +548,9 @@ class LiveScheduleListFragment(): Fragment() {
         if (SessionManager.channelId == 0) {
             val requestBody = AuthRequestBody("", customerMobile)
             viewModel.customerAuthenticationCheck(requestBody).observe(viewLifecycleOwner, Observer {
-                userId = SessionManager.channelId
-                if (userId != 0) {
+                Timber.d("requestBody customerExistsCheck $userId,  ${it.id}")
+                userId = it.id
+                if (userId > 0) {
                     binding?.emptyView?.isVisible = false
                     viewModel.fetchUserScheduleReplay(userId, "customer", 0, 20)
                 } else {

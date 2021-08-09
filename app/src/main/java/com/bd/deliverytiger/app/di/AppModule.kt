@@ -26,7 +26,6 @@ import com.bd.deliverytiger.app.ui.complain.complain_history.ComplainHistoryView
 import com.bd.deliverytiger.app.ui.dashboard.DashboardViewModel
 import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsViewModel
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
-import com.bd.deliverytiger.app.ui.live.deal_management.LiveDealManagementViewModel
 import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivityViewModel
 import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivityViewModelNew
 import com.bd.deliverytiger.app.ui.live.live_order_list.LiveOrderListViewModel
@@ -34,11 +33,6 @@ import com.bd.deliverytiger.app.ui.live.live_product_insert.LiveProductInsertVie
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleViewModel
 import com.bd.deliverytiger.app.ui.live.live_schedule_list.LiveScheduleListViewModel
 import com.bd.deliverytiger.app.ui.live.live_schedule_product.LiveScheduleProductListViewModel
-import com.bd.deliverytiger.app.ui.live.order_management.LiveOrderManagementViewModel
-import com.bd.deliverytiger.app.ui.live.product_gallery.AllProductListViewModel
-import com.bd.deliverytiger.app.ui.live.profile.LiveProfileFragmentViewModel
-import com.bd.deliverytiger.app.ui.live.share.LiveShareViewModel
-import com.bd.deliverytiger.app.ui.live.stream.LiveActivityViewModel
 import com.bd.deliverytiger.app.ui.login.AuthViewModel
 import com.bd.deliverytiger.app.ui.notification.NotificationViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingViewModel
@@ -123,14 +117,8 @@ val appModule = module {
     viewModel { LiveHomeActivityViewModelNew(get()) }
     viewModel { LiveScheduleListViewModel(get()) }
     viewModel { LiveScheduleViewModel(get()) }
-    viewModel { LiveShareViewModel(get()) }
     viewModel { LiveOrderListViewModel(get()) }
-    viewModel { LiveActivityViewModel(get()) }
     viewModel { LiveProductInsertViewModel(get()) }
     viewModel { LiveScheduleProductListViewModel(get()) }
-    viewModel { AllProductListViewModel(get()) }
-    viewModel { LiveProfileFragmentViewModel(get()) }
-    viewModel { LiveDealManagementViewModel(get()) }
-    viewModel { LiveOrderManagementViewModel(get()) }
 
 }
