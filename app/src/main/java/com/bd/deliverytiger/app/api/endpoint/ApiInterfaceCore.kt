@@ -39,10 +39,7 @@ import com.bd.deliverytiger.app.api.model.lead_management.customer_details.Custo
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
-import com.bd.deliverytiger.app.api.model.order.OrderRequest
-import com.bd.deliverytiger.app.api.model.order.OrderResponse
-import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
-import com.bd.deliverytiger.app.api.model.order.UpdateOrderResponse
+import com.bd.deliverytiger.app.api.model.order.*
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackMainResponse
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackReqBody
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackResponse

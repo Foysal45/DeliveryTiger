@@ -10,9 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
-import com.bd.deliverytiger.app.api.model.order.OrderPreviewData
 import com.bd.deliverytiger.app.databinding.FragmentLeadManagementBinding
-import com.bd.deliverytiger.app.ui.add_order.order_preview.OrderPreviewBottomSheet
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.lead_management.customer_details_bottomsheet.CustomerDetailsBottomSheet
 import com.bd.deliverytiger.app.utils.SessionManager
@@ -120,8 +118,12 @@ class LeadManagementFragment : Fragment() {
     }
 
     private fun initClickLister(){
-        dataAdapter.onItemClicked = { model ->
-            goToCustomerDetailsBottomSheet(model.mobile ?: "")
+        dataAdapter.onItemClicked = { model, position, selection ->
+            if (selection){
+                dataAdapter.toggleSelection(model, position)
+            }else{
+                goToCustomerDetailsBottomSheet(model.mobile ?: "")
+            }
         }
     }
 

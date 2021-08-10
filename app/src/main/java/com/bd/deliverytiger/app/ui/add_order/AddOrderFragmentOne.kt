@@ -1030,8 +1030,7 @@ class AddOrderFragmentOne : Fragment() {
         override fun afterTextChanged(s: Editable?) {
             if (s != null) {
                 if (s.count() == 11) {
-                    //TODO Remove comment
-                    //fetchCustomerInformation(s.toString())
+                    fetchCustomerInformation(s.toString())
                 }
             }
         }
@@ -1043,9 +1042,17 @@ class AddOrderFragmentOne : Fragment() {
 
     private fun fetchCustomerInformation(mobile: String){
         viewModel.getCustomerInfoByMobile(mobile).observe(viewLifecycleOwner, Observer { model->
+            if (model != null){
+                districtId = model.districtId
+                etDistrict.setText("")
+                thanaId = model.thanaId
+                areaId = model.areaId
+                getDeliveryCharge(districtId, thanaId, areaId, serviceType)
+            }
             Timber.d("customerInfo $model")
         })
     }
+
     //#endregion
 
     //#region Service Type Selection (for Dhaka only)
