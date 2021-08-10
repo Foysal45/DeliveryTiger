@@ -28,7 +28,6 @@ import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsViewModel
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivityViewModel
 import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivityViewModelNew
-import com.bd.deliverytiger.app.ui.live.live_order_list.LiveOrderListViewModel
 import com.bd.deliverytiger.app.ui.live.live_product_insert.LiveProductInsertViewModel
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleViewModel
 import com.bd.deliverytiger.app.ui.live.live_schedule_list.LiveScheduleListViewModel
@@ -117,7 +116,6 @@ val appModule = module {
     viewModel { LiveHomeActivityViewModelNew(get()) }
     viewModel { LiveScheduleListViewModel(get()) }
     viewModel { LiveScheduleViewModel(get()) }
-    viewModel { LiveOrderListViewModel(get()) }
     viewModel { LiveProductInsertViewModel(get()) }
     viewModel { LiveScheduleProductListViewModel(get()) }
 

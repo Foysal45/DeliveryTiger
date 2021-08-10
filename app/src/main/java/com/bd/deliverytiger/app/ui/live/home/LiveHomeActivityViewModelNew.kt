@@ -1,25 +1,15 @@
 package com.bd.deliverytiger.app.ui.live.home
 
-import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.bd.deliverytiger.app.api.model.live.profile.ProfileData
 import com.bd.deliverytiger.app.repository.AppRepository
-import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.ViewState
-import com.haroldadmin.cnradapter.NetworkResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class LiveHomeActivityViewModelNew(private val repository: AppRepository) : ViewModel() {
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
 
-    fun fetchLiveUserProfile(profileId: Int, context: Context): LiveData<ProfileData> {
+    /*fun fetchLiveUserProfile(profileId: Int, context: Context): LiveData<ProfileData> {
         viewState.value = ViewState.ProgressState(true)
 
         val data: MutableLiveData<ProfileData> = MutableLiveData()
@@ -49,5 +39,5 @@ class LiveHomeActivityViewModelNew(private val repository: AppRepository) : View
             }
         }
         return data
-    }
+    }*/
 }

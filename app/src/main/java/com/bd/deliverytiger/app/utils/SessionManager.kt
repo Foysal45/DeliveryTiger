@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.NonNull
 import androidx.core.content.edit
-import com.bd.deliverytiger.app.api.model.live.profile.ProfileData
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 
@@ -77,21 +76,6 @@ object SessionManager {
             putString("thanaName", model.thanaName)
             putString("areaName", model.areaName)
             putInt("credit", model.credit.toInt())
-        }
-    }
-
-    fun updateProfile(model: ProfileData) {
-
-        pref.edit {
-            putBoolean(Is_LOGIN, true)
-            putInt("ProfileId", model.customerId)
-            putString("Name", model.name)
-            putBoolean("FacebookPageLinkEnable", model.facebookPageLinkEnable)
-            putString("FBStreamURL", model.fbStreamUrl)
-            putString("FBStreamKey", model.fbStreamKey)
-            putString("YoutubeStreamKey", model.youtubeStreamKey)
-            putString("YoutubeStreamURL", model.youtubeStreamUrl)
-
         }
     }
 

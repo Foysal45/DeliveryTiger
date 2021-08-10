@@ -354,10 +354,10 @@ class LiveHomeActivity : AppCompatActivity() {
         val userId = SessionManager.channelId
         //userId = 328702
         //userId = 1100
-        viewModel.fetchLiveUserProfile(userId, this).observe(this, { data->
+        /*viewModel.fetchLiveUserProfile(userId, this).observe(this, { data->
             Timber.d("requestBody $data")
             SessionManager.updateProfile(data)
-        })
+        })*/
     }
 
     @SuppressLint("PackageManagerGetSignatures")
