@@ -35,13 +35,6 @@
         <item name="windowFixedWidthMinor">60%</item>
     </style>
 
-    <style name="MyCustomPickerTheme" parent="MultiContactPicker.Azure">
-        <item name="colorPrimary">@color/blue_dark</item>
-        <item name="colorPrimaryDark">@color/blue_dark</item>
-        <item name="mcpToolbarTheme">@style/MyCustomToolbarTheme</item>
-        <item name="mcpListPopupWindowStyleTheme">@style/MyCustomToolbarTheme</item>
-    </style>
-
     <style name="MyCustomToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>

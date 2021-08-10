@@ -37,8 +37,8 @@ class LiveScheduleProductListFragment(): Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as LiveHomeActivity).updateToolbarTitle("আমার লাইভ")
-        findNavController().currentDestination?.label = "আমার লাইভ"
+        (activity as LiveHomeActivity).updateToolbarTitle("লাইভ প্রোডাক্ট লিস্ট")
+        findNavController().currentDestination?.label = "লাইভ প্রোডাক্ট লিস্ট"
 
         liveId = arguments?.getInt("liveId", 0) ?: 0
 
