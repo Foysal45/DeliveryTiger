@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.ui.add_order.order_preview
 
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,18 +16,18 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlin.concurrent.thread
 
+@SuppressLint("SetTextI18n")
 class OrderPreviewBottomSheet : BottomSheetDialogFragment() {
 
     private var binding: FragmentOrderPreviewBinding? = null
 
-    private var dataList: OrderPreviewData? = null
+    private var model: OrderPreviewData? = null
     var onClose: ((type: Int) -> Unit)? = null
     var onConfirmedClick: ((type: Int) -> Unit)? = null
 
     companion object {
-
-        fun newInstance(data: OrderPreviewData): OrderPreviewBottomSheet = OrderPreviewBottomSheet().apply {
-            dataList = data
+        fun newInstance(model: OrderPreviewData): OrderPreviewBottomSheet = OrderPreviewBottomSheet().apply {
+            this.model = model
         }
         val tag: String = OrderPreviewBottomSheet::class.java.name
     }
@@ -49,19 +50,16 @@ class OrderPreviewBottomSheet : BottomSheetDialogFragment() {
         initClickLister()
     }
 
-    private fun initView() {
-        binding?.nameTV?.text = dataList?.customerName
-        binding?.mobileTV?.text = dataList?.mobile
-        binding?.districtTV?.text = dataList?.district
-        binding?.thanaTV?.text = dataList?.thana
-        if (dataList?.codCharge == 0.0){
-            binding?.codAmountTV?.isVisible = false
-            binding?.detailsItem5?.isVisible = false
-        }else{
 
+    private fun initView() {
+        binding?.nameTV?.text = model?.customerName
+        binding?.mobileTV?.text = model?.mobile
+        binding?.districtTV?.text = model?.district
+        binding?.thanaTV?.text = model?.thana
+        if (model?.isCollection == true) {
             binding?.codAmountTV?.isVisible = true
             binding?.detailsItem5?.isVisible = true
-            binding?.codAmountTV?.text = "৳ ${dataList?.codCharge}"
+            binding?.codAmountTV?.text = "৳ ${model?.codCharge}"
         }
     }
 

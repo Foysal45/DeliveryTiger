@@ -12,6 +12,7 @@ import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -26,6 +27,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
@@ -127,6 +129,65 @@ fun Activity.alert(title: CharSequence? = null, message: CharSequence? = null, s
     return dialog
 }
 
+
+fun Fragment.customAlert(titleText: String, descriptionText: String, noBtnText: String, yesBtnText: String, listener: ((type: Int) -> Unit)? = null) {
+
+    val builder = MaterialAlertDialogBuilder(requireContext())
+    val view = layoutInflater.inflate(R.layout.dialog_instant_live, null)
+    val title = view.findViewById<TextView>(R.id.title)
+    val description = view.findViewById<TextView>(R.id.description)
+    val noBtn = view.findViewById<MaterialButton>(R.id.noBtn)
+    val yesBtn = view.findViewById<MaterialButton>(R.id.yesBtn)
+
+    title.text = titleText
+    description.text = descriptionText
+    noBtn.text = noBtnText
+    yesBtn.text = yesBtnText
+
+    builder.setView(view)
+
+    val dialog = builder.create()
+    dialog.show()
+
+    noBtn.setOnClickListener() {
+        dialog.dismiss()
+        listener?.invoke(2)
+    }
+    yesBtn.setOnClickListener() {
+        dialog.dismiss()
+        listener?.invoke(1)
+    }
+}
+
+fun Activity.customAlert(titleText: String, descriptionText: String, noBtnText: String, yesBtnText: String, listener: ((type: Int) -> Unit)? = null) {
+
+    val builder = MaterialAlertDialogBuilder(this)
+    val view = layoutInflater.inflate(R.layout.dialog_instant_live, null)
+    val title = view.findViewById<TextView>(R.id.title)
+    val description = view.findViewById<TextView>(R.id.description)
+    val noBtn = view.findViewById<MaterialButton>(R.id.noBtn)
+    val yesBtn = view.findViewById<MaterialButton>(R.id.yesBtn)
+
+    title.text = titleText
+    description.text = descriptionText
+    noBtn.text = noBtnText
+    yesBtn.text = yesBtnText
+
+    builder.setView(view)
+
+    val dialog = builder.create()
+    dialog.show()
+
+    noBtn.setOnClickListener() {
+        dialog.dismiss()
+        listener?.invoke(2)
+    }
+    yesBtn.setOnClickListener() {
+        dialog.dismiss()
+        listener?.invoke(1)
+    }
+}
+
 fun Context.toast(msg: String?, time: Int = Toast.LENGTH_SHORT) {
     if (!msg.isNullOrEmpty()) {
         val toast = Toast.makeText(this, msg, time)
@@ -196,6 +257,12 @@ fun Context.isConnectedToNetwork(): Boolean {
     return isConnected
 }
 
+fun isUrlSafeString(text: String): Boolean {
+
+    val match = "[a-zA-Z0-9 \\-_]*".toRegex()
+    return text.matches(match)
+}
+
 fun getFileContentType(filePath: String): String? {
     val file = File(filePath)
     val map = MimeTypeMap.getSingleton()
@@ -221,6 +288,32 @@ fun Bundle.bundleToString(): String {
     return this.keySet().joinToString(", ", "{", "}") { key ->
         "$key=${this[key]}"
     }
+}
+
+fun isIntRange(text: String): Boolean {
+    val match = "[0-9,]*".toRegex()
+    return text.matches(match)
+}
+
+fun cleanPhoneNumber(number: String?): String {
+    if (number == null) return ""
+    val modNumber = number.replace("""[\s-]+""".toRegex(),"")
+    if (modNumber.contains("+")) {
+        return modNumber.substring((modNumber.length-11),modNumber.length)
+    }
+    return modNumber
+}
+
+fun goToSetting(context: Context) {
+    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + context.packageName)).apply {
+        addCategory(Intent.CATEGORY_DEFAULT)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+        addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+    }.also {
+        context.startActivity(it)
+    }
+
 }
 
 fun isEnglishLetterOnly(text: String): Boolean {

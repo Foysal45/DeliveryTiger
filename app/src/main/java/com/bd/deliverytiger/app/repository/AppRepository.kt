@@ -9,9 +9,19 @@ import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
+import com.bd.deliverytiger.app.api.model.deal_management.DealManagementRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
+import com.bd.deliverytiger.app.api.model.live.auth.AuthRequestBody
+import com.bd.deliverytiger.app.api.model.live.auth.SignUpNew
+import com.bd.deliverytiger.app.api.model.live.live_product_insert.LiveProductInsertData
+import com.bd.deliverytiger.app.api.model.live.live_product_insert.ProductGalleryData
+import com.bd.deliverytiger.app.api.model.live.live_product_list.LiveProductRequest
+import com.bd.deliverytiger.app.api.model.live.live_schedule.ScheduleRequest
+import com.bd.deliverytiger.app.api.model.live.live_schedule_insert.LiveScheduleInsertRequest
+import com.bd.deliverytiger.app.api.model.live.live_status.LiveStatusUpdateRequest
+import com.bd.deliverytiger.app.api.model.live.share_sms.SMSRequest
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
@@ -38,8 +48,6 @@ import com.bd.deliverytiger.app.database.dao.NotificationDao
 import com.bd.deliverytiger.app.fcm.FCMData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.http.Body
-import retrofit2.http.Path
 
 class AppRepository(
     private val apiInterfaceADM: ApiInterfaceADM,
@@ -47,6 +55,7 @@ class AppRepository(
     private val apiInterfaceAPI: ApiInterfaceAPI,
     private val apiInterfaceBridge: ApiInterfaceBRIDGE,
     private val apiInterfaceLambda: ApiInterfaceLambda,
+    private val apiInterfaceMerchant: ApiInterfaceMerchant,
     private val apiInterfaceBariKoi: ApiInterfaceBariKoi,
     private val apiInterfaceANA: ApiInterfaceANA,
     private val database: AppDatabase
@@ -86,6 +95,52 @@ class AppRepository(
     suspend fun fetchAllDistricts() = apiInterfaceAPI.fetchAllDistricts()
 
     suspend fun uploadProductImage(data: RequestBody, file: List<MultipartBody.Part>?) = apiInterfaceAPI.uploadProductImage(data, file)
+
+    //Live CustomerExistsCheck
+    suspend fun customerAuthenticationCheck(requestBody: AuthRequestBody) = apiInterfaceAPI.customerAuthenticationCheck(requestBody)
+
+    suspend fun signUpForLivePlaza(requestBody: SignUpNew) = apiInterfaceAPI.signUpForLivePlaza(requestBody)
+
+    // Live
+    suspend fun getProductList(
+        categoryId: Int, subCategoryId: Int, subSUbCategoryId: Int, routingName: String, index: Int, count: Int
+    ) = apiInterfaceAPI.getProductList(categoryId, subCategoryId, subSUbCategoryId, routingName, index, count)
+
+
+    suspend fun fetchLiveSchedule(requestBody: ScheduleRequest) = apiInterfaceAPI.fetchLiveSchedule(requestBody)
+
+    suspend fun insertLiveSchedule(requestBody: LiveScheduleInsertRequest) = apiInterfaceAPI.insertLiveSchedule(requestBody)
+
+    suspend fun uploadLiveCoverPhoto(requestBody: RequestBody, file1: MultipartBody.Part? = null) = apiInterfaceAPI.uploadLiveCoverPhoto(requestBody, file1)
+
+    suspend fun fetchUserSchedule(customerId: Int, type: String, index: Int, count: Int) = apiInterfaceAPI.fetchUserSchedule(customerId, type, index, count)
+
+    suspend fun fetchUserScheduleReplay(customerId: Int, type: String, index: Int, count: Int) = apiInterfaceAPI.fetchUserScheduleReplay(customerId, type, index, count)
+
+    //SMS
+    suspend fun shareSMS(requestBody: SMSRequest) = apiInterfaceAPI.shareSMS(requestBody)
+
+    suspend fun fetchTotalSMSCount(liveId: Int) = apiInterfaceAPI.fetchTotalSMSCount(liveId)
+
+    suspend fun fetchFreeSMSCondition() = apiInterfaceAPI.fetchFreeSMSCondition()
+
+    suspend fun insertLiveProducts(requestBody: List<LiveProductInsertData>) = apiInterfaceAPI.insertLiveProducts(requestBody)
+
+    suspend fun uploadProductPhoto(productId: RequestBody, folderName: RequestBody, files: List<MultipartBody.Part>? = null) = apiInterfaceAPI.uploadProductPhoto(productId, folderName, files)
+
+    suspend fun fetchLiveProducts(requestBody: LiveProductRequest) = apiInterfaceAPI.fetchLiveProducts(requestBody)
+
+    suspend fun updateProductSoldOut(productId: Int, flag: Boolean) = apiInterfaceAPI.updateProductSoldOut(productId, flag)
+
+    suspend fun deleteProductFromLive(productId: Int) = apiInterfaceAPI.deleteProductFromLive(productId)
+
+    suspend fun updateLiveStatus(requestBody: LiveStatusUpdateRequest) = apiInterfaceAPI.updateLiveStatus(requestBody)
+
+    suspend fun insertProductByID(responseBody: List<ProductGalleryData>) = apiInterfaceAPI.insertProductByID(responseBody)
+
+    //******************** ApiInterfaceMerchant ********************//
+
+    suspend fun fetchDealManagementData(requestBody: DealManagementRequest) = apiInterfaceMerchant.fetchDealManagementData(requestBody)
 
     //******************** Analytics ********************//
 

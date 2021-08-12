@@ -21,4 +21,5 @@ interface ApiInterfaceANA {
     @POST("api/bkashsmslog")
     suspend fun logSMS(@Body requestBody: SMSLogRequest): NetworkResponse<SMSLogResponse, ErrorResponse>
 
+
 }

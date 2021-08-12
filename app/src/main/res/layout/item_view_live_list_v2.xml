@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:padding="5dp">
+    
+    <ImageView
+        android:id="@+id/videoCover"
+        android:layout_width="60dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="4dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/cd"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@id/videoCover"
+        app:layout_constraintTop_toTopOf="@id/videoCover"
+        app:layout_constraintBottom_toBottomOf="@id/videoCover"
+        app:layout_constraintEnd_toStartOf="@id/productCountLayout"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintVertical_bias="0">
+    
+        <TextView
+            android:id="@+id/liveStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="8dp"
+            android:textColor="@color/aDheaderColor"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@id/liveSchedule"
+            app:layout_constraintStart_toEndOf="@id/videoCover"
+            app:layout_constraintTop_toTopOf="@+id/videoCover"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Upcoming" />
+    
+        <TextView
+            android:id="@+id/liveTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="8dp"
+            android:textColor="@color/black_100"
+            android:textSize="14sp"
+            android:ellipsize="marquee"
+            android:visibility="gone"
+            tools:visibility="gone"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toTopOf="@id/liveSchedule"
+            app:layout_constraintEnd_toStartOf="@id/productCountLayout"
+            app:layout_constraintStart_toEndOf="@id/videoCover"
+            app:layout_constraintTop_toBottomOf="@+id/liveStatus"
+            tools:text="Live with Anup" />
+    
+        <TextView
+            android:id="@+id/liveSchedule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="8dp"
+            android:textColor="@color/black_100"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@id/shareLayout"
+            app:layout_constraintStart_toEndOf="@id/videoCover"
+            app:layout_constraintTop_toBottomOf="@+id/liveTitle"
+            tools:text="Today @ 10:00 AM" />
+    
+        <LinearLayout
+            android:id="@+id/shareLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="@id/videoCover"
+            app:layout_constraintStart_toEndOf="@id/videoCover"
+            app:layout_constraintTop_toBottomOf="@id/liveSchedule"
+            android:visibility="gone"
+            tools:visibility="visible">
+        
+            <ImageView
+                android:id="@+id/shareLive"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="top|center_horizontal"
+                android:layout_marginTop="8dp"
+                android:background="#00000000"
+                android:contentDescription="@string/cd"
+                android:src="@drawable/ic_share_fill"
+                app:tint="@color/blue" />
+        
+            <ImageView
+                android:id="@+id/smsFreeOffer"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/cd"
+                android:padding="0dp"
+                android:src="@drawable/ic_sms_free_offer" />
+    
+        </LinearLayout>
+        
+        
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/productCountLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:gravity="center"
+        android:minWidth="60dp"
+        android:orientation="vertical"
+        android:padding="4dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
+        
+        <TextView
+            android:id="@+id/productCount"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_stroke_circle"
+            android:gravity="center"
+            android:padding="0dp"
+            android:textColor="@color/blue"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            tools:text="04" />
+        
+        <TextView
+            android:id="@+id/tvProductCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:minWidth="55dp"
+            android:textColor="@color/blue"
+            android:textSize="12sp"
+            tools:text="টি অর্ডার" />
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/remainingTimeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:gravity="center"
+        android:minWidth="60dp"
+        android:orientation="vertical"
+        android:padding="4dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone">
+        
+        <TextView
+            android:id="@+id/remainingTime"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_stroke_circle"
+            android:gravity="center"
+            android:padding="0dp"
+            android:textColor="#F05025"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            tools:text="04" />
+        
+        <TextView
+            android:id="@+id/tvRemainingTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:minWidth="55dp"
+            android:text="ঘন্টা বাকি"
+            android:textColor="@color/black_80"
+            android:textSize="12sp" />
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/liveStartLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="4dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UseCompoundDrawables"
+        tools:visibility="gone">
+        
+        <ImageView
+            android:id="@+id/liveStart"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/cd"
+            android:padding="0dp"
+            android:src="@drawable/ic_live"
+            android:textSize="36sp"
+            tools:text="04" />
+        
+        <TextView
+            android:id="@+id/tvLiveStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:minWidth="55dp"
+            android:text="লাইভ করুন"
+            android:textColor="@color/black_80"
+            android:textSize="12sp" />
+    
+    </LinearLayout>
+    
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="liveStartLayout, remainingTimeLayout, productCountLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/remainingTimeLayout"
+        app:layout_constraintTop_toTopOf="parent" />
+    
+    <LinearLayout
+        android:id="@+id/productAddLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="4dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/barrier"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UseCompoundDrawables"
+        tools:visibility="visible">
+        
+        <ImageView
+            android:id="@+id/productAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:contentDescription="@string/ef_content_desc_image"
+            android:padding="0dp"
+            android:src="@drawable/ic_product_add" />
+        
+        <TextView
+            android:id="@+id/tvProductAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="প্রোডাক্ট যোগ"
+            android:textColor="@color/black_80"
+            android:textSize="12sp" />
+    
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
