@@ -13,6 +13,7 @@ import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
 import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
 import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
+import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfo
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
 import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
@@ -526,9 +527,9 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
         return responseData
     }
 
-    fun getCustomerInfoByMobile(mobile: String) : LiveData<CustomerInformation>{
+    fun getCustomerInfoByMobile(mobile: String) : LiveData<CustomerInfo>{
         viewState.value = ViewState.ProgressState(true)
-        val responseData = MutableLiveData<CustomerInformation>()
+        val responseData = MutableLiveData<CustomerInfo>()
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.getCustomerInfoByMobile(mobile)
             withContext(Dispatchers.Main) {

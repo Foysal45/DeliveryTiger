@@ -1,9 +1,9 @@
-package com.bd.deliverytiger.app.api.model.order
+package com.bd.deliverytiger.app.api.model.lead_management
 
 
 import com.google.gson.annotations.SerializedName
 
-data class CustomerInformation(
+data class CustomerInfo(
     @SerializedName("customerName")
     var customerName: String? = "",
     @SerializedName("otherMobile")
