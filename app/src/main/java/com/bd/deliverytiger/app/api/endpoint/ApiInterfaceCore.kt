@@ -35,6 +35,7 @@ import com.bd.deliverytiger.app.api.model.instant_payment_update.InstantPaymentU
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
+import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetails
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
@@ -213,6 +214,10 @@ interface ApiInterfaceCore {
 
     @GET("/api/Dashboard/GetCustomerInfoByMobile/{mobile}")
     suspend fun getCustomerInfoByMobile(@Path("mobile") mobile: String): NetworkResponse<GenericResponse<CustomerInformation>, ErrorResponse>
+
+    @POST("api/Fetch/LoadAllDistrictsByIds")
+    suspend fun loadAllDistrictsByIds(@Body requestBody: List<GetLocationInfoRequest>): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>
+
 
     @POST("api/Fetch/GetDeliveredReturnedCount")
     suspend fun fetchDeliveredReturnedCount(@Body requestBody: DeliveredReturnedCountRequest): NetworkResponse<GenericResponse<List<DeliveredReturnCountResponseItem>>, ErrorResponse>

@@ -13,6 +13,7 @@ import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturne
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
+import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
@@ -247,6 +248,8 @@ class AppRepository(
     suspend fun fetchAcceptedCourierOrders(courierUserId: Int) = apiInterfaceCore.fetchAcceptedCourierOrders(courierUserId)
 
     suspend fun getCustomerInfoByMobile(mobile: String) = apiInterfaceCore.getCustomerInfoByMobile(mobile)
+
+    suspend fun loadAllDistrictsByIds(requestBody: List<GetLocationInfoRequest>) = apiInterfaceCore.loadAllDistrictsByIds(requestBody)
 
     //Quick Order
     suspend fun getCollectionTimeSlot(requestBody: TimeSlotRequest) = apiInterfaceCore.getCollectionTimeSlot(requestBody)

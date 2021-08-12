@@ -34,6 +34,7 @@ import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
+import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.order.OrderPreviewData
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
@@ -1043,10 +1044,20 @@ class AddOrderFragmentOne : Fragment() {
     private fun fetchCustomerInformation(mobile: String){
         viewModel.getCustomerInfoByMobile(mobile).observe(viewLifecycleOwner, Observer { model->
             if (model != null){
-                districtId = model.districtId
-                etDistrict.setText("")
-                thanaId = model.thanaId
-                areaId = model.areaId
+                fetchSelectedDistrictInfo(model.districtId, model.thanaId, model.areaId)
+            }
+            Timber.d("customerInfo $model")
+        })
+    }
+
+    private fun fetchSelectedDistrictInfo(districtID: Int, thanaID: Int, areaID: Int){
+        val requestBody : MutableList<GetLocationInfoRequest> = mutableListOf()
+        requestBody.add(GetLocationInfoRequest(districtID))
+        requestBody.add(GetLocationInfoRequest(thanaID))
+        requestBody.add(GetLocationInfoRequest(areaID))
+        viewModel.loadAllDistrictsByIds(requestBody).observe(viewLifecycleOwner, Observer { model->
+            Timber.d("districtDData $model")
+            if (model != null){
                 getDeliveryCharge(districtId, thanaId, areaId, serviceType)
             }
             Timber.d("customerInfo $model")
