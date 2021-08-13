@@ -1,6 +1,8 @@
 package com.bd.deliverytiger.app.utils
 
+import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -97,6 +99,48 @@ object DigitConverter {
         } catch (e: Exception) {
             e.printStackTrace()
             return inputDate
+        }
+    }
+
+    fun relativeWeekday(dateTime: Date): String {
+        try {
+            val sdf = SimpleDateFormat("hh: mm a", Locale.US)
+            val calendar = Calendar.getInstance()
+            val toDate = calendar.get(Calendar.DAY_OF_YEAR)
+            calendar.time = dateTime
+            val selectedDate = calendar.get(Calendar.DAY_OF_YEAR)
+            when (selectedDate) {
+                toDate -> {
+                    return "আজ @ ${toBanglaDigit(sdf.format(dateTime))}"
+                }
+                toDate + 1 -> {
+                    return "আগামীকাল @ ${toBanglaDigit(sdf.format(dateTime))}"
+                }
+                toDate - 1 -> {
+                    return "গতকাল @ ${toBanglaDigit(sdf.format(dateTime))}"
+                }
+                else -> {
+                    val local = Locale("bn", "BD")
+                    val sdf1 = SimpleDateFormat("EEEE", local)
+                    return "${sdf1.format(dateTime)} @ ${toBanglaDigit(sdf.format(dateTime))}"
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return ""
+        }
+    }
+
+    private val df = DecimalFormat("#.##", DecimalFormatSymbols(Locale.ENGLISH)).apply {
+        roundingMode = RoundingMode.HALF_UP
+    }
+
+    fun formatDecimal(value: Float): String {
+        return try {
+            df.format(value)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            value.toString()
         }
     }
 

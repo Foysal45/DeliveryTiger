@@ -16,6 +16,7 @@ data class OrderPreviewData(
     @SerializedName("thana")
     var thana: String? = "",
     @SerializedName("codCharge")
-    var codCharge: Double? = 0.0
+    var codCharge: String? = "",
+    var isCollection: Boolean = false
 
 ) : Parcelable

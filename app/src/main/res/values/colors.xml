@@ -5,26 +5,49 @@
     <color name="colorAccent">#00844A</color>
     <color name="login_title_color">#26000000</color>
 
+    <color name="aDheaderColor">#f05a2b</color>
+
+    <color name="blue">#008fd3</color>
+    <color name="blue_dark">#2C363F</color>
+    <color name="light_blue">#4e6aa4</color>
+    <color name="text_black">#212121</color>
+    <color name="orangeForText">#F15A2D</color>
+    <color name="orange_100">#EDC8BC</color>
+
+    <color name="green_900">#1B5E20</color>
+
     <color name="white">#FFFFFF</color>
     <color name="black">#CC000000</color>
     <color name="black_100">#000000</color>
     <color name="black_90">#E6000000</color>
+    <color name="black_85">#D9000000</color>
     <color name="black_80">#CC000000</color>
+    <color name="black_75">#BF000000</color>
     <color name="black_70">#B3000000</color>
     <color name="black_60">#99000000</color>
     <color name="black_50">#80000000</color>
     <color name="black_40">#66000000</color>
+    <color name="black_30">#4D000000</color>
+    <color name="black_25">#40000000</color>
     <color name="black_20">#33000000</color>
     <color name="black_15">#26000000</color>
+    <color name="black_10">#1A000000</color>
     <color name="black_5">#0D000000</color>
     <color name="blur">#FFFFFF</color>
     <color name="separator">#26000000</color>
     <color name="hint">#66000000</color>
     <color name="bg_cod_top_lay">#99F1F1F3</color>
 
+    <color name="gray">#afadad</color>
+    <color name="gray_50">#fafafa</color>
+    <color name="gray_100">#f5f5f5</color>
+    <color name="gray_200">#4De0e0e0</color>
+    <color name="gray_300">#e0e0e0</color>
+    <color name="gray_500">#999999</color>
+    <color name="action_icon_background">#40000000</color>
+
     <color name="divider">#1A000000</color>
     <color name="background">#f0f0f0</color>
-    <color name="gray_500">#999999</color>
     <color name="drawer_icon_color">#9ca5b4</color>
 
     <color name="bg_rv">#08000000</color>
@@ -32,6 +55,7 @@
     <color name="negative">#FF8E34</color>
     <color name="neutral">#E1F3F3</color>
     <color name="red">#E84545</color>
+    <color name="red_900">#B71C1C</color>
     <color name="yellow">#FFFF00</color>
     <color name="ashColor">#7F95A3</color>
     <color name="header_layout_color">#FFE284</color>
@@ -47,6 +71,29 @@
     <color name="return_state_1">#7FB545</color>
     <color name="return_state_2">#5E9C47</color>
     <color name="return_state_3">#00844A</color>
+    
+    <color name="dashboard_positive">#EEF8EF</color>
+    <color name="dashboard_negative">#FFEBDB</color>
+    <color name="dashboard_neutral">#E1F3F3</color>
+    <color name="dashboard_waiting">#FFF4DB</color>
+    <color name="dashboard_positive_text">#66BB6A</color>
+    <color name="dashboard_negative_text">#FF8E34</color>
+    <color name="dashboard_neutral_text">#73B4C8</color>
+    <color name="dashboard_waiting_text">#FFB300</color>
+
+
+
+    <color name="ash">#727272</color>
+
+    <color name="actionButtonColor">@color/blue</color>
+    <color name="product_selected_color">#80008FD3</color>
+    <color name="checkout_tab_color">#008fd3</color>
+
+    <color name="network_state_poor">#FF5722</color>
+    <color name="network_state_moderate">#FFC107</color>
+    <color name="network_state_good">#00e676</color>
+
+    <color name="appColor">#e74c3c</color>
 
     <!--ucrop theme color-->
     <color name="ucrop_color_statusbar">@color/colorPrimaryDark</color>

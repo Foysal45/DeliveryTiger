@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/parent"
+    android:background="@color/white"
+    >
+    
+    <TextView
+        android:id="@+id/titleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="লাইভ প্রোডাক্ট অ্যাড"
+        android:textColor="@color/black_80"
+        android:textSize="16sp"
+        android:layout_gravity="center_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator"
+        app:layout_constraintTop_toBottomOf="@id/titleTV" />
+    
+    <EditText
+        android:id="@+id/productPrice"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:textSize="14sp"
+        android:textColor="@color/black_90"
+        android:background="@drawable/bg_product_price"
+        android:inputType="number"
+        android:imeOptions="actionNext"
+        android:importantForAutofill="no"
+        android:hint="প্রোডাক্টের দাম"
+        />
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="প্রোডাক্টের ছবি"
+        android:textColor="@color/black_70"
+        android:textSize="14sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        />
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        >
+        
+        <ImageView
+            android:id="@+id/coverPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="#F3F7FF"
+            android:contentDescription="@string/cd"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="parent" />
+        
+        <ImageView
+            android:id="@+id/coverPhotoUpload"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:contentDescription="@string/cd"
+            android:src="@drawable/ic_upload_photo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        
+        <ImageView
+            android:id="@+id/coverPhotoEdit"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@color/action_icon_background"
+            android:contentDescription="@string/cd"
+            android:padding="4dp"
+            android:src="@drawable/ic_edit"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/coverPhoto"
+            tools:visibility="visible" />
+    
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/addBtn"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="অ্যাড প্রোডাক্ট"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:backgroundTint="@color/actionButtonColor"
+        app:layout_constraintBottom_toBottomOf="parent" />
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        />
+
+</LinearLayout>

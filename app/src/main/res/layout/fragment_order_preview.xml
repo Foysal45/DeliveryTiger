@@ -58,7 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|start"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/order_preview_margin_top"
         android:text="মোবাইল"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
@@ -70,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/order_preview_margin_top"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|start"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/order_preview_margin_top"
         android:text="জেলা"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
@@ -94,7 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/order_preview_margin_top"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
         app:layout_constraintEnd_toEndOf="parent"
@@ -106,7 +106,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|start"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/order_preview_margin_top"
         android:text="থানা"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
@@ -118,7 +118,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/order_preview_margin_top"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
         app:layout_constraintEnd_toEndOf="parent"
@@ -130,7 +130,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|start"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/order_preview_margin_top"
         android:text="COD এমাউন্ট"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
@@ -144,7 +144,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/order_preview_margin_top"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_14"
         app:layout_constraintEnd_toEndOf="parent"
@@ -157,31 +157,33 @@
         android:id="@+id/leaveActionLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="24dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/codAmountTV"
         android:visibility="visible">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/editBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="4dp"
             android:backgroundTint="@color/red"
-            android:text="edit"/>
+            android:textSize="16sp"
+            android:text="এডিট"/>
 
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/confirmBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/colorPrimary"
             android:layout_marginStart="4dp"
-            android:text="Confirm"/>
+            android:textSize="16sp"
+            android:text="কনফার্ম"/>
 
     </LinearLayout>
 

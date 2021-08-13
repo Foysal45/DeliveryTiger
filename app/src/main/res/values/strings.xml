@@ -16,6 +16,7 @@
     <string name="select_yr_time_slot">টাইম স্লট নির্বাচন করুন </string>
     <string name="write_email_address">আপনার ইমেইল এড্রেস লিখুন</string>
     <string name="update_success">সফলভাবে আপডেট হয়েছে</string>
+    <string name="ef_content_desc_image" translatable="false">Image</string>
 
     <string name="select_dist">জেলা নির্বাচন করুন</string>
     <string name="select_thana">থানা নির্বাচন করুন</string>
@@ -118,6 +119,18 @@
     <string name="instant_payment">ইনস্ট্যান্ট পেমেন্ট আপডেট</string>
     <string name="quick_booking_list">সকল কুইক বুকিং</string>
 
+    <string name="file_provider">com.ajkerdeal.app.ajkerdealseller.fileprovider</string>
+    <string name="pick_single">ছবি সিলেক্ট করুন</string>
+    <string name="empty_msg">কোনো তথ্য পাওয়া যায়নি</string>
+    <string name="empty_msg1">কোনো লাইভ শিডিউল নেই\nনতুন শিডিউল অ্যাড করুন</string>
+
+    <string-array name="order_management_filter">
+        <item>বুকিং কোড</item>
+        <item>ডিল নাম</item>
+        <item>ডিল কোড</item>
+        <item>ফোন নাম্বার</item>
+    </string-array>
+
     <string name="offer_advance_success">আপনাকে বিকাশ পেমেন্ট লিংক সহ একটি এসএমএস ও ইমেইল করা হয়েছে। এটি আপনার এই অর্ডারের নির্দিস্ট কাস্টমারের সাথে শেয়ার করুন। কাস্টমার লিংক ব্যবহার করে বিকাশ পেমেন্ট করলেই আপনার কাছ থেকে প্রোডাক্ট ডেলিভারির জন্য কালেক্ট করা হবে। ১২ ঘন্টার মধ্যে কাস্টমারকে পেমেন্ট সম্পন্ন করার অনুরোধ করুন।</string>
     <string name="instruction">নির্দেশনা</string>
     <string name="ok">ঠিক আছে</string>
@@ -125,5 +138,9 @@
     <string name="yes_delete">হ্যাঁ, ডিলিট</string>
 
     <string name="area_close">জেলায়/থানায়/এরিয়ায় ডেলিভারি সার্ভিস সাময়িকভাবে বন্ধ রয়েছে।</string>
+
+    <string name="why_location_required">To assign order based on your pickup location automatically, allow Delivery Tiger to use your location data.</string>
+    <string name="how_location_used">Delivery Tiger will use location data to order info on rider app and overall operation progress.</string>
+
 
 </resources>

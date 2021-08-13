@@ -33,6 +33,7 @@ import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
 import com.bd.deliverytiger.app.api.model.helpline_number.HelpLineNumberModel
 import com.bd.deliverytiger.app.api.model.instant_payment_update.InstantPaymentUpdateResponse
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
+import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfo
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
 import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
@@ -213,7 +214,7 @@ interface ApiInterfaceCore {
     suspend fun isGetOfferByMerchant(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<Boolean>, ErrorResponse>
 
     @GET("/api/Dashboard/GetCustomerInfoByMobile/{mobile}")
-    suspend fun getCustomerInfoByMobile(@Path("mobile") mobile: String): NetworkResponse<GenericResponse<CustomerInformation>, ErrorResponse>
+    suspend fun getCustomerInfoByMobile(@Path("mobile") mobile: String): NetworkResponse<GenericResponse<CustomerInfo>, ErrorResponse>
 
     @POST("api/Fetch/LoadAllDistrictsByIds")
     suspend fun loadAllDistrictsByIds(@Body requestBody: List<GetLocationInfoRequest>): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>

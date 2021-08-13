@@ -35,6 +35,49 @@
         <item name="windowFixedWidthMinor">60%</item>
     </style>
 
+    <style name="MyCustomToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
+
+    <style name="exampleCursor" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="colorControlActivated">@color/blue</item>
+    </style>
+
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColorHint">@color/blue</item>
+        <item name="android:textColor">@color/black_80</item>
+        <item name="hintTextColor">@color/blue</item>
+        <item name="boxStrokeColor">@color/black_80</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="errorEnabled">true</item>
+        <item name="counterEnabled">false</item>
+        <item name="android:theme">@style/exampleCursor</item>
+    </style>
+
+    <style name="circularProgressBar">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/bg_progress</item>
+    </style>
+
+    <!-- Transparent bottom sheet -->
+    <style name="BottomSheetTransparent" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="BaseBottomSheetDialogTransparent" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="bottomSheetStyle">@style/BottomSheetTransparent</item>
+    </style>
+
+    <style name="BottomSheetDialogThemeTransparent" parent="BaseBottomSheetDialogTransparent">
+        <item name="android:statusBarColor">@color/black_100</item>
+        <item name="android:navigationBarColor">@color/black_100</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
     <!-- set the rounded drawable as background to your bottom sheet -->
     <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/bg_bottom_sheet_bg</item>

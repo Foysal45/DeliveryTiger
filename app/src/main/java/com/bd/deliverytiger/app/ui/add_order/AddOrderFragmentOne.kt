@@ -578,7 +578,10 @@ class AddOrderFragmentOne : Fragment() {
                                 timeSlotId = 0
                                 timeSlotDataAdapter.setSelectedPositions(-1)
                             }
-                        }.show()
+                        }.apply {
+                            setCancelable(false)
+                            show()
+                        }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -621,7 +624,7 @@ class AddOrderFragmentOne : Fragment() {
         })
 
         if (BuildConfig.DEBUG) {
-            mockUserData()
+            //mockUserData()
         }
     }
     //#endregion
@@ -1044,6 +1047,17 @@ class AddOrderFragmentOne : Fragment() {
     private fun fetchCustomerInformation(mobile: String){
         viewModel.getCustomerInfoByMobile(mobile).observe(viewLifecycleOwner, Observer { model->
             if (model != null){
+                districtId = model.districtId
+                thanaId = model.thanaId
+                areaId = model.areaId
+                etAriaPostOfficeLayout.isVisible = areaId > 0
+                etCustomerName.setText(model.customerName)
+                etCustomersAddress.setText(model.address)
+                etAlternativeMobileNo.setText(model.otherMobile)
+
+                selectServiceType()
+
+                getDeliveryCharge(districtId, thanaId, areaId, serviceType)
                 fetchSelectedDistrictInfo(model.districtId, model.thanaId, model.areaId)
             }
             Timber.d("customerInfo $model")
@@ -1055,12 +1069,17 @@ class AddOrderFragmentOne : Fragment() {
         requestBody.add(GetLocationInfoRequest(districtID))
         requestBody.add(GetLocationInfoRequest(thanaID))
         requestBody.add(GetLocationInfoRequest(areaID))
-        viewModel.loadAllDistrictsByIds(requestBody).observe(viewLifecycleOwner, Observer { model->
-            Timber.d("districtDData $model")
-            if (model != null){
-                getDeliveryCharge(districtId, thanaId, areaId, serviceType)
+        viewModel.loadAllDistrictsByIds(requestBody).observe(viewLifecycleOwner, Observer { list->
+            Timber.d("districtDData $list")
+
+            val district = list.find { it.districtId == districtID }
+            etDistrict.setText(district?.districtBng)
+            val thana = list.find { it.districtId == thanaID }
+            etThana.setText(thana?.districtBng)
+            if (areaID > 0) {
+                val area = list.find { it.districtId == areaID }
+                etAriaPostOffice.setText(area?.districtBng)
             }
-            Timber.d("customerInfo $model")
         })
     }
 
@@ -1319,9 +1338,7 @@ class AddOrderFragmentOne : Fragment() {
             isCity = district.isCity
         }
 
-        serviceType = if (merchantDistrict == districtId) {
-            "citytocity"
-        } else "alltoall"
+        selectServiceType()
         codChargePercentage = if (districtId == 14) {
             codChargePercentageInsideDhaka
         } else {
@@ -1528,9 +1545,11 @@ class AddOrderFragmentOne : Fragment() {
             return
         }
         calculateTotalPrice()
-        val orderPreviewData = OrderPreviewData(customerName, mobileNo, etDistrict.text.toString(), etThana.text.toString(), payCollectionAmount)
+        val collectionAmount = collectionAmountET.text.toString()
+        val districtName = etDistrict.text.toString()
+        val thanaName = etThana.text.toString()
+        val orderPreviewData = OrderPreviewData(customerName, mobileNo, districtName, thanaName, collectionAmount, isCollection)
         goToOrderPreviewBottomSheet(orderPreviewData)
-
     }
 
     private fun placeOrder(){
@@ -1577,14 +1596,14 @@ class AddOrderFragmentOne : Fragment() {
         } else if (isAriaAvailable && (areaId == 0 || etAriaPostOffice.text.toString().isEmpty())) {
             go = false
             context?.toast(getString(R.string.select_aria))
-        } else if (customerName.isEmpty()) {
-            context?.toast(getString(R.string.write_yr_name))
-            go = false
-            etCustomerName.requestFocus()
         } else if (mobileNo.isEmpty()) {
             context?.toast(getString(R.string.write_phone_number))
             go = false
             etAddOrderMobileNo.requestFocus()
+        } else if (customerName.isEmpty()) {
+            context?.toast(getString(R.string.write_yr_name))
+            go = false
+            etCustomerName.requestFocus()
         } else if (!Validator.isValidMobileNumber(mobileNo) || mobileNo.length < 11) {
             context?.toast(getString(R.string.write_proper_phone_number_recharge))
             go = false
@@ -1737,6 +1756,7 @@ class AddOrderFragmentOne : Fragment() {
         dialog.show(childFragmentManager, tag)
         dialog.onConfirmedClick = {
             if (it == 1){
+                dialog.dismiss()
                 placeOrder()
             }
         }
@@ -1792,6 +1812,12 @@ class AddOrderFragmentOne : Fragment() {
                 submitOrder()
             }
         }.show()
+    }
+
+    private fun selectServiceType() {
+        serviceType = if (merchantDistrict == districtId) {
+            "citytocity"
+        } else "alltoall"
     }
 
     //#region Test

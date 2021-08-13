@@ -72,6 +72,11 @@
             />
 
         <item
+            android:id="@+id/nav_live_home"
+            android:icon="@drawable/ic_video_watch"
+            android:title="লাইভ করুন" />
+
+        <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_profile"
             android:title="প্রোফাইল আপডেট" />

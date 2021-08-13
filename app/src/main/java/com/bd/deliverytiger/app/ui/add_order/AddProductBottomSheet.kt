@@ -14,7 +14,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.ProgressRequestBody
 import com.bd.deliverytiger.app.api.model.image_upload.ClassifiedImageData
 import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.product_upload.ProductUploadRequest
@@ -31,13 +30,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import com.haroldadmin.cnradapter.NetworkResponse
-import id.zelory.compressor.Compressor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.koin.android.ext.android.inject
@@ -47,7 +44,7 @@ import java.util.*
 import kotlin.concurrent.thread
 
 
-class AddProductBottomSheet : BottomSheetDialogFragment() {
+class AddProductBottomSheet  : BottomSheetDialogFragment() {
 
     private var binding: FragmentAddProductBottomSheetBinding? = null
     var onProductUploaded: ((dealId: Int, offerType: Int) -> Unit)? = null
@@ -250,10 +247,10 @@ class AddProductBottomSheet : BottomSheetDialogFragment() {
         viewModel.uploadProductInfo(jsonModel.toRequestBody(mediaTypeText)).observe(viewLifecycleOwner, Observer { model ->
 
             val imageData = ClassifiedImageData(
-                    model.productTitle,
-                    model.folderName,
-                    model.dealId,
-                    1
+                model.productTitle,
+                model.folderName,
+                model.dealId,
+                1
             )
             val imageDataJson = gson.toJson(imageData)
             val imageDataRequestBody = imageDataJson.toRequestBody(mediaTypeText)
@@ -262,33 +259,33 @@ class AddProductBottomSheet : BottomSheetDialogFragment() {
             val imageFile = File(imagePath)
             if (imageFile.exists()) {
 
-                    val bigFile = scaleImage(imagePath, AppConstant.BIG_IMAGE_WIDTH, AppConstant.BIG_IMAGE_HEIGHT)
-                    val smallFile = scaleImage(imagePath, AppConstant.SMALL_IMAGE_WIDTH, AppConstant.SMALL_IMAGE_HEIGHT)
-                    val miniFile = scaleImage(imagePath, AppConstant.MINI_IMAGE_WIDTH, AppConstant.MINI_IMAGE_HEIGHT)
+                val bigFile = scaleImage(imagePath, AppConstant.BIG_IMAGE_WIDTH, AppConstant.BIG_IMAGE_HEIGHT)
+                val smallFile = scaleImage(imagePath, AppConstant.SMALL_IMAGE_WIDTH, AppConstant.SMALL_IMAGE_HEIGHT)
+                val miniFile = scaleImage(imagePath, AppConstant.MINI_IMAGE_WIDTH, AppConstant.MINI_IMAGE_HEIGHT)
 
-                    if (!bigFile.isNullOrEmpty()) {
-                        //val compressedFile = Compressor.compress(context, File(bigFile))
-                        val compressedFile = File(bigFile)
-                        val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
-                        val part = MultipartBody.Part.createFormData("file1", "1.jpg", requestFile)
-                        partList.add(part)
-                    }
+                if (!bigFile.isNullOrEmpty()) {
+                    //val compressedFile = Compressor.compress(context, File(bigFile))
+                    val compressedFile = File(bigFile)
+                    val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
+                    val part = MultipartBody.Part.createFormData("file1", "1.jpg", requestFile)
+                    partList.add(part)
+                }
 
-                    if (!smallFile.isNullOrEmpty()) {
-                        //val compressedFile = Compressor.compress(context, File(smallFile))
-                        val compressedFile = File(smallFile)
-                        val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
-                        val partNew = MultipartBody.Part.createFormData("fileSmall1", "smallimage1.jpg", requestFile)
-                        partList.add(partNew)
-                    }
+                if (!smallFile.isNullOrEmpty()) {
+                    //val compressedFile = Compressor.compress(context, File(smallFile))
+                    val compressedFile = File(smallFile)
+                    val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
+                    val partNew = MultipartBody.Part.createFormData("fileSmall1", "smallimage1.jpg", requestFile)
+                    partList.add(partNew)
+                }
 
-                    if (!miniFile.isNullOrEmpty()) {
-                        //val compressedFile = Compressor.compress(context, File(miniFile))
-                        val compressedFile = File(miniFile)
-                        val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
-                        val partNew = MultipartBody.Part.createFormData("fileMini1", "miniimage1.jpg", requestFile)
-                        partList.add(partNew)
-                    }
+                if (!miniFile.isNullOrEmpty()) {
+                    //val compressedFile = Compressor.compress(context, File(miniFile))
+                    val compressedFile = File(miniFile)
+                    val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
+                    val partNew = MultipartBody.Part.createFormData("fileMini1", "miniimage1.jpg", requestFile)
+                    partList.add(partNew)
+                }
 
 
                 lifecycleScope.launch(Dispatchers.IO) {
@@ -331,6 +328,7 @@ class AddProductBottomSheet : BottomSheetDialogFragment() {
 
     /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
+
             val image: Image? = ImagePicker.getFirstImageOrNull(data)
             if (image != null) {
                 imagePath = image.path
@@ -403,10 +401,10 @@ class AddProductBottomSheet : BottomSheetDialogFragment() {
 
         canvas.drawColor(Color.WHITE)
         canvas.drawBitmap(
-                unscaledBitmap1,
-                canvasWidth.toFloat(),
-                canvasHeight.toFloat(),
-                null
+            unscaledBitmap1,
+            canvasWidth.toFloat(),
+            canvasHeight.toFloat(),
+            null
         )
         return bitmap
     }

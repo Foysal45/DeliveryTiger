@@ -16,12 +16,29 @@ object SessionManager {
     private val Is_LOGIN = "isLogIn"
     private val Key_accessToken = "accessTokenKey"
     private val Key_UserId = "userIdKey"
+    private val Key_ChannelId = "channelIdKey"
     private val Key_UserName = "userNameKey"
     private val Key_UserEmail = "userEmailKey"
     private val Key_UserPic = "userPicKey"
     private val Key_UserStatus = "userStatusKey"
     private val Key_UserLoginKey = "userLoginKey"
     private val Key_FileBaseUrl = "baseUrlKey"
+
+    //Live Multiple Video Quality
+    private val LIVE_RESOLUTION_ID = "resolutionId"
+    private val LIVE_VIDEO_BIT_RATE = "videoBitRate"
+    private val LIVE_RESOLUTION_WIDTH = "resolutionWidth"
+    private val LIVE_RESOLUTION_HEIGHT = "resolutionHeight"
+    private val LIVE_FPS = "fps"
+    private val LIVE_IS_HARDWARE_ROTATION = "isHardwareRotation"
+    private val LIVE_IS_FACE_DETECTION = "isFaceDetection"
+    private val LIVE_AUDIO_BIT_RATE = "audioBitRate"
+    private val LIVE_AUDIO_SAMPLE_RATE = "audioSampleRate"
+    private val LIVE_IS_STEREO_CHANNEL = "isStereoChannel"
+    private val LIVE_IS_ECHO_CANCELER = "isEchoCanceler"
+    private val LIVE_IS_NOISE_SUPPRESSOR = "isNoiseSuppressor"
+    private val LIVE_IS_FRONT_CAMERA_DEFAULT = "isFrontCameraDefault"
+    private val LIVE_SELECTED_VIDEO_QUALITY_TRACK_INDEX = "selectedVideoQualityTrackIndex"
 
     fun init(@NonNull context: Context) {
         pref = context.getSharedPreferences(Pref_Name, Context.MODE_PRIVATE)
@@ -219,6 +236,16 @@ object SessionManager {
             }
         }
 
+    var channelId: Int
+        get() {
+            return pref.getInt(Key_ChannelId, 0)
+        }
+        set(value) {
+            pref.edit {
+                putInt(Key_ChannelId, value)
+            }
+        }
+
     var userName: String
         get() {
             return pref.getString(Key_UserName, "")!!
@@ -341,6 +368,24 @@ object SessionManager {
         )
     }
 
+    /*fun getStreamConfig(): StreamSettingData {
+        return StreamSettingData(
+            pref.getInt(LIVE_RESOLUTION_ID, 1),
+            pref.getInt(LIVE_VIDEO_BIT_RATE, 2500),
+            pref.getInt(LIVE_RESOLUTION_WIDTH, 640),
+            pref.getInt(LIVE_RESOLUTION_HEIGHT, 360),
+            pref.getInt(LIVE_FPS, 30),
+            pref.getBoolean(LIVE_IS_HARDWARE_ROTATION, false),
+            pref.getBoolean(LIVE_IS_FACE_DETECTION, false),
+            pref.getInt(LIVE_AUDIO_BIT_RATE, 128),
+            pref.getInt(LIVE_AUDIO_SAMPLE_RATE, 44100),
+            pref.getBoolean(LIVE_IS_STEREO_CHANNEL, true),
+            pref.getBoolean(LIVE_IS_ECHO_CANCELER, false),
+            pref.getBoolean(LIVE_IS_NOISE_SUPPRESSOR, false),
+            pref.getBoolean(LIVE_IS_FRONT_CAMERA_DEFAULT, false)
+        )
+    }*/
+
     fun updateSession(model: ProfileUpdateReqBody) {
         pref.edit {
             putString("companyName", model.companyName)
@@ -362,6 +407,13 @@ object SessionManager {
             putString("districtName", model.districtName)
             putString("thanaName", model.thanaName)
             putString("areaName", model.areaName)
+        }
+    }
+
+    fun updateResolutionId(index: Int) {
+        pref.edit {
+            putInt("updateResolutionId", index)
+
         }
     }
 
@@ -502,6 +554,100 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString("retentionManagerNumber", value)
+            }
+        }
+
+    var isLocationConsentShown: Boolean
+        get() {
+            return pref.getBoolean("locationConsent", false)
+        }
+        set(value) {
+            pref.edit {
+                putBoolean("locationConsent", value)
+            }
+        }
+
+    //Live
+
+
+    var profileId: Int
+        get() {
+            return pref.getInt("ProfileId", 0)
+        }
+        set(value) {
+            pref.edit {
+                putInt("ProfileId", value)
+            }
+        }
+
+    var name: String
+        get() {
+            return pref.getString("Name", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("Name", value)
+            }
+        }
+
+    var facebookPageLinkEnable: Boolean
+        get() {
+            return pref.getBoolean("FacebookPageLinkEnable", false)
+        }
+        set(value) {
+            pref.edit {
+                putBoolean("FacebookPageLinkEnable", value)
+            }
+        }
+
+    var fbStreamURL: String
+        get() {
+            return pref.getString("FBStreamURL", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("FBStreamURL", value)
+            }
+        }
+
+    var fbStreamKey: String
+        get() {
+            return pref.getString("FBStreamKey", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("FBStreamKey", value)
+            }
+        }
+
+    var youtubeStreamKey: String
+        get() {
+            return pref.getString("YoutubeStreamKey", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("YoutubeStreamKey", value)
+            }
+        }
+
+
+    var getSelectedVideoQualityTrackIndex: Int
+        get() {
+            return pref.getInt(LIVE_SELECTED_VIDEO_QUALITY_TRACK_INDEX, -1)
+        }
+        set(value) {
+            pref.edit {
+                putInt(LIVE_SELECTED_VIDEO_QUALITY_TRACK_INDEX, value)
+            }
+        }
+
+    var youtubeStreamURL: String
+        get() {
+            return pref.getString("YoutubeStreamURL", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("YoutubeStreamURL", value)
             }
         }
 }
