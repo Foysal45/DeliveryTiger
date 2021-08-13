@@ -147,4 +147,21 @@
         <item name="android:theme">@style/outlinedBoxTheme</item>
     </style>
 
+    <style name="exampleCursor" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColorHint">@color/colorPrimary</item>
+        <item name="android:textColor">@color/black_80</item>
+        <item name="hintTextColor">@color/colorPrimary</item>
+        <item name="boxStrokeColor">@color/black_80</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="errorEnabled">true</item>
+        <item name="counterEnabled">false</item>
+        <item name="android:theme">@style/exampleCursor</item>
+
+    </style>
+
 </resources>
