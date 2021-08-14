@@ -31,7 +31,7 @@
             android:title="@string/return_statement" />
         <item
             android:id="@+id/nav_lead_management"
-            android:icon="@drawable/ic_bill_pay_history"
+            android:icon="@drawable/ic_magnet"
             android:title="@string/lead_management" />
 
         <item
