@@ -81,7 +81,7 @@
     <color name="dashboard_neutral_text">#73B4C8</color>
     <color name="dashboard_waiting_text">#FFB300</color>
 
-
+    <color name="selection_color">#c6edd6</color>
 
     <color name="ash">#727272</color>
 

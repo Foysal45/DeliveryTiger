@@ -5,14 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
+import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
 import com.bd.deliverytiger.app.databinding.FragmentLeadManagementBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.lead_management.customer_details_bottomsheet.CustomerDetailsBottomSheet
+import com.bd.deliverytiger.app.ui.share.SmsShareDialogue
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.ViewState
 import com.bd.deliverytiger.app.utils.hideKeyboard
@@ -120,10 +123,19 @@ class LeadManagementFragment : Fragment() {
     private fun initClickLister(){
         dataAdapter.onItemClicked = { model, position, selection ->
             if (selection){
-                dataAdapter.toggleSelection(model, position)
+                dataAdapter.multipleSelection(model, position)
+                binding?.addContactBtn?.isVisible = true
             }else{
                 goToCustomerDetailsBottomSheet(model.mobile ?: "")
+                binding?.addContactBtn?.isVisible = false
             }
+        }
+
+        binding?.addContactBtn?.setOnClickListener{
+            if (dataAdapter.getSelectedItemCount() > 0){
+                goToSmsSendBottomSheet(dataAdapter.getSelectedItemModelList())
+            }
+
         }
     }
 
@@ -134,6 +146,12 @@ class LeadManagementFragment : Fragment() {
     private fun goToCustomerDetailsBottomSheet(mobile: String) {
         val tag = CustomerDetailsBottomSheet.tag
         val dialog = CustomerDetailsBottomSheet.newInstance(mobile)
+        dialog.show(childFragmentManager, tag)
+    }
+
+    private fun goToSmsSendBottomSheet(model: List<CustomerInformation>) {
+        val tag = SmsShareDialogue.tag
+        val dialog = SmsShareDialogue.newInstance(model)
         dialog.show(childFragmentManager, tag)
     }
 

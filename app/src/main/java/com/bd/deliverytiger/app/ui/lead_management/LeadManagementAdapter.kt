@@ -5,7 +5,7 @@ import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
+import androidx.core.util.contains
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
@@ -14,11 +14,9 @@ class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList: MutableList<CustomerInformation> = mutableListOf()
     var onItemClicked: ((model: CustomerInformation, position: Int, selection: Boolean) -> Unit)? = null
-    var onItemLongClicked: ((model: CustomerInformation, position: Int) -> Unit)? = null
 
     private val selectedItems: SparseBooleanArray = SparseBooleanArray()
     // array used to perform multiple animation at once
-    private val animationItemsIndex: SparseBooleanArray = SparseBooleanArray()
     private var currentSelectedIndex = -1
     private var reverseAllAnimations = false
     var enableSelection: Boolean = false
@@ -40,7 +38,7 @@ class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.district.text = model.districtsViewModel?.district ?: ""
 
             if (selectedItems[position, false]) {
-                binding.parent.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(binding.parent.context, R.color.gray_500))
+                binding.parent.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(binding.parent.context, R.color.selection_color))
             } else {
                 binding.parent.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(binding.parent.context, R.color.white))
             }
@@ -78,34 +76,14 @@ class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun allList(): List<CustomerInformation> = dataList
 
-    fun toggleSelection(model : CustomerInformation, pos: Int) {
+    fun multipleSelection(model : CustomerInformation, pos: Int) {
         this.currentSelectedIndex = pos
-        reverseAllAnimations = true
-        selectedItems.clear()
-        currentSelectedIndex = pos
-        selectedItems.put(pos, true)
-        animationItemsIndex.put(pos, true)
-        notifyItemChanged(pos)
-    }
-
-    fun allSelection() {
-        val selectionLimit = 40
-        reverseAllAnimations = true
-        selectedItems.clear()
-        if (dataList.size >= selectionLimit) {
-            for (i in 0 until selectionLimit) {
-                currentSelectedIndex = i
-                selectedItems.put(i, true)
-                animationItemsIndex.put(i, true)
-            }
-        } else {
-            for (i in dataList.indices) {
-                currentSelectedIndex = i
-                selectedItems.put(i, true)
-                animationItemsIndex.put(i, true)
-            }
+        if (selectedItems.contains(pos)){
+            selectedItems.delete(pos)
+        }else{
+            selectedItems.put(pos, true)
         }
-        notifyDataSetChanged()
+        notifyItemChanged(pos)
     }
 
     fun clearSelections() {
@@ -118,10 +96,10 @@ class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return selectedItems.size()
     }
 
-    fun getSeletedItemModelList(): List<CustomerInformation> {
+    fun getSelectedItemModelList(): List<CustomerInformation> {
         val items: MutableList<CustomerInformation> = ArrayList<CustomerInformation>(selectedItems.size())
         for (i in 0 until selectedItems.size()) {
-            items.add(dataList.get(selectedItems.keyAt(i)))
+            items.add(dataList[selectedItems.keyAt(i)])
         }
         return items
     }

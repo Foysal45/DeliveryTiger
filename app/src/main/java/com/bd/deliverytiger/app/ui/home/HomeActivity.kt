@@ -370,7 +370,8 @@ class HomeActivity : AppCompatActivity(),
                 currentFragment is ReturnStatementFragment || currentFragment is ReturnStatementDetailsFragment ||
                 currentFragment is InstantPaymentUpdateFragment ||
                 currentFragment is DeliveryDetailsFragment ||
-                currentFragment is BalanceLoadHistoryFragment || currentFragment is QuickOrderListFragment
+                currentFragment is BalanceLoadHistoryFragment || currentFragment is QuickOrderListFragment ||
+                currentFragment is LeadManagementFragment
             ) {
                 addProductBtnVisibility(false)
             } else {
