@@ -175,7 +175,7 @@
                         android:layout_height="1px"
                         android:background="@color/login_title_color" />
 
-                    <RadioGroup
+                    <!--<RadioGroup
                         android:id="@+id/ganderType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -202,7 +202,7 @@
                             android:text="নারী"
                             android:textColor="@color/black_80"
                             android:textSize="14sp" />
-                    </RadioGroup>
+                    </RadioGroup>-->
 
                     <TextView
                         android:layout_width="match_parent"
