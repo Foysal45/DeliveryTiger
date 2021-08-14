@@ -30,6 +30,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.broadcast.ConnectivityReceiver
+import com.bd.deliverytiger.app.databinding.ActivityHomeBinding
 import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.log.UserLogger.logGenie
@@ -107,9 +108,10 @@ class HomeActivity : AppCompatActivity(),
     private lateinit var headerPic: ImageView
     private lateinit var separetor: View
     private lateinit var addOrderFab: FloatingActionButton
-    private lateinit var parent: CoordinatorLayout
+    private lateinit var parent: Toolbar
     private lateinit var actionBtn: TextView
 
+    private lateinit var binding: ActivityHomeBinding
     private val viewModel: HomeViewModel by inject()
     private var doubleBackToExitPressedOnce = false
     private var navId: Int = 0
@@ -137,7 +139,8 @@ class HomeActivity : AppCompatActivity(),
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -155,9 +158,11 @@ class HomeActivity : AppCompatActivity(),
         downloadTV = findViewById(R.id.home_toolbar_download)
         separetor = findViewById(R.id.home_toolbar_separator)
         addOrderFab = findViewById(R.id.addOrderFab)
-        parent = findViewById(R.id.parent)
+        parent = findViewById(R.id.toolbar)
         actionBtn = findViewById(R.id.actionBtn)
         navView.setNavigationItemSelectedListener(this)
+
+        binding.appBarHome.bottomNavigationView.background = null
 
 
         /*val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -900,14 +905,14 @@ class HomeActivity : AppCompatActivity(),
 
     private fun addProductBtnVisibility(isVisible: Boolean, withFab: Boolean = true) {
         if (isVisible) {
-            addProductIV.visibility = View.VISIBLE
+            //addProductIV.visibility = View.VISIBLE
             if (withFab) {
-                addOrderFab.show()
+                //addOrderFab.show()
             }
         } else {
-            addProductIV.visibility = View.GONE
+            //addProductIV.visibility = View.GONE
             if (withFab) {
-                addOrderFab.hide()
+                //addOrderFab.hide()
             }
         }
     }

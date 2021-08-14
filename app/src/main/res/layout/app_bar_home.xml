@@ -2,11 +2,10 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeActivity"
-    android:id="@+id/parent"
-    >
+    tools:context=".ui.home.HomeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -63,15 +62,14 @@
                         android:id="@+id/actionBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
+                        android:layout_marginEnd="16dp"
+                        android:drawablePadding="4dp"
                         android:gravity="center"
+                        android:text="সকল অর্ডার"
                         android:textColor="@color/colorPrimary"
                         android:textSize="15sp"
-                        android:drawablePadding="4dp"
-                        android:layout_marginEnd="16dp"
-                        android:text="সকল অর্ডার"
                         android:visibility="gone"
-                        tools:visibility="visible"
-                        />
+                        tools:visibility="visible" />
 
                     <ImageView
                         android:id="@+id/home_toolbar_tracking"
@@ -121,8 +119,7 @@
                         app:layout_constraintEnd_toStartOf="@id/home_toolbar_notification"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_balance"
-                        tools:visibility="visible"
-                        />
+                        tools:visibility="visible" />
 
                     <ImageView
                         android:id="@+id/home_toolbar_notification"
@@ -145,10 +142,12 @@
                         android:layout_marginEnd="16dp"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/cd"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_add_round" />
+                        app:srcCompat="@drawable/ic_add_round"
+                        tools:visibility="visible" />
 
                     <ImageView
                         android:id="@+id/home_toolbar_download"
@@ -157,12 +156,12 @@
                         android:layout_marginEnd="16dp"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/cd"
-                        app:tint="@color/colorPrimary"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_file_download"
+                        app:tint="@color/colorPrimary"
                         tools:visibility="visible" />
 
                 </LinearLayout>
@@ -178,7 +177,38 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:contentInsetEnd="0dp"
+        app:contentInsetStart="0dp"
+        app:fabCradleMargin="10dp"
+        app:fabCradleRoundedCornerRadius="10dp"
+        app:fabCradleVerticalOffset="10dp">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/menu_bottom_nav_home" />
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addOrderFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        app:backgroundTint="@color/white"
+        app:layout_anchor="@id/bottomAppBar"
+        app:srcCompat="@drawable/ic_plus"
+        app:tint="@color/colorPrimary" />
+
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addOrderFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -192,6 +222,6 @@
         app:srcCompat="@drawable/ic_add"
         android:visibility="invisible"
         tools:visibility="visible"
-        />
+        />-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
