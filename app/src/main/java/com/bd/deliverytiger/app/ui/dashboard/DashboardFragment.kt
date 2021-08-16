@@ -883,12 +883,12 @@ class DashboardFragment : Fragment() {
         button1.setOnClickListener {
             dialog.dismiss()
             addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
-            UserLogger.logGenie("Dashboard_NormalOrder")
+            UserLogger.logGenie("Dashboard_AddOrder")
         }
         button2.setOnClickListener {
             dialog.dismiss()
-            addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
-            UserLogger.logGenie("Dashboard_DetailOrder")
+            showQuickOrderBottomSheet()
+            UserLogger.logGenie("Dashboard_Quick_Order")
         }
     }
 
