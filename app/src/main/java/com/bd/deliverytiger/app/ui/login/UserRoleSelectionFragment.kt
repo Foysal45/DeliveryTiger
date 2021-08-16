@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentUserRoleSelectionBinding
+import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
@@ -44,6 +45,7 @@ class UserRoleSelectionFragment : Fragment() {
         }
         binding?.customerBtn?.setOnClickListener {
             goToOrderTrackingFragment()
+            UserLogger.logGenie("Customer_Login")
         }
 
         viewModel.fetchHelpLineNumbers().observe(viewLifecycleOwner, Observer { model->

@@ -9,19 +9,25 @@ import com.bd.deliverytiger.app.api.model.accounts.AdvanceBalanceData
 import com.bd.deliverytiger.app.api.model.config.BannerResponse
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
+import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
 import com.haroldadmin.cnradapter.NetworkResponse
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 class HomeViewModel(private val repository: AppRepository): ViewModel() {
 
     val serverErrorMessage = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
     val networkErrorMessage = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
     val unknownErrorMessage = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+
+    private val sdf = SimpleDateFormat("dd-MM-yyyy hh:mm a", Locale.US)
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
     val bannerInfo = MutableLiveData<BannerResponse>()
@@ -146,6 +152,14 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
                     serviceInfoList.value = serviceList
                 }
             }
+        }
+    }
+
+    fun saveNotificationData(fcmModel: FCMData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insert(fcmModel.apply {
+                createdAt = sdf.format(Date().time)
+            })
         }
     }
 

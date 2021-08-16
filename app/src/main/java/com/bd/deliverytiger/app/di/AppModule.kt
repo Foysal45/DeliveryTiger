@@ -32,6 +32,8 @@ import com.bd.deliverytiger.app.ui.live.live_product_insert.LiveProductInsertVie
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleViewModel
 import com.bd.deliverytiger.app.ui.live.live_schedule_list.LiveScheduleListViewModel
 import com.bd.deliverytiger.app.ui.live.live_schedule_product.LiveScheduleProductListViewModel
+import com.bd.deliverytiger.app.ui.lead_management.LeadManagementViewModel
+import com.bd.deliverytiger.app.ui.lead_management.customer_details_bottomsheet.CustomerDetailsViewModel
 import com.bd.deliverytiger.app.ui.login.AuthViewModel
 import com.bd.deliverytiger.app.ui.notification.NotificationViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingViewModel
@@ -44,6 +46,7 @@ import com.bd.deliverytiger.app.ui.quick_order.QuickOrderRequestViewModel
 import com.bd.deliverytiger.app.ui.referral.ReferralViewModel
 import com.bd.deliverytiger.app.ui.return_statement.ReturnStatementViewModel
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeViewModel
+import com.bd.deliverytiger.app.ui.share.SmsShareViewModel
 import com.bd.deliverytiger.app.ui.survey.SurveyViewModel
 import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODViewModel
 import com.bd.deliverytiger.app.utils.AppConstant
@@ -75,8 +78,9 @@ val appModule = module {
     single { ApiInterfaceBariKoi(get(named("bariKoi"))) }
     single { ApiInterfaceANA(get(named("ana"))) }
 
-    single { AppRepository(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     single { AppDatabase.invoke(get()) }
+
+    single { AppRepository(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 
     single { HomeViewModel(get()) }
 
@@ -118,5 +122,8 @@ val appModule = module {
     viewModel { LiveScheduleViewModel(get()) }
     viewModel { LiveProductInsertViewModel(get()) }
     viewModel { LiveScheduleProductListViewModel(get()) }
+    viewModel { LeadManagementViewModel(get()) }
+    viewModel { CustomerDetailsViewModel(get()) }
+    viewModel { SmsShareViewModel(get()) }
 
 }

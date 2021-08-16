@@ -34,6 +34,7 @@ import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
+import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.order.OrderPreviewData
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
@@ -251,6 +252,7 @@ class AddOrderFragmentOne : Fragment() {
         etAriaPostOffice = view.findViewById(R.id.etAriaPostOffice)
         etCustomersAddress = view.findViewById(R.id.etCustomersAddress)
         etAdditionalNote = view.findViewById(R.id.etAdditionalNote)
+        etAddOrderMobileNo.addTextChangedListener(textWatcher)
 
         //Step 2
         productNameET = view.findViewById(R.id.productName)
@@ -622,7 +624,7 @@ class AddOrderFragmentOne : Fragment() {
         })
 
         if (BuildConfig.DEBUG) {
-            mockUserData()
+            //mockUserData()
         }
     }
     //#endregion
@@ -1027,6 +1029,62 @@ class AddOrderFragmentOne : Fragment() {
         })
     }
 
+    //#region Auto Populate Customer Info
+    private val textWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            if (s != null) {
+                if (s.count() == 11) {
+                    fetchCustomerInformation(s.toString())
+                }
+            }
+        }
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        }
+    }
+
+    private fun fetchCustomerInformation(mobile: String){
+        viewModel.getCustomerInfoByMobile(mobile).observe(viewLifecycleOwner, Observer { model->
+            if (model != null){
+                districtId = model.districtId
+                thanaId = model.thanaId
+                areaId = model.areaId
+                etAriaPostOfficeLayout.isVisible = areaId > 0
+                etCustomerName.setText(model.customerName)
+                etCustomersAddress.setText(model.address)
+                etAlternativeMobileNo.setText(model.otherMobile)
+
+                selectServiceType()
+
+                getDeliveryCharge(districtId, thanaId, areaId, serviceType)
+                fetchSelectedDistrictInfo(model.districtId, model.thanaId, model.areaId)
+            }
+            Timber.d("customerInfo $model")
+        })
+    }
+
+    private fun fetchSelectedDistrictInfo(districtID: Int, thanaID: Int, areaID: Int){
+        val requestBody : MutableList<GetLocationInfoRequest> = mutableListOf()
+        requestBody.add(GetLocationInfoRequest(districtID))
+        requestBody.add(GetLocationInfoRequest(thanaID))
+        requestBody.add(GetLocationInfoRequest(areaID))
+        viewModel.loadAllDistrictsByIds(requestBody).observe(viewLifecycleOwner, Observer { list->
+            Timber.d("districtDData $list")
+
+            val district = list.find { it.districtId == districtID }
+            etDistrict.setText(district?.districtBng)
+            val thana = list.find { it.districtId == thanaID }
+            etThana.setText(thana?.districtBng)
+            if (areaID > 0) {
+                val area = list.find { it.districtId == areaID }
+                etAriaPostOffice.setText(area?.districtBng)
+            }
+        })
+    }
+
+    //#endregion
+
     //#region Service Type Selection (for Dhaka only)
     private fun loadServiceType() {
         homeViewModel.serviceInfoList.observe(viewLifecycleOwner, Observer { list ->
@@ -1280,9 +1338,7 @@ class AddOrderFragmentOne : Fragment() {
             isCity = district.isCity
         }
 
-        serviceType = if (merchantDistrict == districtId) {
-            "citytocity"
-        } else "alltoall"
+        selectServiceType()
         codChargePercentage = if (districtId == 14) {
             codChargePercentageInsideDhaka
         } else {
@@ -1529,44 +1585,47 @@ class AddOrderFragmentOne : Fragment() {
     }
 
     private fun validate(): Boolean {
-        var go = true
+        hideKeyboard()
         getAllViewData()
-        if (districtId == 0) {
-            go = false
-            context?.toast(getString(R.string.select_dist))
-        } else if (thanaId == 0 || etThana.text.toString().isEmpty()) {
-            go = false
-            context?.toast(getString(R.string.select_thana))
-        } else if (isAriaAvailable && (areaId == 0 || etAriaPostOffice.text.toString().isEmpty())) {
-            go = false
-            context?.toast(getString(R.string.select_aria))
-        } else if (customerName.isEmpty()) {
-            context?.toast(getString(R.string.write_yr_name))
-            go = false
-            etCustomerName.requestFocus()
-        } else if (mobileNo.isEmpty()) {
+        if (mobileNo.isEmpty()) {
             context?.toast(getString(R.string.write_phone_number))
-            go = false
             etAddOrderMobileNo.requestFocus()
-        } else if (!Validator.isValidMobileNumber(mobileNo) || mobileNo.length < 11) {
+            return false
+        }
+        if (!Validator.isValidMobileNumber(mobileNo) || mobileNo.length < 11) {
             context?.toast(getString(R.string.write_proper_phone_number_recharge))
-            go = false
             etAddOrderMobileNo.requestFocus()
-        }/* else if(alternativeMobileNo.isEmpty()){
-            go = false
-            context?.toast(context!!, getString(R.string.write_alt_phone_number))
-            etAlternativeMobileNo.requestFocus()
-        }*/
-          else if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
-            go = false
+            return false
+        }
+        if (customerName.isEmpty()) {
+            context?.toast(getString(R.string.write_yr_name))
+            etCustomerName.requestFocus()
+            return false
+        }
+        if (districtId == 0) {
+            context?.toast(getString(R.string.select_dist))
+            return false
+        }
+        if (thanaId == 0 || etThana.text.toString().isEmpty()) {
+            context?.toast(getString(R.string.select_thana))
+            return false
+        }
+        if (isAriaAvailable && (areaId == 0 || etAriaPostOffice.text.toString().isEmpty())) {
+            context?.toast(getString(R.string.select_aria))
+            return false
+        }
+        if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
             context?.toast(getString(R.string.write_yr_address))
             etCustomersAddress.requestFocus()
+            return false
         }
-        hideKeyboard()
+        /*if(alternativeMobileNo.isEmpty()){
+            context?.toast(getString(R.string.write_alt_phone_number))
+            etAlternativeMobileNo.requestFocus()
+            return false
+        }*/
 
-        //go = true
-
-        return go
+        return true
     }
 
     private fun validateFormData(): Boolean {
@@ -1756,6 +1815,12 @@ class AddOrderFragmentOne : Fragment() {
                 submitOrder()
             }
         }.show()
+    }
+
+    private fun selectServiceType() {
+        serviceType = if (merchantDistrict == districtId) {
+            "citytocity"
+        } else "alltoall"
     }
 
     //#region Test

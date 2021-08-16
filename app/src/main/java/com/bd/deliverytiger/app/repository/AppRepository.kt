@@ -22,6 +22,9 @@ import com.bd.deliverytiger.app.api.model.live.live_schedule.ScheduleRequest
 import com.bd.deliverytiger.app.api.model.live.live_schedule_insert.LiveScheduleInsertRequest
 import com.bd.deliverytiger.app.api.model.live.live_status.LiveStatusUpdateRequest
 import com.bd.deliverytiger.app.api.model.live.share_sms.SMSRequest
+import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
+import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
+import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
@@ -45,6 +48,7 @@ import com.bd.deliverytiger.app.database.dao.NotificationDao
 import com.bd.deliverytiger.app.fcm.FCMData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.http.Path
 
 class AppRepository(
     private val apiInterfaceADM: ApiInterfaceADM,
@@ -293,7 +297,20 @@ class AppRepository(
 
     suspend fun updateCourierStatusDT(requestBody: StatusLocationRequest) = apiInterfaceCore.updateCourierStatusDT(requestBody)
 
+    suspend fun fetchCustomerList(requestBody: CustomerInfoRequest) = apiInterfaceCore.fetchCustomerList(requestBody)
+
+    suspend fun fetchCustomerDetailsList(requestBody: CustomerInfoDetailsRequest) = apiInterfaceCore.fetchCustomerDetailsList(requestBody)
+
     suspend fun fetchAcceptedCourierOrders(courierUserId: Int) = apiInterfaceCore.fetchAcceptedCourierOrders(courierUserId)
+
+    suspend fun getCustomerInfoByMobile(mobile: String) = apiInterfaceCore.getCustomerInfoByMobile(mobile)
+
+    suspend fun loadAllDistrictsByIds(requestBody: List<GetLocationInfoRequest>) = apiInterfaceCore.loadAllDistrictsByIds(requestBody)
+
+    suspend fun updateCustomerSMSLimit(
+        @Path("courierUserId") courierUserId: Int,
+        @Path("customerSMSLimit") customerSMSLimit: Int
+    ) = apiInterfaceCore.updateCustomerSMSLimit(courierUserId, customerSMSLimit)
 
     //Quick Order
     suspend fun getCollectionTimeSlot(requestBody: TimeSlotRequest) = apiInterfaceCore.getCollectionTimeSlot(requestBody)

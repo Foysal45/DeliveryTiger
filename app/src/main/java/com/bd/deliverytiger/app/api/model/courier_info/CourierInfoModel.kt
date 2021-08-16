@@ -88,6 +88,10 @@ data class CourierInfoModel(
     var adminUsers: AdminUser? = AdminUser(),
     @SerializedName("isQuickOrderActive")
     var isQuickOrderActive: Boolean = false,
+    @SerializedName("customerSMSLimit")
+    var customerSMSLimit: Int = 0,
+    @SerializedName("isLoanActive")
+    var isLoanActive: Boolean = false,
 
     //Internal
     var isOfferTaken: Boolean = false

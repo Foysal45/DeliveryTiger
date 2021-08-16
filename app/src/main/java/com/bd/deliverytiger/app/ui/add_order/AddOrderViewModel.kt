@@ -12,9 +12,10 @@ import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
 import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
-import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
-import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
+import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfo
+import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
+import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
@@ -509,6 +510,60 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
                     is NetworkResponse.Success -> {
                         val serviceTypeList = response.body.model!!
                         responseData.value = serviceTypeList
+                    }
+                    is NetworkResponse.ServerError -> {
+                        viewState.value = ViewState.ShowMessage(serverErrorMessage)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        viewState.value = ViewState.ShowMessage(networkErrorMessage)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        viewState.value = ViewState.ShowMessage(unknownErrorMessage)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
+    }
+
+    fun getCustomerInfoByMobile(mobile: String) : LiveData<CustomerInfo>{
+        viewState.value = ViewState.ProgressState(true)
+        val responseData = MutableLiveData<CustomerInfo>()
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getCustomerInfoByMobile(mobile)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        responseData.value = response.body.model!!
+                    }
+                    is NetworkResponse.ServerError -> {
+
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        viewState.value = ViewState.ShowMessage(networkErrorMessage)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        viewState.value = ViewState.ShowMessage(unknownErrorMessage)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
+    }
+
+    fun loadAllDistrictsByIds(requestBody: List<GetLocationInfoRequest>) : LiveData<List<AllDistrictListsModel>>{
+        viewState.value = ViewState.ProgressState(true)
+        val responseData = MutableLiveData<List<AllDistrictListsModel>>()
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.loadAllDistrictsByIds(requestBody)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        responseData.value = response.body.model!!
                     }
                     is NetworkResponse.ServerError -> {
                         viewState.value = ViewState.ShowMessage(serverErrorMessage)
