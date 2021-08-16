@@ -1585,44 +1585,47 @@ class AddOrderFragmentOne : Fragment() {
     }
 
     private fun validate(): Boolean {
-        var go = true
+        hideKeyboard()
         getAllViewData()
-        if (districtId == 0) {
-            go = false
-            context?.toast(getString(R.string.select_dist))
-        } else if (thanaId == 0 || etThana.text.toString().isEmpty()) {
-            go = false
-            context?.toast(getString(R.string.select_thana))
-        } else if (isAriaAvailable && (areaId == 0 || etAriaPostOffice.text.toString().isEmpty())) {
-            go = false
-            context?.toast(getString(R.string.select_aria))
-        } else if (mobileNo.isEmpty()) {
+        if (mobileNo.isEmpty()) {
             context?.toast(getString(R.string.write_phone_number))
-            go = false
             etAddOrderMobileNo.requestFocus()
-        } else if (customerName.isEmpty()) {
-            context?.toast(getString(R.string.write_yr_name))
-            go = false
-            etCustomerName.requestFocus()
-        } else if (!Validator.isValidMobileNumber(mobileNo) || mobileNo.length < 11) {
+            return false
+        }
+        if (!Validator.isValidMobileNumber(mobileNo) || mobileNo.length < 11) {
             context?.toast(getString(R.string.write_proper_phone_number_recharge))
-            go = false
             etAddOrderMobileNo.requestFocus()
-        }/* else if(alternativeMobileNo.isEmpty()){
-            go = false
-            context?.toast(context!!, getString(R.string.write_alt_phone_number))
-            etAlternativeMobileNo.requestFocus()
-        }*/
-          else if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
-            go = false
+            return false
+        }
+        if (customerName.isEmpty()) {
+            context?.toast(getString(R.string.write_yr_name))
+            etCustomerName.requestFocus()
+            return false
+        }
+        if (districtId == 0) {
+            context?.toast(getString(R.string.select_dist))
+            return false
+        }
+        if (thanaId == 0 || etThana.text.toString().isEmpty()) {
+            context?.toast(getString(R.string.select_thana))
+            return false
+        }
+        if (isAriaAvailable && (areaId == 0 || etAriaPostOffice.text.toString().isEmpty())) {
+            context?.toast(getString(R.string.select_aria))
+            return false
+        }
+        if (customersAddress.isEmpty() || customersAddress.trim().length < 15) {
             context?.toast(getString(R.string.write_yr_address))
             etCustomersAddress.requestFocus()
+            return false
         }
-        hideKeyboard()
+        /*if(alternativeMobileNo.isEmpty()){
+            context?.toast(getString(R.string.write_alt_phone_number))
+            etAlternativeMobileNo.requestFocus()
+            return false
+        }*/
 
-        //go = true
-
-        return go
+        return true
     }
 
     private fun validateFormData(): Boolean {
