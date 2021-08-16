@@ -46,6 +46,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     private lateinit var conditionTV: TextView
     private lateinit var referTitle: TextView
     private lateinit var knownSourceSpinner: AppCompatSpinner
+    private lateinit var genderGroup: RadioGroup
 
     private lateinit var loginInterface: LoginInterface
     private lateinit var checkReferrer: LoginInterface
@@ -54,6 +55,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
 
     private var preferredPaymentCycle: String = ""
     private var preferredPaymentMedium: String = ""
+    private var gender: String = ""
 
     private var binding: FragmentSignUpBinding? = null
 
@@ -84,6 +86,8 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         conditionTV = view.findViewById(R.id.conditionTV)
         referTitle = view.findViewById(R.id.referTitle)
         knownSourceSpinner = view.findViewById(R.id.spinnerAboutDeliveryTiger)
+        genderGroup = view.findViewById(R.id.ganderType)
+
 
         binding?.accountNumber?.transformationMethod = null
         binding?.routingNumber?.transformationMethod = null
@@ -141,6 +145,19 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
                     Handler(Looper.getMainLooper()).postDelayed({
                         bkashNumberET.requestFocus()
                     }, 200L)
+                }
+            }
+        }
+        genderGroup.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.ganderMale -> {
+                    gender = "male"
+                }
+                R.id.ganderFemale -> {
+                    gender = "female"
+                }
+                R.id.ganderOther -> {
+                    gender = "other"
                 }
             }
         }
@@ -304,6 +321,10 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
             showShortToast(context, getString(R.string.match_pass))
             return false
         }
+        if (gender.isEmpty()) {
+            context?.toast("জেন্ডার সিলেক্ট করুন")
+            return false
+        }
         if (referCodeET.text.toString().isNotEmpty()) {
             val referCode = referCodeET.text.toString().trim()
             if (!Validator.isValidMobileNumber(referCode) || referCode.length < 11) {
@@ -387,7 +408,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
 
         val fragment = SignUpOTPFragment.newInstance(companyName, mobile, password, referCode,
             bkashNumber, preferredPaymentCycle, knowingSource,
-            accountName, accountNumber, bankName, branchName, routingNumber
+            accountName, accountNumber, bankName, branchName, routingNumber, gender
         )
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpOTPFragment.tag)
