@@ -25,11 +25,9 @@ import org.koin.android.ext.android.inject
 class LeadManagementFragment : Fragment() {
 
     private var binding: FragmentLeadManagementBinding? = null
-    private  var dataAdapter: LeadManagementAdapter = LeadManagementAdapter()
-
     private val viewModel: LeadManagementViewModel by inject()
 
-    // Paging params
+    private  var dataAdapter: LeadManagementAdapter = LeadManagementAdapter()
     private var isLoading = false
     //private var totalProduct = 0
     private val visibleThreshold = 5
@@ -125,6 +123,7 @@ class LeadManagementFragment : Fragment() {
             if (selection){
                 dataAdapter.multipleSelection(model, position)
                 binding?.addContactBtn?.isVisible = true
+                binding?.clearBtn?.isVisible = true
             }else{
                 goToCustomerDetailsBottomSheet(model.mobile ?: "")
                 binding?.addContactBtn?.isVisible = false
@@ -136,6 +135,12 @@ class LeadManagementFragment : Fragment() {
                 goToSmsSendBottomSheet(dataAdapter.getSelectedItemModelList())
             }
 
+        }
+
+        binding?.clearBtn?.setOnClickListener {
+            dataAdapter.clearSelections()
+            binding?.clearBtn?.isVisible = false
+            binding?.addContactBtn?.isVisible = false
         }
     }
 
@@ -153,6 +158,12 @@ class LeadManagementFragment : Fragment() {
         val tag = SmsShareDialogue.tag
         val dialog = SmsShareDialogue.newInstance(model)
         dialog.show(childFragmentManager, tag)
+        dialog.onSend = { isSend ->
+            if (isSend) {
+                dataAdapter.clearSelections()
+            }
+            dialog.dismiss()
+        }
     }
 
     override fun onDestroyView() {

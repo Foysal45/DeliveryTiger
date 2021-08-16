@@ -157,7 +157,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
                     gender = "female"
                 }
                 R.id.ganderOther -> {
-                    gender = "other"
+                    gender = "others"
                 }
             }
         }

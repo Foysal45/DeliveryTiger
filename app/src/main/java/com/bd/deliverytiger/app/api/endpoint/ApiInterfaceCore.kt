@@ -266,4 +266,6 @@ interface ApiInterfaceCore {
     @GET("api/Fetch/GetAcceptedCourierOrders/{courierUserId}")
     suspend fun fetchAcceptedCourierOrders(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<AcceptedOrder>, ErrorResponse>
 
+    @PUT("api/Update/UpdateCustomerSMSLimit/{courierUserId}/{customerSMSLimit}")
+    suspend fun updateCustomerSMSLimit(@Path("courierUserId") courierUserId: Int, @Path("customerSMSLimit") customerSMSLimit: Int): NetworkResponse<GenericResponse<CourierInfoModel>, ErrorResponse>
 }

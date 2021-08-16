@@ -12,6 +12,7 @@ import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
 import com.bd.deliverytiger.app.api.model.live.share_sms.SMSBody
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
 import com.bd.deliverytiger.app.databinding.FragmentSmsShareDialogueBinding
+import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -28,6 +29,8 @@ class SmsShareDialogue : BottomSheetDialogFragment() {
     private var customerList: List<CustomerInformation>? = null
     private val selectedNameList: MutableList<String> = mutableListOf()
     private val selectedNumberList: MutableList<String> = mutableListOf()
+    private var smsLimit: Int = 0
+    var onSend: ((isSend: Boolean) -> Unit)? = null
 
     companion object {
         fun newInstance(model: List<CustomerInformation>): SmsShareDialogue = SmsShareDialogue().apply {
@@ -50,6 +53,7 @@ class SmsShareDialogue : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fetchCourierInfo()
         initView()
         initClickLister()
     }
@@ -69,6 +73,12 @@ class SmsShareDialogue : BottomSheetDialogFragment() {
         binding?.shareMessage?.setSelection(msgLength)
     }
 
+    private fun fetchCourierInfo() {
+        viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            smsLimit = model.customerSMSLimit
+        })
+    }
+
     private fun initClickLister(){
 
         binding?.sendSMS?.setOnClickListener {
@@ -80,6 +90,7 @@ class SmsShareDialogue : BottomSheetDialogFragment() {
 
     private fun sendSMS() {
         binding?.progressBar?.isVisible = true
+
         val msg = binding?.shareMessage?.text?.toString() ?: ""
         val requestBody: MutableList<SMSModel> = mutableListOf()
         requestBody.add(SMSModel(numbers = selectedNumberList, text = msg))
@@ -88,9 +99,12 @@ class SmsShareDialogue : BottomSheetDialogFragment() {
                 context?.toast("SMS Send")
                 if (isAdded) {
                     binding?.progressBar?.isVisible = false
-                    dismiss()
                 }
+                onSend?.invoke(true)
             }
+        })
+        viewModel.updateCustomerSMSLimit(SessionManager.courierUserId, selectedNumberList.size).observe(viewLifecycleOwner, Observer { model ->
+            smsLimit = model.customerSMSLimit
         })
     }
 
@@ -103,6 +117,10 @@ class SmsShareDialogue : BottomSheetDialogFragment() {
         val msg = binding?.shareMessage?.text?.toString() ?: ""
         if (msg.isEmpty()) {
             context?.toast("Enter message")
+            return false
+        }
+        if (selectedNumberList.size > smsLimit) {
+            context?.toast("Current SMS limit is $smsLimit")
             return false
         }
         return true

@@ -48,6 +48,7 @@ import com.bd.deliverytiger.app.database.dao.NotificationDao
 import com.bd.deliverytiger.app.fcm.FCMData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.http.Path
 
 class AppRepository(
     private val apiInterfaceADM: ApiInterfaceADM,
@@ -305,6 +306,11 @@ class AppRepository(
     suspend fun getCustomerInfoByMobile(mobile: String) = apiInterfaceCore.getCustomerInfoByMobile(mobile)
 
     suspend fun loadAllDistrictsByIds(requestBody: List<GetLocationInfoRequest>) = apiInterfaceCore.loadAllDistrictsByIds(requestBody)
+
+    suspend fun updateCustomerSMSLimit(
+        @Path("courierUserId") courierUserId: Int,
+        @Path("customerSMSLimit") customerSMSLimit: Int
+    ) = apiInterfaceCore.updateCustomerSMSLimit(courierUserId, customerSMSLimit)
 
     //Quick Order
     suspend fun getCollectionTimeSlot(requestBody: TimeSlotRequest) = apiInterfaceCore.getCollectionTimeSlot(requestBody)
