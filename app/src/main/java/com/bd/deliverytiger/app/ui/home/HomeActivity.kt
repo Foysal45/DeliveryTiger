@@ -178,44 +178,7 @@ class HomeActivity : AppCompatActivity(),
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, navViewRight)
         drawerListener()
         onBackStackChangeListener()
-
-        val headerView = navView.getHeaderView(0)
-        headerPic = headerView.findViewById(R.id.nav_header_image)
-        val headerUserNameTV: TextView = headerView.findViewById(R.id.nav_header_title)
-        val headerDesignationTV: TextView = headerView.findViewById(R.id.nav_header_sub_title)
-        val profileEdit: ImageView = headerView.findViewById(R.id.nav_header_profile_edit)
-        val nearbyHub: LinearLayout = headerView.findViewById(R.id.nearbyHub)
-        //val referralET: EditText = headerView.findViewById(R.id.referralET)
-        //val referralApply: ImageView = headerView.findViewById(R.id.referralApply)
-        //val merchantCredit: TextView = headerView.findViewById(R.id.merchantCredit)
-        //val merchantAdvancePayment: TextView = headerView.findViewById(R.id.merchantAdvancePayment)
-        headerUserNameTV.text = SessionManager.companyName
-        headerDesignationTV.text = SessionManager.mobile
-        //merchantCredit.text = "ক্রেডিট লিমিট: ৳ ${DigitConverter.toBanglaDigit(SessionManager.credit, true)}"
-        //merchantAdvancePayment.text = "অ্যাডভান্স পেমেন্ট: ৳ ${DigitConverter.toBanglaDigit(0, true)}"
-
-        profileEdit.setOnClickListener {
-            navId = R.id.nav_header_profile_edit
-            drawerLayout.closeDrawer(GravityCompat.START)
-        }
-        headerPic.setOnClickListener {
-            navId = R.id.nav_header_profile_edit
-            drawerLayout.closeDrawer(GravityCompat.START)
-        }
-        nearbyHub.setOnClickListener {
-            navId = R.id.nav_nearby_hub
-            drawerLayout.closeDrawer(GravityCompat.START)
-            //goToNearByHubMap()
-        }
-        /*referralApply.setOnClickListener {
-            hideKeyboard()
-            val referCode = referralET.text.toString().trim()
-            if (referCode.isNotEmpty()) {
-                timber.log.Timber.d("Refer code: $referCode ")
-            } else {
-                this.toast("রেফার কোড লিখুন")
-            }
-        }*/
+        bindHeaderView()
 
         FirebaseMessaging.getInstance().subscribeToTopic("DeliveryTigerTopic")
         if (BuildConfig.DEBUG) {
@@ -870,6 +833,47 @@ class HomeActivity : AppCompatActivity(),
             }
         }
         navId = 0
+    }
+    
+    private fun bindHeaderView() {
+        val headerView = navView.getHeaderView(0)
+        headerPic = headerView.findViewById(R.id.nav_header_image)
+        val headerUserNameTV: TextView = headerView.findViewById(R.id.nav_header_title)
+        val headerDesignationTV: TextView = headerView.findViewById(R.id.nav_header_sub_title)
+        val profileEdit: ImageView = headerView.findViewById(R.id.nav_header_profile_edit)
+        val nearbyHub: LinearLayout = headerView.findViewById(R.id.nearbyHub)
+        //val referralET: EditText = headerView.findViewById(R.id.referralET)
+        //val referralApply: ImageView = headerView.findViewById(R.id.referralApply)
+        //val merchantCredit: TextView = headerView.findViewById(R.id.merchantCredit)
+        //val merchantAdvancePayment: TextView = headerView.findViewById(R.id.merchantAdvancePayment)
+        headerUserNameTV.text = "${SessionManager.companyName} (${SessionManager.courierUserId})"
+        headerDesignationTV.text = SessionManager.mobile
+        //merchantCredit.text = "ক্রেডিট লিমিট: ৳ ${DigitConverter.toBanglaDigit(SessionManager.credit, true)}"
+        //merchantAdvancePayment.text = "অ্যাডভান্স পেমেন্ট: ৳ ${DigitConverter.toBanglaDigit(0, true)}"
+
+
+        profileEdit.setOnClickListener {
+            navId = R.id.nav_header_profile_edit
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        headerPic.setOnClickListener {
+            navId = R.id.nav_header_profile_edit
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        nearbyHub.setOnClickListener {
+            navId = R.id.nav_nearby_hub
+            drawerLayout.closeDrawer(GravityCompat.START)
+            //goToNearByHubMap()
+        }
+        /*referralApply.setOnClickListener {
+            hideKeyboard()
+            val referCode = referralET.text.toString().trim()
+            if (referCode.isNotEmpty()) {
+                timber.log.Timber.d("Refer code: $referCode ")
+            } else {
+                this.toast("রেফার কোড লিখুন")
+            }
+        }*/
     }
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {

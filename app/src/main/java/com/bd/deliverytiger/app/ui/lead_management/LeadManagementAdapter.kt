@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
 import com.bd.deliverytiger.app.databinding.ItemViewLeadManagementCustomerInfoBinding
+import com.bd.deliverytiger.app.utils.DigitConverter
+
 class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList: MutableList<CustomerInformation> = mutableListOf()
@@ -34,8 +36,9 @@ class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val binding = holder.binding
 
             binding.name.text = model.customerName
-            binding.mobileNumber.text = model.mobile
             binding.district.text = model.districtsViewModel?.district ?: ""
+            binding.mobileNumber.text = model.mobile
+            binding.totalOrder.text = DigitConverter.toBanglaDigit(model.totalOrder)
 
             if (selectedItems[position, false]) {
                 binding.parent.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(binding.parent.context, R.color.selection_color))
