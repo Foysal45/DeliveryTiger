@@ -65,6 +65,7 @@ import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentUpdateFragment
 import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailFragment
 import com.bd.deliverytiger.app.ui.profile.ProfileFragment
+import com.bd.deliverytiger.app.ui.quick_order.QuickBookingBottomSheet
 import com.bd.deliverytiger.app.ui.quick_order.quick_order_history.QuickOrderListFragment
 import com.bd.deliverytiger.app.ui.referral.ReferralFragment
 import com.bd.deliverytiger.app.ui.return_statement.ReturnStatementFragment
@@ -75,6 +76,8 @@ import com.bd.deliverytiger.app.ui.survey.SurveyActivity
 import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -223,7 +226,8 @@ class HomeActivity : AppCompatActivity(),
         onNewIntent(intent)
 
         addOrderFab.setOnClickListener {
-            addOrderFragment()
+            //addOrderFragment()
+            orderDialog()
         }
 
         loadBannerInfo()
@@ -1312,6 +1316,45 @@ class HomeActivity : AppCompatActivity(),
                 lister?.invoke(isShown)
             }
         })
+    }
+
+    private fun orderDialog() {
+
+        val builder = MaterialAlertDialogBuilder(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_order_type,null)
+        builder.setView(view)
+        val button1: MaterialButton = view.findViewById(R.id.button1)
+        val button2: MaterialButton = view.findViewById(R.id.button2)
+        val dialog = builder.create()
+        dialog.show()
+        button1.setOnClickListener {
+            dialog.dismiss()
+            addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+            UserLogger.logGenie("Dashboard_AddOrder")
+        }
+        button2.setOnClickListener {
+            dialog.dismiss()
+            showQuickOrderBottomSheet()
+            UserLogger.logGenie("Dashboard_Quick_Order")
+        }
+    }
+
+    private fun showQuickOrderBottomSheet() {
+        val tag: String = QuickBookingBottomSheet.tag
+        val dialog: QuickBookingBottomSheet = QuickBookingBottomSheet.newInstance()
+        dialog.show(supportFragmentManager, tag)
+        dialog.onClose = {
+            Handler(Looper.getMainLooper()).postDelayed({
+                hideKeyboard()
+            }, 200L)
+        }
+        dialog.onOrderPlace = { msg ->
+            alert(getString(R.string.instruction), msg, true, getString(R.string.ok), "সকল কুইক বুকিং"){
+                if (it == AlertDialog.BUTTON_NEGATIVE) {
+                    addFragment(QuickOrderListFragment.newInstance(), QuickOrderListFragment.tag)
+                }
+            }.show()
+        }
     }
 
 }
