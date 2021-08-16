@@ -5,32 +5,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
+import com.bd.deliverytiger.app.api.model.live.share_sms.SMSBody
+import com.bd.deliverytiger.app.api.model.sms.SMSModel
 import com.bd.deliverytiger.app.databinding.FragmentSmsShareDialogueBinding
+import com.bd.deliverytiger.app.utils.toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 import kotlin.concurrent.thread
 
 class SmsShareDialogue : BottomSheetDialogFragment() {
 
     private var binding: FragmentSmsShareDialogueBinding? = null
+    private val viewModel: SmsShareViewModel by inject()
 
-
+    private var customerList: List<CustomerInformation>? = null
+    private val selectedNameList: MutableList<String> = mutableListOf()
     private val selectedNumberList: MutableList<String> = mutableListOf()
-    var names = ""
 
     companion object {
-
         fun newInstance(model: List<CustomerInformation>): SmsShareDialogue = SmsShareDialogue().apply {
-            model.forEach {
-                val name = it.customerName
-                selectedNumberList.add(name ?: "")
-                names += "$name,"
-            }
-
+            this.customerList = model
         }
         val tag: String = SmsShareDialogue::class.java.name
     }
@@ -49,17 +50,62 @@ class SmsShareDialogue : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         initView()
         initClickLister()
     }
 
     private fun initView() {
+        selectedNameList.clear()
+        selectedNumberList.clear()
+        customerList?.forEach {
+            selectedNameList.add(it.customerName ?: "")
+            selectedNumberList.add(it.mobile ?: "")
+        }
+
+        val names = selectedNameList.joinToString()
         binding?.receiverNumber?.setText(names)
+
+        val msgLength = binding?.shareMessage?.text?.length ?: 0
+        binding?.shareMessage?.setSelection(msgLength)
     }
 
     private fun initClickLister(){
-        binding?.shareMessage?.setSelection(binding?.shareMessage?.text?.length ?: 0)
+
+        binding?.sendSMS?.setOnClickListener {
+            if (validation()) {
+                sendSMS()
+            }
+        }
+    }
+
+    private fun sendSMS() {
+        binding?.progressBar?.isVisible = true
+        val msg = binding?.shareMessage?.text?.toString() ?: ""
+        val requestBody: MutableList<SMSModel> = mutableListOf()
+        requestBody.add(SMSModel(numbers = selectedNumberList, text = msg))
+        viewModel.sendSMS(requestBody).observe(viewLifecycleOwner, Observer { model ->
+            if (model.status) {
+                context?.toast("SMS Send")
+                if (isAdded) {
+                    binding?.progressBar?.isVisible = false
+                    dismiss()
+                }
+            }
+        })
+    }
+
+    private fun validation(): Boolean {
+
+        if (selectedNumberList.isEmpty()) {
+            context?.toast("Enter mobile number")
+            return false
+        }
+        val msg = binding?.shareMessage?.text?.toString() ?: ""
+        if (msg.isEmpty()) {
+            context?.toast("Enter message")
+            return false
+        }
+        return true
     }
 
     override fun onStart() {

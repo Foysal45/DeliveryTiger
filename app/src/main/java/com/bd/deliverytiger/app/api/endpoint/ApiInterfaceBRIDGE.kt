@@ -17,9 +17,7 @@ interface ApiInterfaceBRIDGE {
         }
     }
 
-    @Headers(
-        "API_KEY: Ajkerdeal_~La?Rj73FcLm",
-    )
+    @Headers("API_KEY: Ajkerdeal_~La?Rj73FcLm")
     @POST("SmsComunication/SendSms")
     suspend fun sendSMS(@Body requestBody: List<SMSModel>): NetworkResponse<List<SMSResponse>, ErrorResponse>
 

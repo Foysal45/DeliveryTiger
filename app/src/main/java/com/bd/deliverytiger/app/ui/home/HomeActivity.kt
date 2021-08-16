@@ -294,6 +294,7 @@ class HomeActivity : AppCompatActivity(),
                             ""
                         )
                         Timber.d("BundleLog FCMData $fcmModel")
+                        viewModel.saveNotificationData(fcmModel)
                         goToNotificationPreview(fcmModel)
                     }
                 }

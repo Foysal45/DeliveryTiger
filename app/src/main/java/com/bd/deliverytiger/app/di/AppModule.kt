@@ -46,6 +46,7 @@ import com.bd.deliverytiger.app.ui.quick_order.QuickOrderRequestViewModel
 import com.bd.deliverytiger.app.ui.referral.ReferralViewModel
 import com.bd.deliverytiger.app.ui.return_statement.ReturnStatementViewModel
 import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeViewModel
+import com.bd.deliverytiger.app.ui.share.SmsShareViewModel
 import com.bd.deliverytiger.app.ui.survey.SurveyViewModel
 import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODViewModel
 import com.bd.deliverytiger.app.utils.AppConstant
@@ -123,5 +124,6 @@ val appModule = module {
     viewModel { LiveScheduleProductListViewModel(get()) }
     viewModel { LeadManagementViewModel(get()) }
     viewModel { CustomerDetailsViewModel(get()) }
+    viewModel { SmsShareViewModel(get()) }
 
 }

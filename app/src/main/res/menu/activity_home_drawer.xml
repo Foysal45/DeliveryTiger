@@ -29,10 +29,6 @@
             android:id="@+id/nav_return_statement"
             android:icon="@drawable/ic_bill_pay_history"
             android:title="@string/return_statement" />
-        <item
-            android:id="@+id/nav_lead_management"
-            android:icon="@drawable/ic_magnet"
-            android:title="@string/lead_management" />
 
         <item
             android:id="@+id/nav_balance_load_history"
@@ -51,13 +47,6 @@
         android:checkableBehavior="none">
 
         <item
-            android:id="@+id/nav_survey"
-            android:icon="@drawable/ic_bill_pay_history"
-            android:title="ফিডব্যাক"
-            android:visible="false"
-            />
-
-        <item
             android:id="@+id/nav_balance_load"
             android:icon="@drawable/ic_balance"
             android:title="ব্যালেন্স লোড"
@@ -72,8 +61,13 @@
             />
 
         <item
+            android:id="@+id/nav_lead_management"
+            android:icon="@drawable/ic_magnet"
+            android:title="@string/lead_management" />
+
+        <item
             android:id="@+id/nav_live_home"
-            android:icon="@drawable/ic_video_watch"
+            android:icon="@drawable/ic_live1"
             android:title="লাইভ করুন" />
 
         <item
@@ -129,6 +123,12 @@
         android:id="@+id/disableGroup"
         android:checkableBehavior="none">
 
+        <item
+            android:id="@+id/nav_survey"
+            android:icon="@drawable/ic_bill_pay_history"
+            android:title="ফিডব্যাক"
+            android:visible="false"
+            />
 
         <item
             android:id="@+id/nav_dashboard"
