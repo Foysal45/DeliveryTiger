@@ -43,6 +43,7 @@ import com.bd.deliverytiger.app.ui.collection_history.CollectionHistoryFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.complain.ComplainFragment
 import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsFragment
+import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
@@ -121,10 +122,6 @@ class DashboardFragment : Fragment() {
     private var paymentDashboardModel: DashboardData = DashboardData(dashboardSpanCount = 2, viewType = 1)
     private var countDownTimer: CountDownTimer? = null
 
-    companion object {
-        fun newInstance(): DashboardFragment = DashboardFragment().apply {}
-        val tag: String = DashboardFragment::class.java.name
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentDashboardBinding.inflate(inflater).also {
@@ -153,6 +150,7 @@ class DashboardFragment : Fragment() {
         if (isBannerEnable) {
             animateSlider()
         }
+        (activity as HomeActivity).setToolbarTitle("ড্যাশবোর্ড")
     }
 
     override fun onPause() {

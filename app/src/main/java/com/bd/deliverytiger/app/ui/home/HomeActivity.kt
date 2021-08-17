@@ -27,6 +27,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.broadcast.ConnectivityReceiver
@@ -79,6 +83,7 @@ import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -123,6 +128,10 @@ class HomeActivity : AppCompatActivity(),
     private var doubleBackToExitPressedOnce = false
     private var navId: Int = 0
 
+    //Navigation
+    private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
+
     //AppUpdateManager
     private lateinit var appUpdateManager: AppUpdateManager
     private val requestCodeAppUpdate = 21720
@@ -155,6 +164,13 @@ class HomeActivity : AppCompatActivity(),
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        navController = findNavController(R.id.navHostFragment)
+        appBarConfiguration = AppBarConfiguration(setOf(
+            R.id.nav_dashboard, R.id.nav_order_tracking, R.id.nav_lead_management
+        ), binding.drawerLayout)
+        binding.appBarHome.toolbar.setupWithNavController(navController, appBarConfiguration)
+        binding.appBarHome.bottomNavigationView.setupWithNavController(navController)
+
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
         navViewRight = findViewById(R.id.nav_view_2)
@@ -175,24 +191,20 @@ class HomeActivity : AppCompatActivity(),
         binding.appBarHome.bottomNavigationView.background = null
 
 
-        /*val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-        toggle.drawerArrowDrawable.color = ActivityCompat.getColor(this, R.color.black_80)*/
-
-        toolbar.setNavigationIcon(R.drawable.ic_menu)
+        /*toolbar.setNavigationIcon(R.drawable.ic_menu)
         toolbar.setNavigationOnClickListener {
             if (supportFragmentManager.backStackEntryCount > 0) {
                 onBackPressed()
             } else {
                 drawerLayout.openDrawer(GravityCompat.START)
             }
-        }
+        }*/
 
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, navViewRight)
         drawerListener()
         onBackStackChangeListener()
         bindHeaderView()
+        bottomNavigationLister()
 
         FirebaseMessaging.getInstance().subscribeToTopic("DeliveryTigerTopic")
         if (BuildConfig.DEBUG) {
@@ -200,7 +212,7 @@ class HomeActivity : AppCompatActivity(),
         }
 
         //addHomeFragment()
-        addDashBoardFragment()
+        //addDashBoardFragment()
 
         addProductIV.setOnClickListener {
             addOrderFab.performClick()
@@ -307,6 +319,9 @@ class HomeActivity : AppCompatActivity(),
                     drawerLayout.closeDrawer(GravityCompat.END)
                 }
             }
+            navController.currentDestination?.id != navController.graph.startDestination -> {
+                super.onBackPressed()
+            }
             supportFragmentManager.backStackEntryCount > 0 -> {
                 supportFragmentManager.popBackStack()
             }
@@ -317,7 +332,7 @@ class HomeActivity : AppCompatActivity(),
                 }
                 doubleBackToExitPressedOnce = true
                 Toast.makeText(this, "Press again to Exit", Toast.LENGTH_SHORT).show()
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     doubleBackToExitPressedOnce = false
                 }, 2000L)
             }
@@ -334,7 +349,7 @@ class HomeActivity : AppCompatActivity(),
             } else {
                 toolbar.setNavigationIcon(R.drawable.ic_menu)
                 logoIV.visibility = View.VISIBLE
-                setToolbarTitle("")
+                setToolbarTitle("ড্যাশবোর্ড")
             }
             val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
             if (currentFragment is DashboardFragment ||
@@ -853,6 +868,27 @@ class HomeActivity : AppCompatActivity(),
         }
         navId = 0
     }
+
+    private fun bottomNavigationLister() {
+        binding.appBarHome.bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    navController.navigate(R.id.nav_dashboard)
+                }
+                R.id.nav_track -> {
+                    navController.navigate(R.id.nav_order_tracking)
+                }
+                R.id.nav_live -> {
+                    startActivity(Intent(this, LiveHomeActivity::class.java))
+                }
+                R.id.nav_lead_management -> {
+                    navController.navigate(R.id.nav_lead_management)
+                }
+            }
+            true
+        }
+
+    }
     
     private fun bindHeaderView() {
         val headerView = navView.getHeaderView(0)
@@ -964,10 +1000,10 @@ class HomeActivity : AppCompatActivity(),
         notificationIV.visibility = View.VISIBLE
         trackingIV.visibility = View.GONE
 
-        val fragment = DashboardFragment.newInstance()
+        /*val fragment = DashboardFragment.newInstance()
         val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
         ft?.replace(R.id.mainActivityContainer, fragment, DashboardFragment.tag)
-        ft?.commit()
+        ft?.commit()*/
     }
 
     private fun addOrderFragment() {

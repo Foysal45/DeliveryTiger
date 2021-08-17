@@ -20,8 +20,7 @@
             app:contentInsetStart="0dp"
             app:contentInsetStartWithNavigation="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title=""
-            app:titleTextColor="@color/black_80">
+            >
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -49,6 +48,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/home_toolbar_logo"
                     app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="visible"
                     tools:text="ড্যাশবোর্ড" />
 
                 <LinearLayout
@@ -177,6 +177,16 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <fragment
+        android:id="@+id/navHostFragment"
+        class="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/navigation_home"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
+
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
@@ -207,6 +217,7 @@
         app:layout_anchor="@id/bottomAppBar"
         app:srcCompat="@drawable/ic_plus"
         app:tint="@color/colorPrimary" />
+
 
     <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addOrderFab"
