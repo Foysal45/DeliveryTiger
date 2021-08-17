@@ -175,6 +175,57 @@
                         android:layout_height="1px"
                         android:background="@color/login_title_color" />
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp"
+                        android:text="এই প্রতিষ্ঠানের প্রধান উদ্যোক্তা একজন"
+                        android:textColor="@color/black_80"
+                        android:textSize="14sp"
+                        app:drawableEndCompat="@drawable/ic_star"
+                        app:drawableTint="@color/red" />
+
+                    <RadioGroup
+                        android:id="@+id/ganderType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="8dp"
+                        android:layout_marginBottom="5dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <RadioButton
+                            android:id="@+id/ganderMale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="পুরুষ"
+                            android:textColor="@color/black_80"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/ganderFemale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="5dp"
+                            android:text="নারী"
+                            android:textColor="@color/black_80"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/ganderOther"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="5dp"
+                            android:text="অন্যান্য"
+                            android:textColor="@color/black_80"
+                            android:textSize="14sp" />
+
+                    </RadioGroup>
 
                     <TextView
                         android:layout_width="match_parent"

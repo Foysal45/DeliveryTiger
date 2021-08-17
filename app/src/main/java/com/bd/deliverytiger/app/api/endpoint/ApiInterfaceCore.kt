@@ -33,12 +33,15 @@ import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
 import com.bd.deliverytiger.app.api.model.helpline_number.HelpLineNumberModel
 import com.bd.deliverytiger.app.api.model.instant_payment_update.InstantPaymentUpdateResponse
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
+import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfo
+import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
+import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
+import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
+import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetails
+import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
-import com.bd.deliverytiger.app.api.model.order.OrderRequest
-import com.bd.deliverytiger.app.api.model.order.OrderResponse
-import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
-import com.bd.deliverytiger.app.api.model.order.UpdateOrderResponse
+import com.bd.deliverytiger.app.api.model.order.*
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackMainResponse
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackReqBody
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackResponse
@@ -210,6 +213,13 @@ interface ApiInterfaceCore {
     @GET("api/Offer/GetOfferByMerchant/{courierUserId}")
     suspend fun isGetOfferByMerchant(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<Boolean>, ErrorResponse>
 
+    @GET("/api/Dashboard/GetCustomerInfoByMobile/{mobile}")
+    suspend fun getCustomerInfoByMobile(@Path("mobile") mobile: String): NetworkResponse<GenericResponse<CustomerInfo>, ErrorResponse>
+
+    @POST("api/Fetch/LoadAllDistrictsByIds")
+    suspend fun loadAllDistrictsByIds(@Body requestBody: List<GetLocationInfoRequest>): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>
+
+
     @POST("api/Fetch/GetDeliveredReturnedCount")
     suspend fun fetchDeliveredReturnedCount(@Body requestBody: DeliveredReturnedCountRequest): NetworkResponse<GenericResponse<List<DeliveredReturnCountResponseItem>>, ErrorResponse>
 
@@ -227,6 +237,12 @@ interface ApiInterfaceCore {
         @Path("orderId") orderId: String,
         @Body requestBody: UpdateOrderReqBody
     ): NetworkResponse<GenericResponse<UpdateOrderResponse>, ErrorResponse>
+
+    @POST("api/Fetch/GetCutomerListForApp")
+    suspend fun fetchCustomerList(@Body requestBody: CustomerInfoRequest): NetworkResponse<GenericResponse<List<CustomerInformation>>, ErrorResponse>
+
+    @POST("api/Fetch/GetCutomerWiseOrdersDetailsForApp")
+    suspend fun fetchCustomerDetailsList(@Body requestBody: CustomerInfoDetailsRequest): NetworkResponse<GenericResponse<List<CustomerInfoDetails>>, ErrorResponse>
 
     //Quick Order Request
     @POST("api/Fetch/GetCollectionTimeSlotByTime")
@@ -250,4 +266,6 @@ interface ApiInterfaceCore {
     @GET("api/Fetch/GetAcceptedCourierOrders/{courierUserId}")
     suspend fun fetchAcceptedCourierOrders(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<AcceptedOrder>, ErrorResponse>
 
+    @PUT("api/Update/UpdateCustomerSMSLimit/{courierUserId}/{customerSMSLimit}")
+    suspend fun updateCustomerSMSLimit(@Path("courierUserId") courierUserId: Int, @Path("customerSMSLimit") customerSMSLimit: Int): NetworkResponse<GenericResponse<CourierInfoModel>, ErrorResponse>
 }

@@ -106,6 +106,7 @@
     <string name="payment_request">পেমেন্ট রিকোয়েস্ট</string>
     <string name="return_statement">রিটার্ন স্টেটমেন্ট</string>
     <string name="bill_pay_history">স্টেটমেন্ট - পরিশোধিত সার্ভিস চার্জ</string>
+    <string name="lead_management">লিড ম্যানেজমেন্ট</string>
     <string name="termsCondition">শর্তাবলী (Terms &amp; Conditions)</string>
     <string name="expressService">জেলা ভিত্তিক সার্ভিস ও স্পিড</string>
     <string name="nearby_hub">নিকটস্থ হাব</string>

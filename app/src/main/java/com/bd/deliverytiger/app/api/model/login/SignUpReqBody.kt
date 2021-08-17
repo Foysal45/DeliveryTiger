@@ -28,6 +28,8 @@ data class SignUpReqBody(
     var branchName: String = "",
     @SerializedName("routingNumber")
     var routingNumber: String = "",
+    @SerializedName("gender")
+    var gender: String = "",
 
     @SerializedName("registrationFrom")
     var registrationFrom: String = "app",

@@ -37,6 +37,45 @@
                     android:textSize="@dimen/text_16"
                     android:textStyle="bold" />
 
+                <EditText
+                    android:id="@+id/etAddOrderMobileNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:background="@drawable/bg_add_order_edit_text"
+                    android:hint="কাস্টমারের মোবাইল নাম্বার"
+                    android:importantForAutofill="no"
+                    android:inputType="phone"
+                    android:maxLength="11"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14"
+                    app:drawableEndCompat="@drawable/ic_star"
+                    app:drawableTint="@color/red"
+                    />
+
+                <EditText
+                    android:id="@+id/etCustomerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_add_order_edit_text"
+                    android:hint="কাস্টমারের নাম"
+                    android:importantForAutofill="no"
+                    android:inputType="textPersonName"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14"
+                    app:drawableEndCompat="@drawable/ic_star"
+                    app:drawableTint="@color/red"
+                    />
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -223,63 +262,6 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <EditText
-                    android:id="@+id/etCustomerName"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/login_view_height"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_add_order_edit_text"
-                    android:hint="কাস্টমারের নাম"
-                    android:importantForAutofill="no"
-                    android:inputType="textPersonName"
-                    android:paddingStart="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="8dp"
-                    android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14"
-                    app:drawableEndCompat="@drawable/ic_star"
-                    app:drawableTint="@color/red"
-                    />
-
-                <EditText
-                    android:id="@+id/etAddOrderMobileNo"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/login_view_height"
-                    android:layout_marginTop="@dimen/fab_margin"
-                    android:background="@drawable/bg_add_order_edit_text"
-                    android:hint="মোবাইল নাম্বার"
-                    android:importantForAutofill="no"
-                    android:inputType="phone"
-                    android:maxLength="11"
-                    android:paddingStart="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="8dp"
-                    android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14"
-                    app:drawableEndCompat="@drawable/ic_star"
-                    app:drawableTint="@color/red"
-                    />
-
-                <EditText
-                    android:id="@+id/etAlternativeMobileNo"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/login_view_height"
-                    android:layout_marginTop="@dimen/fab_margin"
-                    android:background="@drawable/bg_add_order_edit_text"
-                    android:hint="বিকল্প মোবাইল নাম্বার"
-                    android:importantForAutofill="no"
-                    android:inputType="phone"
-                    android:maxLength="11"
-                    android:paddingStart="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="8dp"
-                    android:textColor="@color/black_80"
-                    android:textSize="@dimen/text_14" />
-
-
                 <!--<EditText
                     android:id="@+id/etAriaPostOffice"
                     android:layout_width="match_parent"
@@ -341,6 +323,23 @@
                         />-->
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <EditText
+                    android:id="@+id/etAlternativeMobileNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:background="@drawable/bg_add_order_edit_text"
+                    android:hint="বিকল্প মোবাইল নাম্বার"
+                    android:importantForAutofill="no"
+                    android:inputType="phone"
+                    android:maxLength="11"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/delivery_type_selection_rV"
