@@ -1,7 +1,7 @@
 package com.bd.deliverytiger.app.ui.profile
 
-import android.Manifest.permission
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,8 +12,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,9 +24,6 @@ import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import com.bd.deliverytiger.app.databinding.FragmentProfileBinding
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
-import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
-import com.bd.deliverytiger.app.ui.district.v2.CustomModel
-import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.profile.pickup_address.PickUpLocationAdapter
@@ -35,8 +32,11 @@ import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.VariousTask.getCircularImage
 import com.bd.deliverytiger.app.utils.VariousTask.saveImage
 import com.bd.deliverytiger.app.utils.VariousTask.scaledBitmapImage
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import org.koin.android.ext.android.inject
-import timber.log.Timber
+import com.github.dhaval2404.imagepicker.ImagePicker
 import java.io.File
 import java.io.InputStream
 import java.util.*
@@ -478,9 +478,7 @@ class ProfileFragment : Fragment() {
             binding?.areaSelect?.visibility = View.VISIBLE
         }*/
 
-        if (SessionManager.profileImgUri.isNotEmpty()) {
-            setProfileImgUrl(SessionManager.profileImgUri)
-        }
+        setProfileImgUrl("https://static.ajkerdeal.com/delivery_tiger/profile/${SessionManager.courierUserId}.jpg")
 
         pickupAddressAdapter = PickUpLocationAdapter()
         pickupAddressAdapter.showEdit = true
@@ -519,37 +517,59 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setProfileImgUrl(imageUri: String?) {
-        //Timber.d("HomeActivityLog 1 ", SessionManager.profileImgUri)
-        try {
-            val imgFile = File(imageUri + "");
-            if (imgFile.exists()) {
-                val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                binding?.profilePic?.setImageDrawable(getCircularImage(context, myBitmap))
-                //Timber.d("HomeActivityLog 2 ", myBitmap.allocationByteCount.toString()+" "+ myBitmap.byteCount.toString())
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == GALLERY_REQ_CODE) {
-            val imageStream: InputStream? = activity?.contentResolver?.openInputStream(Uri.parse(data?.data.toString()))
-            imageStream?.let {
-                val scImg = scaledBitmapImage(BitmapFactory.decodeStream(imageStream))
-                binding?.profilePic?.setImageDrawable(getCircularImage(context, scImg))
-                SessionManager.profileImgUri = saveImage(scImg)
-            }
+        val options = RequestOptions()
+            .placeholder(R.drawable.ic_account_green)
+            .circleCrop()
+            //.signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
+        binding?.profilePic?.let { view ->
+            Glide.with(view)
+                .load(imageUri)
+                .apply(options)
+                .into(view)
         }
     }
 
     private fun getImageFromDevice() {
-        if (ContextCompat.checkSelfPermission(requireContext(), permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        ImagePicker.with(this)
+            .cropSquare()
+            .maxResultSize(200, 200)
+            .compress(300)
+            .createIntent { intent ->
+                startForProfileImageResult.launch(intent)
+            }
+        /*if (ContextCompat.checkSelfPermission(requireContext(), permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(permission.WRITE_EXTERNAL_STORAGE), 102)
         } else {
             pickupGallery()
+        }*/
+    }
+
+    private val startForProfileImageResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val resultCode = result.resultCode
+        val data = result.data
+        if (resultCode == Activity.RESULT_OK) {
+            val uri = data?.data!!
+
+            val imagePath = uri.path ?: ""
+            binding?.profilePic?.let { view ->
+                Glide.with(requireContext())
+                    .load(imagePath)
+                    .apply(RequestOptions().placeholder(R.drawable.ic_account_green).circleCrop())
+                    .into(view)
+            }
+
+            uploadImage("${SessionManager.courierUserId}.jpg", "delivery_tiger/profile", imagePath)
+
+
+        } else if (resultCode == ImagePicker.RESULT_ERROR) {
+            context?.toast(ImagePicker.getError(data))
         }
+    }
+
+    private fun uploadImage(fileName: String, imagePath: String, fileUrl: String) {
+        viewModel.imageUploadForFile(fileName, imagePath, fileUrl).observe(viewLifecycleOwner, Observer { flag ->
+
+        })
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -565,6 +585,18 @@ class ProfileFragment : Fragment() {
         val photoPickerIntent = Intent(Intent.ACTION_PICK)
         photoPickerIntent.type = "image/*"
         startActivityForResult(photoPickerIntent, GALLERY_REQ_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK && requestCode == GALLERY_REQ_CODE) {
+            val imageStream: InputStream? = activity?.contentResolver?.openInputStream(Uri.parse(data?.data.toString()))
+            imageStream?.let {
+                val scImg = scaledBitmapImage(BitmapFactory.decodeStream(imageStream))
+                binding?.profilePic?.setImageDrawable(getCircularImage(context, scImg))
+                SessionManager.profileImgUri = saveImage(scImg)
+            }
+        }
     }
 
     private fun getPickupLocation() {

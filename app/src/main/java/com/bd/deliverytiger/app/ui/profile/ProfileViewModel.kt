@@ -18,10 +18,16 @@ import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import java.io.File
 
 class ProfileViewModel(private val repository: AppRepository): ViewModel() {
 
@@ -202,6 +208,46 @@ class ProfileViewModel(private val repository: AppRepository): ViewModel() {
                     }
                     is NetworkResponse.ServerError -> {
                         val message = "পিকআপ লোকেশন ইতিমধ্যে অ্যাড করেছেন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
+    }
+
+    private val mediaTypeText = "text/plain".toMediaTypeOrNull()
+    private val mediaTypeMultipart = "multipart/form-data".toMediaTypeOrNull()
+    fun imageUploadForFile(fileName: String, imagePath: String, fileUrl: String): LiveData<Boolean> {
+
+        viewState.value = ViewState.ProgressState(true)
+        val responseData = MutableLiveData<Boolean>()
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val fileNameR = fileName.toRequestBody(mediaTypeText)
+            val imagePathR = imagePath.toRequestBody(mediaTypeText)
+            val compressedFile = File(fileUrl)
+            val requestFile = compressedFile.asRequestBody(mediaTypeMultipart)
+            val part = MultipartBody.Part.createFormData("img", fileName, requestFile)
+
+            val response = repository.imageUploadForFile(fileNameR, imagePathR, part)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        responseData.value = response.body
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "Server error"
                         viewState.value = ViewState.ShowMessage(message)
                     }
                     is NetworkResponse.NetworkError -> {

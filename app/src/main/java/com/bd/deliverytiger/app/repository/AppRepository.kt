@@ -48,6 +48,7 @@ import com.bd.deliverytiger.app.database.dao.NotificationDao
 import com.bd.deliverytiger.app.fcm.FCMData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.http.Part
 import retrofit2.http.Path
 
 class AppRepository(
@@ -194,6 +195,12 @@ class AppRepository(
     suspend fun getComplainHistory(bookingCode: Int, isVisibleToMerchant: Int) = apiInterfaceADM.getComplainHistory(bookingCode, isVisibleToMerchant)
 
     suspend fun merchantBalanceLoadHistory(merchantID: Int) = apiInterfaceADM.merchantBalanceLoadHistory(merchantID)
+
+    suspend fun imageUploadForFile(
+        fileName: RequestBody,
+        imagePath: RequestBody,
+        file: MultipartBody.Part?
+    ) = apiInterfaceADM.imageUploadForFile(fileName, imagePath, file)
 
     //******************** ADCORE ********************//
 

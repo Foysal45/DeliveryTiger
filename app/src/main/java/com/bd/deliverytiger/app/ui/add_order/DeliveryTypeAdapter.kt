@@ -16,7 +16,8 @@ class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var onItemClick: ((position: Int, model: WeightRangeWiseData) -> Unit)? = null
     private var selectedItem: Int = -1
 
-    private val options = RequestOptions().signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
+    private val options = RequestOptions()
+        .signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ItemViewDeliveryTypeBinding.inflate(LayoutInflater.from(parent.context), parent, false)

@@ -76,6 +76,9 @@ import com.bd.deliverytiger.app.ui.survey.SurveyActivity
 import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
 import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -860,6 +863,14 @@ class HomeActivity : AppCompatActivity(),
         //merchantCredit.text = "ক্রেডিট লিমিট: ৳ ${DigitConverter.toBanglaDigit(SessionManager.credit, true)}"
         //merchantAdvancePayment.text = "অ্যাডভান্স পেমেন্ট: ৳ ${DigitConverter.toBanglaDigit(0, true)}"
 
+        val options = RequestOptions()
+            .placeholder(R.drawable.ic_account_green)
+            .circleCrop()
+            //.signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
+        Glide.with(headerPic)
+            .load("https://static.ajkerdeal.com/delivery_tiger/profile/${SessionManager.courierUserId}.jpg")
+            .apply(options)
+            .into(headerPic)
 
         profileEdit.setOnClickListener {
             navId = R.id.nav_header_profile_edit

@@ -20,11 +20,10 @@ import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableResp
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
 import com.bd.deliverytiger.app.api.model.unpaid_cod.UnpaidCODResponse
 import com.haroldadmin.cnradapter.NetworkResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Retrofit
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface ApiInterfaceADM {
 
@@ -87,4 +86,11 @@ interface ApiInterfaceADM {
     @GET("api/account/reports/MerchantBalanceLoadHistory/{merchantID}")
     suspend fun merchantBalanceLoadHistory(@Path("merchantID") merchantID: Int): NetworkResponse<List<BalanceLoadHistoryData>, ErrorResponse>
 
+    @Multipart
+    @POST("Image/ImageUploadForFile")
+    suspend fun imageUploadForFile(
+        @Part("FileName") fileName: RequestBody,
+        @Part("ImageUrl") imagePath: RequestBody,
+        @Part file: MultipartBody.Part? = null
+    ): NetworkResponse<Boolean, ErrorResponse>
 }
