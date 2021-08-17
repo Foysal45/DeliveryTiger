@@ -62,7 +62,7 @@ class QuickBookingBottomSheet  : BottomSheetDialogFragment() {
         fun newInstance(): QuickBookingBottomSheet = QuickBookingBottomSheet().apply {
         }
 
-        val tag: String = OrderInfoEditBottomSheet::class.java.name
+        val tag: String = QuickBookingBottomSheet::class.java.name
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
