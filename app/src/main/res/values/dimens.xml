@@ -26,4 +26,5 @@
     <dimen name="dashboard_btn_height">60dp</dimen>
     <dimen name="toggleButtonHeight">60dp</dimen>
     <dimen name="order_preview_margin_top">12dp</dimen>
+    <dimen name="bottomActionHeight">60dp</dimen>
 </resources>

@@ -14,7 +14,9 @@
             android:layout_height="match_parent"
             android:background="@color/white"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:paddingBottom="@dimen/bottomActionHeight"
+            >
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -863,7 +865,7 @@
                 tools:visibility="visible" />
 
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:id="@+id/actionLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -923,7 +925,7 @@
                     app:iconGravity="textStart"
                     app:layout_constraintBottom_toBottomOf="parent" />
 
-            </LinearLayout>
+            </LinearLayout>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

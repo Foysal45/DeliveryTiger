@@ -163,7 +163,7 @@ class DashboardFragment : Fragment() {
         countDownTimer?.cancel()
     }
 
-    private fun manageDeliveryReturnDashboard(){
+    private fun manageDeliveryReturnDashboard() {
 
         //Fetch 7 days data
         val calendar = Calendar.getInstance()
@@ -190,26 +190,26 @@ class DashboardFragment : Fragment() {
         }
 
         binding?.deliveryFilterLayout?.setOnClickListener {
-            if(dateRangeFilterList.isEmpty()){
+            if (dateRangeFilterList.isEmpty()) {
                 Toast.makeText(requireContext(), "কোনো তথ্য পাওয়া যায়নি", Toast.LENGTH_SHORT).show()
-            }else{
-                if (dateRangeFilterList.first().delivered != 0){
-                    val reqBody = DeliveryDetailsRequest(fromDate, toDate, SessionManager.courierUserId,"delivery")
+            } else {
+                if (dateRangeFilterList.first().delivered != 0) {
+                    val reqBody = DeliveryDetailsRequest(fromDate, toDate, SessionManager.courierUserId, "delivery")
                     addFragment(DeliveryDetailsFragment.newInstance(reqBody, dateRangeFilterList.first().delivered), DeliveryDetailsFragment.tag)
-                }else{
+                } else {
                     Toast.makeText(requireContext(), "কোনো তথ্য পাওয়া যায়নি", Toast.LENGTH_SHORT).show()
                 }
             }
 
         }
         binding?.deliveredReturnLayout?.setOnClickListener {
-            if(dateRangeFilterList.isEmpty()){
+            if (dateRangeFilterList.isEmpty()) {
                 Toast.makeText(requireContext(), "কোনো তথ্য পাওয়া যায়নি", Toast.LENGTH_SHORT).show()
-            }else{
+            } else {
                 if (dateRangeFilterList.first().returned != 0) {
                     val reqBody = DeliveryDetailsRequest(fromDate, toDate, SessionManager.courierUserId, "return")
                     addFragment(DeliveryDetailsFragment.newInstance(reqBody, dateRangeFilterList.first().returned), DeliveryDetailsFragment.tag)
-                }else{
+                } else {
                     Toast.makeText(requireContext(), "কোনো তথ্য পাওয়া যায়নি", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -268,17 +268,17 @@ class DashboardFragment : Fragment() {
             addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
             UserLogger.logGenie("Dashboard_Complain")
         }
-        binding?.balanceLoadLayout?.setOnClickListener {
+        /*binding?.balanceLoadLayout?.setOnClickListener {
             showQuickOrderBottomSheet()
             UserLogger.logGenie("Dashboard_Quick_Order")
-            /*showQuickOrderDialog()
+            *//*showQuickOrderDialog()
             if (netAmount >= 0) {
                 addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
             } else {
                 serviceChargeDialog()
-            }*/
-        }
-        binding?.orderBtn?.setOnClickListener {
+            }*//*
+        }*/
+        /*binding?.orderBtn?.setOnClickListener {
             binding?.progressBar?.visibility = View.VISIBLE
             if (showOrderPopup) {
                 orderDialog()
@@ -291,7 +291,7 @@ class DashboardFragment : Fragment() {
                     serviceChargeDialog()
                 }
             }
-        }
+        }*/
         dashboardAdapter.onItemClick = { _, model ->
             //dashBoardClickEvent(model?.dashboardRouteUrl!!)
             if (model?.count != 0) {
@@ -393,28 +393,28 @@ class DashboardFragment : Fragment() {
             UserLogger.logGenie("Dashboard_PaymentStatement")
         }
 
-       /* binding?.dateRangePicker?.setOnClickListener {
-            val builder = MaterialDatePicker.Builder.dateRangePicker()
-            builder.setTheme(R.style.CustomMaterialCalendarTheme)
-            builder.setTitleText("ডেট রেঞ্জ সিলেক্ট করুন")
-            val picker = builder.build()
-            picker.show(childFragmentManager, "Picker")
-            picker.addOnPositiveButtonClickListener {
+        /* binding?.dateRangePicker?.setOnClickListener {
+             val builder = MaterialDatePicker.Builder.dateRangePicker()
+             builder.setTheme(R.style.CustomMaterialCalendarTheme)
+             builder.setTitleText("ডেট রেঞ্জ সিলেক্ট করুন")
+             val picker = builder.build()
+             picker.show(childFragmentManager, "Picker")
+             picker.addOnPositiveButtonClickListener {
 
-                selectedStartDate = sdf.format(it.first)
-                selectedEndDate = sdf.format(it.second)
-                selectedMonth = 0
-                selectedYear = 0
+                 selectedStartDate = sdf.format(it.first)
+                 selectedEndDate = sdf.format(it.second)
+                 selectedMonth = 0
+                 selectedYear = 0
 
-                val sdf1 = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-                //context?.toast("$selectedStartDate $selectedEndDate")
-                viewList[0] = DigitConverter.toBanglaDigit("${sdf1.format(it.first)} - ${sdf1.format(it.second)}")
-                monthSpinnerAdapter.notifyDataSetChanged()
-                binding?.monthSpinner?.setSelection(0)
+                 val sdf1 = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+                 //context?.toast("$selectedStartDate $selectedEndDate")
+                 viewList[0] = DigitConverter.toBanglaDigit("${sdf1.format(it.first)} - ${sdf1.format(it.second)}")
+                 monthSpinnerAdapter.notifyDataSetChanged()
+                 binding?.monthSpinner?.setSelection(0)
 
-                getDashBoardData(selectedMonth, selectedYear)
-            }
-        }*/
+                 getDashBoardData(selectedMonth, selectedYear)
+             }
+         }*/
 
         /*binding?.paymentDoneLayout?.setOnClickListener {
             addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
@@ -516,7 +516,7 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun initRetentionManagerData(userId: Int, retentionManagerName: String, retentionManagerNumber: String){
+    private fun initRetentionManagerData(userId: Int, retentionManagerName: String, retentionManagerNumber: String) {
 
         binding?.retentionManagerImage?.let { view ->
             Glide.with(view)
@@ -552,14 +552,14 @@ class DashboardFragment : Fragment() {
 
         selectedEndDate = "$selectedYear-$selectedMonth-$today"
 
-        val calendarStart =  Calendar.getInstance()
+        val calendarStart = Calendar.getInstance()
         calendarStart.add(Calendar.MONTH, monthDuration * -1)
         val startYear = calendarStart.get(Calendar.YEAR)
         val startMonth = calendarStart.get(Calendar.MONTH) + 1
         selectedStartDate = "$startYear-$startMonth-01"
 
         getDashBoardData(selectedMonth, selectedYear)
-        Timber.d( "fetchDashBoard $selectedMonth $selectedYear")
+        Timber.d("fetchDashBoard $selectedMonth $selectedYear")
 
         /*val list: MutableList<MonthDataModel> = mutableListOf()
         viewList.clear()
@@ -613,18 +613,11 @@ class DashboardFragment : Fragment() {
 
     private fun getCourierUsersInformation() {
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
-            SessionManager.collectionCharge = model.collectionCharge
-            SessionManager.merchantDistrict = model.districtId
-            isQuickBookingEnable = model.isQuickOrderActive
-            initRetentionManagerData(model?.adminUsers?.userId ?: 0, model?.adminUsers?.fullName ?: "", model?.adminUsers?.mobile ?: "")
-            if (isQuickBookingEnable) {
-                binding?.balanceLoadLayout?.visibility = View.VISIBLE
-                binding?.orderBtn?.layoutParams?.width = 0
-            } else {
-                binding?.orderBtn?.layoutParams?.width = LinearLayout.LayoutParams.MATCH_PARENT
-                binding?.balanceLoadLayout?.visibility = View.GONE
-            }
-
+            initRetentionManagerData(
+                model?.adminUsers?.userId ?: 0,
+                model?.adminUsers?.fullName ?: "",
+                model?.adminUsers?.mobile ?: ""
+            )
         })
     }
 
@@ -706,48 +699,48 @@ class DashboardFragment : Fragment() {
             val endTimeStamp = sdf1.parse("$endDate $endTime")
             Timber.d("timeDebug $endDate $endTime")
             if (endTimeStamp == null) return
-                val timeDifference = endTimeStamp.time - Date().time
-                Timber.d("timeDebug timeDifference $timeDifference ${endTimeStamp.time}")
-                if (timeDifference > 0) {
-                    binding?.collectorTimerLayout?.isVisible = true
-                    binding?.clock?.let { image ->
-                        Glide.with(image).load(R.raw.gif_watch).into(image)
-                    }
-                    countDownTimer = object: CountDownTimer(timeDifference,1000L * 60 * 10) { // 10 min
-                        override fun onTick(millisUntilFinished: Long) {
-                            val hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished).toInt() % 24
-                            val minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished).toInt() % 60
-                            //val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished).toInt() % 60
-                            //val message = String.format("%02d:%02d:%02d", hours, minutes, seconds)
-
-                            val fraction = minutes % 10
-                            val roundMinute = if (fraction == 0) minutes else minutes + (10 - fraction) // 45 -> 50
-                            Timber.d("timeDebug onTick hour $hours minute $minutes fraction $fraction roundMinute $roundMinute")
-                            val message = if (hours == 0) {
-                                String.format("%d মিনিটের", roundMinute)
-                            } else {
-                                if (roundMinute == 0) {
-                                    String.format("%d ঘন্টার", hours)
-                                } else {
-                                    String.format("%d ঘণ্টা %d মিনিটের", hours, roundMinute)
-                                }
-                            }
-                            binding?.timeCounter?.text = DigitConverter.toBanglaDigit(message)
-                            /*if (hours < 1) {
-                                holder.binding.timeText.setTextColor(ContextCompat.getColor(holder.binding.timeText.context, R.color.crimson))
-                            } else {
-                                holder.binding.timeText.setTextColor(ContextCompat.getColor(holder.binding.timeText.context, R.color.colorPrimary))
-                            }*/
-                        }
-
-                        override fun onFinish() {
-                            binding?.timeCounter?.text = "০ ঘণ্টা ০ মিনিটের"
-                            binding?.collectorTimerLayout?.isVisible = false
-                        }
-                    }.start()
-                } else {
-                    binding?.collectorTimerLayout?.isVisible = false
+            val timeDifference = endTimeStamp.time - Date().time
+            Timber.d("timeDebug timeDifference $timeDifference ${endTimeStamp.time}")
+            if (timeDifference > 0) {
+                binding?.collectorTimerLayout?.isVisible = true
+                binding?.clock?.let { image ->
+                    Glide.with(image).load(R.raw.gif_watch).into(image)
                 }
+                countDownTimer = object : CountDownTimer(timeDifference, 1000L * 60 * 10) { // 10 min
+                    override fun onTick(millisUntilFinished: Long) {
+                        val hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished).toInt() % 24
+                        val minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished).toInt() % 60
+                        //val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished).toInt() % 60
+                        //val message = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+
+                        val fraction = minutes % 10
+                        val roundMinute = if (fraction == 0) minutes else minutes + (10 - fraction) // 45 -> 50
+                        Timber.d("timeDebug onTick hour $hours minute $minutes fraction $fraction roundMinute $roundMinute")
+                        val message = if (hours == 0) {
+                            String.format("%d মিনিটের", roundMinute)
+                        } else {
+                            if (roundMinute == 0) {
+                                String.format("%d ঘন্টার", hours)
+                            } else {
+                                String.format("%d ঘণ্টা %d মিনিটের", hours, roundMinute)
+                            }
+                        }
+                        binding?.timeCounter?.text = DigitConverter.toBanglaDigit(message)
+                        /*if (hours < 1) {
+                            holder.binding.timeText.setTextColor(ContextCompat.getColor(holder.binding.timeText.context, R.color.crimson))
+                        } else {
+                            holder.binding.timeText.setTextColor(ContextCompat.getColor(holder.binding.timeText.context, R.color.colorPrimary))
+                        }*/
+                    }
+
+                    override fun onFinish() {
+                        binding?.timeCounter?.text = "০ ঘণ্টা ০ মিনিটের"
+                        binding?.collectorTimerLayout?.isVisible = false
+                    }
+                }.start()
+            } else {
+                binding?.collectorTimerLayout?.isVisible = false
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -874,7 +867,7 @@ class DashboardFragment : Fragment() {
     private fun orderDialog() {
 
         val builder = MaterialAlertDialogBuilder(requireContext())
-        val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_order_type,null)
+        val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_order_type, null)
         builder.setView(view)
         val button1: MaterialButton = view.findViewById(R.id.button1)
         val button2: MaterialButton = view.findViewById(R.id.button2)
@@ -912,7 +905,7 @@ class DashboardFragment : Fragment() {
                 goToNearByHubMap()
             } else if (model.statusGroupId == 10) {
                 dialog.dismiss()
-                val hubModel = HubInfo(10, "সেন্ট্রাল হাব", "lalmatia-hub", true, "7/7 Block C Lalmatia Mohammadpur","90.3678406", "23.7544619", "01521427957")
+                val hubModel = HubInfo(10, "সেন্ট্রাল হাব", "lalmatia-hub", true, "7/7 Block C Lalmatia Mohammadpur", "90.3678406", "23.7544619", "01521427957")
                 goToHubMap(hubModel)
             }
         }
@@ -1005,7 +998,7 @@ class DashboardFragment : Fragment() {
         viewModel.sendOTP(OTPRequestModel(mobileNumber, mobileNumber)).observe(viewLifecycleOwner, Observer { msg ->
             isOTPRequested = false
             val message = "আপনার অ্যাকাউন্ট ভেরিফিকেশন কোড ${SessionManager.mobile} এই মোবাইল নম্বরে পাঠানো হয়েছে"
-            alert("নির্দেশনা", message, true, "ভেরিফাই", "ক্যানসেল"){
+            alert("নির্দেশনা", message, true, "ভেরিফাই", "ক্যানসেল") {
                 if (it == AlertDialog.BUTTON_POSITIVE) {
                     showOTPVerify()
                 }
@@ -1059,7 +1052,7 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun setDateRangePickerTitle(){
+    private fun setDateRangePickerTitle() {
         val msg = "${DigitConverter.toBanglaDate(fromDate, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(toDate, "yyyy-MM-dd")}"
         binding?.dateRangePicker?.text = msg
         //binding?.clearDateRangeImage?.visibility = View.VISIBLE
@@ -1067,7 +1060,7 @@ class DashboardFragment : Fragment() {
 
     private fun fetchDeliveredReturnCount(requestBody: DeliveredReturnedCountRequest) {
 
-        viewModel.fetchDeliveredCount(requestBody).observe(viewLifecycleOwner, Observer { list->
+        viewModel.fetchDeliveredCount(requestBody).observe(viewLifecycleOwner, Observer { list ->
             if (list.isNotEmpty()) {
                 dateRangeFilterList.clear()
                 dateRangeFilterList.addAll(list)
@@ -1127,7 +1120,7 @@ class DashboardFragment : Fragment() {
             }, 200L)
         }
         dialog.onOrderPlace = { msg ->
-            alert(getString(R.string.instruction), msg, true, getString(R.string.ok), "সকল কুইক বুকিং"){
+            alert(getString(R.string.instruction), msg, true, getString(R.string.ok), "সকল কুইক বুকিং") {
                 if (it == AlertDialog.BUTTON_NEGATIVE) {
                     addFragment(QuickOrderListFragment.newInstance(), QuickOrderListFragment.tag)
                 }
@@ -1136,7 +1129,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun serviceChargeDialog() {
-        alert("নির্দেশনা", "আপনার সার্ভিস চার্জ (প্রি-পেইড) ৳${DigitConverter.toBanglaDigit(netAmount)} বকেয়া রয়েছে। সার্ভিস চার্জ পে করুন।", false, "সার্ভিস চার্জ পে","") {
+        alert("নির্দেশনা", "আপনার সার্ভিস চার্জ (প্রি-পেইড) ৳${DigitConverter.toBanglaDigit(netAmount)} বকেয়া রয়েছে। সার্ভিস চার্জ পে করুন।", false, "সার্ভিস চার্জ পে", "") {
             if (it == AlertDialog.BUTTON_POSITIVE) {
                 addFragment(ServiceBillPayFragment.newInstance(), ServiceBillPayFragment.tag)
             }

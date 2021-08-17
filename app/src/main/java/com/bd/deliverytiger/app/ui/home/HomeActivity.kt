@@ -143,6 +143,9 @@ class HomeActivity : AppCompatActivity(),
     private var mBound: Boolean = false
     private var currentLocation: Location? = null
 
+    //Data
+    private var isQuickBookingEnable: Boolean = false
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -200,7 +203,7 @@ class HomeActivity : AppCompatActivity(),
         addDashBoardFragment()
 
         addProductIV.setOnClickListener {
-            addOrderFragment()
+            addOrderFab.performClick()
         }
         notificationIV.setOnClickListener {
             openRightDrawer()
@@ -229,10 +232,14 @@ class HomeActivity : AppCompatActivity(),
         onNewIntent(intent)
 
         addOrderFab.setOnClickListener {
-            //addOrderFragment()
-            orderDialog()
+            if (isQuickBookingEnable) {
+                orderDialog()
+            } else {
+                orderPlaceWithBalanceCheck()
+            }
         }
 
+        getCourierUsersInformation()
         loadBannerInfo()
         fetchOrderServiceType()
 
@@ -965,7 +972,7 @@ class HomeActivity : AppCompatActivity(),
 
     private fun addOrderFragment() {
 
-        UserLogger.logGenie("DetailOrder")
+        UserLogger.logGenie("Dashboard_AddOrder")
         val fragment = AddOrderFragmentOne.newInstance()
         val ft = supportFragmentManager.beginTransaction()
         ft.add(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
@@ -1329,6 +1336,8 @@ class HomeActivity : AppCompatActivity(),
         })
     }
 
+    //#region Order Place
+
     private fun orderDialog() {
 
         val builder = MaterialAlertDialogBuilder(this)
@@ -1340,8 +1349,7 @@ class HomeActivity : AppCompatActivity(),
         dialog.show()
         button1.setOnClickListener {
             dialog.dismiss()
-            addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
-            UserLogger.logGenie("Dashboard_AddOrder")
+            orderPlaceWithBalanceCheck()
         }
         button2.setOnClickListener {
             dialog.dismiss()
@@ -1367,5 +1375,32 @@ class HomeActivity : AppCompatActivity(),
             }.show()
         }
     }
+
+    private fun getCourierUsersInformation() {
+        viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(this, Observer { model ->
+            SessionManager.collectionCharge = model.collectionCharge
+            SessionManager.merchantDistrict = model.districtId
+            isQuickBookingEnable = model.isQuickOrderActive
+
+        })
+    }
+
+    private fun orderPlaceWithBalanceCheck() {
+        if (SessionManager.netAmount >= 0) {
+            addOrderFragment()
+        } else {
+            serviceChargeDialog()
+        }
+    }
+
+    private fun serviceChargeDialog() {
+        alert("নির্দেশনা", "আপনার সার্ভিস চার্জ (প্রি-পেইড) ৳${DigitConverter.toBanglaDigit(SessionManager.netAmount)} বকেয়া রয়েছে। সার্ভিস চার্জ পে করুন।", false, "সার্ভিস চার্জ পে","") {
+            if (it == AlertDialog.BUTTON_POSITIVE) {
+                addFragment(ServiceBillPayFragment.newInstance(), ServiceBillPayFragment.tag)
+            }
+        }.show()
+    }
+
+    //#endregion
 
 }
