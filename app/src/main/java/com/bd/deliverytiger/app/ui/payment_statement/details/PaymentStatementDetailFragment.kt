@@ -64,6 +64,11 @@ class PaymentStatementDetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        val bundle: Bundle? = arguments
+        bundle?.let {
+            transactionId = it.getString("transactionId") ?: ""
+        }
+
         dataAdapter = PaymentStatementDetailsAdapter()
         with(binding?.recyclerview!!) {
             setHasFixedSize(true)

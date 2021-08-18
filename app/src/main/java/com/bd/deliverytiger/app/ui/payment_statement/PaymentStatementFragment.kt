@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentPaymentStatementBinding
@@ -89,10 +91,16 @@ class PaymentStatementFragment: Fragment() {
         val fragment = PaymentStatementDetailFragment.newInstance(transactionId)
         val tag = PaymentStatementDetailFragment.tag
 
-        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        /*val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
-        ft?.commit()
+        ft?.commit()*/
+
+        //TODO check, added to Nav
+        val bundle: Bundle = bundleOf(
+            "transactionId" to transactionId
+        )
+        findNavController().navigate(R.id.nav_paymentHistory_paymentHistoryDetails, bundle)
     }
 
     override fun onResume() {

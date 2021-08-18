@@ -394,7 +394,9 @@ class DashboardFragment : Fragment() {
         }
 
         binding?.paymentHistoryBtn?.setOnClickListener {
-            addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
+            //addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
+            //TODO check, changed it to Nav
+            findNavController().navigate(R.id.nav_payment_history)
             UserLogger.logGenie("Dashboard_PaymentStatement")
         }
 

@@ -79,11 +79,34 @@
         android:label="@string/service_bill_pay"
         tools:layout="@layout/fragment_service_bill_pay">
 
-
         <action
             android:id="@+id/nav_CODCollection_navWebView"
             app:destination="@id/nav_web_view"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/nav_payment_history"
+        android:name="com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment"
+        android:label="@string/payment_statement"
+        tools:layout="@layout/fragment_payment_statement">
+
+        <action
+            android:id="@+id/nav_paymentHistory_paymentHistoryDetails"
+            app:destination="@id/nav_payment_history_details"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_payment_history_details"
+        android:name="com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailFragment"
+        android:label="@string/payment_statement"
+        tools:layout="@layout/fragment_payment_statement_detail">
+
+        <action
+            android:id="@+id/nav_paymentHistory_paymentHistoryDetails"
+            app:destination="@id/nav_web_view"/>
+    </fragment>
+
+
 
     <fragment
         android:id="@+id/nav_web_view"
