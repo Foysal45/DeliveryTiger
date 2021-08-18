@@ -30,6 +30,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
@@ -102,7 +103,6 @@ import java.util.*
 
 
 class HomeActivity : AppCompatActivity(),
-    NavigationView.OnNavigationItemSelectedListener,
     ConnectivityReceiver.ConnectivityReceiverListener {
 
     private lateinit var toolbar: Toolbar
@@ -126,7 +126,7 @@ class HomeActivity : AppCompatActivity(),
     private lateinit var binding: ActivityHomeBinding
     private val viewModel: HomeViewModel by inject()
     private var doubleBackToExitPressedOnce = false
-    private var navId: Int = 0
+    private var menuItem: MenuItem? = null
 
     //Navigation
     private lateinit var navController: NavController
@@ -186,7 +186,7 @@ class HomeActivity : AppCompatActivity(),
         addOrderFab = findViewById(R.id.addOrderFab)
         parent = findViewById(R.id.toolbar)
         actionBtn = findViewById(R.id.actionBtn)
-        navView.setNavigationItemSelectedListener(this)
+
 
         binding.appBarHome.bottomNavigationView.background = null
 
@@ -201,6 +201,7 @@ class HomeActivity : AppCompatActivity(),
         }*/
 
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, navViewRight)
+        manageNavigationSelection()
         drawerListener()
         onBackStackChangeListener()
         bindHeaderView()
@@ -496,19 +497,27 @@ class HomeActivity : AppCompatActivity(),
         }
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-
-        // go to manageNavigationItemSelection method
-        navId = item.itemId
-        drawerLayout.closeDrawer(GravityCompat.START)
-        return true
+    private fun manageNavigationSelection() {
+        binding.navView.setNavigationItemSelectedListener { item ->
+            menuItem = item
+            val handled = NavigationUI.onNavDestinationSelected(item, navController)
+            if (handled) {
+                drawerLayout.closeDrawer(GravityCompat.START)
+            } else {
+                when (menuItem!!.itemId) {
+                    R.id.nav_logout -> {
+                        menuItem?.isChecked = true
+                        logout()
+                    }
+                }
+            }
+            return@setNavigationItemSelectedListener true
+        }
     }
 
     private fun drawerListener() {
-
         drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {
-
                 if (newState == DrawerLayout.STATE_SETTLING) {
                     if (!drawerLayout.isDrawerOpen(GravityCompat.END)) {
                         // Drawer started opening
@@ -522,21 +531,10 @@ class HomeActivity : AppCompatActivity(),
                     }
                 }
             }
-
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-                /*if (slideOffset == 1.0F && drawerLayout.isDrawerOpen(GravityCompat.END)){
-
-                }*/
-            }
-
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+            override fun onDrawerOpened(drawerView: View) {}
             override fun onDrawerClosed(drawerView: View) {
-                manageNavigationItemSelection(navId)
-                //Timber.d("HomeActivityLog", "onDrawerClosed called")
-                //val inputMethodManager: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                //inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-            }
-
-            override fun onDrawerOpened(drawerView: View) {
+                //manageNavigationItemSelection(navId)
             }
         })
     }
@@ -848,7 +846,7 @@ class HomeActivity : AppCompatActivity(),
                     addFragment(QuickOrderListFragment.newInstance(), QuickOrderListFragment.tag)
                 }
             }
-            R.id.nav_balance_load -> {
+            /*R.id.nav_balance_load -> {
                 if (SessionManager.netAmount >=0 ){
                     addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
                 }else{
@@ -858,15 +856,19 @@ class HomeActivity : AppCompatActivity(),
                         }
                     }.show()
                 }
-            }
+            }*/
             R.id.nav_logout -> {
-
-                SessionManager.clearSession()
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
+                menuItem?.isChecked = true
+                logout()
             }
         }
-        navId = 0
+        menuItem = null
+    }
+
+    private fun logout() {
+        SessionManager.clearSession()
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 
     private fun bottomNavigationLister() {
@@ -916,15 +918,15 @@ class HomeActivity : AppCompatActivity(),
             .into(headerPic)
 
         profileEdit.setOnClickListener {
-            navId = R.id.nav_header_profile_edit
+            //navId = R.id.nav_header_profile_edit
             drawerLayout.closeDrawer(GravityCompat.START)
         }
         headerPic.setOnClickListener {
-            navId = R.id.nav_header_profile_edit
+            //navId = R.id.nav_header_profile_edit
             drawerLayout.closeDrawer(GravityCompat.START)
         }
         nearbyHub.setOnClickListener {
-            navId = R.id.nav_nearby_hub
+            //navId = R.id.nav_nearby_hub
             drawerLayout.closeDrawer(GravityCompat.START)
             //goToNearByHubMap()
         }
@@ -1062,7 +1064,8 @@ class HomeActivity : AppCompatActivity(),
     }
 
     fun goToBalanceLoad() {
-        addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
+        navController.navigate(R.id.nav_balance_load)
+        //addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
     }
 
     private fun addFragment(fragment: Fragment, tag: String) {

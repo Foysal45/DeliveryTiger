@@ -49,7 +49,7 @@
         <item
             android:id="@+id/nav_balance_load"
             android:icon="@drawable/ic_balance"
-            android:title="ব্যালেন্স লোড"
+            android:title="@string/balance_load"
             android:visible="true"
             />
 

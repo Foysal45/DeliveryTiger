@@ -15,7 +15,9 @@
         android:focusable="true"
         android:paddingStart="24dp"
         android:paddingTop="24dp"
-        android:paddingEnd="24dp">
+        android:paddingEnd="24dp"
+        android:paddingBottom="@dimen/bottomActionHeight"
+        >
 
 
         <TextView

@@ -23,19 +23,11 @@ import kotlin.math.abs
 class BalanceLoadFragment: Fragment() {
 
     private var binding: FragmentBalanceLoadBinding? = null
-
     private val viewModel: BalanceLoadViewModel by inject()
 
     private var amountTaka: Int = 0
     private var minimumAmount: Int = 100
     private var maximumAmount: Int = 50000
-
-    companion object {
-        fun newInstance(): BalanceLoadFragment = BalanceLoadFragment().apply {
-
-        }
-        val tag: String = BalanceLoadFragment::class.java.name
-    }
 
     override fun onResume() {
         super.onResume()
