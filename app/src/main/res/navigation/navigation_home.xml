@@ -10,8 +10,13 @@
         android:id="@+id/nav_dashboard"
         android:name="com.bd.deliverytiger.app.ui.dashboard.DashboardFragment"
         android:label="@string/dashboard"
-        tools:layout="@layout/fragment_dashboard"
-        />
+        tools:layout="@layout/fragment_dashboard">
+
+        <action
+            android:id="@+id/nav_dashboard_CODCollection"
+            app:destination="@id/nav_cod_collection"/>
+
+    </fragment>
 
     <fragment
         android:id="@+id/nav_order_tracking"
@@ -43,5 +48,17 @@
 
 
 
+
+    <fragment
+        android:id="@+id/nav_cod_collection"
+        android:name="com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment"
+        android:label="@string/cod_collection"
+        tools:layout="@layout/fragment_cod_collection">
+
+        <action
+            android:id="@+id/nav_CODCollection_orderTracking"
+            app:destination="@id/nav_order_tracking"/>
+
+    </fragment>
 
 </navigation>

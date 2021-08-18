@@ -52,6 +52,12 @@ class OrderTrackingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val bundle: Bundle? = arguments
+        bundle?.let {
+            orderID = bundle?.getString("orderID").toString()
+            containerType = bundle?.getString("containerType")?: ""
+        }
+
         binding?.merchantInfoLayout?.visibility = View.VISIBLE
         if (containerType == "login") {
             binding?.complainBtn?.visibility = View.GONE

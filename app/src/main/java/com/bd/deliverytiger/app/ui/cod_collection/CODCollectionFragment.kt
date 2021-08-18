@@ -8,10 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
@@ -102,6 +104,11 @@ class CODCollectionFragment : Fragment() {
 
         // fromDate = getCurrentDateTime().toString()
         // toDate = getPreviousDateTime(-1).toString()
+
+        val bundle: Bundle? = arguments
+        bundle?.let {
+            isUnpaidCOD = it.getBoolean("isUnpaidCOD")
+        }
 
         if (isUnpaidCOD) {
             binding?.dateLayout?.visibility = View.GONE
@@ -267,6 +274,12 @@ class CODCollectionFragment : Fragment() {
         ft?.add(R.id.mainActivityContainer, fragment, OrderTrackingFragment.tag)
         ft?.addToBackStack(OrderTrackingFragment.tag)
         ft?.commit()
+
+        val bundle = bundleOf(
+            "orderID" to orderID
+        )
+        findNavController().navigate(R.id.nav_CODCollection_orderTracking, bundle)
+
     }
 
     private fun goToFilter() {

@@ -18,6 +18,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
@@ -315,7 +316,12 @@ class DashboardFragment : Fragment() {
                         UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "cod-collection" -> {
-                        addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
+                        //TODO check, changed it to Nav
+                        //addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
+                        val bundle = bundleOf(
+                            "isUnpaidCOD" to CODCollectionFragment
+                        )
+                        findNavController().navigate(R.id.nav_dashboard_CODCollection, bundle)
                         UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "return" -> {
