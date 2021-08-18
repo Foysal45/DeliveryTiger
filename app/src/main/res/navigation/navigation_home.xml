@@ -16,6 +16,10 @@
             android:id="@+id/nav_dashboard_CODCollection"
             app:destination="@id/nav_cod_collection"/>
 
+        <action
+            android:id="@+id/nav_dashboard_billPay"
+            app:destination="@id/nav_bill_pay"/>
+
     </fragment>
 
     <fragment
@@ -63,7 +67,26 @@
         <action
             android:id="@+id/nav_CODCollection_orderTracking"
             app:destination="@id/nav_order_tracking"/>
-
     </fragment>
+
+    <fragment
+        android:id="@+id/nav_bill_pay"
+        android:name="com.bd.deliverytiger.app.ui.bill_pay.ServiceBillPayFragment"
+        android:label="@string/service_bill_pay"
+        tools:layout="@layout/fragment_service_bill_pay">
+
+
+        <action
+            android:id="@+id/nav_CODCollection_navWebView"
+            app:destination="@id/nav_web_view"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_web_view"
+        android:name="com.bd.deliverytiger.app.ui.web_view.WebViewFragment"
+        android:label="@string/web_view"
+        tools:layout="@layout/fragment_web_view"
+        />
+
 
 </navigation>

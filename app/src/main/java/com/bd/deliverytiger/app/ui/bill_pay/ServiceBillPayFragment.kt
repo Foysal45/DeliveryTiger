@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
@@ -165,21 +166,28 @@ class ServiceBillPayFragment: Fragment() {
             orderCodeList.add(OrderCode(it.orderCode?: "DT-",it.totalAmount,"Bkash-$dateTrans"))
         }
         Timber.d("orderCodeList count ${orderCodeList.size}")
-        val model = MonthlyReceivableUpdateRequest(date,"",orderCodeList)
-        val bundle = bundleOf(
-            "requestBody" to model
-        )
+
+        //TODO check Nav added
+        /*val fragment = WebViewFragment.newInstance(url, "পেমেন্ট", bundle)
+        val tag = WebViewFragment.tag*/
 
         val courierId = SessionManager.courierUserId.toString() //6188
-
         val url = "${AppConstant.SERVICE_BILL_PAY_GATEWAY}?CourierID=$courierId&Amount=$totalAmount"
-        val fragment = WebViewFragment.newInstance(url, "পেমেন্ট", bundle)
-        val tag = WebViewFragment.tag
+        val model = MonthlyReceivableUpdateRequest(date,"",orderCodeList)
+        val bundleV2 = bundleOf(
+            "requestBody" to model
+        )
+        val bundle = bundleOf(
+            "url" to url,
+            "title" to "পেমেন্ট",
+            "bundle" to bundleV2
+        )
+        findNavController().navigate(R.id.nav_CODCollection_navWebView, bundle)
 
-        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        /*val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
-        ft?.commit()
+        ft?.commit()*/
     }
 
     override fun onDestroyView() {

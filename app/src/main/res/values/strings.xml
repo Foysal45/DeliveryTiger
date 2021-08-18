@@ -118,6 +118,7 @@
     <string name="pickupType2">কালেক্টর দ্বারা pick-up হবে*</string>
     <string name="instant_payment">ইনস্ট্যান্ট পেমেন্ট আপডেট</string>
     <string name="quick_booking_list">সকল কুইক বুকিং</string>
+    <string name="web_view">ওয়েব</string>
 
     <string name="file_provider">com.ajkerdeal.app.ajkerdealseller.fileprovider</string>
     <string name="pick_single">ছবি সিলেক্ট করুন</string>

@@ -43,6 +43,14 @@ class WebViewFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        val bundle: Bundle? = arguments
+
+        bundle.let {
+            loadUrl = it?.getString("url")?: ""
+            webTitle = it?.getString("title")?: ""
+            this.bundle = it?.getBundle("bundle")
+        }
+
         Timber.d("WebView Url: $loadUrl")
         Timber.d("WebView Bundle: ${bundle.toString()}")
 
