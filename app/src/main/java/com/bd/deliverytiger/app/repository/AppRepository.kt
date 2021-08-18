@@ -48,6 +48,7 @@ import com.bd.deliverytiger.app.database.dao.NotificationDao
 import com.bd.deliverytiger.app.fcm.FCMData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.http.Body
 import retrofit2.http.Path
 
 class AppRepository(
@@ -311,6 +312,8 @@ class AppRepository(
         @Path("courierUserId") courierUserId: Int,
         @Path("customerSMSLimit") customerSMSLimit: Int
     ) = apiInterfaceCore.updateCustomerSMSLimit(courierUserId, customerSMSLimit)
+
+    suspend fun sendSMSCommunication(requestBody: List<SMSModel>) = apiInterfaceCore.sendSMSCommunication(requestBody)
 
     //Quick Order
     suspend fun getCollectionTimeSlot(requestBody: TimeSlotRequest) = apiInterfaceCore.getCollectionTimeSlot(requestBody)

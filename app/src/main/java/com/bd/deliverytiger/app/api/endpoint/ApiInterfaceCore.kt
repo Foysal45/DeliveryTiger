@@ -61,6 +61,8 @@ import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionA
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionModel
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
+import com.bd.deliverytiger.app.api.model.sms.SMSModel
+import com.bd.deliverytiger.app.api.model.sms.SMSResponse
 import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.haroldadmin.cnradapter.NetworkResponse
 import retrofit2.Call
@@ -268,4 +270,7 @@ interface ApiInterfaceCore {
 
     @PUT("api/Update/UpdateCustomerSMSLimit/{courierUserId}/{customerSMSLimit}")
     suspend fun updateCustomerSMSLimit(@Path("courierUserId") courierUserId: Int, @Path("customerSMSLimit") customerSMSLimit: Int): NetworkResponse<GenericResponse<CourierInfoModel>, ErrorResponse>
+
+    @POST("api/SmsComunication/SendSms")
+    suspend fun sendSMSCommunication(@Body requestBody: List<SMSModel>): NetworkResponse<GenericResponse<Boolean>, ErrorResponse>
 }
