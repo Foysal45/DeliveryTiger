@@ -515,6 +515,34 @@ class HomeActivity : AppCompatActivity(),
                         )
                         navController.navigate(R.id.nav_profile, bundle)
                     }
+                    R.id.nav_express_service -> {
+                        val bundle = bundleOf(
+                            "url" to AppConstant.DISTRICT_WIDE_SERVICE_URL,
+                            "title" to getString(R.string.expressService)
+                        )
+                        navController.navigate(R.id.nav_web_view, bundle)
+                    }
+                    R.id.nav_terms -> {
+                        val bundle = bundleOf(
+                            "url" to AppConstant.TERMS_URL,
+                            "title" to getString(R.string.termsCondition)
+                        )
+                        navController.navigate(R.id.nav_web_view, bundle)
+                    }
+                    R.id.nav_privacy -> {
+                        val bundle = bundleOf(
+                            "url" to AppConstant.POLICY_URL,
+                            "title" to getString(R.string.privacy_policy)
+                        )
+                        navController.navigate(R.id.nav_web_view, bundle)
+                    }
+                    R.id.nav_communication -> {
+                        val bundle = bundleOf(
+                            "url" to AppConstant.COMMUNICATION_URL,
+                            "title" to getString(R.string.contact)
+                        )
+                        navController.navigate(R.id.nav_web_view, bundle)
+                    }
                     R.id.nav_logout -> {
                         menuItem?.isChecked = true
                         logout()
@@ -760,7 +788,7 @@ class HomeActivity : AppCompatActivity(),
                     addFragment(ReferralFragment.newInstance(), ReferralFragment.tag)
                 }
             }*/
-            R.id.nav_express_service -> {
+            /*R.id.nav_express_service -> {
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is WebViewFragment) {
@@ -774,7 +802,7 @@ class HomeActivity : AppCompatActivity(),
                         e.printStackTrace()
                     }
                 }
-            }
+            }*/
             R.id.nav_live_home -> {
                 try {
                     startActivity(Intent(this, LiveHomeActivity::class.java))
@@ -783,7 +811,7 @@ class HomeActivity : AppCompatActivity(),
                     Toast.makeText(applicationContext, "Check Internet Connection", Toast.LENGTH_SHORT).show()
                 }
             }
-            R.id.nav_terms -> {
+            /*R.id.nav_terms -> {
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is WebViewFragment) {
@@ -797,8 +825,8 @@ class HomeActivity : AppCompatActivity(),
                         e.printStackTrace()
                     }
                 }
-            }
-            R.id.nav_privacy -> {
+            }*/
+            /*R.id.nav_privacy -> {
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is WebViewFragment) {
@@ -812,8 +840,8 @@ class HomeActivity : AppCompatActivity(),
                         e.printStackTrace()
                     }
                 }
-            }
-            R.id.nav_communication -> {
+            }*/
+            /*R.id.nav_communication -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is WebViewFragment) {
                     Timber.d("WebViewFragment already exist")
@@ -825,7 +853,7 @@ class HomeActivity : AppCompatActivity(),
                         e.printStackTrace()
                     }
                 }
-            }
+            }*/
             R.id.nav_chat -> {
                 startActivity(Intent(this, ChatActivity::class.java))
             }

@@ -152,6 +152,8 @@
     <string name="balance_load">ব্যালেন্স লোড</string>
     <string name="profile">প্রোফাইল আপডেট</string>
     <string name="delivery_charge_calculator">ডেলিভারি চার্জ ক্যালকুলেটর</string>
+    <string name="privacy_policy">প্রাইভেসি পলিসি</string>
+    <string name="contact">যোগাযোগ</string>
 
 
 </resources>
