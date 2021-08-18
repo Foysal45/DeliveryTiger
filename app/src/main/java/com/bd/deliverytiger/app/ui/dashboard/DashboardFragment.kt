@@ -862,7 +862,7 @@ class DashboardFragment : Fragment() {
         })
     }
 
-    private fun orderDialog() {
+    /*private fun orderDialog() {
 
         val builder = MaterialAlertDialogBuilder(requireContext())
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_order_type, null)
@@ -881,7 +881,7 @@ class DashboardFragment : Fragment() {
             showQuickOrderBottomSheet()
             UserLogger.logGenie("Dashboard_Quick_Order")
         }
-    }
+    }*/
 
     private fun returnDialog() {
 
@@ -1108,7 +1108,7 @@ class DashboardFragment : Fragment() {
         addFragment(fragment, tag)
     }
 
-    private fun showQuickOrderBottomSheet() {
+    /*private fun showQuickOrderBottomSheet() {
         val tag: String = QuickBookingBottomSheet.tag
         val dialog: QuickBookingBottomSheet = QuickBookingBottomSheet.newInstance()
         dialog.show(childFragmentManager, tag)
@@ -1124,7 +1124,7 @@ class DashboardFragment : Fragment() {
                 }
             }.show()
         }
-    }
+    }*/
 
     private fun serviceChargeDialog() {
         alert("নির্দেশনা", "আপনার সার্ভিস চার্জ (প্রি-পেইড) ৳${DigitConverter.toBanglaDigit(netAmount)} বকেয়া রয়েছে। সার্ভিস চার্জ পে করুন।", false, "সার্ভিস চার্জ পে", "") {

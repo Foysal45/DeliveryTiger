@@ -34,4 +34,14 @@
         tools:layout="@layout/fragment_balance_load"
         />
 
+    <fragment
+        android:id="@+id/nav_quick_booking_list"
+        android:name="com.bd.deliverytiger.app.ui.quick_order.quick_order_history.QuickOrderListFragment"
+        android:label="@string/quick_booking_list"
+        tools:layout="@layout/fragment_quick_order_list"
+        />
+
+
+
+
 </navigation>

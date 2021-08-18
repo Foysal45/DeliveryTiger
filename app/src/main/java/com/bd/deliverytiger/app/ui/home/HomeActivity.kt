@@ -838,14 +838,14 @@ class HomeActivity : AppCompatActivity(),
             R.id.nav_survey -> {
                 startActivity(Intent(this, SurveyActivity::class.java))
             }
-            R.id.nav_quick_booking_list -> {
+            /*R.id.nav_quick_booking_list -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is QuickOrderListFragment) {
                     Timber.d("QuickOrderListFragment already exist")
                 } else {
                     addFragment(QuickOrderListFragment.newInstance(), QuickOrderListFragment.tag)
                 }
-            }
+            }*/
             /*R.id.nav_balance_load -> {
                 if (SessionManager.netAmount >=0 ){
                     addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
@@ -1409,7 +1409,7 @@ class HomeActivity : AppCompatActivity(),
         dialog.onOrderPlace = { msg ->
             alert(getString(R.string.instruction), msg, true, getString(R.string.ok), "সকল কুইক বুকিং"){
                 if (it == AlertDialog.BUTTON_NEGATIVE) {
-                    addFragment(QuickOrderListFragment.newInstance(), QuickOrderListFragment.tag)
+                    navController.navigate(R.id.nav_quick_booking_list)
                 }
             }.show()
         }

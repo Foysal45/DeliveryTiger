@@ -34,10 +34,6 @@ class QuickOrderListFragment : Fragment() {
     private var fromDate = "2001-01-01"
     private var toDate = "2001-01-01"
 
-    companion object {
-        fun newInstance(): QuickOrderListFragment = QuickOrderListFragment().apply {}
-        val tag: String = QuickOrderListFragment::class.java.name
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentQuickOrderListBinding.inflate(inflater, container, false).also {
