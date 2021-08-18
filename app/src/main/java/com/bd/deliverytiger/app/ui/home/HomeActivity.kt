@@ -508,6 +508,9 @@ class HomeActivity : AppCompatActivity(),
                     R.id.nav_live_home -> {
                         goToLiveActivity()
                     }
+                    R.id.nav_pickup -> {
+                        navController.navigate(R.id.nav_profile)
+                    }
                     R.id.nav_logout -> {
                         menuItem?.isChecked = true
                         logout()
@@ -560,7 +563,7 @@ class HomeActivity : AppCompatActivity(),
 
     private fun manageNavigationItemSelection(id: Int) {
         when (id) {
-            R.id.nav_header_profile_edit -> {
+            /*R.id.nav_header_profile_edit -> {
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ProfileFragment) {
@@ -568,7 +571,7 @@ class HomeActivity : AppCompatActivity(),
                 } else {
                     addFragment(ProfileFragment.newInstance(), ProfileFragment.tag)
                 }
-            }
+            }*/
             R.id.nav_dashboard -> {
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
@@ -681,22 +684,22 @@ class HomeActivity : AppCompatActivity(),
                     addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
                 }
             }
-            R.id.nav_profile -> {
+            /*R.id.nav_profile -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ProfileFragment) {
                     Timber.d("ProfileFragment already exist")
                 } else {
                     addFragment(ProfileFragment.newInstance(), ProfileFragment.tag)
                 }
-            }
-            R.id.nav_pickup -> {
+            }*/
+            /*R.id.nav_pickup -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ProfileFragment) {
                     Timber.d("ProfileFragment already exist")
                 } else {
                     addFragment(ProfileFragment.newInstance(true), ProfileFragment.tag)
                 }
-            }
+            }*/
             R.id.nav_change_calculator -> {
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
@@ -895,6 +898,7 @@ class HomeActivity : AppCompatActivity(),
 
     }
     
+    @SuppressLint("SetTextI18n")
     private fun bindHeaderView() {
         val headerView = navView.getHeaderView(0)
         headerPic = headerView.findViewById(R.id.nav_header_image)
@@ -912,7 +916,8 @@ class HomeActivity : AppCompatActivity(),
         //merchantAdvancePayment.text = "অ্যাডভান্স পেমেন্ট: ৳ ${DigitConverter.toBanglaDigit(0, true)}"
 
         val options = RequestOptions()
-            .placeholder(R.drawable.ic_account_green)
+            .placeholder(R.drawable.ic_account)
+            .error(R.drawable.ic_account)
             .circleCrop()
             //.signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
         Glide.with(headerPic)
@@ -922,14 +927,17 @@ class HomeActivity : AppCompatActivity(),
 
         profileEdit.setOnClickListener {
             //navId = R.id.nav_header_profile_edit
+            navController.navigate(R.id.nav_profile)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
         headerPic.setOnClickListener {
             //navId = R.id.nav_header_profile_edit
+            navController.navigate(R.id.nav_profile)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
         nearbyHub.setOnClickListener {
             //navId = R.id.nav_nearby_hub
+            //ToDo need to add
             drawerLayout.closeDrawer(GravityCompat.START)
             //goToNearByHubMap()
         }

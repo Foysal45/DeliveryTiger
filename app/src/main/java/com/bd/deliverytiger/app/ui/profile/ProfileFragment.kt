@@ -86,14 +86,6 @@ class ProfileFragment : Fragment() {
     private var isFromOrderPlace: Boolean = false
     private var isPickupLocationEmpty: Boolean = false
 
-    companion object {
-        fun newInstance(isPickupLocation: Boolean = false, isFromOrderPlace: Boolean = false): ProfileFragment = ProfileFragment().apply {
-            this.isPickupLocation = isPickupLocation
-            this.isFromOrderPlace = isFromOrderPlace
-        }
-        val tag: String = ProfileFragment::class.java.name
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentProfileBinding.inflate(inflater).also {
             binding = it
@@ -107,6 +99,9 @@ class ProfileFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        isPickupLocation = arguments?.getBoolean("isPickupLocation") ?: false
+        isFromOrderPlace = arguments?.getBoolean("isFromOrderPlace") ?: false
 
         setUpProfileFromSession()
         getPickupLocation()

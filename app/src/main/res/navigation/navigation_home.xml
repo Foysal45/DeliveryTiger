@@ -46,7 +46,12 @@
         tools:layout="@layout/fragment_quick_order_list"
         />
 
-
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.bd.deliverytiger.app.ui.profile.ProfileFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile"
+        />
 
 
     <fragment

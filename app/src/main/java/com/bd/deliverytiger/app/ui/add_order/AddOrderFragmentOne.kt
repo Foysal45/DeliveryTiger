@@ -27,6 +27,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -674,7 +675,12 @@ class AddOrderFragmentOne : Fragment() {
         if (isMissing) {
             alert("নির্দেশনা", missingValues, false) {
                 if (it == AlertDialog.BUTTON_POSITIVE) {
-                    addFragment(ProfileFragment.newInstance(false, true), ProfileFragment.tag)
+                    //addFragment(ProfileFragment.newInstance(false, true), ProfileFragment.tag)
+                    val bundle = bundleOf(
+                        "isPickupLocation" to false,
+                        "isFromOrderPlace" to true
+                    )
+                    findNavController().navigate(R.id.nav_profile, bundle)
                 }
             }.show()
             timber.log.Timber.d("missingValues: $missingValues")
