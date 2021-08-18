@@ -128,5 +128,11 @@
         tools:layout="@layout/fragment_profile"
         />
 
+    <fragment
+        android:id="@+id/nav_change_calculator"
+        android:name="com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment"
+        android:label="@string/delivery_charge_calculator"
+        tools:layout="@layout/fragment_delivery_charge_calculator"
+        />
 
 </navigation>

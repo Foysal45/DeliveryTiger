@@ -34,7 +34,7 @@ class DeliveryChargeCalculatorFragment: Fragment() {
     //private lateinit var dataAdapter: ChargeDeliveryTypeAdapter
 
     private val weightPriceList: MutableList<WeightPrice> = mutableListOf()
-    private var showTitle: Boolean = false
+    private var isHideTitle: Boolean = false
 
     private var codPercent: String = ""
     private var codPercentBangla: String = ""
@@ -43,15 +43,13 @@ class DeliveryChargeCalculatorFragment: Fragment() {
     private var districtId: Int = 0
 
     companion object {
-        fun newInstance(showTitle: Boolean = false): DeliveryChargeCalculatorFragment = DeliveryChargeCalculatorFragment().apply {
-            this.showTitle = showTitle
-        }
+        fun newInstance(): DeliveryChargeCalculatorFragment = DeliveryChargeCalculatorFragment().apply {}
         val tag: String = DeliveryChargeCalculatorFragment::class.java.name
     }
 
     override fun onResume() {
         super.onResume()
-        if (showTitle) {
+        if (!isHideTitle) {
             (activity as HomeActivity).setToolbarTitle("ডেলিভারি চার্জ ক্যালকুলেটর")
         }
     }
@@ -64,6 +62,8 @@ class DeliveryChargeCalculatorFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        isHideTitle = arguments?.getBoolean("isHideTitle", false) ?: false
 
         //dataAdapter = ChargeDeliveryTypeAdapter()
         /*binding?.recyclerView?.let { view1 ->

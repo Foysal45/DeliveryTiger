@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
@@ -62,9 +63,13 @@ class UserRoleSelectionFragment : Fragment() {
     }
 
     private fun showDeliveryChargeCalculator() {
+        val bundle = bundleOf(
+            "isHideTitle" to true
+        )
         val tag = DeliveryChargeCalculatorFragment.tag
         val fragment = DeliveryChargeCalculatorFragment.newInstance()
-        binding?.container?.let { container ->
+        fragment.arguments = bundle
+        binding?.container?.let { _ ->
             childFragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit()
         }
     }
