@@ -132,15 +132,11 @@
     </fragment>
 
 
-    <!--<fragment
+    <fragment
         android:id="@+id/nav_balance_load_history"
         android:name="com.bd.deliverytiger.app.ui.balance_load_history.BalanceLoadHistoryFragment"
         android:label="@string/balance_load_history_statement"
         tools:layout="@layout/fragment_balance_load_history">
-
-        &lt;!&ndash;<action
-            android:id="@+id/nav_paymentHistory_paymentHistoryDetails"
-            app:destination="@id/nav_web_view"/>&ndash;&gt;
     </fragment>
 
     <fragment
@@ -148,11 +144,7 @@
         android:name="com.bd.deliverytiger.app.ui.payment_request.InstantPaymentUpdateFragment"
         android:label="@string/instant_payment"
         tools:layout="@layout/fragment_instant_payment_update">
-
-        &lt;!&ndash;<action
-            android:id="@+id/nav_paymentHistory_paymentHistoryDetails"
-            app:destination="@id/nav_web_view"/>&ndash;&gt;
-    </fragment>-->
+    </fragment>
 
     <fragment
         android:id="@+id/nav_web_view"
