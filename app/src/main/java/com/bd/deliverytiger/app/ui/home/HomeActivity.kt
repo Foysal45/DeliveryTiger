@@ -505,6 +505,9 @@ class HomeActivity : AppCompatActivity(),
                 drawerLayout.closeDrawer(GravityCompat.START)
             } else {
                 when (menuItem!!.itemId) {
+                    R.id.nav_live_home -> {
+                        goToLiveActivity()
+                    }
                     R.id.nav_logout -> {
                         menuItem?.isChecked = true
                         logout()
@@ -881,7 +884,7 @@ class HomeActivity : AppCompatActivity(),
                     navController.navigate(R.id.nav_order_tracking)
                 }
                 R.id.nav_live -> {
-                    startActivity(Intent(this, LiveHomeActivity::class.java))
+                    goToLiveActivity()
                 }
                 R.id.nav_lead_management -> {
                     navController.navigate(R.id.nav_lead_management)
@@ -1123,6 +1126,10 @@ class HomeActivity : AppCompatActivity(),
 
     private fun fetchOrderServiceType() {
         viewModel.fetchOrderServiceInfo()
+    }
+
+    private fun goToLiveActivity() {
+        startActivity(Intent(this, LiveHomeActivity::class.java))
     }
 
     /*private fun moveFabBy(value: Float) {
