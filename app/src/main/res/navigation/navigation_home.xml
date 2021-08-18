@@ -106,6 +106,12 @@
             app:destination="@id/nav_web_view"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/nav_bill_pay_history"
+        android:name="com.bd.deliverytiger.app.ui.bill_pay_history.ServiceBillPayHistoryFragment"
+        android:label="@string/bill_pay_history"
+        tools:layout="@layout/fragment_service_bill_pay_history">
+    </fragment>
 
 
     <fragment
