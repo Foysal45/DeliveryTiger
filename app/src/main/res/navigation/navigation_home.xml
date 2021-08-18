@@ -20,6 +20,10 @@
             android:id="@+id/nav_dashboard_billPay"
             app:destination="@id/nav_bill_pay"/>
 
+        <action
+            android:id="@+id/nav_dashboard_referral"
+            app:destination="@id/nav_referral"/>
+
     </fragment>
 
     <fragment
@@ -86,6 +90,13 @@
         android:name="com.bd.deliverytiger.app.ui.web_view.WebViewFragment"
         android:label="@string/web_view"
         tools:layout="@layout/fragment_web_view"
+        />
+
+    <fragment
+        android:id="@+id/nav_referral"
+        android:name="com.bd.deliverytiger.app.ui.referral.ReferralFragment"
+        android:label="@string/referral"
+        tools:layout="@layout/fragment_profile"
         />
 
 

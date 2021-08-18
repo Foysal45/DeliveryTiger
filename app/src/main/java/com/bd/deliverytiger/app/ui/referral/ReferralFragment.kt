@@ -26,11 +26,6 @@ class ReferralFragment() : Fragment() {
 
     private var refereeOrder: Int = 0
 
-    companion object {
-        fun newInstance(): ReferralFragment = ReferralFragment().apply {}
-        val tag: String = ReferralFragment::class.java.name
-    }
-
     override fun onResume() {
         super.onResume()
         // রেফার করে ফ্রি ডেলিভারি

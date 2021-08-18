@@ -748,14 +748,14 @@ class HomeActivity : AppCompatActivity(),
                     addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
                 }
             }
-            R.id.nav_referral -> {
+            /*R.id.nav_referral -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ReferralFragment) {
                     Timber.d("ComplainFragment already exist")
                 } else {
                     addFragment(ReferralFragment.newInstance(), ReferralFragment.tag)
                 }
-            }
+            }*/
             R.id.nav_express_service -> {
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)

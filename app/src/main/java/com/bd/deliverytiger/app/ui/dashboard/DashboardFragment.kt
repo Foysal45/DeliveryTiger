@@ -383,7 +383,8 @@ class DashboardFragment : Fragment() {
         }
 
         binding?.referBtn?.setOnClickListener {
-            addFragment(ReferralFragment.newInstance(), ReferralFragment.tag)
+            //addFragment(ReferralFragment.newInstance(), ReferralFragment.tag)
+            findNavController().navigate(R.id.nav_dashboard_referral)
             UserLogger.logGenie("Dashboard_Referral")
         }
 
