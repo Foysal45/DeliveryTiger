@@ -113,6 +113,46 @@
         tools:layout="@layout/fragment_service_bill_pay_history">
     </fragment>
 
+    <fragment
+        android:id="@+id/nav_return_statement"
+        android:name="com.bd.deliverytiger.app.ui.return_statement.ReturnStatementFragment"
+        android:label="@string/return_statement"
+        tools:layout="@layout/fragment_return_statement">
+
+        <action
+            android:id="@+id/nav_returnStatement_returnStatementDetails"
+            app:destination="@id/nav_return_statement_details"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_return_statement_details"
+        android:name="com.bd.deliverytiger.app.ui.return_statement.details.ReturnStatementDetailsFragment"
+        android:label="@string/return_statement"
+        tools:layout="@layout/fragment_return_statement_details">
+    </fragment>
+
+
+    <!--<fragment
+        android:id="@+id/nav_balance_load_history"
+        android:name="com.bd.deliverytiger.app.ui.balance_load_history.BalanceLoadHistoryFragment"
+        android:label="@string/balance_load_history_statement"
+        tools:layout="@layout/fragment_balance_load_history">
+
+        &lt;!&ndash;<action
+            android:id="@+id/nav_paymentHistory_paymentHistoryDetails"
+            app:destination="@id/nav_web_view"/>&ndash;&gt;
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_payment_request"
+        android:name="com.bd.deliverytiger.app.ui.payment_request.InstantPaymentUpdateFragment"
+        android:label="@string/instant_payment"
+        tools:layout="@layout/fragment_instant_payment_update">
+
+        &lt;!&ndash;<action
+            android:id="@+id/nav_paymentHistory_paymentHistoryDetails"
+            app:destination="@id/nav_web_view"/>&ndash;&gt;
+    </fragment>-->
 
     <fragment
         android:id="@+id/nav_web_view"

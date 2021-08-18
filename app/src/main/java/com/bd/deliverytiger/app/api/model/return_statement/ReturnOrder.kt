@@ -1,8 +1,11 @@
 package com.bd.deliverytiger.app.api.model.return_statement
 
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class ReturnOrder(
     @SerializedName("id")
     var id: Int = 0,
@@ -109,9 +112,9 @@ data class ReturnOrder(
     @SerializedName("riderDeliveredDate")
     var riderDeliveredDate: String? = "",
     @SerializedName("merchantDeliveryDate")
-    var merchantDeliveryDate: Any? = Any(),
+    var merchantDeliveryDate: String? = "",
     @SerializedName("merchantCollectionDate")
-    var merchantCollectionDate: Any? = Any(),
+    var merchantCollectionDate: String? = "",
     @SerializedName("officeDrop")
     var officeDrop: Boolean = false,
     @SerializedName("offerCode")
@@ -131,11 +134,11 @@ data class ReturnOrder(
     @SerializedName("collectionTimeSlotId")
     var collectionTimeSlotId: Int = 0,
     @SerializedName("collectionTime")
-    var collectionTime: Any? = Any(),
+    var collectionTime: String? = "",
     @SerializedName("offerType")
     var offerType: String? = "",
     @SerializedName("relationType")
     var relationType: String? = "",
     @SerializedName("expectedDeliveryDate")
     var expectedDeliveryDate: String? = ""
-)
+): Parcelable

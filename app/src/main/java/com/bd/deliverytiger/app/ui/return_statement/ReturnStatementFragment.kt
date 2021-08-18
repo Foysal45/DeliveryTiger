@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import com.bd.deliverytiger.app.utils.SessionManager
 import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.return_statement.ReturnStatementData
@@ -143,6 +145,11 @@ class ReturnStatementFragment(): Fragment() {
         ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
         ft?.commit()
+
+        val bundle = bundleOf(
+            "returnStatementData" to model
+        )
+        findNavController().navigate(R.id.nav_returnStatement_returnStatementDetails, bundle)
     }
 
 

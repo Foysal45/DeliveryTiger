@@ -40,6 +40,11 @@ class ReturnStatementDetailsFragment(): Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val bundle: Bundle? = arguments
+        bundle?.let {
+            returnStatementData = it.getParcelable("returnStatementData")?: ReturnStatementData()
+        }
+
         Timber.d("FragmentReturnStatementDetails ${returnStatementData.orders}")
         dataAdapter = ReturnStatementDetailsAdapter()
         with(binding?.recyclerview!!) {
