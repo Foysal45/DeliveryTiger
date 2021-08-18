@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
 import com.bd.deliverytiger.app.databinding.FragmentInstantPaymentUpdateBinding
@@ -124,13 +126,19 @@ class InstantPaymentUpdateFragment : Fragment() {
     }
 
     private fun goToWebView(url: String) {
-        val fragment = WebViewFragment.newInstance(url, "FAQ")
-        val tag = WebViewFragment.tag
 
+        val bundle = bundleOf(
+            "url" to url,
+            "title" to getString(R.string.faq)
+        )
+        findNavController().navigate(R.id.nav_web_view, bundle)
+
+        /*val fragment = WebViewFragment.newInstance(url, "FAQ")
+        val tag = WebViewFragment.tag
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
-        ft?.commit()
+        ft?.commit()*/
     }
 
     override fun onDestroyView() {

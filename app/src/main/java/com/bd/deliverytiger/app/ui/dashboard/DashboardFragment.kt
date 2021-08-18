@@ -1112,9 +1112,15 @@ class DashboardFragment : Fragment() {
 
     private fun goToWebView(url: String) {
 
-        val fragment = WebViewFragment.newInstance(url, "ডেলিভারি টাইগার")
+        val bundle = bundleOf(
+            "url" to url,
+            "title" to getString(R.string.tiger)
+        )
+        findNavController().navigate(R.id.nav_web_view, bundle)
+
+        /*val fragment = WebViewFragment.newInstance(url, "ডেলিভারি টাইগার")
         val tag = WebViewFragment.tag
-        addFragment(fragment, tag)
+        addFragment(fragment, tag)*/
     }
 
     /*private fun showQuickOrderBottomSheet() {

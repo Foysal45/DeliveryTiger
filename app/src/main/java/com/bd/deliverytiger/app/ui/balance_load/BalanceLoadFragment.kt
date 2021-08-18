@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentBalanceLoadBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
@@ -143,13 +145,18 @@ class BalanceLoadFragment: Fragment() {
     private fun paymentGateway(amount: Int) {
 
         val url = "${AppConstant.BALANCE_LOAD_GATEWAY}?CourierID=${SessionManager.courierUserId}&Amount=$amount"
-        val fragment = WebViewFragment.newInstance(url, "ব্যালেন্স লোড")
-        val tag = WebViewFragment.tag
+        val bundle = bundleOf(
+            "url" to url,
+            "title" to getString(R.string.balance_load)
+        )
+        findNavController().navigate(R.id.nav_web_view, bundle)
 
+        /*val fragment = WebViewFragment.newInstance(url, "ব্যালেন্স লোড")
+        val tag = WebViewFragment.tag
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
-        ft?.commit()
+        ft?.commit()*/
     }
 
     override fun onDestroyView() {

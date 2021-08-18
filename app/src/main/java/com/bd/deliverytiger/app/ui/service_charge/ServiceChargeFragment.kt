@@ -11,10 +11,12 @@ import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
@@ -313,13 +315,18 @@ class ServiceChargeFragment : Fragment() {
     private fun paymentGateway(orderId: String) {
 
         val url = "${AppConstant.GATEWAY}?CID=$orderId"
-        val fragment = WebViewFragment.newInstance(url, "পেমেন্ট")
-        val tag = WebViewFragment.tag
+        val bundle = bundleOf(
+            "url" to url,
+            "title" to getString(R.string.payment)
+        )
+        findNavController().navigate(R.id.nav_web_view, bundle)
 
+        /*val fragment = WebViewFragment.newInstance(url, "পেমেন্ট")
+        val tag = WebViewFragment.tag
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
-        ft?.commit()
+        ft?.commit()*/
     }
 
     private fun goToFilter() {

@@ -543,6 +543,9 @@ class HomeActivity : AppCompatActivity(),
                         )
                         navController.navigate(R.id.nav_web_view, bundle)
                     }
+                    R.id.nav_survey -> {
+                        startActivity(Intent(this, SurveyActivity::class.java))
+                    }
                     R.id.nav_logout -> {
                         menuItem?.isChecked = true
                         logout()
@@ -604,7 +607,7 @@ class HomeActivity : AppCompatActivity(),
                     addFragment(ProfileFragment.newInstance(), ProfileFragment.tag)
                 }
             }*/
-            R.id.nav_dashboard -> {
+            /*R.id.nav_dashboard -> {
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is DashboardFragment) {
@@ -616,8 +619,8 @@ class HomeActivity : AppCompatActivity(),
                         supportFragmentManager.popBackStack(first.id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     }
                 }
-            }
-            R.id.nav_new_order -> {
+            }*/
+            /*R.id.nav_new_order -> {
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is AddOrderFragmentOne) {
@@ -625,7 +628,7 @@ class HomeActivity : AppCompatActivity(),
                 } else {
                     addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
                 }
-            }
+            }*/
             R.id.nav_orders -> {
 
                 val currentFragment =
@@ -645,23 +648,23 @@ class HomeActivity : AppCompatActivity(),
                     addFragment(ServiceChargeFragment.newInstance(), ServiceChargeFragment.tag)
                 }
             }
-            R.id.nav_bill_pay -> {
+            /*R.id.nav_bill_pay -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ServiceBillPayFragment) {
                     Timber.d("ServiceBillPayFragment already exist")
                 } else {
                     addFragment(ServiceBillPayFragment.newInstance(), ServiceBillPayFragment.tag)
                 }
-            }
-            R.id.nav_bill_pay_history -> {
+            }*/
+            /*R.id.nav_bill_pay_history -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ServiceBillPayHistoryFragment) {
                     Timber.d("ServiceBillPayHistoryFragment already exist")
                 } else {
                     addFragment(ServiceBillPayHistoryFragment.newInstance(), ServiceBillPayHistoryFragment.tag)
                 }
-            }
-            R.id.nav_cod_collection -> {
+            }*/
+            /*R.id.nav_cod_collection -> {
 
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
@@ -671,8 +674,8 @@ class HomeActivity : AppCompatActivity(),
                     addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
                 }
 
-            }
-            R.id.nav_order_tracking -> {
+            }*/
+            /*R.id.nav_order_tracking -> {
 
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
@@ -682,7 +685,7 @@ class HomeActivity : AppCompatActivity(),
                     addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
                 }
 
-            }
+            }*/
             R.id.nav_payment_history -> {
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
@@ -697,7 +700,7 @@ class HomeActivity : AppCompatActivity(),
                 addFragment(BalanceLoadHistoryFragment.newInstance(), BalanceLoadHistoryFragment.tag)
 
             }
-            R.id.nav_payment_request -> {
+            /*R.id.nav_payment_request -> {
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is InstantPaymentUpdateFragment) {
@@ -705,7 +708,7 @@ class HomeActivity : AppCompatActivity(),
                 } else {
                     addFragment(InstantPaymentUpdateFragment.newInstance(), InstantPaymentUpdateFragment.tag)
                 }
-            }
+            }*/
             R.id.nav_shipment_change -> {
 
                 val currentFragment =
@@ -803,14 +806,14 @@ class HomeActivity : AppCompatActivity(),
                     }
                 }
             }*/
-            R.id.nav_live_home -> {
+            /*R.id.nav_live_home -> {
                 try {
                     startActivity(Intent(this, LiveHomeActivity::class.java))
                     logGenie("navigation_change_information")
                 } catch (e: Exception) {
                     Toast.makeText(applicationContext, "Check Internet Connection", Toast.LENGTH_SHORT).show()
                 }
-            }
+            }*/
             /*R.id.nav_terms -> {
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
@@ -857,25 +860,25 @@ class HomeActivity : AppCompatActivity(),
             R.id.nav_chat -> {
                 startActivity(Intent(this, ChatActivity::class.java))
             }
-            R.id.nav_return_statement -> {
+            /*R.id.nav_return_statement -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ReturnStatementFragment) {
                     Timber.d("ReturnStatementFragment already exist")
                 } else {
                     addFragment(ReturnStatementFragment.newInstance(), ReturnStatementFragment.tag)
                 }
-            }
-            R.id.nav_lead_management -> {
+            }*/
+            /*R.id.nav_lead_management -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is LeadManagementFragment) {
                     Timber.d("LeadManagementFragment already exist")
                 } else {
                     addFragment(LeadManagementFragment.newInstance(), LeadManagementFragment.tag)
                 }
-            }
-            R.id.nav_survey -> {
+            }*/
+            /*R.id.nav_survey -> {
                 startActivity(Intent(this, SurveyActivity::class.java))
-            }
+            }*/
             /*R.id.nav_quick_booking_list -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is QuickOrderListFragment) {
@@ -895,10 +898,10 @@ class HomeActivity : AppCompatActivity(),
                     }.show()
                 }
             }*/
-            R.id.nav_logout -> {
+            /*R.id.nav_logout -> {
                 menuItem?.isChecked = true
                 logout()
-            }
+            }*/
         }
         menuItem = null
     }

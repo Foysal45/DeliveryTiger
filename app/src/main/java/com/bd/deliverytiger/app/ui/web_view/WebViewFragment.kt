@@ -24,15 +24,6 @@ class WebViewFragment : Fragment() {
     private var loadUrl: String = ""
     private var bundle: Bundle? = null
 
-    companion object {
-        fun newInstance(url: String, title: String, bundle: Bundle? = null): WebViewFragment = WebViewFragment().apply {
-            this.loadUrl = url
-            this.webTitle = title
-            this.bundle = bundle
-        }
-        val tag: String = WebViewFragment::class.java.name
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentWebViewBinding.inflate(inflater).also {
             binding = it
