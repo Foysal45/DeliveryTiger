@@ -504,12 +504,16 @@ class HomeActivity : AppCompatActivity(),
             if (handled) {
                 drawerLayout.closeDrawer(GravityCompat.START)
             } else {
+                drawerLayout.closeDrawer(GravityCompat.START)
                 when (menuItem!!.itemId) {
                     R.id.nav_live_home -> {
                         goToLiveActivity()
                     }
                     R.id.nav_pickup -> {
-                        navController.navigate(R.id.nav_profile)
+                        val bundle = bundleOf(
+                            "isPickupLocation" to true
+                        )
+                        navController.navigate(R.id.nav_profile, bundle)
                     }
                     R.id.nav_logout -> {
                         menuItem?.isChecked = true
@@ -700,7 +704,7 @@ class HomeActivity : AppCompatActivity(),
                     addFragment(ProfileFragment.newInstance(true), ProfileFragment.tag)
                 }
             }*/
-            R.id.nav_change_calculator -> {
+            /*R.id.nav_change_calculator -> {
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is DeliveryChargeCalculatorFragment) {
@@ -709,7 +713,7 @@ class HomeActivity : AppCompatActivity(),
                     addFragment(DeliveryChargeCalculatorFragment.newInstance(true), DeliveryChargeCalculatorFragment.tag)
                 }
 
-                /*val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+                *//*val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is WebViewFragment) {
                     Timber.d( "WebViewFragment already exist")
                 } else {
@@ -719,8 +723,8 @@ class HomeActivity : AppCompatActivity(),
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
-                }*/
-            }
+                }*//*
+            }*/
             R.id.nav_map -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is MapFragment) {
