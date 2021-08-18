@@ -15,7 +15,7 @@
             android:background="@color/white"
             android:clickable="true"
             android:focusable="true"
-            android:paddingBottom="@dimen/bottomActionHeight"
+            android:paddingBottom="30dp"
             >
 
             <androidx.core.widget.NestedScrollView
@@ -23,7 +23,7 @@
                 android:layout_height="0dp"
                 android:fillViewport="true"
                 android:overScrollMode="never"
-                app:layout_constraintBottom_toTopOf="@id/actionLayout"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
@@ -674,7 +674,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="70dp"
                         android:background="@drawable/bg_chat_qa_stroke"
                         android:orientation="vertical">
 
