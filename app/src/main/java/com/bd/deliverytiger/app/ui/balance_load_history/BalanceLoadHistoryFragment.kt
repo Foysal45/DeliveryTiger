@@ -24,11 +24,6 @@ class BalanceLoadHistoryFragment : Fragment() {
     private var dataAdapter : BalanceLoadHistoryAdapter = BalanceLoadHistoryAdapter()
     private val viewModel: BalanceLoadHistoryViewModel by inject()
 
-    companion object {
-        fun newInstance(): BalanceLoadHistoryFragment = BalanceLoadHistoryFragment().apply {}
-        val tag: String = BalanceLoadHistoryFragment::class.java.name
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return FragmentBalanceLoadHistoryBinding.inflate(inflater, container, false).also {
             binding = it

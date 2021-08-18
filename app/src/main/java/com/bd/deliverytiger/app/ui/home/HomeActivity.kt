@@ -695,11 +695,9 @@ class HomeActivity : AppCompatActivity(),
                     addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
                 }
             }
-            R.id.nav_balance_load_history -> {
-
+            /*R.id.nav_balance_load_history -> {
                 addFragment(BalanceLoadHistoryFragment.newInstance(), BalanceLoadHistoryFragment.tag)
-
-            }
+            }*/
             /*R.id.nav_payment_request -> {
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
