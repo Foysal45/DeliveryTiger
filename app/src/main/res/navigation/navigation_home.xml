@@ -50,7 +50,9 @@
         <action android:id="@+id/nav_dashboard_paymentDetails"
             app:destination="@id/nav_paymentDetails"
             />
-
+        <action android:id="@+id/nav_dashboard_collectionHistory"
+            app:destination="@id/nav_collectionHistory"
+            />
 
     </fragment>
 
@@ -295,6 +297,13 @@
         android:name="com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment"
         android:label="@string/dashboard"
         tools:layout="@layout/fragment_shipment_charge"
+        />
+
+    <fragment
+        android:id="@+id/nav_collectionHistory"
+        android:name="com.bd.deliverytiger.app.ui.collection_history.CollectionHistoryFragment"
+        android:label="@string/collection_history"
+        tools:layout="@layout/fragment_collection_history"
         />
 
 </navigation>

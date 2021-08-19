@@ -22,10 +22,6 @@ class CollectionHistoryFragment : Fragment() {
     private val viewModel: CollectionHistoryViewModel by inject()
     private lateinit var dataAdapter: CollectionHistoryAdapter
 
-    companion object {
-        fun newInstance(): CollectionHistoryFragment = CollectionHistoryFragment()
-        val tag: String = CollectionHistoryFragment::class.java.name
-    }
 
     override fun onResume() {
         super.onResume()

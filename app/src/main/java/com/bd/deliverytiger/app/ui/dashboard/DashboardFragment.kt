@@ -390,7 +390,8 @@ class DashboardFragment : Fragment() {
 
         binding?.collectionLayout?.setOnClickListener {
             if (collectionToday > 0) {
-                addFragment(CollectionHistoryFragment.newInstance(), CollectionHistoryFragment.tag)
+                findNavController().navigate(R.id.nav_dashboard_collectionHistory)
+                //addFragment(CollectionHistoryFragment.newInstance(), CollectionHistoryFragment.tag)
             } else {
                 context?.toast("পর্যাপ্ত তথ্য নেই")
             }
