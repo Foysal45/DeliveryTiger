@@ -27,7 +27,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.*
 import kotlin.concurrent.thread
 
-class LocationSelectionDialog : BottomSheetDialogFragment() {
+class LocationSelectionBottomSheet : BottomSheetDialogFragment() {
 
     private var binding: FragmentLocationSelectionDialogBinding? = null
 
@@ -48,14 +48,10 @@ class LocationSelectionDialog : BottomSheetDialogFragment() {
     var onLocationPicked: ((model: LocationData) -> Unit)? = null
 
     companion object {
-
-        @JvmStatic
-        fun newInstance(dataList: MutableList<LocationData>): LocationSelectionDialog = LocationSelectionDialog().apply {
+        fun newInstance(dataList: MutableList<LocationData>): LocationSelectionBottomSheet = LocationSelectionBottomSheet().apply {
             this.dataList = dataList
         }
-
-        @JvmField
-        val tag: String = LocationSelectionDialog::class.java.name
+        val tag: String = LocationSelectionBottomSheet::class.java.name
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -44,14 +44,12 @@ import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.databinding.FragmentAddOrderFragmentOneBinding
-import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
+import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionBottomSheet
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationType
 import com.bd.deliverytiger.app.ui.add_order.order_preview.OrderPreviewBottomSheet
 import com.bd.deliverytiger.app.ui.add_order.service_wise_bottom_sheet.ServicesSelectionBottomSheet
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
-import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
-import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -1259,8 +1257,8 @@ class AddOrderFragmentOne : Fragment() {
             locationList.add(LocationData.from(model))
         }
 
-        val dialog = LocationSelectionDialog.newInstance(locationList)
-        dialog.show(childFragmentManager, LocationSelectionDialog.tag)
+        val dialog = LocationSelectionBottomSheet.newInstance(locationList)
+        dialog.show(childFragmentManager, LocationSelectionBottomSheet.tag)
         dialog.onLocationPicked = { model ->
             when (locationType) {
                 LocationType.DISTRICT -> {

@@ -23,7 +23,7 @@ import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import com.bd.deliverytiger.app.databinding.FragmentProfileBinding
-import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
+import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionBottomSheet
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.profile.pickup_address.PickUpLocationAdapter
@@ -34,10 +34,8 @@ import com.bd.deliverytiger.app.utils.VariousTask.saveImage
 import com.bd.deliverytiger.app.utils.VariousTask.scaledBitmapImage
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.signature.ObjectKey
 import org.koin.android.ext.android.inject
 import com.github.dhaval2404.imagepicker.ImagePicker
-import java.io.File
 import java.io.InputStream
 import java.util.*
 
@@ -228,8 +226,8 @@ class ProfileFragment : Fragment() {
             locationList.add(LocationData.from(model))
         }
 
-        val dialog = LocationSelectionDialog.newInstance(locationList)
-        dialog.show(childFragmentManager, LocationSelectionDialog.tag)
+        val dialog = LocationSelectionBottomSheet.newInstance(locationList)
+        dialog.show(childFragmentManager, LocationSelectionBottomSheet.tag)
         dialog.onLocationPicked = { model ->
             when (operationFlag) {
                 1 -> {

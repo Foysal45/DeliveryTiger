@@ -5,7 +5,7 @@
     android:id="@+id/parentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.all_orders.details_bottomsheet.AllOrdersDetailsDialog">
+    tools:context=".ui.all_orders.details_bottomsheet.AllOrdersDetailsBottomSheet">
 
     <TextView
         android:id="@+id/complain_history_title_tv"

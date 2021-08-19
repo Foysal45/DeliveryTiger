@@ -6,11 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.fragment.app.FragmentTransaction
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.databinding.FragmentAllOrderDetailsDialogueBinding
-import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.utils.DigitConverter
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -19,17 +17,17 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlin.concurrent.thread
 
 @SuppressLint("SetTextI18n")
-class AllOrdersDetailsDialog : BottomSheetDialogFragment() {
+class AllOrdersDetailsBottomSheet : BottomSheetDialogFragment() {
 
     private var binding: FragmentAllOrderDetailsDialogueBinding? = null
     private var dataModel: CourierOrderViewModel? = null
 
     companion object {
 
-        fun newInstance(model: CourierOrderViewModel?): AllOrdersDetailsDialog = AllOrdersDetailsDialog().apply {
+        fun newInstance(model: CourierOrderViewModel?): AllOrdersDetailsBottomSheet = AllOrdersDetailsBottomSheet().apply {
             dataModel = model
         }
-        val tag: String = AllOrdersDetailsDialog::class.java.name
+        val tag: String = AllOrdersDetailsBottomSheet::class.java.name
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

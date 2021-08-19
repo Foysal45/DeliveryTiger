@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.payment_statement.OrderHistoryData
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsResponse
-import com.bd.deliverytiger.app.api.model.unpaid_cod.CODDetailsData
 import com.bd.deliverytiger.app.databinding.FragmentPaymentStatementDetailBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.payment_statement.excel_generator.ExcelGenerator
@@ -179,8 +178,8 @@ class PaymentStatementDetailFragment : Fragment() {
         if (tabFlag == 2) {
             return
         }
-        val dialog = OrderChargeDetailsFragment.newInstance(model, tabFlag)
-        dialog.show(childFragmentManager, OrderChargeDetailsFragment.tag)
+        val dialog = OrderChargeDetailsBottomSheet.newInstance(model, tabFlag)
+        dialog.show(childFragmentManager, OrderChargeDetailsBottomSheet.tag)
     }
 
     private fun filterOrderList(dataList: List<OrderHistoryData>?, filterKey: String) {

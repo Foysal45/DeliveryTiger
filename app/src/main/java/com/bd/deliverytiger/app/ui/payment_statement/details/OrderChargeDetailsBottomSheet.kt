@@ -11,7 +11,7 @@ import com.bd.deliverytiger.app.databinding.DialogOrderChangeDetailsBinding
 import com.bd.deliverytiger.app.utils.DigitConverter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class OrderChargeDetailsFragment: BottomSheetDialogFragment() {
+class OrderChargeDetailsBottomSheet: BottomSheetDialogFragment() {
 
     private var model: OrderHistoryData? = null
     private var binding: DialogOrderChangeDetailsBinding? = null
@@ -19,15 +19,15 @@ class OrderChargeDetailsFragment: BottomSheetDialogFragment() {
     private var tabFlag: Int = 0
 
     companion object {
-        fun newInstance(orderHistoryData: OrderHistoryData?, isOnlyDelivery: Boolean = false): OrderChargeDetailsFragment = OrderChargeDetailsFragment().apply {
+        fun newInstance(orderHistoryData: OrderHistoryData?, isOnlyDelivery: Boolean = false): OrderChargeDetailsBottomSheet = OrderChargeDetailsBottomSheet().apply {
             this.model = orderHistoryData
             this.isOnlyDelivery = isOnlyDelivery
         }
-        fun newInstance(orderHistoryData: OrderHistoryData?, tabFlag: Int): OrderChargeDetailsFragment = OrderChargeDetailsFragment().apply {
+        fun newInstance(orderHistoryData: OrderHistoryData?, tabFlag: Int): OrderChargeDetailsBottomSheet = OrderChargeDetailsBottomSheet().apply {
             this.model = orderHistoryData
             this.tabFlag = tabFlag
         }
-        val tag: String = OrderChargeDetailsFragment::class.java.name
+        val tag: String = OrderChargeDetailsBottomSheet::class.java.name
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

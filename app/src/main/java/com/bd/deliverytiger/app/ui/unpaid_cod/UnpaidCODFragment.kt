@@ -13,7 +13,7 @@ import com.bd.deliverytiger.app.api.model.payment_statement.OrderHistoryData
 import com.bd.deliverytiger.app.api.model.unpaid_cod.CODDetailsData
 import com.bd.deliverytiger.app.databinding.FragmentUnpaidCodBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
-import com.bd.deliverytiger.app.ui.payment_statement.details.OrderChargeDetailsFragment
+import com.bd.deliverytiger.app.ui.payment_statement.details.OrderChargeDetailsBottomSheet
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.tabs.TabLayout
 import org.koin.android.ext.android.inject
@@ -98,8 +98,8 @@ class UnpaidCODFragment: Fragment() {
             amount = model.merchantPayable,
             totalCharge = model.totalCharge
         )
-        val dialog = OrderChargeDetailsFragment.newInstance(orderHistoryData, tabFlag)
-        dialog.show(childFragmentManager, OrderChargeDetailsFragment.tag)
+        val dialog = OrderChargeDetailsBottomSheet.newInstance(orderHistoryData, tabFlag)
+        dialog.show(childFragmentManager, OrderChargeDetailsBottomSheet.tag)
     }
 
     private fun fetchCODData() {

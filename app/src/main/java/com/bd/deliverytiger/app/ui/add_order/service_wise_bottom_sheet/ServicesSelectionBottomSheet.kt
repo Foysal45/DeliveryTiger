@@ -12,15 +12,13 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.databinding.FragmentServicesSelectionBottomSheetBinding
-import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
+import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionBottomSheet
 import com.bd.deliverytiger.app.utils.toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.android.ext.android.inject
-import java.util.*
 import kotlin.concurrent.thread
-import androidx.lifecycle.Observer
 
 class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
 
@@ -104,8 +102,8 @@ class ServicesSelectionBottomSheet : BottomSheetDialogFragment() {
             locationList.add(LocationData.from(model))
         }
 
-        val dialog = LocationSelectionDialog.newInstance(locationList)
-        dialog.show(childFragmentManager, LocationSelectionDialog.tag)
+        val dialog = LocationSelectionBottomSheet.newInstance(locationList)
+        dialog.show(childFragmentManager, LocationSelectionBottomSheet.tag)
         dialog.onLocationPicked = { model ->
             onServiceSelected?.invoke(serviceInfo, model)
             dismiss()

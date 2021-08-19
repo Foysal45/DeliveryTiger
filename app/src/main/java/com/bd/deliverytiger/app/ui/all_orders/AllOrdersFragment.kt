@@ -20,11 +20,9 @@ import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
-import com.bd.deliverytiger.app.ui.all_orders.details_bottomsheet.AllOrdersDetailsDialog
-import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
+import com.bd.deliverytiger.app.ui.all_orders.details_bottomsheet.AllOrdersDetailsBottomSheet
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
-import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -206,8 +204,8 @@ class AllOrdersFragment : Fragment() {
     }
 
     private fun showAllOrdersDetailsBottomSheet(model: CourierOrderViewModel) {
-        val tag: String = AllOrdersDetailsDialog.tag
-        val dialog: AllOrdersDetailsDialog = AllOrdersDetailsDialog.newInstance(model)
+        val tag: String = AllOrdersDetailsBottomSheet.tag
+        val dialog: AllOrdersDetailsBottomSheet = AllOrdersDetailsBottomSheet.newInstance(model)
         dialog.show(childFragmentManager, tag)
     }
 

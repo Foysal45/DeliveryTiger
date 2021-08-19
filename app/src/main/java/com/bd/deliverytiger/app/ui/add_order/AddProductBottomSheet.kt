@@ -1,7 +1,6 @@
 package com.bd.deliverytiger.app.ui.add_order
 
 import android.app.Activity
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -19,10 +18,9 @@ import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.product_upload.ProductUploadRequest
 import com.bd.deliverytiger.app.databinding.FragmentAddProductBottomSheetBinding
 import com.bd.deliverytiger.app.repository.AppRepository
-import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionDialog
+import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionBottomSheet
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -141,8 +139,8 @@ class AddProductBottomSheet  : BottomSheetDialogFragment() {
                     )
                 }
 
-                val dialog = LocationSelectionDialog.newInstance(locationList)
-                dialog.show(childFragmentManager, LocationSelectionDialog.tag)
+                val dialog = LocationSelectionBottomSheet.newInstance(locationList)
+                dialog.show(childFragmentManager, LocationSelectionBottomSheet.tag)
                 dialog.onLocationPicked = { model ->
                     selectedDistrictId = model.id
                     districtName = model.displayNameBangla!!

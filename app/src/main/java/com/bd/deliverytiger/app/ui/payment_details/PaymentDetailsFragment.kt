@@ -12,7 +12,7 @@ import com.bd.deliverytiger.app.api.model.accounts.AccountDetailsResponse
 import com.bd.deliverytiger.app.api.model.payment_statement.OrderHistoryData
 import com.bd.deliverytiger.app.databinding.FragmentPaymentDetailsBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
-import com.bd.deliverytiger.app.ui.payment_statement.details.OrderChargeDetailsFragment
+import com.bd.deliverytiger.app.ui.payment_statement.details.OrderChargeDetailsBottomSheet
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.tabs.TabLayout
 import org.koin.android.ext.android.inject
@@ -65,8 +65,8 @@ class PaymentDetailsFragment: Fragment() {
                 amount = model.merchantPayable,
                 totalCharge = model.totalCharge
             )
-            val dialog = OrderChargeDetailsFragment.newInstance(orderHistoryData, isOnlyDelivery)
-            dialog.show(childFragmentManager, OrderChargeDetailsFragment.tag)
+            val dialog = OrderChargeDetailsBottomSheet.newInstance(orderHistoryData, isOnlyDelivery)
+            dialog.show(childFragmentManager, OrderChargeDetailsBottomSheet.tag)
         }
 
         viewModel.getPaymentHistoryDetails(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
