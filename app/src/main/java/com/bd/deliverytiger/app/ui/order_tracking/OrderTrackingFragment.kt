@@ -113,9 +113,12 @@ class OrderTrackingFragment : Fragment() {
         }
 
         binding?.complainBtn?.setOnClickListener {
-            val tag = ComplainFragment.tag
-            val fragment = ComplainFragment.newInstance(orderID)
-            addFragment(fragment, tag)
+            /*val tag = ComplainFragment.tag
+            val fragment = ComplainFragment.newInstance(orderID)*/
+            val bundle = bundleOf(
+                "orderId" to orderID
+            )
+            findNavController().navigate(R.id.nav_orderTracking_complain, bundle)
         }
 
         binding?.callBtn?.setOnClickListener {

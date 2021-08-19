@@ -785,7 +785,8 @@ class HomeActivity : AppCompatActivity(),
                 if (currentFragment is ComplainFragment) {
                     Timber.d("ComplainFragment already exist")
                 } else {
-                    addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
+                    //addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
+                    navController.navigate(R.id.nav_complain)
                 }
             }
             /*R.id.nav_referral -> {

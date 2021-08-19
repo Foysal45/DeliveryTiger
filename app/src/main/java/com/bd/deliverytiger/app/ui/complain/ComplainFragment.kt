@@ -27,14 +27,6 @@ class ComplainFragment(): Fragment() {
 
     private var orderId: String? = null
 
-    companion object {
-        fun newInstance(orderId: String? = null): ComplainFragment = ComplainFragment().apply {
-            this.orderId = orderId
-        }
-
-        val tag: String = ComplainFragment::class.java.name
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentComplainBinding.inflate(inflater, container, false).also {
             binding = it
@@ -48,6 +40,11 @@ class ComplainFragment(): Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val bundle: Bundle? = arguments
+        bundle?.let {
+            orderId = it.getString("orderId")
+        }
 
         setUpSpinner()
         initComplainList()

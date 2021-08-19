@@ -41,6 +41,9 @@
         <action android:id="@+id/nav_dashboard_map"
             app:destination="@id/nav_map"
             />
+        <action android:id="@+id/nav_dashboard_complain"
+            app:destination="@id/nav_complain"
+            />
 
     </fragment>
 
@@ -50,9 +53,11 @@
         android:label="@string/order_track"
         tools:layout="@layout/fragment_order_tracking"
         >
-
         <action android:id="@+id/nav_orderTrack_map"
             app:destination="@id/nav_map"
+            />
+        <action android:id="@+id/nav_orderTracking_complain"
+            app:destination="@id/nav_complain"
             />
 
     </fragment>
@@ -245,6 +250,13 @@
         android:name="com.bd.deliverytiger.app.ui.add_order.OrderSuccessFragment"
         android:label="@string/order_success"
         tools:layout="@layout/fragment_order_success"
+        />
+
+    <fragment
+        android:id="@+id/nav_complain"
+        android:name="com.bd.deliverytiger.app.ui.complain.ComplainFragment"
+        android:label="@string/complain"
+        tools:layout="@layout/fragment_complain"
         />
 
 </navigation>

@@ -18,6 +18,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -274,7 +275,8 @@ class DashboardFragment : Fragment() {
             UserLogger.logGenie("Dashboard_Order_Track")
         }
         binding?.complainBtn?.setOnClickListener {
-            addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
+            //addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
+            findNavController().navigate(R.id.nav_dashboard_complain)
             UserLogger.logGenie("Dashboard_Complain")
         }
         /*binding?.balanceLoadLayout?.setOnClickListener {
