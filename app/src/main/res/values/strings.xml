@@ -163,6 +163,8 @@
     <string name="service_charge">সার্ভিস চার্জ</string>
     <string name="order_success">অর্ডার সাকসেস</string>
     <string name="complain">কমপ্লেইন</string>
+    <string name="notification">নোটিফিকেশন</string>
+    <string name="payment_details">পেমেন্ট ডিটেইলস</string>
 
 
 </resources>

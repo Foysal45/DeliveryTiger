@@ -960,12 +960,14 @@ class DashboardFragment : Fragment() {
 
     private fun goToPaymentDetails() {
 
-        val tag = PaymentDetailsFragment.tag
+        findNavController().navigate(R.id.nav_dashboard_paymentDetails)
+
+        /*val tag = PaymentDetailsFragment.tag
         val fragment = PaymentDetailsFragment.newInstance()
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
-        ft?.commit()
+        ft?.commit()*/
     }
 
     private fun fetchAccountsData() {

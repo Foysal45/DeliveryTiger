@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
+import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentNotificationPreviewBinding
 import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.ui.home.HomeActivity
@@ -18,9 +19,7 @@ class NotificationPreviewFragment : Fragment() {
     private var model: FCMData? = null
 
     companion object {
-        fun newInstance(model: FCMData?): NotificationPreviewFragment = NotificationPreviewFragment().apply {
-            this.model = model
-        }
+        fun newInstance(): NotificationPreviewFragment = NotificationPreviewFragment().apply {}
 
         val fragmentTag: String = NotificationPreviewFragment::class.java.name
     }
@@ -33,6 +32,8 @@ class NotificationPreviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        model = arguments?.getParcelable("fcmData")
 
         binding?.title?.text = toHTML(model?.title ?: "")
         binding?.description?.text = toHTML(model?.body ?: "")
@@ -54,7 +55,7 @@ class NotificationPreviewFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("নোটিফিকেশন")
+        (activity as HomeActivity).setToolbarTitle(getString(R.string.notification))
     }
 
     private fun toHTML(text: String): Spanned {

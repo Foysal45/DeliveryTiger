@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.accounts.AccountDetailsResponse
 import com.bd.deliverytiger.app.api.model.payment_statement.OrderHistoryData
 import com.bd.deliverytiger.app.databinding.FragmentPaymentDetailsBinding
@@ -24,12 +25,6 @@ class PaymentDetailsFragment: Fragment() {
 
     private var accountDetailsResponse: AccountDetailsResponse? = null
 
-    companion object {
-        fun newInstance(): PaymentDetailsFragment = PaymentDetailsFragment().apply {
-        }
-        val tag: String = PaymentDetailsFragment::class.java.name
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentPaymentDetailsBinding.inflate(inflater).also {
             binding = it
@@ -38,7 +33,7 @@ class PaymentDetailsFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("পেমেন্ট ডিটেইলস")
+        (activity as HomeActivity).setToolbarTitle(getString(R.string.payment_details))
     }
 
     @SuppressLint("SetTextI18n")

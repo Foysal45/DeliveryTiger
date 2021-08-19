@@ -300,12 +300,18 @@ class HomeActivity : AppCompatActivity(),
     }
 
     private fun goToNotificationPreview(model: FCMData) {
-        val fragment = NotificationPreviewFragment.newInstance(model)
+
+        val bundle = bundleOf(
+            "fcmData" to model
+        )
+        navController.navigate(R.id.nav_notification_preview, bundle)
+
+        /*val fragment = NotificationPreviewFragment.newInstance(model)
         val tag = NotificationPreviewFragment.fragmentTag
         val ft = supportFragmentManager.beginTransaction()
         ft.add(R.id.mainActivityContainer, fragment, tag)
         ft.addToBackStack(tag)
-        ft.commit()
+        ft.commit()*/
     }
 
     override fun onBackPressed() {

@@ -47,6 +47,10 @@
         <action android:id="@+id/nav_dashboard_unpaidCod"
             app:destination="@id/nav_unpaid_cod"
             />
+        <action android:id="@+id/nav_dashboard_paymentDetails"
+            app:destination="@id/nav_paymentDetails"
+            />
+
 
     </fragment>
 
@@ -267,6 +271,20 @@
         android:name="com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment"
         android:label="@string/dashboard"
         tools:layout="@layout/fragment_unpaid_cod"
+        />
+
+    <fragment
+        android:id="@+id/nav_notification_preview"
+        android:name="com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment"
+        android:label="@string/notification"
+        tools:layout="@layout/fragment_notification_preview"
+        />
+
+    <fragment
+        android:id="@+id/nav_paymentDetails"
+        android:name="com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment"
+        android:label="@string/payment_details"
+        tools:layout="@layout/fragment_payment_details"
         />
 
 </navigation>
