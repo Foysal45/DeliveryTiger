@@ -1775,6 +1775,7 @@ class AddOrderFragmentOne : Fragment() {
         )
         activity?.onBackPressed()
         //activity?.onBackPressed()
+        Timber.d("requestBody $bundle")
         findNavController().navigate(R.id.nav_orderSuccess, bundle)
 
         /*val fragment = OrderSuccessFragment.newInstance(bundle)

@@ -67,10 +67,8 @@ class OrderSuccessFragment : Fragment() {
         progressBar = view.findViewById(R.id.progressBar)
         offerBtn = view.findViewById(R.id.offerBtn)
 
-        bundle?.let {
-            orderResponse = it.getParcelable("orderResponse")
-            isCollection = it.getBoolean("isCollection", false)
-        }
+        orderResponse = arguments?.getParcelable("orderResponse")
+        isCollection = arguments?.getBoolean("isCollection", false) ?: false
 
         if (orderResponse != null) {
             courierOrdersId = orderResponse!!.courierOrdersId ?: ""
