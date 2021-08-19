@@ -83,15 +83,6 @@ class PaymentStatementFragment: Fragment() {
 
     private fun goToDetails(transactionId: String) {
 
-        val fragment = PaymentStatementDetailFragment.newInstance(transactionId)
-        val tag = PaymentStatementDetailFragment.tag
-
-        /*val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.mainActivityContainer, fragment, tag)
-        ft?.addToBackStack(tag)
-        ft?.commit()*/
-
-        //TODO check, added to Nav
         val bundle: Bundle = bundleOf(
             "transactionId" to transactionId
         )

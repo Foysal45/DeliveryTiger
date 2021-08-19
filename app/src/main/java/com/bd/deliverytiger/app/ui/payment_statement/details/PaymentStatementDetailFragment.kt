@@ -45,14 +45,6 @@ class PaymentStatementDetailFragment : Fragment() {
     private val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     private val permissionStorage = 9875
 
-    companion object {
-        fun newInstance(transactionId: String): PaymentStatementDetailFragment = PaymentStatementDetailFragment().apply {
-            this.transactionId = transactionId
-        }
-
-        val tag: String = PaymentStatementDetailFragment::class.java.name
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentPaymentStatementDetailBinding.inflate(inflater).also {
             binding = it

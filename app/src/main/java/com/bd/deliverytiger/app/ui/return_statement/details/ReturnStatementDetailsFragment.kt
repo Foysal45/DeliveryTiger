@@ -21,16 +21,6 @@ class ReturnStatementDetailsFragment(): Fragment() {
 
     private var returnStatementData: ReturnStatementData = ReturnStatementData()
 
-    companion object {
-        @JvmStatic
-        fun newInstance(returnStatementData: ReturnStatementData): ReturnStatementDetailsFragment = ReturnStatementDetailsFragment().apply {
-            this.returnStatementData = returnStatementData
-        }
-
-        @JvmField
-        val tag: String = ReturnStatementDetailsFragment::class.java.name
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return  FragmentReturnStatementDetailsBinding.inflate(inflater, container, false).also {
             binding = it

@@ -133,14 +133,6 @@ class ReturnStatementFragment(): Fragment() {
 
     private fun goToReturnDetails(model: ReturnStatementData) {
 
-        val fragment = ReturnStatementDetailsFragment.newInstance(model)
-        val tag = ReturnStatementDetailsFragment.tag
-
-        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.mainActivityContainer, fragment, tag)
-        ft?.addToBackStack(tag)
-        ft?.commit()
-
         val bundle = bundleOf(
             "returnStatementData" to model
         )
