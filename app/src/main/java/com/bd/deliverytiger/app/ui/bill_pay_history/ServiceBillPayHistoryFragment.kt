@@ -24,11 +24,6 @@ class ServiceBillPayHistoryFragment: Fragment() {
     private val viewModel: ServiceBillHistoryViewModel by inject()
     private var binding: FragmentServiceBillPayHistoryBinding? = null
 
-    companion object {
-        fun newInstance(): ServiceBillPayHistoryFragment = ServiceBillPayHistoryFragment()
-        val tag: String = ServiceBillPayHistoryFragment::class.java.name
-    }
-
     override fun onResume() {
         super.onResume()
         (activity as HomeActivity).setToolbarTitle(getString(R.string.bill_pay_history))

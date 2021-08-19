@@ -686,7 +686,7 @@ class HomeActivity : AppCompatActivity(),
                 }
 
             }*/
-            R.id.nav_payment_history -> {
+            /*R.id.nav_payment_history -> {
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is PaymentStatementFragment) {
@@ -694,7 +694,7 @@ class HomeActivity : AppCompatActivity(),
                 } else {
                     addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
                 }
-            }
+            }*/
             /*R.id.nav_balance_load_history -> {
                 addFragment(BalanceLoadHistoryFragment.newInstance(), BalanceLoadHistoryFragment.tag)
             }*/
@@ -1483,7 +1483,7 @@ class HomeActivity : AppCompatActivity(),
     private fun serviceChargeDialog() {
         alert("নির্দেশনা", "আপনার সার্ভিস চার্জ (প্রি-পেইড) ৳${DigitConverter.toBanglaDigit(SessionManager.netAmount)} বকেয়া রয়েছে। সার্ভিস চার্জ পে করুন।", false, "সার্ভিস চার্জ পে","") {
             if (it == AlertDialog.BUTTON_POSITIVE) {
-                addFragment(ServiceBillPayFragment.newInstance(), ServiceBillPayFragment.tag)
+                navController.navigate(R.id.nav_bill_pay)
             }
         }.show()
     }

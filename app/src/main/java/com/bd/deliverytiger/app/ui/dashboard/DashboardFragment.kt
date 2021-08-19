@@ -318,10 +318,7 @@ class DashboardFragment : Fragment() {
                     "cod-collection" -> {
                         //TODO check, changed it to Nav
                         //addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
-                        val bundle = bundleOf(
-                            "isUnpaidCOD" to CODCollectionFragment
-                        )
-                        findNavController().navigate(R.id.nav_dashboard_CODCollection, bundle)
+                        findNavController().navigate(R.id.nav_dashboard_CODCollection)
                         UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "return" -> {

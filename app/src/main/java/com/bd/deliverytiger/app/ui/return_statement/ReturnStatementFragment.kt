@@ -40,11 +40,6 @@ class ReturnStatementFragment(): Fragment() {
 
     private lateinit var dataAdapter:ReturnStatementAdapter
 
-    companion object {
-        fun newInstance(): ReturnStatementFragment = ReturnStatementFragment().apply {  }
-        val tag: String = ReturnStatementFragment::class.java.name
-    }
-
     override fun onResume() {
         super.onResume()
         (activity as HomeActivity).setToolbarTitle(getString(R.string.return_statement))

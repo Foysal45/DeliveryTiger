@@ -27,11 +27,6 @@ class PaymentStatementFragment: Fragment() {
     private var binding: FragmentPaymentStatementBinding? = null
     private lateinit var dataAdapter: PaymentStatementAdapter
 
-    companion object {
-        fun newInstance(): PaymentStatementFragment = PaymentStatementFragment()
-        val tag: String = PaymentStatementFragment::class.java.name
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentPaymentStatementBinding.inflate(inflater).also {
             binding = it

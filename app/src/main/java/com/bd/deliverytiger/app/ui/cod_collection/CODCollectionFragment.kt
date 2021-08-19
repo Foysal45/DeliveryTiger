@@ -67,13 +67,6 @@ class CODCollectionFragment : Fragment() {
 
     private val viewModel: CODCollectionViewModel by inject()
 
-    companion object {
-        fun newInstance(isUnpaidCOD: Boolean = false): CODCollectionFragment = CODCollectionFragment().apply {
-            this.isUnpaidCOD = isUnpaidCOD
-        }
-        val tag: String = CODCollectionFragment::class.java.name
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentCodCollectionBinding.inflate(inflater, container, false).also {
             binding = it

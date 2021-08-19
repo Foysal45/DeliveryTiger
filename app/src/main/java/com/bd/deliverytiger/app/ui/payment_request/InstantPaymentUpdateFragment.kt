@@ -32,11 +32,6 @@ class InstantPaymentUpdateFragment : Fragment() {
     private var preferredPaymentCycle = ""
     private var formattedDate: String = ""
 
-    companion object {
-        fun newInstance(): InstantPaymentUpdateFragment = InstantPaymentUpdateFragment()
-        val tag: String = InstantPaymentUpdateFragment::class.java.name
-    }
-
     override fun onResume() {
         super.onResume()
         (activity as HomeActivity).setToolbarTitle(getString(R.string.instant_payment))
