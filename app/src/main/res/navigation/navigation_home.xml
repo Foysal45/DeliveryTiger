@@ -66,6 +66,9 @@
         <action android:id="@+id/nav_orderTracking_complain"
             app:destination="@id/nav_complain"
             />
+        <action android:id="@+id/nav_dashboard_shipmentCharge"
+            app:destination="@id/nav_shipment_charge"
+            />
 
     </fragment>
 
@@ -285,6 +288,13 @@
         android:name="com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment"
         android:label="@string/payment_details"
         tools:layout="@layout/fragment_payment_details"
+        />
+
+    <fragment
+        android:id="@+id/nav_shipment_charge"
+        android:name="com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment"
+        android:label="@string/dashboard"
+        tools:layout="@layout/fragment_shipment_charge"
         />
 
 </navigation>

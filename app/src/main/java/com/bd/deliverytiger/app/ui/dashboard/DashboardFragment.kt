@@ -323,7 +323,8 @@ class DashboardFragment : Fragment() {
                         UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "shipment-charge" -> {
-                        addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
+                        //addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
+                        findNavController().navigate(R.id.nav_dashboard_shipmentCharge)
                         UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "all-order" -> {
