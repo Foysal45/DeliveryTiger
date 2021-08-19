@@ -94,8 +94,8 @@ class SmsShareDialogue : BottomSheetDialogFragment() {
         val msg = binding?.shareMessage?.text?.toString() ?: ""
         val requestBody: MutableList<SMSModel> = mutableListOf()
         requestBody.add(SMSModel(numbers = selectedNumberList, text = msg))
-        viewModel.sendSMS(requestBody).observe(viewLifecycleOwner, Observer { model ->
-            if (model.status) {
+        viewModel.sendSMS(requestBody).observe(viewLifecycleOwner, Observer { flag ->
+            if (flag) {
                 context?.toast("SMS Send")
                 if (isAdded) {
                     binding?.progressBar?.isVisible = false

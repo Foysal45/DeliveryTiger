@@ -19,19 +19,17 @@ class SmsShareViewModel(private val repository: AppRepository): ViewModel() {
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
 
-    fun sendSMS(requestBody: List<SMSModel>): LiveData<SMSResponse> {
-        val onSMSResponse: MutableLiveData<SMSResponse> = MutableLiveData()
+    fun sendSMS(requestBody: List<SMSModel>): LiveData<Boolean> {
+        val onSMSResponse: MutableLiveData<Boolean> = MutableLiveData()
 
         viewState.value = ViewState.ProgressState(true)
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.sendSMS(requestBody)
+            val response = repository.sendSMSCommunication(requestBody)
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {
                     is NetworkResponse.Success -> {
-                        if (!response.body.isNullOrEmpty()) {
-                            onSMSResponse.value = response.body.first()
-                        }
+                        onSMSResponse.value = response.body.model ?: false
                     }
                     is NetworkResponse.ServerError -> {
                         val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
