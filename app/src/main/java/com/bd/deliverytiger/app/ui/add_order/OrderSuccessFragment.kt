@@ -52,13 +52,6 @@ class OrderSuccessFragment : Fragment() {
     private var courierOrdersId: String = ""
 
 
-    companion object {
-        fun newInstance(bundle: Bundle?): OrderSuccessFragment = OrderSuccessFragment().apply{
-            this.bundle = bundle
-        }
-        val tag: String = AddOrderFragmentOne::class.java.name
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_order_success, container, false)
     }

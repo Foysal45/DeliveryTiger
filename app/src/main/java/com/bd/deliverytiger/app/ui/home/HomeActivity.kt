@@ -1094,7 +1094,7 @@ class HomeActivity : AppCompatActivity(),
     private fun goToOrderTracking() {
 
         //val bundle = bundleOf("orderID" to orderId)
-        navController.navigate(R.id.nav_allOrder_orderTracking)
+        navController.navigate(R.id.nav_order_tracking)
 
         /*val fragment = OrderTrackingFragment.newInstance("")
         val ft = supportFragmentManager.beginTransaction()

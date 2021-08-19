@@ -161,6 +161,7 @@
     <string name="all_order">সব অর্ডার</string>
     <string name="new_order">নতুন অর্ডার</string>
     <string name="service_charge">সার্ভিস চার্জ</string>
+    <string name="order_success">অর্ডার সাকসেস</string>
 
 
 </resources>

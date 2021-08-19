@@ -218,7 +218,13 @@
         android:name="com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne"
         android:label="@string/new_order"
         tools:layout="@layout/fragment_add_order_fragment_one"
+        >
+
+        <action
+            android:id="@+id/nav_newOrder_orderSuccess"
+            app:destination="@id/nav_orderSuccess"
         />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_bill"
@@ -232,6 +238,13 @@
         android:name="com.bd.deliverytiger.app.ui.collector_tracking.MapFragment"
         android:label="@string/track"
         tools:layout="@layout/fragment_map"
+        />
+
+    <fragment
+        android:id="@+id/nav_orderSuccess"
+        android:name="com.bd.deliverytiger.app.ui.add_order.OrderSuccessFragment"
+        android:label="@string/order_success"
+        tools:layout="@layout/fragment_order_success"
         />
 
 </navigation>

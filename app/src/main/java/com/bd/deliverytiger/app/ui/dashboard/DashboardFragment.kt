@@ -840,13 +840,13 @@ class DashboardFragment : Fragment() {
             list.forEach { model ->
                 when (model.statusGroupId) {
                     //"পার্সেলটি সর্টিং এ আছে"
-                    14 -> {
+                    /*14 -> {
                         dashboardList.add(model)
-                    }
+                    }*/
                     //"কাস্টমারকে খুঁজে পাওয়া যাচ্ছে না"
-                    15 -> {
+                    /*15 -> {
                         dashboardList.add(model)
-                    }
+                    }*/
                     //"শিপমেন্টে আছে"
                     4 -> {
                         dashboardList.add(model)

@@ -1775,14 +1775,15 @@ class AddOrderFragmentOne : Fragment() {
             "isCollection" to isCollection,
             "orderResponse" to orderResponse
         )
+        activity?.onBackPressed()
+        //activity?.onBackPressed()
+        findNavController().navigate(R.id.nav_newOrder_orderSuccess, bundle)
 
-        activity?.onBackPressed()
-        activity?.onBackPressed()
-        val fragment = OrderSuccessFragment.newInstance(bundle)
+        /*val fragment = OrderSuccessFragment.newInstance(bundle)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.mainActivityContainer, fragment, OrderSuccessFragment.tag)
         ft?.addToBackStack(OrderSuccessFragment.tag)
-        ft?.commit()
+        ft?.commit()*/
     }
 
     private fun showCreditLimitAlert() {
