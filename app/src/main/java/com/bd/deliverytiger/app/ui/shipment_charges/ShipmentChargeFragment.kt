@@ -54,14 +54,6 @@ class ShipmentChargeFragment : Fragment() {
 
     private lateinit var dataAdapter: ShipmentChargeAdapter
 
-    companion object {
-        fun newInstance(): ShipmentChargeFragment = ShipmentChargeFragment().apply {
-
-        }
-
-        val tag = ShipmentChargeFragment::class.java.name
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         this.mContext = context

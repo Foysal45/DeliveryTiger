@@ -727,7 +727,8 @@ class HomeActivity : AppCompatActivity(),
                 if (currentFragment is ShipmentChargeFragment) {
                     Timber.d("ShipmentChargeFragment already exist")
                 } else {
-                    addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
+                    //addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
+                    navController.navigate(R.id.nav_dashboard_shipmentCharge)
                 }
             }
             /*R.id.nav_profile -> {
