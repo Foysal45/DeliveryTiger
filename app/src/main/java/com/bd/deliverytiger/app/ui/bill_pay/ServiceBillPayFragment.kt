@@ -40,11 +40,6 @@ class ServiceBillPayFragment: Fragment() {
     private val orderList: MutableList<OrderData> = mutableListOf()
     private var responseModel: MonthlyReceivableResponse? = null
 
-    companion object {
-        fun newInstance(): ServiceBillPayFragment = ServiceBillPayFragment()
-        val tag: String = ServiceBillPayFragment::class.java.name
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentServiceBillPayBinding.inflate(inflater).also {
             binding = it
