@@ -36,6 +36,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.bd.deliverytiger.app.ui.all_orders.order_edit.OrderInfoEditBottomSheet
 
 class AllOrdersFragment : Fragment() {
@@ -91,18 +92,6 @@ class AllOrdersFragment : Fragment() {
 
     private val viewModel: AllOrderViewModel by inject()
 
-    companion object {
-        fun newInstance(shouldOpenFilter: Boolean = false, isFromDashBoard: Boolean = false): AllOrdersFragment = AllOrdersFragment().apply {
-            this.shouldOpenFilter = shouldOpenFilter
-            this.isFromDashBoard = isFromDashBoard
-        }
-        fun newInstance(bundle: Bundle, isFromDashBoard: Boolean = false): AllOrdersFragment = AllOrdersFragment().apply {
-            this.bundle = bundle
-            this.isFromDashBoard = isFromDashBoard
-        }
-        val tag = AllOrdersFragment::class.java.name
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_all_orders, container, false)
     }
@@ -114,7 +103,7 @@ class AllOrdersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as HomeActivity).setToolbarTitle("সব অর্ডার")
+
         rvAllOrder = view.findViewById(R.id.rvAllOrder)
         allOrderProgressBar = view.findViewById(R.id.allOrderProgressBar)
         tvTotalOrder = view.findViewById(R.id.tvTotalOrder)
@@ -130,19 +119,19 @@ class AllOrdersFragment : Fragment() {
 
         dateRangePicker = view.findViewById(R.id.dateRangePicker)
 
-        if (!bundle.isEmpty){
-            statusGroup = bundle.getString("statusGroup", "-1")
-            fromDate = bundle.getString("fromDate", defaultFromDate)
-            toDate = bundle.getString("toDate", defaultToDate)
-            defaultFromDate = fromDate
-            defaultToDate = toDate
-            val dashboardStatusFilter = bundle.getString("dashboardStatusFilter", "-1")
-
-            val statusArray = dashboardStatusFilter.split(",")
-            statusGroupList.clear()
-            statusGroupList.addAll(statusArray)
-            activeFilter(true)
-        }
+        //Bundle
+        shouldOpenFilter = arguments?.getBoolean("shouldOpenFilter", false) ?: false
+        isFromDashBoard = arguments?.getBoolean("isFromDashBoard", false) ?: false
+        statusGroup = arguments?.getString("statusGroup", "-1") ?: "-1"
+        fromDate = arguments?.getString("fromDate", defaultFromDate) ?: defaultFromDate
+        toDate = arguments?.getString("toDate", defaultToDate) ?: defaultToDate
+        defaultFromDate = fromDate
+        defaultToDate = toDate
+        val dashboardStatusFilter = arguments?.getString("dashboardStatusFilter", "-1") ?: "-1"
+        val statusArray = dashboardStatusFilter.split(",")
+        statusGroupList.clear()
+        statusGroupList.addAll(statusArray)
+        activeFilter(true)
 
         allOrderInterface =
             RetrofitSingleton.getInstance(requireContext()).create(AllOrderInterface::class.java)
@@ -313,11 +302,15 @@ class AllOrdersFragment : Fragment() {
     }
 
     private fun addOrderTrackFragment(orderId: String) {
-        val fragment = OrderTrackingFragment.newInstance(orderId)
+
+        val bundle = bundleOf("orderID" to orderId)
+        findNavController().navigate(R.id.nav_allOrder_orderTracking, bundle)
+
+        /*val fragment = OrderTrackingFragment.newInstance(orderId)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, OrderTrackingFragment.tag)
         ft?.addToBackStack(OrderTrackingFragment.tag)
-        ft?.commit()
+        ft?.commit()*/
     }
 
     private fun goToFilter(filterType: Int = 0) {

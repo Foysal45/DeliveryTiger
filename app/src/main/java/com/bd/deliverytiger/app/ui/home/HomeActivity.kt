@@ -29,6 +29,7 @@ import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
@@ -629,7 +630,7 @@ class HomeActivity : AppCompatActivity(),
                     addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
                 }
             }*/
-            R.id.nav_orders -> {
+            /*R.id.nav_all_order -> {
 
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
@@ -638,8 +639,8 @@ class HomeActivity : AppCompatActivity(),
                 } else {
                     addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
                 }
-            }
-            R.id.nav_bill -> {
+            }*/
+            /*R.id.nav_bill -> {
 
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ServiceChargeFragment) {
@@ -647,7 +648,7 @@ class HomeActivity : AppCompatActivity(),
                 } else {
                     addFragment(ServiceChargeFragment.newInstance(), ServiceChargeFragment.tag)
                 }
-            }
+            }*/
             /*R.id.nav_bill_pay -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ServiceBillPayFragment) {
@@ -1055,11 +1056,13 @@ class HomeActivity : AppCompatActivity(),
     private fun addOrderFragment() {
 
         UserLogger.logGenie("Dashboard_AddOrder")
-        val fragment = AddOrderFragmentOne.newInstance()
+        navController.navigate(R.id.nav_new_order)
+
+        /*val fragment = AddOrderFragmentOne.newInstance()
         val ft = supportFragmentManager.beginTransaction()
         ft.add(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
         ft.addToBackStack(AddOrderFragmentOne.tag)
-        ft.commit()
+        ft.commit()*/
 
         /*val fragment = AddOrderFragmentTwo.newInstance(null)
         val ft = supportFragmentManager.beginTransaction()
@@ -1084,20 +1087,26 @@ class HomeActivity : AppCompatActivity(),
 
     private fun goToOrderTracking() {
 
-        val fragment = OrderTrackingFragment.newInstance("")
+        //val bundle = bundleOf("orderID" to orderId)
+        navController.navigate(R.id.nav_allOrder_orderTracking)
+
+        /*val fragment = OrderTrackingFragment.newInstance("")
         val ft = supportFragmentManager.beginTransaction()
         ft.add(R.id.mainActivityContainer, fragment, OrderTrackingFragment.tag)
         ft.addToBackStack(OrderTrackingFragment.tag)
-        ft.commit()
+        ft.commit()*/
     }
 
     private fun goToAllOrder(shouldOpenFilter: Boolean) {
 
-        val fragment = AllOrdersFragment.newInstance(shouldOpenFilter)
+        val bundle = bundleOf("shouldOpenFilter" to shouldOpenFilter)
+        navController.navigate(R.id.nav_all_order, bundle)
+
+        /*val fragment = AllOrdersFragment.newInstance(shouldOpenFilter)
         val ft = supportFragmentManager.beginTransaction()
         ft.add(R.id.mainActivityContainer, fragment, AllOrdersFragment.tag)
         ft.addToBackStack(AllOrdersFragment.tag)
-        ft.commit()
+        ft.commit()*/
     }
 
     private fun goToNearByHubMap() {

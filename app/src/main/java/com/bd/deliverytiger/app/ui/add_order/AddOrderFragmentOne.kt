@@ -226,15 +226,7 @@ class AddOrderFragmentOne : Fragment() {
     private val viewModel: AddOrderViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
 
-    companion object {
-        fun newInstance(): AddOrderFragmentOne = AddOrderFragmentOne()
-        val tag: String = AddOrderFragmentOne::class.java.name
-    }
-
     //#region Life cycle
-
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentAddOrderFragmentOneBinding.inflate(inflater, container, false).also {
             binding = it
@@ -298,7 +290,7 @@ class AddOrderFragmentOne : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("নতুন অর্ডার")
+        (activity as HomeActivity).setToolbarTitle(getString(R.string.new_order))
         //isProfileComplete = checkProfileData()
     }
 
@@ -1789,7 +1781,7 @@ class AddOrderFragmentOne : Fragment() {
         val fragment = OrderSuccessFragment.newInstance(bundle)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.mainActivityContainer, fragment, OrderSuccessFragment.tag)
-        ft?.addToBackStack(OrderTrackingFragment.tag)
+        ft?.addToBackStack(OrderSuccessFragment.tag)
         ft?.commit()
     }
 

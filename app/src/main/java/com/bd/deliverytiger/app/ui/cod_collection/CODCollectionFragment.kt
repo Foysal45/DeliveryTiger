@@ -262,16 +262,17 @@ class CODCollectionFragment : Fragment() {
     }
 
     private fun addOrderTrackFragment(orderID: String) {
-        val fragment = OrderTrackingFragment.newInstance(orderID)
-        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.mainActivityContainer, fragment, OrderTrackingFragment.tag)
-        ft?.addToBackStack(OrderTrackingFragment.tag)
-        ft?.commit()
 
         val bundle = bundleOf(
             "orderID" to orderID
         )
         findNavController().navigate(R.id.nav_CODCollection_orderTracking, bundle)
+
+        /*val fragment = OrderTrackingFragment.newInstance(orderID)
+        val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.mainActivityContainer, fragment, OrderTrackingFragment.tag)
+        ft?.addToBackStack(OrderTrackingFragment.tag)
+        ft?.commit()*/
 
     }
 

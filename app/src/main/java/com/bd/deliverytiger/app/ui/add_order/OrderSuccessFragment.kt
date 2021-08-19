@@ -13,6 +13,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
@@ -258,12 +259,13 @@ class OrderSuccessFragment : Fragment() {
     }
 
     private fun allOrderListFragment() {
-       // activity?.supportFragmentManager?.popBackStack()
-        val fragment = AllOrdersFragment.newInstance()
+
+        findNavController().navigate(R.id.nav_all_order)
+
+        /*val fragment = AllOrdersFragment.newInstance()
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.mainActivityContainer, fragment, AllOrdersFragment.tag)
-       // ft?.addToBackStack(OrderTrackingFragment.tag)
-        ft?.commit()
+        ft?.commit()*/
     }
 
     private fun getAddress(orderResponse: OrderResponse?): String {

@@ -80,10 +80,6 @@ class ServiceChargeFragment : Fragment() {
 
     private val viewModel: ServiceChargeViewModel by inject()
 
-    companion object {
-        fun newInstance(): ServiceChargeFragment = ServiceChargeFragment()
-        val tag: String = ServiceChargeFragment::class.java.name
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentServiceChargeBinding.inflate(inflater, container, false).also {
@@ -291,7 +287,7 @@ class ServiceChargeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTitle("সার্ভিস চার্জ")
+        (activity as HomeActivity).setToolbarTitle(getString(R.string.service_charge))
         fetchServiceBillDetails(0, 20)
     }
 
@@ -305,11 +301,15 @@ class ServiceChargeFragment : Fragment() {
     }
 
     private fun addOrderTrackFragment(orderId: String) {
-        val fragment = OrderTrackingFragment.newInstance(orderId)
+
+        val bundle = bundleOf("orderID" to orderId)
+        findNavController().navigate(R.id.nav_allOrder_orderTracking, bundle)
+
+        /*val fragment = OrderTrackingFragment.newInstance(orderId)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, OrderTrackingFragment.tag)
         ft?.addToBackStack(OrderTrackingFragment.tag)
-        ft?.commit()
+        ft?.commit()*/
     }
 
     private fun paymentGateway(orderId: String) {

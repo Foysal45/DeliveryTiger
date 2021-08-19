@@ -87,10 +87,12 @@ class UserRoleSelectionFragment : Fragment() {
 
     private fun goToOrderTrackingFragment(){
 
-        val fragment: OrderTrackingFragment = OrderTrackingFragment.newInstance("", "login")
+        val bundle = bundleOf("containerType" to "login")
+        val fragment: OrderTrackingFragment = OrderTrackingFragment.newInstance()
+        fragment.arguments = bundle
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.loginActivityContainer, fragment, OrderTrackingFragment.tag)
-        ft?.addToBackStack(OrderTrackingFragment.tag)
+        ft?.replace(R.id.loginActivityContainer, fragment, "OrderTrackingFragment")
+        ft?.addToBackStack("OrderTrackingFragment")
         ft?.commit()
     }
 

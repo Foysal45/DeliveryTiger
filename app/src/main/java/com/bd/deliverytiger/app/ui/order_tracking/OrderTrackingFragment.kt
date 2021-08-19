@@ -16,6 +16,7 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackData
 import com.bd.deliverytiger.app.databinding.FragmentOrderTrackingBinding
+import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.complain.ComplainFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
@@ -35,10 +36,7 @@ class OrderTrackingFragment : Fragment() {
     private var containerType: String = ""
 
     companion object {
-        fun newInstance(orderID: String, containerType: String = ""): OrderTrackingFragment = OrderTrackingFragment().apply {
-            this.orderID = orderID
-            this.containerType = containerType
-        }
+        fun newInstance(): OrderTrackingFragment = OrderTrackingFragment().apply {}
         val tag: String = OrderTrackingFragment::class.java.name
     }
 

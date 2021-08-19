@@ -138,7 +138,7 @@
             />
 
         <item
-            android:id="@+id/nav_orders"
+            android:id="@+id/nav_all_order"
             android:icon="@drawable/ic_list"
             android:title="সব অর্ডার"
             android:visible="false"

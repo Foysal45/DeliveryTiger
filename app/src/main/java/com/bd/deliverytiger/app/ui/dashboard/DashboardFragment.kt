@@ -268,7 +268,8 @@ class DashboardFragment : Fragment() {
             UserLogger.logGenie("Dashboard_Collector_Track")
         }
         binding?.orderTrackingBtn?.setOnClickListener {
-            addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
+            //addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
+            findNavController().navigate(R.id.nav_dashboard_orderTracking)
             UserLogger.logGenie("Dashboard_Order_Track")
         }
         binding?.complainBtn?.setOnClickListener {
@@ -304,15 +305,18 @@ class DashboardFragment : Fragment() {
             if (model?.count != 0) {
                 when (model?.dashboardRouteUrl) {
                     "add-order" -> {
-                        addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+                        //addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
+                        findNavController().navigate(R.id.nav_dashboard_newOrder)
                         UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "billing-service" -> {
-                        addFragment(ServiceChargeFragment.newInstance(), ServiceChargeFragment.tag)
+                        //addFragment(ServiceChargeFragment.newInstance(), ServiceChargeFragment.tag)
+                        findNavController().navigate(R.id.nav_dashboard_Bill)
                         UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "order-tracking" -> {
-                        addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
+                        //addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
+                        findNavController().navigate(R.id.nav_dashboard_orderTracking)
                         UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "shipment-charge" -> {
@@ -334,7 +338,8 @@ class DashboardFragment : Fragment() {
                         UserLogger.logGenie("Dashboard_ReturnDialog")
                     }
                     else -> {
-                        addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
+                        //addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
+                        findNavController().navigate(R.id.nav_dashboard_allOrder)
                         UserLogger.logGenie("Dashboard_AllOrder")
                     }
                 }
@@ -932,17 +937,21 @@ class DashboardFragment : Fragment() {
 
     private fun goToAllOrder(statusGroupName: String, statusFilter: String, startDate: String, endDate: String) {
 
-        val bundle = Bundle()
-        bundle.putString("statusGroup", statusGroupName)
-        bundle.putString("fromDate", startDate)
-        bundle.putString("toDate", endDate)
-        bundle.putString("dashboardStatusFilter", statusFilter)
+        val bundle = bundleOf(
+            "statusGroup" to statusGroupName,
+            "fromDate" to startDate,
+            "toDate" to endDate,
+            "dashboardStatusFilter" to statusFilter,
+            "isFromDashBoard" to true
+        )
 
-        val fragment = AllOrdersFragment.newInstance(bundle, true)
+        findNavController().navigate(R.id.nav_dashboard_allOrder, bundle)
+
+        /*val fragment = AllOrdersFragment.newInstance(bundle, true)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, AllOrdersFragment.tag)
         ft?.addToBackStack(AllOrdersFragment.tag)
-        ft?.commit()
+        ft?.commit()*/
     }
 
     private fun goToPaymentDetails() {
