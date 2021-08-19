@@ -44,6 +44,9 @@
         <action android:id="@+id/nav_dashboard_complain"
             app:destination="@id/nav_complain"
             />
+        <action android:id="@+id/nav_dashboard_unpaidCod"
+            app:destination="@id/nav_unpaid_cod"
+            />
 
     </fragment>
 
@@ -257,6 +260,13 @@
         android:name="com.bd.deliverytiger.app.ui.complain.ComplainFragment"
         android:label="@string/complain"
         tools:layout="@layout/fragment_complain"
+        />
+
+    <fragment
+        android:id="@+id/nav_unpaid_cod"
+        android:name="com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment"
+        android:label="@string/dashboard"
+        tools:layout="@layout/fragment_unpaid_cod"
         />
 
 </navigation>

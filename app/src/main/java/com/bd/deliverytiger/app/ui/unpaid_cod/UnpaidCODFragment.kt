@@ -28,11 +28,6 @@ class UnpaidCODFragment: Fragment() {
 
     private var netAmount: Int = 0
 
-    companion object {
-        fun newInstance(): UnpaidCODFragment = UnpaidCODFragment().apply {  }
-        val tag: String = UnpaidCODFragment::class.java.name
-    }
-
     override fun onResume() {
         super.onResume()
         (activity as HomeActivity).setToolbarTitle("আনপেইড COD কালেকশন")

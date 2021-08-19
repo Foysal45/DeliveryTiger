@@ -362,7 +362,8 @@ class DashboardFragment : Fragment() {
             if (netAmount == 0) {
                 context?.toast("পর্যাপ্ত তথ্য নেই")
             } else {
-                addFragment(UnpaidCODFragment.newInstance(), UnpaidCODFragment.tag)
+                //addFragment(UnpaidCODFragment.newInstance(), UnpaidCODFragment.tag)
+                findNavController().navigate(R.id.nav_dashboard_unpaidCod)
             }
             UserLogger.logGenie("Dashboard_UnpaidCOD")
         }
