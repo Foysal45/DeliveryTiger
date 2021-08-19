@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -346,6 +347,7 @@ class HomeActivity : AppCompatActivity(),
             when (destination.id) {
                 R.id.nav_dashboard -> {
                     initToolbarActions()
+
                     binding.appBarHome.bottomAppBar.isVisible = true
                     addOrderFab.show()
                 }
@@ -354,6 +356,9 @@ class HomeActivity : AppCompatActivity(),
                 }
                 R.id.nav_web_view -> {
                     trackingIV.isVisible = false
+
+                    binding.appBarHome.bottomAppBar.isVisible = false
+                    addOrderFab.hide()
                 }
                 R.id.nav_order_tracking -> {
                     logoIV.isVisible = false
@@ -364,6 +369,21 @@ class HomeActivity : AppCompatActivity(),
                     balanceIV.isVisible = false
                     notificationIV.isVisible = false
                     trackingIV.isVisible = false
+                    addProductIV.isVisible = false
+                    downloadTV.isVisible = false
+
+                    //binding.appBarHome.bottomAppBar.isVisible = false
+                    //addOrderFab.hide()
+                }
+                R.id.nav_lead_management -> {
+                    logoIV.isVisible = false
+                    toolbarTitleTV.isVisible = true
+                    actionBtn.isVisible = false
+                    separetor.isVisible = false
+                    searchIV.isVisible = false
+                    balanceIV.isVisible = false
+                    notificationIV.isVisible = false
+                    trackingIV.isVisible = true
                     addProductIV.isVisible = false
                     downloadTV.isVisible = false
                 }
@@ -381,6 +401,13 @@ class HomeActivity : AppCompatActivity(),
 
                     binding.appBarHome.bottomAppBar.isVisible = false
                     addOrderFab.hide()
+                }
+            }
+
+
+            binding.appBarHome.bottomNavigationView.menu.forEach { item ->
+                if (item.itemId == destination.id) {
+                    item.isChecked = true
                 }
             }
         }
@@ -604,6 +631,30 @@ class HomeActivity : AppCompatActivity(),
                 }
             }
             return@setNavigationItemSelectedListener true
+        }
+    }
+
+    private fun bottomNavigationLister() {
+        binding.appBarHome.bottomNavigationView.setOnItemSelectedListener { item ->
+            if (navController.currentDestination?.id == item.itemId) false
+            when (item.itemId) {
+                R.id.nav_dashboard -> {
+                    NavigationUI.onNavDestinationSelected(item, navController)
+                }
+                R.id.nav_order_tracking -> {
+                    NavigationUI.onNavDestinationSelected(item, navController)
+                    //navController.navigate(R.id.nav_order_tracking)
+                }
+                R.id.nav_live -> {
+                    goToLiveActivity()
+                    return@setOnItemSelectedListener false
+                }
+                R.id.nav_lead_management -> {
+                    NavigationUI.onNavDestinationSelected(item, navController)
+                    //navController.navigate(R.id.nav_lead_management)
+                }
+            }
+            return@setOnItemSelectedListener true
         }
     }
 
@@ -963,27 +1014,6 @@ class HomeActivity : AppCompatActivity(),
         finish()
     }
 
-    private fun bottomNavigationLister() {
-        binding.appBarHome.bottomNavigationView.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    navController.navigate(R.id.nav_dashboard)
-                }
-                R.id.nav_track -> {
-                    navController.navigate(R.id.nav_order_tracking)
-                }
-                R.id.nav_live -> {
-                    goToLiveActivity()
-                }
-                R.id.nav_lead_management -> {
-                    navController.navigate(R.id.nav_lead_management)
-                }
-            }
-            true
-        }
-
-    }
-    
     @SuppressLint("SetTextI18n")
     private fun bindHeaderView() {
         val headerView = navView.getHeaderView(0)
