@@ -32,11 +32,6 @@ class LeadManagementFragment : Fragment() {
     //private var totalProduct = 0
     private val visibleThreshold = 5
 
-    companion object {
-        fun newInstance(): LeadManagementFragment = LeadManagementFragment()
-        val tag: String = LeadManagementFragment::class.java.name
-    }
-
     override fun onResume() {
         super.onResume()
         (activity as HomeActivity).setToolbarTitle(getString(R.string.lead_management))
