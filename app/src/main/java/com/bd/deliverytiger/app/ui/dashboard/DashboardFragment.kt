@@ -194,7 +194,11 @@ class DashboardFragment : Fragment() {
             } else {
                 if (dateRangeFilterList.first().delivered != 0) {
                     val reqBody = DeliveryDetailsRequest(fromDate, toDate, SessionManager.courierUserId, "delivery")
-                    addFragment(DeliveryDetailsFragment.newInstance(reqBody, dateRangeFilterList.first().delivered), DeliveryDetailsFragment.tag)
+                    val bundle = bundleOf(
+                        "dataRequestBody" to reqBody,
+                        "totalCount" to dateRangeFilterList.first().delivered
+                    )
+                    findNavController().navigate(R.id.nav_delivery_details, bundle)
                 } else {
                     Toast.makeText(requireContext(), "কোনো তথ্য পাওয়া যায়নি", Toast.LENGTH_SHORT).show()
                 }
@@ -207,7 +211,11 @@ class DashboardFragment : Fragment() {
             } else {
                 if (dateRangeFilterList.first().returned != 0) {
                     val reqBody = DeliveryDetailsRequest(fromDate, toDate, SessionManager.courierUserId, "return")
-                    addFragment(DeliveryDetailsFragment.newInstance(reqBody, dateRangeFilterList.first().returned), DeliveryDetailsFragment.tag)
+                    val bundle = bundleOf(
+                        "dataRequestBody" to reqBody,
+                        "totalCount" to dateRangeFilterList.first().returned
+                    )
+                    findNavController().navigate(R.id.nav_delivery_details, bundle)
                 } else {
                     Toast.makeText(requireContext(), "কোনো তথ্য পাওয়া যায়নি", Toast.LENGTH_SHORT).show()
                 }

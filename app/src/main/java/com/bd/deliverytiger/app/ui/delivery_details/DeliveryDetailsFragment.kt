@@ -44,6 +44,12 @@ class DeliveryDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val bundle: Bundle? = arguments
+        bundle?.let {
+            dataRequestBody = it.getParcelable("dataRequestBody")?: DeliveryDetailsRequest()
+            total = it.getInt("totalCount")
+        }
+
         title = if (dataRequestBody?.type == "return"){
             "রিটার্নে আছে (${DigitConverter.toBanglaDigit(total)} টি)"
         }else{
