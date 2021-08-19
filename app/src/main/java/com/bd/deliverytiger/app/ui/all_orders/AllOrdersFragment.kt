@@ -606,11 +606,13 @@ class AllOrdersFragment : Fragment() {
             "hubModel" to hubModel
         )
 
-        val fragment = MapFragment.newInstance(bundle)
+        findNavController().navigate(R.id.nav_allOrder_map, bundle)
+
+        /*val fragment = MapFragment.newInstance(bundle)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, MapFragment.tag)
         ft?.addToBackStack(MapFragment.tag)
-        ft?.commit()
+        ft?.commit()*/
     }
 
 }

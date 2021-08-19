@@ -547,6 +547,12 @@ class HomeActivity : AppCompatActivity(),
                     R.id.nav_survey -> {
                         startActivity(Intent(this, SurveyActivity::class.java))
                     }
+                    R.id.nav_nearby_hub -> {
+                        val bundle = bundleOf(
+                            "isNearByHubView" to true
+                        )
+                        navController.navigate(R.id.nav_map, bundle)
+                    }
                     R.id.nav_logout -> {
                         menuItem?.isChecked = true
                         logout()
@@ -755,15 +761,15 @@ class HomeActivity : AppCompatActivity(),
                     }
                 }*//*
             }*/
-            R.id.nav_map -> {
+            /*R.id.nav_map -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is MapFragment) {
                     Timber.d("MapFragment already exist")
                 } else {
                     addFragment(MapFragment.newInstance(null), MapFragment.tag)
                 }
-            }
-            R.id.nav_nearby_hub -> {
+            }*/
+            /*R.id.nav_nearby_hub -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is MapFragment) {
                     Timber.d("MapFragment already exist")
@@ -773,7 +779,7 @@ class HomeActivity : AppCompatActivity(),
                     )
                     addFragment(MapFragment.newInstance(bundle), MapFragment.tag)
                 }
-            }
+            }*/
             R.id.nav_complain -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ComplainFragment) {
@@ -1113,7 +1119,7 @@ class HomeActivity : AppCompatActivity(),
         val bundle = bundleOf(
             "isNearByHubView" to true
         )
-        addFragment(MapFragment.newInstance(bundle), MapFragment.tag)
+        navController.navigate(R.id.nav_map, bundle)
     }
 
     fun goToBalanceLoad() {

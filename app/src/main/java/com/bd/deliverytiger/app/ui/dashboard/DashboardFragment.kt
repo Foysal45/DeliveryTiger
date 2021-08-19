@@ -264,7 +264,8 @@ class DashboardFragment : Fragment() {
             getDashBoardData(selectedMonth, selectedYear)
         }
         binding?.collectorTrackBtn?.setOnClickListener {
-            addFragment(MapFragment.newInstance(null), MapFragment.tag)
+            //addFragment(MapFragment.newInstance(null), MapFragment.tag)
+            findNavController().navigate(R.id.nav_dashboard_map)
             UserLogger.logGenie("Dashboard_Collector_Track")
         }
         binding?.orderTrackingBtn?.setOnClickListener {
@@ -1107,7 +1108,8 @@ class DashboardFragment : Fragment() {
         val bundle = bundleOf(
             "isNearByHubView" to true
         )
-        addFragment(MapFragment.newInstance(bundle), MapFragment.tag)
+        findNavController().navigate(R.id.nav_dashboard_map, bundle)
+        //addFragment(MapFragment.newInstance(bundle), MapFragment.tag)
     }
 
     private fun goToHubMap(hubModel: HubInfo) {
@@ -1117,11 +1119,13 @@ class DashboardFragment : Fragment() {
             "hubModel" to hubModel
         )
 
-        val fragment = MapFragment.newInstance(bundle)
+        findNavController().navigate(R.id.nav_dashboard_map, bundle)
+
+        /*val fragment = MapFragment.newInstance(bundle)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, MapFragment.tag)
         ft?.addToBackStack(MapFragment.tag)
-        ft?.commit()
+        ft?.commit()*/
     }
 
     private fun goToWebView(url: String) {

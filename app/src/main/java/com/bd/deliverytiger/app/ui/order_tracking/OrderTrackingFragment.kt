@@ -10,6 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
@@ -329,9 +330,12 @@ class OrderTrackingFragment : Fragment() {
             "hubView" to true,
             "hubModel" to hubModel
         )
-        val fragment = MapFragment.newInstance(bundle)
-        val tag = MapFragment.tag
-        addFragment(fragment, tag)
+
+        findNavController().navigate(R.id.nav_orderTrack_map, bundle)
+
+        //val fragment = MapFragment.newInstance(bundle)
+        //val tag = MapFragment.tag
+        //addFragment(fragment, tag)
     }
 
     override fun onDestroyView() {

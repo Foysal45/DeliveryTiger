@@ -60,12 +60,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private val homeViewModel: HomeViewModel by inject()
     private val viewModel: MapViewModel by inject()
 
-    companion object {
-        fun newInstance(bundle: Bundle?): MapFragment = MapFragment().apply {
-            this.bundle = bundle
-        }
-        val tag: String = MapFragment::class.java.name
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentMapBinding.inflate(inflater, container, false).also {
