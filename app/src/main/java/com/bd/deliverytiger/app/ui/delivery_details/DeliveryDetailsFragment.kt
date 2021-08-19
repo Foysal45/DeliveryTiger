@@ -27,14 +27,6 @@ class DeliveryDetailsFragment : Fragment() {
     private var title = ""
     private var total = 0
 
-    companion object{
-        fun newInstance(dataRequestBody: DeliveryDetailsRequest?, totalCount: Int): DeliveryDetailsFragment = DeliveryDetailsFragment().apply {
-            this.dataRequestBody = dataRequestBody
-            this.total = totalCount
-        }
-        val tag: String = DeliveryDetailsFragment::class.java.name
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentDeliveryDetailsBinding.inflate(inflater, container, false).also {
             binding = it
