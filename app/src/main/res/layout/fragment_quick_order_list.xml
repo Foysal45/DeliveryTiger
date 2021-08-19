@@ -54,7 +54,7 @@
         android:paddingTop="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/datePickerLayout"
-        android:paddingBottom="@dimen/bottomActionHeight"
+
 
         tools:itemCount="3"
         tools:layout_editor_absoluteX="0dp"

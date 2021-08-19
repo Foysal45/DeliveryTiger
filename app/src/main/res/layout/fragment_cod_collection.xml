@@ -8,7 +8,7 @@
     android:clickable="true"
     android:focusable="true"
     tools:context=".ui.cod_collection.CODCollectionFragment"
-    android:paddingBottom="@dimen/bottomActionHeight">
+    >
 
     <include
         android:id="@+id/include_filter"

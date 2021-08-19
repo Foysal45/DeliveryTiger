@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
@@ -61,6 +62,7 @@ class OrderTrackingFragment : Fragment() {
         if (containerType == "login") {
             binding?.complainBtn?.visibility = View.GONE
             binding?.merchantInfoLayout?.visibility = View.GONE
+            binding?.spacer?.isVisible = false
         }
 
         dataAdapter = OrderTrackingNewAdapter()
@@ -346,12 +348,12 @@ class OrderTrackingFragment : Fragment() {
         super.onDestroyView()
     }
 
-    private fun addFragment(fragment: Fragment, tag: String) {
+    /*private fun addFragment(fragment: Fragment, tag: String) {
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
         ft?.commit()
-    }
+    }*/
 
 
 }

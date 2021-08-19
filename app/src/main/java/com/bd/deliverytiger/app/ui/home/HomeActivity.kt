@@ -17,19 +17,17 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
@@ -39,7 +37,6 @@ import com.bd.deliverytiger.app.broadcast.ConnectivityReceiver
 import com.bd.deliverytiger.app.databinding.ActivityHomeBinding
 import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.log.UserLogger
-import com.bd.deliverytiger.app.log.UserLogger.logGenie
 import com.bd.deliverytiger.app.services.LocationUpdatesService
 import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
 import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
@@ -56,8 +53,6 @@ import com.bd.deliverytiger.app.ui.complain.ComplainFragment
 import com.bd.deliverytiger.app.ui.dashboard.DashboardFragment
 import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsFragment
 import com.bd.deliverytiger.app.ui.dialog.PopupDialog
-import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
-import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivity
 import com.bd.deliverytiger.app.ui.location.LocationUsesBottomSheet
@@ -84,8 +79,6 @@ import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.signature.ObjectKey
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -167,7 +160,7 @@ class HomeActivity : AppCompatActivity(),
 
         navController = findNavController(R.id.navHostFragment)
         appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.nav_dashboard, R.id.nav_order_tracking, R.id.nav_lead_management
+            R.id.nav_dashboard/*, R.id.nav_order_tracking, R.id.nav_lead_management*/
         ), binding.drawerLayout)
         binding.appBarHome.toolbar.setupWithNavController(navController, appBarConfiguration)
         binding.appBarHome.bottomNavigationView.setupWithNavController(navController)
@@ -177,7 +170,7 @@ class HomeActivity : AppCompatActivity(),
         navViewRight = findViewById(R.id.nav_view_2)
         logoIV = findViewById(R.id.home_toolbar_logo)
         addProductIV = findViewById(R.id.home_toolbar_add)
-        toolbarTitleTV = findViewById(R.id.home_toolbar_title)
+        toolbarTitleTV = findViewById(R.id.toolbarTitle)
         notificationIV = findViewById(R.id.home_toolbar_notification)
         trackingIV = findViewById(R.id.home_toolbar_tracking)
         searchIV = findViewById(R.id.home_toolbar_search)
@@ -213,8 +206,7 @@ class HomeActivity : AppCompatActivity(),
             FirebaseMessaging.getInstance().subscribeToTopic("DeliveryTigerTopicTest")
         }
 
-        //addHomeFragment()
-        //addDashBoardFragment()
+        //initToolbarActions()
 
         addProductIV.setOnClickListener {
             addOrderFab.performClick()
@@ -230,7 +222,8 @@ class HomeActivity : AppCompatActivity(),
             goToAllOrder(true)
         }
         downloadTV.setOnClickListener {
-            val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment)
+            val currentFragment: Fragment? = navHostFragment?.childFragmentManager?.primaryNavigationFragment
             if (currentFragment is PaymentStatementDetailFragment) {
                 currentFragment.downloadFile()
             }
@@ -330,9 +323,9 @@ class HomeActivity : AppCompatActivity(),
             navController.currentDestination?.id != navController.graph.startDestination -> {
                 super.onBackPressed()
             }
-            supportFragmentManager.backStackEntryCount > 0 -> {
+            /*supportFragmentManager.backStackEntryCount > 0 -> {
                 supportFragmentManager.popBackStack()
-            }
+            }*/
             else -> {
                 if (doubleBackToExitPressedOnce) {
                     super.onBackPressed()
@@ -349,7 +342,50 @@ class HomeActivity : AppCompatActivity(),
 
     private fun onBackStackChangeListener() {
 
-        supportFragmentManager.addOnBackStackChangedListener {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.nav_dashboard -> {
+                    initToolbarActions()
+                    binding.appBarHome.bottomAppBar.isVisible = true
+                    addOrderFab.show()
+                }
+                R.id.nav_payment_history_details -> {
+                    downloadTV.isVisible = true
+                }
+                R.id.nav_web_view -> {
+                    trackingIV.isVisible = false
+                }
+                R.id.nav_order_tracking -> {
+                    logoIV.isVisible = false
+                    toolbarTitleTV.isVisible = true
+                    actionBtn.isVisible = false
+                    separetor.isVisible = false
+                    searchIV.isVisible = false
+                    balanceIV.isVisible = false
+                    notificationIV.isVisible = false
+                    trackingIV.isVisible = false
+                    addProductIV.isVisible = false
+                    downloadTV.isVisible = false
+                }
+                else -> {
+                    logoIV.isVisible = false
+                    toolbarTitleTV.isVisible = true
+                    actionBtn.isVisible = false
+                    separetor.isVisible = false
+                    searchIV.isVisible = false
+                    balanceIV.isVisible = false
+                    notificationIV.isVisible = false
+                    trackingIV.isVisible = true
+                    addProductIV.isVisible = false
+                    downloadTV.isVisible = false
+
+                    binding.appBarHome.bottomAppBar.isVisible = false
+                    addOrderFab.hide()
+                }
+            }
+        }
+
+        /*supportFragmentManager.addOnBackStackChangedListener {
             if (supportFragmentManager.backStackEntryCount > 0) {
                 toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
                 logoIV.visibility = View.GONE
@@ -363,7 +399,6 @@ class HomeActivity : AppCompatActivity(),
             if (currentFragment is DashboardFragment ||
                 currentFragment is AddOrderFragmentOne ||
                 currentFragment is ProfileFragment ||
-                currentFragment is DistrictSelectFragment || currentFragment is DistrictThanaAriaSelectFragment ||
                 currentFragment is MapFragment ||
                 currentFragment is ServiceBillPayFragment || currentFragment is ServiceBillPayHistoryFragment ||
                 currentFragment is PaymentStatementFragment || currentFragment is PaymentStatementDetailFragment ||
@@ -392,9 +427,9 @@ class HomeActivity : AppCompatActivity(),
                 notificationIV.visibility = View.GONE
                 addProductBtnVisibility(false)
             }
-            /*if (currentFragment is ServiceBillPayFragment) {
+            *//*if (currentFragment is ServiceBillPayFragment) {
                 addOrderFab.hide()
-            }*/
+            }*//*
             if (currentFragment is PaymentStatementDetailFragment) {
                 downloadTV.visibility = View.VISIBLE
             } else {
@@ -421,9 +456,9 @@ class HomeActivity : AppCompatActivity(),
             }
             if (currentFragment is OrderTrackingFragment) {
                 trackingIV.visibility = View.GONE
-            } /*else {
+            } *//*else {
                 trackingIV.visibility = View.VISIBLE
-            }*/
+            }*//*
             if (currentFragment is WebViewFragment) {
                 trackingIV.visibility = View.GONE
                 searchIV.visibility = View.GONE
@@ -501,7 +536,7 @@ class HomeActivity : AppCompatActivity(),
                 }
             }
 
-        }
+        }*/
     }
 
     private fun manageNavigationSelection() {
@@ -558,6 +593,9 @@ class HomeActivity : AppCompatActivity(),
                             "isNearByHubView" to true
                         )
                         navController.navigate(R.id.nav_map, bundle)
+                    }
+                    R.id.nav_chat -> {
+                        startActivity(Intent(this, ChatActivity::class.java))
                     }
                     R.id.nav_logout -> {
                         menuItem?.isChecked = true
@@ -720,7 +758,7 @@ class HomeActivity : AppCompatActivity(),
                     addFragment(InstantPaymentUpdateFragment.newInstance(), InstantPaymentUpdateFragment.tag)
                 }
             }*/
-            R.id.nav_shipment_change -> {
+            /*R.id.nav_shipment_change -> {
 
                 val currentFragment =
                     supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
@@ -730,7 +768,7 @@ class HomeActivity : AppCompatActivity(),
                     //addFragment(ShipmentChargeFragment.newInstance(), ShipmentChargeFragment.tag)
                     navController.navigate(R.id.nav_dashboard_shipmentCharge)
                 }
-            }
+            }*/
             /*R.id.nav_profile -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ProfileFragment) {
@@ -787,7 +825,7 @@ class HomeActivity : AppCompatActivity(),
                     addFragment(MapFragment.newInstance(bundle), MapFragment.tag)
                 }
             }*/
-            R.id.nav_complain -> {
+            /*R.id.nav_complain -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ComplainFragment) {
                     Timber.d("ComplainFragment already exist")
@@ -795,7 +833,7 @@ class HomeActivity : AppCompatActivity(),
                     //addFragment(ComplainFragment.newInstance(), ComplainFragment.tag)
                     navController.navigate(R.id.nav_complain)
                 }
-            }
+            }*/
             /*R.id.nav_referral -> {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
                 if (currentFragment is ReferralFragment) {
@@ -1025,7 +1063,8 @@ class HomeActivity : AppCompatActivity(),
 
 
     private fun callFragmentHideKeyboard() {
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment)
+        val currentFragment: Fragment? = navHostFragment?.childFragmentManager?.primaryNavigationFragment
         currentFragment?.hideKeyboard()
     }
 
@@ -1052,14 +1091,19 @@ class HomeActivity : AppCompatActivity(),
     }
 
 
-    private fun addDashBoardFragment() {
-        logoIV.visibility = View.VISIBLE
-        addProductBtnVisibility(false)
-        searchIV.visibility = View.VISIBLE
-        actionBtn.visibility = View.VISIBLE
-        balanceIV.visibility = View.VISIBLE
-        notificationIV.visibility = View.VISIBLE
-        trackingIV.visibility = View.GONE
+    private fun initToolbarActions() {
+
+        logoIV.isVisible = true
+        toolbarTitleTV.isVisible = false
+        actionBtn.isVisible = true
+        separetor.isVisible = true
+        searchIV.isVisible = true
+        balanceIV.isVisible = true
+        notificationIV.isVisible = true
+        trackingIV.isVisible = false
+        addProductIV.isVisible = false
+        downloadTV.isVisible = false
+
 
         /*val fragment = DashboardFragment.newInstance()
         val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
@@ -1135,12 +1179,12 @@ class HomeActivity : AppCompatActivity(),
         //addFragment(BalanceLoadFragment.newInstance(), BalanceLoadFragment.tag)
     }
 
-    private fun addFragment(fragment: Fragment, tag: String) {
+    /*private fun addFragment(fragment: Fragment, tag: String) {
         val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
         ft.replace(R.id.mainActivityContainer, fragment, tag)
         ft.addToBackStack(tag)
         ft.commit()
-    }
+    }*/
 
     private fun setProfileImgUrl(imageUri: String?) {
         try {

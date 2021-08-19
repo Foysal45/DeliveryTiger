@@ -19,7 +19,7 @@
             android:background="@color/white"
             android:clickable="true"
             android:focusable="true"
-            android:paddingBottom="@dimen/bottomActionHeight"
+
             >
 
             <LinearLayout

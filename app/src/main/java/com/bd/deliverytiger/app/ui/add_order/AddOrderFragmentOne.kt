@@ -683,12 +683,12 @@ class AddOrderFragmentOne : Fragment() {
         return !isMissing
     }
 
-    private fun addFragment(fragment: Fragment, tag: String) {
+    /*private fun addFragment(fragment: Fragment, tag: String) {
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
         ft?.commit()
-    }
+    }*/
 
     private fun pickupBottomSheet() {
         val tag: String = CollectionInfoBottomSheet.tag
@@ -1775,7 +1775,7 @@ class AddOrderFragmentOne : Fragment() {
         )
         activity?.onBackPressed()
         //activity?.onBackPressed()
-        findNavController().navigate(R.id.nav_newOrder_orderSuccess, bundle)
+        findNavController().navigate(R.id.nav_orderSuccess, bundle)
 
         /*val fragment = OrderSuccessFragment.newInstance(bundle)
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()

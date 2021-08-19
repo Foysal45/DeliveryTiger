@@ -164,11 +164,11 @@ class BalanceLoadFragment: Fragment() {
         binding = null
     }
 
-    private fun addFragment(fragment: Fragment, tag: String) {
+    /*private fun addFragment(fragment: Fragment, tag: String) {
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
         ft?.commit()
-    }
+    }*/
 
 }

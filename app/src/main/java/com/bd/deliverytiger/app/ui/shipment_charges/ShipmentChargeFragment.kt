@@ -23,9 +23,7 @@ import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
 import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
 import com.bd.deliverytiger.app.api.model.district.ThanaPayLoad
-import com.bd.deliverytiger.app.ui.district.DistrictSelectFragment
 import com.bd.deliverytiger.app.ui.district.v2.CustomModel
-import com.bd.deliverytiger.app.ui.district.v2.DistrictThanaAriaSelectFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.VariousTask
 import com.google.android.material.button.MaterialButton
@@ -33,9 +31,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class ShipmentChargeFragment : Fragment() {
 
     private lateinit var districtTV: TextView
@@ -183,7 +179,7 @@ class ShipmentChargeFragment : Fragment() {
 
     private fun goToDistrict() {
 
-        val distFrag = DistrictSelectFragment.newInstance(mContext, districtList)
+        /*val distFrag = DistrictSelectFragment.newInstance(mContext, districtList)
         val ft = activity?.supportFragmentManager?.beginTransaction()
         ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
         ft?.add(R.id.mainActivityContainer, distFrag, DistrictSelectFragment.tag)
@@ -200,7 +196,7 @@ class ShipmentChargeFragment : Fragment() {
                 ariaPostOffice = 0
                 thanaTV.text = ""
             }
-        })
+        })*/
     }
 
     private fun thanaAriaSelect(
@@ -209,7 +205,7 @@ class ShipmentChargeFragment : Fragment() {
         list: ArrayList<CustomModel>, title: String
     ) {
         //track = 1 district , track = 2 thana, track = 3 aria
-        val distFrag = DistrictThanaAriaSelectFragment.newInstance(mContext, list, title)
+        /*val distFrag = DistrictThanaAriaSelectFragment.newInstance(mContext, list, title)
         val ft = activity?.supportFragmentManager?.beginTransaction()
         ft?.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up)
         ft?.add(R.id.mainActivityContainer, distFrag, DistrictSelectFragment.tag)
@@ -246,7 +242,7 @@ class ShipmentChargeFragment : Fragment() {
                     //etAriaPostOffice.setText(thanaOrAriaList[listPostion].thanaBng )
                 }
             }
-        }
+        }*/
     }
 
     /*private fun customAlertDialog(thanaOrAriaList: ArrayList<ThanaPayLoad>, track: Int){

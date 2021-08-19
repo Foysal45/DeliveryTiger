@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -59,10 +60,12 @@ class NotificationFragment : Fragment() {
             val bundle = bundleOf(
                 "fcmData" to model
             )
-            val fragment = NotificationPreviewFragment.newInstance()
-            fragment.arguments = bundle
-            val tag = NotificationPreviewFragment.fragmentTag
-            addFragment(fragment, tag)
+            findNavController().navigate(R.id.nav_notification_preview, bundle)
+
+            //val fragment = NotificationPreviewFragment.newInstance()
+            //fragment.arguments = bundle
+            //val tag = NotificationPreviewFragment.fragmentTag
+
         }
 
         dataAdapter.onItemDelete = { model, position ->
@@ -114,12 +117,12 @@ class NotificationFragment : Fragment() {
         })*/
     }
 
-    private fun addFragment(fragment: Fragment, tag: String) {
+    /*private fun addFragment(fragment: Fragment, tag: String) {
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.mainActivityContainer, fragment, tag)
         ft?.addToBackStack(tag)
         ft?.commitAllowingStateLoss()
-    }
+    }*/
 
     override fun onDestroyView() {
         super.onDestroyView()

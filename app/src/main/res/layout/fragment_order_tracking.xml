@@ -79,7 +79,6 @@
         android:background="@color/white"
         android:clickable="true"
         android:focusable="true"
-        android:paddingBottom="@dimen/bottomActionHeight"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.core.widget.NestedScrollView
@@ -352,7 +351,7 @@
             app:backgroundTint="#808080"
             app:cornerRadius="1dp"
 
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/spacer"
             app:layout_constraintEnd_toStartOf="@id/callBtn"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -373,9 +372,17 @@
             app:iconGravity="textStart"
             app:iconPadding="8dp"
 
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/spacer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/complainBtn" />
+
+        <Space
+            android:id="@+id/spacer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottomActionHeight"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="gone"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
