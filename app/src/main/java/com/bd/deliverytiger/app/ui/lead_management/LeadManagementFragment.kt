@@ -114,15 +114,20 @@ class LeadManagementFragment : Fragment() {
     }
 
     private fun initClickLister(){
-        dataAdapter.onItemClicked = { model, position, selection ->
-            if (selection){
-                dataAdapter.multipleSelection(model, position)
-                binding?.addContactBtn?.isVisible = true
-                binding?.clearBtn?.isVisible = true
-            }else{
-                goToCustomerDetailsBottomSheet(model.mobile ?: "")
-                binding?.addContactBtn?.isVisible = false
+
+
+        dataAdapter.onItemClicked = { model, position ->
+            dataAdapter.multipleSelection(model, position)
+            binding?.addContactBtn?.isVisible = true
+            binding?.clearBtn?.isVisible = true
+
+            if (dataAdapter.getSelectedItemCount() == 0) {
+                binding?.clearBtn?.performClick()
             }
+        }
+
+        dataAdapter.onOrderDetailsClicked = {model, position ->
+            goToCustomerDetailsBottomSheet(model.mobile ?: "")
         }
 
         binding?.addContactBtn?.setOnClickListener{

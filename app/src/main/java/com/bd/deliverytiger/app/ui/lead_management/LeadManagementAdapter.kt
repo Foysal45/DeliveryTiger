@@ -15,13 +15,14 @@ import com.bd.deliverytiger.app.utils.DigitConverter
 class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList: MutableList<CustomerInformation> = mutableListOf()
-    var onItemClicked: ((model: CustomerInformation, position: Int, selection: Boolean) -> Unit)? = null
+    var onItemClicked: ((model: CustomerInformation, position: Int) -> Unit)? = null
+    var onOrderDetailsClicked: ((model: CustomerInformation, position: Int) -> Unit)? = null
 
     private val selectedItems: SparseBooleanArray = SparseBooleanArray()
     // array used to perform multiple animation at once
     private var currentSelectedIndex = -1
     private var reverseAllAnimations = false
-    var enableSelection: Boolean = false
+    var enableSelection: Boolean = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding: ItemViewLeadManagementCustomerInfoBinding = ItemViewLeadManagementCustomerInfoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -38,7 +39,7 @@ class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.name.text = model.customerName
             binding.district.text = model.districtsViewModel?.district ?: ""
             binding.mobileNumber.text = model.mobile
-            binding.totalOrder.text = DigitConverter.toBanglaDigit(model.totalOrder)
+            binding.totalOrder.text = "${DigitConverter.toBanglaDigit(model.totalOrder)}টি অর্ডার "
 
             if (selectedItems[position, false]) {
                 binding.parent.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(binding.parent.context, R.color.selection_color))
@@ -52,13 +53,11 @@ class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         init {
             binding.root.setOnClickListener {
-                onItemClicked?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition, enableSelection)
+                onItemClicked?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
             }
 
-            binding.root.setOnLongClickListener {
-                enableSelection = true
-                onItemClicked?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition, enableSelection)
-                return@setOnLongClickListener true
+            binding.orderLayout.setOnClickListener {
+                onOrderDetailsClicked?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
             }
         }
     }

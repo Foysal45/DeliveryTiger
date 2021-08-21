@@ -6,19 +6,20 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:paddingBottom="80dp">
 
     <TextView
         android:id="@+id/title_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:paddingTop="16dp"
         android:text="আপনার সর্বাধিক অর্ডার করা কাস্টমার"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="@dimen/text_16"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerview"
+        app:layout_constraintBottom_toTopOf="@+id/hints_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,15 +29,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:padding="4dp"
+        android:paddingTop="4dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:text="ক্লিয়ার"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/title_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/hints_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="@dimen/text_12"
+        android:textColor="@color/red"
+        android:paddingBottom="8dp"
+        android:text="(কাস্টোমারকে বিনামূল্যে SMS করতে এক বা একাধিক সিলেক্ট করুন)"
+        app:layout_constraintTop_toBottomOf="@+id/title_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
@@ -45,10 +60,11 @@
         android:clipToPadding="false"
         android:overScrollMode="never"
         android:paddingBottom="@dimen/list_bottom_padding"
-        app:layout_constraintTop_toBottomOf="@+id/title_tv"
+        app:layout_constraintTop_toBottomOf="@+id/hints_tv"
 
         tools:itemCount="4"
         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:layout_editor_absoluteX="0dp"
         tools:listitem="@layout/item_view_lead_management_customer_info"
         tools:orientation="vertical"
         tools:spanCount="2"
