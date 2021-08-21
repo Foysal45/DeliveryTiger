@@ -234,7 +234,7 @@
                         android:paddingTop="8dp"
                         android:paddingEnd="16dp"
                         android:paddingBottom="8dp"
-                        android:text="আপনি কিভাবে COD কালেশানের পেমেন্ট গ্রহণ করবেন?"
+                        android:text="আপনি কিভাবে COD কলেকশনের পেমেন্ট গ্রহণ করবেন?"
                         android:textColor="@color/black_80"
                         android:textSize="14sp"
                         app:drawableEndCompat="@drawable/ic_star"
@@ -515,7 +515,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/login_view_height"
                         android:background="@drawable/bg_login_top_edit_text"
-                        android:hint="ফেসবুক পেজ (https://www.facebook.com/page/)"
+                        android:hint="ফেসবুক পেজ\n(https://www.facebook.com/page/)"
                         android:importantForAutofill="no"
                         android:inputType="text"
                         android:paddingStart="16dp"
@@ -523,7 +523,7 @@
                         android:paddingEnd="16dp"
                         android:paddingBottom="8dp"
                         android:textColor="@color/black_80"
-                        android:textSize="@dimen/text_14"
+                        android:textSize="12sp"
                         />
 
                     <androidx.constraintlayout.widget.ConstraintLayout

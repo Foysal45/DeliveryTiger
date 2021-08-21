@@ -355,8 +355,7 @@ class HomeActivity : AppCompatActivity(),
                     downloadTV.isVisible = true
                 }
                 R.id.nav_web_view -> {
-                    trackingIV.isVisible = false
-
+                    clearToolbar()
                     binding.appBarHome.bottomAppBar.isVisible = false
                     addOrderFab.hide()
                 }
@@ -388,17 +387,7 @@ class HomeActivity : AppCompatActivity(),
                     downloadTV.isVisible = false
                 }
                 else -> {
-                    logoIV.isVisible = false
-                    toolbarTitleTV.isVisible = true
-                    actionBtn.isVisible = false
-                    separetor.isVisible = false
-                    searchIV.isVisible = false
-                    balanceIV.isVisible = false
-                    notificationIV.isVisible = false
-                    trackingIV.isVisible = true
-                    addProductIV.isVisible = false
-                    downloadTV.isVisible = false
-
+                    clearToolbar()
                     binding.appBarHome.bottomAppBar.isVisible = false
                     addOrderFab.hide()
                 }
@@ -564,6 +553,19 @@ class HomeActivity : AppCompatActivity(),
             }
 
         }*/
+    }
+
+    private fun clearToolbar() {
+        logoIV.isVisible = false
+        toolbarTitleTV.isVisible = true
+        actionBtn.isVisible = false
+        separetor.isVisible = false
+        searchIV.isVisible = false
+        balanceIV.isVisible = false
+        notificationIV.isVisible = false
+        trackingIV.isVisible = false
+        addProductIV.isVisible = false
+        downloadTV.isVisible = false
     }
 
     private fun manageNavigationSelection() {
