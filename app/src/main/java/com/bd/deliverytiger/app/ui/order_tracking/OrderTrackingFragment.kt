@@ -90,7 +90,7 @@ class OrderTrackingFragment : Fragment() {
             binding?.recyclerView?.adapter = dataAdapter
             getOrderTrackingList(orderID)
         }
-        viewModel.fetchHelpLineNumbers().observe(viewLifecycleOwner, Observer { model->
+        /*viewModel.fetchHelpLineNumbers().observe(viewLifecycleOwner, Observer { model->
             if (model.helpLine2.isNullOrEmpty()){
                 binding?.helpLineContactLayout?.visibility = View.GONE
             }else{
@@ -100,7 +100,7 @@ class OrderTrackingFragment : Fragment() {
                     callHelplineNumber(model.helpLine2!!)
                 }
             }
-        })
+        })*/
 
         binding?.trackBtn?.setOnClickListener {
             Timber.d("trackBtn called")

@@ -20,7 +20,7 @@
         android:layout_marginTop="16dp"
         android:insetTop="0dp"
         android:insetBottom="0dp"
-        android:text="নরমাল অর্ডার"
+        android:text="রেগুলার অর্ডার"
         android:textColor="@color/white"
         android:textSize="16sp" />
 
