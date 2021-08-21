@@ -50,12 +50,13 @@ class SignUpOTPFragment : Fragment() {
     private var branchName = ""
     private var routingNumber = ""
     private var gender = ""
+    private var fbPage = ""
 
     companion object {
         fun newInstance(companyName: String, userMobile: String, userPassword: String, referCode: String,
                         bkashNumber: String, preferredPaymentCycle: String, knowingSource: String,
                         accountName: String, accountNumber: String, bankName: String,
-                        branchName: String, routingNumber: String, gender: String
+                        branchName: String, routingNumber: String, gender: String, fbPage: String
         ): SignUpOTPFragment = SignUpOTPFragment().apply {
             this.companyName = companyName
             this.userMobile = userMobile
@@ -70,6 +71,7 @@ class SignUpOTPFragment : Fragment() {
             this.branchName = branchName
             this.routingNumber = routingNumber
             this.gender = gender
+            this.fbPage = fbPage
         }
 
         val tag: String = SignUpOTPFragment::class.java.name
@@ -172,7 +174,7 @@ class SignUpOTPFragment : Fragment() {
         val signUpReqBody = SignUpReqBody(
             userMobile, userPassword, referCode,
             bkashNumber, preferredPaymentCycle, knowingSource, companyName,
-            accountName, accountNumber, bankName, branchName, routingNumber, gender
+            accountName, accountNumber, bankName, branchName, routingNumber, gender, fbPage
         )
         loginInterface.userUserRegister(signUpReqBody).enqueue(object : Callback<GenericResponse<SignUpResponse>> {
             override fun onFailure(call: Call<GenericResponse<SignUpResponse>>, t: Throwable) {

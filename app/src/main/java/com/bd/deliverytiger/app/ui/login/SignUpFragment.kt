@@ -56,6 +56,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     private var preferredPaymentCycle: String = ""
     private var preferredPaymentMedium: String = ""
     private var gender: String = ""
+    private var fbPage: String = ""
 
     private var binding: FragmentSignUpBinding? = null
 
@@ -389,6 +390,14 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
             }
         }
 
+        fbPage = binding?.facebookPage?.text?.toString() ?: ""
+        if (fbPage.isNotEmpty()) {
+            if (!fbPage.contains("https://www.facebook.com/")) {
+                context?.toast("Invalid format (https://www.facebook.com/yourPage)")
+                return false
+            }
+        }
+
         return true
     }
 
@@ -408,7 +417,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
 
         val fragment = SignUpOTPFragment.newInstance(companyName, mobile, password, referCode,
             bkashNumber, preferredPaymentCycle, knowingSource,
-            accountName, accountNumber, bankName, branchName, routingNumber, gender
+            accountName, accountNumber, bankName, branchName, routingNumber, gender, fbPage
         )
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpOTPFragment.tag)

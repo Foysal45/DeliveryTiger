@@ -30,6 +30,8 @@ data class SignUpReqBody(
     var routingNumber: String = "",
     @SerializedName("gender")
     var gender: String = "",
+    @SerializedName("fburl")
+    var fbUrl: String? = "",
 
     @SerializedName("registrationFrom")
     var registrationFrom: String = "app",
