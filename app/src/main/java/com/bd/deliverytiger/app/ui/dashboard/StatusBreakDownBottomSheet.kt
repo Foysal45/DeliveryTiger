@@ -21,9 +21,11 @@ class StatusBreakDownBottomSheet(): BottomSheetDialogFragment() {
     var onMapClick: ((model: DashboardData, position: Int) -> Unit)? = null
 
     private var dataList: MutableList<DashboardData> = mutableListOf()
+    private var title: String? = ""
 
     companion object {
-        fun newInstance(dataList: MutableList<DashboardData>): StatusBreakDownBottomSheet = StatusBreakDownBottomSheet().apply {
+        fun newInstance(title: String, dataList: MutableList<DashboardData>): StatusBreakDownBottomSheet = StatusBreakDownBottomSheet().apply {
+            this.title = title
             this.dataList = dataList
         }
         val tag: String = StatusBreakDownBottomSheet::class.java.name
@@ -67,6 +69,8 @@ class StatusBreakDownBottomSheet(): BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding?.titleTV?.text = title
 
         val dataAdapter = ReturnAdapter()
         with(binding?.recyclerview!!) {

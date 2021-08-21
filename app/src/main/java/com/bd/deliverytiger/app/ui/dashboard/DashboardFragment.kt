@@ -1,7 +1,6 @@
 package com.bd.deliverytiger.app.ui.dashboard
 
 import android.annotation.SuppressLint
-import android.app.ActionBar
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -10,15 +9,12 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,35 +31,14 @@ import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsR
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.log.UserLogger
-import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
-import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationType
-import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
-import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillPayFragment
-import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
-import com.bd.deliverytiger.app.ui.collection_history.CollectionHistoryFragment
-import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
-import com.bd.deliverytiger.app.ui.complain.ComplainFragment
-import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
-import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
-import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
-import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
-import com.bd.deliverytiger.app.ui.quick_order.QuickBookingBottomSheet
-import com.bd.deliverytiger.app.ui.quick_order.quick_order_history.QuickOrderListFragment
-import com.bd.deliverytiger.app.ui.referral.ReferralFragment
-import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
-import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
-import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
-import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
@@ -72,7 +47,6 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.math.floor
 
 @SuppressLint("SetTextI18n")
 class DashboardFragment : Fragment() {
@@ -82,6 +56,7 @@ class DashboardFragment : Fragment() {
     private lateinit var dashboardAdapter: DashboardAdapter
     private val dataList: MutableList<DashboardData> = mutableListOf()
     private val returnDataList: MutableList<DashboardData> = mutableListOf()
+    private val shipmentDataList: MutableList<DashboardData> = mutableListOf()
     private var dateRangeFilterList: MutableList<DeliveredReturnCountResponseItem> = mutableListOf()
     private val viewModel: DashboardViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
@@ -126,7 +101,7 @@ class DashboardFragment : Fragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentDashboardBinding.inflate(inflater).also {
+        return binding?.root ?: FragmentDashboardBinding.inflate(inflater).also {
             binding = it
         }.root
     }
@@ -305,8 +280,8 @@ class DashboardFragment : Fragment() {
         }*/
         dashboardAdapter.onItemClick = { _, model ->
             //dashBoardClickEvent(model?.dashboardRouteUrl!!)
-            if (model?.count != 0) {
-                when (model?.dashboardRouteUrl) {
+            if (model.count != 0) {
+                when (model.dashboardRouteUrl) {
                     "add-order" -> {
                         //addFragment(AddOrderFragmentOne.newInstance(), AddOrderFragmentOne.tag)
                         findNavController().navigate(R.id.nav_dashboard_newOrder)
@@ -338,8 +313,12 @@ class DashboardFragment : Fragment() {
                         UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "return" -> {
-                        returnDialog()
+                        showStatusSubGroupBottomSheet(model.dashboardRouteUrl)
                         UserLogger.logGenie("Dashboard_ReturnDialog")
+                    }
+                    "shipment" -> {
+                        showStatusSubGroupBottomSheet(model.dashboardRouteUrl)
+                        UserLogger.logGenie("Dashboard_ShipmentDialog")
                     }
                     else -> {
                         //addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
@@ -839,8 +818,10 @@ class DashboardFragment : Fragment() {
 
             binding?.swipeRefresh?.isRefreshing = false
             returnDataList.clear()
+            shipmentDataList.clear()
             val dashboardList: MutableList<DashboardData> = mutableListOf()
             var returnCount = 0
+            var shipmentCount = 0
 
             list.forEach { model ->
                 when (model.statusGroupId) {
@@ -853,8 +834,12 @@ class DashboardFragment : Fragment() {
                         dashboardList.add(model)
                     }*/
                     //"শিপমেন্টে আছে"
-                    4 -> {
+                    /*4 -> {
                         dashboardList.add(model)
+                    }*/
+                    4, 14, 15 -> {
+                        shipmentCount += model.count ?: 0
+                        shipmentDataList.add(model)
                     }
                     //"রিটার্ন পার্সেল এখনো ঢাকায় পৌছায়নি", "রিটার্ন পার্সেল সেন্ট্রাল ওয়্যার হাউসে আছে", "রিটার্ন পার্সেল আপনার নিকটস্থ হাবে আছে"
                     9, 10, 11 -> {
@@ -863,6 +848,15 @@ class DashboardFragment : Fragment() {
                     }
                 }
             }
+            val shipmentData = DashboardData(
+                name = "শিপমেন্টে আছে",
+                dashboardSpanCount = 1,
+                count = shipmentCount,
+                dashboardViewColorType = "waiting",
+                dashboardRouteUrl = "shipment",
+                dashboardCountSumView = "count"
+            )
+            dashboardList.add(shipmentData)
             val returnData = DashboardData(
                 name = "রিটার্নে আছে",
                 dashboardSpanCount = 1,
@@ -908,10 +902,24 @@ class DashboardFragment : Fragment() {
         }
     }*/
 
-    private fun returnDialog() {
+    private fun showStatusSubGroupBottomSheet(dashboardRouteUrl: String?) {
+
+        val dataList: MutableList<DashboardData>
+        var title = ""
+        when (dashboardRouteUrl) {
+            "shipment" -> {
+                dataList = shipmentDataList
+                title = "শিপমেন্টে আছে"
+            }
+            "return" -> {
+                dataList = returnDataList
+                title = "রিটার্নে আছে"
+            }
+            else -> return
+        }
 
         val tag = StatusBreakDownBottomSheet.tag
-        val dialog = StatusBreakDownBottomSheet.newInstance(returnDataList)
+        val dialog = StatusBreakDownBottomSheet.newInstance(title, dataList)
         dialog.show(childFragmentManager, tag)
         dialog.onItemClicked = { model, position ->
             dialog.dismiss()
