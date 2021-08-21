@@ -20,7 +20,11 @@ import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.ViewState
 import com.bd.deliverytiger.app.utils.hideKeyboard
 import com.bd.deliverytiger.app.utils.toast
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import org.koin.android.ext.android.inject
+import java.util.*
 
 class LeadManagementFragment : Fragment() {
 
@@ -59,6 +63,8 @@ class LeadManagementFragment : Fragment() {
         }
 
         fetchCustomerInformation(0)
+
+        fetchBanner()
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -163,6 +169,18 @@ class LeadManagementFragment : Fragment() {
                 dataAdapter.clearSelections()
             }
             dialog.dismiss()
+        }
+    }
+
+    private fun fetchBanner() {
+        val options = RequestOptions()
+            .placeholder(R.drawable.ic_banner_place)
+            .signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
+        binding?.bannerImage?.let { image ->
+            Glide.with(image)
+                .load("https://static.ajkerdeal.com/images/merchant/chumbok_banner.jpg")
+                .apply(options)
+                .into(image)
         }
     }
 
