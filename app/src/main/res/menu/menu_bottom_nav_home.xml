@@ -11,7 +11,7 @@
         android:title="@string/track" />
     <item
         android:id="@+id/placeholder"
-        android:title="" />
+        android:title="@string/order" />
     <item
         android:id="@+id/nav_live"
         android:icon="@drawable/ic_live1"

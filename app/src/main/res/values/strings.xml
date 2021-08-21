@@ -165,6 +165,7 @@
     <string name="complain">কমপ্লেইন</string>
     <string name="notification">নোটিফিকেশন</string>
     <string name="payment_details">পেমেন্ট ডিটেইলস</string>
+    <string name="order">অর্ডার</string>
 
 
 </resources>

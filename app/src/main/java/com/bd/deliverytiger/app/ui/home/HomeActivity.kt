@@ -1053,7 +1053,10 @@ class HomeActivity : AppCompatActivity(),
         }
         nearbyHub.setOnClickListener {
             //navId = R.id.nav_nearby_hub
-            //ToDo need to add
+            val bundle = bundleOf(
+                "isNearByHubView" to true
+            )
+            navController.navigate(R.id.nav_map, bundle)
             drawerLayout.closeDrawer(GravityCompat.START)
             //goToNearByHubMap()
         }
