@@ -189,7 +189,7 @@ class LiveScheduleViewModel(private val repository: AppRepository): ViewModel() 
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body.data != null) {
-                            responseData.value = response.body.data!! == 1
+                            responseData.value = response.body.data!! > 0
                         }
                     }
                     is NetworkResponse.ServerError -> {

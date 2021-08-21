@@ -19,7 +19,8 @@
         <item name="colorPrimaryDark">@color/blur</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlayLight" parent="ThemeOverlay.AppCompat.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="custom_spinner_style" parent="Widget.AppCompat.Light.DropDownItem.Spinner">

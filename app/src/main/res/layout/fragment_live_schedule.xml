@@ -113,13 +113,16 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_info"/>
+                    android:src="@drawable/ic_info"
+                    android:contentDescription="@string/cd"
+                    />
 
                 <TextView
+                    android:id="@+id/hintText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:text="ফেইসবুকের লাইভ ভিডিওটির লিংকটি কপি করে এইখানে পেস্ট করুন। \n(ex: https://www.facebook.com/ajkerdeal/videos/2987768108167354)"
                     />
             </LinearLayout>

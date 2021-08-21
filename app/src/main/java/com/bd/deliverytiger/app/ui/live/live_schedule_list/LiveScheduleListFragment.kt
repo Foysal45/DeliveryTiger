@@ -30,6 +30,9 @@ import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivity
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleActivity
 import com.bd.deliverytiger.app.utils.*
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import com.google.android.material.tabs.TabLayout
 import org.koin.android.ext.android.inject
 import timber.log.Timber
@@ -520,7 +523,15 @@ class LiveScheduleListFragment(): Fragment() {
     }
 
     private fun fetchBanner() {
-        binding?.bannerImage?.visibility = View.VISIBLE
+        val options = RequestOptions()
+            .placeholder(R.drawable.ic_banner_place)
+            .signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
+        binding?.bannerImage?.let { image ->
+            Glide.with(image)
+                .load("https://static.ajkerdeal.com/images/merchant/live_banner.jpg")
+                .apply(options)
+                .into(image)
+        }
     }
 
     override fun onResume() {

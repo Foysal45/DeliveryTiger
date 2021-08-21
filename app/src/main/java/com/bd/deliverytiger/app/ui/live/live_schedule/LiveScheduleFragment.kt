@@ -122,6 +122,8 @@ class LiveScheduleFragment(): Fragment() {
         initClickLister()
         ownNumber = SessionManager.mobile
         ownAlternateNumber = SessionManager.alterMobile
+        val companyName = SessionManager.companyName.replace("\\s".toRegex(), "")
+        binding?.hintText?.text = "ফেইসবুকের লাইভ ভিডিওটির লিংকটি কপি করে এইখানে পেস্ট করুন। \n(ex: https://www.facebook.com/$companyName/videos/2987768108167354)"
         //ToDo: remove after test
         if (BuildConfig.DEBUG) {
             //testForm()
@@ -139,20 +141,18 @@ class LiveScheduleFragment(): Fragment() {
                 instantScheduleTime()
             }
             if (validation()) {
-                if (instantLive) {
+                insertSchedule()
+                /*if (instantLive) {
                     val titleText = "নির্দেশনা"
                     val descriptionText = "আপনি ফেসবুকের ভিডিও শেয়ার করতে যাচ্ছেন।"
                     val noBtnText = "ক্যানসেল"
                     val yesBtnText = "শেয়ার করুন"
-
                     customAlert(titleText, descriptionText, noBtnText, yesBtnText) {
-                        if (it == 1) {
-                            insertSchedule()
-                        }
+                        if (it == 1) { }
                     }
                 } else {
                     //insertSchedule()
-                }
+                }*/
             }
         }
 
@@ -224,7 +224,7 @@ class LiveScheduleFragment(): Fragment() {
                 liveId = id
                 Timber.tag("LiveScheduleFragment").d("insertLiveSchedule with $liveId")
                 insertLiveCover()
-                updateLiveStatus()
+
             } else if (id == -2) {
                 val titleText = "নির্দেশনা"
                 val descriptionText = "এই ভিডিওটি ইতিমধ্যে শেয়ার করা হয়েছে।"
@@ -249,8 +249,10 @@ class LiveScheduleFragment(): Fragment() {
             if (flag) {
                 Timber.tag("LiveScheduleFragment").d("Video cover upload")
                 progressDialog.dismiss()
+
+                updateLiveStatus()
                 //showCompleteDialog(liveId)
-                if (instantLive && selectedNumberList.isNotEmpty()) {
+                /*if (instantLive && selectedNumberList.isNotEmpty()) {
                     val requestBody: MutableList<SMSBody> = mutableListOf()
                     selectedNumberList.forEach { mobile ->
                         val model = SMSBody(mobile, "$liveShareMsg https://m.ajkerdeal.com/livevideoshopping/$liveId/$mobile")
@@ -267,14 +269,13 @@ class LiveScheduleFragment(): Fragment() {
                             context?.toast("ভিডিও শেয়ার sms পাঠানো হয়েছে")
                         }
                     })
-                }
+                }*/
 
                 /*val intent = Intent().apply {
                     putExtra("instantLive", instantLive)
                     putExtra("liveId", liveId)
                 }
                 activity?.setResult(Activity.RESULT_OK, intent)*/
-                activity?.finish()
             }
         })
     }
@@ -283,6 +284,14 @@ class LiveScheduleFragment(): Fragment() {
         val status = "replay"
         val requestBody = LiveStatusUpdateRequest(liveId, status, "", facebookVideoUrl)
         viewModel.updateLiveStatus(requestBody).observe(viewLifecycleOwner, Observer { flag ->
+            if (flag) {
+                //https://www.facebook.com/test/videos/1
+                alert(getString(R.string.instruction), "আপনার লাইভটি সফলভাবে শেয়ার হয়েছে") {
+                    if (it == AlertDialog.BUTTON_POSITIVE) {
+                        activity?.finish()
+                    }
+                }.show()
+            }
         })
     }
 
