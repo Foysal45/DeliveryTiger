@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:clickable="true"
-    android:focusable="true"
-    android:paddingBottom="80dp">
+    android:focusable="true">
 
     <ImageView
         android:id="@+id/bannerImage"
@@ -41,7 +40,7 @@
         android:id="@+id/clearBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="12dp"
         android:paddingTop="4dp"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
@@ -69,13 +68,14 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingBottom="@dimen/list_bottom_padding"
+        android:paddingBottom="150dp"
         app:layout_constraintTop_toBottomOf="@+id/hints_tv"
+        app:layout_constraintBottom_toBottomOf="parent"
 
-        tools:itemCount="4"
+        tools:itemCount="10"
         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:layout_editor_absoluteX="0dp"
         tools:listitem="@layout/item_view_lead_management_customer_info"
@@ -83,43 +83,22 @@
         tools:spanCount="2"
         tools:visibility="visible" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bannerImage" />
-
-    <TextView
-        android:id="@+id/emptyView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="কোনো তথ্য পাওয়া যায়নি"
-        android:textColor="@color/black_90"
-        android:textSize="14sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
-
     <LinearLayout
         android:id="@+id/addContactBtn"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="24dp"
         android:background="@drawable/layout_button_background"
         android:clickable="true"
         android:elevation="2dp"
         android:focusable="true"
         android:gravity="center"
         android:visibility="gone"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="100dp"
         tools:visibility="visible">
 
         <ImageView
@@ -162,5 +141,27 @@
 
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hints_tv" />
+
+    <TextView
+        android:id="@+id/emptyView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="কোনো তথ্য পাওয়া যায়নি"
+        android:textColor="@color/black_90"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hints_tv"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
