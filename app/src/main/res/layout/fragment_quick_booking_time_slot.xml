@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:background="@color/white"
-        android:hint="প্রোডাক্ট কলেকশনের সময় "
+        android:hint="প্রোডাক্ট কালেকশনের সময় "
         android:padding="3dp"
         app:layout_constraintBottom_toTopOf="@+id/productCollectionTimeLayout"
         app:layout_constraintStart_toStartOf="@+id/productCollectionTimeLayout"

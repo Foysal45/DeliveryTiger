@@ -60,7 +60,7 @@
         android:textSize="@dimen/text_12"
         android:textColor="@color/red"
         android:paddingBottom="8dp"
-        android:text="(কাস্টোমারকে বিনামূল্যে SMS করতে এক বা একাধিক সিলেক্ট করুন)"
+        android:text="(কাস্টমারকে বিনামূল্যে SMS করতে এক বা একাধিক সিলেক্ট করুন)"
         app:layout_constraintTop_toBottomOf="@+id/title_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
