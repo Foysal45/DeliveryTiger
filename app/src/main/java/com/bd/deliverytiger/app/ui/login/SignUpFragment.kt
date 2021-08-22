@@ -45,6 +45,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     private lateinit var bkashNumberET: EditText
     private lateinit var conditionTV: TextView
     private lateinit var referTitle: TextView
+    private lateinit var referImage: ImageView
     private lateinit var knownSourceSpinner: AppCompatSpinner
     private lateinit var genderGroup: RadioGroup
 
@@ -86,6 +87,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         bkashNumberET = view.findViewById(R.id.bkashNumber)
         conditionTV = view.findViewById(R.id.conditionTV)
         referTitle = view.findViewById(R.id.referTitle)
+        referImage = view.findViewById(R.id.referImage)
         knownSourceSpinner = view.findViewById(R.id.spinnerAboutDeliveryTiger)
         genderGroup = view.findViewById(R.id.ganderType)
 
@@ -169,6 +171,9 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
                 referCodeET.visibility = View.GONE
                 referCodeET.text.clear()
             }
+        }
+        referImage.setOnClickListener {
+            referTitle.performClick()
         }
     }
 
