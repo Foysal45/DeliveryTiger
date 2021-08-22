@@ -12,6 +12,7 @@ import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
 import com.bd.deliverytiger.app.api.model.live.share_sms.SMSBody
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
 import com.bd.deliverytiger.app.databinding.FragmentSmsShareDialogueBinding
+import com.bd.deliverytiger.app.utils.DigitConverter
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -68,6 +69,7 @@ class SmsShareDialogue : BottomSheetDialogFragment() {
 
         val names = selectedNameList.joinToString()
         binding?.receiverNumber?.setText(names)
+        binding?.sendSMS?.text = "সেন্ড (${DigitConverter.toBanglaDigit(customerList?.size) ?: 0}টি)"
 
         val msgLength = binding?.shareMessage?.text?.length ?: 0
         binding?.shareMessage?.setSelection(msgLength)
@@ -76,6 +78,7 @@ class SmsShareDialogue : BottomSheetDialogFragment() {
     private fun fetchCourierInfo() {
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
             smsLimit = model.customerSMSLimit
+            showSmsCount(smsLimit)
         })
     }
 
@@ -105,7 +108,12 @@ class SmsShareDialogue : BottomSheetDialogFragment() {
         })
         viewModel.updateCustomerSMSLimit(SessionManager.courierUserId, selectedNumberList.size).observe(viewLifecycleOwner, Observer { model ->
             smsLimit = model.customerSMSLimit
+            showSmsCount(smsLimit)
         })
+    }
+
+    private fun showSmsCount(smsLimit: Int) {
+        binding?.complainHistoryTitleTv?.text = "সেন্ড ম্যাসেজ (${DigitConverter.toBanglaDigit(smsLimit)} টি ফ্রি SMS)"
     }
 
     private fun validation(): Boolean {
