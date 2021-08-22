@@ -25,7 +25,6 @@ import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -34,7 +33,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
-import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
+import com.bd.deliverytiger.app.api.model.district.DistrictData
 import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.order.OrderPreviewData
@@ -123,9 +122,9 @@ class AddOrderFragmentOne : Fragment() {
     private var serviceId: Int = 0
     private val serviceWiseDeliveryRangeList: MutableList<Int> = mutableListOf()
     private val serviceTypeList: MutableList<ServiceInfoData> = mutableListOf()
-    private var filteredDistrictLists: MutableList<AllDistrictListsModel> = mutableListOf()
-    private var filteredThanaLists: MutableList<AllDistrictListsModel> = mutableListOf()
-    private var filteredAreaLists: MutableList<AllDistrictListsModel> = mutableListOf()
+    private var filteredDistrictLists: MutableList<DistrictData> = mutableListOf()
+    private var filteredThanaLists: MutableList<DistrictData> = mutableListOf()
+    private var filteredAreaLists: MutableList<DistrictData> = mutableListOf()
 
     private var isAriaAvailable = true
     private var isProfileComplete: Boolean = false
@@ -1250,7 +1249,7 @@ class AddOrderFragmentOne : Fragment() {
         })
     }
 
-    private fun goToLocationSelectionDialog(list: MutableList<AllDistrictListsModel>, locationType: LocationType) {
+    private fun goToLocationSelectionDialog(list: MutableList<DistrictData>, locationType: LocationType) {
 
         val locationList: MutableList<LocationData> = mutableListOf()
         list.forEach { model ->
@@ -1377,7 +1376,7 @@ class AddOrderFragmentOne : Fragment() {
         calculateTotalPrice()*/
     }
 
-    private fun showLocationAlert(model: AllDistrictListsModel, locationType: LocationType) {
+    private fun showLocationAlert(model: DistrictData, locationType: LocationType) {
         if (model.isActiveForCorona) {
             val msg = when (locationType) {
                 LocationType.DISTRICT -> "${model.districtBng} জেলায় ডেলিভারি সার্ভিস সাময়িকভাবে বন্ধ রয়েছে।"

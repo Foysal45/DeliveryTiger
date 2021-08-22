@@ -5,9 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bd.deliverytiger.app.api.model.GenericResponse
-import com.bd.deliverytiger.app.api.model.district.DeliveryChargePayLoad
-import com.bd.deliverytiger.app.api.model.district.DistrictDeliveryChargePayLoad
-import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
+import com.bd.deliverytiger.app.api.model.district.DistrictData
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
@@ -20,7 +18,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
@@ -68,9 +65,9 @@ class ProfileViewModel(private val repository: AppRepository): ViewModel() {
         return responseData
     }
 
-    fun loadAllDistrictsById(id: Int): LiveData<List<AllDistrictListsModel>> {
+    fun loadAllDistrictsById(id: Int): LiveData<List<DistrictData>> {
         viewState.value = ViewState.ProgressState(true)
-        val responseData = MutableLiveData<List<AllDistrictListsModel>>()
+        val responseData = MutableLiveData<List<DistrictData>>()
 
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.loadAllDistrictsById(id)

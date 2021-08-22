@@ -30,19 +30,21 @@ class WebViewFragment : Fragment() {
         }.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle(webTitle)
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val bundle: Bundle? = arguments
-
-        bundle.let {
-            loadUrl = it?.getString("url")?: ""
-            webTitle = it?.getString("title")?: ""
-            this.bundle = it?.getBundle("bundle")
-        }
+        loadUrl = arguments?.getString("url")?: ""
+        webTitle = arguments?.getString("title")?: ""
+        bundle = arguments?.getBundle("bundle")
 
         Timber.d("WebView Url: $loadUrl")
+        Timber.d("WebView webTitle: $webTitle")
         Timber.d("WebView Bundle: ${bundle.toString()}")
 
         binding?.webView!!.settings.apply {
@@ -67,11 +69,6 @@ class WebViewFragment : Fragment() {
         }
 
         binding?.webView?.loadUrl(loadUrl)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        (activity as HomeActivity).setToolbarTitle(webTitle)
     }
 
     inner class Callback : WebViewClient() {

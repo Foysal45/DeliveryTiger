@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
+import com.bd.deliverytiger.app.api.model.district.DistrictData
 import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
@@ -46,8 +46,8 @@ class ProfileFragment : Fragment() {
     private val viewModel: ProfileViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
 
-    private val districtList: MutableList<AllDistrictListsModel> = mutableListOf()
-    private val thanaOrAriaList: MutableList<AllDistrictListsModel> = mutableListOf()
+    private val districtList: MutableList<DistrictData> = mutableListOf()
+    private val thanaOrAriaList: MutableList<DistrictData> = mutableListOf()
     private val GALLERY_REQ_CODE = 101
 
     private var districtId = 0
@@ -219,7 +219,7 @@ class ProfileFragment : Fragment() {
         })
     }
 
-    private fun goToLocationSelectionDialog(list: MutableList<AllDistrictListsModel>, operationFlag: Int) {
+    private fun goToLocationSelectionDialog(list: MutableList<DistrictData>, operationFlag: Int) {
 
         val locationList: MutableList<LocationData> = mutableListOf()
         list.forEach { model ->

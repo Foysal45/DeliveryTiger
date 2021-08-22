@@ -41,6 +41,8 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
 
     val serviceInfoList = MutableLiveData<List<ServiceInfoData>>()
 
+    val netAmount = MutableLiveData<Int>(0)
+
     fun getBannerInfo(): LiveData<BannerResponse> {
 
         viewState.value = ViewState.ProgressState(true)

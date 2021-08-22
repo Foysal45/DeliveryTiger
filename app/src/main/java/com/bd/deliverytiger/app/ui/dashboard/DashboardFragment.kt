@@ -757,6 +757,7 @@ class DashboardFragment : Fragment() {
             availabilityMessage = model.availabilityMessage
             //netAmount = 6000
             //availability = true
+            homeViewModel.netAmount.value = netAmount
 
             paymentDashboardModel.apply {
                 this.name = "COD কালেকশন"

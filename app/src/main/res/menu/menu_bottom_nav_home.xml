@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_track"
         android:title="@string/track" />
     <item
-        android:id="@+id/placeholder"
+        android:id="@+id/nav_placeholder"
         android:title="@string/order" />
     <item
         android:id="@+id/nav_live"

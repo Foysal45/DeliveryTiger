@@ -2,7 +2,6 @@ package com.bd.deliverytiger.app.api.endpoint
 
 import com.bd.deliverytiger.app.api.model.ErrorResponse
 import com.bd.deliverytiger.app.api.model.GenericResponse
-import com.bd.deliverytiger.app.api.model.ResponseHeader
 import com.bd.deliverytiger.app.api.model.accepted_orders.AcceptedOrder
 import com.bd.deliverytiger.app.api.model.accounts.BalanceInfo
 import com.bd.deliverytiger.app.api.model.balance_load.BalanceLimitResponse
@@ -28,7 +27,7 @@ import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnC
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsResponse
-import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
+import com.bd.deliverytiger.app.api.model.district.DistrictData
 import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
 import com.bd.deliverytiger.app.api.model.helpline_number.HelpLineNumberModel
 import com.bd.deliverytiger.app.api.model.instant_payment_update.InstantPaymentUpdateResponse
@@ -62,7 +61,6 @@ import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionM
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
-import com.bd.deliverytiger.app.api.model.sms.SMSResponse
 import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.haroldadmin.cnradapter.NetworkResponse
 import retrofit2.Call
@@ -88,10 +86,13 @@ interface ApiInterfaceCore {
     suspend fun fetchCollection(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<DashboardData>, ErrorResponse>
 
     @GET("api/Fetch/LoadAllDistrictsById/{id}")
-    suspend fun loadAllDistrictsById(@Path("id") id: Int): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>
+    suspend fun loadAllDistrictsById(@Path("id") id: Int): NetworkResponse<GenericResponse<List<DistrictData>>, ErrorResponse>
+
+    @GET("api/Fetch/LoadAllDistricts")
+    suspend fun loadAllDistricts(): NetworkResponse<GenericResponse<List<DistrictData>>, ErrorResponse>
 
     @POST("api/Fetch/GetServiceDistricts")
-    suspend fun fetchServiceDistricts(@Body requestBody: ServiceDistrictsRequest): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>
+    suspend fun fetchServiceDistricts(@Body requestBody: ServiceDistrictsRequest): NetworkResponse<GenericResponse<List<DistrictData>>, ErrorResponse>
 
     @GET("api/Fetch/GetDTServices")
     suspend fun getDTService(): NetworkResponse<GenericResponse<List<ServiceInfoData>>, ErrorResponse>
@@ -219,7 +220,7 @@ interface ApiInterfaceCore {
     suspend fun getCustomerInfoByMobile(@Path("mobile") mobile: String): NetworkResponse<GenericResponse<CustomerInfo>, ErrorResponse>
 
     @POST("api/Fetch/LoadAllDistrictsByIds")
-    suspend fun loadAllDistrictsByIds(@Body requestBody: List<GetLocationInfoRequest>): NetworkResponse<GenericResponse<List<AllDistrictListsModel>>, ErrorResponse>
+    suspend fun loadAllDistrictsByIds(@Body requestBody: List<GetLocationInfoRequest>): NetworkResponse<GenericResponse<List<DistrictData>>, ErrorResponse>
 
 
     @POST("api/Fetch/GetDeliveredReturnedCount")

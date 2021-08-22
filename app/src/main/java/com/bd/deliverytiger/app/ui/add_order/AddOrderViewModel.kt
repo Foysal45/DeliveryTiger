@@ -11,10 +11,9 @@ import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
-import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
+import com.bd.deliverytiger.app.api.model.district.DistrictData
 import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfo
-import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
 import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
@@ -23,9 +22,7 @@ import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
 import com.bd.deliverytiger.app.api.model.quick_order.TimeSlotRequest
 import com.bd.deliverytiger.app.api.model.referral.OfferData
-import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
-import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.ViewState
@@ -157,9 +154,9 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
         return responseBody
     }
 
-    fun loadAllDistrictsById(id: Int): LiveData<List<AllDistrictListsModel>> {
+    fun loadAllDistrictsById(id: Int): LiveData<List<DistrictData>> {
         viewState.value = ViewState.ProgressState(true)
-        val responseData = MutableLiveData<List<AllDistrictListsModel>>()
+        val responseData = MutableLiveData<List<DistrictData>>()
 
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.loadAllDistrictsById(id)
@@ -554,9 +551,9 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
         return responseData
     }
 
-    fun loadAllDistrictsByIds(requestBody: List<GetLocationInfoRequest>) : LiveData<List<AllDistrictListsModel>>{
+    fun loadAllDistrictsByIds(requestBody: List<GetLocationInfoRequest>) : LiveData<List<DistrictData>>{
         viewState.value = ViewState.ProgressState(true)
-        val responseData = MutableLiveData<List<AllDistrictListsModel>>()
+        val responseData = MutableLiveData<List<DistrictData>>()
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.loadAllDistrictsByIds(requestBody)
             withContext(Dispatchers.Main) {

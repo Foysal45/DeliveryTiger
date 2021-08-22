@@ -1,7 +1,6 @@
 package com.bd.deliverytiger.app.api.model.location
 
-import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
-import com.google.gson.annotations.SerializedName
+import com.bd.deliverytiger.app.api.model.district.DistrictData
 import java.util.*
 
 data class LocationData(
@@ -14,7 +13,7 @@ data class LocationData(
 ) {
 
     companion object {
-        fun from(model: AllDistrictListsModel): LocationData {
+        fun from(model: DistrictData): LocationData {
             return LocationData(
                 model.districtId,
                 model.districtBng,

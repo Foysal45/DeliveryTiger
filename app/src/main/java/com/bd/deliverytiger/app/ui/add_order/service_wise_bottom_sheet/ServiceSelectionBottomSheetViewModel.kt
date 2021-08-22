@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bd.deliverytiger.app.api.model.district.AllDistrictListsModel
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.repository.AppRepository
@@ -13,7 +12,6 @@ import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class ServiceSelectionBottomSheetViewModel(private val repository: AppRepository) : ViewModel() {
 

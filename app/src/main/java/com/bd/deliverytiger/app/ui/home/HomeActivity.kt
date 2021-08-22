@@ -29,6 +29,7 @@ import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
@@ -39,44 +40,16 @@ import com.bd.deliverytiger.app.databinding.ActivityHomeBinding
 import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.services.LocationUpdatesService
-import com.bd.deliverytiger.app.ui.add_order.AddOrderFragmentOne
-import com.bd.deliverytiger.app.ui.all_orders.AllOrdersFragment
-import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadFragment
-import com.bd.deliverytiger.app.ui.balance_load_history.BalanceLoadHistoryFragment
-import com.bd.deliverytiger.app.ui.bill_pay.ServiceBillPayFragment
-import com.bd.deliverytiger.app.ui.bill_pay_history.ServiceBillPayHistoryFragment
-import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
 import com.bd.deliverytiger.app.ui.chat.ChatActivity
-import com.bd.deliverytiger.app.ui.cod_collection.CODCollectionFragment
-import com.bd.deliverytiger.app.ui.collection_history.CollectionHistoryFragment
-import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
-import com.bd.deliverytiger.app.ui.complain.ComplainFragment
-import com.bd.deliverytiger.app.ui.dashboard.DashboardFragment
-import com.bd.deliverytiger.app.ui.delivery_details.DeliveryDetailsFragment
 import com.bd.deliverytiger.app.ui.dialog.PopupDialog
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivity
 import com.bd.deliverytiger.app.ui.location.LocationUsesBottomSheet
-import com.bd.deliverytiger.app.ui.lead_management.LeadManagementFragment
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
-import com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment
-import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingFragment
-import com.bd.deliverytiger.app.ui.payment_details.PaymentDetailsFragment
-import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentUpdateFragment
-import com.bd.deliverytiger.app.ui.payment_statement.PaymentStatementFragment
 import com.bd.deliverytiger.app.ui.payment_statement.details.PaymentStatementDetailFragment
-import com.bd.deliverytiger.app.ui.profile.ProfileFragment
 import com.bd.deliverytiger.app.ui.quick_order.QuickBookingBottomSheet
-import com.bd.deliverytiger.app.ui.quick_order.quick_order_history.QuickOrderListFragment
-import com.bd.deliverytiger.app.ui.referral.ReferralFragment
-import com.bd.deliverytiger.app.ui.return_statement.ReturnStatementFragment
-import com.bd.deliverytiger.app.ui.return_statement.details.ReturnStatementDetailsFragment
-import com.bd.deliverytiger.app.ui.service_charge.ServiceChargeFragment
-import com.bd.deliverytiger.app.ui.shipment_charges.ShipmentChargeFragment
 import com.bd.deliverytiger.app.ui.survey.SurveyActivity
-import com.bd.deliverytiger.app.ui.unpaid_cod.UnpaidCODFragment
-import com.bd.deliverytiger.app.ui.web_view.WebViewFragment
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -149,6 +122,7 @@ class HomeActivity : AppCompatActivity(),
 
     //Data
     private var isQuickBookingEnable: Boolean = false
+    private var isServiceTypeLoaded: Boolean = false
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -240,11 +214,7 @@ class HomeActivity : AppCompatActivity(),
         onNewIntent(intent)
 
         addOrderFab.setOnClickListener {
-            if (isQuickBookingEnable) {
-                orderDialog()
-            } else {
-                orderPlaceWithBalanceCheck()
-            }
+            validateOrderPlace()
         }
 
         getCourierUsersInformation()
@@ -347,7 +317,6 @@ class HomeActivity : AppCompatActivity(),
             when (destination.id) {
                 R.id.nav_dashboard -> {
                     initToolbarActions()
-
                     binding.appBarHome.bottomAppBar.isVisible = true
                     addOrderFab.show()
                 }
@@ -360,31 +329,12 @@ class HomeActivity : AppCompatActivity(),
                     addOrderFab.hide()
                 }
                 R.id.nav_order_tracking -> {
-                    logoIV.isVisible = false
-                    toolbarTitleTV.isVisible = true
-                    actionBtn.isVisible = false
-                    separetor.isVisible = false
-                    searchIV.isVisible = false
-                    balanceIV.isVisible = false
-                    notificationIV.isVisible = false
-                    trackingIV.isVisible = false
-                    addProductIV.isVisible = false
-                    downloadTV.isVisible = false
-
+                    clearToolbar()
                     //binding.appBarHome.bottomAppBar.isVisible = false
                     //addOrderFab.hide()
                 }
                 R.id.nav_lead_management -> {
-                    logoIV.isVisible = false
-                    toolbarTitleTV.isVisible = true
-                    actionBtn.isVisible = false
-                    separetor.isVisible = false
-                    searchIV.isVisible = false
-                    balanceIV.isVisible = false
-                    notificationIV.isVisible = false
-                    trackingIV.isVisible = true
-                    addProductIV.isVisible = false
-                    downloadTV.isVisible = false
+                    clearToolbar()
                 }
                 else -> {
                     clearToolbar()
@@ -654,6 +604,9 @@ class HomeActivity : AppCompatActivity(),
                 R.id.nav_lead_management -> {
                     NavigationUI.onNavDestinationSelected(item, navController)
                     //navController.navigate(R.id.nav_lead_management)
+                }
+                R.id.nav_placeholder -> {
+                    return@setOnItemSelectedListener false
                 }
             }
             return@setOnItemSelectedListener true
@@ -1125,6 +1078,97 @@ class HomeActivity : AppCompatActivity(),
         }
     }
 
+    //#region Order
+    private fun getCourierUsersInformation() {
+        viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(this, Observer { model ->
+            SessionManager.collectionCharge = model.collectionCharge
+            SessionManager.merchantDistrict = model.districtId
+            isQuickBookingEnable = model.isQuickOrderActive
+        })
+    }
+
+    private fun fetchOrderServiceType() {
+        viewModel.fetchOrderServiceInfo()
+        viewModel.serviceInfoList.observe(this, Observer { list ->
+            isServiceTypeLoaded = list.isNotEmpty()
+        })
+    }
+
+    private fun validateOrderPlace() {
+        if (!isServiceTypeLoaded) {
+            this.toast("অর্ডার সার্ভিস টাইপ লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন")
+            return
+        }
+        if (isQuickBookingEnable) {
+            orderDialog()
+        } else {
+            validateBalanceOrderPlace()
+        }
+    }
+
+    private fun orderDialog() {
+        val builder = MaterialAlertDialogBuilder(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_order_type,null)
+        builder.setView(view)
+        val button1: MaterialButton = view.findViewById(R.id.button1)
+        val button2: MaterialButton = view.findViewById(R.id.button2)
+        val dialog = builder.create()
+        dialog.show()
+        button1.setOnClickListener {
+            dialog.dismiss()
+            validateBalanceOrderPlace()
+        }
+        button2.setOnClickListener {
+            dialog.dismiss()
+            showQuickOrderBottomSheet()
+            UserLogger.logGenie("Dashboard_Quick_Order")
+        }
+    }
+
+    private fun validateBalanceOrderPlace() {
+        if (SessionManager.netAmount >= 0) {
+            goToAddOrderFragment()
+        } else {
+            serviceChargeDialog()
+        }
+    }
+
+    private fun serviceChargeDialog() {
+        alert("নির্দেশনা", "আপনার সার্ভিস চার্জ (প্রি-পেইড) ৳${DigitConverter.toBanglaDigit(SessionManager.netAmount)} বকেয়া রয়েছে। সার্ভিস চার্জ পে করুন।", false, "সার্ভিস চার্জ পে", "") {
+            if (it == AlertDialog.BUTTON_POSITIVE) {
+                navController.navigate(R.id.nav_bill_pay)
+            }
+        }.show()
+    }
+
+    private fun showQuickOrderBottomSheet() {
+        val tag: String = QuickBookingBottomSheet.tag
+        val dialog: QuickBookingBottomSheet = QuickBookingBottomSheet.newInstance()
+        dialog.show(supportFragmentManager, tag)
+        dialog.onClose = {
+            Handler(Looper.getMainLooper()).postDelayed({
+                hideKeyboard()
+            }, 200L)
+        }
+        dialog.onOrderPlace = { msg ->
+            alert(getString(R.string.instruction), msg, true, getString(R.string.ok), "সকল কুইক বুকিং"){
+                if (it == AlertDialog.BUTTON_NEGATIVE) {
+                    navController.navigate(R.id.nav_quick_booking_list)
+                }
+            }.show()
+        }
+    }
+
+    private fun goToAddOrderFragment() {
+        navController.navigate(R.id.nav_new_order)
+        UserLogger.logGenie("Dashboard_AddOrder")
+        /*val fragment = AddOrderFragmentOne.newInstance()
+        val ft = supportFragmentManager.beginTransaction()
+        ft.add(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
+        ft.addToBackStack(AddOrderFragmentOne.tag)
+        ft.commit()*/
+    }
+    //#endregion
 
     private fun initToolbarActions() {
 
@@ -1144,24 +1188,6 @@ class HomeActivity : AppCompatActivity(),
         val ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
         ft?.replace(R.id.mainActivityContainer, fragment, DashboardFragment.tag)
         ft?.commit()*/
-    }
-
-    private fun addOrderFragment() {
-
-        UserLogger.logGenie("Dashboard_AddOrder")
-        navController.navigate(R.id.nav_new_order)
-
-        /*val fragment = AddOrderFragmentOne.newInstance()
-        val ft = supportFragmentManager.beginTransaction()
-        ft.add(R.id.mainActivityContainer, fragment, AddOrderFragmentOne.tag)
-        ft.addToBackStack(AddOrderFragmentOne.tag)
-        ft.commit()*/
-
-        /*val fragment = AddOrderFragmentTwo.newInstance(null)
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.mainActivityContainer, fragment, AddOrderFragmentTwo.tag)
-        ft.addToBackStack(AddOrderFragmentTwo.tag)
-        ft.commit()*/
     }
 
     private fun goToNotification() {
@@ -1265,10 +1291,6 @@ class HomeActivity : AppCompatActivity(),
         val tag = PopupDialog.tag
         val dialog = PopupDialog.newInstance(imageUrl)
         dialog.show(supportFragmentManager, tag)
-    }
-
-    private fun fetchOrderServiceType() {
-        viewModel.fetchOrderServiceInfo()
     }
 
     private fun goToLiveActivity() {
@@ -1524,72 +1546,5 @@ class HomeActivity : AppCompatActivity(),
             }
         })
     }
-
-    //#region Order Place
-
-    private fun orderDialog() {
-
-        val builder = MaterialAlertDialogBuilder(this)
-        val view = LayoutInflater.from(this).inflate(R.layout.dialog_order_type,null)
-        builder.setView(view)
-        val button1: MaterialButton = view.findViewById(R.id.button1)
-        val button2: MaterialButton = view.findViewById(R.id.button2)
-        val dialog = builder.create()
-        dialog.show()
-        button1.setOnClickListener {
-            dialog.dismiss()
-            orderPlaceWithBalanceCheck()
-        }
-        button2.setOnClickListener {
-            dialog.dismiss()
-            showQuickOrderBottomSheet()
-            UserLogger.logGenie("Dashboard_Quick_Order")
-        }
-    }
-
-    private fun showQuickOrderBottomSheet() {
-        val tag: String = QuickBookingBottomSheet.tag
-        val dialog: QuickBookingBottomSheet = QuickBookingBottomSheet.newInstance()
-        dialog.show(supportFragmentManager, tag)
-        dialog.onClose = {
-            Handler(Looper.getMainLooper()).postDelayed({
-                hideKeyboard()
-            }, 200L)
-        }
-        dialog.onOrderPlace = { msg ->
-            alert(getString(R.string.instruction), msg, true, getString(R.string.ok), "সকল কুইক বুকিং"){
-                if (it == AlertDialog.BUTTON_NEGATIVE) {
-                    navController.navigate(R.id.nav_quick_booking_list)
-                }
-            }.show()
-        }
-    }
-
-    private fun getCourierUsersInformation() {
-        viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(this, Observer { model ->
-            SessionManager.collectionCharge = model.collectionCharge
-            SessionManager.merchantDistrict = model.districtId
-            isQuickBookingEnable = model.isQuickOrderActive
-
-        })
-    }
-
-    private fun orderPlaceWithBalanceCheck() {
-        if (SessionManager.netAmount >= 0) {
-            addOrderFragment()
-        } else {
-            serviceChargeDialog()
-        }
-    }
-
-    private fun serviceChargeDialog() {
-        alert("নির্দেশনা", "আপনার সার্ভিস চার্জ (প্রি-পেইড) ৳${DigitConverter.toBanglaDigit(SessionManager.netAmount)} বকেয়া রয়েছে। সার্ভিস চার্জ পে করুন।", false, "সার্ভিস চার্জ পে","") {
-            if (it == AlertDialog.BUTTON_POSITIVE) {
-                navController.navigate(R.id.nav_bill_pay)
-            }
-        }.show()
-    }
-
-    //#endregion
 
 }
