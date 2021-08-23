@@ -137,7 +137,7 @@ class SmsShareDialogue : BottomSheetDialogFragment() {
     override fun onStart() {
         super.onStart()
         val dialog = dialog as BottomSheetDialog?
-        dialog?.setCanceledOnTouchOutside(true)
+        dialog?.setCanceledOnTouchOutside(false)
         val bottomSheet: FrameLayout? = dialog?.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         if (bottomSheet != null) {
             BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_COLLAPSED
