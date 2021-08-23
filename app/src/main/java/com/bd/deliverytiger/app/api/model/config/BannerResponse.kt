@@ -1,6 +1,5 @@
 package com.bd.deliverytiger.app.api.model.config
 
-
 import com.google.gson.annotations.SerializedName
 
 data class BannerResponse(
@@ -20,5 +19,7 @@ data class BannerResponse(
     @SerializedName("referBanner")
     var referBanner: String? = "",
     @SerializedName("instantPaymentHourLimitRange")
-    var instantPaymentHourLimitRange: String? = ""
+    var instantPaymentHourLimitRange: String? = "",
+    @SerializedName("currentAppVersionCode")
+    var currentAppVersionCode: Int = 0
 )

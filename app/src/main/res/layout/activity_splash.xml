@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,10 +12,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/splashCarBg"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
@@ -24,16 +23,15 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:contentDescription="@string/cd"
-            app:srcCompat="@drawable/ic_logo"
-            />
+            app:srcCompat="@drawable/ic_logo" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:textSize="@dimen/text_14"
+            android:text="@string/app_title"
             android:textColor="@color/black_70"
-            android:text="@string/app_title"/>
+            android:textSize="@dimen/text_14" />
 
     </LinearLayout>
 
@@ -53,9 +51,8 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:contentDescription="@string/cd"
-        app:srcCompat="@drawable/ic_car_bg"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:srcCompat="@drawable/ic_car_bg" />
 
     <ImageView
         android:id="@+id/car"
@@ -63,10 +60,21 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:contentDescription="@string/cd"
-        app:srcCompat="@drawable/ic_car"
-        app:layout_constraintTop_toTopOf="@id/splashCarBg"
         app:layout_constraintBottom_toBottomOf="@id/splashCarBg"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="@id/splashCarBg"
+        app:srcCompat="@drawable/ic_car" />
+
+    <TextView
+        android:id="@+id/versionCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="8dp"
+        tools:text="v1.50" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
