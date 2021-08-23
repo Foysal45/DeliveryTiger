@@ -12,8 +12,10 @@ import android.os.Looper
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.work.*
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.ActivitySplashBinding
+import com.bd.deliverytiger.app.services.DistrictCacheWorker
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.utils.SessionManager
@@ -22,7 +24,9 @@ import com.bd.deliverytiger.app.utils.appVersion
 import com.bd.deliverytiger.app.utils.appVersionCode
 import com.bumptech.glide.Glide
 import org.koin.android.ext.android.inject
+import org.koin.core.component.KoinApiExtension
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 @SuppressLint("SetTextI18n")
 class SplashActivity : AppCompatActivity() {
@@ -39,16 +43,8 @@ class SplashActivity : AppCompatActivity() {
 
         initView()
         fetchConfigData()
+        syncDistrict()
         animateView()
-
-        /*Glide.with(this)
-            .load(R.raw.gif_dt)
-            .into(binding.splashGif)*/
-
-        /*val handler = Handler(Looper.getMainLooper())
-        handler.postDelayed({
-            goToHome()
-        }, 3000L)*/
     }
 
     private fun initView() {
@@ -130,8 +126,45 @@ class SplashActivity : AppCompatActivity() {
         } else {
             startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
         }
-        //val intent = Intent(this@SplashActivity, LoginActivity::class.java)
-        //startActivity(intent)
         finish()
+    }
+
+    @KoinApiExtension
+    private fun syncDistrict() {
+
+        if (SessionManager.workManagerDistrictUUID.isNotEmpty()) return
+
+        val data = Data.Builder()
+            .putBoolean("sync", true)
+            .build()
+
+        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+
+        /*val request = OneTimeWorkRequestBuilder<DistrictCacheWorker>()
+            .setConstraints(constraints)
+            .setInputData(data)
+            .addTag("districtSync").setInitialDelay(5, TimeUnit.SECONDS)
+            .build()*/
+        val request = PeriodicWorkRequestBuilder<DistrictCacheWorker>(1, TimeUnit.DAYS)
+            .setConstraints(constraints)
+            .setInputData(data)
+            .addTag("districtSync")
+            .build()
+
+        val requestUUID = request.id
+        val workManager = WorkManager.getInstance(this)
+        //workManager.beginUniqueWork("districtSync", ExistingWorkPolicy.REPLACE, request).enqueue()
+        workManager.enqueue(request)
+        /*workManager.getWorkInfoByIdLiveData(requestUUID).observe(this, Observer { workInfo ->
+            if (workInfo != null) {
+                val result = workInfo.outputData.getString("work_result")
+                if (workInfo.state == WorkInfo.State.SUCCEEDED) {
+                    Timber.d("WorkManager getWorkInfoByIdLiveDataObserve onSuccess resultMsg: $result")
+                } else if (workInfo.state == WorkInfo.State.FAILED) {
+                    Timber.d("WorkManager getWorkInfoByIdLiveDataObserve onFailed resultMsg: $result")
+                }
+            }
+        })*/
+        SessionManager.workManagerDistrictUUID = requestUUID.toString()
     }
 }

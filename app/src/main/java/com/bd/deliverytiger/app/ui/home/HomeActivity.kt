@@ -232,7 +232,6 @@ class HomeActivity : AppCompatActivity(),
         setKeyboardVisibilityListener() { isShown ->
             viewModel.keyboardVisibility.value = isShown
         }
-        syncDistrict()
         //facebookHash()
     }
 
@@ -1310,44 +1309,7 @@ class HomeActivity : AppCompatActivity(),
         addOrderFab.layoutParams = param
     }*/
 
-    @KoinApiExtension
-    private fun syncDistrict() {
 
-        if (SessionManager.workManagerDistrictUUID.isNotEmpty()) return
-
-        val data = Data.Builder()
-            .putBoolean("sync", true)
-            .build()
-
-        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-
-        /*val request = OneTimeWorkRequestBuilder<DistrictCacheWorker>()
-            .setConstraints(constraints)
-            .setInputData(data)
-            .addTag("districtSync").setInitialDelay(5, TimeUnit.SECONDS)
-            .build()*/
-        val request = PeriodicWorkRequestBuilder<DistrictCacheWorker>(1, TimeUnit.DAYS)
-            .setConstraints(constraints)
-            .setInputData(data)
-            .addTag("districtSync").setInitialDelay(5, TimeUnit.SECONDS)
-            .build()
-
-        val requestUUID = request.id
-        val workManager = WorkManager.getInstance(this)
-        //workManager.beginUniqueWork("districtSync", ExistingWorkPolicy.REPLACE, request).enqueue()
-        workManager.enqueue(request)
-        workManager.getWorkInfoByIdLiveData(requestUUID).observe(this, Observer { workInfo ->
-            if (workInfo != null) {
-                val result = workInfo.outputData.getString("work_result")
-                if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                    Timber.d("WorkManager getWorkInfoByIdLiveDataObserve onSuccess resultMsg: $result")
-                } else if (workInfo.state == WorkInfo.State.FAILED) {
-                    Timber.d("WorkManager getWorkInfoByIdLiveDataObserve onFailed resultMsg: $result")
-                }
-            }
-        })
-        SessionManager.workManagerDistrictUUID = requestUUID.toString()
-    }
 
     private fun cancelSyncDistrict() {
         if (SessionManager.workManagerDistrictUUID.isNotEmpty()) {
