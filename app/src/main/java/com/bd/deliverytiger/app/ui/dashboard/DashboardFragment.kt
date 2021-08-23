@@ -814,7 +814,6 @@ class DashboardFragment : Fragment() {
 
         val dashBoardReqBody = DashBoardReqBody(0, 0, selectedStartDate, selectedEndDate, SessionManager.courierUserId)
 
-
         viewModel.getDashboardStatusGroup(dashBoardReqBody).observe(viewLifecycleOwner, Observer { list ->
 
             binding?.swipeRefresh?.isRefreshing = false
@@ -826,19 +825,8 @@ class DashboardFragment : Fragment() {
 
             list.forEach { model ->
                 when (model.statusGroupId) {
-                    //"পার্সেলটি সর্টিং এ আছে"
-                    /*14 -> {
-                        dashboardList.add(model)
-                    }*/
-                    //"কাস্টমারকে খুঁজে পাওয়া যাচ্ছে না"
-                    /*15 -> {
-                        dashboardList.add(model)
-                    }*/
-                    //"শিপমেন্টে আছে"
-                    /*4 -> {
-                        dashboardList.add(model)
-                    }*/
-                    4, 14, 15 -> {
+                    // "শিপমেন্টে আছে", "পার্সেল ঢাকার সর্টিং সেন্টারে আছে", "কাস্টমারকে যোগাযোগ করা যাচ্ছে না", "পার্সেল লস্ট"
+                    4, 14, 15, 16 -> {
                         shipmentCount += model.count ?: 0
                         shipmentDataList.add(model)
                     }
