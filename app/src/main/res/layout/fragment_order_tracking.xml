@@ -347,8 +347,12 @@
             android:text="কমপ্লেইন"
             android:textColor="@color/white"
             android:textSize="16sp"
-            app:backgroundTint="#808080"
+            app:backgroundTint="#F0663B"
             app:cornerRadius="1dp"
+            app:icon="@drawable/ic_complain"
+            app:iconSize="24dp"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
 
             app:layout_constraintBottom_toTopOf="@id/spacer"
             app:layout_constraintEnd_toStartOf="@id/callBtn"
