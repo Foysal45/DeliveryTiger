@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.bd.deliverytiger.app.api.model.accounts.AdvanceBalanceData
 import com.bd.deliverytiger.app.api.model.config.BannerResponse
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
+import com.bd.deliverytiger.app.api.model.district.DistrictData
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.fcm.FCMData
@@ -135,7 +136,14 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
                         }
                     } else {
                         if (model.districtList.isEmpty()) {
-                            val allDistrictResponse = repository.loadAllDistrictsById(0)
+                            val locationList = repository.getDistrictByParentId(0)
+                            if (!locationList.isNullOrEmpty()) {
+                                model.apply {
+                                    this.districtList = locationList
+                                    this.index = index
+                                }
+                            }
+                            /*val allDistrictResponse = repository.loadAllDistrictsById(0)
                             if (allDistrictResponse is NetworkResponse.Success) {
                                 val locationList = allDistrictResponse.body.model
                                 if (!locationList.isNullOrEmpty()) {
@@ -143,11 +151,11 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
                                         this.districtList = locationList
                                         this.index = index
                                     }
-                                    /*withContext(Dispatchers.Main) {
+                                    *//*withContext(Dispatchers.Main) {
                                         serviceInfoList.value = model
-                                    }*/
+                                    }*//*
                                 }
-                            }
+                            }*/
                         }
                     }
                 }
@@ -156,6 +164,19 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
                 }
             }
         }
+    }
+
+    fun loadAllDistrictsById(parentId: Int): LiveData<List<DistrictData>> {
+        val responseData: MutableLiveData<List<DistrictData>> = MutableLiveData()
+        viewState.value = ViewState.ProgressState(true)
+        viewModelScope.launch(Dispatchers.IO){
+            val dataList = repository.getDistrictByParentId(parentId)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                responseData.value = dataList
+            }
+        }
+        return responseData
     }
 
     fun saveNotificationData(fcmModel: FCMData) {

@@ -65,7 +65,7 @@ class ProfileViewModel(private val repository: AppRepository): ViewModel() {
         return responseData
     }
 
-    fun loadAllDistrictsById(id: Int): LiveData<List<DistrictData>> {
+    fun loadAllDistrictsByIdList(id: Int): LiveData<List<DistrictData>> {
         viewState.value = ViewState.ProgressState(true)
         val responseData = MutableLiveData<List<DistrictData>>()
 
@@ -93,6 +93,19 @@ class ProfileViewModel(private val repository: AppRepository): ViewModel() {
                         Timber.d(response.error)
                     }
                 }
+            }
+        }
+        return responseData
+    }
+
+    fun loadAllDistrictsById(parentId: Int): LiveData<List<DistrictData>> {
+        val responseData: MutableLiveData<List<DistrictData>> = MutableLiveData()
+        viewState.value = ViewState.ProgressState(true)
+        viewModelScope.launch(Dispatchers.IO){
+            val dataList = repository.getDistrictByParentId(parentId)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                responseData.value = dataList
             }
         }
         return responseData

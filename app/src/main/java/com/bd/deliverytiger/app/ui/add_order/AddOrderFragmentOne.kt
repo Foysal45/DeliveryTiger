@@ -1064,7 +1064,7 @@ class AddOrderFragmentOne : Fragment() {
         requestBody.add(GetLocationInfoRequest(districtID))
         requestBody.add(GetLocationInfoRequest(thanaID))
         requestBody.add(GetLocationInfoRequest(areaID))
-        viewModel.loadAllDistrictsByIds(requestBody).observe(viewLifecycleOwner, Observer { list->
+        viewModel.loadAllDistrictsByIdList(requestBody).observe(viewLifecycleOwner, Observer { list->
             Timber.d("districtDData $list")
 
             val district = list.find { it.districtId == districtID }

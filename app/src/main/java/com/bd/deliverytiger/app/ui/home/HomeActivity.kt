@@ -33,12 +33,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.*
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.broadcast.ConnectivityReceiver
 import com.bd.deliverytiger.app.databinding.ActivityHomeBinding
 import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.log.UserLogger
+import com.bd.deliverytiger.app.services.DistrictCacheWorker
 import com.bd.deliverytiger.app.services.LocationUpdatesService
 import com.bd.deliverytiger.app.ui.chat.ChatActivity
 import com.bd.deliverytiger.app.ui.dialog.PopupDialog
@@ -65,9 +67,11 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 import org.koin.android.ext.android.inject
+import org.koin.core.component.KoinApiExtension
 import timber.log.Timber
 import java.io.File
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class HomeActivity : AppCompatActivity(),
@@ -228,6 +232,7 @@ class HomeActivity : AppCompatActivity(),
         setKeyboardVisibilityListener() { isShown ->
             viewModel.keyboardVisibility.value = isShown
         }
+        syncDistrict()
         //facebookHash()
     }
 
@@ -964,6 +969,7 @@ class HomeActivity : AppCompatActivity(),
     }
 
     private fun logout() {
+        cancelSyncDistrict()
         SessionManager.clearSession()
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
@@ -1303,6 +1309,53 @@ class HomeActivity : AppCompatActivity(),
         param.setMargins(0,0, this.dpToPx(24f), this.dpToPx(value))
         addOrderFab.layoutParams = param
     }*/
+
+    @KoinApiExtension
+    private fun syncDistrict() {
+
+        if (SessionManager.workManagerDistrictUUID.isNotEmpty()) return
+
+        val data = Data.Builder()
+            .putBoolean("sync", true)
+            .build()
+
+        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+
+        /*val request = OneTimeWorkRequestBuilder<DistrictCacheWorker>()
+            .setConstraints(constraints)
+            .setInputData(data)
+            .addTag("districtSync").setInitialDelay(5, TimeUnit.SECONDS)
+            .build()*/
+        val request = PeriodicWorkRequestBuilder<DistrictCacheWorker>(1, TimeUnit.DAYS)
+            .setConstraints(constraints)
+            .setInputData(data)
+            .addTag("districtSync").setInitialDelay(5, TimeUnit.SECONDS)
+            .build()
+
+        val requestUUID = request.id
+        val workManager = WorkManager.getInstance(this)
+        //workManager.beginUniqueWork("districtSync", ExistingWorkPolicy.REPLACE, request).enqueue()
+        workManager.enqueue(request)
+        workManager.getWorkInfoByIdLiveData(requestUUID).observe(this, Observer { workInfo ->
+            if (workInfo != null) {
+                val result = workInfo.outputData.getString("work_result")
+                if (workInfo.state == WorkInfo.State.SUCCEEDED) {
+                    Timber.d("WorkManager getWorkInfoByIdLiveDataObserve onSuccess resultMsg: $result")
+                } else if (workInfo.state == WorkInfo.State.FAILED) {
+                    Timber.d("WorkManager getWorkInfoByIdLiveDataObserve onFailed resultMsg: $result")
+                }
+            }
+        })
+        SessionManager.workManagerDistrictUUID = requestUUID.toString()
+    }
+
+    private fun cancelSyncDistrict() {
+        if (SessionManager.workManagerDistrictUUID.isNotEmpty()) {
+            val workManager = WorkManager.getInstance(this)
+            workManager.cancelWorkById(UUID.fromString(SessionManager.workManagerDistrictUUID))
+            SessionManager.workManagerDistrictUUID = ""
+        }
+    }
 
     //################################################## App Update Manager ########################################//
 

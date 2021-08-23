@@ -650,4 +650,14 @@ object SessionManager {
                 putString("YoutubeStreamURL", value)
             }
         }
+
+    var workManagerDistrictUUID: String
+        get() {
+            return pref.getString("workManagerDistrictUUID", "")!!
+        }
+        set(value) {
+            pref.edit {
+                putString("workManagerDistrictUUID", value)
+            }
+        }
 }

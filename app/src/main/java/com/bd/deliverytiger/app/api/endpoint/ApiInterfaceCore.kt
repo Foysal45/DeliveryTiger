@@ -88,6 +88,9 @@ interface ApiInterfaceCore {
     @GET("api/Fetch/LoadAllDistrictsById/{id}")
     suspend fun loadAllDistrictsById(@Path("id") id: Int): NetworkResponse<GenericResponse<List<DistrictData>>, ErrorResponse>
 
+    @POST("api/Fetch/LoadAllDistrictsByIds")
+    suspend fun loadAllDistrictsByIdList(@Body requestBody: List<GetLocationInfoRequest>): NetworkResponse<GenericResponse<List<DistrictData>>, ErrorResponse>
+
     @GET("api/Fetch/LoadAllDistricts")
     suspend fun loadAllDistricts(): NetworkResponse<GenericResponse<List<DistrictData>>, ErrorResponse>
 
@@ -218,10 +221,6 @@ interface ApiInterfaceCore {
 
     @GET("/api/Dashboard/GetCustomerInfoByMobile/{mobile}")
     suspend fun getCustomerInfoByMobile(@Path("mobile") mobile: String): NetworkResponse<GenericResponse<CustomerInfo>, ErrorResponse>
-
-    @POST("api/Fetch/LoadAllDistrictsByIds")
-    suspend fun loadAllDistrictsByIds(@Body requestBody: List<GetLocationInfoRequest>): NetworkResponse<GenericResponse<List<DistrictData>>, ErrorResponse>
-
 
     @POST("api/Fetch/GetDeliveredReturnedCount")
     suspend fun fetchDeliveredReturnedCount(@Body requestBody: DeliveredReturnedCountRequest): NetworkResponse<GenericResponse<List<DeliveredReturnCountResponseItem>>, ErrorResponse>

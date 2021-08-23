@@ -4,13 +4,16 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.bd.deliverytiger.app.api.model.district.DistrictData
+import com.bd.deliverytiger.app.database.dao.DistrictDao
 import com.bd.deliverytiger.app.database.dao.NotificationDao
 import com.bd.deliverytiger.app.fcm.FCMData
 
-@Database(entities = [FCMData::class], version = 1, exportSchema = false)
+@Database(entities = [FCMData::class, DistrictData::class], version = 1, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun notificationDao(): NotificationDao
+    abstract fun districtDao(): DistrictDao
 
     companion object {
 
