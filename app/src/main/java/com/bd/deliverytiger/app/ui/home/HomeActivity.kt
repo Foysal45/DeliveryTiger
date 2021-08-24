@@ -162,6 +162,7 @@ class HomeActivity : AppCompatActivity(),
 
 
         binding.appBarHome.bottomNavigationView.background = null
+        binding.appBarHome.bottomNavigationView.menu.getItem(2).isEnabled = false
 
 
         /*toolbar.setNavigationIcon(R.drawable.ic_menu)

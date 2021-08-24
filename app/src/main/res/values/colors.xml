@@ -101,6 +101,6 @@
     <color name="ucrop_color_toolbar_widget">@color/white</color>
     <color name="ucrop_color_blaze_orange">#fff</color>
     <color name="ucrop_color_widget_active">@color/colorPrimary</color>
-    <color name="bottom_appbar_color">#009A4E</color>
+    <color name="bottom_appbar_color">#E6009A4E</color>
 
 </resources>

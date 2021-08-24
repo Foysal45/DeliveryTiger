@@ -145,6 +145,7 @@
 
     <string name="home">হোম</string>
     <string name="track">ট্র্যাক</string>
+    <string name="parcel_tracking">পার্সেল ট্র্যাকিং</string>
     <string name="live">লাইভ</string>
     <string name="magnet">চুম্বক</string>
     <string name="dashboard">ড্যাশবোর্ড</string>
