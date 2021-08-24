@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
@@ -18,6 +19,7 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
     var onOrderItemClick: ((position: Int) -> Unit)? = null
     var onEditItemClick: ((position: Int) -> Unit)? = null
     var onLocationBtnClick: ((model: CourierOrderViewModel, position: Int) -> Unit)? = null
+    var onActionClicked: ((model: CourierOrderViewModel, position: Int) -> Unit)? = null
     var isFromDashBoard: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -32,6 +34,7 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
 
         if (holder is ViewHolder) {
             val model = dataList[position]
+            val binding = holder.binding
 
             holder.binding.orderId.text = model?.courierOrdersId.toString()
 
@@ -111,6 +114,17 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
                 holder.binding.key5.visibility = View.VISIBLE*/
             }
 
+            when (model.statusId) {
+                // কাস্টমার প্রোডাক্ট নিতে চায়নি, ক্রেতা ফোনে পাওয়া যায়নি
+                26, 33 -> {
+                    binding.actionBtn.isVisible = true
+                    binding.actionBtn.text = "পুনরায় চেষ্টা করুন"
+                }
+                else -> {
+                    binding.actionBtn.isVisible = false
+                }
+            }
+
         }
 
     }
@@ -132,6 +146,11 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
             binding.hubLocationBtn.setOnClickListener {
                 if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
                     onLocationBtnClick?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
+                }
+            }
+            binding.actionBtn.setOnClickListener {
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                    onActionClicked?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
                 }
             }
         }

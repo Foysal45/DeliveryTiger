@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.repository
 
 import com.bd.deliverytiger.app.api.endpoint.*
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody
+import com.bd.deliverytiger.app.api.model.bulk_status.StatusUpdateData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.collector_info.CollectorInfoRequest
@@ -354,6 +355,8 @@ class AppRepository(
     ) = apiInterfaceCore.updateCustomerSMSLimit(courierUserId, customerSMSLimit)
 
     suspend fun sendSMSCommunication(requestBody: List<SMSModel>) = apiInterfaceCore.sendSMSCommunication(requestBody)
+
+    suspend fun updateBulkStatus(requestBody: List<StatusUpdateData>) = apiInterfaceCore.updateBulkStatus(requestBody)
 
     //Quick Order
     suspend fun getCollectionTimeSlot(requestBody: TimeSlotRequest) = apiInterfaceCore.getCollectionTimeSlot(requestBody)

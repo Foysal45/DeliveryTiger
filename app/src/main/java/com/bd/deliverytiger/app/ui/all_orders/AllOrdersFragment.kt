@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.bd.deliverytiger.app.api.model.bulk_status.StatusUpdateData
 import com.bd.deliverytiger.app.ui.all_orders.order_edit.OrderInfoEditBottomSheet
 
 class AllOrdersFragment : Fragment() {
@@ -193,6 +194,10 @@ class AllOrdersFragment : Fragment() {
             goToFilter(3)
         }
 
+        allOrdersAdapter.onActionClicked = { model, position ->
+            updateBulkStatus(model)
+        }
+
         if (shouldOpenFilter) {
             goToFilter(1)
         }
@@ -201,6 +206,18 @@ class AllOrdersFragment : Fragment() {
             dateRangePicker()
         }
 
+    }
+
+    private fun updateBulkStatus(model: CourierOrderViewModel) {
+        val requestBody: MutableList<StatusUpdateData> = mutableListOf()
+        val requestModel = StatusUpdateData(64, "Need reattempt for delivery", SessionManager.courierUserId, model.courierOrdersId ?: "")
+        requestBody.add(requestModel)
+        viewModel.updateBulkStatus(requestBody).observe(viewLifecycleOwner, Observer { flag ->
+            if (flag) {
+                context?.toast("Reattempt request submitted")
+                getAllOrders(0, 20)
+            }
+        })
     }
 
     private fun showAllOrdersDetailsBottomSheet(model: CourierOrderViewModel) {

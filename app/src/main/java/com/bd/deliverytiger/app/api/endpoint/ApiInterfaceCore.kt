@@ -7,6 +7,7 @@ import com.bd.deliverytiger.app.api.model.accounts.BalanceInfo
 import com.bd.deliverytiger.app.api.model.balance_load.BalanceLimitResponse
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceMainResponse
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody
+import com.bd.deliverytiger.app.api.model.bulk_status.StatusUpdateData
 import com.bd.deliverytiger.app.api.model.calculator.DeliveryChargeInfo
 import com.bd.deliverytiger.app.api.model.calculator.WeightPrice
 import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
@@ -273,4 +274,7 @@ interface ApiInterfaceCore {
 
     @POST("api/SmsComunication/SendSms")
     suspend fun sendSMSCommunication(@Body requestBody: List<SMSModel>): NetworkResponse<GenericResponse<Boolean>, ErrorResponse>
+
+    @PUT("api/Update/UpdateBulkStatus")
+    suspend fun updateBulkStatus(@Body requestBody: List<StatusUpdateData>): NetworkResponse<GenericResponse<Int>, ErrorResponse>
 }
