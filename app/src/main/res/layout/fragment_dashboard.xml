@@ -401,77 +401,6 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="18dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="18dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:id="@+id/orderTrackingBtn"
-                            android:layout_width="0dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginEnd="8dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_nearby_hub"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            tools:ignore="UselessParent"
-                            android:visibility="gone">
-
-                            <ImageView
-                                android:layout_width="28dp"
-                                android:layout_height="28dp"
-                                android:contentDescription="@string/cd"
-                                android:src="@drawable/ic_tracking"
-                                app:tint="@color/white" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:ellipsize="end"
-                                android:maxLines="1"
-                                android:text="ট্র্যাক অর্ডার"
-                                android:textColor="@color/white"
-                                android:textSize="16sp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/complainBtn"
-                            android:layout_width="0dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_complain"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            tools:ignore="UselessParent">
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:contentDescription="@string/cd"
-                                android:src="@drawable/ic_complain" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:ellipsize="end"
-                                android:maxLines="1"
-                                android:text="কমপ্লেইন"
-                                android:textColor="@color/white"
-                                android:textSize="16sp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/deliveredReturnLayout"
                         android:layout_width="match_parent"
@@ -766,6 +695,77 @@
                         android:src="@drawable/bg_banner_referral"
                         android:visibility="gone"
                         tools:visibility="visible" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="18dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/orderTrackingBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_nearby_hub"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            tools:ignore="UselessParent"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:contentDescription="@string/cd"
+                                android:src="@drawable/ic_tracking"
+                                app:tint="@color/white" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="ট্র্যাক অর্ডার"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/complainBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_complain"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            tools:ignore="UselessParent">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:contentDescription="@string/cd"
+                                android:src="@drawable/ic_complain" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="কমপ্লেইন"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                     <Space
                         android:id="@+id/space"

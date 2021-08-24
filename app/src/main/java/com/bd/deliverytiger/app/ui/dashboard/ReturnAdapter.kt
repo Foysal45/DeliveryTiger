@@ -39,7 +39,7 @@ class ReturnAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             } else if (position == 1) {
                 binding.title.setBackgroundColor(ContextCompat.getColor(binding.title.context, R.color.return_state_2))
                 (binding.countTV.background as GradientDrawable).setStroke(binding.countTV.context.dpToPx(1f),  ContextCompat.getColor(binding.countTV.context, R.color.return_state_2))
-                binding.countTV.setTextColor(ContextCompat.getColor(binding.title.context, R.color.black_90))
+                binding.countTV.setTextColor(ContextCompat.getColor(binding.title.context, R.color.orange))
             } else {
                 binding.title.setBackgroundColor(ContextCompat.getColor(binding.title.context, R.color.return_state_3))
                 (binding.countTV.background as GradientDrawable).setStroke(binding.countTV.context.dpToPx(1f),  ContextCompat.getColor(binding.countTV.context, R.color.return_state_3))

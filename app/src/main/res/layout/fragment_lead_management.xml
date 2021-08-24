@@ -60,7 +60,7 @@
         android:textSize="@dimen/text_12"
         android:textColor="@color/red"
         android:paddingBottom="8dp"
-        android:text="(কাস্টমারকে বিনামূল্যে SMS করতে এক বা একাধিক সিলেক্ট করুন)"
+        android:text="(কাস্টমারকে বিনামূল্যে SMS করতে এক বা একাধিক নম্বর সিলেক্ট করুন)"
         app:layout_constraintTop_toBottomOf="@+id/title_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -88,6 +88,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@drawable/layout_button_background"
+        android:backgroundTint="@color/blue"
         android:clickable="true"
         android:elevation="2dp"
         android:focusable="true"
@@ -100,16 +101,6 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="100dp"
         tools:visibility="visible">
-
-        <ImageView
-            android:id="@+id/addContactIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:contentDescription="@string/cd"
-            android:src="@drawable/ic_phone_book"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@color/white" />
 
 
         <TextView
@@ -138,6 +129,17 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/addContactIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="5dp"
+            android:contentDescription="@string/cd"
+            android:src="@drawable/ic_edit_square"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/white" />
 
     </LinearLayout>
 
