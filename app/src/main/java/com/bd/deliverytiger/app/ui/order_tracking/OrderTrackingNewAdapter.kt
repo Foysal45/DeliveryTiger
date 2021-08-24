@@ -21,6 +21,7 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var onItemClick: ((model:OrderTrackData, position: Int) -> Unit)? = null
     var onLocationClick: ((model:OrderTrackData, position: Int) -> Unit)? = null
     var onCallPress: ((model:OrderTrackData, position: Int) -> Unit)? = null
+    var onActionClicked: ((model:OrderTrackData, position: Int) -> Unit)? = null
 
     private val sdf1 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
     private val sdf2 = SimpleDateFormat("dd", Locale.US)
@@ -178,6 +179,16 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 binding.deliveryManInfo.isVisible = false
             }
 
+            when (model.status) {
+                // কাস্টমার প্রোডাক্ট নিতে চায়নি, ক্রেতা ফোনে পাওয়া যায়নি
+                26, 33 -> {
+                    binding.actionBtn.isVisible = true
+                }
+                else -> {
+                    binding.actionBtn.isVisible = false
+                }
+            }
+
             if (position == 0) {
                 binding.verticalView.visibility = View.GONE
             } else {
@@ -207,6 +218,11 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.mobileNumber.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     onCallPress?.invoke(dataList[adapterPosition], adapterPosition)
+                }
+            }
+            binding.actionBtn.setOnClickListener {
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                    onActionClicked?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
                 }
             }
         }

@@ -163,6 +163,25 @@
                 tools:text="Package is on the way to delivery by Phoniksion(8801891907090)"
                 />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/actionBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:text="পুনরায় চেষ্টা করুন"
+                android:textSize="14sp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/status"
+                android:layout_marginTop="4dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+
         </LinearLayout>
 
     </LinearLayout>

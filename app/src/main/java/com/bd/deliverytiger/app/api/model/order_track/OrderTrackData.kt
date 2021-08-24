@@ -20,6 +20,8 @@ data class OrderTrackData(
     var expectedFirstDeliveryDate: String? = "",
     @SerializedName("trackingOrderBy")
     var trackingOrderBy: Float = 0f,
+    @SerializedName("status")
+    var status: Int = 0,
     @SerializedName("subTrackingShipmentName")
     var subTrackingShipmentName: SubTrackingShipmentName = SubTrackingShipmentName(),
     @SerializedName("subTrackingReturnName")

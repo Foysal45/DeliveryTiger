@@ -15,6 +15,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.bulk_status.StatusUpdateData
+import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackData
 import com.bd.deliverytiger.app.databinding.FragmentOrderTrackingBinding
@@ -85,6 +87,9 @@ class OrderTrackingFragment : Fragment() {
                 callNumber(model.courierDeliveryMan?.courierDeliveryManMobile!!)
             }
         }
+        dataAdapter.onActionClicked = { model, position ->
+            updateBulkStatus(model)
+        }
         customerOrderAdapter.onItemClick = { model, position ->
             orderID = model.courierOrdersId ?: ""
             binding?.recyclerView?.adapter = dataAdapter
@@ -149,6 +154,18 @@ class OrderTrackingFragment : Fragment() {
         if (BuildConfig.DEBUG) {
             binding?.orderIdET?.setText("DT-357538") //DT-12222 01715269261 DT-314560
         }
+    }
+
+    private fun updateBulkStatus(model: OrderTrackData) {
+        val requestBody: MutableList<StatusUpdateData> = mutableListOf()
+        val requestModel = StatusUpdateData(64, "Need reattempt for delivery", SessionManager.courierUserId, orderID)
+        requestBody.add(requestModel)
+        viewModel.updateBulkStatus(requestBody).observe(viewLifecycleOwner, Observer { flag ->
+            if (flag) {
+                context?.toast("Reattempt request submitted")
+                //getOrderTrackingList(orderID)
+            }
+        })
     }
 
     private fun callNumber(number: String) {
