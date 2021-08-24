@@ -22,6 +22,8 @@ data class PickupLocation(
     var latitude: String = "0.0",
     @SerializedName("longitude")
     var longitude: String = "0.0",
+    @SerializedName("mobile")
+    var mobile: String? = "",
     @SerializedName("acceptedOrderCount")
     var acceptedOrderCount: Int = 0
 )

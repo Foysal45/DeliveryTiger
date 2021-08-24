@@ -106,6 +106,25 @@
                 android:textSize="@dimen/text_14"
                 android:inputType="textMultiLine" />
 
+            <EditText
+                android:id="@+id/pickupContact"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_view_height"
+                android:layout_marginTop="@dimen/fab_margin"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_add_order_edit_text"
+                android:hint="মোবাইল নাম্বার"
+                android:maxLength="11"
+                android:importantForAutofill="no"
+                android:paddingStart="16dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                android:inputType="phone" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -146,7 +165,7 @@
                     app:layout_constraintEnd_toEndOf="@id/gpsLocation"
                     app:layout_constraintTop_toTopOf="@id/gpsLocation"
                     app:srcCompat="@drawable/ic_location"
-                    android:tint="#9ca5b4"
+                    app:tint="#9ca5b4"
                     />
 
 

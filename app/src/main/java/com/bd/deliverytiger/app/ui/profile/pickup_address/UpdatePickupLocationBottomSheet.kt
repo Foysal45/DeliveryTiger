@@ -88,6 +88,7 @@ class UpdatePickupLocationBottomSheet: BottomSheetDialogFragment() {
         binding?.pickupAddress?.setText(pickUpLocation.pickupAddress)
         val gpsLocation = "${pickUpLocation.latitude}, ${pickUpLocation.longitude}"
         binding?.gpsLocation?.setText(gpsLocation)
+        binding?.pickupContact?.setText(pickUpLocation.mobile)
 
         binding?.updatePickupBtn?.setOnClickListener {
             hideKeyboard()
@@ -145,6 +146,14 @@ class UpdatePickupLocationBottomSheet: BottomSheetDialogFragment() {
             return false
         }
         pickUpLocation.pickupAddress = newPickUpAddress
+
+        val pickupContact = binding?.pickupContact?.text?.toString() ?: ""
+        if (pickupContact.length != 11) {
+            context?.toast("সঠিক মোবাইল নাম্বার লিখুন")
+            binding?.pickupContact?.requestFocus()
+            return false
+        }
+        pickUpLocation.mobile = pickupContact
 
         return true
     }

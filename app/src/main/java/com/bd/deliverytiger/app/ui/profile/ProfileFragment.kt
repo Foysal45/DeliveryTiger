@@ -371,6 +371,13 @@ class ProfileFragment : Fragment() {
             return
         }
 
+        val pickupContact = binding?.pickupContact?.text?.toString() ?: ""
+        if (pickupContact.length != 11) {
+            context?.toast("সঠিক মোবাইল নাম্বার লিখুন")
+            binding?.pickupContact?.requestFocus()
+            return
+        }
+
         if (currentLatitude == 0.0 && currentLongitude == 0.0) {
             context?.toast("জিপিএস লোকেশন অ্যাড করুন")
             return
@@ -385,6 +392,7 @@ class ProfileFragment : Fragment() {
             thanaName = this@ProfileFragment.thanaName
             latitude = currentLatitude.toString()
             longitude = currentLongitude.toString()
+            mobile = pickupContact
         }
         viewModel.addPickupLocations(requestBody).observe(viewLifecycleOwner, Observer { model ->
             //pickupAddressAdapter.addItem(requestBody)
