@@ -141,6 +141,7 @@
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/callCollectorBtn"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
                             android:layout_marginStart="10dp"
@@ -152,8 +153,10 @@
                             android:paddingEnd="10dp"
                             android:paddingBottom="0dp"
                             android:text="কালেক্টর কল"
-                            android:textColor="@color/white"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="14sp"
+                            android:backgroundTint="@color/lightGreen"
+                            app:strokeColor="@color/colorPrimary"
                             app:icon="@drawable/ic_call"
                             app:iconGravity="start"
                             app:iconSize="20dp" />
@@ -379,6 +382,7 @@
 
                                 <com.google.android.material.button.MaterialButton
                                     android:id="@+id/callBtn"
+                                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                                     android:layout_width="wrap_content"
                                     android:layout_height="40dp"
                                     android:layout_marginEnd="0dp"
@@ -386,9 +390,10 @@
                                     android:insetBottom="0dp"
                                     android:text="কল"
                                     android:textAllCaps="false"
-                                    android:textColor="@color/white"
-                                    android:textSize="14sp"
-                                    app:backgroundTint="@color/colorPrimary"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="16sp"
+                                    android:backgroundTint="@color/lightGreen"
+                                    app:strokeColor="@color/colorPrimary"
                                     app:icon="@drawable/ic_call"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"

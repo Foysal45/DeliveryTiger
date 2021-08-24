@@ -596,17 +596,21 @@ class HomeActivity : AppCompatActivity(),
             if (navController.currentDestination?.id == item.itemId) false
             when (item.itemId) {
                 R.id.nav_dashboard -> {
+                    UserLogger.logGenie("BottomNav_Dashboard")
                     NavigationUI.onNavDestinationSelected(item, navController)
                 }
                 R.id.nav_order_tracking -> {
+                    UserLogger.logGenie("BottomNav_OrderTracking")
                     NavigationUI.onNavDestinationSelected(item, navController)
                     //navController.navigate(R.id.nav_order_tracking)
                 }
                 R.id.nav_live -> {
+                    UserLogger.logGenie("BottomNav_Live")
                     goToLiveActivity()
                     return@setOnItemSelectedListener false
                 }
                 R.id.nav_lead_management -> {
+                    UserLogger.logGenie("BottomNav_LeadManagement")
                     NavigationUI.onNavDestinationSelected(item, navController)
                     //navController.navigate(R.id.nav_lead_management)
                 }
