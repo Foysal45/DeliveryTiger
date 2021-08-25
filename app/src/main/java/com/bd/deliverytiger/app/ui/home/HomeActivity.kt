@@ -335,8 +335,8 @@ class HomeActivity : AppCompatActivity(),
                 }
                 R.id.nav_order_tracking -> {
                     clearToolbar()
-                    //binding.appBarHome.bottomAppBar.isVisible = false
-                    //addOrderFab.hide()
+                    binding.appBarHome.bottomAppBar.isVisible = true
+                    addOrderFab.show()
                 }
                 R.id.nav_lead_management -> {
                     clearToolbar()
