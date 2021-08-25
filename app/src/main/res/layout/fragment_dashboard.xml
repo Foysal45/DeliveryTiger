@@ -413,7 +413,8 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:background="@drawable/bg_stroke1"
+                        android:background="@drawable/bg_stroke4"
+                        android:padding="2dp"
                         android:gravity="center"
                         android:orientation="horizontal"
                         tools:ignore="UselessParent"
@@ -424,10 +425,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/title_oval_shape"
+                            android:backgroundTint="@color/white"
                             android:padding="5dp"
                             android:text="ডেলিভারি ও রিটার্ন ট্রেন্ড"
                             android:textAlignment="center"
-                            android:textColor="@color/yellow"
+                            android:textColor="#636466"
                             android:textSize="@dimen/text_14"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -439,6 +441,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="@color/separator"
+                            android:visibility="gone"
                             app:layout_constraintTop_toBottomOf="@id/titleDeliveryReturn" />
 
                         <LinearLayout
@@ -457,6 +460,7 @@
                                 android:layout_height="40dp"
                                 android:layout_weight="1"
                                 android:background="@drawable/bg_add_order_edit_text"
+                                android:backgroundTint="#EDEDEE"
                                 android:gravity="center_vertical"
                                 android:hint="ডেট রেঞ্জ সিলেক্ট করুন"
                                 android:includeFontPadding="false"
@@ -464,8 +468,8 @@
                                 android:paddingTop="8dp"
                                 android:paddingEnd="16dp"
                                 android:paddingBottom="8dp"
-                                android:textColor="@color/black_80"
-                                android:textColorHint="@color/red"
+                                android:textColor="#58595B"
+                                android:textColorHint="#58595B"
                                 android:textSize="@dimen/text_14"
                                 app:drawableEndCompat="@drawable/ic_date" />
 
@@ -488,7 +492,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
-                            android:layout_marginTop="12dp"
+                            android:layout_marginTop="4dp"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
                             android:baselineAligned="false"
@@ -551,7 +555,7 @@
                                             android:layout_height="wrap_content"
                                             android:maxLines="1"
                                             android:text="-"
-                                            android:textColor="@color/yellow"
+                                            android:textColor="@color/white"
                                             android:textSize="@dimen/text_14" />
 
                                         <TextView
@@ -559,7 +563,7 @@
                                             android:layout_height="wrap_content"
                                             android:maxLines="1"
                                             android:text="%"
-                                            android:textColor="@color/yellow"
+                                            android:textColor="@color/white"
                                             android:textSize="@dimen/text_12" />
 
                                         <TextView
@@ -581,11 +585,12 @@
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
                                     android:background="@drawable/bg_bottom_oval_shape"
+                                    android:backgroundTint="@color/white"
                                     android:gravity="center_horizontal"
                                     android:maxLines="1"
                                     android:padding="5dp"
                                     android:text="-"
-                                    android:textColor="@color/black_80"
+                                    android:textColor="@color/colorPrimary"
                                     android:textSize="@dimen/text_16"
                                     android:textStyle="bold"
                                     tools:text="০টি" />
@@ -644,7 +649,7 @@
                                             android:layout_height="wrap_content"
                                             android:maxLines="1"
                                             android:text="-"
-                                            android:textColor="@color/yellow"
+                                            android:textColor="@color/white"
                                             android:textSize="@dimen/text_14" />
 
                                         <TextView
@@ -652,7 +657,7 @@
                                             android:layout_height="wrap_content"
                                             android:maxLines="1"
                                             android:text="%"
-                                            android:textColor="@color/yellow"
+                                            android:textColor="@color/white"
                                             android:textSize="@dimen/text_12" />
 
                                         <TextView
@@ -673,11 +678,12 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
                                     android:background="@drawable/bg_bottom_oval_shape"
+                                    android:backgroundTint="@color/white"
                                     android:gravity="center_horizontal"
                                     android:maxLines="1"
                                     android:padding="5dp"
                                     android:text="-"
-                                    android:textColor="@color/black_80"
+                                    android:textColor="@color/aDheaderColor"
                                     android:textSize="@dimen/text_16"
                                     android:textStyle="bold"
                                     tools:text="০টি" />
