@@ -12,6 +12,7 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackData
 import com.bd.deliverytiger.app.databinding.ItemViewOrderTrackBinding
 import com.bd.deliverytiger.app.utils.DigitConverter
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -179,6 +180,7 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 binding.deliveryManInfo.isVisible = false
             }
 
+            //Timber.d("order tracking status ${model.status}")
             when (model.status) {
                 // কাস্টমার প্রোডাক্ট নিতে চায়নি, ক্রেতা ফোনে পাওয়া যায়নি
                 26, 33 -> {

@@ -112,6 +112,8 @@ class AppRepository(
 
     suspend fun getDistrictByParentId(parentId: Int) = districtDao.getDistrictByParentId(parentId)
 
+    fun getDistrictByParentIdFlow(parentId: Int) = districtDao.getDistrictByParentIdFlow(parentId)
+
     suspend fun deleteDistrictById(id: Int) = districtDao.deleteDistrictById(id)
 
     suspend fun deleteAllDistrict() = districtDao.deleteAllDistrict()

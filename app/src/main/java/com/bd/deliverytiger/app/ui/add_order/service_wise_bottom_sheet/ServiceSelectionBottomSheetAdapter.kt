@@ -61,14 +61,18 @@ class ServiceSelectionBottomSheetAdapter: RecyclerView.Adapter<RecyclerView.View
             }else{
                 binding.serviceRangeArea.text = "${DigitConverter.toBanglaDigit(model.districtList.count())} টি জেলা সদরে"
             }*/
-            binding.progressBar.isVisible = model.districtList.isEmpty()
+            if (model.deliveryRangeId.isNotEmpty()) {
+                binding.progressBar.isVisible = model.districtList.isEmpty()
+            } else {
+                binding.progressBar.isVisible = false
+            }
         }
     }
 
     inner class ViewHolder(val binding: ItemViewServiceListsBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.etDistrict.setOnClickListener {
-                val position = adapterPosition
+                val position = absoluteAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     onDistrictSelectionClick?.invoke(position, dataList[position])
                 }

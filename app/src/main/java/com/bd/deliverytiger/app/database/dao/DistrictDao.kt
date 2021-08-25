@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.database.dao
 
 import androidx.room.*
 import com.bd.deliverytiger.app.api.model.district.DistrictData
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DistrictDao {
@@ -20,6 +21,9 @@ interface DistrictDao {
 
     @Query("SELECT * FROM district_table WHERE parentId = :parentId")
     suspend fun getDistrictByParentId(parentId: Int): List<DistrictData>
+
+    @Query("SELECT * FROM district_table WHERE parentId = :parentId")
+    fun getDistrictByParentIdFlow(parentId: Int): Flow<List<DistrictData>>
 
     @Update
     suspend fun updateDistrict(model: DistrictData): Int

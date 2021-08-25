@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bd.deliverytiger.app.api.model.district.DistrictData
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.repository.AppRepository
@@ -21,4 +22,16 @@ class ServiceSelectionBottomSheetViewModel(private val repository: AppRepository
     val networkErrorMessage = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
     val unknownErrorMessage = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
 
+    fun loadAllDistrictsById(parentId: Int): LiveData<List<DistrictData>> {
+        val responseData: MutableLiveData<List<DistrictData>> = MutableLiveData()
+        viewState.value = ViewState.ProgressState(true)
+        viewModelScope.launch(Dispatchers.IO){
+            val dataList = repository.getDistrictByParentId(parentId)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                responseData.value = dataList
+            }
+        }
+        return responseData
+    }
 }

@@ -151,9 +151,9 @@ class OrderTrackingFragment : Fragment() {
         })
 
         // Test
-        if (BuildConfig.DEBUG) {
+        /*if (BuildConfig.DEBUG) {
             binding?.orderIdET?.setText("DT-357538") //DT-12222 01715269261 DT-314560
-        }
+        }*/
     }
 
     private fun updateBulkStatus(model: OrderTrackData) {
