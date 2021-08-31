@@ -118,7 +118,7 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
                 // কাস্টমার প্রোডাক্ট নিতে চায়নি, ক্রেতা ফোনে পাওয়া যায়নি
                 26, 33 -> {
                     binding.actionBtn.isVisible = true
-                    binding.actionBtn.text = "পুনরায় চেষ্টা করুন"
+                    binding.actionBtn.text = "আবার ডেলিভারি এটেম্পট নিন"
                 }
                 else -> {
                     binding.actionBtn.isVisible = false
