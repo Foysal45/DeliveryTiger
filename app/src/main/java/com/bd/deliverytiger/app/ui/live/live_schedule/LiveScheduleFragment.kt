@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.live.DateData
+import com.bd.deliverytiger.app.api.model.live.auth.AuthRequestBody
 import com.bd.deliverytiger.app.api.model.live.auth.SignUpNew
 import com.bd.deliverytiger.app.api.model.live.live_schedule.PriceTemp
 import com.bd.deliverytiger.app.api.model.live.live_schedule.ScheduleData
@@ -43,6 +44,7 @@ import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -108,7 +110,7 @@ class LiveScheduleFragment(): Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        instantLive = activity?.intent?.getBooleanExtra("instantLive", false) ?: false
+        instantLive = activity?.intent?.getBooleanExtra("instantLive", true) ?: true
 
         if (instantLive) {
             binding?.uploadBtn?.text = "ফেসবুক ভিডিও শেয়ার করুন"
@@ -120,6 +122,8 @@ class LiveScheduleFragment(): Fragment() {
             findNavController().currentDestination?.label = "লাইভ শিডিউল"
         }
         initClickLister()
+        fetchBanner()
+        customerExistsCheck()
         ownNumber = SessionManager.mobile
         ownAlternateNumber = SessionManager.alterMobile
         val companyName = SessionManager.companyName.replace("\\s".toRegex(), "")
@@ -494,6 +498,38 @@ class LiveScheduleFragment(): Fragment() {
                 }.show()
             }
         }
+    }
+
+    private fun fetchBanner() {
+        val options = RequestOptions()
+                .placeholder(R.drawable.ic_banner_place)
+                .signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
+        binding?.bannerImage?.let { image ->
+            Glide.with(image)
+                    .load("https://static.ajkerdeal.com/images/merchant/live_banner.jpg")
+                    .apply(options)
+                    .into(image)
+        }
+    }
+
+    private fun customerExistsCheck() {
+        val customerMobile = SessionManager.mobile
+
+        Timber.d("requestBody 1 ${SessionManager.channelId}")
+        if (SessionManager.channelId == 0) {
+            val requestBody = AuthRequestBody("", customerMobile)
+            viewModel.customerAuthenticationCheck(requestBody).observe(viewLifecycleOwner, Observer {
+                /*Timber.d("requestBody customerExistsCheck $userId,  ${it.id}")
+                userId = it.id
+                if (userId > 0) {
+                    binding?.emptyView?.isVisible = false
+                    viewModel.fetchUserScheduleReplay(userId, "customer", 0, 20)
+                } else {
+                    binding?.emptyView?.isVisible = true
+                }*/
+            })
+        }
+
     }
 
     private fun pictureDialog(imageSource: Int) {

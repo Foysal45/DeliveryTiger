@@ -46,6 +46,7 @@ import com.bd.deliverytiger.app.ui.chat.ChatActivity
 import com.bd.deliverytiger.app.ui.dialog.PopupDialog
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivity
+import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleActivity
 import com.bd.deliverytiger.app.ui.location.LocationUsesBottomSheet
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
@@ -1304,7 +1305,7 @@ class HomeActivity : AppCompatActivity(),
     }
 
     private fun goToLiveActivity() {
-        startActivity(Intent(this, LiveHomeActivity::class.java))
+        startActivity(Intent(this, LiveScheduleActivity::class.java))
     }
 
     /*private fun moveFabBy(value: Float) {

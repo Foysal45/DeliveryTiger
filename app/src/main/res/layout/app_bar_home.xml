@@ -194,9 +194,9 @@
         android:layout_gravity="bottom"
         app:contentInsetEnd="0dp"
         app:contentInsetStart="0dp"
-        app:fabCradleMargin="10dp"
-        app:fabCradleRoundedCornerRadius="10dp"
-        app:fabCradleVerticalOffset="10dp"
+        app:fabCradleMargin="5dp"
+        app:fabCradleRoundedCornerRadius="20dp"
+        app:fabCradleVerticalOffset="8dp"
         app:backgroundTint="@color/bottom_appbar_color"
         >
 
