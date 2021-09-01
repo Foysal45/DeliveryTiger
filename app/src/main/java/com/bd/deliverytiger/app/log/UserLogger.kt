@@ -1,12 +1,15 @@
 package com.bd.deliverytiger.app.log
 
 import android.content.Context
+import android.util.Log
 import androidx.core.os.bundleOf
 import com.bd.deliverytiger.app.utils.SessionManager
+import com.bd.deliverytiger.app.utils.bundleToString
 import com.facebook.appevents.AppEventsLogger
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
+import timber.log.Timber
 
 object UserLogger {
 
@@ -84,6 +87,7 @@ object UserLogger {
         )
         firebaseAnalytics.logEvent("GenieEvent", bundle)
         facebookAnalytics.logEvent(eventName, bundle)
+        Timber.d("GenieEvent ${bundle.bundleToString()}")
     }
 
 

@@ -522,7 +522,7 @@ class DashboardFragment : Fragment() {
 
         binding?.retentionManagerImage?.let { view ->
             Glide.with(view)
-                .load("https://static.ajkerdeal.com/images/admin_users/$userId.jpg")
+                .load("https://static.ajkerdeal.com/images/admin_users/dt/$userId.jpg")
                 .apply(RequestOptions().placeholder(R.drawable.ic_avater_demo).error(R.drawable.ic_avater_demo).circleCrop())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
