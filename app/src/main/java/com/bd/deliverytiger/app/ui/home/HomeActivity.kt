@@ -79,7 +79,7 @@ class HomeActivity : AppCompatActivity(),
     ConnectivityReceiver.ConnectivityReceiverListener {
 
     private lateinit var toolbar: Toolbar
-    private lateinit var drawerLayout: DrawerLayout
+    //private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
     private lateinit var navViewRight: NavigationView
     private lateinit var addProductIV: ImageView
@@ -145,7 +145,7 @@ class HomeActivity : AppCompatActivity(),
         binding.appBarHome.toolbar.setupWithNavController(navController, appBarConfiguration)
         binding.appBarHome.bottomNavigationView.setupWithNavController(navController)
 
-        drawerLayout = findViewById(R.id.drawer_layout)
+        //drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
         navViewRight = findViewById(R.id.nav_view_2)
         logoIV = findViewById(R.id.home_toolbar_logo)
@@ -175,7 +175,7 @@ class HomeActivity : AppCompatActivity(),
             }
         }*/
 
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, navViewRight)
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, navViewRight)
         manageNavigationSelection()
         drawerListener()
         onBackStackChangeListener()
@@ -287,14 +287,14 @@ class HomeActivity : AppCompatActivity(),
     override fun onBackPressed() {
 
         when {
-            drawerLayout.isDrawerOpen(GravityCompat.START) || drawerLayout.isDrawerOpen(
+            binding.drawerLayout.isDrawerOpen(GravityCompat.START) || binding.drawerLayout.isDrawerOpen(
                 GravityCompat.END
             ) -> {
-                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    drawerLayout.closeDrawer(GravityCompat.START)
+                if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
                 }
-                if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
-                    drawerLayout.closeDrawer(GravityCompat.END)
+                if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                    binding.drawerLayout.closeDrawer(GravityCompat.END)
                 }
             }
             navController.currentDestination?.id != navController.graph.startDestination -> {
@@ -529,9 +529,9 @@ class HomeActivity : AppCompatActivity(),
             menuItem = item
             val handled = NavigationUI.onNavDestinationSelected(item, navController)
             if (handled) {
-                drawerLayout.closeDrawer(GravityCompat.START)
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
             } else {
-                drawerLayout.closeDrawer(GravityCompat.START)
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
                 when (menuItem!!.itemId) {
                     R.id.nav_live_home -> {
                         goToLiveActivity()
@@ -624,10 +624,10 @@ class HomeActivity : AppCompatActivity(),
     }
 
     private fun drawerListener() {
-        drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+        binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {
                 if (newState == DrawerLayout.STATE_SETTLING) {
-                    if (!drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                    if (!binding?.drawerLayout.isDrawerOpen(GravityCompat.END)) {
                         // Drawer started opening
 
                     } else {
@@ -648,18 +648,18 @@ class HomeActivity : AppCompatActivity(),
     }
 
     fun openRightDrawer() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
-        drawerLayout.openDrawer(GravityCompat.END)
+        binding.drawerLayout.openDrawer(GravityCompat.END)
     }
 
     fun closeDrawer() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
-        if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
-            drawerLayout.closeDrawer(GravityCompat.END)
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.END)
         }
     }
 
@@ -1010,12 +1010,12 @@ class HomeActivity : AppCompatActivity(),
         profileEdit.setOnClickListener {
             //navId = R.id.nav_header_profile_edit
             navController.navigate(R.id.nav_profile)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
         headerPic.setOnClickListener {
             //navId = R.id.nav_header_profile_edit
             navController.navigate(R.id.nav_profile)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
         nearbyHub.setOnClickListener {
             //navId = R.id.nav_nearby_hub
@@ -1023,7 +1023,7 @@ class HomeActivity : AppCompatActivity(),
                 "isNearByHubView" to true
             )
             navController.navigate(R.id.nav_map, bundle)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
             //goToNearByHubMap()
         }
         /*referralApply.setOnClickListener {
