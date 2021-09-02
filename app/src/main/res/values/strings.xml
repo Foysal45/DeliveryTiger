@@ -90,6 +90,13 @@
         <item>কল সেন্টারের কল থেকে</item>
         <item>ইমেইল থেকে</item>
     </string-array>
+    <string-array name="registration_known_source_value">
+        <item>ডেলিভারি টাইগার সম্পর্কে শুনেছেন</item>
+        <item>From Facebook</item>
+        <item>From Familiar person</item>
+        <item>From Call centre</item>
+        <item>From Email</item>
+    </string-array>
     <string-array name="pickup_district">
         <item>"জেলা নির্বাচন করুন"</item>
     </string-array>

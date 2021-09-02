@@ -10,6 +10,7 @@ object AppConstant {
     const val BASE_URL_BRIDGE = "https://bridge.ajkerdeal.com/"
     const val BASE_URL_LAMBDA = "https://wwh1zufip9.execute-api.us-east-2.amazonaws.com/"
     const val BASE_BARI_KOI = "https://barikoi.xyz/"
+    const val BASE_URL_FCM = "https://fcm.googleapis.com/"
 
     const val POLICY_URL = "https://deliverytiger.com.bd/privacypolicy.html"
     const val COMMUNICATION_URL = "https://deliverytiger.com.bd/contact-us-for-app"

@@ -1,42 +1,55 @@
 package com.bd.deliverytiger.app.ui.chat.history
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.chat.ChatUserData
+import com.bd.deliverytiger.app.api.model.chat.HistoryData
 import com.bd.deliverytiger.app.databinding.FragmentChatHistoryBinding
-import com.bd.deliverytiger.app.ui.chat.compose.ChatFragment
-import com.bd.deliverytiger.app.ui.chat.model.ChatHistoryData
-import com.bd.deliverytiger.app.utils.SessionManager
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
+import com.bd.deliverytiger.app.ui.chat.ChatActivity
+import com.bd.deliverytiger.app.ui.chat.compose.ChatComposeFragment
+import com.google.firebase.FirebaseApp
+import com.google.firebase.firestore.*
+import com.bd.deliverytiger.app.R
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import timber.log.Timber
 
-class ChatHistoryFragment(): Fragment() {
+class ChatHistoryFragment: Fragment() {
 
     private var binding: FragmentChatHistoryBinding? = null
-    private lateinit var historyReference: DatabaseReference
+
+    private lateinit var firebaseApp: FirebaseApp
+    private lateinit var firebaseDatabase: FirebaseFirestore
+    private lateinit var historyCollection: CollectionReference
+    private lateinit var userSenderCollection: CollectionReference
+    private var realTimeListenerRegistration: ListenerRegistration? = null
+
+
+    private var sender: ChatUserData? = null
+    private var receiver: ChatUserData? = null
+    private var documentName: String? = null
+    private var firebaseStorageUrl: String? = null
+    private var firebaseWebApiKey: String? = null
+    private var role: String? = null
+    private var isLoading: Boolean = false
+
     private lateinit var dataAdapter: ChatHistoryAdapter
-
-    private lateinit var valueEventListener: ValueEventListener
-
-    private var isLoading = false
-    private val visibleThreshold = 6
-    private var totalCount = 0
-    private val queryLimit = 15
+    private lateinit var linearLayoutManager: LinearLayoutManager
 
     companion object {
-        fun newInstance(): ChatHistoryFragment = ChatHistoryFragment().apply {  }
+        fun newInstance(firebaseApp: FirebaseApp, bundle: Bundle) = ChatHistoryFragment().apply {
+            this.firebaseApp = firebaseApp
+            this.arguments = bundle
+        }
+
         val tag: String = ChatHistoryFragment::class.java.name
     }
 
@@ -48,148 +61,170 @@ class ChatHistoryFragment(): Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initData()
+        initView()
+        initChat()
+        fetchHistoryData()
+        updateSenderData()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.let {
+            (it as ChatActivity).setToolbar("Chat History")
+        }
+    }
+
+    private fun initData() {
+
+        val bundle = arguments
+        documentName = bundle?.getString("documentName")
+        firebaseStorageUrl = bundle?.getString("firebaseStorageUrl")
+        firebaseWebApiKey = bundle?.getString("firebaseWebApiKey")
+        sender = bundle?.getParcelable("sender")
+        receiver = bundle?.getParcelable("receiver")
+        role = sender?.role ?: throw Exception("Invalid sender role")
+    }
+
+    private fun initView() {
         dataAdapter = ChatHistoryAdapter()
-        with(binding?.recyclerview!!) {
+        linearLayoutManager = LinearLayoutManager(requireContext())
+        binding?.recyclerView?.run {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = linearLayoutManager
             adapter = dataAdapter
             addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         }
         dataAdapter.onItemClicked = { model ->
-            val bundle = bundleOf(
-                "agentId" to 328702
-            )
-            goToChatCompose(bundle)
+            goToChatCompose(model)
         }
 
-        binding?.progressBar?.visibility = View.VISIBLE
-        val userId = SessionManager.courierUserId
-        historyReference = Firebase.database.getReference("DeliveryTiger")
-            .child("chat")
-            .child("agentHistory")
-            .child(userId.toString())
-        Timber.tag("chatDebug").d("Reference $historyReference")
-        historyReference.orderByKey().limitToLast(queryLimit).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                binding?.progressBar?.visibility = View.GONE
-                if (snapshot.exists()) {
-                    Timber.tag("chatDebug").d(snapshot.toString())
-                    val historyList: MutableList<ChatHistoryData> = mutableListOf()
-                    snapshot.children.forEach { dataSnapshot ->
-                        val model = dataSnapshot.getValue(ChatHistoryData::class.java)
-                        model?.let {
-                            historyList.add(it)
-                        }
-                    }
-                    historyList.reverse()
-                    dataAdapter.initLoad(historyList)
-
-                } else {
-                    binding?.emptyView?.visibility = View.VISIBLE
-                    Timber.tag("chatDebug").d("agentHistory $snapshot")
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {
-                binding?.progressBar?.visibility = View.GONE
-                binding?.emptyView?.visibility = View.VISIBLE
-                Timber.tag("chatDebug").d("agentHistory ${error.message}")
-            }
-        })
-
-        valueEventLister()
-
-        binding?.recyclerview?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding?.recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0) {
+                if (dy < 0) {
                     val currentItemCount = recyclerView.layoutManager?.itemCount ?: 0
-                    val lastVisibleItem = (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                    Timber.d("onScrolled ${!isLoading} $currentItemCount <= ${lastVisibleItem + visibleThreshold}")
-                    if (!isLoading && currentItemCount <= lastVisibleItem + visibleThreshold /*&& currentItemCount < totalCount*/) {
+                    val firstVisibleItem = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                    //Log.d("onScrolled","${!isLoading} $currentItemCount <= ${firstVisibleItem + visibleThreshold}")
+                    if (!isLoading && firstVisibleItem < 5 /*&& currentItemCount > queryLimit - 1 && currentItemCount < totalCount*/) {
                         isLoading = true
-                        val endKey = dataAdapter.lastItem().key
-                        fetchMoreHistory(endKey)
-                        Timber.d("onScrolled fetchMoreHistory $endKey")
+                        fetchMoreHistoryData(20)
                     }
                 }
             }
         })
-
     }
 
-    private fun fetchMoreHistory(endKey: String?) {
-        binding?.progressBar?.visibility = View.VISIBLE
-        historyReference.orderByKey().endAt(endKey).limitToLast(queryLimit).addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    isLoading = false
-                    Timber.tag("chatDebug").d(snapshot.toString())
-                    val historyList: MutableList<ChatHistoryData> = mutableListOf()
-                    snapshot.children.forEach { dataSnapshot ->
-                        val model = dataSnapshot.getValue(ChatHistoryData::class.java)
-                        model?.let {
-                            historyList.add(it)
-                        }
-                    }
-                    historyList.reverse()
-                    dataAdapter.pagingLoad(historyList)
-                    if (historyList.size < queryLimit - 1) {
-                        isLoading = true
-                    }
+    private fun initChat() {
+        val historyNode = "chat/$documentName/history/$role/${sender?.id}"
+        firebaseDatabase = Firebase.firestore //FirebaseFirestore.getInstance(firebaseApp)
+        historyCollection = firebaseDatabase.collection(historyNode)
 
-                } else {
-                    isLoading = true
+        val userSenderNode = "chat/$documentName/user-$role"
+        userSenderCollection = firebaseDatabase.collection(userSenderNode)
+    }
+
+    private fun fetchHistoryData() {
+        historyCollection
+            .orderBy("date", Query.Direction.DESCENDING)
+            .limit(20)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (documents.isEmpty) return@addOnSuccessListener
+                val chatHistoryList = documents.toObjects(HistoryData::class.java)
+                dataAdapter.initLoad(chatHistoryList)
+                initRealTimeListener()
+            }
+    }
+
+    private fun fetchMoreHistoryData(limit: Long = 20) {
+        //fetch init data
+        binding?.progressBar?.isVisible = true
+        val lastModel = dataAdapter.lastItem()
+        historyCollection
+            .orderBy("date", Query.Direction.DESCENDING)
+            .startAfter(lastModel.date)
+            .limit(limit)
+            .get()
+            .addOnSuccessListener { documents ->
+                isLoading = false
+                binding?.progressBar?.isVisible = false
+                if (documents.isEmpty) return@addOnSuccessListener
+                val chatHistoryList = documents.toObjects(HistoryData::class.java)
+                dataAdapter.pagingLoad(chatHistoryList)
+                Log.d("chatDebug", "fetchMoreChatData chatHistoryList $chatHistoryList")
+            }.addOnFailureListener {
+                isLoading = false
+                binding?.progressBar?.isVisible = false
+            }
+    }
+
+    private fun initRealTimeListener() {
+        //listen for real time change
+        realTimeListenerRegistration = historyCollection
+            .orderBy("date", Query.Direction.DESCENDING)
+            .limit(1)
+            .addSnapshotListener(realTimeUpdateLister)
+    }
+
+    private val realTimeUpdateLister = EventListener<QuerySnapshot> { snapshot, error ->
+        if (error != null) return@EventListener
+        if (snapshot != null && !snapshot.isEmpty) {
+            for (doc in snapshot.documentChanges) {
+                if (doc.type == DocumentChange.Type.ADDED) {
+                    val chatList = doc.document.toObject(HistoryData::class.java)
+                    dataAdapter.addNewData(chatList)
+                    smoothScrollToNewMsg()
+                } else if (doc.type == DocumentChange.Type.MODIFIED) {
+                    val chatList = doc.document.toObject(HistoryData::class.java)
+                    dataAdapter.addUniqueHistory(chatList)
+                    smoothScrollToNewMsg()
                 }
-                binding?.progressBar?.visibility = View.GONE
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                binding?.progressBar?.visibility = View.GONE
-                Timber.tag("chatDebug").d("agentHistory fetchMoreHistory ${error.message}")
-            }
-
-        })
+        }
     }
 
-    private fun valueEventLister() {
-
-        valueEventListener = historyReference.orderByKey().limitToLast(1).addValueEventListener(object : ValueEventListener {
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-                Timber.tag("chatDebug").d(snapshot.toString())
-                val historyList: MutableList<ChatHistoryData> = mutableListOf()
-                snapshot.children.forEach { dataSnapshot ->
-                    val model = dataSnapshot.getValue(ChatHistoryData::class.java)
-                    model?.let {
-                        historyList.add(it)
-                    }
-                }
-                historyList.reverse()
-                dataAdapter.addNewData(historyList)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Timber.tag("chatDebug").d("agentHistory valueEventListener ${error.message}")
-            }
-        })
-
+    private fun smoothScrollToNewMsg() {
+        //val currentItemCount = dataAdapter.itemCount
+        val visibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
+        Log.d("debugSmoothScroll", "$visibleItemPosition")
+        if (visibleItemPosition < 4) {
+            binding?.recyclerView?.smoothScrollToPosition(0)
+        }
     }
 
-    private fun goToChatCompose(bundle: Bundle) {
-        val fragment = ChatFragment.newInstance(bundle)
-        val tag = ChatHistoryFragment.tag
-        requireActivity().supportFragmentManager.beginTransaction().apply {
-            add(R.id.containerChat, fragment, tag)
+    private fun updateSenderData() {
+        userSenderCollection
+            .document("${sender?.id}")
+            .set(sender!!)
+    }
+
+    private fun goToChatCompose(model: HistoryData) {
+
+        val bundle = bundleOf(
+            "documentName" to documentName,
+            "firebaseStorageUrl" to firebaseStorageUrl,
+            "firebaseWebApiKey" to firebaseWebApiKey,
+            "sender" to sender,
+            "receiver" to ChatUserData(
+                model.receiverId,
+                model.receiverName,
+                role = model.receiverRole
+            )
+        )
+
+        val fragment = ChatComposeFragment.newInstance(firebaseApp, bundle)
+        val tag = ChatComposeFragment.tag
+        activity?.supportFragmentManager?.beginTransaction()?.run {
+            add(R.id.container, fragment, tag)
             addToBackStack(tag)
             commit()
         }
     }
 
     override fun onDestroyView() {
-        binding = null
-        historyReference.removeEventListener(valueEventListener)
         super.onDestroyView()
+        binding = null
     }
 
 }

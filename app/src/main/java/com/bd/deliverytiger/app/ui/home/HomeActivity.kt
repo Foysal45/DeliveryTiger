@@ -36,6 +36,8 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.chat.ChatUserData
+import com.bd.deliverytiger.app.api.model.chat.FirebaseCredential
 import com.bd.deliverytiger.app.broadcast.ConnectivityReceiver
 import com.bd.deliverytiger.app.databinding.ActivityHomeBinding
 import com.bd.deliverytiger.app.fcm.FCMData
@@ -43,6 +45,7 @@ import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.services.DistrictCacheWorker
 import com.bd.deliverytiger.app.services.LocationUpdatesService
 import com.bd.deliverytiger.app.ui.chat.ChatActivity
+import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.dialog.PopupDialog
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivity
@@ -580,7 +583,7 @@ class HomeActivity : AppCompatActivity(),
                         navController.navigate(R.id.nav_map, bundle)
                     }
                     R.id.nav_chat -> {
-                        startActivity(Intent(this, ChatActivity::class.java))
+                        goToChatActivity()
                     }
                     R.id.nav_logout -> {
                         menuItem?.isChecked = true
@@ -1306,6 +1309,22 @@ class HomeActivity : AppCompatActivity(),
 
     private fun goToLiveActivity() {
         startActivity(Intent(this, LiveScheduleActivity::class.java))
+    }
+
+    private fun goToChatActivity() {
+        val firebaseCredential = FirebaseCredential(
+            firebaseWebApiKey = BuildConfig.FirebaseWebApiKey
+        )
+        val senderData = ChatUserData(SessionManager.courierUserId.toString(), SessionManager.userName, SessionManager.mobile,
+            imageUrl = "https://static.ajkerdeal.com/delivery_tiger/profile/${SessionManager.courierUserId}.jpg",
+            role = "dt",
+            fcmToken = SessionManager.firebaseToken
+        )
+        ChatConfigure(
+            "dt-retention",
+            senderData,
+            firebaseCredential = firebaseCredential
+        ).config(this)
     }
 
     /*private fun moveFabBy(value: Float) {

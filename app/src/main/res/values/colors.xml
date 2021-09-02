@@ -105,4 +105,11 @@
     <color name="ucrop_color_widget_active">@color/colorPrimary</color>
     <color name="bottom_appbar_color">#E6009A4E</color>
 
+    <color name="action_color">#00844A</color>
+    <color name="secondary_text">#80000000</color>
+    <color name="sender_msg_background">#01AA60</color>
+    <color name="receiver_msg_background">#015E35</color>
+    <color name="file_send_background">#EFEFEF</color>
+    <color name="unread_background">#e6f6ed</color>
+    <color name="read_background">#ffffff</color>
 </resources>

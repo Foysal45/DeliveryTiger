@@ -126,7 +126,7 @@
 -keep class com.google.firebase.crashlytics.** { *; }
 -dontwarn com.google.firebase.crashlytics.**
 
--keepclassmembers class com.bd.deliverytiger.app.ui.chat.model.* { *; }
+-keepclassmembers class com.bd.deliverytiger.app.api.model.chat.* { *; }
 
 -keep class org.openxmlformats.** { *; }
 -keep class schemaorg_apache_xmlbeans.* { *; }

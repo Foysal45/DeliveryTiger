@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle"
+    >
+    <solid android:color="@color/receiver_msg_background" />
+    <corners
+        android:bottomLeftRadius="0dp"
+        android:bottomRightRadius="@dimen/msg_background_curve"
+        android:topLeftRadius="@dimen/msg_background_curve"
+        android:topRightRadius="@dimen/msg_background_curve" />
+</shape>

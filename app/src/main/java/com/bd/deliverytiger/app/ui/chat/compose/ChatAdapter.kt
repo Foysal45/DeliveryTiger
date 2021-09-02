@@ -3,23 +3,38 @@ package com.bd.deliverytiger.app.ui.chat.compose
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.databinding.ItemViewChatMineMsgBinding
-import com.bd.deliverytiger.app.databinding.ItemViewChatOtherMsgBinding
-import com.bd.deliverytiger.app.ui.chat.model.ChatData
-import com.bd.deliverytiger.app.utils.SessionManager
-import com.bd.deliverytiger.app.utils.generateNameInitial
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
+import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.chat.ChatData
+import com.bd.deliverytiger.app.databinding.ItemViewChatReceiverBinding
+import com.bd.deliverytiger.app.databinding.ItemViewChatSenderBinding
+import java.text.SimpleDateFormat
+import java.util.*
 
-class ChatAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+@SuppressLint("SetTextI18n")
+class ChatAdapter(private val userId: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList: MutableList<ChatData> = mutableListOf()
-    private val userId = SessionManager.courierUserId.toString()
     var onItemClicked: ((model: ChatData) -> Unit)? = null
+    private val sdf = SimpleDateFormat("hh:mm a", Locale.US)
+
+    private val options = RequestOptions()
+        .placeholder(R.drawable.ic_person_circle)
+        .error(R.drawable.ic_person_circle)
+        .circleCrop()
+    private val optionsImage = RequestOptions()
+        .placeholder(R.drawable.ic_placeholder_40)
+        .error(R.drawable.ic_placeholder_40)
+        .transform(RoundedCorners(40))
+        //.transform(RoundedCorners(R.integer.msg_image_curve))
 
     override fun getItemViewType(position: Int): Int {
-        return if (dataList[position].id == userId) {
+        val model = dataList[position]
+        return if (model.id == userId) {
             1
         } else {
             0
@@ -28,70 +43,110 @@ class ChatAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == 1) {
-            val binding: ItemViewChatMineMsgBinding = ItemViewChatMineMsgBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            ViewModelMine(binding)
+            val binding = ItemViewChatSenderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ViewModelSender(binding)
         } else {
-            val binding: ItemViewChatOtherMsgBinding = ItemViewChatOtherMsgBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            ViewModelOther(binding)
+            val binding = ItemViewChatReceiverBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ViewModelReceiver(binding)
         }
-
     }
 
     override fun getItemCount(): Int = dataList.size
 
-    @SuppressLint("SetTextI18n")
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        if (holder is ViewModelMine) {
+        if (holder is ViewModelSender) {
             val model = dataList[position]
             val binding = holder.binding
 
             binding.message.text = model.message
-            /*if (!model.customerImgUrl.isNullOrEmpty()) {
-                Glide.with(binding.logo).load(model.customerImgUrl).into(binding.logo)
-                binding.nameInitial.text = ""
-            } else {
-                Glide.with(binding.logo).load(R.drawable.bg_chat_user).into(binding.logo)
-                binding.nameInitial.text = generateNameInitial(model.customerName)
-            }*/
+            try {
+                val date = Date(model.date)
+                val time = sdf.format(date)
+                binding.timeStamp.text = time
+            }catch (e: Exception) {
+                e.printStackTrace()
+            }
 
-            Glide.with(binding.profileImage).load(R.drawable.bg_chat_user).into(binding.profileImage)
-            binding.nameInitial.text = generateNameInitial(model.name)
+            when(model.type) {
+                "msg" -> {
+                    binding.message.text = model.message
+                    binding.message.isVisible = true
+                    binding.image.isVisible = false
+                }
+                "img" -> {
+                    binding.message.isVisible = false
+                    binding.image.isVisible = true
+                    Glide.with(binding.image)
+                        .load(model.url)
+                        .apply(optionsImage)
+                        .into(binding.image)
+                }
+                else -> {
+                    binding.message.text = model.message
+                    binding.message.isVisible = true
+                    binding.image.isVisible = false
+                }
+            }
 
-        } else if (holder is ViewModelOther) {
+        } else if (holder is ViewModelReceiver) {
             val model = dataList[position]
             val binding = holder.binding
 
             binding.message.text = model.message
-            /*if (!model.customerImgUrl.isNullOrEmpty()) {
-                            Glide.with(binding.logo).load(model.customerImgUrl).into(binding.logo)
-                            binding.nameInitial.text = ""
-                        } else {
-                            Glide.with(binding.logo).load(R.drawable.bg_chat_user).into(binding.logo)
-                            binding.nameInitial.text = generateNameInitial(model.customerName)
-                        }*/
+            try {
+                val date = Date(model.date)
+                val time = sdf.format(date)
+                binding.timeStamp.text = time
+            }catch (e: Exception) {
+                e.printStackTrace()
+            }
 
-            Glide.with(binding.profileImage).load(R.drawable.bg_chat_user).into(binding.profileImage)
-            binding.nameInitial.text = generateNameInitial(model.name)
+            when(model.type) {
+                "msg" -> {
+                    binding.message.text = model.message
+                    binding.message.isVisible = true
+                    binding.image.isVisible = false
+                }
+                "img" -> {
+                    binding.message.isVisible = false
+                    binding.image.isVisible = true
+                    Glide.with(binding.image)
+                        .load(model.url)
+                        .apply(optionsImage)
+                        .into(binding.image)
+                }
+                else -> {
+                    binding.message.text = model.message
+                    binding.message.isVisible = true
+                    binding.image.isVisible = false
+                }
+            }
+
+            Glide.with(binding.imageProfile)
+                .load(model.profile)
+                .apply(options)
+                .into(binding.imageProfile)
         }
     }
 
-    inner class ViewModelMine(val binding: ItemViewChatMineMsgBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewModelSender(val binding: ItemViewChatSenderBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.root.setOnClickListener {
-                if (adapterPosition in 0..dataList.lastIndex)
-                    onItemClicked?.invoke(dataList[adapterPosition])
+                if (absoluteAdapterPosition in 0..dataList.lastIndex)
+                    onItemClicked?.invoke(dataList[absoluteAdapterPosition])
             }
         }
     }
 
-    inner class ViewModelOther(val binding: ItemViewChatOtherMsgBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewModelReceiver(val binding: ItemViewChatReceiverBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.root.setOnClickListener {
-                if (adapterPosition in 0..dataList.lastIndex)
-                    onItemClicked?.invoke(dataList[adapterPosition])
+                if (absoluteAdapterPosition in 0..dataList.lastIndex)
+                    onItemClicked?.invoke(dataList[absoluteAdapterPosition])
             }
         }
     }
@@ -109,6 +164,13 @@ class ChatAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyItemRangeInserted(currentIndex, newDataCount)
     }
 
+    fun pagingLoadReverse(list: List<ChatData>) {
+        val currentIndex = 0
+        val newDataCount = list.size
+        dataList.addAll(currentIndex, list)
+        notifyItemRangeInserted(currentIndex, newDataCount)
+    }
+
     fun addNewData(list: List<ChatData>) {
         val currentIndex = dataList.size
         val newDataCount = list.size
@@ -116,8 +178,25 @@ class ChatAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyItemRangeInserted(currentIndex, newDataCount)
     }
 
+    fun addNewData(model: ChatData) {
+        dataList.lastOrNull()?.let {
+            if (it == model) return
+        }
+        val currentIndex = dataList.size
+        dataList.add(model)
+        notifyItemInserted(currentIndex)
+    }
+
     fun lastItem(): ChatData {
         return dataList.last()
+    }
+
+    fun firstItem(): ChatData {
+        return dataList.first()
+    }
+
+    fun isDataExist(model: ChatData): Boolean {
+        return dataList.contains(model)
     }
 
 }

@@ -14,10 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.servey_question_answer.SurveyQuestionModel
 import com.bd.deliverytiger.app.databinding.FragmentSurveyBinding
-import com.bd.deliverytiger.app.databinding.ItemViewSurveyQuestionOptionBinding
 import com.bd.deliverytiger.app.utils.toast
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.fragment_add_product_bottom_sheet.view.*
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 

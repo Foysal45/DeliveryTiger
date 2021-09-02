@@ -14,6 +14,7 @@ import com.bd.deliverytiger.app.api.model.deal_management.DealManagementRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.api.model.district.DistrictData
+import com.bd.deliverytiger.app.api.model.fcm.FCMRequest
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
 import com.bd.deliverytiger.app.api.model.live.auth.AuthRequestBody
 import com.bd.deliverytiger.app.api.model.live.auth.SignUpNew
@@ -51,6 +52,7 @@ import com.bd.deliverytiger.app.database.dao.NotificationDao
 import com.bd.deliverytiger.app.fcm.FCMData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.http.Body
 import retrofit2.http.Path
 
 class AppRepository(
@@ -62,6 +64,7 @@ class AppRepository(
     private val apiInterfaceMerchant: ApiInterfaceMerchant,
     private val apiInterfaceBariKoi: ApiInterfaceBariKoi,
     private val apiInterfaceANA: ApiInterfaceANA,
+    private val apiInterfaceFCM: ApiInterfaceFCM,
     private val database: AppDatabase
 ) {
 
@@ -371,5 +374,6 @@ class AppRepository(
 
     suspend fun deleteOrderRequest(orderRequestId: Int) = apiInterfaceCore.deleteOrderRequest(orderRequestId)
 
-
+    suspend fun sendPushNotifications(authToken: String, @Body requestBody: FCMRequest) =
+        apiInterfaceFCM.sendPushNotifications(authToken, requestBody)
 }

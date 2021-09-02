@@ -418,7 +418,8 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         val bankName = binding?.bankName?.text?.toString()?.trim() ?: ""
         val branchName = binding?.branchName?.text?.toString()?.trim() ?: ""
         val routingNumber = binding?.routingNumber?.text?.toString()?.trim() ?: ""
-        val knowingSource: String = if (knownSourceSpinner.selectedItemPosition == 0) "" else knownSourceSpinner.selectedItem.toString()
+        val sourceValueList = resources.getStringArray(R.array.registration_known_source_value)
+        val knowingSource: String = if (knownSourceSpinner.selectedItemPosition <= 0) "" else sourceValueList[knownSourceSpinner.selectedItemPosition]
 
         val fragment = SignUpOTPFragment.newInstance(companyName, mobile, password, referCode,
             bkashNumber, preferredPaymentCycle, knowingSource,

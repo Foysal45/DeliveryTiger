@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@id/chatActionLayout"
+        app:layout_constraintTop_toTopOf="parent"
+
+        tools:itemCount="1"
+        tools:listitem="@layout/item_view_chat_sender" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/filePreviewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/file_send_background"
+        android:padding="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/chatActionLayout"
+        tools:visibility="visible"
+        >
+
+        <ImageView
+            android:id="@+id/imagePreview"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginEnd="8dp"
+            android:adjustViewBounds="true"
+            android:alpha="0.8"
+            android:contentDescription="@string/cd"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/fileSendBtn"
+            android:src="@drawable/ic_placeholder"
+            tools:src="@tools:sample/avatars" />
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/imagePreview"
+            app:layout_constraintEnd_toEndOf="@id/imagePreview"
+            app:layout_constraintStart_toStartOf="@id/imagePreview"
+            app:layout_constraintTop_toTopOf="@id/imagePreview"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/fileSendBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/cd"
+            android:src="@drawable/ic_send"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/action_color" />
+
+        <ImageView
+            android:id="@+id/fileCloseBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/cd"
+            android:src="@drawable/ic_close"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/action_color" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/chatActionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chat_bottom_bar_background"
+        android:orientation="horizontal"
+        android:paddingLeft="2dp"
+        android:paddingTop="5dp"
+        android:paddingRight="2dp"
+        android:paddingBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/addBtn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:contentDescription="@string/cd"
+            android:src="@drawable/ic_add"
+            app:tint="@color/action_color"
+            tools:visibility="visible" />
+
+        <EditText
+            android:id="@+id/messageET"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:layout_weight="1"
+            android:background="@drawable/chat_message_text_area"
+            android:hint="Aa"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLines="4"
+            android:paddingStart="@dimen/chat_btn_padding_left"
+            android:paddingTop="@dimen/chat_btn_padding_top"
+            android:paddingEnd="@dimen/chat_btn_padding_right"
+            android:paddingBottom="@dimen/chat_btn_padding_bottom"
+            android:textColor="#424242"
+            android:textColorHint="#BDBDBD"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/sendBtn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:contentDescription="@string/cd"
+            android:src="@drawable/ic_send"
+            app:tint="@color/action_color" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/recyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
