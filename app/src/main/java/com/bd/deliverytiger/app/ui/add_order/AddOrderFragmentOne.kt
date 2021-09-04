@@ -702,6 +702,7 @@ class AddOrderFragmentOne : Fragment() {
                 collectionAddress = pickupLocation.pickupAddress ?: ""
                 collectionAddressET.setText(collectionAddress)
                 isCollectionLocationSelected = true
+                merchantDistrict = collectionDistrictId
             } else {
                 isOfficeDrop = true
                 isCollectionLocationSelected = false
@@ -710,12 +711,12 @@ class AddOrderFragmentOne : Fragment() {
             isCollectionTypeSelected = true
             //orderPlaceBtn.performClick()
 
-            merchantDistrict = collectionDistrictId
-            if (merchantDistrict == 14) {
+            loadServiceType()
+            /*if (merchantDistrict == 14) {
                 loadServiceType()
             } else {
                 fetchLocationById(0, LocationType.DISTRICT, false)
-            }
+            }*/
         }
     }
 
@@ -907,7 +908,7 @@ class AddOrderFragmentOne : Fragment() {
     private fun getCourierUsersInformation() {
 
         collectionChargeApi = SessionManager.collectionCharge
-        merchantDistrict = SessionManager.merchantDistrict
+        //merchantDistrict = SessionManager.merchantDistrict
         showPickupBottomSheet()
         initLocationListener()
     }
