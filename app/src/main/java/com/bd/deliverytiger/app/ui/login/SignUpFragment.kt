@@ -20,9 +20,14 @@ import com.bd.deliverytiger.app.api.RetrofitSingletonAPI
 import com.bd.deliverytiger.app.api.endpoint.LoginInterface
 import com.bd.deliverytiger.app.api.endpoint.OtherApiInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
+import com.bd.deliverytiger.app.api.model.district.DistrictData
+import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.login.*
 import com.bd.deliverytiger.app.api.model.terms.TermsModel
 import com.bd.deliverytiger.app.databinding.FragmentSignUpBinding
+import com.bd.deliverytiger.app.enums.CategoryType
+import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionBottomSheet
+import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationType
 import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
 import com.bd.deliverytiger.app.utils.VariousTask.showShortToast
@@ -58,6 +63,8 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     private var preferredPaymentMedium: String = ""
     private var gender: String = ""
     private var fbPage: String = ""
+    private var categoryId: Int = 0
+    private var subCategoryId: Int = 0
 
     private var binding: FragmentSignUpBinding? = null
 
@@ -106,6 +113,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
 
         initClickListener()
         loadTerms()
+        fetchCategory()
     }
 
     private fun initClickListener() {
@@ -174,6 +182,12 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         }
         referImage.setOnClickListener {
             referTitle.performClick()
+        }
+        binding?.categoryBtn?.setOnClickListener {
+            showCategory()
+        }
+        binding?.subCategoryBtn?.setOnClickListener {
+            showCategory()
         }
     }
 
@@ -436,6 +450,40 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         ft?.replace(R.id.loginActivityContainer, fragment, LoginFragment.tag)
         //ft?.addToBackStack(LoginFragment.tag)
         ft?.commit()
+    }
+
+    private fun fetchCategory() {
+
+    }
+
+    private fun showCategory() {
+
+        val list = MutableList<DistrictData>(2) { DistrictData(0, it, "Name$it", "NameBangla$it") }
+        goToCategorySelection(list, CategoryType.Category)
+    }
+
+    private fun goToCategorySelection(list: MutableList<DistrictData>, categoryType: CategoryType) {
+
+        val locationList: MutableList<LocationData> = mutableListOf()
+        list.forEach { model ->
+            locationList.add(LocationData.from(model))
+        }
+
+        val dialog = LocationSelectionBottomSheet.newInstance(locationList)
+        dialog.show(childFragmentManager, LocationSelectionBottomSheet.tag)
+        dialog.onLocationPicked = { model ->
+            when (categoryType) {
+                CategoryType.Category -> {
+                    categoryId = model.id
+                    binding?.categoryBtn?.text = model.displayNameBangla
+                    binding?.subCategoryLayout?.isVisible = true
+                }
+                CategoryType.SubCategory -> {
+                    subCategoryId = model.id
+                    binding?.subCategoryBtn?.text = model.displayNameBangla
+                }
+            }
+        }
     }
 
 }
