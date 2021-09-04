@@ -689,7 +689,7 @@ class AddOrderFragmentOne : Fragment() {
         ft?.commit()
     }*/
 
-    private fun pickupBottomSheet() {
+    private fun showPickupBottomSheet() {
         val tag: String = CollectionInfoBottomSheet.tag
         val dialog: CollectionInfoBottomSheet = CollectionInfoBottomSheet.newInstance(weightRangeId)
         dialog.show(childFragmentManager, tag)
@@ -708,7 +708,14 @@ class AddOrderFragmentOne : Fragment() {
             }
             calculateTotalPrice()
             isCollectionTypeSelected = true
-            orderPlaceBtn.performClick()
+            //orderPlaceBtn.performClick()
+
+            merchantDistrict = collectionDistrictId
+            if (merchantDistrict == 14) {
+                loadServiceType()
+            } else {
+                fetchLocationById(0, LocationType.DISTRICT, false)
+            }
         }
     }
 
@@ -901,11 +908,7 @@ class AddOrderFragmentOne : Fragment() {
 
         collectionChargeApi = SessionManager.collectionCharge
         merchantDistrict = SessionManager.merchantDistrict
-        if (merchantDistrict == 14) {
-            loadServiceType()
-        } else {
-            fetchLocationById(0, LocationType.DISTRICT, false)
-        }
+        showPickupBottomSheet()
         initLocationListener()
     }
 
@@ -1719,18 +1722,16 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         if (!isCollectionTypeSelected) {
-            pickupBottomSheet()
+            showPickupBottomSheet()
             return false
         }
 
         // Hub drop is must for weight > 5kg
-        /*if (weightRangeId > 6 && !isOfficeDrop) {
+        if (isOfficeDrop && weightRangeId > 6) {
             context?.showToast("পার্সেলের ওজন ৫ কেজির উপরে হলে কালেকশন হাবে ড্রপ করতে হবে")
             isCollectionTypeSelected = false
             return false
-        }*/
-
-        if (!isOfficeDrop) {
+        } else if (!isOfficeDrop) {
             if (!isCollectionLocationSelected) {
                 context?.showToast("কালেকশন লোকেশন নির্বাচন করুন")
                 return false

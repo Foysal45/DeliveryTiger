@@ -6,24 +6,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="15dp">
+    >
 
     <TextView
         android:id="@+id/terms_sheet_title_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:padding="8dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_bottom_sheet_curved_bg"
+        android:padding="16dp"
         android:text="কিভাবে প্রোডাক্ট কালেক্ট করা হবে?"
-        android:textColor="@color/black_80"
+        android:textAlignment="center"
+        android:textColor="@color/white"
         android:textSize="@dimen/text_16"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        />
 
     <View
         android:id="@+id/terms_sheet_separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
         android:background="@color/separator" />
 
     <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
@@ -31,6 +33,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         app:justifyContent="center"
         app:toggle_horizontalSpacing="16dp">
 
@@ -58,20 +62,25 @@
         android:id="@+id/msg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="@color/red"
         android:textSize="14sp"
         android:visibility="gone"
         tools:text="@tools:sample/lorem/random"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/pickupAddressLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -107,44 +116,55 @@
             app:srcCompat="@drawable/ic_star"
             app:tint="@color/red" />
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/spinnerCollectionLocation"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_marginEnd="20dp"
+            />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/chargeMsgLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         android:padding="5dp"
         android:orientation="horizontal"
-        android:visibility="gone"
-        tools:visibility="visible"
         >
-
 
         <TextView
             android:id="@+id/chargeMsg1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/red"
-            android:textSize="14sp"
-            android:text="*৫ টাকা " />
+            android:textSize="12sp"
+            android:text="* ৫ টাকা " />
 
         <TextView
             android:id="@+id/chargeMsg2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/red"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:text="Pick-Up"
-            android:textStyle="bold"/>
+            />
 
         <TextView
             android:id="@+id/chargeMsg3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/red"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:text=" চার্জ যোগ হবে" />
 
     </LinearLayout>
@@ -152,6 +172,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:layout_marginTop="16dp" />
+        />
 
 </LinearLayout>
