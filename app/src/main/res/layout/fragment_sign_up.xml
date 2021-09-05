@@ -526,6 +526,93 @@
                         android:textSize="12sp"
                         />
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/login_title_color" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/categoryBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/login_view_height"
+                            android:background="@drawable/bg_login_top_edit_text"
+                            android:hint="আপনি কোন ক্যাটাগরির প্রোডাক্ট সেল করেন?"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingBottom="8dp"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black_80"
+                            android:textSize="@dimen/text_14"
+                            app:drawableEndCompat="@drawable/ic_star"
+                            app:drawableTint="@color/red"
+                            app:layout_constraintTop_toTopOf="parent"
+                            />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:contentDescription="@string/cd"
+                            app:layout_constraintBottom_toBottomOf="@id/categoryBtn"
+                            app:layout_constraintEnd_toEndOf="@id/categoryBtn"
+                            app:layout_constraintTop_toTopOf="@id/categoryBtn"
+                            app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/login_title_color" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/subCategoryLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        >
+
+                        <TextView
+                            android:id="@+id/subCategoryBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/login_view_height"
+                            android:background="@drawable/bg_login_top_edit_text"
+                            android:hint="সাব ক্যাটাগরি"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingBottom="8dp"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black_80"
+                            android:textSize="@dimen/text_14"
+                            app:drawableEndCompat="@drawable/ic_star"
+                            app:drawableTint="@color/red"
+                            app:layout_constraintTop_toTopOf="parent"
+                            />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:contentDescription="@string/cd"
+                            app:layout_constraintBottom_toBottomOf="@id/subCategoryBtn"
+                            app:layout_constraintEnd_toEndOf="@id/subCategoryBtn"
+                            app:layout_constraintTop_toTopOf="@id/subCategoryBtn"
+                            app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/login_title_color" />
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
