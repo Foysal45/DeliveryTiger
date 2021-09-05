@@ -1,5 +1,7 @@
 package com.bd.deliverytiger.app.api.model.location
 
+import com.bd.deliverytiger.app.api.model.category.CategoryData
+import com.bd.deliverytiger.app.api.model.category.SubCategoryData
 import com.bd.deliverytiger.app.api.model.district.DistrictData
 import java.util.*
 
@@ -21,6 +23,22 @@ data class LocationData(
                 model.postalCode,
                 model.district?.lowercase(Locale.US) ?: "",
                 model.isActiveForCorona
+            )
+        }
+
+        fun from(model: CategoryData): LocationData {
+            return LocationData(
+                model.categoryId,
+                model.categoryNameBng,
+                model.categoryNameEng
+            )
+        }
+
+        fun from(model: SubCategoryData): LocationData {
+            return LocationData(
+                model.subCategoryId,
+                model.subCategoryNameBng,
+                model.subCategoryNameEng
             )
         }
     }

@@ -79,12 +79,263 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="200dp"
+                            android:overScrollMode="never"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:itemCount="4"
+                            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                            tools:listitem="@layout/item_view_dashboard"
+                            tools:spanCount="2" />
+
+                        <TextView
+                            android:id="@+id/paymentHistoryBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="8dp"
+                            android:paddingTop="6dp"
+                            android:paddingEnd="6dp"
+                            android:paddingBottom="6dp"
+                            android:text="পূর্বের সকল পেমেন্ট"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/recyclerview" />
+
+                        <ImageView
+                            android:id="@+id/arrow"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_arrow_right"
+                            android:contentDescription="@string/cd"
+                            app:layout_constraintTop_toTopOf="@id/paymentHistoryBtn"
+                            app:layout_constraintBottom_toBottomOf="@id/paymentHistoryBtn"
+                            app:layout_constraintStart_toEndOf="@id/paymentHistoryBtn"
+                            app:tint="@color/colorPrimary"
+                            />
+
+
+                        <ImageView
+                            android:id="@+id/retryBtn"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:contentDescription="@string/cd"
+                            android:src="@drawable/ic_reload"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/colorPrimary"
+                            tools:visibility="visible" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.smarteist.autoimageslider.SliderView
+                        android:id="@+id/sliderView"
+                        android:layout_width="match_parent"
+                        android:layout_height="110dp"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_marginEnd="18dp"
+                        android:visibility="gone"
+                        app:sliderIndicatorMarginBottom="3dp"
+                        app:sliderIndicatorRadius="0dp"
+                        tools:background="@color/black_15"
+                        tools:visibility="visible" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/bg_chat_qa_stroke"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bang_lay_pending_query"
+                            android:gravity="center"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="আপনার একাউন্ট ম্যানেজার"
+                                android:textColor="@color/white"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="12dp">
+
+
+                                <ImageView
+                                    android:id="@+id/retentionManagerImage"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:contentDescription="@string/cd"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/ic_avater_demo"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    tools:src="@tools:sample/avatars" />
+
+                                <TextView
+                                    android:id="@+id/retentionManagerName"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:textColor="@color/black_80"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toStartOf="@+id/chatBtn"
+                                    app:layout_constraintStart_toEndOf="@id/retentionManagerImage"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    tools:text="Md Sifat" />
+
+                                <TextView
+                                    android:id="@+id/retentionManagerNumber"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:maxLines="1"
+                                    android:textColor="@color/black_80"
+                                    android:textSize="14sp"
+                                    app:layout_constraintEnd_toStartOf="@+id/chatBtn"
+                                    app:layout_constraintStart_toEndOf="@id/retentionManagerImage"
+                                    app:layout_constraintTop_toBottomOf="@id/retentionManagerName"
+                                    app:layout_constraintVertical_bias="0.0"
+                                    tools:text="09638-000777" />
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/callBtn"
+                                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:padding="0dp"
+                                    app:iconPadding="0dp"
+                                    android:insetLeft="0dp"
+                                    android:insetTop="0dp"
+                                    android:insetRight="0dp"
+                                    android:insetBottom="0dp"
+                                    app:iconSize="24dp"
+                                    app:iconGravity="textStart"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/colorPrimary"
+                                    android:backgroundTint="@color/lightGreen"
+                                    app:strokeColor="@color/colorPrimary"
+                                    app:icon="@drawable/ic_call"
+                                    app:layout_constraintVertical_chainStyle="packed"
+                                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
+                                    app:layout_constraintBottom_toTopOf="@id/callBtnTV"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"/>
+
+                                <TextView
+                                    android:id="@+id/callBtnTV"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLines="1"
+                                    android:text="কল"
+                                    android:textColor="@color/black_80"
+                                    android:textSize="14sp"
+                                    android:layout_marginTop="2dp"
+                                    app:layout_constraintEnd_toEndOf="@+id/callBtn"
+                                    app:layout_constraintStart_toStartOf="@id/callBtn"
+                                    app:layout_constraintTop_toBottomOf="@id/callBtn"
+                                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                                <com.google.android.material.button.MaterialButton
+                                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:padding="0dp"
+                                    app:iconPadding="0dp"
+                                    android:insetLeft="0dp"
+                                    android:insetTop="0dp"
+                                    android:insetRight="0dp"
+                                    android:insetBottom="0dp"
+                                    app:iconSize="24dp"
+                                    android:layout_marginEnd="8dp"
+                                    app:iconGravity="textStart"
+                                    android:textAllCaps="false"
+                                    app:icon="@drawable/ic_chat"
+                                    app:layout_constraintVertical_chainStyle="packed"
+                                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
+                                    app:layout_constraintBottom_toTopOf="@id/chatBtnTV"
+                                    app:layout_constraintEnd_toStartOf="@id/callBtn"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:visibility="gone"/>
+
+                                <ImageView
+                                    android:id="@+id/chatBtn"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/ic_chat"
+                                    android:layout_marginEnd="20dp"
+                                    app:layout_constraintVertical_chainStyle="packed"
+                                    app:layout_constraintBottom_toTopOf="@id/chatBtnTV"
+                                    app:layout_constraintEnd_toStartOf="@id/callBtn"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    />
+
+                                <TextView
+                                    android:id="@+id/chatBtnTV"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLines="1"
+                                    android:text="লাইভ চ্যাট"
+                                    android:textColor="@color/black_80"
+                                    android:textSize="14sp"
+                                    android:layout_marginTop="2dp"
+                                    app:layout_constraintEnd_toEndOf="@+id/chatBtn"
+                                    app:layout_constraintStart_toStartOf="@id/chatBtn"
+                                    app:layout_constraintTop_toBottomOf="@id/chatBtn"
+                                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+
                     <LinearLayout
                         android:id="@+id/collectorLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="22dp"
                         android:layout_marginEnd="16dp"
                         android:baselineAligned="false"
                         android:gravity="center"
@@ -192,7 +443,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="12dp"
                         android:layout_marginEnd="16dp"
                         android:gravity="center"
                         android:orientation="horizontal"
@@ -235,183 +486,11 @@
                     </LinearLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:background="@drawable/bg_stroke2">
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recyclerview"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:minHeight="200dp"
-                            android:overScrollMode="never"
-                            android:padding="5dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:itemCount="4"
-                            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                            tools:listitem="@layout/item_view_dashboard"
-                            tools:spanCount="2" />
-
-                        <TextView
-                            android:id="@+id/paymentHistoryBtn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingStart="14dp"
-                            android:paddingTop="0dp"
-                            android:paddingEnd="14dp"
-                            android:paddingBottom="12dp"
-                            android:text="পূর্বের সকল পেমেন্ট"
-                            android:textColor="@color/orange"
-                            android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/recyclerview" />
-
-
-                        <ImageView
-                            android:id="@+id/retryBtn"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:contentDescription="@string/cd"
-                            android:src="@drawable/ic_reload"
-                            android:visibility="gone"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/colorPrimary"
-                            tools:visibility="visible" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <com.smarteist.autoimageslider.SliderView
-                        android:id="@+id/sliderView"
-                        android:layout_width="match_parent"
-                        android:layout_height="110dp"
-                        android:layout_marginStart="18dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="18dp"
-                        android:visibility="gone"
-                        app:sliderIndicatorMarginBottom="3dp"
-                        app:sliderIndicatorRadius="0dp"
-                        tools:background="@color/black_15"
-                        tools:visibility="visible" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:background="@drawable/bg_chat_qa_stroke"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bang_lay_pending_query"
-                            android:gravity="center"
-                            android:padding="5dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="আপনার একাউন্ট ম্যানেজার"
-                                android:textColor="@color/white"
-                                android:textSize="14sp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:padding="12dp">
-
-
-                                <ImageView
-                                    android:id="@+id/retentionManagerImage"
-                                    android:layout_width="50dp"
-                                    android:layout_height="50dp"
-                                    android:contentDescription="@string/cd"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/ic_avater_demo"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    tools:src="@tools:sample/avatars" />
-
-                                <TextView
-                                    android:id="@+id/retentionManagerName"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
-                                    android:ellipsize="end"
-                                    android:maxLines="1"
-                                    android:textColor="@color/black_80"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    app:layout_constraintEnd_toStartOf="@+id/callBtn"
-                                    app:layout_constraintStart_toEndOf="@id/retentionManagerImage"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    tools:text="Md Sifat" />
-
-                                <TextView
-                                    android:id="@+id/retentionManagerNumber"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
-                                    android:maxLines="1"
-                                    android:textColor="@color/black_80"
-                                    android:textSize="14sp"
-                                    app:layout_constraintEnd_toStartOf="@+id/callBtn"
-                                    app:layout_constraintStart_toEndOf="@id/retentionManagerImage"
-                                    app:layout_constraintTop_toBottomOf="@id/retentionManagerName"
-                                    app:layout_constraintVertical_bias="0.0"
-                                    tools:text="09638-000777" />
-
-                                <com.google.android.material.button.MaterialButton
-                                    android:id="@+id/callBtn"
-                                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="40dp"
-                                    android:layout_marginEnd="0dp"
-                                    android:insetTop="0dp"
-                                    android:insetBottom="0dp"
-                                    android:text="কল"
-                                    android:textAllCaps="false"
-                                    android:textColor="@color/colorPrimary"
-                                    android:textSize="16sp"
-                                    android:backgroundTint="@color/lightGreen"
-                                    app:strokeColor="@color/colorPrimary"
-                                    app:icon="@drawable/ic_call"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/deliveredReturnLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="22dp"
                         android:layout_marginEnd="16dp"
                         android:background="@drawable/bg_stroke4"
                         android:padding="2dp"
@@ -699,7 +778,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="22dp"
                         android:layout_marginEnd="18dp"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/cd"
@@ -711,7 +790,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="22dp"
                         android:layout_marginEnd="18dp"
                         android:orientation="horizontal">
 

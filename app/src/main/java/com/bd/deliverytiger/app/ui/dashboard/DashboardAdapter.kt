@@ -83,32 +83,41 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             //var cardDesign = 0
             when(model.dashboardViewColorType) {
                 "positive" -> {
-                    cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_positive)
-                    countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_positive_text)
+                    //cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_positive)
+                    //countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_positive_text)
+                    cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_default)
+                    countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_default_text)
                     //cardDesign = R.drawable.ic_dashboard_design_3
                 }
                 "neutral" -> {
-                    cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_neutral)
-                    countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_neutral_text)
+                    //cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_neutral)
+                    //countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_neutral_text)
+                    cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_default)
+                    countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_default_text)
                     //cardDesign = R.drawable.ic_dashboard_design_1
                 }
                 "negative" -> {
-                    cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_negative)
+                    //cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_negative)
+                    cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_default)
                     countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_negative_text)
                     //cardDesign = R.drawable.ic_dashboard_design_4
                 }
                 "waiting" -> {
-                    cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_waiting)
-                    countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_waiting_text)
+                    //cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_waiting)
+                    //countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_waiting_text)
+                    cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_default)
+                    countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_default_text)
                     //cardDesign = R.drawable.ic_dashboard_design_2
                 }
                 else -> { //neutral
-                    cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_neutral)
+                    //cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_neutral)
+                    cardColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_default)
                     countTextColor = ContextCompat.getColor(holder.parentLayout.context, R.color.dashboard_neutral_text)
                     //cardDesign = R.drawable.ic_dashboard_design_1
                 }
             }
-            holder.parentLayout.setBackgroundColor(cardColor)
+            //holder.parentLayout.setBackgroundColor(cardColor)
+            holder.parentLayout.setBackgroundResource(R.drawable.bg_cod_collection)
             holder.countTV.setTextColor(countTextColor)
             //holder.designIV.setImageResource(cardDesign)
             /*Glide.with(holder.iconIV.context)

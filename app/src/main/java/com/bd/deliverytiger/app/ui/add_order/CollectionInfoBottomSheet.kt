@@ -16,31 +16,29 @@ import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.databinding.FragmentCollectionInfoBottomSheetBinding
 import com.bd.deliverytiger.app.utils.CustomSpinnerAdapter
 import com.bd.deliverytiger.app.utils.SessionManager
+import com.bd.deliverytiger.app.utils.ViewState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.android.ext.android.inject
 import kotlin.concurrent.thread
 
-
 class CollectionInfoBottomSheet : BottomSheetDialogFragment() {
 
     private var binding: FragmentCollectionInfoBottomSheetBinding? = null
+    private val viewModel: AddOrderViewModel by inject()
 
     var onCollectionTypeSelected: ((isPickup: Boolean, pickupLocation: PickupLocation) -> Unit)? = null
 
     private lateinit var pickupAddressLayout: ConstraintLayout
-    private lateinit var chargeMsgLayout: LinearLayout
     private lateinit var spinnerCollectionLocation: AppCompatSpinner
-
     private var weightRangeId = 0
-
-    private val viewModel: AddOrderViewModel by inject()
 
     companion object {
         fun newInstance(weightRangeId: Int): CollectionInfoBottomSheet = CollectionInfoBottomSheet().apply {
             this.weightRangeId = weightRangeId
         }
+
         val tag: String = CollectionInfoBottomSheet::class.java.name
     }
 
@@ -84,18 +82,24 @@ class CollectionInfoBottomSheet : BottomSheetDialogFragment() {
 
         spinnerCollectionLocation = view.findViewById(R.id.spinnerCollectionLocation)
         pickupAddressLayout = view.findViewById(R.id.pickupAddressLayout)
-        chargeMsgLayout = view.findViewById(R.id.chargeMsgLayout)
 
+        fetchPickupLocation()
+        initClickListener()
+    }
+
+    private fun fetchPickupLocation() {
         viewModel.getPickupLocations(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list ->
             spinnerDataBinding(list)
         })
+    }
+
+    private fun initClickListener() {
 
         binding?.toggleButtonPickupGroup?.setOnSelectListener { button ->
             when (button.id) {
                 R.id.toggleButtonPickup1 -> {
                     onCollectionTypeSelected?.invoke(false, PickupLocation())
                     pickupAddressLayout.visibility = View.GONE
-                    chargeMsgLayout.visibility = View.GONE
                 }
                 R.id.toggleButtonPickup2 -> {
                     if (weightRangeId > 6) {
@@ -104,15 +108,21 @@ class CollectionInfoBottomSheet : BottomSheetDialogFragment() {
                     } else {
                         binding?.msg?.isVisible = false
                         pickupAddressLayout.visibility = View.VISIBLE
-                        chargeMsgLayout.visibility = View.VISIBLE
                     }
                 }
             }
         }
 
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is ViewState.ProgressState -> {
+                    binding?.progressBar?.isVisible = state.isShow
+                }
+            }
+        })
     }
 
-    private fun spinnerDataBinding(list: List<PickupLocation>){
+    private fun spinnerDataBinding(list: List<PickupLocation>) {
         val pickupList: MutableList<String> = mutableListOf()
         pickupList.add("পিক আপ লোকেশন")
         list.forEach {
@@ -125,7 +135,7 @@ class CollectionInfoBottomSheet : BottomSheetDialogFragment() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (position != 0) {
-                    val model = list[position-1]
+                    val model = list[position - 1]
                     onCollectionTypeSelected?.invoke(true, model)
                 }
             }

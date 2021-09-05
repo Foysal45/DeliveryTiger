@@ -689,7 +689,7 @@ class AddOrderFragmentOne : Fragment() {
         ft?.commit()
     }*/
 
-    private fun pickupBottomSheet() {
+    private fun showPickupBottomSheet() {
         val tag: String = CollectionInfoBottomSheet.tag
         val dialog: CollectionInfoBottomSheet = CollectionInfoBottomSheet.newInstance(weightRangeId)
         dialog.show(childFragmentManager, tag)
@@ -702,13 +702,21 @@ class AddOrderFragmentOne : Fragment() {
                 collectionAddress = pickupLocation.pickupAddress ?: ""
                 collectionAddressET.setText(collectionAddress)
                 isCollectionLocationSelected = true
+                merchantDistrict = collectionDistrictId
             } else {
                 isOfficeDrop = true
                 isCollectionLocationSelected = false
             }
             calculateTotalPrice()
             isCollectionTypeSelected = true
-            orderPlaceBtn.performClick()
+            //orderPlaceBtn.performClick()
+
+            loadServiceType()
+            /*if (merchantDistrict == 14) {
+                loadServiceType()
+            } else {
+                fetchLocationById(0, LocationType.DISTRICT, false)
+            }*/
         }
     }
 
@@ -900,12 +908,8 @@ class AddOrderFragmentOne : Fragment() {
     private fun getCourierUsersInformation() {
 
         collectionChargeApi = SessionManager.collectionCharge
-        merchantDistrict = SessionManager.merchantDistrict
-        if (merchantDistrict == 14) {
-            loadServiceType()
-        } else {
-            fetchLocationById(0, LocationType.DISTRICT, false)
-        }
+        //merchantDistrict = SessionManager.merchantDistrict
+        showPickupBottomSheet()
         initLocationListener()
     }
 
@@ -1719,18 +1723,16 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         if (!isCollectionTypeSelected) {
-            pickupBottomSheet()
+            showPickupBottomSheet()
             return false
         }
 
         // Hub drop is must for weight > 5kg
-        /*if (weightRangeId > 6 && !isOfficeDrop) {
+        if (isOfficeDrop && weightRangeId > 6) {
             context?.showToast("পার্সেলের ওজন ৫ কেজির উপরে হলে কালেকশন হাবে ড্রপ করতে হবে")
             isCollectionTypeSelected = false
             return false
-        }*/
-
-        if (!isOfficeDrop) {
+        } else if (!isOfficeDrop) {
             if (!isCollectionLocationSelected) {
                 context?.showToast("কালেকশন লোকেশন নির্বাচন করুন")
                 return false

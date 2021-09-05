@@ -24,6 +24,7 @@ import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 
 class SignUpOTPFragment : Fragment() {
 
@@ -51,12 +52,14 @@ class SignUpOTPFragment : Fragment() {
     private var routingNumber = ""
     private var gender = ""
     private var fbPage = ""
+    private var categoryId: Int = 0
+    private var subCategoryId: Int = 0
 
     companion object {
         fun newInstance(companyName: String, userMobile: String, userPassword: String, referCode: String,
                         bkashNumber: String, preferredPaymentCycle: String, knowingSource: String,
                         accountName: String, accountNumber: String, bankName: String,
-                        branchName: String, routingNumber: String, gender: String, fbPage: String
+                        branchName: String, routingNumber: String, gender: String, fbPage: String, categoryId: Int, subCategoryId: Int
         ): SignUpOTPFragment = SignUpOTPFragment().apply {
             this.companyName = companyName
             this.userMobile = userMobile
@@ -72,6 +75,8 @@ class SignUpOTPFragment : Fragment() {
             this.routingNumber = routingNumber
             this.gender = gender
             this.fbPage = fbPage
+            this.categoryId = categoryId
+            this.subCategoryId = subCategoryId
         }
 
         val tag: String = SignUpOTPFragment::class.java.name
@@ -114,6 +119,8 @@ class SignUpOTPFragment : Fragment() {
         submitBtn.setOnClickListener {
             VariousTask.hideSoftKeyBoard(activity)
             checkOTP()
+            //Test
+            //registerUser()
         }
     }
 
@@ -174,8 +181,9 @@ class SignUpOTPFragment : Fragment() {
         val signUpReqBody = SignUpReqBody(
             userMobile, userPassword, referCode,
             bkashNumber, preferredPaymentCycle, knowingSource, companyName,
-            accountName, accountNumber, bankName, branchName, routingNumber, gender, fbPage
+            accountName, accountNumber, bankName, branchName, routingNumber, gender, fbPage, categoryId, subCategoryId
         )
+        Timber.d("signUpReqBody $signUpReqBody")
         loginInterface.userUserRegister(signUpReqBody).enqueue(object : Callback<GenericResponse<SignUpResponse>> {
             override fun onFailure(call: Call<GenericResponse<SignUpResponse>>, t: Throwable) {
                 //Timber.e("userUserRegister", "failed " + t.message)

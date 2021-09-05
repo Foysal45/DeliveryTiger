@@ -10,6 +10,8 @@ import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody
 import com.bd.deliverytiger.app.api.model.bulk_status.StatusUpdateData
 import com.bd.deliverytiger.app.api.model.calculator.DeliveryChargeInfo
 import com.bd.deliverytiger.app.api.model.calculator.WeightPrice
+import com.bd.deliverytiger.app.api.model.category.CategoryData
+import com.bd.deliverytiger.app.api.model.category.SubCategoryData
 import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
@@ -277,4 +279,10 @@ interface ApiInterfaceCore {
 
     @PUT("api/Update/UpdateBulkStatus")
     suspend fun updateBulkStatus(@Body requestBody: List<StatusUpdateData>): NetworkResponse<GenericResponse<Int>, ErrorResponse>
+
+    @GET("api/Fetch/GetDtCategories/true")
+    suspend fun fetchCategory(): NetworkResponse<GenericResponse<List<CategoryData>>, ErrorResponse>
+
+    @GET("api/Fetch/GetSubCategoryById/true/{categoryId}")
+    suspend fun fetchSubCategoryById(@Path("categoryId") categoryId: Int): NetworkResponse<GenericResponse<List<SubCategoryData>>, ErrorResponse>
 }

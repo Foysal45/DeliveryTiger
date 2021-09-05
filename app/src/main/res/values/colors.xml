@@ -74,12 +74,14 @@
     <color name="return_state_2">#5E9C47</color>
     <color name="return_state_3">#00844A</color>
     
+    <color name="dashboard_default">#EDEDEE</color>
     <color name="dashboard_positive">#EEF8EF</color>
     <color name="dashboard_negative">#FFEBDB</color>
     <color name="dashboard_neutral">#E1F3F3</color>
     <color name="dashboard_waiting">#FFF4DB</color>
+    <color name="dashboard_default_text">#008C44</color>
     <color name="dashboard_positive_text">#66BB6A</color>
-    <color name="dashboard_negative_text">#FF8E34</color>
+    <color name="dashboard_negative_text">#EC1C24</color>
     <color name="dashboard_neutral_text">#73B4C8</color>
     <color name="dashboard_waiting_text">#FFB300</color>
 
