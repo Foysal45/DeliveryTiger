@@ -27,6 +27,7 @@ import com.bd.deliverytiger.app.api.model.live.share_sms.SMSRequest
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
+import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
@@ -236,6 +237,8 @@ class AppRepository(
         imagePath: RequestBody,
         file: MultipartBody.Part?
     ) = apiInterfaceADM.imageUploadForFile(fileName, imagePath, file)
+
+    suspend fun submitLoanSurvey(requestBody: LoanSurveyRequestBody) = apiInterfaceCore.submitLoanSurvey(requestBody)
 
     //******************** ADCORE ********************//
 

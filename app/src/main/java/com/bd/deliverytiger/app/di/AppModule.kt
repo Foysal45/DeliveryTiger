@@ -34,6 +34,7 @@ import com.bd.deliverytiger.app.ui.live.live_schedule_list.LiveScheduleListViewM
 import com.bd.deliverytiger.app.ui.live.live_schedule_product.LiveScheduleProductListViewModel
 import com.bd.deliverytiger.app.ui.lead_management.LeadManagementViewModel
 import com.bd.deliverytiger.app.ui.lead_management.customer_details_bottomsheet.CustomerDetailsViewModel
+import com.bd.deliverytiger.app.ui.loan_survey.LoanSurveryViewModel
 import com.bd.deliverytiger.app.ui.login.AuthViewModel
 import com.bd.deliverytiger.app.ui.notification.NotificationViewModel
 import com.bd.deliverytiger.app.ui.order_tracking.OrderTrackingViewModel
@@ -127,5 +128,6 @@ val appModule = module {
     viewModel { LeadManagementViewModel(get()) }
     viewModel { CustomerDetailsViewModel(get()) }
     viewModel { SmsShareViewModel(get()) }
+    viewModel { LoanSurveryViewModel(get()) }
 
 }

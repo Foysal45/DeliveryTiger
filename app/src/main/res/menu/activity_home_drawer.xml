@@ -6,6 +6,11 @@
         android:checkableBehavior="none">
 
         <item
+            android:id="@+id/nav_loan_survey"
+            android:icon="@drawable/ic_bill_pay_history"
+            android:title="লোন সার্ভে" />
+
+        <item
             android:id="@+id/nav_cod_collection"
             android:icon="@drawable/ic_taka"
             android:title="@string/cod_collection" />
