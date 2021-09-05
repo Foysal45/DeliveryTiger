@@ -57,7 +57,9 @@
         <activity android:name=".ui.chat.ChatActivity"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
+            android:excludeFromRecents="true"
+            android:parentActivityName=".ui.home.HomeActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"
             />
         <activity android:name=".ui.survey.SurveyActivity"

@@ -1,7 +1,6 @@
 package com.bd.deliverytiger.app.ui.chat.history
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +20,7 @@ import com.google.firebase.firestore.*
 import com.bd.deliverytiger.app.R
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import timber.log.Timber
 
 class ChatHistoryFragment: Fragment() {
 
@@ -105,7 +105,7 @@ class ChatHistoryFragment: Fragment() {
                 if (dy < 0) {
                     val currentItemCount = recyclerView.layoutManager?.itemCount ?: 0
                     val firstVisibleItem = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    //Log.d("onScrolled","${!isLoading} $currentItemCount <= ${firstVisibleItem + visibleThreshold}")
+                    //Timber.d("onScrolled","${!isLoading} $currentItemCount <= ${firstVisibleItem + visibleThreshold}")
                     if (!isLoading && firstVisibleItem < 5 /*&& currentItemCount > queryLimit - 1 && currentItemCount < totalCount*/) {
                         isLoading = true
                         fetchMoreHistoryData(20)
@@ -152,7 +152,7 @@ class ChatHistoryFragment: Fragment() {
                 if (documents.isEmpty) return@addOnSuccessListener
                 val chatHistoryList = documents.toObjects(HistoryData::class.java)
                 dataAdapter.pagingLoad(chatHistoryList)
-                Log.d("chatDebug", "fetchMoreChatData chatHistoryList $chatHistoryList")
+                Timber.tag("chatDebug").d("fetchMoreChatData chatHistoryList $chatHistoryList")
             }.addOnFailureListener {
                 isLoading = false
                 binding?.progressBar?.isVisible = false
@@ -187,7 +187,7 @@ class ChatHistoryFragment: Fragment() {
     private fun smoothScrollToNewMsg() {
         //val currentItemCount = dataAdapter.itemCount
         val visibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
-        Log.d("debugSmoothScroll", "$visibleItemPosition")
+        Timber.tag("chatDebug").d( "$visibleItemPosition")
         if (visibleItemPosition < 4) {
             binding?.recyclerView?.smoothScrollToPosition(0)
         }

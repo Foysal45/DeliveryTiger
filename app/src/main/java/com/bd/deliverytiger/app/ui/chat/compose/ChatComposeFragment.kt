@@ -425,7 +425,13 @@ class ChatComposeFragment : Fragment() {
             title, body
         )
         val dataModel = FCMDataModel(
-            title, body, model.date.toString(), sender?.name ?: "", documentName ?: "chat"
+            documentName ?: "chat",
+            title, body,
+            model.date.toString(),
+            sender?.id ?: "",
+            sender?.name ?: "",
+            sender?.role ?: "",
+            receiver?.id ?: ""
         )
         val requestBody = FCMRequest(token, notificationModel, dataModel)
         viewModel.sendPushNotifications(firebaseWebApiKey!!, requestBody)

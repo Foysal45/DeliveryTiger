@@ -41,6 +41,8 @@
     <string name="give_order_id">অর্ডার আইডি / মোবাইল নম্বর লিখুন</string>
     <string name="give_right_order_id">সঠিক অর্ডার আইডি লিখুন</string>
     <string name="default_notification_channel_id">Promotion</string>
+    <string name="notification_channel_chat">Chat</string>
+    <string name="notification_channel_chat_name">Chat</string>
 
     <string name="waiting">অপেক্ষা করুন</string>
     <string name="dashboard_spinner_temp">মাস অথবা ডেট রেঞ্জ সিলেক্ট করুন</string>

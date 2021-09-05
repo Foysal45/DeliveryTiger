@@ -9,5 +9,6 @@ data class FCMNotification(
     @SerializedName("body")
     var body: String? = "",
     @SerializedName("image")
-    var image: String? = ""
+    var image: String? = "",
+
 )

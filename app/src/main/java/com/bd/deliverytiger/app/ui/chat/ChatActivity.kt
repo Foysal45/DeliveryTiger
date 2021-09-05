@@ -1,22 +1,32 @@
 package com.bd.deliverytiger.app.ui.chat
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.chat.ChatUserData
 import com.bd.deliverytiger.app.api.model.chat.FirebaseCredential
 import com.bd.deliverytiger.app.databinding.ActivityChatBinding
+import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.ui.chat.compose.ChatComposeFragment
 import com.bd.deliverytiger.app.ui.chat.history.ChatHistoryFragment
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.app
+import timber.log.Timber
 
 class ChatActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityChatBinding
+
+    private var credential: FirebaseCredential? = null
+    private var documentName: String? = null
+    private var sender: ChatUserData? = null
+    private var receiver: ChatUserData? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +40,7 @@ class ChatActivity: AppCompatActivity() {
             onBackPressed()
         }
 
-        val bundle = intent?.getBundleExtra("chatConfig")
-        val credential = bundle?.getParcelable<FirebaseCredential>("credential") ?: throw Exception("Invalid firebase credential")
-        val documentName: String? = bundle.getString("documentName")
-        val sender: ChatUserData? = bundle.getParcelable("sender")
-        val receiver: ChatUserData? = bundle.getParcelable("receiver")
+        onNewIntent(intent)
 
         //val firebaseApp = initFirebaseDatabase(credential)
         val firebaseApp = Firebase.app
@@ -43,21 +49,50 @@ class ChatActivity: AppCompatActivity() {
 
             val bundleChatHistory = bundleOf(
                 "documentName" to documentName,
-                "firebaseStorageUrl" to credential.storageUrl,
-                "firebaseWebApiKey" to credential.firebaseWebApiKey,
+                "firebaseStorageUrl" to credential?.storageUrl,
+                "firebaseWebApiKey" to credential?.firebaseWebApiKey,
                 "sender" to sender
             )
             goToChatHistory(firebaseApp, bundleChatHistory)
         } else {
             val bundleChatCompose = bundleOf(
                 "documentName" to documentName,
-                "firebaseStorageUrl" to credential.storageUrl,
-                "firebaseWebApiKey" to credential.firebaseWebApiKey,
+                "firebaseStorageUrl" to credential?.storageUrl,
+                "firebaseWebApiKey" to credential?.firebaseWebApiKey,
                 "sender" to sender,
                 "receiver" to receiver
             )
             goToChatCompose(firebaseApp, bundleChatCompose)
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent ?: return
+        val bundle = intent.extras
+        if (bundle != null) {
+            val notificationType = bundle.getString("notificationType")
+            if (!notificationType.isNullOrEmpty()) {
+                credential = FirebaseCredential(firebaseWebApiKey = BuildConfig.FirebaseWebApiKey)
+                documentName = bundle.getString("notificationType")
+                receiver = ChatUserData(
+                    bundle.getString("senderId") ?: "",
+                    bundle.getString("senderName") ?: "", "", "", "",
+                    bundle.getString("senderRole") ?: ""
+                )
+                sender = ChatUserData(
+                    bundle.getString("receiverId") ?: ""
+                )
+            } else {
+                bundle.getBundle("chatConfig")?.run {
+                    credential = getParcelable("credential")
+                    documentName = getString("documentName")
+                    sender = getParcelable("sender")
+                    receiver = getParcelable("receiver")
+                }
+            }
+        }
+        intent.removeExtra("notificationType")
     }
 
     private fun initFirebaseDatabase(credential: FirebaseCredential): FirebaseApp {

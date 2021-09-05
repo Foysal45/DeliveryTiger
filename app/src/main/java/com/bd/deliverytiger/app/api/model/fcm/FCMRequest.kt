@@ -8,5 +8,7 @@ data class FCMRequest(
     @SerializedName("notification")
     var notification: FCMNotification = FCMNotification(),
     @SerializedName("data")
-    var data: FCMDataModel = FCMDataModel()
+    var data: FCMDataModel = FCMDataModel(),
+    @SerializedName("time_to_live")
+    var timeToLive: Int = 86400
 )
