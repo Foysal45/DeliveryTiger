@@ -56,6 +56,7 @@ class DashboardFragment : Fragment() {
     private lateinit var dashboardAdapter: DashboardAdapter
     private val dataList: MutableList<DashboardData> = mutableListOf()
     private val returnDataList: MutableList<DashboardData> = mutableListOf()
+    private val customerNotFoundDataList: MutableList<DashboardData> = mutableListOf()
     private val shipmentDataList: MutableList<DashboardData> = mutableListOf()
     private var dateRangeFilterList: MutableList<DeliveredReturnCountResponseItem> = mutableListOf()
     private val viewModel: DashboardViewModel by inject()
@@ -96,7 +97,7 @@ class DashboardFragment : Fragment() {
     private var isBannerEnable: Boolean = false
     private var worker: Runnable? = null
     private var handler = Handler(Looper.getMainLooper())
-    private var paymentDashboardModel: DashboardData = DashboardData(dashboardSpanCount = 2, viewType = 1)
+    private var paymentDashboardModel: DashboardData = DashboardData(dashboardSpanCount = 3, viewType = 1)
     private var countDownTimer: CountDownTimer? = null
 
 
@@ -320,6 +321,10 @@ class DashboardFragment : Fragment() {
                         showStatusSubGroupBottomSheet(model.dashboardRouteUrl)
                         UserLogger.logGenie("Dashboard_ShipmentDialog")
                     }
+                    "customer_not_found" -> {
+                        goToAllOrder(model.name ?: "", model.dashboardStatusFilter, selectedStartDate, selectedEndDate)
+                        UserLogger.logGenie("Dashboard_CustomerNotFound_${model.statusGroupId}")
+                    }
                     else -> {
                         //addFragment(AllOrdersFragment.newInstance(), AllOrdersFragment.tag)
                         findNavController().navigate(R.id.nav_dashboard_allOrder)
@@ -501,11 +506,11 @@ class DashboardFragment : Fragment() {
     private fun initDashboard() {
 
         dashboardAdapter = DashboardAdapter(requireContext(), dataList)
-        val gridLayoutManager = GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
+        val gridLayoutManager = GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                return if (dataList[position].dashboardSpanCount!! == 0 || dataList[position].dashboardSpanCount!! > 2) {
-                    2
+                return if (dataList[position].dashboardSpanCount!! == 0 || dataList[position].dashboardSpanCount!! > 3) {
+                    3
                 } else {
                     dataList[position].dashboardSpanCount!!
                 }
@@ -818,14 +823,22 @@ class DashboardFragment : Fragment() {
 
             binding?.swipeRefresh?.isRefreshing = false
             returnDataList.clear()
+            customerNotFoundDataList.clear()
             shipmentDataList.clear()
             val dashboardList: MutableList<DashboardData> = mutableListOf()
             var returnCount = 0
+            var customerNotFoundCount = 0
             var shipmentCount = 0
 
             list.forEach { model ->
                 when (model.statusGroupId) {
-                    // "শিপমেন্টে আছে", "পার্সেল ঢাকার সর্টিং সেন্টারে আছে", "কাস্টমারকে যোগাযোগ করা যাচ্ছে না", "পার্সেল লস্ট"
+                    //  "কাস্টমারকে যোগাযোগ করা যাচ্ছে না",
+                    15 -> {
+                        Timber.d("requestBody DataFilter $model")
+                        customerNotFoundCount += model.count ?: 0
+                        customerNotFoundDataList.add(model)
+                    }
+                    // "শিপমেন্টে আছে", "পার্সেল ঢাকার সর্টিং সেন্টারে আছে", "পার্সেল লস্ট"
                     4, 14, 15, 16 -> {
                         shipmentCount += model.count ?: 0
                         shipmentDataList.add(model)
@@ -846,6 +859,16 @@ class DashboardFragment : Fragment() {
                 dashboardCountSumView = "count"
             )
             dashboardList.add(shipmentData)
+            val customerNotFoundData = DashboardData(
+                name = "কাস্টমারকে পাওয়া যাচ্ছে না",
+                dashboardSpanCount = 1,
+                count = customerNotFoundCount,
+                dashboardViewColorType = "negative",
+                dashboardRouteUrl = "customer_not_found",
+                dashboardCountSumView = "count",
+                dashboardStatusFilter = "কাস্টমারকে যোগাযোগ করে পাওয়া যাচ্ছে না"
+            )
+            dashboardList.add(customerNotFoundData)
             val returnData = DashboardData(
                 name = "রিটার্নে আছে",
                 dashboardSpanCount = 1,
@@ -899,6 +922,10 @@ class DashboardFragment : Fragment() {
             "shipment" -> {
                 dataList = shipmentDataList
                 title = "শিপমেন্টে আছে"
+            }
+            "customer_not_found" -> {
+                dataList = customerNotFoundDataList
+                title = "কাস্টমারকে পাওয়া যাচ্ছে না"
             }
             "return" -> {
                 dataList = returnDataList
