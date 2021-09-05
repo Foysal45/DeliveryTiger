@@ -24,6 +24,7 @@ import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 
 class SignUpOTPFragment : Fragment() {
 
@@ -118,6 +119,8 @@ class SignUpOTPFragment : Fragment() {
         submitBtn.setOnClickListener {
             VariousTask.hideSoftKeyBoard(activity)
             checkOTP()
+            //Test
+            //registerUser()
         }
     }
 
@@ -180,6 +183,7 @@ class SignUpOTPFragment : Fragment() {
             bkashNumber, preferredPaymentCycle, knowingSource, companyName,
             accountName, accountNumber, bankName, branchName, routingNumber, gender, fbPage, categoryId, subCategoryId
         )
+        Timber.d("signUpReqBody $signUpReqBody")
         loginInterface.userUserRegister(signUpReqBody).enqueue(object : Callback<GenericResponse<SignUpResponse>> {
             override fun onFailure(call: Call<GenericResponse<SignUpResponse>>, t: Throwable) {
                 //Timber.e("userUserRegister", "failed " + t.message)
