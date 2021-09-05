@@ -32,6 +32,10 @@ data class SignUpReqBody(
     var gender: String = "",
     @SerializedName("fburl")
     var fbUrl: String? = "",
+    @SerializedName("categoryId")
+    var categoryId: Int = 0,
+    @SerializedName("subCategoryId")
+    var subCategoryId: Int = 0,
 
     @SerializedName("registrationFrom")
     var registrationFrom: String = "app",

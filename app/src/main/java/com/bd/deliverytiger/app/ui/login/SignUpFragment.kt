@@ -14,12 +14,15 @@ import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.RetrofitSingletonAPI
 import com.bd.deliverytiger.app.api.endpoint.LoginInterface
 import com.bd.deliverytiger.app.api.endpoint.OtherApiInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
+import com.bd.deliverytiger.app.api.model.category.CategoryData
+import com.bd.deliverytiger.app.api.model.category.SubCategoryData
 import com.bd.deliverytiger.app.api.model.district.DistrictData
 import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.login.*
@@ -31,6 +34,7 @@ import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationType
 import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
 import com.bd.deliverytiger.app.utils.VariousTask.showShortToast
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -59,6 +63,8 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     private lateinit var otherApiInterface: OtherApiInterface
     private var progressDialog: ProgressDialog? = null
 
+    private val categoryList: MutableList<CategoryData> = mutableListOf()
+    private val subCategoryList: MutableList<SubCategoryData> = mutableListOf()
     private var preferredPaymentCycle: String = ""
     private var preferredPaymentMedium: String = ""
     private var gender: String = ""
@@ -67,6 +73,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     private var subCategoryId: Int = 0
 
     private var binding: FragmentSignUpBinding? = null
+    private val viewModel: AuthViewModel by inject()
 
     companion object {
         fun newInstance(): SignUpFragment = SignUpFragment()
@@ -187,7 +194,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
             showCategory()
         }
         binding?.subCategoryBtn?.setOnClickListener {
-            showCategory()
+            showSubCategory()
         }
     }
 
@@ -436,7 +443,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
 
         val fragment = SignUpOTPFragment.newInstance(companyName, mobile, password, referCode,
             bkashNumber, preferredPaymentCycle, knowingSource,
-            accountName, accountNumber, bankName, branchName, routingNumber, gender, fbPage
+            accountName, accountNumber, bankName, branchName, routingNumber, gender, fbPage, categoryId, subCategoryId
         )
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpOTPFragment.tag)
@@ -453,30 +460,42 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     }
 
     private fun fetchCategory() {
+        viewModel.fetchCategory().observe(viewLifecycleOwner, Observer { list ->
+            categoryList.clear()
+            categoryList.addAll(list)
+        })
+    }
 
+    private fun fetchSubCategory(categoryId: Int) {
+        viewModel.fetchSubCategoryById(categoryId).observe(viewLifecycleOwner, Observer { list ->
+            subCategoryList.clear()
+            subCategoryList.addAll(list)
+            if (list.isNotEmpty()) {
+                binding?.subCategoryLayout?.isVisible = true
+            }
+        })
     }
 
     private fun showCategory() {
-
-        val list = MutableList<DistrictData>(2) { DistrictData(0, it, "Name$it", "NameBangla$it") }
-        goToCategorySelection(list, CategoryType.Category)
+        val list = categoryList.map { LocationData.from(it) }
+        goToCategorySelection(list as MutableList<LocationData>, CategoryType.Category)
     }
 
-    private fun goToCategorySelection(list: MutableList<DistrictData>, categoryType: CategoryType) {
+    private fun showSubCategory() {
+        val list = subCategoryList.map { LocationData.from(it) }
+        goToCategorySelection(list as MutableList<LocationData>, CategoryType.SubCategory)
+    }
 
-        val locationList: MutableList<LocationData> = mutableListOf()
-        list.forEach { model ->
-            locationList.add(LocationData.from(model))
-        }
+    private fun goToCategorySelection(list: MutableList<LocationData>, categoryType: CategoryType) {
 
-        val dialog = LocationSelectionBottomSheet.newInstance(locationList)
+        val dialog = LocationSelectionBottomSheet.newInstance(list)
         dialog.show(childFragmentManager, LocationSelectionBottomSheet.tag)
         dialog.onLocationPicked = { model ->
             when (categoryType) {
                 CategoryType.Category -> {
                     categoryId = model.id
                     binding?.categoryBtn?.text = model.displayNameBangla
-                    binding?.subCategoryLayout?.isVisible = true
+                    fetchSubCategory(categoryId)
                 }
                 CategoryType.SubCategory -> {
                     subCategoryId = model.id

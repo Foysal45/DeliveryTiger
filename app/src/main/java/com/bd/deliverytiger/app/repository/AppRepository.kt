@@ -360,6 +360,10 @@ class AppRepository(
 
     suspend fun updateBulkStatus(requestBody: List<StatusUpdateData>) = apiInterfaceCore.updateBulkStatus(requestBody)
 
+    suspend fun fetchCategory() = apiInterfaceCore.fetchCategory()
+
+    suspend fun fetchSubCategoryById(categoryId: Int) = apiInterfaceCore.fetchSubCategoryById(categoryId)
+
     //Quick Order
     suspend fun getCollectionTimeSlot(requestBody: TimeSlotRequest) = apiInterfaceCore.getCollectionTimeSlot(requestBody)
 
