@@ -40,23 +40,11 @@
             android:icon="@drawable/ic_history_cod"
             android:title="@string/instant_payment" />
 
-        <item
-            android:id="@+id/nav_loan_survey"
-            android:icon="@drawable/ic_bill_pay_history"
-            android:title="লোন সার্ভে" />
-
     </group>
 
     <group
         android:id="@+id/settingGroup"
         android:checkableBehavior="none">
-
-        <item
-            android:id="@+id/nav_chat"
-            android:icon="@drawable/ic_chat"
-            android:title="চ্যাট"
-            android:visible="true"
-            />
 
         <item
             android:id="@+id/nav_balance_load"
@@ -76,6 +64,18 @@
             android:id="@+id/nav_lead_management"
             android:icon="@drawable/ic_magnet"
             android:title="@string/lead_management" />
+
+        <item
+            android:id="@+id/nav_loan_survey"
+            android:icon="@drawable/ic_bill_pay_history"
+            android:title="লোন সার্ভে" />
+
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/ic_chat"
+            android:title="চ্যাট"
+            android:visible="true"
+            />
 
         <item
             android:id="@+id/nav_live_home"
