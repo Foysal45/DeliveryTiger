@@ -125,15 +125,20 @@ class ChatHistoryFragment: Fragment() {
     }
 
     private fun fetchHistoryData() {
+        binding?.progressBar?.isVisible = true
         historyCollection
             .orderBy("date", Query.Direction.DESCENDING)
             .limit(20)
             .get()
             .addOnSuccessListener { documents ->
+                binding?.progressBar?.isVisible = false
                 if (documents.isEmpty) return@addOnSuccessListener
                 val chatHistoryList = documents.toObjects(HistoryData::class.java)
                 dataAdapter.initLoad(chatHistoryList)
                 initRealTimeListener()
+            }
+            .addOnFailureListener {
+                binding?.progressBar?.isVisible = false
             }
     }
 

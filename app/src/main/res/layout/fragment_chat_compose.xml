@@ -43,7 +43,7 @@
             android:contentDescription="@string/cd"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/fileSendBtn"
+            app:layout_constraintEnd_toStartOf="@id/fileCloseBtn"
             android:src="@drawable/ic_placeholder"
             tools:src="@tools:sample/avatars" />
 
@@ -57,17 +57,6 @@
             app:layout_constraintStart_toStartOf="@id/imagePreview"
             app:layout_constraintTop_toTopOf="@id/imagePreview"
             tools:visibility="visible" />
-
-        <ImageView
-            android:id="@+id/fileSendBtn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="@string/cd"
-            android:src="@drawable/ic_send"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@color/action_color" />
 
         <ImageView
             android:id="@+id/fileCloseBtn"

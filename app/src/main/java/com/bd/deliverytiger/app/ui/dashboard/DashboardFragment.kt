@@ -18,11 +18,15 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.accepted_orders.AcceptedOrder
+import com.bd.deliverytiger.app.api.model.chat.ChatUserData
+import com.bd.deliverytiger.app.api.model.chat.FirebaseCredential
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.collector_info.CollectorInfoRequest
 import com.bd.deliverytiger.app.api.model.config.BannerModel
+import com.bd.deliverytiger.app.api.model.courier_info.AdminUser
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnCountResponseItem
@@ -32,6 +36,7 @@ import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
+import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.utils.*
@@ -99,6 +104,7 @@ class DashboardFragment : Fragment() {
     private var handler = Handler(Looper.getMainLooper())
     private var paymentDashboardModel: DashboardData = DashboardData(dashboardSpanCount = 3, viewType = 1)
     private var countDownTimer: CountDownTimer? = null
+    private var adminUser: AdminUser? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -543,6 +549,9 @@ class DashboardFragment : Fragment() {
                 context?.toast("কোনো মোবাইল নম্বর অ্যাড করা হয়নি")
             }
         }
+        binding?.chatBtn?.setOnClickListener {
+            goToChatActivity()
+        }
     }
 
     private fun setSpinner(monthDuration: Int) {
@@ -620,6 +629,7 @@ class DashboardFragment : Fragment() {
 
     private fun getCourierUsersInformation() {
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            adminUser = model?.adminUsers
             initRetentionManagerData(
                 model?.adminUsers?.userId ?: 0,
                 model?.adminUsers?.fullName ?: "",
@@ -1198,6 +1208,31 @@ class DashboardFragment : Fragment() {
                 findNavController().navigate(R.id.nav_dashboard_billPay)
             }
         }.show()
+    }
+
+    private fun goToChatActivity() {
+        val firebaseCredential = FirebaseCredential(
+            firebaseWebApiKey = BuildConfig.FirebaseWebApiKey
+        )
+        val senderData = ChatUserData(SessionManager.courierUserId.toString(), SessionManager.userName, SessionManager.mobile,
+            imageUrl = "https://static.ajkerdeal.com/delivery_tiger/profile/${SessionManager.courierUserId}.jpg",
+            role = "dt",
+            fcmToken = SessionManager.firebaseToken
+        )
+        val receiverData = if (adminUser != null) {
+            ChatUserData(adminUser!!.userId.toString(), adminUser!!.fullName.toString(), adminUser!!.mobile.toString(),
+                imageUrl = "https://static.ajkerdeal.com/images/admin_users/dt/${adminUser!!.userId}.jpg",
+                role = "retention"
+            )
+        } else {
+            ChatUserData()
+        }
+        ChatConfigure(
+            "dt-retention",
+            senderData,
+            firebaseCredential = firebaseCredential,
+            receiver = receiverData
+        ).config(requireContext())
     }
 
     override fun onDestroyView() {

@@ -42,9 +42,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import org.koin.android.ext.android.inject
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.utils.hideKeyboard
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import timber.log.Timber
 
 class ChatComposeFragment : Fragment() {
 
@@ -79,6 +81,7 @@ class ChatComposeFragment : Fragment() {
     private var receiverFcmToken: String = ""
     private var receiverCurrentRoomId: String = ""
     private var roomId: String = ""
+    private var isFileSend: Boolean = false
 
     private val viewModel: ChatComposeViewModel by inject()
 
@@ -145,7 +148,7 @@ class ChatComposeFragment : Fragment() {
                 if (dy < 0) {
                     val currentItemCount = recyclerView.layoutManager?.itemCount ?: 0
                     val firstVisibleItem = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    //Log.d("onScrolled","${!isLoading} $currentItemCount <= ${firstVisibleItem + visibleThreshold}")
+                    //Timber.tag("chatDebug").d("onScrolled","${!isLoading} $currentItemCount <= ${firstVisibleItem + visibleThreshold}")
                     if (!isLoading && firstVisibleItem < 5 /*&& currentItemCount > queryLimit - 1 && currentItemCount < totalCount*/) {
                         isLoading = true
                         fetchMoreChatData(20)
@@ -155,6 +158,7 @@ class ChatComposeFragment : Fragment() {
         })
 
         dataAdapter.onItemClicked = { model ->
+            hideKeyboard()
             when (model.type) {
                 "msg" -> {
                     onChatClicked(model)
@@ -166,7 +170,11 @@ class ChatComposeFragment : Fragment() {
         }
 
         binding?.sendBtn?.setOnClickListener {
-            generateChatMessage(1)
+            if (isFileSend) {
+                sendFile()
+            } else {
+                generateChatMessage(1)
+            }
         }
 
         binding?.fileCloseBtn?.setOnClickListener {
@@ -175,16 +183,13 @@ class ChatComposeFragment : Fragment() {
             binding?.imagePreview?.let { view ->
                 Glide.with(requireContext()).clear(view)
             }
+            isFileSend = false
         }
 
         binding?.addBtn?.setOnClickListener {
             if (isCheckPermission()) {
                 pickUpImage()
             }
-        }
-
-        binding?.fileSendBtn?.setOnClickListener {
-            sendFile()
         }
     }
 
@@ -232,12 +237,15 @@ class ChatComposeFragment : Fragment() {
             .get()
             .addOnSuccessListener { documents ->
                 binding?.progressBar?.isVisible = false
-                if (documents.isEmpty) return@addOnSuccessListener
-                val chatList = documents.toObjects(ChatData::class.java)
-                chatList.reverse()
-                dataAdapter.initLoad(chatList)
-                initRealTimeListener()
-                Log.d("chatDebug", "fetchChatData chatList $chatList")
+                if (documents.isEmpty) {
+                    initRealTimeListener()
+                } else {
+                    val chatList = documents.toObjects(ChatData::class.java)
+                    chatList.reverse()
+                    dataAdapter.initLoad(chatList)
+                    initRealTimeListener()
+                    Timber.tag("chatDebug").d( "fetchChatData chatList $chatList")
+                }
             }.addOnFailureListener {
                 binding?.progressBar?.isVisible = false
             }
@@ -259,7 +267,7 @@ class ChatComposeFragment : Fragment() {
                 val chatList = documents.toObjects(ChatData::class.java)
                 chatList.reverse()
                 dataAdapter.pagingLoadReverse(chatList)
-                Log.d("chatDebug", "fetchMoreChatData chatList $chatList")
+                Timber.tag("chatDebug").d( "fetchMoreChatData chatList $chatList")
             }.addOnFailureListener {
                 isLoading = false
                 binding?.progressBar?.isVisible = false
@@ -275,27 +283,28 @@ class ChatComposeFragment : Fragment() {
     }
 
     private val realTimeUpdateLister = EventListener<QuerySnapshot> { snapshot, error ->
+        Timber.d("chatDebug snapshot $snapshot")
         if (error != null) return@EventListener
         if (snapshot != null && !snapshot.isEmpty) {
             for (doc in snapshot.documentChanges) {
                 if (doc.type == DocumentChange.Type.ADDED) {
                     val chatList = doc.document.toObject(ChatData::class.java)
                     dataAdapter.addNewData(chatList)
-                    lastMsg = if (chatList.message.isNotEmpty()) chatList.message else "Send a image"
+                    lastMsg = if (chatList.message.isNotEmpty()) chatList.message else "Sent an image"
                     chatData?.run {
                         message = lastMsg
                     }
                     smoothScrollToNewMsg()
                 }
             }
-            Log.d("chatDebug", "realTimeUpdateLister snapshot ${snapshot.documents}")
+            Timber.tag("chatDebug").d( "realTimeUpdateLister snapshot ${snapshot.documents}")
         }
     }
 
     private fun smoothScrollToNewMsg() {
         val currentItemCount = dataAdapter.itemCount
         val visibleItemPosition = linearLayoutManager.findLastVisibleItemPosition()
-        Log.d("debugSmoothScroll", "$visibleItemPosition $currentItemCount")
+        Timber.tag("chatDebug").d( "debugSmoothScroll $visibleItemPosition $currentItemCount")
         val diff = (currentItemCount - visibleItemPosition)
         if (diff < 3) {
             binding?.recyclerView?.smoothScrollToPosition(currentItemCount)
@@ -304,12 +313,12 @@ class ChatComposeFragment : Fragment() {
 
     private fun generateChatMessage(type: Int) {
 
-        val message = binding?.messageET?.text?.toString()?.trim() ?: ""
-        if (message.isEmpty()) return
         var model = ChatData()
         when (type) {
             // data msg
             1 -> {
+                val message = binding?.messageET?.text?.toString()?.trim() ?: ""
+                if (message.isEmpty()) return
                 model = ChatData(
                     sender!!.id, message, "", "msg", sender!!.imageUrl, Date().time
                 )
@@ -321,23 +330,29 @@ class ChatComposeFragment : Fragment() {
                 val fileName = Date().time
                 val imageKeyRef = imageStorageRef.child("$fileName.jpg")
                 //val uri = FileProvider.getUriForFile(requireContext(), requireContext().packageName + ".my.package.name.provider", File(filePath!!))
-                val uri = FileProvider.getUriForFile(requireContext(), "com.github.anupdey99.chatkitlib.provider", File(filePath))
+                val uri = FileProvider.getUriForFile(requireContext(), "com.bd.deliverytiger.app.fileprovider", File(filePath))
+                Timber.tag("chatDebug").d("imageKeyRef ${imageKeyRef.path}" )
+                Timber.tag("chatDebug").d("uri ${uri.path}" )
                 imageKeyRef.putFile(uri).addOnCompleteListener { task ->
                     binding?.progressBar1?.isVisible = false
-                    binding?.fileSendBtn?.isEnabled = true
+                    binding?.sendBtn?.isEnabled = true
                     binding?.filePreviewLayout?.visibility = View.GONE
+                    isFileSend = false
                     if (task.isSuccessful) {
                         imageKeyRef.downloadUrl.addOnSuccessListener { uri ->
                             val downloadUrl = uri.toString()
-                            Log.d("chatDebug", "Image $downloadUrl")
+                            Timber.tag("chatDebug").d( "Image $downloadUrl")
                             model = ChatData(
-                                sender!!.id, message, downloadUrl, "img", sender!!.imageUrl, Date().time
+                                sender!!.id, "", downloadUrl, "img", sender!!.imageUrl, Date().time
                             )
                             sendChatMessage(model)
                         }
                     } else {
-                        Log.d("chatDebug", "putFile error ${task.exception}")
+                        Timber.tag("chatDebug").d( "putFile error ${task.exception}")
                     }
+                }.addOnFailureListener {
+                    it.printStackTrace()
+                    Timber.tag("chatDebug").d( "putFile error ${it.message}")
                 }
             }
         }
@@ -368,7 +383,7 @@ class ChatComposeFragment : Fragment() {
             model.url,
             model.type,
             model.date,
-            0
+            1
         )
         val historyReceiverModel = HistoryData(
             sender?.id ?: "0",
@@ -420,9 +435,9 @@ class ChatComposeFragment : Fragment() {
         if (token.isEmpty() || firebaseWebApiKey.isNullOrEmpty()) return
         if (receiverCurrentRoomId == roomId) return
         val title = sender?.name ?: "Sender"
-        val body = if (model.message.isNotEmpty()) model.message else "Send a image"
+        val body = if (model.message.isNotEmpty()) model.message else "Sent an image"
         val notificationModel = FCMNotification(
-            title, body
+            title, body, "", "ChatActivity"
         )
         val dataModel = FCMDataModel(
             documentName ?: "chat",
@@ -455,6 +470,7 @@ class ChatComposeFragment : Fragment() {
     private fun pickUpImage() {
         ImagePicker.with(this)
             .compress(200)
+            .maxResultSize(512, 512)
             .createIntent { intent ->
                 startForImageResult.launch(intent)
             }
@@ -465,9 +481,9 @@ class ChatComposeFragment : Fragment() {
         val data = result.data
         if (resultCode == Activity.RESULT_OK) {
             val uri = data?.data
-            Log.d("chatDebug", "fileUri $uri")
+            Timber.tag("chatDebug").d( "fileUri $uri")
             if (uri == null) {
-                Log.d("chatDebug", "fileUri $uri")
+                Timber.tag("chatDebug").d( "fileUri $uri")
                 context?.toast("File not selected")
                 return@registerForActivityResult
             }
@@ -475,10 +491,10 @@ class ChatComposeFragment : Fragment() {
 
             val fileUtils = FileUtils(requireContext())
             filePath = fileUtils.getPath(uri) ?: (fileUri.path ?: "")
-            Log.d("chatDebug", "filePath $filePath")
+            Timber.tag("chatDebug").d( "filePath $filePath")
 
             //val validUri = FileProvider.getUriForFile(requireContext(), "com.github.anupdey99.chatkitlib.provider", File(uri.path))
-            //Log.d("chatDebug", "validUri $validUri")
+            //Timber.tag("chatDebug").d("chatDebug", "validUri $validUri")
 
 
             binding?.filePreviewLayout?.isVisible = true
@@ -488,6 +504,7 @@ class ChatComposeFragment : Fragment() {
                     .apply(options)
                     .into(view)
             }
+            isFileSend = true
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
             context?.toast(ImagePicker.getError(data))
         }
@@ -496,7 +513,7 @@ class ChatComposeFragment : Fragment() {
     private fun sendFile() {
         if (filePath.isNotEmpty()) {
             binding?.progressBar1?.isVisible = true
-            binding?.fileSendBtn?.isEnabled = false
+            binding?.sendBtn?.isEnabled = false
             generateChatMessage(2)
         }
     }

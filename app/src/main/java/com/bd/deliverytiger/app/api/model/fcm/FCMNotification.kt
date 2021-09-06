@@ -10,5 +10,6 @@ data class FCMNotification(
     var body: String? = "",
     @SerializedName("image")
     var image: String? = "",
-
+    @SerializedName("click_action")
+    var clickAction: String? = ""
 )

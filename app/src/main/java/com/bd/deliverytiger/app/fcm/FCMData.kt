@@ -3,6 +3,7 @@ package com.bd.deliverytiger.app.fcm
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
@@ -44,4 +45,18 @@ data class FCMData(
 
     @ColumnInfo(name = "created_at", defaultValue = "CURRENT_TIMESTAMP")
     var createdAt: String? = "", //2019-12-13 16:18:32
+
+    @Ignore
+    @SerializedName("senderId")
+    var senderId: String? = "",
+    @Ignore
+    @SerializedName("senderName")
+    var senderName: String? = "",
+    @Ignore
+    @SerializedName("senderRole")
+    var senderRole: String? = "",
+    @Ignore
+    @SerializedName("receiverId")
+    var receiverId: String? = ""
+
 ): Parcelable
