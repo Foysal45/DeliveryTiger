@@ -41,6 +41,7 @@ import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
 import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetails
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
+import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.*
@@ -285,4 +286,7 @@ interface ApiInterfaceCore {
 
     @GET("api/Fetch/GetSubCategoryById/true/{categoryId}")
     suspend fun fetchSubCategoryById(@Path("categoryId") categoryId: Int): NetworkResponse<GenericResponse<List<SubCategoryData>>, ErrorResponse>
+
+    @POST("api/Loan/AddLoanSurvey")
+    suspend fun submitLoanSurvey(@Body requestBody: LoanSurveyRequestBody): NetworkResponse<Boolean, ErrorResponse>
 }

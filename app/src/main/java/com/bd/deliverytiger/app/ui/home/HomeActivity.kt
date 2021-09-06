@@ -50,6 +50,7 @@ import com.bd.deliverytiger.app.ui.dialog.PopupDialog
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
 import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivity
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleActivity
+import com.bd.deliverytiger.app.ui.loan_survey.LoanSurveyFragment
 import com.bd.deliverytiger.app.ui.location.LocationUsesBottomSheet
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
@@ -588,6 +589,10 @@ class HomeActivity : AppCompatActivity(),
                     R.id.nav_logout -> {
                         menuItem?.isChecked = true
                         logout()
+                    }
+                    R.id.nav_loan_survey -> {
+                        navController.navigate(R.id.nav_dashboard_loanSurvey)
+
                     }
                 }
             }

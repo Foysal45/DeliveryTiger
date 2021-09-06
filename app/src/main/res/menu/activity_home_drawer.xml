@@ -40,6 +40,11 @@
             android:icon="@drawable/ic_history_cod"
             android:title="@string/instant_payment" />
 
+        <item
+            android:id="@+id/nav_loan_survey"
+            android:icon="@drawable/ic_bill_pay_history"
+            android:title="লোন সার্ভে" />
+
     </group>
 
     <group

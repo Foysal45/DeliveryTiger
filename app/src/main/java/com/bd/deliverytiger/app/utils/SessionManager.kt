@@ -23,6 +23,7 @@ object SessionManager {
     private val Key_UserStatus = "userStatusKey"
     private val Key_UserLoginKey = "userLoginKey"
     private val Key_FileBaseUrl = "baseUrlKey"
+    private val Key_SurveyComplete = "userSurveyComplete"
 
     //Live Multiple Video Quality
     private val LIVE_RESOLUTION_ID = "resolutionId"
@@ -658,6 +659,17 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putString("workManagerDistrictUUID", value)
+            }
+        }
+
+
+    var isSurveyComplete: Boolean
+        get() {
+            return pref.getBoolean(Key_SurveyComplete, false)
+        }
+        set(value) {
+            pref.edit {
+                putBoolean(Key_SurveyComplete, value)
             }
         }
 }

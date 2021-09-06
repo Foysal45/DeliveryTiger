@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ui.all_orders.order_edit.reattempt_bottomsheet.ReattemptBottomSheet">
+
+    <TextView
+        android:id="@+id/title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bottom_sheet_curved_bg"
+        android:padding="16dp"
+        android:text="আবার ডেলিভারি এটেম্পট নিন"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_16"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator"
+        app:layout_constraintTop_toBottomOf="@id/title_tv" />
+
+    <TextView
+        android:id="@+id/customerConfirmTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="আপনার কাস্টমারকে ফোন করে নিশ্চিত করে নিন"
+        android:textAlignment="center"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_16"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_tv" />
+
+
+    <TextView
+        android:id="@+id/mobile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="16dp"
+        tools:text="01772248149"
+        android:textAlignment="center"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_16"
+        android:textStyle="bold"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintEnd_toStartOf="@id/callBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/customerConfirmTitle"/>
+
+    <TextView
+        android:id="@+id/alternateMobileNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:text="01555555555"
+        android:textAlignment="center"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_16"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintTop_toBottomOf="@+id/mobile"
+        app:layout_constraintStart_toStartOf="@+id/mobile"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/callBtn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="0dp"
+        app:iconPadding="0dp"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        app:iconSize="24dp"
+        app:iconGravity="textStart"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:backgroundTint="@color/lightGreen"
+        app:strokeColor="@color/colorPrimary"
+        app:icon="@drawable/ic_call"
+        app:iconTint="@color/colorPrimary"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
+        app:layout_constraintTop_toTopOf="@id/mobile"
+        app:layout_constraintBottom_toBottomOf="@id/alternateMobileNumber"
+        app:layout_constraintStart_toEndOf="@+id/mobile"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <EditText
+        android:id="@+id/customComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_edit_text"
+        android:gravity="top"
+        android:hint="আপনার মন্তব্য লিখুন..."
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/callBtn"
+
+        />
+
+    <TextView
+        android:id="@+id/smsChargeInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="* প্রতি রি-এটেম্প্ট এর জন্য ২ টাকা চার্জ প্রযোজ্য"
+        android:textAlignment="center"
+        android:textColor="@color/red"
+        android:textSize="@dimen/text_12"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/customComment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/reattemptBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/colorPrimary"
+        android:text="ডেলিভারি এটেম্পট নিন"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/customComment"
+        app:layout_constraintEnd_toEndOf="@+id/customComment"
+        app:layout_constraintTop_toBottomOf="@+id/smsChargeInfo"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

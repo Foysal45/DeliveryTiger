@@ -176,6 +176,9 @@
     <string name="notification">নোটিফিকেশন</string>
     <string name="payment_details">পেমেন্ট ডিটেইলস</string>
     <string name="order">অর্ডার</string>
+    <string name="survey">সার্ভে </string>
+    <string name="pickup_options">বেছে নিন</string>
+    <string name="submit">সাবমিট</string>
 
 
 </resources>

@@ -37,6 +37,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bd.deliverytiger.app.api.model.bulk_status.StatusUpdateData
 import com.bd.deliverytiger.app.ui.all_orders.order_edit.OrderInfoEditBottomSheet
+import com.bd.deliverytiger.app.ui.all_orders.order_edit.reattempt_bottomsheet.ReattemptBottomSheet
+import timber.log.Timber
 
 class AllOrdersFragment : Fragment() {
 
@@ -195,7 +197,7 @@ class AllOrdersFragment : Fragment() {
         }
 
         allOrdersAdapter.onActionClicked = { model, position ->
-            updateBulkStatus(model)
+            showReattemptPopupBottomSheet(model)
         }
 
         if (shouldOpenFilter) {
@@ -208,9 +210,25 @@ class AllOrdersFragment : Fragment() {
 
     }
 
-    private fun updateBulkStatus(model: CourierOrderViewModel) {
+    private fun showReattemptPopupBottomSheet(model: CourierOrderViewModel) {
+        val tag: String = ReattemptBottomSheet.tag
+        val dialog: ReattemptBottomSheet = ReattemptBottomSheet.newInstance(model)
+        dialog.show(childFragmentManager, tag)
+
+        dialog.onReattemptClick = { comment->
+            dialog.dismiss()
+            val msg = if (comment.isEmpty()){
+                "Need reattempt for delivery"
+            } else {
+                comment
+            }
+            updateBulkStatus(model, msg)
+        }
+    }
+
+    private fun updateBulkStatus(model: CourierOrderViewModel, comment: String) {
         val requestBody: MutableList<StatusUpdateData> = mutableListOf()
-        val requestModel = StatusUpdateData(64, "Need reattempt for delivery", SessionManager.courierUserId, model.courierOrdersId ?: "")
+        val requestModel = StatusUpdateData(64, comment, SessionManager.courierUserId, model.courierOrdersId ?: "")
         requestBody.add(requestModel)
         viewModel.updateBulkStatus(requestBody).observe(viewLifecycleOwner, Observer { flag ->
             if (flag) {
