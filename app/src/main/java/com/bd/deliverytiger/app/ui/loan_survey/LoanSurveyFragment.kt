@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
 import com.bd.deliverytiger.app.databinding.FragmentLoanSurveyBinding
@@ -27,16 +29,7 @@ class LoanSurveyFragment : Fragment() {
 
     private var merchantGender = ""
 
-    private var loanRangeList: MutableList<String> = mutableListOf()
-    private var selectedLoanRange = 0
     private var loanRange = ""
-
-    private var monthlyParcelCountList: MutableList<String> = mutableListOf()
-    private var selectedMonthlyParcelCount = 0
-    private var monthlyParcelCount = ""
-
-    private var monthlyTransactionList: MutableList<String> = mutableListOf()
-    private var selectedMonthlyTransaction = 0
     private var monthlyTransaction = ""
 
     private var hasBankAccount = false
@@ -55,116 +48,36 @@ class LoanSurveyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        init()
+
+        if (SessionManager.isSurveyComplete) {
+            warning()
+        }
         initClickListener()
-        fetchLoanRange()
-        fetchMonthlyParcelCount()
-        fetchMonthlyTransaction()
-    }
-
-    private fun init() {
-        /*binding?.recyclerViewEducation?.let { recyclerView ->
-            recyclerView.apply {
-                layoutManager = GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
-                adapter = dataAdapterEducation
-                itemAnimator = null
-            }
-        }
-        binding?.recyclerViewProfession?.let { recyclerView ->
-            recyclerView.apply {
-                layoutManager = GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
-                adapter = dataAdapterProfession
-                itemAnimator = null
-            }
-        }*/
-    }
-
-    private fun fetchLoanRange() {
-        val tempList = mutableListOf("১,০০০-৫,০০০", "৫,০০০-১০,০০০", "১০,০০০-২০,০০০", "২০,০০০-৫০,০০০", "অন্যান্য")
-        val firstOption = resources.getStringArray(R.array.pick_options).toList()
-        loanRangeList.clear()
-        loanRangeList.addAll(firstOption)
-        loanRangeList.addAll(tempList)
-        /*danaViewModel.danaAllVariables.observe(viewLifecycleOwner, Observer { data ->
-            data.income?.let {
-                monthlyIncomeList.addAll(it.values)
-            }
-        })*/
-
-        val spinnerAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, loanRangeList)
-        binding?.spinnerLoanRange?.adapter = spinnerAdapter
-        binding?.spinnerLoanRange?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedLoanRange = position
-                Timber.d("requestBody $selectedLoanRange, ${loanRangeList.size-1}")
-                binding?.loanRangeETLayout?.isVisible = selectedLoanRange == (loanRangeList.size-1)
-            }
-        }
-
-    }
-
-    private fun fetchMonthlyParcelCount() {
-        val tempList = mutableListOf("১০-৫০", "৫০-২০০", "২০০-৫০০", "৫০০-১০০০", "অন্যান্য")
-        val firstOption = resources.getStringArray(R.array.pick_options).toList()
-        monthlyParcelCountList.clear()
-        monthlyParcelCountList.addAll(firstOption)
-        monthlyParcelCountList.addAll(tempList)
-        /*danaViewModel.danaAllVariables.observe(viewLifecycleOwner, Observer { data ->
-            data.income?.let {
-                monthlyIncomeList.addAll(it.values)
-            }
-        })*/
-
-        val spinnerAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, monthlyParcelCountList)
-        binding?.spinnerMonthlyParcelCount?.adapter = spinnerAdapter
-        binding?.spinnerMonthlyParcelCount?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedMonthlyParcelCount = position
-                Timber.d("requestBody $selectedMonthlyParcelCount, ${monthlyParcelCountList.size-1}")
-                binding?.monthlyParcelCountETLayout?.isVisible = selectedMonthlyParcelCount == (monthlyParcelCountList.size-1)
-            }
-        }
-    }
-
-    private fun fetchMonthlyTransaction() {
-        val tempList = mutableListOf("১,০০০-৫,০০০", "৫,০০০-১০,০০০", "১০,০০০-২০,০০০", "২০,০০০-৫০,০০০", "অন্যান্য")
-        val firstOption = resources.getStringArray(R.array.pick_options).toList()
-        monthlyTransactionList.clear()
-        monthlyTransactionList.addAll(firstOption)
-        monthlyTransactionList.addAll(tempList)
-        /*danaViewModel.danaAllVariables.observe(viewLifecycleOwner, Observer { data ->
-            data.income?.let {
-                monthlyIncomeList.addAll(it.values)
-            }
-        })*/
-
-        val spinnerAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, monthlyTransactionList)
-        binding?.spinnerMonthlyTransaction?.adapter = spinnerAdapter
-        binding?.spinnerMonthlyTransaction?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedMonthlyTransaction = position
-                Timber.d("requestBody $selectedMonthlyTransaction, ${monthlyTransactionList.size-1}")
-                binding?.monthlyTransactionETLayout?.isVisible = selectedMonthlyTransaction == (monthlyTransactionList.size-1)
-            }
-        }
     }
 
     private fun initClickListener() {
         binding?.applyLoanBtn?.setOnClickListener {
             if (verify()) {
-                /*val requestBody = LoanSurveyRequestBody(merchantGender, loanRange, monthlyParcelCount, monthlyTransaction,
-                    hasBankAccount, hasPhysicalShop, hasTradeLicence, imageTradeLicencePath)*/
 
-                val requestBody = LoanSurveyRequestBody(SessionManager.courierUserId, merchantGender,
-                "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg")
-                uploadImage(
-                    "trade_${SessionManager.courierUserId}.jpg",
-                    "delivery_tiger/trade_license",
-                    imageTradeLicencePath, requestBody
-                )
+                if (imagePickFlag == 1) {
+                    val requestBody = LoanSurveyRequestBody(SessionManager.courierUserId, merchantGender,
+                        "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg",
+                        loanRange, monthlyTransaction, hasBankAccount, hasPhysicalShop
+                    )
+                    Timber.d("requestBody 1 $requestBody")
+                    uploadImage(
+                        "trade_${SessionManager.courierUserId}.jpg",
+                        "delivery_tiger/trade_license",
+                        imageTradeLicencePath, requestBody
+                    )
+                } else {
+                    val requestBody = LoanSurveyRequestBody(SessionManager.courierUserId, merchantGender,
+                        "",
+                        loanRange, monthlyTransaction, hasBankAccount, hasPhysicalShop
+                    )
+                    Timber.d("requestBody 2 $requestBody")
+                    submitLoanSurveyData(requestBody)
+                }
             }
         }
 
@@ -214,13 +127,13 @@ class LoanSurveyFragment : Fragment() {
         binding?.merchantHasTradeLicenceRadioGroup?.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 R.id.merchantHasTradeLicenceYes -> {
-                    imagePickFlag = 1
                     hasTradeLicence = true
+                    imagePickFlag = 1
                     binding?.merchantTradeLicenceLayout?.isVisible = true
                 }
                 R.id.merchantHasTradeLicenceNo -> {
-                    imagePickFlag = 0
                     hasTradeLicence = false
+                    imagePickFlag = 0
                     binding?.merchantTradeLicenceLayout?.isVisible = false
                 }
             }
@@ -249,50 +162,16 @@ class LoanSurveyFragment : Fragment() {
             return false
         }
 
-        if (selectedLoanRange == 0) {
-            context?.toast("Select a Loan range")
+        loanRange = binding?.loanRangeET?.text.toString()
+        if (loanRange.isEmpty()) {
+            context?.toast("Please enter loan range")
             return false
-        } else if (selectedLoanRange == loanRangeList.size-1) {
-            val tempLoanRange = binding?.loanRangeET?.text
-            if (tempLoanRange.isNullOrEmpty()) {
-                context?.toast("Please enter loan range")
-                return false
-            } else {
-                loanRange = tempLoanRange.toString()
-            }
-        } else {
-            loanRange = loanRangeList[selectedLoanRange]
         }
 
-        if (selectedMonthlyParcelCount == 0) {
-            context?.toast("Select a Monthly Parcel Count")
+        monthlyTransaction = binding?.monthlyTransactionET?.text.toString()
+        if (monthlyTransaction.isEmpty()) {
+            context?.toast("Please enter Monthly Transaction")
             return false
-        } else if (selectedMonthlyParcelCount == monthlyParcelCountList.size-1) {
-            val tempMonthlyParcelCount = binding?.monthlyParcelCountET?.text
-            if (tempMonthlyParcelCount.isNullOrEmpty()) {
-                context?.toast("Please enter Monthly Parcel Count")
-                return false
-            } else {
-                monthlyParcelCount = tempMonthlyParcelCount.toString()
-            }
-        } else {
-            monthlyParcelCount = monthlyParcelCountList[selectedMonthlyParcelCount]
-        }
-
-
-        if (selectedMonthlyTransaction == 0) {
-            context?.toast("Select a Monthly Transaction")
-            return false
-        } else if (selectedMonthlyTransaction == monthlyTransactionList.size-1) {
-            val tempMonthlyTransaction = binding?.monthlyTransactionET?.text
-            if (tempMonthlyTransaction.isNullOrEmpty()) {
-                context?.toast("Please enter Monthly Transaction")
-                return false
-            } else {
-                monthlyTransaction = tempMonthlyTransaction.toString()
-            }
-        } else {
-            monthlyTransaction = monthlyTransactionList[selectedMonthlyTransaction]
         }
 
         if (imagePickFlag == 1) {
@@ -325,7 +204,7 @@ class LoanSurveyFragment : Fragment() {
                             .into(view)
                     }
                     imageTradeLicencePath = imagePath
-                    imagePickFlag = 0
+                    //imagePickFlag = 0
                 }
                 2 -> {
                     /*binding?.imagePayslipAddIV?.isVisible = false
@@ -375,10 +254,19 @@ class LoanSurveyFragment : Fragment() {
             progressDialog.dismiss()
             showAlert()
             if (model) {
+                submitLoanSurveyData(requestBody)
                 context?.toast("Uploaded successfully")
-                viewModel.submitLoanSurvey(requestBody)
+
             } else {
                 context?.toast("Uploaded Failed")
+            }
+        })
+    }
+
+    private fun submitLoanSurveyData(requestBody: LoanSurveyRequestBody) {
+        viewModel.submitLoanSurvey(requestBody).observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                SessionManager.isSurveyComplete = true
             }
         })
     }
@@ -391,16 +279,13 @@ class LoanSurveyFragment : Fragment() {
         }.show()
     }
 
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
-            val image: Image? = ImagePicker.getFirstImageOrNull(data)
-            if (image != null) {
-                imagePath = image.path
-                binding?.image?.let { view ->
-                    Glide.with(requireContext()).load(imagePath).apply(RequestOptions().placeholder(R.drawable.ic_banner_place)).into(view)
-                }
+    private fun warning() {
+        val titleText = "নির্দেশনা"
+        val descriptionText = "আপনি ইতিপূর্বে একবার সার্ভেটি পূরণ করেছেন, আপনি কি আবার পূরণ করতে ইচ্ছুক?"
+        alert(titleText, descriptionText, true,"ঠিক আছে", "ক্যানসেল") {
+            if (it == AlertDialog.BUTTON_NEGATIVE) {
+                findNavController().popBackStack()
             }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
-    }*/
+        }.show()
+    }
 }

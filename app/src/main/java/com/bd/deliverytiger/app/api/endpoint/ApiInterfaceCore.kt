@@ -288,5 +288,5 @@ interface ApiInterfaceCore {
     suspend fun fetchSubCategoryById(@Path("categoryId") categoryId: Int): NetworkResponse<GenericResponse<List<SubCategoryData>>, ErrorResponse>
 
     @POST("api/Loan/AddLoanSurvey")
-    suspend fun submitLoanSurvey(@Body requestBody: LoanSurveyRequestBody): NetworkResponse<Int, ErrorResponse>
+    suspend fun submitLoanSurvey(@Body requestBody: LoanSurveyRequestBody): NetworkResponse<Boolean, ErrorResponse>
 }

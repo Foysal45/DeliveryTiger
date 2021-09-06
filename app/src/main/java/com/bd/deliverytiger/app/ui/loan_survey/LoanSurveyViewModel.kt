@@ -75,9 +75,9 @@ class LoanSurveryViewModel(private val repository: AppRepository) : ViewModel() 
         return responseData
     }
 
-    fun submitLoanSurvey(requestBody: LoanSurveyRequestBody): LiveData<Int> {
+    fun submitLoanSurvey(requestBody: LoanSurveyRequestBody): LiveData<Boolean> {
 
-        val responseData: MutableLiveData<Int> = MutableLiveData()
+        val responseData: MutableLiveData<Boolean> = MutableLiveData()
 
         viewState.value = ViewState.ProgressState(true)
         viewModelScope.launch(Dispatchers.IO) {

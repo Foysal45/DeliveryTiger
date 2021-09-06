@@ -79,54 +79,17 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/spinnerLoanRangeLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
-
-            <TextView
-                android:id="@+id/spinnerLoanRangeTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="আপনি কত টাকা পর্যন্ত লোন নিতে ইচ্ছুক?"
-                android:textColor="@color/black_70"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spinnerLoanRange"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bg_item_unselected_border"
-                android:overlapAnchor="false"
-                android:spinnerMode="dropdown"
-                android:theme="@style/custom_spinner_style"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spinnerLoanRangeTV"
-                tools:entries="@array/pick_options" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:contentDescription="@string/cd"
-                app:layout_constraintBottom_toBottomOf="@id/spinnerLoanRange"
-                app:layout_constraintEnd_toEndOf="@id/spinnerLoanRange"
-                app:layout_constraintTop_toTopOf="@id/spinnerLoanRange"
-                app:srcCompat="@drawable/ic_arrow_drop_down" />
+            android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loanRangeETLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="লোনের পরিমাণ"
-                app:layout_constraintTop_toBottomOf="@id/spinnerLoanRange"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:hint="আপনি কত টাকা পর্যন্ত লোন নিতে ইচ্ছুক?"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/loanRangeET"
@@ -145,123 +108,20 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/spinnerMonthlyParcelCountLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
-
-            <TextView
-                android:id="@+id/spinnerMonthlyParcelCountTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="আপনি প্রতি মাসে আনুমানিক কতটি পার্সেল দিয়ে থাকেন?"
-                android:textColor="@color/black_70"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spinnerMonthlyParcelCount"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bg_item_unselected_border"
-                android:overlapAnchor="false"
-                android:spinnerMode="dropdown"
-                android:theme="@style/custom_spinner_style"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spinnerMonthlyParcelCountTV"
-                tools:entries="@array/pick_options" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:contentDescription="@string/cd"
-                app:layout_constraintBottom_toBottomOf="@id/spinnerMonthlyParcelCount"
-                app:layout_constraintEnd_toEndOf="@id/spinnerMonthlyParcelCount"
-                app:layout_constraintTop_toTopOf="@id/spinnerMonthlyParcelCount"
-                app:srcCompat="@drawable/ic_arrow_drop_down" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/monthlyParcelCountETLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="পার্সেলের পরিমাণ লিখুন"
-                app:layout_constraintTop_toBottomOf="@id/spinnerMonthlyParcelCount"
-                android:visibility="gone"
-                tools:visibility="visible">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/monthlyParcelCountET"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:maxLength="15"
-                    android:textColor="@color/black_80"
-                    android:textSize="14sp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/spinnerMonthlyTransactionLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
-
-            <TextView
-                android:id="@+id/spinnerMonthlyTransactionTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="আপনার প্রতি মাসে আনুমানিক লেনদেনের পরিমাণ কত?"
-                android:textColor="@color/black_70"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spinnerMonthlyTransaction"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bg_item_unselected_border"
-                android:overlapAnchor="false"
-                android:spinnerMode="dropdown"
-                android:theme="@style/custom_spinner_style"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spinnerMonthlyTransactionTV"
-                tools:entries="@array/pick_options" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:contentDescription="@string/cd"
-                app:layout_constraintBottom_toBottomOf="@id/spinnerMonthlyTransaction"
-                app:layout_constraintEnd_toEndOf="@id/spinnerMonthlyTransaction"
-                app:layout_constraintTop_toTopOf="@id/spinnerMonthlyTransaction"
-                app:srcCompat="@drawable/ic_arrow_drop_down" />
+            android:layout_marginTop="10dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/monthlyTransactionETLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="লেনদেনের পরিমাণ লিখুন"
-                app:layout_constraintTop_toBottomOf="@id/spinnerMonthlyTransaction"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:hint="অনলাইন/ফেসবুকের মাধ্যমে মাসে কত বিক্রি?"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/monthlyTransactionET"
@@ -324,7 +184,7 @@
             android:id="@+id/merchantPhysicalShopExistsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="8dp">
 
             <TextView
                 android:id="@+id/merchantPhysicalShopExistsTV"
@@ -366,7 +226,7 @@
             android:id="@+id/merchantHasTradeLicenceLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="8dp">
 
             <TextView
                 android:id="@+id/merchantHasTradeLicenceTV"
@@ -406,7 +266,7 @@
                 android:id="@+id/merchantTradeLicenceLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:orientation="vertical"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -93,9 +93,6 @@
     <string-array name="pickup_district">
         <item>"জেলা নির্বাচন করুন"</item>
     </string-array>
-    <string-array name="pick_options">
-        <item>"বেছে নিন"</item>
-    </string-array>
     <string-array name="collection_time">
         <item>"সিলেক্ট কালেকশন টাইম"</item>
     </string-array>

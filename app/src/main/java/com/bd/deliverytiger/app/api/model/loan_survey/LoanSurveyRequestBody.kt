@@ -10,10 +10,18 @@ data class LoanSurveyRequestBody (
     var gender: String? = "",
     @SerializedName("tradeLicenseImageUrl")
     var tradeLicenseImageUrl: String? = "",
+    @SerializedName("interestedAmount")
+    var interestedAmount: String? = "0",
+    @SerializedName("transactionAmount")
+    var transactionAmount: String? = "0",
+    @SerializedName("isBankAccount")
+    var isBankAccount: Boolean = false,
+    @SerializedName("isLocalShop")
+    var isLocalShop: Boolean = false,
 
 
-    @SerializedName("loadSurveyId")
-    var loadSurveyId: Int = 0,
+    @SerializedName("loanSurveyId")
+    var loanSurveyId: Int = 0
 
     /*
     @SerializedName("loanRange")

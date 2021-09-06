@@ -232,13 +232,13 @@ class AppRepository(
 
     suspend fun merchantBalanceLoadHistory(merchantID: Int) = apiInterfaceADM.merchantBalanceLoadHistory(merchantID)
 
+    suspend fun submitLoanSurvey(requestBody: LoanSurveyRequestBody) = apiInterfaceCore.submitLoanSurvey(requestBody)
+
     suspend fun imageUploadForFile(
         fileName: RequestBody,
         imagePath: RequestBody,
         file: MultipartBody.Part?
     ) = apiInterfaceADM.imageUploadForFile(fileName, imagePath, file)
-
-    suspend fun submitLoanSurvey(requestBody: LoanSurveyRequestBody) = apiInterfaceCore.submitLoanSurvey(requestBody)
 
     //******************** ADCORE ********************//
 
