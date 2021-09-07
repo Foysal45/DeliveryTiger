@@ -158,7 +158,7 @@ class OrderTrackingFragment : Fragment() {
 
     private fun updateBulkStatus(model: OrderTrackData) {
         val requestBody: MutableList<StatusUpdateData> = mutableListOf()
-        val requestModel = StatusUpdateData(64, "Need reattempt for delivery", SessionManager.courierUserId, orderID)
+        val requestModel = StatusUpdateData(64, "Need reattempt for delivery", SessionManager.courierUserId, orderID, SessionManager.reAttemptCharge)
         requestBody.add(requestModel)
         viewModel.updateBulkStatus(requestBody).observe(viewLifecycleOwner, Observer { flag ->
             if (flag) {

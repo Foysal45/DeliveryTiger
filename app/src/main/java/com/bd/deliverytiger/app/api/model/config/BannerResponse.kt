@@ -21,5 +21,7 @@ data class BannerResponse(
     @SerializedName("instantPaymentHourLimitRange")
     var instantPaymentHourLimitRange: String? = "",
     @SerializedName("currentAppVersionCode")
-    var currentAppVersionCode: Int = 0
+    var currentAppVersionCode: Int = 0,
+    @SerializedName("reAttemptCharge")
+    var reAttemptCharge: Float = 0f
 )

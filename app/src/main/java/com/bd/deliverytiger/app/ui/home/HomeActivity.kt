@@ -1285,6 +1285,7 @@ class HomeActivity : AppCompatActivity(),
                 flag = true
             }
             Timber.d("showPopupDialog getBannerInfo called")
+            SessionManager.reAttemptCharge = model.reAttemptCharge
             val popupModel = model.popUpModel
             if (popupModel.showPopUp) {
                 // No frequency show all time

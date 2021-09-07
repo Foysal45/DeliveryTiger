@@ -12,9 +12,10 @@ data class StatusUpdateData(
     var updatedBy: Int = 0,
     @SerializedName("courierOrdersId")
     var courierOrdersId: String = "",
+    @SerializedName("reAttemptCharge")
+    var reAttemptCharge: Float = 0f,
     @SerializedName("isConfirmedBy")
     var isConfirmedBy: String = "merchantapp",
     @SerializedName("hubName")
     var hubName: String = ""
-
 )
