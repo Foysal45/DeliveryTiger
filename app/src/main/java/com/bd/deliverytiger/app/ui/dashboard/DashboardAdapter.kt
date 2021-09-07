@@ -3,6 +3,7 @@ package com.bd.deliverytiger.app.ui.dashboard
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,6 +77,12 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             holder.countTV.text = countMsg
             holder.titleTV.text = HtmlCompat.fromHtml(titleMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
             holder.countText.text = countText
+
+            if (model.statusGroupId == 15) {
+                holder.countTV.typeface = Typeface.create(holder.countTV.typeface, Typeface.NORMAL)
+            } else {
+                holder.countTV.typeface = Typeface.create(holder.countTV.typeface, Typeface.BOLD)
+            }
 
 
             var cardColor = 0

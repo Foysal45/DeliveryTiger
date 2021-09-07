@@ -849,7 +849,7 @@ class DashboardFragment : Fragment() {
                         customerNotFoundDataList.add(model)
                     }
                     // "শিপমেন্টে আছে", "পার্সেল ঢাকার সর্টিং সেন্টারে আছে", "পার্সেল লস্ট"
-                    4, 14, 15, 16 -> {
+                    4, 14, 16 -> {
                         shipmentCount += model.count ?: 0
                         shipmentDataList.add(model)
                     }
