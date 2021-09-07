@@ -5,7 +5,6 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.ConnectivityManager
@@ -384,15 +383,6 @@ fun Fragment.appVersionCode(): Int {
     } catch (e: Exception) {
         e.printStackTrace()
         0
-    }
-}
-
-fun isPackageInstalled(packageManager: PackageManager, packageName: String): Boolean {
-    return try {
-        packageManager.getPackageInfo(packageName, 0)
-        true
-    } catch (e: Exception) {
-        false
     }
 }
 

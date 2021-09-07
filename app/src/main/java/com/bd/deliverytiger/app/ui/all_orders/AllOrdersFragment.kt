@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.ui.all_orders
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -198,6 +199,31 @@ class AllOrdersFragment : Fragment() {
 
         allOrdersAdapter.onActionClicked = { model, position ->
             showReattemptPopupBottomSheet(model)
+        }
+
+        allOrdersAdapter.onCallClicked = { model, position ->
+            var number = model?.courierAddressContactInfo?.mobile
+            var altNumber = model?.courierAddressContactInfo?.otherMobile
+
+            if (!number.isNullOrEmpty() && !altNumber.isNullOrEmpty()) {
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle("কোন নাম্বার এ কল করতে চান")
+                val numberLists = arrayOf(number, altNumber)
+                builder.setItems(numberLists) { _, which ->
+                    when (which) {
+                        0 -> {
+                            callHelplineNumber(numberLists[0])
+                        }
+                        1 -> {
+                            callHelplineNumber(numberLists[1])
+                        }
+                    }
+                }
+                val dialog = builder.create()
+                dialog.show()
+            } else {
+                callHelplineNumber(number!!)
+            }
         }
 
         if (shouldOpenFilter) {
