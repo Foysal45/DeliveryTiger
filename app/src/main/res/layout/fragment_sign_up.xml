@@ -613,6 +613,54 @@
                         android:layout_height="1px"
                         android:background="@color/login_title_color" />
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp"
+                        android:text="আপনি কি ভঙ্গুর প্রোডাক্ট সেল করেন?"
+                        android:textColor="@color/black_80"
+                        android:textSize="14sp"
+                        app:drawableEndCompat="@drawable/ic_star"
+                        app:drawableTint="@color/red" />
+
+                    <RadioGroup
+                        android:id="@+id/breakableType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="8dp"
+                        android:layout_marginBottom="5dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <RadioButton
+                            android:id="@+id/breakableYes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="হ্যাঁ"
+                            android:textColor="@color/black_80"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/breakableNo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="5dp"
+                            android:text="না"
+                            android:textColor="@color/black_80"
+                            android:textSize="14sp" />
+
+                    </RadioGroup>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/login_title_color" />
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">

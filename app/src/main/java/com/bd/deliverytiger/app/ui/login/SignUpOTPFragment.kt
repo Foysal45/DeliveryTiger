@@ -54,12 +54,14 @@ class SignUpOTPFragment : Fragment() {
     private var fbPage = ""
     private var categoryId: Int = 0
     private var subCategoryId: Int = 0
+    private var isBreakableParcel: Boolean = false
 
     companion object {
         fun newInstance(companyName: String, userMobile: String, userPassword: String, referCode: String,
                         bkashNumber: String, preferredPaymentCycle: String, knowingSource: String,
                         accountName: String, accountNumber: String, bankName: String,
-                        branchName: String, routingNumber: String, gender: String, fbPage: String, categoryId: Int, subCategoryId: Int
+                        branchName: String, routingNumber: String, gender: String, fbPage: String,
+                        categoryId: Int, subCategoryId: Int, isBreakableParcel: Boolean
         ): SignUpOTPFragment = SignUpOTPFragment().apply {
             this.companyName = companyName
             this.userMobile = userMobile
@@ -77,6 +79,7 @@ class SignUpOTPFragment : Fragment() {
             this.fbPage = fbPage
             this.categoryId = categoryId
             this.subCategoryId = subCategoryId
+            this.isBreakableParcel = isBreakableParcel
         }
 
         val tag: String = SignUpOTPFragment::class.java.name
@@ -181,7 +184,8 @@ class SignUpOTPFragment : Fragment() {
         val signUpReqBody = SignUpReqBody(
             userMobile, userPassword, referCode,
             bkashNumber, preferredPaymentCycle, knowingSource, companyName,
-            accountName, accountNumber, bankName, branchName, routingNumber, gender, fbPage, categoryId, subCategoryId
+            accountName, accountNumber, bankName, branchName, routingNumber, gender, fbPage,
+            categoryId, subCategoryId, isBreakableParcel
         )
         Timber.d("signUpReqBody $signUpReqBody")
         loginInterface.userUserRegister(signUpReqBody).enqueue(object : Callback<GenericResponse<SignUpResponse>> {

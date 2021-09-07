@@ -38,6 +38,7 @@ import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 
 
 class SignUpFragment() : Fragment(), View.OnClickListener {
@@ -71,6 +72,8 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
     private var fbPage: String = ""
     private var categoryId: Int = 0
     private var subCategoryId: Int = 0
+    private var isBreakableParcel: Boolean = false
+    private var isBreakableParcelSelected: Boolean = false
 
     private var binding: FragmentSignUpBinding? = null
     private val viewModel: AuthViewModel by inject()
@@ -196,6 +199,19 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         binding?.subCategoryBtn?.setOnClickListener {
             showSubCategory()
         }
+        binding?.breakableType?.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.breakableYes -> {
+                    isBreakableParcel = true
+                    isBreakableParcelSelected = true
+                }
+                R.id.breakableNo -> {
+                    isBreakableParcel = false
+                    isBreakableParcelSelected = true
+                }
+            }
+
+        }
     }
 
     override fun onClick(p0: View?) {
@@ -218,6 +234,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
 
         progressDialog?.show()
         val mobile = etSignUpMobileNo.text.toString()
+        Timber.d("mobile $mobile")
         checkReferrer.getUserInfo(UserInfoRequest(mobile)).enqueue(object : Callback<GenericResponse<LoginResponse>> {
             override fun onFailure(call: Call<GenericResponse<LoginResponse>>, t: Throwable) {
                 progressDialog?.dismiss()
@@ -424,6 +441,19 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
             }
         }
 
+        if (categoryId == 0) {
+            context?.toast("আপনি কোন ক্যাটাগরির প্রোডাক্ট সেল করেন? সিলেক্ট করুন")
+            return false
+        }
+        if (subCategoryList.isNotEmpty() && subCategoryId == 0) {
+            context?.toast("আপনি কোন সাব ক্যাটাগরির প্রোডাক্ট সেল করেন? সিলেক্ট করুন")
+            return false
+        }
+        if (!isBreakableParcelSelected) {
+            context?.toast("আপনি কি ভঙ্গুর প্রোডাক্ট সেল করেন? সিলেক্ট করুন")
+            return false
+        }
+
         return true
     }
 
@@ -444,7 +474,8 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
 
         val fragment = SignUpOTPFragment.newInstance(companyName, mobile, password, referCode,
             bkashNumber, preferredPaymentCycle, knowingSource,
-            accountName, accountNumber, bankName, branchName, routingNumber, gender, fbPage, categoryId, subCategoryId
+            accountName, accountNumber, bankName, branchName, routingNumber, gender, fbPage,
+            categoryId, subCategoryId, isBreakableParcel
         )
         val ft: FragmentTransaction? = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.loginActivityContainer, fragment, SignUpOTPFragment.tag)
