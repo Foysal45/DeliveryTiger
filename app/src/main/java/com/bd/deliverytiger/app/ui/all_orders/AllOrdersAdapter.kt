@@ -20,6 +20,7 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
     var onEditItemClick: ((position: Int) -> Unit)? = null
     var onLocationBtnClick: ((model: CourierOrderViewModel, position: Int) -> Unit)? = null
     var onActionClicked: ((model: CourierOrderViewModel, position: Int) -> Unit)? = null
+    var onCallClicked: ((model: CourierOrderViewModel, position: Int) -> Unit)? = null
     var isFromDashBoard: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -151,6 +152,11 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
             binding.actionBtn.setOnClickListener {
                 if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
                     onActionClicked?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
+                }
+            }
+            binding.callBtn.setOnClickListener {
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                    onCallClicked?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
                 }
             }
         }

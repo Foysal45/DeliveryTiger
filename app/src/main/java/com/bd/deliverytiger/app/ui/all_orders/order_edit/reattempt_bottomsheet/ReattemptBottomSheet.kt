@@ -1,8 +1,6 @@
 package com.bd.deliverytiger.app.ui.all_orders.order_edit.reattempt_bottomsheet
 
 import android.app.AlertDialog
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,15 +10,14 @@ import androidx.core.view.isVisible
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.databinding.FragmentReattemptBottomSheetBinding
-import com.bd.deliverytiger.app.utils.isPackageInstalled
-import com.bd.deliverytiger.app.utils.toast
+import com.bd.deliverytiger.app.utils.callHelplineNumber
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlin.concurrent.thread
 
 
-class ReattemptBottomSheet  : BottomSheetDialogFragment() {
+class ReattemptBottomSheet : BottomSheetDialogFragment() {
 
     private var binding: FragmentReattemptBottomSheetBinding? = null
 
@@ -30,9 +27,10 @@ class ReattemptBottomSheet  : BottomSheetDialogFragment() {
 
     companion object {
 
-        fun newInstance(model: CourierOrderViewModel): ReattemptBottomSheet = ReattemptBottomSheet().apply {
-            data = model
-        }
+        fun newInstance(model: CourierOrderViewModel): ReattemptBottomSheet =
+            ReattemptBottomSheet().apply {
+                data = model
+            }
 
         val tag: String = ReattemptBottomSheet::class.java.name
     }
@@ -43,7 +41,11 @@ class ReattemptBottomSheet  : BottomSheetDialogFragment() {
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return FragmentReattemptBottomSheetBinding.inflate(inflater, container, false).also {
             binding = it
         }.root
@@ -56,9 +58,9 @@ class ReattemptBottomSheet  : BottomSheetDialogFragment() {
         initClickLister()
     }
 
-    private fun initView(){
+    private fun initView() {
         binding?.mobile?.text = data?.courierAddressContactInfo?.mobile
-        if (!data?.courierAddressContactInfo?.otherMobile.isNullOrEmpty()){
+        if (!data?.courierAddressContactInfo?.otherMobile.isNullOrEmpty()) {
             binding?.alternateMobileNumber?.isVisible = true
             binding?.alternateMobileNumber?.text = data?.courierAddressContactInfo?.otherMobile
         }
@@ -83,17 +85,17 @@ class ReattemptBottomSheet  : BottomSheetDialogFragment() {
                 builder.setItems(numberLists) { _, which ->
                     when (which) {
                         0 -> {
-                            goToCallOption(numberLists[0])
+                            callHelplineNumber(numberLists[0])
                         }
                         1 -> {
-                            goToCallOption(numberLists[1])
+                            callHelplineNumber(numberLists[1])
                         }
                     }
                 }
                 val dialog = builder.create()
                 dialog.show()
             } else {
-                goToCallOption(number!!)
+                callHelplineNumber(number!!)
             }
         }
     }
@@ -102,7 +104,8 @@ class ReattemptBottomSheet  : BottomSheetDialogFragment() {
         super.onStart()
         val dialog: BottomSheetDialog? = dialog as BottomSheetDialog?
         dialog?.setCanceledOnTouchOutside(false)
-        val bottomSheet: FrameLayout? = dialog?.findViewById(com.google.android.material.R.id.design_bottom_sheet)
+        val bottomSheet: FrameLayout? =
+            dialog?.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         if (bottomSheet != null) {
             BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_EXPANDED
             thread {
@@ -117,21 +120,6 @@ class ReattemptBottomSheet  : BottomSheetDialogFragment() {
             }
         }
     }
-
-    private fun goToCallOption(number: String) {
-        try {
-            val zoiperAvailable = isPackageInstalled(requireContext().packageManager, "com.zoiper.android.app")
-            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$number"))
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            if (zoiperAvailable) {
-                intent.setPackage("com.zoiper.android.app")
-            }
-            startActivity(intent)
-        } catch (e: Exception) {
-            context?.toast("Could not find an activity to place the call")
-        }
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
