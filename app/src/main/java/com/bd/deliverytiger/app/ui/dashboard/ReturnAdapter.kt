@@ -34,24 +34,28 @@ class ReturnAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             if (position == 0) {
                 binding.title.setBackgroundColor(ContextCompat.getColor(binding.title.context, R.color.return_state_1))
-                (binding.countTV.background as GradientDrawable).setStroke(binding.countTV.context.dpToPx(1f),  ContextCompat.getColor(binding.countTV.context, R.color.return_state_1))
+                (binding.countAndMapLayout.background as GradientDrawable).setStroke(binding.countTV.context.dpToPx(1f),  ContextCompat.getColor(binding.countTV.context, R.color.return_state_1))
                 binding.countTV.setTextColor(ContextCompat.getColor(binding.title.context, R.color.black_90))
             } else if (position == 1) {
                 binding.title.setBackgroundColor(ContextCompat.getColor(binding.title.context, R.color.return_state_2))
-                (binding.countTV.background as GradientDrawable).setStroke(binding.countTV.context.dpToPx(1f),  ContextCompat.getColor(binding.countTV.context, R.color.return_state_2))
+                (binding.countAndMapLayout.background as GradientDrawable).setStroke(binding.countTV.context.dpToPx(1f),  ContextCompat.getColor(binding.countTV.context, R.color.return_state_2))
                 binding.countTV.setTextColor(ContextCompat.getColor(binding.title.context, R.color.orange))
             } else {
                 binding.title.setBackgroundColor(ContextCompat.getColor(binding.title.context, R.color.return_state_3))
-                (binding.countTV.background as GradientDrawable).setStroke(binding.countTV.context.dpToPx(1f),  ContextCompat.getColor(binding.countTV.context, R.color.return_state_3))
+                (binding.countAndMapLayout.background as GradientDrawable).setStroke(binding.countTV.context.dpToPx(1f),  ContextCompat.getColor(binding.countTV.context, R.color.return_state_3))
                 binding.countTV.setTextColor(ContextCompat.getColor(binding.title.context, R.color.orange))
             }
 
             if (model.statusGroupId == 11 || model.statusGroupId == 10) {
                 binding.mapBtn.setImageResource(R.drawable.ic_location1)
-                binding.countTV.setPadding(0,0,binding.countTV.context.dpToPx(16f),0)
+                //binding.countTV.setPadding(0,0,binding.countTV.context.dpToPx(16f),0)
             } else if (model.statusGroupId == 9) {
                 binding.mapBtn.visibility = View.GONE
-                binding.countTV.setPadding(0,0,0,0)
+                binding.view.visibility = View.GONE
+                //binding.countTV.setPadding(0,0,0,0)
+            } else {
+                binding.mapBtn.visibility = View.GONE
+                binding.view.visibility = View.GONE
             }
         }
     }
