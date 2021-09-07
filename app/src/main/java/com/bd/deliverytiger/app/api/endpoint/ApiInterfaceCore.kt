@@ -35,10 +35,7 @@ import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
 import com.bd.deliverytiger.app.api.model.helpline_number.HelpLineNumberModel
 import com.bd.deliverytiger.app.api.model.instant_payment_update.InstantPaymentUpdateResponse
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
-import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfo
-import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
-import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
-import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
+import com.bd.deliverytiger.app.api.model.lead_management.*
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetails
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
@@ -289,4 +286,7 @@ interface ApiInterfaceCore {
 
     @POST("api/Loan/AddLoanSurvey")
     suspend fun submitLoanSurvey(@Body requestBody: LoanSurveyRequestBody): NetworkResponse<Boolean, ErrorResponse>
+
+    @POST("api/Entry/AddCustomerSMSLog")
+    suspend fun saveCustomerSMSLog(@Body requestBody: List<SMSLogData>): NetworkResponse<GenericResponse<List<SMSLogData>>, ErrorResponse>
 }

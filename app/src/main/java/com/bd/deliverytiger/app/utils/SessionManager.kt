@@ -672,4 +672,14 @@ object SessionManager {
                 putBoolean(Key_SurveyComplete, value)
             }
         }
+
+    var reAttemptCharge: Float
+        get() {
+            return pref.getFloat("reAttemptCharge", 2.0f)
+        }
+        set(value) {
+            pref.edit {
+                putFloat("reAttemptCharge", value)
+            }
+        }
 }

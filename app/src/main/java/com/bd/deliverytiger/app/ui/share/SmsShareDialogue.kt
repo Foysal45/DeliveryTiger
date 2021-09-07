@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
+import com.bd.deliverytiger.app.api.model.lead_management.SMSLogData
 import com.bd.deliverytiger.app.api.model.live.share_sms.SMSBody
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
 import com.bd.deliverytiger.app.databinding.FragmentSmsShareDialogueBinding
@@ -30,6 +31,7 @@ class SmsShareDialogue : BottomSheetDialogFragment() {
     private var customerList: List<CustomerInformation>? = null
     private val selectedNameList: MutableList<String> = mutableListOf()
     private val selectedNumberList: MutableList<String> = mutableListOf()
+    private val logList: MutableList<SMSLogData> = mutableListOf()
     private var smsLimit: Int = 0
     var onSend: ((isSend: Boolean) -> Unit)? = null
 
@@ -97,7 +99,16 @@ class SmsShareDialogue : BottomSheetDialogFragment() {
         val msg = binding?.shareMessage?.text?.toString() ?: ""
         val requestBody: MutableList<SMSModel> = mutableListOf()
         requestBody.add(SMSModel(numbers = selectedNumberList, text = msg))
-        viewModel.sendSMS(requestBody).observe(viewLifecycleOwner, Observer { flag ->
+        logList.clear()
+        customerList?.forEach {
+            logList.add(SMSLogData(
+                SessionManager.courierUserId,
+                it.mobile,
+                it.customerName,
+                msg
+            ))
+        }
+        viewModel.sendSMS(requestBody, logList).observe(viewLifecycleOwner, Observer { flag ->
             if (flag) {
                 context?.toast("SMS Send")
                 if (isAdded) {

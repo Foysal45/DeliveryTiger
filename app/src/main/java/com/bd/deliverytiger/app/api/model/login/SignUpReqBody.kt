@@ -36,6 +36,9 @@ data class SignUpReqBody(
     var categoryId: Int = 0,
     @SerializedName("subCategoryId")
     var subCategoryId: Int = 0,
+    @SerializedName("isBreakAble")
+    var isBreakAble: Boolean = false,
+
 
     @SerializedName("registrationFrom")
     var registrationFrom: String = "app",

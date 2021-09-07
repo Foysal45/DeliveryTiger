@@ -254,7 +254,7 @@ class AllOrdersFragment : Fragment() {
 
     private fun updateBulkStatus(model: CourierOrderViewModel, comment: String) {
         val requestBody: MutableList<StatusUpdateData> = mutableListOf()
-        val requestModel = StatusUpdateData(64, comment, SessionManager.courierUserId, model.courierOrdersId ?: "")
+        val requestModel = StatusUpdateData(64, comment, SessionManager.courierUserId, model.courierOrdersId ?: "", SessionManager.reAttemptCharge)
         requestBody.add(requestModel)
         viewModel.updateBulkStatus(requestBody).observe(viewLifecycleOwner, Observer { flag ->
             if (flag) {
