@@ -27,6 +27,7 @@ import com.bd.deliverytiger.app.api.model.live.live_status.LiveStatusUpdateReque
 import com.bd.deliverytiger.app.api.model.live.share_sms.SMSRequest
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
+import com.bd.deliverytiger.app.api.model.lead_management.SMSLogData
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
@@ -236,6 +237,8 @@ class AppRepository(
     suspend fun merchantBalanceLoadHistory(merchantID: Int) = apiInterfaceADM.merchantBalanceLoadHistory(merchantID)
 
     suspend fun submitLoanSurvey(requestBody: LoanSurveyRequestBody) = apiInterfaceCore.submitLoanSurvey(requestBody)
+
+    suspend fun saveCustomerSMSLog(requestBody: List<SMSLogData>) = apiInterfaceCore.saveCustomerSMSLog(requestBody)
 
     suspend fun imageUploadForFile(
         fileName: RequestBody,
