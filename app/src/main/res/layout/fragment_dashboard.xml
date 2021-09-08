@@ -79,6 +79,53 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <LinearLayout
+                        android:id="@+id/collectorTimerLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="16dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <ImageView
+                            android:id="@+id/clock"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="@string/cd"
+                            android:src="@drawable/ic_express" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="কালেক্টর"
+                            android:textColor="@color/black_90"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/timeCounter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="4dp"
+                            android:textColor="@color/orange"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            tools:text="২ ঘণ্টা ১০ মিনিটের" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="মধ্যে আসবে"
+                            android:textColor="@color/black_90"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -205,6 +252,7 @@
                                     android:src="@drawable/ic_avater_demo"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
                                     tools:src="@tools:sample/avatars" />
 
                                 <TextView
@@ -219,7 +267,8 @@
                                     android:textStyle="bold"
                                     app:layout_constraintEnd_toStartOf="@+id/chatBtn"
                                     app:layout_constraintStart_toEndOf="@id/retentionManagerImage"
-                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintTop_toTopOf="@id/retentionManagerImage"
+                                    app:layout_constraintBottom_toBottomOf="@id/retentionManagerImage"
                                     tools:text="Md Sifat" />
 
                                 <TextView
@@ -234,7 +283,8 @@
                                     app:layout_constraintStart_toEndOf="@id/retentionManagerImage"
                                     app:layout_constraintTop_toBottomOf="@id/retentionManagerName"
                                     app:layout_constraintVertical_bias="0.0"
-                                    tools:text="09638-000777" />
+                                    tools:text="09638-000777"
+                                    android:visibility="gone"/>
 
                                 <com.google.android.material.button.MaterialButton
                                     android:id="@+id/callBtn"
@@ -437,53 +487,6 @@
                                 android:textSize="12sp" />
 
                         </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/collectorTimerLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginEnd="16dp"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:visibility="gone"
-                        tools:visibility="visible">
-
-                        <ImageView
-                            android:id="@+id/clock"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:contentDescription="@string/cd"
-                            android:src="@drawable/ic_express" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
-                            android:text="কালেক্টর"
-                            android:textColor="@color/black_90"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/timeCounter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="4dp"
-                            android:textColor="@color/orange"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            tools:text="২ ঘণ্টা ১০ মিনিটের" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="মধ্যে আসবে"
-                            android:textColor="@color/black_90"
-                            android:textSize="14sp" />
 
                     </LinearLayout>
 
