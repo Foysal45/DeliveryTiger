@@ -27,6 +27,7 @@
     <dimen name="toggleButtonHeight">60dp</dimen>
     <dimen name="order_preview_margin_top">12dp</dimen>
     <dimen name="bottomActionHeight">60dp</dimen>
+    <dimen name="dashboard_count_size">24sp</dimen>
 
     <dimen name="chat_btn_margin">8dp</dimen>
     <dimen name="chat_btn_padding_left">10dp</dimen>
@@ -37,4 +38,5 @@
     <dimen name="item_img_size">38sp</dimen>
     <dimen name="msg_background_curve">24dp</dimen>
     <dimen name="msg_timestamp_size">8sp</dimen>
+
 </resources>

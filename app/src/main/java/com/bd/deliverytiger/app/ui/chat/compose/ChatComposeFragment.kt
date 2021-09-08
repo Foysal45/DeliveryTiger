@@ -469,7 +469,7 @@ class ChatComposeFragment : Fragment() {
 
     private fun pickUpImage() {
         ImagePicker.with(this)
-            .compress(200)
+            .compress(100)
             .maxResultSize(512, 512)
             .createIntent { intent ->
                 startForImageResult.launch(intent)

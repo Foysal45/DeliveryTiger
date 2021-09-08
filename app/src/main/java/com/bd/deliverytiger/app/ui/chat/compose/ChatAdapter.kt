@@ -30,6 +30,7 @@ class ChatAdapter(private val userId: String) : RecyclerView.Adapter<RecyclerVie
         .placeholder(R.drawable.ic_placeholder_40)
         .error(R.drawable.ic_placeholder_40)
         .transform(RoundedCorners(40))
+        .timeout(3000)
         //.transform(RoundedCorners(R.integer.msg_image_curve))
 
     override fun getItemViewType(position: Int): Int {
@@ -114,6 +115,7 @@ class ChatAdapter(private val userId: String) : RecyclerView.Adapter<RecyclerVie
                     binding.image.isVisible = true
                     Glide.with(binding.image)
                         .load(model.url)
+                        .error(Glide.with(binding.image).load(model.url))
                         .apply(optionsImage)
                         .into(binding.image)
                 }
