@@ -90,9 +90,6 @@ class LoanSurveyFragment : Fragment() {
                 R.id.merchantGenderFemale -> {
                     merchantGender = "female"
                 }
-                R.id.merchantGenderOthers -> {
-                    merchantGender = "others"
-                }
             }
         }
         //endregion
