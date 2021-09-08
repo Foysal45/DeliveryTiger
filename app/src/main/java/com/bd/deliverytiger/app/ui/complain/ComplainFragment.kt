@@ -8,8 +8,12 @@ import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.chat.ChatUserData
+import com.bd.deliverytiger.app.api.model.chat.FirebaseCredential
 import com.bd.deliverytiger.app.databinding.FragmentComplainBinding
+import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.complain.complain_history.ComplainHistoryBottomSheet
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
@@ -91,6 +95,10 @@ class ComplainFragment(): Fragment() {
                     }
                 })
             }
+        }
+
+        binding?.chatLayout?.setOnClickListener {
+            goToChatActivity()
         }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
@@ -197,6 +205,27 @@ class ComplainFragment(): Fragment() {
             }
         }
 
+    }
+
+    private fun goToChatActivity() {
+        val firebaseCredential = FirebaseCredential(
+            firebaseWebApiKey = BuildConfig.FirebaseWebApiKey
+        )
+        val senderData = ChatUserData(SessionManager.courierUserId.toString(), SessionManager.userName, SessionManager.mobile,
+            imageUrl = "https://static.ajkerdeal.com/delivery_tiger/profile/${SessionManager.courierUserId}.jpg",
+            role = "dt",
+            fcmToken = SessionManager.firebaseToken
+        )
+        val receiverData = ChatUserData("845", "Complain Admin", "",
+            imageUrl = "https://static.ajkerdeal.com/images/admin_users/ad/845.jpg",
+            role = "complain"
+        )
+        ChatConfigure(
+            "dt-complain",
+            senderData,
+            firebaseCredential = firebaseCredential,
+            receiver = receiverData
+        ).config(requireContext())
     }
 
     override fun onDestroyView() {

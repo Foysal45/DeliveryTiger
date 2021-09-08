@@ -45,7 +45,8 @@
             app:toggle_btnCornerRadius="4dp"
             app:toggle_selectedBackgroundColor="@color/colorPrimary"
             app:toggle_text="@string/pickupType1"
-            app:toggle_textSize="16sp" />
+            app:toggle_textSize="16sp"
+            />
 
         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
             android:id="@+id/toggleButtonPickup2"
