@@ -229,6 +229,7 @@ class HomeActivity : AppCompatActivity(),
 
         getCourierUsersInformation()
         loadBannerInfo()
+        fetchPickupLocations()
         fetchOrderServiceType()
 
         initService()
@@ -1104,6 +1105,10 @@ class HomeActivity : AppCompatActivity(),
             SessionManager.merchantDistrict = model.districtId
             isQuickBookingEnable = model.isQuickOrderActive
         })
+    }
+
+    private fun fetchPickupLocations() {
+        viewModel.getPickupLocations(SessionManager.courierUserId)
     }
 
     private fun fetchOrderServiceType() {
