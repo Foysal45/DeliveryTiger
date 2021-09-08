@@ -110,7 +110,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/bg_edit_text"
         android:gravity="top"
-        android:hint="কাস্টমার থেকে প্রাপ্ত তথ্য লিখুন। কাস্টমারের বিকল্প নম্বর লিখুন।"
+        android:hint="কাস্টমার থেকে প্রাপ্ত তথ্য লিখুন অথবা কাস্টমারের বিকল্প নম্বর লিখুন।"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:importantForAutofill="no"
