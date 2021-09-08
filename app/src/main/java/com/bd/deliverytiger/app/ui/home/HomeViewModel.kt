@@ -9,6 +9,7 @@ import com.bd.deliverytiger.app.api.model.accounts.AdvanceBalanceData
 import com.bd.deliverytiger.app.api.model.config.BannerResponse
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
 import com.bd.deliverytiger.app.api.model.district.DistrictData
+import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.fcm.FCMData
@@ -41,6 +42,8 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
     val keyboardVisibility = MutableLiveData<Boolean>(false)
 
     val serviceInfoList = MutableLiveData<List<ServiceInfoData>>()
+
+    val pickupLocationList = MutableLiveData<List<PickupLocation>>()
 
     val netAmount = MutableLiveData<Int>(0)
 
@@ -219,6 +222,40 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
             }
         }
         return responseData
+    }
+
+    fun getPickupLocations(courierUserId: Int): LiveData<List<PickupLocation>> {
+
+        viewState.value = ViewState.ProgressState(true)
+        //val responseData = MutableLiveData<List<PickupLocation>>()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getPickupLocations(courierUserId)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            pickupLocationList.value = response.body.model!!
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return pickupLocationList
     }
 
 }

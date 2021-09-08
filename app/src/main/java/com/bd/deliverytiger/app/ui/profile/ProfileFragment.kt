@@ -396,7 +396,7 @@ class ProfileFragment : Fragment() {
         }
         viewModel.addPickupLocations(requestBody).observe(viewLifecycleOwner, Observer { model ->
             //pickupAddressAdapter.addItem(requestBody)
-            getPickupLocation()
+            homeViewModel.getPickupLocations(SessionManager.courierUserId)
             context?.toast("পিকআপ লোকেশন অ্যাড হয়েছে")
 
             binding?.spinnerPickUpDistrict?.setSelection(0)
@@ -498,7 +498,7 @@ class ProfileFragment : Fragment() {
             dialog.onUpdateClicked = { model ->
                 dialog.dismiss()
                 context?.toast("সফলভাবে পিকআপ লোকেশন আপডেট হয়েছে")
-                getPickupLocation()
+                homeViewModel.getPickupLocations(SessionManager.courierUserId)
             }
         }
         pickupAddressAdapter.onDeleteClicked = { model ->
@@ -507,7 +507,7 @@ class ProfileFragment : Fragment() {
                     viewModel.deletePickupLocations(model).observe(viewLifecycleOwner, Observer {
                         if (it) {
                             context?.toast("সফলভাবে ডিলিট হয়েছে")
-                            getPickupLocation()
+                            homeViewModel.getPickupLocations(SessionManager.courierUserId)
                         }
                     })
                 }
@@ -602,7 +602,7 @@ class ProfileFragment : Fragment() {
 
     private fun getPickupLocation() {
 
-        viewModel.getPickupLocations(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list ->
+        homeViewModel.pickupLocationList.observe(viewLifecycleOwner, Observer { list ->
             if (list.isNotEmpty()) {
                 //setUpCollectionSpinner(list, null, 1)
                 pickupAddressAdapter.initList(list)

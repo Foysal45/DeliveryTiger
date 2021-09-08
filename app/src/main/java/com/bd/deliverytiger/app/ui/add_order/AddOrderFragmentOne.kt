@@ -217,6 +217,7 @@ class AddOrderFragmentOne : Fragment() {
     private var isCity: Boolean = false
 
     private var isLocationLoading: Boolean = false
+    private var isShowServiceType: Boolean = false
 
     private var binding: FragmentAddOrderFragmentOneBinding? = null
     private var timeSlotDataAdapter: AddOrderTimeSlotAdapter = AddOrderTimeSlotAdapter()
@@ -281,7 +282,6 @@ class AddOrderFragmentOne : Fragment() {
         fetchOfferCharge()
         getPackagingCharge()
         fetchDTOrderGenericLimit()
-        getPickupLocation()
         fetchCollectionTimeSlot()
     }
 
@@ -676,7 +676,7 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         if (!isPickupLocationListAvailable) {
-            getPickupLocation()
+            homeViewModel.getPickupLocations(SessionManager.courierUserId)
         }
 
         return !isMissing
@@ -688,6 +688,30 @@ class AddOrderFragmentOne : Fragment() {
         ft?.addToBackStack(tag)
         ft?.commit()
     }*/
+
+    private fun fetchPickupLocation() {
+        homeViewModel.pickupLocationList.observe(viewLifecycleOwner, Observer { list ->
+            if (list.isNotEmpty()) {
+                isPickupLocationListAvailable = true
+                SessionManager.isPickupLocationAdded = true
+                if (list.size == 1 && list.first().districtId == 14) {
+                    merchantDistrict = 14
+                    isShowServiceType = false
+                    loadServiceType()
+                } else {
+                    isShowServiceType = true
+                    showPickupBottomSheet()
+                }
+            } else {
+                isPickupLocationListAvailable = false
+                SessionManager.isPickupLocationAdded = false
+            }
+            if (!isPickupLocationFirstLoad) {
+                isPickupLocationFirstLoad = true
+                isProfileComplete = checkProfileData()
+            }
+        })
+    }
 
     private fun showPickupBottomSheet() {
         val tag: String = CollectionInfoBottomSheet.tag
@@ -711,7 +735,9 @@ class AddOrderFragmentOne : Fragment() {
             isCollectionTypeSelected = true
             //orderPlaceBtn.performClick()
 
-            loadServiceType()
+            if (isShowServiceType) {
+                loadServiceType()
+            }
             /*if (merchantDistrict == 14) {
                 loadServiceType()
             } else {
@@ -909,7 +935,7 @@ class AddOrderFragmentOne : Fragment() {
 
         collectionChargeApi = SessionManager.collectionCharge
         //merchantDistrict = SessionManager.merchantDistrict
-        showPickupBottomSheet()
+        fetchPickupLocation()
         initLocationListener()
     }
 
@@ -1050,6 +1076,7 @@ class AddOrderFragmentOne : Fragment() {
                 thanaId = model.thanaId
                 areaId = model.areaId
                 etAriaPostOfficeLayout.isVisible = areaId > 0
+                isAriaAvailable = areaId > 0
                 etCustomerName.setText(model.customerName)
                 etCustomersAddress.setText(model.address)
                 etAlternativeMobileNo.setText(model.otherMobile)
@@ -1446,27 +1473,6 @@ class AddOrderFragmentOne : Fragment() {
         }
     }
     //#endregion
-
-    private fun getPickupLocation() {
-
-        viewModel.getPickupLocations(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list ->
-            if (list.isNotEmpty()) {
-                //setUpCollectionSpinner(list, null, 1)
-                //collectionAddressET.visibility = View.GONE
-                isPickupLocationListAvailable = true
-                SessionManager.isPickupLocationAdded = true
-            } else {
-                //getDistrictThanaOrAria(14)
-                //collectionAddressET.visibility = View.VISIBLE
-                isPickupLocationListAvailable = false
-                SessionManager.isPickupLocationAdded = false
-            }
-            if (!isPickupLocationFirstLoad) {
-                isPickupLocationFirstLoad = true
-                isProfileComplete = checkProfileData()
-            }
-        })
-    }
 
     private fun fetchDTOrderGenericLimit() {
         viewModel.fetchDTOrderGenericLimit().observe(viewLifecycleOwner, Observer { model ->
