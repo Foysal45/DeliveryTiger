@@ -16,15 +16,21 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:clipToPadding="false">
 
-        <TextView
-            android:id="@+id/intro1TV"
+        <ImageView
+            android:id="@+id/bannerImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="নিজের তথ্য দিন"
-            android:textColor="@color/black_90"
-            android:textSize="20sp" />
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/cd"
+            android:minHeight="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_banner_place"
+            />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/merchantGender"
@@ -65,13 +71,6 @@
                     android:text="মহিলা"
                     android:layout_marginStart="8dp"/>
 
-                <RadioButton
-                    android:id="@+id/merchantGenderOthers"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="অন্যান্য"
-                    android:layout_marginStart="8dp"/>
-
             </RadioGroup>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -95,7 +94,7 @@
                     android:id="@+id/loanRangeET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
+                    android:imeOptions="actionNext"
                     android:importantForAutofill="no"
                     android:inputType="number"
                     android:maxLength="15"
@@ -135,6 +134,127 @@
                     android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/merchantPhysicalShopExistsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/merchantPhysicalShopExistsTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="আপনার কি ফিজিক্যাল দোকান আছে?"
+                android:textColor="@color/black_80"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <RadioGroup
+                android:id="@+id/merchantPhysicalShopExistsRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/merchantPhysicalShopExistsTV"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <RadioButton
+                    android:id="@+id/merchantPhysicalShopExistsYes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="হ্যাঁ"/>
+
+                <RadioButton
+                    android:id="@+id/merchantPhysicalShopExistsNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="না"
+                    android:layout_marginStart="8dp"/>
+
+            </RadioGroup>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/totalCODFromOtherServices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/totalCODFromOtherServicesTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ডেলিভারি টাইগার সহ অন্য কুরিয়ার থেকে মাসিক সর্বমোট কত টাকা COD কালেক্ট করেন?"
+                android:textColor="@color/black_80"
+                android:textAlignment="inherit"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/totalCODFromOtherServicesETLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="মাসিক সর্বমোট COD পরিমান লিখুন"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/totalCODFromOtherServicesTV"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/totalCODFromOtherServicesET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:maxLength="15"
+                    android:textColor="@color/black_80"
+                    android:textSize="14sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/otherServices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/otherServicesTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ডেলিভারি টাইগার ব্যাতিত অন্য আর কার কার সার্ভিস গ্রহণ করেন?"
+                android:textColor="@color/black_80"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewOtherServices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/otherServicesTV"
+
+                tools:itemCount="6"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_view_courier_options"
+                tools:orientation="vertical"
+                tools:spanCount="3" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -181,52 +301,10 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/merchantPhysicalShopExistsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
-
-            <TextView
-                android:id="@+id/merchantPhysicalShopExistsTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="আপনার কি ফিজিক্যাল দোকান আছে?"
-                android:textColor="@color/black_80"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <RadioGroup
-                android:id="@+id/merchantPhysicalShopExistsRadioGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/merchantPhysicalShopExistsTV"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <RadioButton
-                    android:id="@+id/merchantPhysicalShopExistsYes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="হ্যাঁ"/>
-
-                <RadioButton
-                    android:id="@+id/merchantPhysicalShopExistsNo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="না"
-                    android:layout_marginStart="8dp"/>
-
-            </RadioGroup>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/merchantHasTradeLicenceLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="12dp">
 
             <TextView
                 android:id="@+id/merchantHasTradeLicenceTV"
@@ -318,6 +396,116 @@
                     tools:visibility="visible" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/merchantHasGuarantorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/merchantHasGuarantorTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=" আপনার কি কোনো গ্যারেন্টর আছে?"
+                android:textColor="@color/black_80"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <RadioGroup
+                android:id="@+id/merchantHasGuarantorRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/merchantHasGuarantorTV"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <RadioButton
+                    android:id="@+id/merchantHasGuarantorYes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="হ্যাঁ"/>
+
+                <RadioButton
+                    android:id="@+id/merchantHasGuarantorNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="না"
+                    android:layout_marginStart="8dp"/>
+
+            </RadioGroup>
+
+            <LinearLayout
+                android:id="@+id/merchantGuarantorLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/merchantHasGuarantorRadioGroup"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/merchantGuarantorNameETLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="গ্যারেন্টরের নাম"
+                    app:layout_constraintTop_toBottomOf="@id/merchantHasGuarantorRadioGroup"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/merchantGuarantorNameET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:maxLength="15"
+                        android:textColor="@color/black_80"
+                        android:textSize="14sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/merchantGuarantorNumberETLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="গ্যারেন্টরের ফোন নম্বর"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/merchantGuarantorNameETLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/merchantGuarantorNumberET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionDone"
+                        android:importantForAutofill="no"
+                        android:inputType="number"
+                        android:maxLength="15"
+                        android:textColor="@color/black_80"
+                        android:textSize="14sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="* গ্যারেন্টরের সাথে যোগাযোগ করা হবে \n(গ্যারেন্টর পরিবারের কোনো সদস্য হতে পারবেন না)"
+                    android:textSize="14sp"
+                    android:textColor="@color/red_900"
+                    android:layout_marginTop="8dp"/>
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

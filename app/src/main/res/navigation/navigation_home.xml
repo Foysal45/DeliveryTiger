@@ -312,7 +312,7 @@
     <fragment
         android:id="@+id/nav_loanSurvey"
         android:name="com.bd.deliverytiger.app.ui.loan_survey.LoanSurveyFragment"
-        android:label="@string/survey"
+        android:label="@string/loan_survey"
         tools:layout="@layout/fragment_loan_survey"
     />
 
