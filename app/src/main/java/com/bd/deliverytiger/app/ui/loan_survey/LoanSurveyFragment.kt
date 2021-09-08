@@ -12,33 +12,53 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
 import com.bd.deliverytiger.app.databinding.FragmentLoanSurveyBinding
+import com.bd.deliverytiger.app.ui.dana.user_details_info.LoanSurveyAdapter
+import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import com.github.dhaval2404.imagepicker.ImagePicker
 import org.koin.android.ext.android.inject
 import timber.log.Timber
+import java.util.*
 
 class LoanSurveyFragment : Fragment() {
 
     private var binding: FragmentLoanSurveyBinding? = null
     private val viewModel: LoanSurveryViewModel by inject()
 
+    private val dataAdapter = LoanSurveyAdapter()
+
+    private var courierList: MutableList<String> = mutableListOf()
+
     private var merchantGender = ""
 
     private var loanRange = ""
     private var monthlyTransaction = ""
 
+    private var totalMonthlyCOD = ""
+    private var guarantorName = ""
+    private var guarantorNumber = ""
+
     private var hasBankAccount = false
     private var hasPhysicalShop = false
     private var hasTradeLicence = false
+    private var hasGuarantor = false
 
     private var imagePath: String = ""
     private var imagePickFlag = 0
     private var imageTradeLicencePath: String = ""
+
+
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle(getString(R.string.loan_survey))
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentLoanSurveyBinding.inflate(inflater).also {
@@ -52,10 +72,30 @@ class LoanSurveyFragment : Fragment() {
         if (SessionManager.isSurveyComplete) {
             warning()
         }
+        fetchBanner()
+        init()
+        fetchCourierList()
         initClickListener()
     }
 
+    private fun init() {
+        binding?.recyclerViewOtherServices?.let { recyclerView ->
+            recyclerView.apply {
+                layoutManager = GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
+                adapter = dataAdapter
+                itemAnimator = null
+            }
+        }
+    }
+
     private fun initClickListener() {
+
+        dataAdapter.onItemClicked = { model, position ->
+            context?.toast(model)
+            dataAdapter.multipleSelection(model, position)
+        }
+
+
         binding?.applyLoanBtn?.setOnClickListener {
             if (verify()) {
 
@@ -141,6 +181,28 @@ class LoanSurveyFragment : Fragment() {
             pickImage()
         }
 
+        //region merchantHasGuarantor
+        binding?.merchantHasGuarantorRadioGroup?.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.merchantHasGuarantorYes -> {
+                    hasGuarantor = true
+                    binding?.merchantGuarantorLayout?.isVisible = true
+                }
+                R.id.merchantHasGuarantorNo -> {
+                    hasGuarantor = false
+                    binding?.merchantGuarantorLayout?.isVisible = false
+                }
+            }
+        }
+        //endregion
+
+    }
+
+    private fun fetchCourierList() {
+        courierList.clear()
+
+        courierList.addAll(listOf("eDesh", "Shundorban", "eCourier", "Redex"))
+        dataAdapter.initLoad(courierList)
     }
 
     private fun pickImage() {
@@ -171,6 +233,12 @@ class LoanSurveyFragment : Fragment() {
             return false
         }
 
+        totalMonthlyCOD = binding?.totalCODFromOtherServicesET?.text.toString()
+        if (totalMonthlyCOD.isEmpty()) {
+            context?.toast("Please enter Total Monthly COD")
+            return false
+        }
+
         if (imagePickFlag == 1) {
             if (imageTradeLicencePath.isEmpty()) {
                 context?.toast("ট্রেড লাইসেন্স এর ছবি অ্যাড করুন")
@@ -178,6 +246,17 @@ class LoanSurveyFragment : Fragment() {
             }
         }
 
+        guarantorName = binding?.merchantGuarantorNameET?.text.toString()
+        guarantorNumber = binding?.merchantGuarantorNumberET?.text.toString()
+        if (hasGuarantor) {
+            if (guarantorName.isEmpty()) {
+                context?.toast("Please Fill Guarantor Name")
+                return false
+            } else if (guarantorNumber.isEmpty()) {
+                context?.toast("Please Fill Guarantor Number")
+                return false
+            }
+        }
 
         return true
     }
@@ -284,5 +363,17 @@ class LoanSurveyFragment : Fragment() {
                 findNavController().popBackStack()
             }
         }.show()
+    }
+
+    private fun fetchBanner() {
+        val options = RequestOptions()
+            .placeholder(R.drawable.ic_banner_place)
+            .signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
+        binding?.bannerImage?.let { image ->
+            Glide.with(image)
+                .load("https://static.ajkerdeal.com/images/merchant/loan_banner.jpg")
+                .apply(options)
+                .into(image)
+        }
     }
 }
