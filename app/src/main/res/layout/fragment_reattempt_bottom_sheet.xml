@@ -11,9 +11,9 @@
         android:id="@+id/title_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_bottom_sheet_curved_bg"
+        android:background="@drawable/bg_bottom_sheet_reattempt_curved_bg"
         android:padding="16dp"
-        android:text="আবার ডেলিভারি এটেম্পট নিন"
+        android:text="আপনি কি পুনরায় ডেলিভারি এটেম্পট করতে চান?"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="@dimen/text_16"
@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="আপনার কাস্টমারকে ফোন করে নিশ্চিত করে নিন"
+        android:text="আপনার কাস্টমারকে ফোন করে নিশ্চিত হয়ে নিন"
         android:textAlignment="center"
         android:textColor="@color/black_80"
         android:textSize="@dimen/text_16"
@@ -110,7 +110,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/bg_edit_text"
         android:gravity="top"
-        android:hint="আপনার মন্তব্য লিখুন..."
+        android:hint="কাস্টমার থেকে প্রাপ্ত তথ্য লিখুন। কাস্টমারের বিকল্প নম্বর লিখুন।"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:importantForAutofill="no"
@@ -124,15 +124,15 @@
         android:textSize="@dimen/text_14"
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@+id/callBtn"
-
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/smsChargeInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="* প্রতি রি-এটেম্প্ট এর জন্য ২ টাকা চার্জ প্রযোজ্য"
+        android:text="* প্রতি রি-এটেম্পটের জন্য ২ টাকা চার্জ প্রযোজ্য"
         android:textAlignment="center"
         android:textColor="@color/red"
         android:textSize="@dimen/text_12"
@@ -146,14 +146,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:gravity="center"
         android:textColor="@color/white"
         app:backgroundTint="@color/colorPrimary"
-        android:text="ডেলিভারি এটেম্পট নিন"
+        android:text="পুনরায় ডেলিভারি এটেম্পট করুন"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/customComment"
-        app:layout_constraintEnd_toEndOf="@+id/customComment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/smsChargeInfo"/>
 
 

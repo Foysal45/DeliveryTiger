@@ -117,7 +117,7 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
 
             when (model.statusId) {
                 // কাস্টমার প্রোডাক্ট নিতে চায়নি, ক্রেতা ফোনে পাওয়া যায়নি
-                26, 33 -> {
+                26, 33, 47, 27 -> {
                     binding.actionBtn.isVisible = true
                     binding.actionBtn.text = "আবার ডেলিভারি এটেম্পট নিন"
                 }

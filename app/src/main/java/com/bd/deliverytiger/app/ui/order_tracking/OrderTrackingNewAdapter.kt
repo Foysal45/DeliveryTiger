@@ -183,7 +183,7 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             //Timber.d("order tracking status ${model.status}")
             when (model.status) {
                 // কাস্টমার প্রোডাক্ট নিতে চায়নি, ক্রেতা ফোনে পাওয়া যায়নি
-                26, 33 -> {
+                26, 33 , 47, 27-> {
                     if (position == 0) {
                         binding.actionBtn.isVisible = true
                         binding.actionBtn.text = "আবার ডেলিভারি এটেম্পট নিন"
