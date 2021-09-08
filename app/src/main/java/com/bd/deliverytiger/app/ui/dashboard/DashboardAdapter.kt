@@ -78,12 +78,6 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             holder.titleTV.text = HtmlCompat.fromHtml(titleMsg, HtmlCompat.FROM_HTML_MODE_LEGACY)
             holder.countText.text = countText
 
-            if (model.statusGroupId == 15) {
-                holder.countTV.typeface = Typeface.create(holder.countTV.typeface, Typeface.NORMAL)
-            } else {
-                holder.countTV.typeface = Typeface.create(holder.countTV.typeface, Typeface.BOLD)
-            }
-
 
             var cardColor = 0
             var countTextColor = 0
@@ -126,6 +120,15 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             //holder.parentLayout.setBackgroundColor(cardColor)
             holder.parentLayout.setBackgroundResource(R.drawable.bg_cod_collection)
             holder.countTV.setTextColor(countTextColor)
+
+            if (model.statusGroupId == 15) {
+                holder.countTV.typeface = Typeface.create(holder.countTV.typeface, Typeface.NORMAL)
+                holder.countTV.textSize = 22f
+            } else {
+                holder.countTV.typeface = Typeface.create(holder.countTV.typeface, Typeface.BOLD)
+                holder.countTV.textSize = 24f
+            }
+
             //holder.designIV.setImageResource(cardDesign)
             /*Glide.with(holder.iconIV.context)
                 .load(model.dashboardImageUrl)

@@ -842,16 +842,16 @@ class DashboardFragment : Fragment() {
 
             list.forEach { model ->
                 when (model.statusGroupId) {
+                    // "শিপমেন্টে আছে", "পার্সেল ঢাকার সর্টিং সেন্টারে আছে", "পার্সেল লস্ট"
+                    4, 14, 16 -> {
+                        shipmentCount += model.count ?: 0
+                        shipmentDataList.add(model)
+                    }
                     //  "কাস্টমারকে যোগাযোগ করা যাচ্ছে না",
                     15 -> {
                         Timber.d("requestBody DataFilter $model")
                         customerNotFoundCount += model.count ?: 0
                         customerNotFoundDataList.add(model)
-                    }
-                    // "শিপমেন্টে আছে", "পার্সেল ঢাকার সর্টিং সেন্টারে আছে", "পার্সেল লস্ট"
-                    4, 14, 16 -> {
-                        shipmentCount += model.count ?: 0
-                        shipmentDataList.add(model)
                     }
                     //"রিটার্ন পার্সেল এখনো ঢাকায় পৌছায়নি", "রিটার্ন পার্সেল সেন্ট্রাল ওয়্যার হাউসে আছে", "রিটার্ন পার্সেল আপনার নিকটস্থ হাবে আছে"
                     9, 10, 11 -> {
@@ -863,6 +863,7 @@ class DashboardFragment : Fragment() {
             val shipmentData = DashboardData(
                 name = "শিপমেন্টে আছে",
                 dashboardSpanCount = 1,
+                statusGroupId = 4,
                 count = shipmentCount,
                 dashboardViewColorType = "waiting",
                 dashboardRouteUrl = "shipment",
@@ -872,6 +873,7 @@ class DashboardFragment : Fragment() {
             val customerNotFoundData = DashboardData(
                 name = "কাস্টমারকে পাওয়া যাচ্ছে না",
                 dashboardSpanCount = 1,
+                statusGroupId = 15,
                 count = customerNotFoundCount,
                 dashboardViewColorType = "negative",
                 dashboardRouteUrl = "customer_not_found",
@@ -882,6 +884,7 @@ class DashboardFragment : Fragment() {
             val returnData = DashboardData(
                 name = "রিটার্নে আছে",
                 dashboardSpanCount = 1,
+                statusGroupId = 9,
                 count = returnCount,
                 dashboardViewColorType = "negative",
                 dashboardRouteUrl = "return",
