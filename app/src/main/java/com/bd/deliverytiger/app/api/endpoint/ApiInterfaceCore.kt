@@ -38,7 +38,9 @@ import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCy
 import com.bd.deliverytiger.app.api.model.lead_management.*
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetails
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
+import com.bd.deliverytiger.app.api.model.loan_survey.CourierModel
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
+import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.*
@@ -284,8 +286,17 @@ interface ApiInterfaceCore {
     @GET("api/Fetch/GetSubCategoryById/true/{categoryId}")
     suspend fun fetchSubCategoryById(@Path("categoryId") categoryId: Int): NetworkResponse<GenericResponse<List<SubCategoryData>>, ErrorResponse>
 
+
+
+
+    @GET("api/Dashboard/GetCouriers")
+    suspend fun fetchCourierList(): NetworkResponse<GenericResponse<List<CourierModel>>, ErrorResponse>
+
     @POST("api/Loan/AddLoanSurvey")
-    suspend fun submitLoanSurvey(@Body requestBody: LoanSurveyRequestBody): NetworkResponse<Boolean, ErrorResponse>
+    suspend fun submitLoanSurvey(@Body requestBody: LoanSurveyRequestBody): NetworkResponse<GenericResponse<LoanSurveyRequestBody>, ErrorResponse>
+
+    @POST("api/Entry/AddCouriersWithLoanSurvey")
+    suspend fun submitCourierList(@Body requestBody: List<SelectedCourierModel>): NetworkResponse<List<SelectedCourierModel>, ErrorResponse>
 
     @POST("api/Entry/AddCustomerSMSLog")
     suspend fun saveCustomerSMSLog(@Body requestBody: List<SMSLogData>): NetworkResponse<GenericResponse<List<SMSLogData>>, ErrorResponse>

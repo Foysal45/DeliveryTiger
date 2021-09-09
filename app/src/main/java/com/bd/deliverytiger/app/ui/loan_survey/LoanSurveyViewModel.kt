@@ -5,13 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
+import com.bd.deliverytiger.app.api.model.loan_survey.CourierModel
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
+import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
 import com.haroldadmin.cnradapter.NetworkResponse
 import id.zelory.compressor.Compressor
-import id.zelory.compressor.constraint.quality
 import id.zelory.compressor.constraint.resolution
 import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +32,41 @@ class LoanSurveryViewModel(private val repository: AppRepository) : ViewModel() 
     private val mediaTypeMultipart = "multipart/form-data".toMediaTypeOrNull()
     private val mediaTypeText = "text/plain".toMediaTypeOrNull()
 
+
+    fun fetchCourierList(): LiveData<List<CourierModel>> {
+
+        viewState.value = ViewState.ProgressState(true)
+        val responseBody = MutableLiveData<List<CourierModel>>()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.fetchCourierList()
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseBody.value = response.body.model!!
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        //val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        //viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        //val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        //viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        //val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        //viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+
+        return responseBody
+    }
 
     fun imageUploadForFile(context: Context, fileName: String, imagePath: String, fileUrl: String): LiveData<Boolean> {
 
@@ -75,13 +110,47 @@ class LoanSurveryViewModel(private val repository: AppRepository) : ViewModel() 
         return responseData
     }
 
-    fun submitLoanSurvey(requestBody: LoanSurveyRequestBody): LiveData<Boolean> {
+    fun submitLoanSurvey(requestBody: LoanSurveyRequestBody): LiveData<LoanSurveyRequestBody> {
 
-        val responseData: MutableLiveData<Boolean> = MutableLiveData()
+        val responseData: MutableLiveData<LoanSurveyRequestBody> = MutableLiveData()
 
         viewState.value = ViewState.ProgressState(true)
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.submitLoanSurvey(requestBody)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body != null) {
+                            responseData.value = response.body.model
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
+    }
+
+    fun submitCourierList(requestBody: List<SelectedCourierModel>): LiveData<List<SelectedCourierModel>> {
+
+        val responseData: MutableLiveData<List<SelectedCourierModel>> = MutableLiveData()
+
+        viewState.value = ViewState.ProgressState(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.submitCourierList(requestBody)
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {
