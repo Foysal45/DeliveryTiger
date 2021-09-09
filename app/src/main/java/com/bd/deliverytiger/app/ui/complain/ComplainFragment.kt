@@ -216,12 +216,12 @@ class ComplainFragment(): Fragment() {
             role = "dt",
             fcmToken = SessionManager.firebaseToken
         )
-        val receiverData = ChatUserData("845", "Complain Admin", "",
-            imageUrl = "https://static.ajkerdeal.com/images/admin_users/ad/845.jpg",
-            role = "complain"
+        val receiverData = ChatUserData("938", "Complain Admin", "01894811222",
+            imageUrl = "https://static.ajkerdeal.com/images/admin_users/dt/938.jpg",
+            role = "retention"
         )
         ChatConfigure(
-            "dt-complain",
+            "dt-retention",
             senderData,
             firebaseCredential = firebaseCredential,
             receiver = receiverData

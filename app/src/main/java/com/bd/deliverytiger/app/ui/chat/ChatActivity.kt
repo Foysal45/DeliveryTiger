@@ -148,9 +148,9 @@ class ChatActivity: AppCompatActivity() {
             is ChatHistoryFragment -> {
                 setToolbar("Chat History")
             }
-            is ChatComposeFragment -> {
+            /*is ChatComposeFragment -> {
                 setToolbar(receiver?.name ?: "Chat")
-            }
+            }*/
         }
     }
 

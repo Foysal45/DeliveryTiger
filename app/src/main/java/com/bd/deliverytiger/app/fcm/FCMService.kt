@@ -141,7 +141,7 @@ class FCMService : FirebaseMessagingService() {
                         }
                     })
             }
-            "dt-retention" -> {
+            "dt-retention", "dt-complain" -> {
                 val builder1 = createNotification(
                     getString(R.string.notification_channel_chat),
                     title, body, createChatPendingIntent(fcmModel)
