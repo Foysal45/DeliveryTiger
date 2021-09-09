@@ -1295,7 +1295,7 @@ class HomeActivity : AppCompatActivity(),
             if (popupModel.showPopUp) {
                 // No frequency show all time
                 if (popupModel.popUpFrequency == 0) {
-                    showPopupDialog(popupModel.popUpUrl)
+                    showPopupDialog(popupModel.popUpUrl, popupModel.route)
                 } else {
                     val calender = Calendar.getInstance()
                     val dayOfYear = calender.get(Calendar.DAY_OF_YEAR)
@@ -1305,17 +1305,25 @@ class HomeActivity : AppCompatActivity(),
                     if (popupModel.popUpFrequency > SessionManager.popupShowCount) {
                         SessionManager.popupShowCount = SessionManager.popupShowCount + 1
                         SessionManager.popupDateOfYear = dayOfYear
-                        showPopupDialog(popupModel.popUpUrl)
+                        showPopupDialog(popupModel.popUpUrl, popupModel.route)
                     }
                 }
             }
         })
     }
 
-    private fun showPopupDialog(imageUrl: String?) {
+    private fun showPopupDialog(imageUrl: String?, route: String?) {
         val tag = PopupDialog.tag
         val dialog = PopupDialog.newInstance(imageUrl)
         dialog.show(supportFragmentManager, tag)
+        dialog.onClick = {
+            dialog.dismiss()
+            when (route) {
+                "survey" -> {
+                    navController.navigate(R.id.nav_dashboard_loanSurvey)
+                }
+            }
+        }
     }
 
     private fun goToLiveActivity() {

@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.ui.dashboard
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -39,6 +40,7 @@ import com.bd.deliverytiger.app.ui.banner.SliderAdapter
 import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
+import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleActivity
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -472,8 +474,8 @@ class DashboardFragment : Fragment() {
                 val model = bannerList[position]
                 Timber.d("sliderViewDebug $model")
                 //goToWebView(model.webUrl ?: "")
-                if (model.isWebLinkActive) {
-                    goToWebView(model.webUrl ?: "")
+                if (model.isWebLinkActive && !model.webUrl.isNullOrEmpty()) {
+                    bannerNavigation(model.webUrl!!)
                 }
             }
 
@@ -1236,6 +1238,27 @@ class DashboardFragment : Fragment() {
             firebaseCredential = firebaseCredential,
             receiver = receiverData
         ).config(requireContext())
+    }
+
+    private fun bannerNavigation(url: String) {
+        when(url) {
+            "survey" -> {
+                findNavController().navigate(R.id.nav_dashboard_loanSurvey)
+            }
+            "chumbok" -> {
+                findNavController().navigate(R.id.nav_dashboard_leadManagement)
+            }
+            "live" -> {
+                goToLiveActivity()
+            }
+            else -> {
+                goToWebView(url)
+            }
+        }
+    }
+
+    private fun goToLiveActivity() {
+        startActivity(Intent(requireContext(), LiveScheduleActivity::class.java))
     }
 
     override fun onDestroyView() {

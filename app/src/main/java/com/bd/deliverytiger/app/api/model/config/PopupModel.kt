@@ -9,5 +9,7 @@ data class PopupModel(
     @SerializedName("showPopUp")
     var showPopUp: Boolean = false,
     @SerializedName("popUpFrequency")
-    var popUpFrequency: Int = 0
+    var popUpFrequency: Int = 0,
+    @SerializedName("route")
+    var route: String? = ""
 )

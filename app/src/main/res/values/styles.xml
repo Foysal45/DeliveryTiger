@@ -5,7 +5,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:fontFamily">@font/solaiman_lipi</item>
+        <item name="android:fontFamily">@font/solaiman_lipi_1_6</item>
         <item name="android:forceDarkAllowed" tools:ignore="NewApi">false</item>
     </style>
 
