@@ -132,7 +132,11 @@ class ChatHistoryFragment: Fragment() {
             .get()
             .addOnSuccessListener { documents ->
                 binding?.progressBar?.isVisible = false
-                if (documents.isEmpty) return@addOnSuccessListener
+                if (documents.isEmpty) {
+                    binding?.emptyView?.isVisible = true
+                    return@addOnSuccessListener
+                }
+                binding?.emptyView?.isVisible = false
                 val chatHistoryList = documents.toObjects(HistoryData::class.java)
                 dataAdapter.initLoad(chatHistoryList)
                 initRealTimeListener()
