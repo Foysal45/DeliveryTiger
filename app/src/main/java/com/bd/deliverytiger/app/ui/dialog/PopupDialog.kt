@@ -19,6 +19,7 @@ import java.util.*
 class PopupDialog : DialogFragment() {
 
     private var imageUrl: String? = null
+    var onClick: (() -> Unit)? = null
 
     companion object {
         fun newInstance(imageUrl: String?): PopupDialog = PopupDialog().apply {
@@ -41,6 +42,9 @@ class PopupDialog : DialogFragment() {
 
         val closeLayout: FrameLayout = view.findViewById(R.id.closeLayout)
         val bannerIV: ImageView = view.findViewById(R.id.banner)
+        bannerIV.setOnClickListener {
+            onClick?.invoke()
+        }
 
 
         Glide.with(requireContext())

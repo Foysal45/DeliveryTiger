@@ -56,7 +56,12 @@
         <action android:id="@+id/nav_dashboard_loanSurvey"
             app:destination="@id/nav_loanSurvey"
             />
-
+        <action android:id="@+id/nav_dashboard_leadManagement"
+            app:destination="@id/nav_lead_management"
+            />
+        <action android:id="@+id/nav_dashboard_live"
+            app:destination="@id/nav_live"
+            />
     </fragment>
 
     <fragment
