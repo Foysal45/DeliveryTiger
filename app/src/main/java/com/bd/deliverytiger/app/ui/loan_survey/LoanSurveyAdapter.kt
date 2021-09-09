@@ -88,4 +88,12 @@ class LoanSurveyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyItemChanged(pos)
     }
 
+    fun getSelectedItemModelList(): List<String> {
+        val items: MutableList<String> = ArrayList<String>(selectedItems.size())
+        for (i in 0 until selectedItems.size()) {
+            items.add(dataList[selectedItems.keyAt(i)])
+        }
+        return items
+    }
+
 }

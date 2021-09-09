@@ -91,7 +91,7 @@ class LoanSurveyFragment : Fragment() {
     private fun initClickListener() {
 
         dataAdapter.onItemClicked = { model, position ->
-            context?.toast(model)
+            //context?.toast(model)
             dataAdapter.multipleSelection(model, position)
         }
 
@@ -99,23 +99,27 @@ class LoanSurveyFragment : Fragment() {
         binding?.applyLoanBtn?.setOnClickListener {
             if (verify()) {
 
+                Timber.d("requestBody list ${dataAdapter.getSelectedItemModelList()}")
+
+                val requestBody = LoanSurveyRequestBody(SessionManager.courierUserId, merchantGender,
+                    "",
+                    loanRange, monthlyTransaction, hasBankAccount, hasPhysicalShop,
+                    totalMonthlyCOD, guarantorName, guarantorNumber
+                )
                 if (imagePickFlag == 1) {
-                    val requestBody = LoanSurveyRequestBody(SessionManager.courierUserId, merchantGender,
-                        "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg",
-                        loanRange, monthlyTransaction, hasBankAccount, hasPhysicalShop
-                    )
+                    requestBody.apply {
+                        tradeLicenseImageUrl = "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg"
+                    }
                     Timber.d("requestBody 1 $requestBody")
+                    //TODO Active the following code
                     uploadImage(
                         "trade_${SessionManager.courierUserId}.jpg",
                         "delivery_tiger/trade_license",
                         imageTradeLicencePath, requestBody
                     )
                 } else {
-                    val requestBody = LoanSurveyRequestBody(SessionManager.courierUserId, merchantGender,
-                        "",
-                        loanRange, monthlyTransaction, hasBankAccount, hasPhysicalShop
-                    )
                     Timber.d("requestBody 2 $requestBody")
+                    //TODO Active the following code
                     submitLoanSurveyData(requestBody)
                 }
             }

@@ -19,6 +19,13 @@ data class LoanSurveyRequestBody (
     @SerializedName("isLocalShop")
     var isLocalShop: Boolean = false,
 
+    @SerializedName("totalMonthlyCOD")
+    var totalMonthlyCOD: String? = "0",
+    @SerializedName("guarantorName")
+    var guarantorName: String? = "",
+    @SerializedName("guarantorNumber")
+    var guarantorNumber: String? = "",
+
 
     @SerializedName("loanSurveyId")
     var loanSurveyId: Int = 0
