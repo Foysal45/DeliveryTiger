@@ -1,6 +1,5 @@
 package com.bd.deliverytiger.app.ui.dana.user_details_info
 
-import android.content.res.ColorStateList
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,14 +7,15 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.contains
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
+import com.bd.deliverytiger.app.api.model.loan_survey.CourierModel
+import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
 import com.bd.deliverytiger.app.databinding.ItemViewCourierOptionsBinding
 
 class LoanSurveyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val dataList: MutableList<String> = mutableListOf()
+    private val dataList: MutableList<CourierModel> = mutableListOf()
 
-    var onItemClicked: ((model: String, position: Int) -> Unit)? = null
+    var onItemClicked: ((model: CourierModel, position: Int) -> Unit)? = null
 
     private val selectedItems: SparseBooleanArray = SparseBooleanArray()
     // array used to perform multiple animation at once
@@ -32,7 +32,7 @@ class LoanSurveyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val model = dataList[position]
             val binding = holder.binding
 
-            binding.title.text = model
+            binding.title.text = model.courierName
             /*val background = if (selectedPosition == position) {
                 ContextCompat.getDrawable(binding.title.context, R.drawable.bg_item_selected_border)
             } else {
@@ -48,9 +48,9 @@ class LoanSurveyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.title.setTextColor(color)
 
             var background = if (selectedItems[position, false]) {
-                ContextCompat.getDrawable(binding.title.context, R.drawable.bg_time_slot_selected)
+                ContextCompat.getDrawable(binding.title.context, R.drawable.bg_live_schedule_date_selected)
             } else {
-                ContextCompat.getDrawable(binding.title.context, R.drawable.bg_item_unselected_border)
+                ContextCompat.getDrawable(binding.title.context, R.drawable.bg_live_schedule_date_unselected)
             }
             binding.title.background = background
         }
@@ -72,13 +72,13 @@ class LoanSurveyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    fun initLoad(list: List<String>) {
+    fun initLoad(list: List<CourierModel>) {
         dataList.clear()
         dataList.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun multipleSelection(model : String, pos: Int) {
+    fun multipleSelection(model : CourierModel, pos: Int) {
         this.currentSelectedIndex = pos
         if (selectedItems.contains(pos)){
             selectedItems.delete(pos)
@@ -86,6 +86,17 @@ class LoanSurveyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             selectedItems.put(pos, true)
         }
         notifyItemChanged(pos)
+    }
+
+    fun getSelectedItemModelList(): List<SelectedCourierModel> {
+        val items: MutableList<SelectedCourierModel> = ArrayList(selectedItems.size())
+        for (i in 0 until selectedItems.size()) {
+            items.add(SelectedCourierModel(
+                dataList[selectedItems.keyAt(i)].courierId,
+                dataList[selectedItems.keyAt(i)].courierName
+            ))
+        }
+        return items
     }
 
 }

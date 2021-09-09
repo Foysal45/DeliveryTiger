@@ -7,20 +7,46 @@
     android:layout_height="match_parent"
     tools:context=".ui.all_orders.details_bottomsheet.AllOrdersDetailsBottomSheet">
 
-    <TextView
-        android:id="@+id/complain_history_title_tv"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomSheet_title_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:background="@drawable/bg_bottom_sheet_curved_bg"
-        android:padding="16dp"
-        android:text="অর্ডার ডিটেইলস"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_16"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/complain_history_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="অর্ডার ডিটেইলস"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_16"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/track_iv"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:padding="6dp"
+            android:layout_marginEnd="8dp"
+            android:layout_gravity="center|end"
+            android:src="@drawable/ic_tracking_text"
+            app:tint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/orderInfo"
@@ -32,7 +58,7 @@
         android:layout_marginBottom="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/complain_history_title_tv">
+        app:layout_constraintTop_toBottomOf="@+id/bottomSheet_title_layout">
 
         <TextView
             android:id="@+id/orderId"
@@ -62,7 +88,7 @@
             <ImageView
                 android:id="@+id/trackBtn"
                 android:layout_width="wrap_content"
-                android:layout_height="24dp"
+                android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/cd"
                 app:srcCompat="@drawable/ic_tracking_text" />

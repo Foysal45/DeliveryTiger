@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
@@ -14,7 +13,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.loan_survey.CourierModel
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
+import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
 import com.bd.deliverytiger.app.databinding.FragmentLoanSurveyBinding
 import com.bd.deliverytiger.app.ui.dana.user_details_info.LoanSurveyAdapter
 import com.bd.deliverytiger.app.ui.home.HomeActivity
@@ -34,7 +35,8 @@ class LoanSurveyFragment : Fragment() {
 
     private val dataAdapter = LoanSurveyAdapter()
 
-    private var courierList: MutableList<String> = mutableListOf()
+    private var courierList: MutableList<CourierModel> = mutableListOf()
+    private var selectedCourierList: MutableList<SelectedCourierModel> = mutableListOf()
 
     private var merchantGender = ""
 
@@ -91,7 +93,7 @@ class LoanSurveyFragment : Fragment() {
     private fun initClickListener() {
 
         dataAdapter.onItemClicked = { model, position ->
-            context?.toast(model)
+            //context?.toast(model)
             dataAdapter.multipleSelection(model, position)
         }
 
@@ -99,23 +101,26 @@ class LoanSurveyFragment : Fragment() {
         binding?.applyLoanBtn?.setOnClickListener {
             if (verify()) {
 
+                val requestBody = LoanSurveyRequestBody(
+                    SessionManager.courierUserId, merchantGender,
+                    "",
+                    loanRange, monthlyTransaction, hasBankAccount, hasPhysicalShop,
+                    totalMonthlyCOD, guarantorName, guarantorNumber
+                )
                 if (imagePickFlag == 1) {
-                    val requestBody = LoanSurveyRequestBody(SessionManager.courierUserId, merchantGender,
-                        "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg",
-                        loanRange, monthlyTransaction, hasBankAccount, hasPhysicalShop
-                    )
+                    requestBody.apply {
+                        tradeLicenseImageUrl = "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg"
+                    }
                     Timber.d("requestBody 1 $requestBody")
+
                     uploadImage(
                         "trade_${SessionManager.courierUserId}.jpg",
                         "delivery_tiger/trade_license",
                         imageTradeLicencePath, requestBody
                     )
                 } else {
-                    val requestBody = LoanSurveyRequestBody(SessionManager.courierUserId, merchantGender,
-                        "",
-                        loanRange, monthlyTransaction, hasBankAccount, hasPhysicalShop
-                    )
                     Timber.d("requestBody 2 $requestBody")
+
                     submitLoanSurveyData(requestBody)
                 }
             }
@@ -201,8 +206,12 @@ class LoanSurveyFragment : Fragment() {
     private fun fetchCourierList() {
         courierList.clear()
 
-        courierList.addAll(listOf("eDesh", "Shundorban", "eCourier", "Redex"))
-        dataAdapter.initLoad(courierList)
+        viewModel.fetchCourierList().observe(viewLifecycleOwner, Observer { list ->
+            if (list.isNotEmpty()) {
+                courierList.addAll(list)
+                dataAdapter.initLoad(courierList)
+            }
+        })
     }
 
     private fun pickImage() {
@@ -239,6 +248,26 @@ class LoanSurveyFragment : Fragment() {
             return false
         }
 
+        if (dataAdapter.getSelectedItemModelList().isEmpty()) {
+            context?.toast("Please select other courier service you use")
+            return false
+        }
+
+        if (binding?.merchantHasBankAccountRadioGroup?.checkedRadioButtonId == -1) {
+            context?.toast("Please select a bank account option")
+            return false
+        }
+
+        if (binding?.merchantHasTradeLicenceRadioGroup?.checkedRadioButtonId == -1) {
+            context?.toast("Please select a trade license option")
+            return false
+        }
+
+        if (binding?.merchantHasGuarantorRadioGroup?.checkedRadioButtonId == -1) {
+            context?.toast("Please select a guarantor option")
+            return false
+        }
+
         if (imagePickFlag == 1) {
             if (imageTradeLicencePath.isEmpty()) {
                 context?.toast("ট্রেড লাইসেন্স এর ছবি অ্যাড করুন")
@@ -252,7 +281,7 @@ class LoanSurveyFragment : Fragment() {
             if (guarantorName.isEmpty()) {
                 context?.toast("Please Fill Guarantor Name")
                 return false
-            } else if (guarantorNumber.isEmpty()) {
+            } else if (guarantorNumber.isEmpty() || guarantorNumber.length != 11) {
                 context?.toast("Please Fill Guarantor Number")
                 return false
             }
@@ -340,10 +369,22 @@ class LoanSurveyFragment : Fragment() {
     }
 
     private fun submitLoanSurveyData(requestBody: LoanSurveyRequestBody) {
-        viewModel.submitLoanSurvey(requestBody).observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                SessionManager.isSurveyComplete = true
+        viewModel.submitLoanSurvey(requestBody).observe(viewLifecycleOwner, Observer { model ->
+            SessionManager.isSurveyComplete = true
+            val tempLoanSurveyId = model.loanSurveyId
+
+            Timber.d("requestBody 3 ${model.loanSurveyId}")
+
+            selectedCourierList.clear()
+            for (item in dataAdapter.getSelectedItemModelList()) {
+                item.apply {
+                    loanSurveyId = tempLoanSurveyId
+                }
+                selectedCourierList.add(item)
             }
+
+            Timber.d("requestBody 3 $selectedCourierList")
+            viewModel.submitCourierList(selectedCourierList)
         })
     }
 

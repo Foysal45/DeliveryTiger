@@ -162,10 +162,6 @@ class ServiceBillPayFragment: Fragment() {
         }
         Timber.d("orderCodeList count ${orderCodeList.size}")
 
-        //TODO check Nav added
-        /*val fragment = WebViewFragment.newInstance(url, "পেমেন্ট", bundle)
-        val tag = WebViewFragment.tag*/
-
         val courierId = SessionManager.courierUserId.toString() //6188
         val url = "${AppConstant.SERVICE_BILL_PAY_GATEWAY}?CourierID=$courierId&Amount=$totalAmount"
         val model = MonthlyReceivableUpdateRequest(date,"",orderCodeList)

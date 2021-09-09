@@ -316,8 +316,6 @@ class DashboardFragment : Fragment() {
                         UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
                     "cod-collection" -> {
-                        //TODO check, changed it to Nav
-                        //addFragment(CODCollectionFragment.newInstance(), CODCollectionFragment.tag)
                         findNavController().navigate(R.id.nav_dashboard_CODCollection)
                         UserLogger.logGenie("Dashboard_AllOrder_${model.statusGroupId}")
                     }
@@ -402,8 +400,6 @@ class DashboardFragment : Fragment() {
         }
 
         binding?.paymentHistoryBtn?.setOnClickListener {
-            //addFragment(PaymentStatementFragment.newInstance(), PaymentStatementFragment.tag)
-            //TODO check, changed it to Nav
             findNavController().navigate(R.id.nav_payment_history)
             UserLogger.logGenie("Dashboard_PaymentStatement")
         }
@@ -1211,8 +1207,6 @@ class DashboardFragment : Fragment() {
     private fun serviceChargeDialog() {
         alert("নির্দেশনা", "আপনার সার্ভিস চার্জ (প্রি-পেইড) ৳${DigitConverter.toBanglaDigit(netAmount)} বকেয়া রয়েছে। সার্ভিস চার্জ পে করুন।", false, "সার্ভিস চার্জ পে", "") {
             if (it == AlertDialog.BUTTON_POSITIVE) {
-                //addFragment(ServiceBillPayFragment.newInstance(), ServiceBillPayFragment.tag)
-                //TODO check, changed it to Nav
                 findNavController().navigate(R.id.nav_dashboard_billPay)
             }
         }.show()
