@@ -286,9 +286,6 @@ interface ApiInterfaceCore {
     @GET("api/Fetch/GetSubCategoryById/true/{categoryId}")
     suspend fun fetchSubCategoryById(@Path("categoryId") categoryId: Int): NetworkResponse<GenericResponse<List<SubCategoryData>>, ErrorResponse>
 
-
-
-
     @GET("api/Dashboard/GetCouriers")
     suspend fun fetchCourierList(): NetworkResponse<GenericResponse<List<CourierModel>>, ErrorResponse>
 

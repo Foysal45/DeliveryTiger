@@ -237,8 +237,6 @@ class AppRepository(
 
     suspend fun merchantBalanceLoadHistory(merchantID: Int) = apiInterfaceADM.merchantBalanceLoadHistory(merchantID)
 
-
-
     suspend fun fetchCourierList() = apiInterfaceCore.fetchCourierList()
 
     suspend fun submitLoanSurvey(requestBody: LoanSurveyRequestBody) = apiInterfaceCore.submitLoanSurvey(requestBody)
