@@ -396,15 +396,15 @@ class LoanSurveyFragment : Fragment() {
     private fun showAlert() {
         val titleText = "নির্দেশনা"
         val descriptionText = "সার্ভেটি পূরণ করার জন্য ধন্যবাদ।"
-        alert(titleText, descriptionText, false, "হ্যাঁ", "না") {
-            activity?.supportFragmentManager?.popBackStackImmediate()
+        alert(titleText, descriptionText, false, "ঠিক আছে", "না") {
+            findNavController().popBackStack()
         }.show()
     }
 
     private fun warning() {
         val titleText = "নির্দেশনা"
         val descriptionText = "আপনি ইতিপূর্বে একবার সার্ভেটি পূরণ করেছেন, আপনি কি আবার পূরণ করতে ইচ্ছুক?"
-        alert(titleText, descriptionText, true,"ঠিক আছে", "ক্যানসেল") {
+        alert(titleText, descriptionText, true,"হ্যাঁ", "না") {
             if (it == AlertDialog.BUTTON_NEGATIVE) {
                 findNavController().popBackStack()
             }
