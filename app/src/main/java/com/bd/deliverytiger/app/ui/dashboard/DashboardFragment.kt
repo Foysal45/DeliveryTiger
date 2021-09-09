@@ -854,6 +854,9 @@ class DashboardFragment : Fragment() {
                         Timber.d("requestBody DataFilter $model")
                         customerNotFoundCount += model.count ?: 0
                         customerNotFoundDataList.add(model)
+                        // also add to shipment
+                        shipmentCount += model.count ?: 0
+                        shipmentDataList.add(model)
                     }
                     //"রিটার্ন পার্সেল এখনো ঢাকায় পৌছায়নি", "রিটার্ন পার্সেল সেন্ট্রাল ওয়্যার হাউসে আছে", "রিটার্ন পার্সেল আপনার নিকটস্থ হাবে আছে"
                     9, 10, 11 -> {
