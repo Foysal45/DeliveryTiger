@@ -357,7 +357,6 @@ class LoanSurveyFragment : Fragment() {
         Timber.d("requestBody $fileName, $imagePath, $fileUrl")
         viewModel.imageUploadForFile(requireContext(), fileName, imagePath, fileUrl).observe( viewLifecycleOwner, Observer { model ->
             progressDialog.dismiss()
-            showAlert()
             if (model) {
                 submitLoanSurveyData(requestBody)
                 context?.toast("Uploaded successfully")
@@ -369,9 +368,13 @@ class LoanSurveyFragment : Fragment() {
     }
 
     private fun submitLoanSurveyData(requestBody: LoanSurveyRequestBody) {
+        val progressDialog = progressDialog()
+        progressDialog.show()
+
         viewModel.submitLoanSurvey(requestBody).observe(viewLifecycleOwner, Observer { model ->
             SessionManager.isSurveyComplete = true
             val tempLoanSurveyId = model.loanSurveyId
+
 
             Timber.d("requestBody 3 ${model.loanSurveyId}")
 
@@ -385,13 +388,15 @@ class LoanSurveyFragment : Fragment() {
 
             Timber.d("requestBody 3 $selectedCourierList")
             viewModel.submitCourierList(selectedCourierList)
+            progressDialog.dismiss()
+            showAlert()
         })
     }
 
     private fun showAlert() {
         val titleText = "নির্দেশনা"
-        val descriptionText = "সার্ভেটি পূরণ করার জন্যে ধন্যবাদ।"
-        alert(titleText, descriptionText, false) {
+        val descriptionText = "সার্ভেটি পূরণ করার জন্য ধন্যবাদ।"
+        alert(titleText, descriptionText, false, "হ্যাঁ", "না") {
             activity?.supportFragmentManager?.popBackStackImmediate()
         }.show()
     }
