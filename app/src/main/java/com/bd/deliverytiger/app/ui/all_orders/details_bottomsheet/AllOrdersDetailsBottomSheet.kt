@@ -22,6 +22,8 @@ class AllOrdersDetailsBottomSheet : BottomSheetDialogFragment() {
     private var binding: FragmentAllOrderDetailsDialogueBinding? = null
     private var dataModel: CourierOrderViewModel? = null
 
+    var onTrackClick: ((orderId: String) -> Unit)? = null
+
     companion object {
 
         fun newInstance(model: CourierOrderViewModel?): AllOrdersDetailsBottomSheet = AllOrdersDetailsBottomSheet().apply {
@@ -45,12 +47,18 @@ class AllOrdersDetailsBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initClickListener()
         initOrderData()
         initCustomerData()
         initServiceChargeData()
 
     }
 
+    private fun initClickListener() {
+        binding?.trackIv?.setOnClickListener {
+            dataModel?.courierOrdersId?.let { it1 -> onTrackClick?.invoke(it1) }
+        }
+    }
 
     private fun initOrderData(){
         val model = dataModel ?: return

@@ -268,6 +268,11 @@ class AllOrdersFragment : Fragment() {
         val tag: String = AllOrdersDetailsBottomSheet.tag
         val dialog: AllOrdersDetailsBottomSheet = AllOrdersDetailsBottomSheet.newInstance(model)
         dialog.show(childFragmentManager, tag)
+
+        dialog.onTrackClick = { orderId ->
+            dialog.dismiss()
+            addOrderTrackFragment(orderId)
+        }
     }
 
     private fun dateRangePicker() {
