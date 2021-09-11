@@ -669,7 +669,9 @@ class AddOrderFragmentOne : Fragment() {
                         "isPickupLocation" to false,
                         "isFromOrderPlace" to true
                     )
-                    findNavController().navigate(R.id.nav_profile, bundle)
+                    if (isAdded) {
+                        findNavController().navigate(R.id.nav_profile, bundle)
+                    }
                 }
             }.show()
             timber.log.Timber.d("missingValues: $missingValues")
