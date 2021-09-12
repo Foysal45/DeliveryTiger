@@ -49,7 +49,8 @@ class UserRoleSelectionFragment : Fragment() {
             UserLogger.logGenie("Customer_Login")
         }
 
-        viewModel.fetchHelpLineNumbers().observe(viewLifecycleOwner, Observer { model->
+        //Hidden as requirement
+        /*viewModel.fetchHelpLineNumbers().observe(viewLifecycleOwner, Observer { model->
             if (model.helpLine1.isNullOrEmpty()){
                 binding?.helpLineContactLayout?.visibility = View.GONE
             }else{
@@ -59,7 +60,7 @@ class UserRoleSelectionFragment : Fragment() {
                     callHelplineNumber(model.helpLine1!!)
                 }
             }
-        })
+        })*/
     }
 
     private fun showDeliveryChargeCalculator() {
