@@ -100,6 +100,8 @@
 
     <color name="appColor">#e74c3c</color>
 
+    <color name="purple">#3244A4</color>
+
     <!--ucrop theme color-->
     <color name="ucrop_color_statusbar">@color/colorPrimaryDark</color>
     <color name="ucrop_color_toolbar">@color/colorPrimary</color>

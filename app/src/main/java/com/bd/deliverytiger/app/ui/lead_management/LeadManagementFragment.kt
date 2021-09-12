@@ -15,6 +15,7 @@ import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
 import com.bd.deliverytiger.app.databinding.FragmentLeadManagementBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.lead_management.customer_details_bottomsheet.CustomerDetailsBottomSheet
+import com.bd.deliverytiger.app.ui.recorder.RecordBottomSheet
 import com.bd.deliverytiger.app.ui.share.SmsShareDialogue
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.ViewState
@@ -119,12 +120,14 @@ class LeadManagementFragment : Fragment() {
         })
     }
 
+
     private fun initClickLister(){
 
 
         dataAdapter.onItemClicked = { model, position ->
             dataAdapter.multipleSelection(model, position)
             binding?.addContactBtn?.isVisible = true
+            binding?.voiceCall?.isVisible = true
             binding?.clearBtn?.isVisible = true
 
             if (dataAdapter.getSelectedItemCount() == 0) {
@@ -143,10 +146,15 @@ class LeadManagementFragment : Fragment() {
 
         }
 
+        binding?.voiceCall?.setOnClickListener{
+            goToRecordingBottomSheet()
+        }
+
         binding?.clearBtn?.setOnClickListener {
             dataAdapter.clearSelections()
             binding?.clearBtn?.isVisible = false
             binding?.addContactBtn?.isVisible = false
+            binding?.voiceCall?.isVisible = false
         }
     }
 
@@ -157,6 +165,12 @@ class LeadManagementFragment : Fragment() {
     private fun goToCustomerDetailsBottomSheet(mobile: String) {
         val tag = CustomerDetailsBottomSheet.tag
         val dialog = CustomerDetailsBottomSheet.newInstance(mobile)
+        dialog.show(childFragmentManager, tag)
+    }
+
+    private fun goToRecordingBottomSheet() {
+        val tag = RecordBottomSheet.tag
+        val dialog = RecordBottomSheet.newInstance()
         dialog.show(childFragmentManager, tag)
     }
 
