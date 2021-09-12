@@ -17,6 +17,7 @@ class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val dataList: MutableList<CustomerInformation> = mutableListOf()
     var onItemClicked: ((model: CustomerInformation, position: Int) -> Unit)? = null
     var onOrderDetailsClicked: ((model: CustomerInformation, position: Int) -> Unit)? = null
+    var onSaveToPhoneBookClicked: ((model: CustomerInformation, position: Int) -> Unit)? = null
 
     private val selectedItems: SparseBooleanArray = SparseBooleanArray()
     // array used to perform multiple animation at once
@@ -59,6 +60,7 @@ class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.orderLayout.setOnClickListener {
                 onOrderDetailsClicked?.invoke(dataList[absoluteAdapterPosition], absoluteAdapterPosition)
             }
+
         }
     }
 

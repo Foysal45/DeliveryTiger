@@ -5,8 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bd.deliverytiger.app.api.model.PagingModel
+import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
+import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
+import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookData
+import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookGroupData
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
 import com.bd.deliverytiger.app.utils.exhaustive
@@ -60,4 +64,73 @@ class LeadManagementViewModel(private val repository: AppRepository): ViewModel(
         }
     }
 
+    fun addToOwnPhoneBook(requestBody: List<PhonebookData>): LiveData<List<PhonebookData>> {
+
+        viewState.value = ViewState.ProgressState(true)
+        val responseBody = MutableLiveData<List<PhonebookData>>()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.addToOwnPhoneBook(requestBody)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseBody.value = response.body.model!!
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        //val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        //viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        //val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        //viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        //val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        //viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+
+        return responseBody
+    }
+
+    fun createPhoneBookGroup(requestBody: List<PhonebookGroupData>): LiveData<List<PhonebookData>> {
+
+        viewState.value = ViewState.ProgressState(true)
+        val responseBody = MutableLiveData<List<PhonebookData>>()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.createPhoneBookGroup(requestBody)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body.model != null) {
+                            responseBody.value = response.body.model!!
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        //val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        //viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        //val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        //viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        //val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        //viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+
+        return responseBody
+    }
 }

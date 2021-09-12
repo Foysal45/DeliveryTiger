@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
+import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookData
 import com.bd.deliverytiger.app.databinding.FragmentLeadManagementBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.lead_management.customer_details_bottomsheet.CustomerDetailsBottomSheet
@@ -204,6 +205,14 @@ class LeadManagementFragment : Fragment() {
         }
     }
 
+    private fun insertPhoneBookData(requestBody: List<PhonebookData>) {
+        viewModel.addToOwnPhoneBook(requestBody).observe(viewLifecycleOwner, Observer { list ->
+            if (list.isNotEmpty()) {
+                context?.toast("সফলভাবে অ্যাড হয়েছে")
+            }
+        })
+    }
+
     private fun pickupContact() {
 
         MultiContactPicker.Builder(this)
@@ -246,7 +255,19 @@ class LeadManagementFragment : Fragment() {
                         numbers += "$modNumber,"
                     }
 
-
+                    val requestBody: MutableList<PhonebookData> = mutableListOf()
+                    contactList.forEach {
+                        val number = it.phoneNumbers.first().number
+                        val modNumber = cleanPhoneNumber(number)
+                        val name = it.displayName
+                        val model = PhonebookData(
+                            SessionManager.courierUserId,
+                            modNumber,
+                            name
+                        )
+                        requestBody.add(model)
+                    }
+                    insertPhoneBookData(requestBody)
                 }
             }
         }

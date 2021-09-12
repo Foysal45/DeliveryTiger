@@ -29,6 +29,8 @@ import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.SMSLogData
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
+import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookData
+import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookGroupData
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
 import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
@@ -244,6 +246,10 @@ class AppRepository(
     suspend fun submitCourierList(requestBody: List<SelectedCourierModel>) = apiInterfaceCore.submitCourierList(requestBody)
 
     suspend fun saveCustomerSMSLog(requestBody: List<SMSLogData>) = apiInterfaceCore.saveCustomerSMSLog(requestBody)
+
+    suspend fun addToOwnPhoneBook(requestBody: List<PhonebookData>) = apiInterfaceCore.addToOwnPhoneBook(requestBody)
+
+    suspend fun createPhoneBookGroup(requestBody: List<PhonebookGroupData>) = apiInterfaceCore.createPhoneBookGroup(requestBody)
 
     suspend fun imageUploadForFile(
         fileName: RequestBody,

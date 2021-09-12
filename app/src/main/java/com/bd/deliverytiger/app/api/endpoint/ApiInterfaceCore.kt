@@ -38,6 +38,8 @@ import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCy
 import com.bd.deliverytiger.app.api.model.lead_management.*
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetails
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
+import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookData
+import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookGroupData
 import com.bd.deliverytiger.app.api.model.loan_survey.CourierModel
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
 import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
@@ -297,4 +299,10 @@ interface ApiInterfaceCore {
 
     @POST("api/Entry/AddCustomerSMSLog")
     suspend fun saveCustomerSMSLog(@Body requestBody: List<SMSLogData>): NetworkResponse<GenericResponse<List<SMSLogData>>, ErrorResponse>
+
+    @POST("api/Entry/AddOwnPhoneBook")
+    suspend fun addToOwnPhoneBook(@Body requestBody: List<PhonebookData>): NetworkResponse<GenericResponse<List<PhonebookData>>, ErrorResponse>
+
+    @POST("api/Entry/AddPhoneBookGroup")
+    suspend fun createPhoneBookGroup(@Body requestBody: List<PhonebookGroupData>): NetworkResponse<GenericResponse<List<PhonebookData>>, ErrorResponse>
 }
