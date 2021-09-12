@@ -184,6 +184,7 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             when (model.status) {
                 // কাস্টমার প্রোডাক্ট নিতে চায়নি, ক্রেতা ফোনে পাওয়া যায়নি
                 26, 33 , 47, 27-> {
+                    binding.reattemptStatus.isVisible = false
                     if (position == 0) {
                         binding.actionBtn.isVisible = true
                         binding.actionBtn.text = "আবার ডেলিভারি এটেম্পট নিন"
@@ -191,7 +192,12 @@ class OrderTrackingNewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         binding.actionBtn.isVisible = false
                     }
                 }
+                64 -> {
+                    binding.reattemptStatus.isVisible = true
+                    binding.reattemptStatus.text = "রি-এটেম্পট রিকোয়েস্ট করা হয়েছে"
+                }
                 else -> {
+                    binding.reattemptStatus.isVisible = false
                     binding.actionBtn.isVisible = false
                 }
             }
