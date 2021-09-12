@@ -1,10 +1,19 @@
 package com.bd.deliverytiger.app.ui.lead_management
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,13 +25,13 @@ import com.bd.deliverytiger.app.databinding.FragmentLeadManagementBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.lead_management.customer_details_bottomsheet.CustomerDetailsBottomSheet
 import com.bd.deliverytiger.app.ui.share.SmsShareDialogue
-import com.bd.deliverytiger.app.utils.SessionManager
-import com.bd.deliverytiger.app.utils.ViewState
-import com.bd.deliverytiger.app.utils.hideKeyboard
-import com.bd.deliverytiger.app.utils.toast
+import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
+import com.wafflecopter.multicontactpicker.ContactResult
+import com.wafflecopter.multicontactpicker.LimitColumn
+import com.wafflecopter.multicontactpicker.MultiContactPicker
 import org.koin.android.ext.android.inject
 import java.util.*
 
@@ -35,6 +44,11 @@ class LeadManagementFragment : Fragment() {
     private var isLoading = false
     //private var totalProduct = 0
     private val visibleThreshold = 5
+
+    //Pickup contact
+    private val requestCodeContactPicker = 8221
+    private val selectedContactList: MutableList<ContactResult> = mutableListOf()
+    private val selectedNumberList: MutableList<String> = mutableListOf()
 
     override fun onResume() {
         super.onResume()
@@ -148,6 +162,12 @@ class LeadManagementFragment : Fragment() {
             binding?.clearBtn?.isVisible = false
             binding?.addContactBtn?.isVisible = false
         }
+
+        binding?.importBtn?.setOnClickListener {
+            if (isContactPermissions()) {
+                pickupContact()
+            }
+        }
     }
 
     private fun fetchCustomerInformation(index: Int){
@@ -181,6 +201,79 @@ class LeadManagementFragment : Fragment() {
                 .load("https://static.ajkerdeal.com/images/merchant/chumbok_banner.jpg")
                 .apply(options)
                 .into(image)
+        }
+    }
+
+    private fun pickupContact() {
+
+        MultiContactPicker.Builder(this)
+            .theme(R.style.MyCustomPickerTheme)
+            .hideScrollbar(false)
+            .showTrack(true)
+            .searchIconColor(Color.WHITE)
+            .setChoiceMode(MultiContactPicker.CHOICE_MODE_MULTIPLE)
+            .handleColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+            .bubbleColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+            .bubbleTextColor(Color.WHITE)
+            .setTitleText("Select Contacts")
+            .setSelectedContacts(selectedContactList as ArrayList<ContactResult>)
+            .setLoadingType(MultiContactPicker.LOAD_SYNC)
+            .limitToColumn(LimitColumn.PHONE)
+            .setActivityAnimations(
+                android.R.anim.fade_in,
+                android.R.anim.fade_out,
+                android.R.anim.fade_in,
+                android.R.anim.fade_out)
+            .showPickerForResult(requestCodeContactPicker)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            requestCodeContactPicker -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val contactList: MutableList<ContactResult> = MultiContactPicker.obtainResult(data)
+                    //val contact = contactList.first()
+                    //Timber.d("contactDebug ${contact.contactID} ${contact.displayName} ${contact.emails} ${contact.isStarred} ${contact.photo} ${contact.thumbnail} ${contact.phoneNumbers.first().typeLabel} ${contact.phoneNumbers.first().number}")
+                    selectedContactList.clear()
+                    selectedNumberList.clear()
+                    selectedContactList.addAll(contactList)
+                    var numbers = ""
+                    selectedContactList.forEach {
+                        val number = it.phoneNumbers.first().number
+                        val modNumber = cleanPhoneNumber(number)
+                        selectedNumberList.add(modNumber)
+                        numbers += "$modNumber,"
+                    }
+
+
+                }
+            }
+        }
+    }
+
+    private fun isContactPermissions(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val storagePermission = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
+            return if (storagePermission != PackageManager.PERMISSION_GRANTED) {
+                val storagePermissionRationale = ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                if (storagePermissionRationale) {
+                    contactPermission.launch(Manifest.permission.READ_CONTACTS)
+                } else {
+                    contactPermission.launch(Manifest.permission.READ_CONTACTS)
+                }
+                false
+            } else {
+                true
+            }
+        } else {
+            return true
+        }
+    }
+
+    private val contactPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { hasPermission ->
+        if (hasPermission) {
+            pickupContact()
         }
     }
 
