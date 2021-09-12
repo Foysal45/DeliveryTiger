@@ -18,6 +18,8 @@ data class LoanSurveyRequestBody (
     var isBankAccount: Boolean = false,
     @SerializedName("isLocalShop")
     var isLocalShop: Boolean = false,
+    @SerializedName("MonthlyTotalAverageSale")
+    var totalMonthlyAverageSell: String? = "0",
 
     @SerializedName("totalMonthlyCOD")
     var totalMonthlyCOD: String? = "0",
@@ -29,22 +31,4 @@ data class LoanSurveyRequestBody (
 
     @SerializedName("loanSurveyId")
     var loanSurveyId: Int = 0
-
-    /*
-    @SerializedName("loanRange")
-    var loanRange: String? = "",
-    @SerializedName("monthlyParcelCount")
-    var monthlyParcelCount: String? = "",
-    @SerializedName("monthlyTransaction")
-    var monthlyTransaction: String? = "",
-
-    @SerializedName("hasBankAccount")
-    var hasBankAccount: Boolean? = false,
-    @SerializedName("hasPhysicalShop")
-    var hasPhysicalShop: Boolean? = false,
-
-    @SerializedName("hasTradeLicence")
-    var hasTradeLicence: Boolean? = false,
-    @SerializedName("tradeLicence")
-    var tradeLicence: String? = ""*/
 )

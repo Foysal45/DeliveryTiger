@@ -44,6 +44,7 @@ class LoanSurveyFragment : Fragment() {
     private var monthlyTransaction = ""
 
     private var totalMonthlyCOD = ""
+    private var totalMonthlyAverageSell = ""
     private var guarantorName = ""
     private var guarantorNumber = ""
 
@@ -104,7 +105,7 @@ class LoanSurveyFragment : Fragment() {
                 val requestBody = LoanSurveyRequestBody(
                     SessionManager.courierUserId, merchantGender,
                     "",
-                    loanRange, monthlyTransaction, hasBankAccount, hasPhysicalShop,
+                    loanRange, monthlyTransaction, hasBankAccount, hasPhysicalShop, totalMonthlyAverageSell,
                     totalMonthlyCOD, guarantorName, guarantorNumber
                 )
                 if (imagePickFlag == 1) {
@@ -157,9 +158,11 @@ class LoanSurveyFragment : Fragment() {
             when (checkedId) {
                 R.id.merchantPhysicalShopExistsYes -> {
                     hasPhysicalShop = true
+                    binding?.totalMonthlyAverageSellETLayout?.isVisible = true
                 }
                 R.id.merchantPhysicalShopExistsNo -> {
                     hasPhysicalShop = false
+                    binding?.totalMonthlyAverageSellETLayout?.isVisible = false
                 }
             }
         }
@@ -241,6 +244,17 @@ class LoanSurveyFragment : Fragment() {
             context?.toast("Please enter Monthly Transaction")
             return false
         }
+
+        if (hasPhysicalShop) {
+            totalMonthlyAverageSell = binding?.totalMonthlyAverageSellET?.text.toString()
+            if (totalMonthlyAverageSell.isEmpty()) {
+                context?.toast("Please enter Total Monthly Average Sell")
+                return false
+            }
+        } else {
+            totalMonthlyAverageSell = ""
+        }
+
 
         totalMonthlyCOD = binding?.totalCODFromOtherServicesET?.text.toString()
         if (totalMonthlyCOD.isEmpty()) {
