@@ -38,6 +38,7 @@ class LoanSurveyFragment : Fragment() {
     private var courierList: MutableList<CourierModel> = mutableListOf()
     private var selectedCourierList: MutableList<SelectedCourierModel> = mutableListOf()
 
+    private var merchantName = ""
     private var merchantGender = ""
 
     private var loanRange = ""
@@ -103,7 +104,7 @@ class LoanSurveyFragment : Fragment() {
             if (verify()) {
 
                 val requestBody = LoanSurveyRequestBody(
-                    SessionManager.courierUserId, merchantGender,
+                    SessionManager.courierUserId, merchantName, merchantGender,
                     "",
                     loanRange, monthlyTransaction, hasBankAccount, hasPhysicalShop, totalMonthlyAverageSell,
                     totalMonthlyCOD, guarantorName, guarantorNumber
@@ -137,6 +138,7 @@ class LoanSurveyFragment : Fragment() {
                     merchantGender = "female"
                 }
             }
+            binding?.merchantNameETLayout?.isVisible = true
         }
         //endregion
 
@@ -230,6 +232,12 @@ class LoanSurveyFragment : Fragment() {
 
         if (merchantGender.isEmpty()) {
             context?.toast("Select Gender")
+            return false
+        }
+
+        merchantName = binding?.merchantNameET?.text.toString()
+        if (merchantName.isEmpty()) {
+            context?.toast("Enter Your Name")
             return false
         }
 

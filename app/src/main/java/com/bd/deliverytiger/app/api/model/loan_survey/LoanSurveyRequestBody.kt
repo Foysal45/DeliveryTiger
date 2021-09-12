@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName
 data class LoanSurveyRequestBody (
     @SerializedName("courierUserId")
     var courierUserId: Int = 0,
+    @SerializedName("MerchantName")
+    var merchantName: String? = "",
     @SerializedName("gender")
     var gender: String? = "",
     @SerializedName("tradeLicenseImageUrl")
