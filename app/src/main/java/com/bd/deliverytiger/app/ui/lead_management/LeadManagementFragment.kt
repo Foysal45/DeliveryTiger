@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.ui.lead_management
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,19 +13,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
+import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
+import com.bd.deliverytiger.app.api.model.voice_SMS.Message
+import com.bd.deliverytiger.app.api.model.voice_SMS.VoiceSmsAudiRequestBody
 import com.bd.deliverytiger.app.databinding.FragmentLeadManagementBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.lead_management.customer_details_bottomsheet.CustomerDetailsBottomSheet
 import com.bd.deliverytiger.app.ui.recorder.RecordBottomSheet
 import com.bd.deliverytiger.app.ui.share.SmsShareDialogue
-import com.bd.deliverytiger.app.utils.SessionManager
-import com.bd.deliverytiger.app.utils.ViewState
-import com.bd.deliverytiger.app.utils.hideKeyboard
-import com.bd.deliverytiger.app.utils.toast
+import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import org.koin.android.ext.android.inject
+import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.*
 
 class LeadManagementFragment : Fragment() {
@@ -32,8 +35,13 @@ class LeadManagementFragment : Fragment() {
     private var binding: FragmentLeadManagementBinding? = null
     private val viewModel: LeadManagementViewModel by inject()
 
-    private  var dataAdapter: LeadManagementAdapter = LeadManagementAdapter()
+    private var dataAdapter: LeadManagementAdapter = LeadManagementAdapter()
     private var isLoading = false
+
+
+    private val selectedNameList: MutableList<String> = mutableListOf()
+    private val selectedNumberList: MutableList<String> = mutableListOf()
+
     //private var totalProduct = 0
     private val visibleThreshold = 5
 
@@ -42,7 +50,11 @@ class LeadManagementFragment : Fragment() {
         (activity as HomeActivity).setToolbarTitle(getString(R.string.lead_management))
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return FragmentLeadManagementBinding.inflate(inflater).also {
             binding = it
         }.root
@@ -55,7 +67,7 @@ class LeadManagementFragment : Fragment() {
         initClickLister()
     }
 
-    private fun initView(){
+    private fun initView() {
         with(binding?.recyclerview!!) {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
@@ -108,8 +120,10 @@ class LeadManagementFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy > 0) {
-                    val currentItemCount = (recyclerView.layoutManager as LinearLayoutManager).itemCount
-                    val lastVisibleItem = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                    val currentItemCount =
+                        (recyclerView.layoutManager as LinearLayoutManager).itemCount
+                    val lastVisibleItem =
+                        (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
                     if (!isLoading && currentItemCount <= lastVisibleItem + visibleThreshold) {
                         isLoading = true
                         fetchCustomerInformation(currentItemCount)
@@ -120,8 +134,7 @@ class LeadManagementFragment : Fragment() {
         })
     }
 
-
-    private fun initClickLister(){
+    private fun initClickLister() {
 
 
         dataAdapter.onItemClicked = { model, position ->
@@ -135,18 +148,27 @@ class LeadManagementFragment : Fragment() {
             }
         }
 
-        dataAdapter.onOrderDetailsClicked = {model, position ->
+        dataAdapter.onOrderDetailsClicked = { model, position ->
             goToCustomerDetailsBottomSheet(model.mobile ?: "")
         }
 
-        binding?.addContactBtn?.setOnClickListener{
-            if (dataAdapter.getSelectedItemCount() > 0){
+        binding?.addContactBtn?.setOnClickListener {
+            if (dataAdapter.getSelectedItemCount() > 0) {
                 goToSmsSendBottomSheet(dataAdapter.getSelectedItemModelList())
             }
 
         }
 
-        binding?.voiceCall?.setOnClickListener{
+        binding?.voiceCall?.setOnClickListener {
+            var model = dataAdapter.getSelectedItemModelList()
+            if (model.isNotEmpty()){
+                selectedNameList.clear()
+                selectedNumberList.clear()
+                model?.forEach {
+                    selectedNameList.add(it.customerName ?: "")
+                    selectedNumberList.add("88" + it.mobile ?: "")
+                }
+            }
             goToRecordingBottomSheet()
         }
 
@@ -158,8 +180,11 @@ class LeadManagementFragment : Fragment() {
         }
     }
 
-    private fun fetchCustomerInformation(index: Int){
-        viewModel.fetchCustomerList(CustomerInfoRequest(SessionManager.courierUserId,index,20), index)
+    private fun fetchCustomerInformation(index: Int) {
+        viewModel.fetchCustomerList(
+            CustomerInfoRequest(SessionManager.courierUserId, index, 20),
+            index
+        )
     }
 
     private fun goToCustomerDetailsBottomSheet(mobile: String) {
@@ -172,6 +197,63 @@ class LeadManagementFragment : Fragment() {
         val tag = RecordBottomSheet.tag
         val dialog = RecordBottomSheet.newInstance()
         dialog.show(childFragmentManager, tag)
+        dialog.onRecordingComplete = { audioPath ->
+            val names = selectedNameList.joinToString()
+            val alert = alert(
+                "নির্দেশনা",
+                "আপনার সিলেক্টেড কাস্টমার, \n $names",
+                true,
+                "ঠিক আছে",
+                "ক্যানসেল"
+            ) {
+                if (it == AlertDialog.BUTTON_POSITIVE) {
+                    uploadAudio(
+                        "aud_${SessionManager.courierUserId}.mp3",
+                        "audio/merchant",
+                        audioPath
+                    )
+                }
+            }
+            alert.setCancelable(false)
+            alert.show()
+
+        }
+    }
+
+    private fun uploadAudio(fileName: String, audioPath: String, fileUrl: String) {
+
+        val progressDialog = progressDialog()
+        progressDialog.show()
+
+        Timber.d("requestBody $fileName, $audioPath, $fileUrl")
+        viewModel.audioUploadForFile(requireContext(), fileName, audioPath, fileUrl)
+            .observe(viewLifecycleOwner, Observer { model ->
+                if (model) {
+                    context?.toast("Uploaded successfully")
+                    sendVoiceSMS("https://static.ajkerdeal.com/audio/merchant/aud_${SessionManager.courierUserId}.mp3")
+                    progressDialog.hide()
+                } else {
+                    context?.toast("Uploaded Failed")
+                }
+            })
+    }
+
+    private fun sendVoiceSMS(audioPath: String) {
+        if (selectedNameList.isNotEmpty()){
+            var requestBody = VoiceSmsAudiRequestBody(
+                listOf(
+                    Message(
+                        audioPath,
+                        "8804445650020",
+                        selectedNumberList
+                    )
+                )
+            )
+            viewModel.sendVoiceSms(requestBody).observe(viewLifecycleOwner, Observer {
+                context?.toast("Voice SMS Send")
+            })
+        }
+
     }
 
     private fun goToSmsSendBottomSheet(model: List<CustomerInformation>) {

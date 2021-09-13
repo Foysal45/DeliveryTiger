@@ -43,6 +43,10 @@ fun createNewFile(context: Context, type: FileType = FileType.Video): File? {
                 prefix = "VID_${timeStamp}_"
                 suffix = ".mp4"
             }
+            FileType.Audio -> {
+                prefix = "AUD_${timeStamp}_"
+                suffix = ".mp3"
+            }
         }
         File.createTempFile(prefix, suffix, storageDir).apply {
             val filePath = absolutePath
@@ -108,6 +112,35 @@ fun createNewFile(context: Context, type: FileType = FileType.Video): File? {
         null
     }*/
 
+}
+
+fun createNewFilePath(context: Context, type: FileType = FileType.Video): String {
+    val storageDir: File = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM), context.getString(R.string.app_name))
+    } else {
+        File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), context.getString(R.string.app_name))
+    }
+    if (!storageDir.exists()) {
+        storageDir.mkdirs()
+    }
+    val timeStamp: String = SimpleDateFormat("yyyyMMdd", Locale.US).format(Date())
+    var prefix = ""
+    var suffix = ""
+    when (type) {
+        FileType.Picture -> {
+            prefix = "IMG_${timeStamp}_"
+            suffix = ".jpg"
+        }
+        FileType.Video -> {
+            prefix = "VID_${timeStamp}_"
+            suffix = ".mp4"
+        }
+        FileType.Audio -> {
+            prefix = "AUD_${timeStamp}_"
+            suffix = ".mp3"
+        }
+    }
+    return storageDir.absolutePath + prefix + suffix
 }
 
 fun moveToDICM(context: Context, sourcePath: String, type: FileType = FileType.Video, listener: (isSuccess: Boolean, path: String) -> Unit) {
