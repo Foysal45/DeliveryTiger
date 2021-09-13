@@ -25,6 +25,7 @@ import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookDat
 import com.bd.deliverytiger.app.databinding.FragmentLeadManagementBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.lead_management.customer_details_bottomsheet.CustomerDetailsBottomSheet
+import com.bd.deliverytiger.app.ui.lead_management.phonebook.PhonebookFormBottomSheet
 import com.bd.deliverytiger.app.ui.lead_management.phonebook.PhonebookGroupBottomSheet
 import com.bd.deliverytiger.app.ui.share.SmsShareDialogue
 import com.bd.deliverytiger.app.utils.*
@@ -42,8 +43,9 @@ class LeadManagementFragment : Fragment() {
     private var binding: FragmentLeadManagementBinding? = null
     private val viewModel: LeadManagementViewModel by inject()
 
-    private  var dataAdapter: LeadManagementAdapter = LeadManagementAdapter()
+    private var dataAdapter: LeadManagementAdapter = LeadManagementAdapter()
     private var isLoading = false
+
     //private var totalProduct = 0
     private val visibleThreshold = 5
 
@@ -70,7 +72,7 @@ class LeadManagementFragment : Fragment() {
         initClickLister()
     }
 
-    private fun initView(){
+    private fun initView() {
         with(binding?.recyclerview!!) {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
@@ -135,45 +137,68 @@ class LeadManagementFragment : Fragment() {
         })
     }
 
-    private fun initClickLister(){
-
+    private fun initClickLister() {
 
         dataAdapter.onItemClicked = { model, position ->
             dataAdapter.multipleSelection(model, position)
             binding?.sendSMSBtn?.isVisible = true
+            binding?.sendVoiceSMSBtn?.isVisible = true
             binding?.clearBtn?.isVisible = true
+            binding?.addToPhoneGroupBtn?.isVisible = true
 
             if (dataAdapter.getSelectedItemCount() == 0) {
                 binding?.clearBtn?.performClick()
             }
         }
 
-        dataAdapter.onOrderDetailsClicked = {model, position ->
+        dataAdapter.onOrderDetailsClicked = { model, _ ->
             goToCustomerDetailsBottomSheet(model.mobile ?: "")
         }
 
-        binding?.sendSMSBtn?.setOnClickListener{
-            showPhonebookGroup()
-            /*if (dataAdapter.getSelectedItemCount() > 0){
+        binding?.sendSMSBtn?.setOnClickListener {
+            if (dataAdapter.getSelectedItemCount() > 0) {
                 goToSmsSendBottomSheet(dataAdapter.getSelectedItemModelList())
-            }*/
+            }
         }
 
         binding?.clearBtn?.setOnClickListener {
             dataAdapter.clearSelections()
             binding?.clearBtn?.isVisible = false
             binding?.sendSMSBtn?.isVisible = false
+            binding?.sendVoiceSMSBtn?.isVisible = false
+            binding?.addToPhoneGroupBtn?.isVisible = false
         }
 
-        binding?.importBtn?.setOnClickListener {
+        binding?.sendVoiceSMSBtn?.setOnClickListener {
+            if (dataAdapter.getSelectedItemCount() > 0) {
+                val selectedCustomerList = dataAdapter.getSelectedItemModelList()
+
+            }
+        }
+
+        binding?.phoneBookImportBtn?.setOnClickListener {
             if (isContactPermissions()) {
                 pickupContact()
             }
         }
+
+        binding?.phoneBookFormBtn?.setOnClickListener {
+            showPhonebookForm()
+        }
+
+        binding?.addToPhoneGroupBtn?.setOnClickListener {
+            if (dataAdapter.getSelectedItemCount() > 0) {
+                val selectedCustomerList = dataAdapter.getSelectedItemModelList()
+                showPhonebookGroup(selectedCustomerList)
+            } else {
+                context?.toast("কমপক্ষে একজন কাস্টমার সিলেক্ট করুন")
+            }
+        }
+
     }
 
-    private fun fetchCustomerInformation(index: Int){
-        viewModel.fetchCustomerList(CustomerInfoRequest(SessionManager.courierUserId,index,20), index)
+    private fun fetchCustomerInformation(index: Int) {
+        viewModel.fetchCustomerList(CustomerInfoRequest(SessionManager.courierUserId, index, 20), index)
     }
 
     private fun goToCustomerDetailsBottomSheet(mobile: String) {
@@ -214,11 +239,41 @@ class LeadManagementFragment : Fragment() {
         })
     }
 
-    private fun showPhonebookGroup() {
+    private fun showPhonebookGroup(selectedCustomerList: List<CustomerInformation>) {
         val dialog = PhonebookGroupBottomSheet.newInstance()
         val tag = PhonebookGroupBottomSheet.tag
         dialog.show(childFragmentManager, tag)
+        dialog.onGroupSelected = { model ->
+            dialog.dismiss()
+            val requestBody: MutableList<PhonebookData> = mutableListOf()
+            selectedCustomerList.forEach { customer ->
+                requestBody.add(
+                    PhonebookData(
+                        SessionManager.courierUserId,
+                        customer.mobile,
+                        customer.companyName,
+                        phoneBookGroupId = model.phoneBookGroupId
+                    )
+                )
+            }
+            viewModel.addToOwnPhoneBookGroup(requestBody).observe(viewLifecycleOwner, Observer { flag ->
+                if (flag) {
+                    context?.toast("ফোনবুক গ্রুপে অ্যাড হয়েছে")
+                }
+            })
+        }
+    }
 
+    private fun showPhonebookForm() {
+        val dialog = PhonebookFormBottomSheet.newInstance()
+        val tag = PhonebookFormBottomSheet.tag
+        dialog.show(childFragmentManager, tag)
+        dialog.onSave = { model ->
+            dialog.dismiss()
+            val requestBody: MutableList<PhonebookData> = mutableListOf()
+            requestBody.add(model)
+            insertPhoneBookData(requestBody)
+        }
     }
 
     private fun pickupContact() {
@@ -240,7 +295,8 @@ class LeadManagementFragment : Fragment() {
                 android.R.anim.fade_in,
                 android.R.anim.fade_out,
                 android.R.anim.fade_in,
-                android.R.anim.fade_out)
+                android.R.anim.fade_out
+            )
             .showPickerForResult(requestCodeContactPicker)
     }
 

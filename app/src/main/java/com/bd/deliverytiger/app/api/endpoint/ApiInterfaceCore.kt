@@ -309,8 +309,12 @@ interface ApiInterfaceCore {
     suspend fun createPhoneBookGroup(@Body requestBody: List<PhonebookGroupData>): NetworkResponse<GenericResponse<List<PhonebookGroupData>>, ErrorResponse>
 
     // Get all group from my virtual phonebook
-    @POST("api/Fetch/GetMyPhoneBookGroup/{courierUserId}")
+    @GET("api/Fetch/GetMyPhoneBookGroup/{courierUserId}")
     suspend fun fetchMyPhoneBookGroup(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<List<PhonebookGroupData>>, ErrorResponse>
+
+    // Add customer number to virtual phonebook group
+    @POST("api/Entry/AddNumnerInGroup")
+    suspend fun addToOwnPhoneBookGroup(@Body requestBody: List<PhonebookData>): NetworkResponse<GenericResponse<Int>, ErrorResponse>
 
 
 }

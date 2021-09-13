@@ -13,6 +13,7 @@ import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookGro
 import com.bd.deliverytiger.app.databinding.FragmentPhonebookGroupBinding
 import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.ViewState
+import com.bd.deliverytiger.app.utils.hideKeyboard
 import com.bd.deliverytiger.app.utils.toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -21,7 +22,7 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 import kotlin.concurrent.thread
 
-class PhonebookGroupBottomSheet: BottomSheetDialogFragment() {
+class PhonebookGroupBottomSheet : BottomSheetDialogFragment() {
 
     private var binding: FragmentPhonebookGroupBinding? = null
     private val viewModel: PhonebookGroupViewModel by inject()
@@ -34,12 +35,13 @@ class PhonebookGroupBottomSheet: BottomSheetDialogFragment() {
         fun newInstance(): PhonebookGroupBottomSheet = PhonebookGroupBottomSheet().apply {
 
         }
+
         val tag: String = PhonebookGroupBottomSheet::class.java.name
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme)
+        setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme1)
     }
 
     override fun onStart() {
@@ -78,13 +80,6 @@ class PhonebookGroupBottomSheet: BottomSheetDialogFragment() {
 
         fetchMyPhoneBookGroup()
         initClickListener()
-
-        //ToDo test
-        val groupList: MutableList<PhonebookGroupData> = mutableListOf()
-        groupList.add(PhonebookGroupData(SessionManager.courierUserId,"Group1", 1))
-        groupList.add(PhonebookGroupData(SessionManager.courierUserId,"Group2", 2))
-        groupList.add(PhonebookGroupData(SessionManager.courierUserId,"Group3", 3))
-        showGroups(groupList)
     }
 
     private fun showGroups(list: List<PhonebookGroupData>) {
@@ -124,7 +119,7 @@ class PhonebookGroupBottomSheet: BottomSheetDialogFragment() {
         }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
-            when(state) {
+            when (state) {
                 is ViewState.ProgressState -> {
                     binding?.progressBar?.isVisible = state.isShow
                 }
@@ -157,17 +152,20 @@ class PhonebookGroupBottomSheet: BottomSheetDialogFragment() {
 
     private fun createPhoneBookGroup() {
 
+        hideKeyboard()
         val groupName = binding?.groupNameET?.text?.toString() ?: ""
         if (groupName.isEmpty()) {
             context?.toast("ফোনবুক গ্রুপের নাম লিখুন")
             return
         }
 
-        val requestBody: MutableList<PhonebookGroupData> =  mutableListOf()
-        requestBody.add(PhonebookGroupData(
-            SessionManager.courierUserId,
-            groupName
-        ))
+        val requestBody: MutableList<PhonebookGroupData> = mutableListOf()
+        requestBody.add(
+            PhonebookGroupData(
+                SessionManager.courierUserId,
+                groupName
+            )
+        )
         viewModel.createPhoneBookGroup(requestBody).observe(viewLifecycleOwner, Observer { list ->
             if (list.isNotEmpty()) {
                 context?.toast("নতুন ফোনবুক তৈরি হয়েছে")
