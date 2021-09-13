@@ -251,6 +251,8 @@ class AppRepository(
 
     suspend fun createPhoneBookGroup(requestBody: List<PhonebookGroupData>) = apiInterfaceCore.createPhoneBookGroup(requestBody)
 
+    suspend fun fetchMyPhoneBookGroup(courierUserId: Int) = apiInterfaceCore.fetchMyPhoneBookGroup(courierUserId)
+
     suspend fun imageUploadForFile(
         fileName: RequestBody,
         imagePath: RequestBody,

@@ -7,10 +7,25 @@
     android:id="@+id/parent"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_bottom_sheet_curved_bg"
+        android:padding="16dp"
+        android:text="ফোনবুক গ্রুপ"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_16"
+        android:textStyle="bold"
+        />
+
     <RadioGroup
         android:id="@+id/phonebookGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="50dp"
         android:layout_marginTop="@dimen/fab_margin"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
@@ -18,6 +33,16 @@
         >
 
     </RadioGroup>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:indeterminateTint="@color/colorPrimary"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
 
     <EditText
         android:id="@+id/groupNameET"
@@ -51,11 +76,14 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:visibility="gone"
+        tools:visibility="visible"
         />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="24dp"
+        android:layout_height="48dp"
         />
 
 </LinearLayout>

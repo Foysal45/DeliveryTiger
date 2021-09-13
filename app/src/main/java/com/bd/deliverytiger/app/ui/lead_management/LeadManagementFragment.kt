@@ -25,6 +25,7 @@ import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookDat
 import com.bd.deliverytiger.app.databinding.FragmentLeadManagementBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.lead_management.customer_details_bottomsheet.CustomerDetailsBottomSheet
+import com.bd.deliverytiger.app.ui.lead_management.phonebook.PhonebookGroupBottomSheet
 import com.bd.deliverytiger.app.ui.share.SmsShareDialogue
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
@@ -139,7 +140,7 @@ class LeadManagementFragment : Fragment() {
 
         dataAdapter.onItemClicked = { model, position ->
             dataAdapter.multipleSelection(model, position)
-            binding?.addContactBtn?.isVisible = true
+            binding?.sendSMSBtn?.isVisible = true
             binding?.clearBtn?.isVisible = true
 
             if (dataAdapter.getSelectedItemCount() == 0) {
@@ -151,17 +152,17 @@ class LeadManagementFragment : Fragment() {
             goToCustomerDetailsBottomSheet(model.mobile ?: "")
         }
 
-        binding?.addContactBtn?.setOnClickListener{
-            if (dataAdapter.getSelectedItemCount() > 0){
+        binding?.sendSMSBtn?.setOnClickListener{
+            showPhonebookGroup()
+            /*if (dataAdapter.getSelectedItemCount() > 0){
                 goToSmsSendBottomSheet(dataAdapter.getSelectedItemModelList())
-            }
-
+            }*/
         }
 
         binding?.clearBtn?.setOnClickListener {
             dataAdapter.clearSelections()
             binding?.clearBtn?.isVisible = false
-            binding?.addContactBtn?.isVisible = false
+            binding?.sendSMSBtn?.isVisible = false
         }
 
         binding?.importBtn?.setOnClickListener {
@@ -211,6 +212,13 @@ class LeadManagementFragment : Fragment() {
                 context?.toast("সফলভাবে অ্যাড হয়েছে")
             }
         })
+    }
+
+    private fun showPhonebookGroup() {
+        val dialog = PhonebookGroupBottomSheet.newInstance()
+        val tag = PhonebookGroupBottomSheet.tag
+        dialog.show(childFragmentManager, tag)
+
     }
 
     private fun pickupContact() {

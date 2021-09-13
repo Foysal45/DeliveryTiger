@@ -300,9 +300,17 @@ interface ApiInterfaceCore {
     @POST("api/Entry/AddCustomerSMSLog")
     suspend fun saveCustomerSMSLog(@Body requestBody: List<SMSLogData>): NetworkResponse<GenericResponse<List<SMSLogData>>, ErrorResponse>
 
+    // Add customer number to virtual phonebook
     @POST("api/Entry/AddOwnPhoneBook")
     suspend fun addToOwnPhoneBook(@Body requestBody: List<PhonebookData>): NetworkResponse<GenericResponse<List<PhonebookData>>, ErrorResponse>
 
+    // Create new group in virtual phonebook
     @POST("api/Entry/AddPhoneBookGroup")
-    suspend fun createPhoneBookGroup(@Body requestBody: List<PhonebookGroupData>): NetworkResponse<GenericResponse<List<PhonebookData>>, ErrorResponse>
+    suspend fun createPhoneBookGroup(@Body requestBody: List<PhonebookGroupData>): NetworkResponse<GenericResponse<List<PhonebookGroupData>>, ErrorResponse>
+
+    // Get all group from my virtual phonebook
+    @POST("api/Fetch/GetMyPhoneBookGroup/{courierUserId}")
+    suspend fun fetchMyPhoneBookGroup(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<List<PhonebookGroupData>>, ErrorResponse>
+
+
 }

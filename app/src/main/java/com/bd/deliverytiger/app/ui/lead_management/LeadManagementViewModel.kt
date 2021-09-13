@@ -99,10 +99,10 @@ class LeadManagementViewModel(private val repository: AppRepository): ViewModel(
         return responseBody
     }
 
-    fun createPhoneBookGroup(requestBody: List<PhonebookGroupData>): LiveData<List<PhonebookData>> {
+    fun createPhoneBookGroup(requestBody: List<PhonebookGroupData>): LiveData<List<PhonebookGroupData>> {
 
         viewState.value = ViewState.ProgressState(true)
-        val responseBody = MutableLiveData<List<PhonebookData>>()
+        val responseBody = MutableLiveData<List<PhonebookGroupData>>()
 
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.createPhoneBookGroup(requestBody)

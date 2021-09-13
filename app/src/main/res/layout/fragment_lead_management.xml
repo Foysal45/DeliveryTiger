@@ -100,7 +100,7 @@
         tools:visibility="visible" />
 
     <LinearLayout
-        android:id="@+id/addContactBtn"
+        android:id="@+id/sendSMSBtn"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@drawable/layout_button_background"
