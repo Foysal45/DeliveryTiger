@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.repository
 
+import com.bd.deliverytiger.app.api.ApiInterfaceInfobip
 import com.bd.deliverytiger.app.api.endpoint.*
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody
 import com.bd.deliverytiger.app.api.model.bulk_status.StatusUpdateData
@@ -51,6 +52,7 @@ import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequ
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
+import com.bd.deliverytiger.app.api.model.voice_SMS.VoiceSmsAudiRequestBody
 import com.bd.deliverytiger.app.database.AppDatabase
 import com.bd.deliverytiger.app.database.dao.DistrictDao
 import com.bd.deliverytiger.app.database.dao.NotificationDao
@@ -70,6 +72,7 @@ class AppRepository(
     private val apiInterfaceBariKoi: ApiInterfaceBariKoi,
     private val apiInterfaceANA: ApiInterfaceANA,
     private val apiInterfaceFCM: ApiInterfaceFCM,
+    private val apiInterfaceINFOBIP: ApiInterfaceInfobip,
     private val database: AppDatabase
 ) {
 
@@ -399,6 +402,11 @@ class AppRepository(
 
     suspend fun deleteOrderRequest(orderRequestId: Int) = apiInterfaceCore.deleteOrderRequest(orderRequestId)
 
-    suspend fun sendPushNotifications(authToken: String, @Body requestBody: FCMRequest) =
-        apiInterfaceFCM.sendPushNotifications(authToken, requestBody)
+    suspend fun sendPushNotifications(authToken: String, @Body requestBody: FCMRequest) = apiInterfaceFCM.sendPushNotifications(authToken, requestBody)
+
+    //#region Infobip Voice SMS
+
+    suspend fun sendVoiceSms(requestBody: VoiceSmsAudiRequestBody) = apiInterfaceINFOBIP.sendVoiceSms(requestBody)
+
+    //#endregion
 }

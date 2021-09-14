@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.di
 
+import com.bd.deliverytiger.app.api.ApiInterfaceInfobip
 import com.bd.deliverytiger.app.api.RetrofitUtils.createCache
 import com.bd.deliverytiger.app.api.RetrofitUtils.createOkHttpClient
 import com.bd.deliverytiger.app.api.RetrofitUtils.getGson
@@ -73,6 +74,7 @@ val appModule = module {
     single(named("lambda")) { retrofitInstance(AppConstant.BASE_URL_LAMBDA, get(), get()) }
     single(named("bariKoi")) { retrofitInstance(AppConstant.BASE_BARI_KOI, get(), get()) }
     single(named("fcm")) { retrofitInstance(AppConstant.BASE_URL_FCM, get(), get()) }
+    single(named("infobip")) { retrofitInstance(AppConstant.BASE_URL_INFOBIP, get(), get()) }
 
     single { ApiInterfaceADM(get(named("adm"))) }
     single { ApiInterfaceCore(get(named("adcore"))) }
@@ -83,10 +85,11 @@ val appModule = module {
     single { ApiInterfaceBariKoi(get(named("bariKoi"))) }
     single { ApiInterfaceANA(get(named("ana"))) }
     single { ApiInterfaceFCM(get(named("fcm"))) }
+    single { ApiInterfaceInfobip(get(named("infobip"))) }
 
     single { AppDatabase.invoke(get()) }
 
-    single { AppRepository(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    single { AppRepository(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 
 
     single { HomeViewModel(get()) }

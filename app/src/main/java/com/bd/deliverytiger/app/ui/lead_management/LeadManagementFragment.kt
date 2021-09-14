@@ -2,12 +2,12 @@ package com.bd.deliverytiger.app.ui.lead_management
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,11 +23,14 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.CustomerInformation
 import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookData
+import com.bd.deliverytiger.app.api.model.voice_SMS.Message
+import com.bd.deliverytiger.app.api.model.voice_SMS.VoiceSmsAudiRequestBody
 import com.bd.deliverytiger.app.databinding.FragmentLeadManagementBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.lead_management.customer_details_bottomsheet.CustomerDetailsBottomSheet
 import com.bd.deliverytiger.app.ui.lead_management.phonebook.PhonebookFormBottomSheet
 import com.bd.deliverytiger.app.ui.lead_management.phonebook.PhonebookGroupBottomSheet
+import com.bd.deliverytiger.app.ui.recorder.RecordBottomSheet
 import com.bd.deliverytiger.app.ui.share.SmsShareDialogue
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
@@ -36,6 +40,7 @@ import com.wafflecopter.multicontactpicker.ContactResult
 import com.wafflecopter.multicontactpicker.LimitColumn
 import com.wafflecopter.multicontactpicker.MultiContactPicker
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 import java.util.*
 
 class LeadManagementFragment : Fragment() {
@@ -53,13 +58,15 @@ class LeadManagementFragment : Fragment() {
     private val requestCodeContactPicker = 8221
     private val selectedContactList: MutableList<ContactResult> = mutableListOf()
     private val selectedNumberList: MutableList<String> = mutableListOf()
+    private val selectedNameList: MutableList<String> = mutableListOf()
+    private val selectedVoiceNumberList: MutableList<String> = mutableListOf()
 
     override fun onResume() {
         super.onResume()
         (activity as HomeActivity).setToolbarTitle(getString(R.string.lead_management))
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return FragmentLeadManagementBinding.inflate(inflater).also {
             binding = it
         }.root
@@ -172,7 +179,11 @@ class LeadManagementFragment : Fragment() {
         binding?.sendVoiceSMSBtn?.setOnClickListener {
             if (dataAdapter.getSelectedItemCount() > 0) {
                 val selectedCustomerList = dataAdapter.getSelectedItemModelList()
-
+                selectedNameList.clear()
+                selectedNameList.addAll(selectedCustomerList.map { it.customerName ?: "" })
+                selectedVoiceNumberList.clear()
+                selectedVoiceNumberList.addAll(selectedCustomerList.map { "88" + it.mobile })
+                goToRecordingBottomSheet()
             }
         }
 
@@ -205,6 +216,59 @@ class LeadManagementFragment : Fragment() {
         val tag = CustomerDetailsBottomSheet.tag
         val dialog = CustomerDetailsBottomSheet.newInstance(mobile)
         dialog.show(childFragmentManager, tag)
+    }
+
+    private fun goToRecordingBottomSheet() {
+        val tag = RecordBottomSheet.tag
+        val dialog = RecordBottomSheet.newInstance()
+        dialog.show(childFragmentManager, tag)
+        dialog.onRecordingComplete = { audioPath ->
+            dialog.dismiss()
+            val names = selectedNameList.joinToString()
+            val alert = alert("নির্দেশনা", "আপনার সিলেক্টেড কাস্টমার \n $names", true,
+                "ঠিক আছে", "ক্যানসেল"
+            ) {
+                if (it == AlertDialog.BUTTON_POSITIVE) {
+                    uploadAudio(
+                        "aud_${SessionManager.courierUserId}_${Date().time}.mp3",
+                        "audio/merchant",
+                        audioPath
+                    )
+                    binding?.clearBtn?.performClick()
+                }
+            }
+            alert.setCancelable(false)
+            alert.show()
+        }
+    }
+
+    private fun uploadAudio(fileName: String, audioPath: String, fileUrl: String) {
+
+        val progressDialog = progressDialog()
+        progressDialog.show()
+
+        Timber.d("requestBody $fileName, $audioPath, $fileUrl")
+        viewModel.audioUploadForFile(requireContext(), fileName, audioPath, fileUrl)
+            .observe(viewLifecycleOwner, Observer { model ->
+                progressDialog.hide()
+                if (model) {
+                    context?.toast("Uploaded successfully")
+                    sendVoiceSMS("https://static.ajkerdeal.com/audio/merchant/$fileName")
+                } else {
+                    context?.toast("Uploaded Failed")
+                }
+            })
+    }
+
+    private fun sendVoiceSMS(audioPath: String) {
+        if (selectedNameList.isNotEmpty()){
+            val requestBody = VoiceSmsAudiRequestBody(
+                listOf(Message(audioPath, "8804445650020", selectedVoiceNumberList))
+            )
+            viewModel.sendVoiceSms(requestBody).observe(viewLifecycleOwner, Observer {
+                context?.toast("Voice SMS Send")
+            })
+        }
     }
 
     private fun goToSmsSendBottomSheet(model: List<CustomerInformation>) {
