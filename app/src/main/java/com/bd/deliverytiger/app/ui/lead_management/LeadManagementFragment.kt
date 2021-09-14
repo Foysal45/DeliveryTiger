@@ -222,6 +222,9 @@ class LeadManagementFragment : Fragment() {
         val tag = RecordBottomSheet.tag
         val dialog = RecordBottomSheet.newInstance()
         dialog.show(childFragmentManager, tag)
+        dialog.onCancel = {
+            binding?.clearBtn?.performClick()
+        }
         dialog.onRecordingComplete = { audioPath ->
             dialog.dismiss()
             val names = selectedNameList.joinToString()

@@ -34,6 +34,7 @@ class RecordBottomSheet : BottomSheetDialogFragment() {
 
     private var binding: FragmentRecordBottomSheetBinding? = null
     var onRecordingComplete: ((url: String) -> Unit)? = null
+    var onCancel: (() -> Unit)? = null
 
     private var mediaRecorder: MediaRecorder? = null
     private var mediaPlayer: MediaPlayer? = null
@@ -103,6 +104,7 @@ class RecordBottomSheet : BottomSheetDialogFragment() {
         }
 
         binding?.cancelBtn?.setOnClickListener {
+            onCancel?.invoke()
             dismiss()
         }
 
