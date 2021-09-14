@@ -61,47 +61,7 @@ class RecordBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (isAudioPermissions()) {
-            initMediaRecorder()
-        }
-        initView()
         initClickLister()
-    }
-
-    private fun initView() {
-
-    }
-
-    private fun initMediaRecorder() {
-
-        audioFilePath = createNewFilePath(requireContext(), FileType.Audio)
-        Timber.d("debugAudio $audioFilePath")
-
-        try {
-            mediaRecorder = MediaRecorder().apply {
-                setAudioSource(MediaRecorder.AudioSource.MIC)
-                setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-                setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-                setOutputFile(audioFilePath)
-            }
-
-            mediaPlayer = MediaPlayer().apply {
-                //setAudioStreamType(AudioManager.STREAM_MUSIC)
-                setAudioAttributes(AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .build())
-            }
-            mediaPlayer?.setOnCompletionListener {
-                it.stop()
-                binding?.playBtn?.setIconResource(R.drawable.ic_play)
-                isPlaying = false
-            }
-
-        } catch (e: IllegalStateException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
     }
 
     private fun initClickLister() {
@@ -128,37 +88,54 @@ class RecordBottomSheet : BottomSheetDialogFragment() {
             } else {
                 binding?.playBtn?.setIconResource(R.drawable.ic_play)
                 isPlaying = false
-                stopPlayer()
+                mediaPlayer?.run {
+                    pause()
+                }
             }
         }
 
         binding?.saveAudioBtn?.setOnClickListener {
             if (audioFilePath.isNotEmpty() && File(audioFilePath).exists()) {
                 onRecordingComplete?.invoke(audioFilePath)
-            }
-            else{
+            } else {
                 context?.toast("অডিও রেকর্ড করুন")
             }
         }
 
         binding?.cancelBtn?.setOnClickListener {
-            stopMedia()
             dismiss()
         }
 
     }
 
     private fun playRecording(audioFilePath: String) {
-
         try {
             val manager: AudioManager = requireContext().getSystemService(Context.AUDIO_SERVICE) as AudioManager
             if (manager.isMusicActive) {
                 context?.toast("Another recording is just playing! Wait until it's finished!")
             } else {
-                mediaPlayer?.run {
-                    setDataSource(requireContext(), Uri.parse(audioFilePath))
-                    prepare()
-                    start()
+                try {
+                    mediaPlayer = MediaPlayer().apply {
+                        setAudioAttributes(
+                            AudioAttributes.Builder()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                .setUsage(AudioAttributes.USAGE_MEDIA)
+                                .build()
+                        )
+                        setDataSource(requireContext(), Uri.parse(audioFilePath))
+                        prepare()
+                        start()
+                    }
+                    mediaPlayer?.setOnCompletionListener {
+                        it.pause()
+                        binding?.playBtn?.setIconResource(R.drawable.ic_play)
+                        isPlaying = false
+                    }
+
+                } catch (e: IllegalStateException) {
+                    e.printStackTrace()
+                } catch (e: IOException) {
+                    e.printStackTrace()
                 }
             }
         } catch (e: Exception) {
@@ -177,13 +154,20 @@ class RecordBottomSheet : BottomSheetDialogFragment() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
     private fun startRecording() {
         try {
-            mediaRecorder?.prepare()
-            mediaRecorder?.start()
+            audioFilePath = createNewFilePath(requireContext(), FileType.Audio)
+            Timber.d("debugAudio $audioFilePath")
+            mediaRecorder = MediaRecorder().apply {
+                setAudioSource(MediaRecorder.AudioSource.MIC)
+                setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+                setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+                setOutputFile(audioFilePath)
+                prepare()
+                start()
+            }
             isAudioRecording = true
             binding?.chronometer?.let { chronometer ->
                 chronometer.base = SystemClock.elapsedRealtime()
@@ -201,8 +185,10 @@ class RecordBottomSheet : BottomSheetDialogFragment() {
     private fun stopRecording() {
         try {
             if (isAudioRecording) {
-                mediaRecorder?.stop()
-                mediaRecorder?.release()
+                mediaRecorder?.run {
+                    stop()
+                    release()
+                }
                 isAudioRecording = false
                 binding?.recordBtn?.setIconResource(R.drawable.ic_mic)
                 binding?.chronometer?.stop()
@@ -216,6 +202,11 @@ class RecordBottomSheet : BottomSheetDialogFragment() {
     private fun stopMedia() {
         stopPlayer()
         stopRecording()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopMedia()
     }
 
     private fun isAudioPermissions(): Boolean {
@@ -259,13 +250,8 @@ class RecordBottomSheet : BottomSheetDialogFragment() {
             }
         }
         if (isPermission1) {
-            initMediaRecorder()
+            binding?.recordBtn?.performClick()
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        stopMedia()
     }
 
     override fun onStart() {
