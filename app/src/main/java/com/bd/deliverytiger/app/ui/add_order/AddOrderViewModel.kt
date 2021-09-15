@@ -319,9 +319,9 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
                     if (response.body()!!.model != null) {
                         responseBody.value = response.body()!!.model!!
                     } else {
-                        viewState.value = ViewState.ProgressState(false)
                         viewState.value = ViewState.ShowMessage(message)
                     }
+                    viewState.value = ViewState.ProgressState(false)
                 } else {
                     viewState.value = ViewState.ProgressState(false)
                     viewState.value = ViewState.ShowMessage(message)
