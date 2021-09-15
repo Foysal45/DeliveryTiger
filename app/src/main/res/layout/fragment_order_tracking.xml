@@ -356,8 +356,15 @@
             app:iconPadding="8dp"
 
             app:layout_constraintBottom_toTopOf="@id/spacer"
-            app:layout_constraintEnd_toStartOf="@id/callBtn"
+            app:layout_constraintEnd_toStartOf="@id/guideline_var"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_var"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".5"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/callBtn"
@@ -367,7 +374,7 @@
             android:gravity="center"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            android:text="কল করুন"
+            android:text="কল"
             android:layout_marginBottom="10dp"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
@@ -379,8 +386,31 @@
             app:iconPadding="8dp"
 
             app:layout_constraintBottom_toTopOf="@id/spacer"
+            app:layout_constraintEnd_toStartOf="@id/chatBtn"
+            app:layout_constraintStart_toEndOf="@id/guideline_var" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/chatBtn"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="চ্যাট"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/aDheaderColor"
+            android:textSize="16sp"
+            app:backgroundTint="@color/dashboard_neutral"
+            app:cornerRadius="1dp"
+            app:icon="@drawable/ic_chat2"
+            app:iconTint="@color/aDheaderColor"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+
+            app:layout_constraintBottom_toTopOf="@id/spacer"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/complainBtn" />
+            app:layout_constraintStart_toEndOf="@id/callBtn" />
 
         <Space
             android:id="@+id/spacer"

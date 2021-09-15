@@ -38,12 +38,14 @@ class LoanSurveyFragment : Fragment() {
     private var courierList: MutableList<CourierModel> = mutableListOf()
     private var selectedCourierList: MutableList<SelectedCourierModel> = mutableListOf()
 
+    private var merchantName = ""
     private var merchantGender = ""
 
     private var loanRange = ""
     private var monthlyTransaction = ""
 
     private var totalMonthlyCOD = ""
+    private var totalMonthlyAverageSell = ""
     private var guarantorName = ""
     private var guarantorNumber = ""
 
@@ -83,7 +85,7 @@ class LoanSurveyFragment : Fragment() {
     private fun init() {
         binding?.recyclerViewOtherServices?.let { recyclerView ->
             recyclerView.apply {
-                layoutManager = GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
+                layoutManager = GridLayoutManager(requireContext(), 4, GridLayoutManager.VERTICAL, false)
                 adapter = dataAdapter
                 itemAnimator = null
             }
@@ -102,9 +104,9 @@ class LoanSurveyFragment : Fragment() {
             if (verify()) {
 
                 val requestBody = LoanSurveyRequestBody(
-                    SessionManager.courierUserId, merchantGender,
+                    SessionManager.courierUserId, merchantName, merchantGender,
                     "",
-                    loanRange, monthlyTransaction, hasBankAccount, hasPhysicalShop,
+                    loanRange, monthlyTransaction, hasBankAccount, hasPhysicalShop, totalMonthlyAverageSell,
                     totalMonthlyCOD, guarantorName, guarantorNumber
                 )
                 if (imagePickFlag == 1) {
@@ -136,6 +138,7 @@ class LoanSurveyFragment : Fragment() {
                     merchantGender = "female"
                 }
             }
+            binding?.merchantNameETLayout?.isVisible = true
         }
         //endregion
 
@@ -157,9 +160,11 @@ class LoanSurveyFragment : Fragment() {
             when (checkedId) {
                 R.id.merchantPhysicalShopExistsYes -> {
                     hasPhysicalShop = true
+                    binding?.totalMonthlyAverageSellETLayout?.isVisible = true
                 }
                 R.id.merchantPhysicalShopExistsNo -> {
                     hasPhysicalShop = false
+                    binding?.totalMonthlyAverageSellETLayout?.isVisible = false
                 }
             }
         }
@@ -230,6 +235,12 @@ class LoanSurveyFragment : Fragment() {
             return false
         }
 
+        merchantName = binding?.merchantNameET?.text.toString()
+        if (merchantName.isEmpty()) {
+            context?.toast("Enter Your Name")
+            return false
+        }
+
         loanRange = binding?.loanRangeET?.text.toString()
         if (loanRange.isEmpty()) {
             context?.toast("Please enter loan range")
@@ -241,6 +252,17 @@ class LoanSurveyFragment : Fragment() {
             context?.toast("Please enter Monthly Transaction")
             return false
         }
+
+        if (hasPhysicalShop) {
+            totalMonthlyAverageSell = binding?.totalMonthlyAverageSellET?.text.toString()
+            if (totalMonthlyAverageSell.isEmpty()) {
+                context?.toast("Please enter Total Monthly Average Sell")
+                return false
+            }
+        } else {
+            totalMonthlyAverageSell = ""
+        }
+
 
         totalMonthlyCOD = binding?.totalCODFromOtherServicesET?.text.toString()
         if (totalMonthlyCOD.isEmpty()) {
