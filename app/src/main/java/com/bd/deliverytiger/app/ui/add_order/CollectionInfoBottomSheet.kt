@@ -33,6 +33,7 @@ class CollectionInfoBottomSheet : BottomSheetDialogFragment() {
     private lateinit var pickupAddressLayout: ConstraintLayout
     private lateinit var spinnerCollectionLocation: AppCompatSpinner
     private var weightRangeId = 0
+    private val pickupLocationList: MutableList<PickupLocation> = mutableListOf()
 
     companion object {
         fun newInstance(weightRangeId: Int): CollectionInfoBottomSheet = CollectionInfoBottomSheet().apply {
@@ -89,6 +90,8 @@ class CollectionInfoBottomSheet : BottomSheetDialogFragment() {
 
     private fun fetchPickupLocation() {
         viewModel.getPickupLocations(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { list ->
+            pickupLocationList.clear()
+            pickupLocationList.addAll(list)
             spinnerDataBinding(list)
         })
     }
@@ -98,7 +101,8 @@ class CollectionInfoBottomSheet : BottomSheetDialogFragment() {
         binding?.toggleButtonPickupGroup?.setOnSelectListener { button ->
             when (button.id) {
                 R.id.toggleButtonPickup1 -> {
-                    onCollectionTypeSelected?.invoke(false, PickupLocation())
+                    val first = if (pickupLocationList.isEmpty()) PickupLocation() else pickupLocationList.first()
+                    onCollectionTypeSelected?.invoke(false, first)
                     pickupAddressLayout.visibility = View.GONE
                 }
                 R.id.toggleButtonPickup2 -> {

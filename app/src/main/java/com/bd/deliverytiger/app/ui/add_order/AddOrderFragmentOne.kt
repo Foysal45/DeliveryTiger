@@ -732,6 +732,7 @@ class AddOrderFragmentOne : Fragment() {
             } else {
                 isOfficeDrop = true
                 isCollectionLocationSelected = false
+                merchantDistrict = pickupLocation.districtId
             }
             calculateTotalPrice()
             isCollectionTypeSelected = true
