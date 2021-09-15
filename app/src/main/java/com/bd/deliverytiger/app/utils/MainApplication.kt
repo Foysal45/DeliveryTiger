@@ -7,6 +7,7 @@ import android.provider.Settings
 import com.bd.deliverytiger.app.api.RetrofitSingleton
 import com.bd.deliverytiger.app.api.endpoint.LoginInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
+import com.bd.deliverytiger.app.api.model.login.LoginBody
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.di.appModule
 import com.bd.deliverytiger.app.interfaces.Session
@@ -85,11 +86,7 @@ class MainApplication: Application() {
             override fun onResponse(call: Call<GenericResponse<LoginResponse>>, response: Response<GenericResponse<LoginResponse>>) {
                 //Timber.d("applicationLog", "onResponse: ${response.code()} ${response.message()}")
                 if (response.code() == 404){
-                    val intent = Intent(this@MainApplication, LoginActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    intent.putExtra("isSessionOut", true)
-                    startActivity(intent)
-
+                    reloginUser()
                 }
                 if (response.isSuccessful && response.body() != null){
                     if (response.body()!!.model != null){
@@ -101,6 +98,36 @@ class MainApplication: Application() {
             }
 
         })
+    }
+
+    fun reloginUser() {
+
+        val loginInterface = retrofit.create(LoginInterface::class.java)
+        val requestBody = LoginBody(SessionManager.loginId, SessionManager.loginPassword, SessionManager.firebaseToken)
+        loginInterface.userLogin(requestBody).enqueue(object : Callback<GenericResponse<LoginResponse>>{
+            override fun onFailure(call: Call<GenericResponse<LoginResponse>>, t: Throwable) {
+                goToLogin()
+            }
+
+            override fun onResponse(call: Call<GenericResponse<LoginResponse>>, response: Response<GenericResponse<LoginResponse>>) {
+                //Timber.d("applicationLog", "onResponse: ${response.code()} ${response.message()}")
+                if (response.isSuccessful && response.body() != null){
+                    if (response.body()!!.model != null){
+                        SessionManager.createSession(response.body()!!.model)
+                    } else {
+                        goToLogin()
+                    }
+                }
+            }
+
+        })
+    }
+
+    private fun goToLogin() {
+        val intent = Intent(this@MainApplication, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.putExtra("isSessionOut", true)
+        startActivity(intent)
     }
 
 
