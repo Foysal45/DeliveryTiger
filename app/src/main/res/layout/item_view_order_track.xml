@@ -185,6 +185,18 @@
             android:backgroundTint="@color/colorPrimary"
             />
 
+        <TextView
+            android:id="@+id/reattemptStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textColor="@color/red_900"
+            android:textSize="@dimen/text_12"
+            tools:text="status" />
+
     </LinearLayout>
 
     <TextView

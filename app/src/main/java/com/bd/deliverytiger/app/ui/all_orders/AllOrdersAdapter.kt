@@ -119,9 +119,15 @@ class AllOrdersAdapter(var context: Context, var dataList: MutableList<CourierOr
                 // কাস্টমার প্রোডাক্ট নিতে চায়নি, ক্রেতা ফোনে পাওয়া যায়নি
                 26, 33, 47, 27 -> {
                     binding.actionBtn.isVisible = true
+                    binding.reattemptStatus.isVisible = false
                     binding.actionBtn.text = "আবার ডেলিভারি এটেম্পট নিন"
                 }
+                64 -> {
+                    binding.reattemptStatus.isVisible = true
+                    binding.reattemptStatus.text = "রি-এটেম্পট রিকোয়েস্ট করা হয়েছে"
+                }
                 else -> {
+                    binding.reattemptStatus.isVisible = false
                     binding.actionBtn.isVisible = false
                 }
             }
