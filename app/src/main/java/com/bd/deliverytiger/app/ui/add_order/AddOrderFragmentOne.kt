@@ -219,8 +219,6 @@ class AddOrderFragmentOne : Fragment() {
     private var isLocationLoading: Boolean = false
     private var isShowServiceType: Boolean = false
 
-    private var progressDialog: ProgressDialog? = null
-
     private var binding: FragmentAddOrderFragmentOneBinding? = null
     private var timeSlotDataAdapter: AddOrderTimeSlotAdapter = AddOrderTimeSlotAdapter()
     private val viewModel: AddOrderViewModel by inject()
