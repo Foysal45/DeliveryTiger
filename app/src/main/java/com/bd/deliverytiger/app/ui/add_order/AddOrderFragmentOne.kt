@@ -219,6 +219,8 @@ class AddOrderFragmentOne : Fragment() {
     private var isLocationLoading: Boolean = false
     private var isShowServiceType: Boolean = false
 
+    private var progressDialog: ProgressDialog? = null
+
     private var binding: FragmentAddOrderFragmentOneBinding? = null
     private var timeSlotDataAdapter: AddOrderTimeSlotAdapter = AddOrderTimeSlotAdapter()
     private val viewModel: AddOrderViewModel by inject()
@@ -608,6 +610,7 @@ class AddOrderFragmentOne : Fragment() {
                         //binding?.progressBar?.visibility = View.VISIBLE
                     } else {
                         //binding?.progressBar?.visibility = View.GONE
+                        progressDialog?.hide()
                     }
                 }
             }
@@ -1561,10 +1564,12 @@ class AddOrderFragmentOne : Fragment() {
     }
 
     private fun placeOrder(){
-        val dialog = ProgressDialog(context)
-        dialog.setMessage("অপেক্ষা করুন")
-        dialog.setCancelable(false)
-        dialog.show()
+        progressDialog = ProgressDialog(context)
+        progressDialog?.run {
+            setMessage("অপেক্ষা করুন")
+            setCancelable(false)
+            show()
+        }
 
         if (collectionAddress.isEmpty()) {
             collectionAddress = SessionManager.address
@@ -1586,7 +1591,7 @@ class AddOrderFragmentOne : Fragment() {
 
 
         viewModel.placeOrder(requestBody).observe(viewLifecycleOwner, Observer { model ->
-            dialog?.hide()
+            progressDialog?.hide()
             SessionManager.totalAmount = total.toInt()
             addOrderSuccessFragment(model)
         })

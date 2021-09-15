@@ -240,6 +240,9 @@ class HomeActivity : AppCompatActivity(),
             viewModel.keyboardVisibility.value = isShown
         }
         //facebookHash()
+        //Timber.d("tokenDebug AccessToken:\n${SessionManager.accessToken}")
+        //Timber.d("tokenDebug RefreshToken:\n${SessionManager.refreshToken}")
+
     }
 
     override fun onNewIntent(intent: Intent?) {
