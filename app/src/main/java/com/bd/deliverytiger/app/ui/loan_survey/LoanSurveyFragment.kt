@@ -85,7 +85,7 @@ class LoanSurveyFragment : Fragment() {
     private fun init() {
         binding?.recyclerViewOtherServices?.let { recyclerView ->
             recyclerView.apply {
-                layoutManager = GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
+                layoutManager = GridLayoutManager(requireContext(), 4, GridLayoutManager.VERTICAL, false)
                 adapter = dataAdapter
                 itemAnimator = null
             }
