@@ -226,6 +226,8 @@ class AddOrderFragmentOne : Fragment() {
     private val viewModel: AddOrderViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
 
+    private var progressDialog: ProgressDialog? = null
+
     //#region Life cycle
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentAddOrderFragmentOneBinding.inflate(inflater, container, false).also {
