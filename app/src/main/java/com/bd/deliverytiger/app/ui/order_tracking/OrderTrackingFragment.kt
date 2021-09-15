@@ -16,11 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.bulk_status.StatusUpdateData
+import com.bd.deliverytiger.app.api.model.chat.ChatUserData
+import com.bd.deliverytiger.app.api.model.chat.FirebaseCredential
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackData
 import com.bd.deliverytiger.app.databinding.FragmentOrderTrackingBinding
 import com.bd.deliverytiger.app.ui.charge_calculator.DeliveryChargeCalculatorFragment
+import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.collector_tracking.MapFragment
 import com.bd.deliverytiger.app.ui.complain.ComplainFragment
 import com.bd.deliverytiger.app.ui.home.HomeActivity
@@ -130,6 +133,10 @@ class OrderTrackingFragment : Fragment() {
 
         binding?.callBtn?.setOnClickListener {
             callHelpLine()
+        }
+
+        binding?.chatBtn?.setOnClickListener {
+            goToChatActivity()
         }
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
@@ -358,6 +365,27 @@ class OrderTrackingFragment : Fragment() {
         //val fragment = MapFragment.newInstance(bundle)
         //val tag = MapFragment.tag
         //addFragment(fragment, tag)
+    }
+
+    private fun goToChatActivity() {
+        val firebaseCredential = FirebaseCredential(
+            firebaseWebApiKey = BuildConfig.FirebaseWebApiKey
+        )
+        val senderData = ChatUserData(SessionManager.courierUserId.toString(), SessionManager.userName, SessionManager.mobile,
+            imageUrl = "https://static.ajkerdeal.com/delivery_tiger/profile/${SessionManager.courierUserId}.jpg",
+            role = "dt",
+            fcmToken = SessionManager.firebaseToken
+        )
+        val receiverData = ChatUserData("938", "Complain Admin", "01894811222",
+            imageUrl = "https://static.ajkerdeal.com/images/admin_users/dt/938.jpg",
+            role = "retention"
+        )
+        ChatConfigure(
+            "dt-retention",
+            senderData,
+            firebaseCredential = firebaseCredential,
+            receiver = receiverData
+        ).config(requireContext())
     }
 
     override fun onDestroyView() {
