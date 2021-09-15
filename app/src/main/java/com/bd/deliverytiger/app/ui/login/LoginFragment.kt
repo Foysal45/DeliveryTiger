@@ -107,7 +107,7 @@ class LoginFragment: Fragment() {
             }
         }
 
-        viewModel.fetchHelpLineNumbers().observe(viewLifecycleOwner, Observer { model->
+        /*viewModel.fetchHelpLineNumbers().observe(viewLifecycleOwner, Observer { model->
             if (model.helpLine1.isNullOrEmpty()){
                 helpLineContactLayout.visibility = View.GONE
             }else{
@@ -117,7 +117,7 @@ class LoginFragment: Fragment() {
                     callHelplineNumber(model.helpLine1!!)
                 }
             }
-        })
+        })*/
 
         if (isSessionOut) {
 
