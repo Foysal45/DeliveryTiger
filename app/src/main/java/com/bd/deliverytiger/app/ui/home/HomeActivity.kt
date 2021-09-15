@@ -1320,7 +1320,9 @@ class HomeActivity : AppCompatActivity(),
             dialog.dismiss()
             when (route) {
                 "survey" -> {
-                    navController.navigate(R.id.nav_dashboard_loanSurvey)
+                    if (navController.currentDestination?.id == navController.graph.startDestination) {
+                        navController.navigate(R.id.nav_dashboard_loanSurvey)
+                    }
                 }
             }
         }
