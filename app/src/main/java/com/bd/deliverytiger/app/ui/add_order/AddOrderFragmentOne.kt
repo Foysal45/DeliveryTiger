@@ -224,6 +224,8 @@ class AddOrderFragmentOne : Fragment() {
     private val viewModel: AddOrderViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
 
+    private var progressDialog: ProgressDialog? = null
+
     //#region Life cycle
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentAddOrderFragmentOneBinding.inflate(inflater, container, false).also {
@@ -608,6 +610,7 @@ class AddOrderFragmentOne : Fragment() {
                         //binding?.progressBar?.visibility = View.VISIBLE
                     } else {
                         //binding?.progressBar?.visibility = View.GONE
+                        progressDialog?.hide()
                     }
                 }
             }
@@ -732,6 +735,7 @@ class AddOrderFragmentOne : Fragment() {
             } else {
                 isOfficeDrop = true
                 isCollectionLocationSelected = false
+                merchantDistrict = pickupLocation.districtId
             }
             calculateTotalPrice()
             isCollectionTypeSelected = true
@@ -1560,10 +1564,12 @@ class AddOrderFragmentOne : Fragment() {
     }
 
     private fun placeOrder(){
-        val dialog = ProgressDialog(context)
-        dialog.setMessage("অপেক্ষা করুন")
-        dialog.setCancelable(false)
-        dialog.show()
+        progressDialog = ProgressDialog(context)
+        progressDialog?.run {
+            setMessage("অপেক্ষা করুন")
+            setCancelable(false)
+            show()
+        }
 
         if (collectionAddress.isEmpty()) {
             collectionAddress = SessionManager.address
@@ -1585,7 +1591,7 @@ class AddOrderFragmentOne : Fragment() {
 
 
         viewModel.placeOrder(requestBody).observe(viewLifecycleOwner, Observer { model ->
-            dialog?.hide()
+            progressDialog?.hide()
             SessionManager.totalAmount = total.toInt()
             addOrderSuccessFragment(model)
         })
