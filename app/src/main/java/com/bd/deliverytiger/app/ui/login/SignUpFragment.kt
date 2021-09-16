@@ -355,14 +355,17 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         }
         if (password.isEmpty()) {
             showShortToast(context, getString(R.string.write_password))
+            etSignUpPassword.requestFocus()
             return false
         }
         if (!isAlphaNumericPassword(password)) {
             showShortToast(context, getString(R.string.password_pattern))
+            etSignUpPassword.requestFocus()
             return false
         }
         if (password != confirmPassword) {
             showShortToast(context, getString(R.string.match_pass))
+            etSignUpPassword.requestFocus()
             return false
         }
         if (gender.isEmpty()) {
