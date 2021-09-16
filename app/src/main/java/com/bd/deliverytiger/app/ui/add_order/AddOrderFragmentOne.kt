@@ -146,6 +146,7 @@ class AddOrderFragmentOne : Fragment() {
 
     private var isCollection: Boolean = false
     private var isBreakable: Boolean = false
+    private var isHeavyWeight: Boolean = false
     private var isAgreeTerms: Boolean = false
     private var isWeightSelected: Boolean = false
     private var isPackagingSelected: Boolean = false
@@ -945,7 +946,7 @@ class AddOrderFragmentOne : Fragment() {
 
         collectionChargeApi = SessionManager.collectionCharge
         isBreakable = SessionManager.isBreakAble
-        //isHeavyWeight = SessionManager.isHeavyWeight
+        isHeavyWeight = SessionManager.isHeavyWeight
         //merchantDistrict = SessionManager.merchantDistrict
         fetchPickupLocation()
         initLocationListener()
@@ -973,8 +974,8 @@ class AddOrderFragmentOne : Fragment() {
             packagingDataList.addAll(list)
 
             if (list.isNotEmpty()) {
-                // Bubble + Box (Tk 20) id 5
-                val first = list.find { it.packagingChargeId == 5 }
+                // Bubble + Poly (Tk 10) id 4
+                val first = list.find { it.packagingChargeId == 4 }
                 payPackagingCharge = first?.packagingCharge ?: 0.0
             }
 
@@ -1471,6 +1472,10 @@ class AddOrderFragmentOne : Fragment() {
                     if (deliveryRangeId == 14 || deliveryRangeId == 17) {
                         timeSlotList.removeLast()
                     }
+                    if (isHeavyWeight) {
+                        // keep only first one
+                        timeSlotList.removeAll { it.collectionTimeSlotId != 1 }
+                    }
                 }
                 timeSlotDataAdapter.initLoad(timeSlotList)
                 binding?.emptyView?.isVisible = timeSlotList.isEmpty()
@@ -1480,7 +1485,12 @@ class AddOrderFragmentOne : Fragment() {
                 Timber.d("timeSlotDebug upcoming time slot")
                 timeSlotList.clear()
                 timeSlotList.addAll(list)
-
+                if (timeSlotList.isNotEmpty()) {
+                    if (isHeavyWeight) {
+                        // keep only first one
+                        timeSlotList.removeAll { it.collectionTimeSlotId != 1 }
+                    }
+                }
                 timeSlotDataAdapter.initLoad(timeSlotList)
                 binding?.emptyView?.isVisible = timeSlotList.isEmpty()
             })
