@@ -133,7 +133,9 @@ class LeadManagementFragment : Fragment() {
         }
 
         dataAdapter.onOrderDetailsClicked = {model, position ->
-            goToCustomerDetailsBottomSheet(model.mobile ?: "")
+            if (model.totalOrder > 0){
+                goToCustomerDetailsBottomSheet(model.mobile ?: "")
+            }
         }
 
         binding?.addContactBtn?.setOnClickListener{
