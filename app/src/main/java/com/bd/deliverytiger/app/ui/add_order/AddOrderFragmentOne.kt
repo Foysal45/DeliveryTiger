@@ -139,6 +139,7 @@ class AddOrderFragmentOne : Fragment() {
     private var breakableChargeApi: Double = 0.0
     private var bigProductCharge: Double = 0.0
     private var collectionChargeApi: Double = 0.0
+    private var collectionChargeExtraWeightWiseApi: Double = 0.0
     private var isCheckBigProduct: Boolean = false
     private var codChargePercentageInsideDhaka: Double = 0.0
     private var codChargePercentageOutsideDhaka: Double = 0.0
@@ -281,8 +282,10 @@ class AddOrderFragmentOne : Fragment() {
         getCourierUsersInformation()
         fetchMerchantBalanceInfo()
         getBreakableCharge()
+        if (SessionManager.isBreakAble) {
+            getPackagingCharge()
+        }
         fetchOfferCharge()
-        getPackagingCharge()
         fetchDTOrderGenericLimit()
         fetchCollectionTimeSlot()
     }
@@ -352,6 +355,7 @@ class AddOrderFragmentOne : Fragment() {
                 payShipmentCharge = model.chargeAmount // TotalCharge = deliveryCharge + extraDeliveryCharge
                 deliveryCharge = model.deliveryCharge
                 extraDeliveryCharge = model.extraDeliveryCharge
+                collectionChargeExtraWeightWiseApi = model.extraCollectionCharge
                 offerType = ""
             }
 
@@ -940,6 +944,8 @@ class AddOrderFragmentOne : Fragment() {
     private fun getCourierUsersInformation() {
 
         collectionChargeApi = SessionManager.collectionCharge
+        isBreakable = SessionManager.isBreakAble
+        //isHeavyWeight = SessionManager.isHeavyWeight
         //merchantDistrict = SessionManager.merchantDistrict
         fetchPickupLocation()
         initLocationListener()
@@ -966,19 +972,22 @@ class AddOrderFragmentOne : Fragment() {
             packagingDataList.clear()
             packagingDataList.addAll(list)
 
-            val packageNameList: MutableList<String> = mutableListOf()
+            if (list.isNotEmpty()) {
+                // Bubble + Box (Tk 20) id 5
+                val first = list.find { it.packagingChargeId == 5 }
+                payPackagingCharge = first?.packagingCharge ?: 0.0
+            }
+
+            // Temp disabled
+            /*val packageNameList: MutableList<String> = mutableListOf()
             packageNameList.add("প্যাকেজিং")
             for (model1 in packagingDataList) {
                 packageNameList.add(model1.packagingName)
             }
-
             val packagingAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, packageNameList)
             spinnerPackaging.adapter = packagingAdapter
             spinnerPackaging.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                }
-
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                     if (p2 != 0) {
                         val model2 = packagingDataList[p2 - 1]
@@ -990,9 +999,8 @@ class AddOrderFragmentOne : Fragment() {
                         isPackagingSelected = false
                     }
                 }
-
             }
-            spinnerPackaging.setSelection(1, false)
+            spinnerPackaging.setSelection(1, false)*/
         })
 
     }
@@ -1526,7 +1534,7 @@ class AddOrderFragmentOne : Fragment() {
         if (isOfficeDrop) {
             payCollectionCharge = 0.0
         } else {
-            payCollectionCharge = collectionChargeApi
+            payCollectionCharge = collectionChargeApi + collectionChargeExtraWeightWiseApi
         }
 
         //val payReturnCharge = SessionManager.returnCharge
@@ -1535,7 +1543,6 @@ class AddOrderFragmentOne : Fragment() {
         } else {
             total = payDeliveryCharge + payCODCharge + payCollectionCharge + payPackagingCharge
         }
-
 
         //   total = payDeliveryCharge + payCODCharge + payCollectionCharge + payPackagingCharge
 

@@ -1103,6 +1103,8 @@ class HomeActivity : AppCompatActivity(),
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(this, Observer { model ->
             SessionManager.collectionCharge = model.collectionCharge
             SessionManager.merchantDistrict = model.districtId
+            SessionManager.isBreakAble = model.isBreakAble
+            SessionManager.isHeavyWeight = model.isHeavyWeight
             isQuickBookingEnable = model.isQuickOrderActive
         })
     }
