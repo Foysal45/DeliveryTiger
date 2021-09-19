@@ -249,9 +249,9 @@ class DashboardFragment : Fragment() {
             getDashBoardData(selectedMonth, selectedYear)
         }
         binding?.collectorTrackBtn?.setOnClickListener {
-            //addFragment(MapFragment.newInstance(null), MapFragment.tag)
             findNavController().navigate(R.id.nav_dashboard_map)
             UserLogger.logGenie("Dashboard_Collector_Track")
+            //goToChatActivityRider()
         }
         binding?.orderTrackingBtn?.setOnClickListener {
             //addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
@@ -1231,6 +1231,31 @@ class DashboardFragment : Fragment() {
         }
         ChatConfigure(
             "dt-retention",
+            senderData,
+            firebaseCredential = firebaseCredential,
+            receiver = receiverData
+        ).config(requireContext())
+    }
+
+    private fun goToChatActivityRider() {
+        val firebaseCredential = FirebaseCredential(
+            firebaseWebApiKey = BuildConfig.FirebaseWebApiKey
+        )
+        val senderData = ChatUserData(SessionManager.courierUserId.toString(), SessionManager.userName, SessionManager.mobile,
+            imageUrl = "https://static.ajkerdeal.com/delivery_tiger/profile/${SessionManager.courierUserId}.jpg",
+            role = "dt",
+            fcmToken = SessionManager.firebaseToken
+        )
+        val receiverData = if (adminUser != null) {
+            ChatUserData("14".toString(), "Rider Abin", "01715269261",
+                imageUrl = "https://static.ajkerdeal.com/images/bondhuprofileimage/14/profileimage.jpg",
+                role = "bondhu"
+            )
+        } else {
+            ChatUserData()
+        }
+        ChatConfigure(
+            "dt-bondhu",
             senderData,
             firebaseCredential = firebaseCredential,
             receiver = receiverData

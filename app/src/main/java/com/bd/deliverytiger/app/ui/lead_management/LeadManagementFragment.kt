@@ -32,7 +32,10 @@ import com.bd.deliverytiger.app.ui.lead_management.phonebook.PhonebookFormBottom
 import com.bd.deliverytiger.app.ui.lead_management.phonebook.PhonebookGroupBottomSheet
 import com.bd.deliverytiger.app.ui.recorder.RecordBottomSheet
 import com.bd.deliverytiger.app.ui.share.SmsShareDialogue
-import com.bd.deliverytiger.app.utils.*
+import com.bd.deliverytiger.app.utils.SessionManager
+import com.bd.deliverytiger.app.utils.ViewState
+import com.bd.deliverytiger.app.utils.hideKeyboard
+import com.bd.deliverytiger.app.utils.toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
@@ -158,8 +161,10 @@ class LeadManagementFragment : Fragment() {
             }
         }
 
-        dataAdapter.onOrderDetailsClicked = { model, _ ->
-            goToCustomerDetailsBottomSheet(model.mobile ?: "")
+        dataAdapter.onOrderDetailsClicked = {model, position ->
+            if (model.totalOrder > 0){
+                goToCustomerDetailsBottomSheet(model.mobile ?: "")
+            }
         }
 
         binding?.sendSMSBtn?.setOnClickListener {

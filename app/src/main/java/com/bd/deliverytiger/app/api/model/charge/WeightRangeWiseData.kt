@@ -34,6 +34,8 @@ data class WeightRangeWiseData(
     var deliveryCharge: Double = 0.0,
     @SerializedName("extraDeliveryCharge")
     var extraDeliveryCharge: Double = 0.0,
+    @SerializedName("extraCollectionCharge")
+    var extraCollectionCharge: Double = 0.0,
     @SerializedName("type")
     var type: String? = ""
 )

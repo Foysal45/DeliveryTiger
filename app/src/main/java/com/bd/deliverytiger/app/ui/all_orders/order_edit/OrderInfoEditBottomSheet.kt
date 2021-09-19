@@ -137,13 +137,20 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
     private fun spinnerDataBinding(list: List<PickupLocation>) {
 
         val pickupList: MutableList<String> = mutableListOf()
-        list.forEach {
-            pickupList.add(it.thanaName ?: "")
+
+        val selectedIndex = list.indexOfFirst { it.districtId == model.courierAddressContactInfo?.collectAddressDistrictId && it.thanaId == model.courierAddressContactInfo?.collectAddressThanaId }
+        if (selectedIndex != -1) {
+            val model = list[selectedIndex]
+            pickupList.add(model.thanaName ?: "")
+            //binding?.spinnerCollectionLocation?.setSelection(selectedIndex)
         }
+        /*list.forEach {
+            pickupList.add(it.thanaName ?: "")
+        }*/
 
         val pickupAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, pickupList)
         binding?.spinnerCollectionLocation?.adapter = pickupAdapter
-        binding?.spinnerCollectionLocation?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        /*binding?.spinnerCollectionLocation?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -152,13 +159,7 @@ class OrderInfoEditBottomSheet : BottomSheetDialogFragment() {
                 collectionThanaId = model.thanaId
                 collectionAddress = model.pickupAddress ?: ""
             }
-        }
-
-        val selectedIndex = list.indexOfFirst { it.districtId == model.courierAddressContactInfo?.collectAddressDistrictId && it.thanaId == model.courierAddressContactInfo?.collectAddressThanaId }
-        if (selectedIndex != -1) {
-            binding?.spinnerCollectionLocation?.setSelection(selectedIndex)
-        }
-
+        }*/
     }
 
     private fun initClickLister() {

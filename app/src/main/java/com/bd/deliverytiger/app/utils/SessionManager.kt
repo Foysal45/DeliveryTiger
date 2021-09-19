@@ -520,7 +520,7 @@ object SessionManager {
 
     var collectionCharge: Double
         get() {
-            return pref.getFloat("collectionCharge", 0.0f).toDouble()
+            return pref.getFloat("collectionCharge", 5.0f).toDouble()
         }
         set(value) {
             pref.edit {
@@ -535,6 +535,26 @@ object SessionManager {
         set(value) {
             pref.edit {
                 putInt("merchantDistrict", value)
+            }
+        }
+
+    var isBreakAble: Boolean
+        get() {
+            return pref.getBoolean("isBreakAble", false)
+        }
+        set(value) {
+            pref.edit {
+                putBoolean("isBreakAble", value)
+            }
+        }
+
+    var isHeavyWeight: Boolean
+        get() {
+            return pref.getBoolean("isHeavyWeight", false)
+        }
+        set(value) {
+            pref.edit {
+                putBoolean("isHeavyWeight", value)
             }
         }
 
