@@ -283,7 +283,7 @@ class AddOrderFragmentOne : Fragment() {
         getCourierUsersInformation()
         fetchMerchantBalanceInfo()
         getBreakableCharge()
-        if (SessionManager.isBreakAble) {
+        if (isBreakable) {
             getPackagingCharge()
         }
         fetchOfferCharge()
@@ -409,6 +409,14 @@ class AddOrderFragmentOne : Fragment() {
                         }
                     }
                 }
+            }
+
+            if (weightRangeId > 6 && (deliveryRangeId == 14 || deliveryRangeId == 17)) {
+                alert("নির্দেশনা", "পার্সেলের ওজন ৫ কেজির উপরে হলে নেক্সট ডে ডেলিভারি সম্ভব হবে না", false).show()
+            }
+
+            if (isBreakable && (deliveryRangeId == 14 || deliveryRangeId == 17)) {
+                alert("নির্দেশনা", "ভঙ্গুর/তরল পার্সেলের ডেলিভারি নেক্সট ডে সম্ভব হবে না", false).show()
             }
 
             calculateTotalPrice()
@@ -1778,6 +1786,18 @@ class AddOrderFragmentOne : Fragment() {
                 context?.showToast("বিস্তারিত কালেকশন ঠিকানা লিখুন, ন্যূনতম ১৫ ডিজিট")
                 return false
             }
+        }
+
+        // weightRangeId (6) 4 kg - 5 kg and deliveryRangeId (14/17) নেক্সট ডে
+        if (weightRangeId > 6 && (deliveryRangeId == 14 || deliveryRangeId == 17)) {
+            context?.showToast("পার্সেলের ওজন ৫ কেজির উপরে হলে নেক্সট ডে ডেলিভারি সম্ভব হবে না")
+            return false
+        }
+
+        // isBreakable true for breakable or liquid parcel and deliveryRangeId (14/17) নেক্সট ডে
+        if (isBreakable && (deliveryRangeId == 14 || deliveryRangeId == 17)) {
+            context?.showToast("ভঙ্গুর/তরল পার্সেলের ডেলিভারি নেক্সট ডে সম্ভব হবে না")
+            return false
         }
 
         return true
