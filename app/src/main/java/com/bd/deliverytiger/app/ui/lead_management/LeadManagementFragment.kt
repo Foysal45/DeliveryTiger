@@ -304,6 +304,7 @@ class LeadManagementFragment : Fragment() {
         viewModel.addToOwnPhoneBook(requestBody).observe(viewLifecycleOwner, Observer { list ->
             if (list.isNotEmpty()) {
                 context?.toast("সফলভাবে অ্যাড হয়েছে")
+                fetchCustomerInformation(0)
             }
         })
     }
