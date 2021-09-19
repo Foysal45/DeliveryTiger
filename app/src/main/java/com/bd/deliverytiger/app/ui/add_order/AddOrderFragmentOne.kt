@@ -149,7 +149,7 @@ class AddOrderFragmentOne : Fragment() {
     private var isHeavyWeight: Boolean = false
     private var isAgreeTerms: Boolean = false
     private var isWeightSelected: Boolean = false
-    private var isPackagingSelected: Boolean = false
+    private var isPackagingSelected: Boolean = true
     private var payCollectionAmount: Double = 0.0
     private var payDeliveryCharge: Double = 0.0
     private var payShipmentCharge: Double = 0.0
@@ -179,7 +179,7 @@ class AddOrderFragmentOne : Fragment() {
     private var productType: String = "small"
     private var weight: String = ""
     private var collectionName: String = ""
-    private var packingName: String = ""
+    private var packingName: String = "No Extra Packing"
     private var collectionAddress: String = ""
     private var isOrderTypeSelected: Boolean = false
 
@@ -977,6 +977,8 @@ class AddOrderFragmentOne : Fragment() {
                 // Bubble + Poly (Tk 10) id 4
                 val first = list.find { it.packagingChargeId == 4 }
                 payPackagingCharge = first?.packagingCharge ?: 0.0
+                packingName = first?.packagingName ?: ""
+                isPackagingSelected = true
             }
 
             // Temp disabled
