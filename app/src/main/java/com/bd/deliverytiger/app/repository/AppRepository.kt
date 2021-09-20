@@ -379,9 +379,14 @@ class AppRepository(
     suspend fun getCustomerInfoByMobile(mobile: String) = apiInterfaceCore.getCustomerInfoByMobile(mobile)
 
     suspend fun updateCustomerSMSLimit(
-        @Path("courierUserId") courierUserId: Int,
-        @Path("customerSMSLimit") customerSMSLimit: Int
+        courierUserId: Int,
+        customerSMSLimit: Int
     ) = apiInterfaceCore.updateCustomerSMSLimit(courierUserId, customerSMSLimit)
+
+    suspend fun updateCustomerVoiceSmsLimit(
+        courierUserId: Int,
+        customerSMSLimit: Int
+    ) = apiInterfaceCore.updateCustomerVoiceSmsLimit(courierUserId, customerSMSLimit)
 
     suspend fun sendSMSCommunication(requestBody: List<SMSModel>) = apiInterfaceCore.sendSMSCommunication(requestBody)
 

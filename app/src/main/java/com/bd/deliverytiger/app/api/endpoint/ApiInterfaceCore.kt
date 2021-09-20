@@ -276,6 +276,9 @@ interface ApiInterfaceCore {
     @PUT("api/Update/UpdateCustomerSMSLimit/{courierUserId}/{customerSMSLimit}")
     suspend fun updateCustomerSMSLimit(@Path("courierUserId") courierUserId: Int, @Path("customerSMSLimit") customerSMSLimit: Int): NetworkResponse<GenericResponse<CourierInfoModel>, ErrorResponse>
 
+    @PUT("api/Update/CustomerVoiceSmsLimit/{courierUserId}/{customerVoiceSmsLimit}")
+    suspend fun updateCustomerVoiceSmsLimit(@Path("courierUserId") courierUserId: Int, @Path("customerVoiceSmsLimit") customerSMSLimit: Int): NetworkResponse<GenericResponse<CourierInfoModel>, ErrorResponse>
+
     @POST("api/SmsComunication/SendSms")
     suspend fun sendSMSCommunication(@Body requestBody: List<SMSModel>): NetworkResponse<GenericResponse<Boolean>, ErrorResponse>
 

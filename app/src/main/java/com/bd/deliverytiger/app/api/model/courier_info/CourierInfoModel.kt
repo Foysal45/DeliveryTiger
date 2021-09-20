@@ -96,6 +96,8 @@ data class CourierInfoModel(
     var customerSMSLimit: Int = 0,
     @SerializedName("isLoanActive")
     var isLoanActive: Boolean = false,
+    @SerializedName("customerVoiceSmsLimit")
+    var customerVoiceSmsLimit: Int = 0,
 
     //Internal
     var isOfferTaken: Boolean = false

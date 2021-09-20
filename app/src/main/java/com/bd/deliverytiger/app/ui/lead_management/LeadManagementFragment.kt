@@ -53,6 +53,8 @@ class LeadManagementFragment : Fragment() {
 
     //private var totalProduct = 0
     private val visibleThreshold = 5
+    private var smsLimit: Int = 0
+    private var voiceSMSLimit: Int = 0
 
     //Pickup contact
     private val requestCodeContactPicker = 8221
@@ -90,6 +92,8 @@ class LeadManagementFragment : Fragment() {
         fetchCustomerInformation(0)
 
         fetchBanner()
+
+        fetchCourierInfo()
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -179,13 +183,18 @@ class LeadManagementFragment : Fragment() {
         }
 
         binding?.sendVoiceSMSBtn?.setOnClickListener {
+
             if (dataAdapter.getSelectedItemCount() > 0) {
                 val selectedCustomerList = dataAdapter.getSelectedItemModelList()
-                selectedNameList.clear()
-                selectedNameList.addAll(selectedCustomerList.map { it.customerName ?: "" })
-                selectedVoiceNumberList.clear()
-                selectedVoiceNumberList.addAll(selectedCustomerList.map { "88" + it.mobile })
-                goToRecordingBottomSheet()
+                if (voiceSMSLimit >= selectedCustomerList.size) {
+                    selectedNameList.clear()
+                    selectedNameList.addAll(selectedCustomerList.map { it.customerName ?: "" })
+                    selectedVoiceNumberList.clear()
+                    selectedVoiceNumberList.addAll(selectedCustomerList.map { "88" + it.mobile })
+                    goToRecordingBottomSheet()
+                } else {
+                    context?.toast("ভয়েস SMS লিমিট শেষ হয়ে গিয়েছে")
+                }
             }
         }
 
@@ -272,8 +281,16 @@ class LeadManagementFragment : Fragment() {
             )
             viewModel.sendVoiceSms(requestBody).observe(viewLifecycleOwner, Observer {
                 context?.toast("Voice SMS Send")
+                updateVoiceSMSCount(selectedNameList.size)
             })
         }
+    }
+
+    private fun updateVoiceSMSCount(count: Int) {
+        viewModel.updateCustomerVoiceSmsLimit(SessionManager.courierUserId, count).observe(viewLifecycleOwner, Observer { model ->
+            smsLimit = model.customerSMSLimit
+            voiceSMSLimit = model.customerVoiceSmsLimit
+        })
     }
 
     private fun goToSmsSendBottomSheet(model: List<CustomerInformation>) {
@@ -430,6 +447,13 @@ class LeadManagementFragment : Fragment() {
         if (hasPermission) {
             pickupContact()
         }
+    }
+
+    private fun fetchCourierInfo() {
+        viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            smsLimit = model.customerSMSLimit
+            voiceSMSLimit = model.customerVoiceSmsLimit
+        })
     }
 
     override fun onDestroyView() {
