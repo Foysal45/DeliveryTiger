@@ -27,7 +27,7 @@ object AppConstant {
 
     const val DOMAIN_URL_PREFIX = "https://deliverytiger.page.link"
 
-    const val hotLineNumber = "০৯৬৩৮০১০৩০৩"
+    const val hotLineNumber = "01894811222" //"09638010303"
 
     const val FAQ_URL = "https://deliverytiger.com.bd/instant-payment-faq"
 
