@@ -1613,7 +1613,8 @@ class AddOrderFragmentOne : Fragment() {
             payBreakableCharge, additionalNote, payCODCharge, payCollectionCharge, SessionManager.returnCharge, packingName,
             payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,
             "android", SessionManager.versionName, true, collectionDistrictId, collectionThanaId,
-            deliveryDate, collectionDate, isOfficeDrop, payActualPackagePrice, timeSlotId, selectedCollectionSlotDate, offerType, relationType, serviceType
+            deliveryDate, collectionDate, isOfficeDrop, payActualPackagePrice, timeSlotId, selectedCollectionSlotDate,
+            offerType, relationType, serviceType, isHeavyWeight
         )
 
 
