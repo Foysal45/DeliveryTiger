@@ -165,7 +165,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:text="ভয়েস SMS"
+            android:text="ভয়েস মেসেজ"
             android:textColor="#FEDC00"
             android:textSize="18sp"
             android:textStyle="bold" />
