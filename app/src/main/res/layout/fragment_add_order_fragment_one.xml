@@ -1040,18 +1040,40 @@
                     android:layout_marginStart="2dp"
                     />
 
-                <TextView
-                    android:id="@+id/tvAddOrderTotalOrder"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="০ ৳"
-                    android:textColor="#F36E41"
-                    android:textSize="26sp"
-                    android:textStyle="normal"
+                    android:orientation="vertical"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
-                    tools:text="৯৯৯৯ ৳"
-                     />
+                    >
+
+                    <TextView
+                        android:id="@+id/tvAddOrderTotalOrder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="০ ৳"
+                        android:textColor="#F36E41"
+                        android:textSize="26sp"
+                        tools:text="৯৯৯৯ ৳"
+                        android:includeFontPadding="false"
+                        />
+
+                    <TextView
+                        android:id="@+id/orderAmountMsg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black_80"
+                        android:textSize="10sp"
+                        tools:text="* 20৳ সহ (তরল/ভঙ্গুর)"
+                        android:includeFontPadding="false"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        />
+
+                </LinearLayout>
+
+
 
             </LinearLayout>
 

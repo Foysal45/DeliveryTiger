@@ -85,5 +85,7 @@ data class OrderRequest(
     @SerializedName("relationType")
     var relationType: String = "",
     @SerializedName("serviceType")
-    var serviceType: String = ""
+    var serviceType: String = "",
+    @SerializedName("isHeavyWeight")
+    var isHeavyWeight: Boolean = false
 )
