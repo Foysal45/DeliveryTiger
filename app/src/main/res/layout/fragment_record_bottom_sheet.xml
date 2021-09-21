@@ -32,6 +32,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/voiceImage" />
 
+    <TextView
+        android:id="@+id/recordInstruction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chronometer"
+        android:text="মেসেজ দৈর্ঘ সর্বোচ ১ মিনিট"
+        android:layout_marginTop="2dp"
+        />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/recordBtn"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
@@ -54,7 +67,7 @@
         app:iconTint="@color/colorPrimary"
         app:layout_constraintEnd_toStartOf="@+id/playBtn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chronometer"
+        app:layout_constraintTop_toBottomOf="@id/recordInstruction"
         app:layout_constraintVertical_chainStyle="packed"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
         app:strokeColor="@color/colorPrimary" />
@@ -81,7 +94,7 @@
         app:iconTint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/recordBtn"
-        app:layout_constraintTop_toBottomOf="@+id/chronometer"
+        app:layout_constraintTop_toBottomOf="@id/recordInstruction"
         app:layout_constraintVertical_chainStyle="packed"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
         app:strokeColor="@color/colorPrimary" />

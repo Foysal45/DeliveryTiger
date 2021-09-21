@@ -177,6 +177,13 @@ class RecordBottomSheet : BottomSheetDialogFragment() {
             }
             binding?.recordBtn?.setIconResource(R.drawable.ic_stop)
             binding?.recordBtn?.setIconTintResource(R.color.red)
+            binding?.chronometer?.setOnChronometerTickListener { chronometer ->
+                val elapsed = SystemClock.elapsedRealtime() - chronometer.base
+                Timber.d("chronometer elapsed $elapsed")
+                if (elapsed >= 1000L * 60) {
+                    stopRecording()
+                }
+            }
         } catch (e: IllegalStateException) {
             e.printStackTrace()
         } catch (e: IOException) {
