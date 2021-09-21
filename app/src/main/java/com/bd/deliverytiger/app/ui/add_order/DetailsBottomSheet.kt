@@ -30,6 +30,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
     private var bigProductCharge: Double = 0.0
     private var total: Double = 0.0
     private var productType: String = ""
+    private var isBreakable: Boolean = false
 
     companion object{
         fun newInstance(bundle: Bundle): DetailsBottomSheet = DetailsBottomSheet().apply {
@@ -66,6 +67,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
                 boroProductCheck = getBoolean("boroProductCheck", false)
                 productType = getString("productType", "")
                 total = getDouble("total", 0.0)
+                isBreakable = getBoolean("isBreakable", false)
             }
         }
 
@@ -77,6 +79,15 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
         binding?.collectionChargeTV?.text = "${DigitConverter.toBanglaDigit(payCollectionCharge, true)} ৳"
         binding?.packagingChargeTV?.text = "${DigitConverter.toBanglaDigit(payPackagingCharge, true)} ৳"
         binding?.totalTV?.text = "${DigitConverter.toBanglaDigit(total, true)} ৳"
+
+        if (isBreakable) {
+            binding?.detailsItem5?.text = "এক্সট্রা প্যাকেজিং চার্জ (তরল/ভঙ্গুর প্রোডাক্টের জন্য)"
+        }
+
+        binding?.closeBtn?.setOnClickListener {
+            dismiss()
+        }
+
     }
 
     override fun onDestroyView() {

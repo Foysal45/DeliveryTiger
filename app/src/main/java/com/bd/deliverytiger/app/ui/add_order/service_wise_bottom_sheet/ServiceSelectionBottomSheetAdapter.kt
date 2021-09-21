@@ -47,8 +47,8 @@ class ServiceSelectionBottomSheetAdapter: RecyclerView.Adapter<RecyclerView.View
 
             if (model.deliveryRangeId.isNotEmpty()) {
                 val firstRange = model.deliveryRangeId.first()
-                if (firstRange == 14) {
-                    binding.serviceTypeSubTitle.text = "(শুধু সদর)"
+                if (firstRange == 14 || firstRange == 18) {
+                    binding.serviceTypeSubTitle.text = "(শুধু জেলা সদর)"
                 } else {
                     binding.serviceTypeSubTitle.text = ""
                 }

@@ -411,13 +411,13 @@ class AddOrderFragmentOne : Fragment() {
                 }
             }
 
-            if (weightRangeId > 6 && (deliveryRangeId == 14 || deliveryRangeId == 17)) {
+            /*if (weightRangeId > 6 && (deliveryRangeId == 14 || deliveryRangeId == 17)) {
                 alert("নির্দেশনা", "পার্সেলের ওজন ৫ কেজির উপরে হলে নেক্সট ডে ডেলিভারি সম্ভব হবে না", false).show()
-            }
+            }*/
 
-            if (isBreakable && (deliveryRangeId == 14 || deliveryRangeId == 17)) {
+            /*if (isBreakable && (deliveryRangeId == 14 || deliveryRangeId == 17)) {
                 alert("নির্দেশনা", "ভঙ্গুর/তরল পার্সেলের ডেলিভারি নেক্সট ডে সম্ভব হবে না", false).show()
-            }
+            }*/
 
             calculateTotalPrice()
             fetchCollectionTimeSlot()
@@ -513,6 +513,7 @@ class AddOrderFragmentOne : Fragment() {
                 putBoolean("boroProductCheck", boroProductCheck)
                 putString("productType", productType)
                 putDouble("total", total)
+                putBoolean("isBreakable", isBreakable)
             }
 
             val detailsSheet = DetailsBottomSheet.newInstance(bundle)
@@ -1569,8 +1570,12 @@ class AddOrderFragmentOne : Fragment() {
         if (isBreakable) {
             payBreakableCharge = breakableChargeApi
             total += payBreakableCharge
+
+            binding?.orderAmountMsg?.isVisible = true
+            binding?.orderAmountMsg?.text = "* ${DigitConverter.toBanglaDigit(payBreakableCharge.toInt())}৳ সহ (তরল/ভঙ্গুর)"
         } else {
             payBreakableCharge = 0.0
+            binding?.orderAmountMsg?.isVisible = false
         }
 
         totalTV.text = "${DigitConverter.toBanglaDigit(total.toInt(), true)} ৳"
@@ -1790,16 +1795,16 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         // weightRangeId (6) 4 kg - 5 kg and deliveryRangeId (14/17) নেক্সট ডে
-        if (weightRangeId > 6 && (deliveryRangeId == 14 || deliveryRangeId == 17)) {
+        /*if (weightRangeId > 6 && (deliveryRangeId == 14 || deliveryRangeId == 17)) {
             context?.showToast("পার্সেলের ওজন ৫ কেজির উপরে হলে নেক্সট ডে ডেলিভারি সম্ভব হবে না")
             return false
-        }
+        }*/
 
         // isBreakable true for breakable or liquid parcel and deliveryRangeId (14/17) নেক্সট ডে
-        if (isBreakable && (deliveryRangeId == 14 || deliveryRangeId == 17)) {
+        /*if (isBreakable && (deliveryRangeId == 14 || deliveryRangeId == 17)) {
             context?.showToast("ভঙ্গুর/তরল পার্সেলের ডেলিভারি নেক্সট ডে সম্ভব হবে না")
             return false
-        }
+        }*/
 
         return true
     }
