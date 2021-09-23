@@ -15,6 +15,7 @@ import com.bd.deliverytiger.app.utils.DigitConverter
 class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList: MutableList<CustomerInformation> = mutableListOf()
+    private val filterDataList: MutableList<CustomerInformation> = mutableListOf()
     var onItemClicked: ((model: CustomerInformation, position: Int) -> Unit)? = null
     var onOrderDetailsClicked: ((model: CustomerInformation, position: Int) -> Unit)? = null
 
@@ -29,11 +30,11 @@ class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return ViewModel(binding)
     }
 
-    override fun getItemCount(): Int = dataList.size
+    override fun getItemCount(): Int = filterDataList.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewModel) {
-            val model = dataList[position]
+            val model = filterDataList[position]
             val binding = holder.binding
 
             binding.name.text = model.customerName
@@ -65,6 +66,8 @@ class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun initLoad(list: List<CustomerInformation>) {
         dataList.clear()
         dataList.addAll(list)
+        filterDataList.clear()
+        filterDataList.addAll(list)
         notifyDataSetChanged()
     }
 
@@ -73,6 +76,27 @@ class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val newDataCount = list.size
         dataList.addAll(list)
         notifyItemRangeInserted(currentIndex, newDataCount)
+    }
+
+    fun lazyLoadWithFilter(list: List<CustomerInformation>, selectedTab: Int) {
+        val start = filterDataList.size
+        dataList.addAll(list)
+        when (selectedTab) {
+            1 -> {
+                filterDataList.addAll(list)
+                notifyItemRangeInserted(start, list.size)
+            }
+            2 -> {
+                val filter = list.filter { it.totalOrder > 0 }
+                filterDataList.addAll(filter)
+                notifyItemRangeInserted(start, filter.size)
+            }
+            3 -> {
+                val filter = list.filter { it.totalOrder == 0 }
+                filterDataList.addAll(filter)
+                notifyItemRangeInserted(start, filter.size)
+            }
+        }
     }
 
 
@@ -86,6 +110,11 @@ class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             selectedItems.put(pos, true)
         }
         notifyItemChanged(pos)
+    }
+
+    fun clearList() {
+        dataList.clear()
+        notifyDataSetChanged()
     }
 
     fun clearSelections() {
@@ -112,6 +141,27 @@ class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             items.add(selectedItems.keyAt(i))
         }
         return items
+    }
+
+    fun filter(selectedTab: Int): Boolean {
+        when (selectedTab) {
+            1 -> {
+                filterDataList.clear()
+                filterDataList.addAll(dataList)
+                notifyDataSetChanged()
+            }
+            2 -> {
+                filterDataList.clear()
+                filterDataList.addAll(dataList.filter { it.totalOrder > 0 })
+                notifyDataSetChanged()
+            }
+            3 -> {
+                filterDataList.clear()
+                filterDataList.addAll(dataList.filter { it.totalOrder == 0 })
+                notifyDataSetChanged()
+            }
+        }
+        return filterDataList.isEmpty()
     }
 
 

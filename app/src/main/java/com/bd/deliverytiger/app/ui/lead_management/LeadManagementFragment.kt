@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 import java.util.*
 
 class LeadManagementFragment : Fragment() {
@@ -33,8 +35,10 @@ class LeadManagementFragment : Fragment() {
 
     private  var dataAdapter: LeadManagementAdapter = LeadManagementAdapter()
     private var isLoading = false
+    private var isEmpty = false
     //private var totalProduct = 0
     private val visibleThreshold = 5
+    private var selectedTab = 1
 
     override fun onResume() {
         super.onResume()
@@ -50,11 +54,17 @@ class LeadManagementFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         initView()
         initClickLister()
     }
 
     private fun initView(){
+        binding?.allCustomer?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
+        binding?.deliveredCustomer?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+        binding?.phonebookCustomer?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+        binding?.addToPhonebookLayout?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+
         with(binding?.recyclerview!!) {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
@@ -87,7 +97,25 @@ class LeadManagementFragment : Fragment() {
         viewModel.pagingState.observe(viewLifecycleOwner, Observer { state ->
             isLoading = false
             if (state.isInitLoad) {
-                dataAdapter.initLoad(state.dataList)
+                //dataAdapter.initLoad(state.dataList)
+
+                when (selectedTab) {
+                    1 -> {
+                        dataAdapter.clearList()
+                        dataAdapter.initLoad(state.dataList)
+                    }
+                    2 -> {
+                        dataAdapter.clearList()
+                        val tempDataList = state.dataList.filter { it.totalOrder > 0 }
+                        dataAdapter.initLoad(tempDataList)
+                    }
+                    3 -> {
+                        dataAdapter.clearList()
+                        val tempDataList = state.dataList.filter { it.totalOrder == 0 }
+                        dataAdapter.initLoad(tempDataList)
+                    }
+                }
+
 
                 if (state.dataList.isEmpty()) {
                     binding?.emptyView?.visibility = View.VISIBLE
@@ -96,10 +124,13 @@ class LeadManagementFragment : Fragment() {
                 }
 
             } else {
-                dataAdapter.pagingLoad(state.dataList)
+                //dataAdapter.pagingLoad(state.dataList)
                 if (state.dataList.isEmpty()) {
                     isLoading = true
+                } else {
+                    dataAdapter.lazyLoadWithFilter(state.dataList, selectedTab)
                 }
+                Timber.d("dataAdapter.lazyLoad called")
             }
         })
 
@@ -121,6 +152,24 @@ class LeadManagementFragment : Fragment() {
 
     private fun initClickLister(){
 
+        binding?.allCustomer?.setOnClickListener{
+            selectedTab = 1
+            isEmptyListCheck(dataAdapter.filter(selectedTab), selectedTab)
+        }
+        binding?.deliveredCustomer?.setOnClickListener{
+            selectedTab = 2
+            isEmptyListCheck(dataAdapter.filter(selectedTab), selectedTab)
+
+        }
+        binding?.phonebookCustomer?.setOnClickListener{
+            selectedTab = 3
+            isEmptyListCheck(dataAdapter.filter(selectedTab), selectedTab)
+
+        }
+        binding?.addToPhonebookLayout?.setOnClickListener{
+            //selectedTab = 4
+            displayDialogue()
+        }
 
         dataAdapter.onItemClicked = { model, position ->
             dataAdapter.multipleSelection(model, position)
@@ -150,6 +199,33 @@ class LeadManagementFragment : Fragment() {
             binding?.clearBtn?.isVisible = false
             binding?.addContactBtn?.isVisible = false
         }
+    }
+
+    private fun isEmptyListCheck(isEmpty: Boolean, selectedTab: Int) {
+        binding?.emptyView?.isVisible = isEmpty
+
+        binding?.recyclerview?.smoothScrollToPosition(0)
+        when(selectedTab) {
+            1 -> {
+                binding?.allCustomer?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
+                binding?.deliveredCustomer?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+                binding?.phonebookCustomer?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+                binding?.addToPhonebookLayout?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+            }
+            2 -> {
+                binding?.allCustomer?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+                binding?.deliveredCustomer?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
+                binding?.phonebookCustomer?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+                binding?.addToPhonebookLayout?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+            }
+            3 -> {
+                binding?.allCustomer?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+                binding?.deliveredCustomer?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+                binding?.phonebookCustomer?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
+                binding?.addToPhonebookLayout?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
+            }
+        }
+
     }
 
     private fun fetchCustomerInformation(index: Int){
@@ -184,6 +260,12 @@ class LeadManagementFragment : Fragment() {
                 .apply(options)
                 .into(image)
         }
+    }
+
+    private fun displayDialogue() {
+        /*val tag = CustomerDetailsBottomSheet.tag
+        val dialog = CustomerDetailsBottomSheet.newInstance()
+        dialog.show(childFragmentManager, tag)*/
     }
 
     override fun onDestroyView() {
