@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_bottom_sheet_curved_bg"
+        android:padding="16dp"
+        android:text="ফোনবুক গ্রুপ"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_16"
+        android:textStyle="bold"
+        />
+
+    <RadioGroup
+        android:id="@+id/phonebookGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:orientation="vertical"
+        >
+
+    </RadioGroup>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:indeterminateTint="@color/colorPrimary"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+    <EditText
+        android:id="@+id/groupNameET"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_view_height"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:background="@drawable/bg_add_order_edit_text"
+        android:hint="ফোনবুক গ্রুপ নাম"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:maxLength="40"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:textColor="@color/black_80"
+        android:textSize="@dimen/text_14"
+        app:drawableEndCompat="@drawable/ic_star"
+        app:drawableTint="@color/red"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="সেভ ফোনবুক গ্রুপ"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        />
+
+</LinearLayout>

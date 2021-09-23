@@ -59,13 +59,15 @@ class OrderTrackingFragment : Fragment() {
 
         val bundle: Bundle? = arguments
         bundle?.let {
-            orderID = bundle?.getString("orderID").toString()
+            orderID = bundle?.getString("orderID") ?: ""
             containerType = bundle?.getString("containerType")?: ""
         }
 
         binding?.merchantInfoLayout?.visibility = View.VISIBLE
         if (containerType == "login") {
             binding?.complainBtn?.visibility = View.GONE
+            binding?.callBtn?.visibility = View.GONE
+            binding?.chatBtn?.visibility = View.GONE
             binding?.merchantInfoLayout?.visibility = View.GONE
             binding?.spacer?.isVisible = false
         }

@@ -240,6 +240,9 @@ class HomeActivity : AppCompatActivity(),
             viewModel.keyboardVisibility.value = isShown
         }
         //facebookHash()
+        //Timber.d("tokenDebug AccessToken:\n${SessionManager.accessToken}")
+        //Timber.d("tokenDebug RefreshToken:\n${SessionManager.refreshToken}")
+
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -1338,7 +1341,7 @@ class HomeActivity : AppCompatActivity(),
         val firebaseCredential = FirebaseCredential(
             firebaseWebApiKey = BuildConfig.FirebaseWebApiKey
         )
-        val senderData = ChatUserData(SessionManager.courierUserId.toString(), SessionManager.userName, SessionManager.mobile,
+        val senderData = ChatUserData(SessionManager.courierUserId.toString(), SessionManager.companyName, SessionManager.mobile,
             imageUrl = "https://static.ajkerdeal.com/delivery_tiger/profile/${SessionManager.courierUserId}.jpg",
             role = "dt",
             fcmToken = SessionManager.firebaseToken

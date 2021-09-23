@@ -38,6 +38,8 @@ import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCy
 import com.bd.deliverytiger.app.api.model.lead_management.*
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetails
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
+import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookData
+import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookGroupData
 import com.bd.deliverytiger.app.api.model.loan_survey.CourierModel
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
 import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
@@ -274,6 +276,9 @@ interface ApiInterfaceCore {
     @PUT("api/Update/UpdateCustomerSMSLimit/{courierUserId}/{customerSMSLimit}")
     suspend fun updateCustomerSMSLimit(@Path("courierUserId") courierUserId: Int, @Path("customerSMSLimit") customerSMSLimit: Int): NetworkResponse<GenericResponse<CourierInfoModel>, ErrorResponse>
 
+    @PUT("api/Update/CustomerVoiceSmsLimit/{courierUserId}/{customerVoiceSmsLimit}")
+    suspend fun updateCustomerVoiceSmsLimit(@Path("courierUserId") courierUserId: Int, @Path("customerVoiceSmsLimit") customerSMSLimit: Int): NetworkResponse<GenericResponse<CourierInfoModel>, ErrorResponse>
+
     @POST("api/SmsComunication/SendSms")
     suspend fun sendSMSCommunication(@Body requestBody: List<SMSModel>): NetworkResponse<GenericResponse<Boolean>, ErrorResponse>
 
@@ -297,4 +302,22 @@ interface ApiInterfaceCore {
 
     @POST("api/Entry/AddCustomerSMSLog")
     suspend fun saveCustomerSMSLog(@Body requestBody: List<SMSLogData>): NetworkResponse<GenericResponse<List<SMSLogData>>, ErrorResponse>
+
+    // Add customer number to virtual phonebook
+    @POST("api/Entry/AddOwnPhoneBook")
+    suspend fun addToOwnPhoneBook(@Body requestBody: List<PhonebookData>): NetworkResponse<GenericResponse<List<PhonebookData>>, ErrorResponse>
+
+    // Create new group in virtual phonebook
+    @POST("api/Entry/AddPhoneBookGroup")
+    suspend fun createPhoneBookGroup(@Body requestBody: List<PhonebookGroupData>): NetworkResponse<GenericResponse<List<PhonebookGroupData>>, ErrorResponse>
+
+    // Get all group from my virtual phonebook
+    @GET("api/Fetch/GetMyPhoneBookGroup/{courierUserId}")
+    suspend fun fetchMyPhoneBookGroup(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<List<PhonebookGroupData>>, ErrorResponse>
+
+    // Add customer number to virtual phonebook group
+    @POST("api/Entry/AddNumnerInGroup")
+    suspend fun addToOwnPhoneBookGroup(@Body requestBody: List<PhonebookData>): NetworkResponse<GenericResponse<Int>, ErrorResponse>
+
+
 }

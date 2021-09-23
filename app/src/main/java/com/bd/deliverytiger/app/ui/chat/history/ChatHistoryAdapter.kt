@@ -66,7 +66,6 @@ class ChatHistoryAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             }*/
 
 
-
             /*when (model.seenStatus) {
                 "wow" -> {
                     binding.status.visibility = View.VISIBLE

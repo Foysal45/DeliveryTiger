@@ -1,5 +1,6 @@
 package com.bd.deliverytiger.app.repository
 
+import com.bd.deliverytiger.app.api.ApiInterfaceInfobip
 import com.bd.deliverytiger.app.api.endpoint.*
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody
 import com.bd.deliverytiger.app.api.model.bulk_status.StatusUpdateData
@@ -29,6 +30,8 @@ import com.bd.deliverytiger.app.api.model.lead_management.CustomerInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.lead_management.SMSLogData
 import com.bd.deliverytiger.app.api.model.lead_management.customer_details.CustomerInfoDetailsRequest
+import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookData
+import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookGroupData
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
 import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
@@ -49,6 +52,7 @@ import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableRequ
 import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpdateRequest
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
+import com.bd.deliverytiger.app.api.model.voice_SMS.VoiceSmsAudiRequestBody
 import com.bd.deliverytiger.app.database.AppDatabase
 import com.bd.deliverytiger.app.database.dao.DistrictDao
 import com.bd.deliverytiger.app.database.dao.NotificationDao
@@ -68,6 +72,7 @@ class AppRepository(
     private val apiInterfaceBariKoi: ApiInterfaceBariKoi,
     private val apiInterfaceANA: ApiInterfaceANA,
     private val apiInterfaceFCM: ApiInterfaceFCM,
+    private val apiInterfaceINFOBIP: ApiInterfaceInfobip,
     private val database: AppDatabase
 ) {
 
@@ -245,6 +250,14 @@ class AppRepository(
 
     suspend fun saveCustomerSMSLog(requestBody: List<SMSLogData>) = apiInterfaceCore.saveCustomerSMSLog(requestBody)
 
+    suspend fun addToOwnPhoneBook(requestBody: List<PhonebookData>) = apiInterfaceCore.addToOwnPhoneBook(requestBody)
+
+    suspend fun createPhoneBookGroup(requestBody: List<PhonebookGroupData>) = apiInterfaceCore.createPhoneBookGroup(requestBody)
+
+    suspend fun fetchMyPhoneBookGroup(courierUserId: Int) = apiInterfaceCore.fetchMyPhoneBookGroup(courierUserId)
+
+    suspend fun addToOwnPhoneBookGroup(requestBody: List<PhonebookData>) = apiInterfaceCore.addToOwnPhoneBookGroup(requestBody)
+
     suspend fun imageUploadForFile(
         fileName: RequestBody,
         imagePath: RequestBody,
@@ -366,9 +379,14 @@ class AppRepository(
     suspend fun getCustomerInfoByMobile(mobile: String) = apiInterfaceCore.getCustomerInfoByMobile(mobile)
 
     suspend fun updateCustomerSMSLimit(
-        @Path("courierUserId") courierUserId: Int,
-        @Path("customerSMSLimit") customerSMSLimit: Int
+        courierUserId: Int,
+        customerSMSLimit: Int
     ) = apiInterfaceCore.updateCustomerSMSLimit(courierUserId, customerSMSLimit)
+
+    suspend fun updateCustomerVoiceSmsLimit(
+        courierUserId: Int,
+        customerSMSLimit: Int
+    ) = apiInterfaceCore.updateCustomerVoiceSmsLimit(courierUserId, customerSMSLimit)
 
     suspend fun sendSMSCommunication(requestBody: List<SMSModel>) = apiInterfaceCore.sendSMSCommunication(requestBody)
 
@@ -389,6 +407,11 @@ class AppRepository(
 
     suspend fun deleteOrderRequest(orderRequestId: Int) = apiInterfaceCore.deleteOrderRequest(orderRequestId)
 
-    suspend fun sendPushNotifications(authToken: String, @Body requestBody: FCMRequest) =
-        apiInterfaceFCM.sendPushNotifications(authToken, requestBody)
+    suspend fun sendPushNotifications(authToken: String, @Body requestBody: FCMRequest) = apiInterfaceFCM.sendPushNotifications(authToken, requestBody)
+
+    //#region Infobip Voice SMS
+
+    suspend fun sendVoiceSms(requestBody: VoiceSmsAudiRequestBody) = apiInterfaceINFOBIP.sendVoiceSms(requestBody)
+
+    //#endregion
 }

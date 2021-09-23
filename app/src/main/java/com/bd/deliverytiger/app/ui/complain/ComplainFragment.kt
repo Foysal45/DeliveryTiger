@@ -211,7 +211,7 @@ class ComplainFragment(): Fragment() {
         val firebaseCredential = FirebaseCredential(
             firebaseWebApiKey = BuildConfig.FirebaseWebApiKey
         )
-        val senderData = ChatUserData(SessionManager.courierUserId.toString(), SessionManager.userName, SessionManager.mobile,
+        val senderData = ChatUserData(SessionManager.courierUserId.toString(), SessionManager.companyName, SessionManager.mobile,
             imageUrl = "https://static.ajkerdeal.com/delivery_tiger/profile/${SessionManager.courierUserId}.jpg",
             role = "dt",
             fcmToken = SessionManager.firebaseToken
