@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -195,7 +194,7 @@ class LeadManagementFragment : Fragment() {
         }
         binding?.addToPhonebookLayout?.setOnClickListener{
             //selectedTab = 4
-            displayDialogue()
+            showPhonebookForm()
         }
 
         dataAdapter.onItemClicked = { model, position ->
@@ -269,6 +268,8 @@ class LeadManagementFragment : Fragment() {
 
     private fun fetchCustomerInformation(index: Int) {
         viewModel.fetchCustomerList(CustomerInfoRequest(SessionManager.courierUserId, index, 20), index)
+    }
+
     private fun isEmptyListCheck(isEmpty: Boolean, selectedTab: Int) {
         binding?.emptyView?.isVisible = isEmpty
 
@@ -294,10 +295,6 @@ class LeadManagementFragment : Fragment() {
             }
         }
 
-    }
-
-    private fun fetchCustomerInformation(index: Int){
-        viewModel.fetchCustomerList(CustomerInfoRequest(SessionManager.courierUserId,index,20), index)
     }
 
     private fun goToCustomerDetailsBottomSheet(mobile: String) {
@@ -379,6 +376,7 @@ class LeadManagementFragment : Fragment() {
                 dataAdapter.clearSelections()
             }
             dialog.dismiss()
+            fetchCustomerInformation(0)
         }
     }
 
@@ -531,12 +529,6 @@ class LeadManagementFragment : Fragment() {
             smsLimit = model.customerSMSLimit
             voiceSMSLimit = model.customerVoiceSmsLimit
         })
-    }
-
-    private fun displayDialogue() {
-        /*val tag = CustomerDetailsBottomSheet.tag
-        val dialog = CustomerDetailsBottomSheet.newInstance()
-        dialog.show(childFragmentManager, tag)*/
     }
 
     override fun onDestroyView() {

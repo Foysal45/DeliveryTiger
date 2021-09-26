@@ -43,6 +43,7 @@
     <color name="gray">#afadad</color>
     <color name="gray_50">#fafafa</color>
     <color name="gray_100">#f5f5f5</color>
+    <color name="gray_150">#808285</color>
     <color name="gray_200">#4De0e0e0</color>
     <color name="gray_300">#e0e0e0</color>
     <color name="gray_500">#999999</color>

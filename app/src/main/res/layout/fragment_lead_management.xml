@@ -33,13 +33,14 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bannerImage" />
+        app:layout_constraintTop_toBottomOf="@id/bannerImage"
+        android:visibility="gone"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
+        android:paddingTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/title_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -147,7 +148,7 @@
         android:textColor="@color/colorPrimary"
         android:textSize="14sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/title_tv"
+        app:layout_constraintTop_toBottomOf="@id/hints_tv"
         app:layout_constraintEnd_toEndOf="parent"
         tools:visibility="visible" />
 
@@ -157,7 +158,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="@dimen/text_12"
-        android:textColor="@color/red"
+        android:textColor="@color/gray_150"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:text="(কাস্টমারকে বিনামূল্যে SMS করতে এক বা একাধিক নম্বর সিলেক্ট করুন)"
@@ -173,11 +174,13 @@
         android:textColor="@color/blue"
         android:text="ইমপোর্ট"
         app:layout_constraintTop_toBottomOf="@+id/hints_tv"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/phoneBookFormBtn"
         app:drawableStartCompat="@drawable/ic_phone_book"
         android:drawablePadding="2dp"
         android:gravity="top"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
         />
 
     <TextView
@@ -188,12 +191,13 @@
         android:textColor="@color/blue"
         android:text="ফোনবুকে অ্যাড"
         app:layout_constraintTop_toBottomOf="@+id/hints_tv"
-        app:layout_constraintEnd_toStartOf="@id/phoneBookImportBtn"
+        app:layout_constraintStart_toEndOf="@id/addToPhoneGroupBtn"
         app:drawableStartCompat="@drawable/ic_phone_book"
         android:drawablePadding="2dp"
         android:gravity="top"
-        android:layout_marginEnd="8dp"
-        android:visibility="visible"
+        android:layout_marginStart="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
         />
 
     <TextView
@@ -203,12 +207,12 @@
         android:textSize="15sp"
         android:textColor="@color/blue"
         android:text="ফোনবুক গ্রুপে অ্যাড"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hints_tv"
-        app:layout_constraintEnd_toStartOf="@id/phoneBookFormBtn"
         app:drawableStartCompat="@drawable/ic_phone_book"
         android:drawablePadding="2dp"
         android:gravity="top"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:visibility="gone"
         tools:visibility="visible"
         />
@@ -220,7 +224,7 @@
         android:clipToPadding="false"
         android:overScrollMode="never"
         android:paddingBottom="150dp"
-        app:layout_constraintTop_toBottomOf="@+id/phoneBookImportBtn"
+        app:layout_constraintTop_toBottomOf="@+id/addToPhoneGroupBtn"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="4dp"
 

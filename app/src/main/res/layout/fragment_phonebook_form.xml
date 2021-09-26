@@ -12,14 +12,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/bg_bottom_sheet_curved_bg"
+        android:background="@drawable/bg_add_order_edit_text"
         android:padding="16dp"
-        android:text="ফোনবুকে কাস্টমার অ্যাড"
+        android:text="কাস্টমার নম্বর অ্যাড ও ইমপোর্ট"
         android:textAlignment="center"
-        android:textColor="@color/white"
+        android:textColor="@color/black_80"
         android:textSize="@dimen/text_16"
         android:textStyle="bold"
         />
+
+    <LinearLayout
+        android:id="@+id/phoneBookImportBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_150"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="12dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:layout_margin="8dp"
+        android:gravity="center"
+        android:layout_gravity="end">
+
+        <ImageView
+            android:id="@+id/phoneBookImportIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:src="@drawable/ic_import"/>
+
+        <TextView
+            android:id="@+id/phoneBookImportTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/white"
+            android:text="ইমপোর্ট"/>
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/customerNameET"
@@ -27,7 +58,7 @@
         android:layout_height="@dimen/login_view_height"
         android:layout_marginTop="@dimen/fab_margin"
         android:background="@drawable/bg_add_order_edit_text"
-        android:hint="কাস্টমার নাম"
+        android:hint="নাম"
         android:importantForAutofill="no"
         android:inputType="text"
         android:maxLength="40"
@@ -49,7 +80,7 @@
         android:layout_height="@dimen/login_view_height"
         android:layout_marginTop="@dimen/fab_margin"
         android:background="@drawable/bg_add_order_edit_text"
-        android:hint="কাস্টমার মোবাইল নম্বর"
+        android:hint="নম্বর"
         android:importantForAutofill="no"
         android:inputType="phone"
         android:maxLength="11"
@@ -73,14 +104,16 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/saveBtn"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="সেভ কাস্টমার"
+            android:text="অ্যাড করুন"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:backgroundTint="@color/colorPrimary"
 
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             />
 
         <ProgressBar
