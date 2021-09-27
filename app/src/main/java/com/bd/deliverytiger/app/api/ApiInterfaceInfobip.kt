@@ -16,8 +16,8 @@ interface ApiInterfaceInfobip {
     }
 
     @Headers(
-        "username: AjkDeal",
-        "password: isQPx63xTjx96i!",
+        "Username: AjkDeal",
+        "Password: isQPx63xTjx96i!",
         "Authorization: App 9ee985c0a29b8325a5e9550498c17cdf-d0eae13e-6316-48fb-8179-90149807af80"
     )
     @POST("tts/3/multi")

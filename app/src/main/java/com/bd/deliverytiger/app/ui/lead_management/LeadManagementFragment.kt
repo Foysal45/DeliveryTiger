@@ -63,6 +63,7 @@ class LeadManagementFragment : Fragment() {
     private val selectedNameList: MutableList<String> = mutableListOf()
     private val selectedVoiceNumberList: MutableList<String> = mutableListOf()
     private var selectedTab = 1
+    private var currentTab = 1
 
     override fun onResume() {
         super.onResume()
@@ -272,7 +273,8 @@ class LeadManagementFragment : Fragment() {
 
     private fun isEmptyListCheck(isEmpty: Boolean, selectedTab: Int) {
         binding?.emptyView?.isVisible = isEmpty
-
+        if (currentTab != selectedTab) {binding?.clearBtn?.performClick()}
+        currentTab = selectedTab
         binding?.recyclerview?.smoothScrollToPosition(0)
         when(selectedTab) {
             1 -> {

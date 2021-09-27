@@ -1775,7 +1775,7 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         // Hub drop is must for weight > 5kg
-        if (isOfficeDrop && weightRangeId > 6) {
+        if (!isOfficeDrop && weightRangeId > 6) {
             context?.showToast("পার্সেলের ওজন ৫ কেজির উপরে হলে কালেকশন হাবে ড্রপ করতে হবে")
             isCollectionTypeSelected = false
             return false

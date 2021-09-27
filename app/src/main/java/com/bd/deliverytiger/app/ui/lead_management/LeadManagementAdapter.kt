@@ -132,7 +132,7 @@ class LeadManagementAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun getSelectedItemModelList(): List<CustomerInformation> {
         val items: MutableList<CustomerInformation> = ArrayList<CustomerInformation>(selectedItems.size())
         for (i in 0 until selectedItems.size()) {
-            items.add(dataList[selectedItems.keyAt(i)])
+            items.add(filterDataList[selectedItems.keyAt(i)])
         }
         return items
     }
