@@ -199,7 +199,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
         binding?.subCategoryBtn?.setOnClickListener {
             showSubCategory()
         }
-        binding?.breakableType?.setOnCheckedChangeListener { _, checkedId ->
+        /*binding?.breakableType?.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.breakableYes -> {
                     isBreakableParcel = true
@@ -211,7 +211,7 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
                 }
             }
 
-        }
+        }*/
     }
 
     override fun onClick(p0: View?) {
@@ -452,10 +452,10 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
             context?.toast("আপনি কোন সাব ক্যাটাগরির প্রোডাক্ট সেল করেন? সিলেক্ট করুন")
             return false
         }
-        if (!isBreakableParcelSelected) {
+        /*if (!isBreakableParcelSelected) {
             context?.toast("আপনি কি ভঙ্গুর প্রোডাক্ট সেল করেন? সিলেক্ট করুন")
             return false
-        }
+        }*/
 
         return true
     }
