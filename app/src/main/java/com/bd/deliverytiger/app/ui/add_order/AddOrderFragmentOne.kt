@@ -1778,6 +1778,7 @@ class AddOrderFragmentOne : Fragment() {
         if (!isOfficeDrop && weightRangeId > 6) {
             context?.showToast("পার্সেলের ওজন ৫ কেজির উপরে হলে কালেকশন হাবে ড্রপ করতে হবে")
             isCollectionTypeSelected = false
+            isShowServiceType = false
             return false
         } else if (!isOfficeDrop) {
             if (!isCollectionLocationSelected) {

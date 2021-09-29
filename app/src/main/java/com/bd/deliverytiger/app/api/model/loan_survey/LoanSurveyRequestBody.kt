@@ -32,5 +32,9 @@ data class LoanSurveyRequestBody (
 
 
     @SerializedName("loanSurveyId")
-    var loanSurveyId: Int = 0
+    var loanSurveyId: Int = 0,
+    @SerializedName("loanAmount")
+    var loanAmount: Int = 0,
+    @SerializedName("bankName")
+    var bankName:  String? = ""
 )

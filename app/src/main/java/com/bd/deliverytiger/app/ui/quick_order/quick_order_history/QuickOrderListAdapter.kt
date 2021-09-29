@@ -84,4 +84,9 @@ class QuickOrderListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             notifyItemRemoved(index)
         }
     }
+
+    fun clearData() {
+        dataList.clear()
+        notifyDataSetChanged()
+    }
 }

@@ -125,6 +125,7 @@ class QuickOrderListFragment : Fragment() {
 
         viewModel.getMerchantQuickOrders(requestBody).observe(viewLifecycleOwner, Observer { list ->
             if (list.isNullOrEmpty()) {
+                dataAdapter.clearData()
                 binding?.emptyView?.visibility = View.VISIBLE
             } else {
                 dataAdapter.initLoad(list)

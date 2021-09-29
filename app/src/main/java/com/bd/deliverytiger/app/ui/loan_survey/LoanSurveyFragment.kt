@@ -46,6 +46,8 @@ class LoanSurveyFragment : Fragment() {
 
     private var totalMonthlyCOD = ""
     private var totalMonthlyAverageSell = ""
+    private var previousTakingLoanAmount = 0
+    private var bankName = ""
     private var guarantorName = ""
     private var guarantorNumber = ""
 
@@ -53,6 +55,7 @@ class LoanSurveyFragment : Fragment() {
     private var hasPhysicalShop = false
     private var hasTradeLicence = false
     private var hasGuarantor = false
+    private var hasPreviousLoan = true
 
     private var imagePath: String = ""
     private var imagePickFlag = 0
@@ -102,12 +105,12 @@ class LoanSurveyFragment : Fragment() {
 
         binding?.applyLoanBtn?.setOnClickListener {
             if (verify()) {
-
+                Timber.d("dataDebud $previousTakingLoanAmount $bankName")
                 val requestBody = LoanSurveyRequestBody(
                     SessionManager.courierUserId, merchantName, merchantGender,
                     "",
                     loanRange, monthlyTransaction, hasBankAccount, hasPhysicalShop, totalMonthlyAverageSell,
-                    totalMonthlyCOD, guarantorName, guarantorNumber
+                    totalMonthlyCOD, guarantorName, guarantorNumber, 0,previousTakingLoanAmount, bankName
                 )
                 if (imagePickFlag == 1) {
                     requestBody.apply {
@@ -206,6 +209,23 @@ class LoanSurveyFragment : Fragment() {
         }
         //endregion
 
+        // region merchantPreviousLoan
+        binding?.merchantTakeLoanRadioGroup?.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.merchantTakeLoanAccountYes -> {
+                    hasPreviousLoan = true
+                    binding?.merchantLoanAmountETLayout?.isVisible = true
+                    binding?.bankNameETETLayout?.isVisible = true
+                }
+                R.id.merchantTakeLoanAccountNo -> {
+                    hasPreviousLoan = false
+                    binding?.merchantLoanAmountETLayout?.isVisible = false
+                    binding?.bankNameETETLayout?.isVisible = false
+                }
+            }
+        }
+        //endregion
+
     }
 
     private fun fetchCourierList() {
@@ -273,6 +293,29 @@ class LoanSurveyFragment : Fragment() {
         if (dataAdapter.getSelectedItemModelList().isEmpty()) {
             context?.toast("Please select other courier service you use")
             return false
+        }
+
+        if (binding?.merchantTakeLoanRadioGroup?.checkedRadioButtonId == -1) {
+            context?.toast("Please select a previous loan information")
+            return false
+        }
+
+        if (hasPreviousLoan) {
+            if (binding?.loanAMountET?.text.isNullOrBlank() || binding?.loanAMountET?.text.toString().toInt() < 1) {
+                context?.toast("Please fill up Your previous Loan Amount")
+                return false
+            }else{
+                previousTakingLoanAmount = binding?.loanAMountET?.text.toString()!!.toInt()
+            }
+            if (binding?.bankNameET?.text!!.isEmpty()) {
+                context?.toast("Please Write Bank Name")
+                return false
+            }else{
+                bankName = binding?.bankNameET?.text.toString()
+            }
+        } else {
+            previousTakingLoanAmount = 0
+            bankName = ""
         }
 
         if (binding?.merchantHasBankAccountRadioGroup?.checkedRadioButtonId == -1) {
