@@ -21,7 +21,7 @@ data class LoanSurveyRequestBody (
     @SerializedName("isLocalShop")
     var isLocalShop: Boolean = false,
     @SerializedName("MonthlyTotalAverageSale")
-    var totalMonthlyAverageSell: String? = "0",
+    var totalMonthlyAverageSell: Int? = 0,
 
     @SerializedName("totalMonthlyCOD")
     var totalMonthlyCOD: String? = "0",

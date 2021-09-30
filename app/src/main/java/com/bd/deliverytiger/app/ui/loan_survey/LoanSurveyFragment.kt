@@ -45,7 +45,7 @@ class LoanSurveyFragment : Fragment() {
     private var monthlyTransaction = ""
 
     private var totalMonthlyCOD = ""
-    private var totalMonthlyAverageSell = ""
+    private var totalMonthlyAverageSell = 0
     private var previousTakingLoanAmount = 0
     private var bankName = ""
     private var guarantorName = ""
@@ -274,13 +274,13 @@ class LoanSurveyFragment : Fragment() {
         }
 
         if (hasPhysicalShop) {
-            totalMonthlyAverageSell = binding?.totalMonthlyAverageSellET?.text.toString()
-            if (totalMonthlyAverageSell.isEmpty()) {
+            totalMonthlyAverageSell = binding?.totalMonthlyAverageSellET?.text.toString().toInt()
+            if (totalMonthlyAverageSell < 1) {
                 context?.toast("Please enter Total Monthly Average Sell")
                 return false
             }
         } else {
-            totalMonthlyAverageSell = ""
+            totalMonthlyAverageSell = 0
         }
 
 
