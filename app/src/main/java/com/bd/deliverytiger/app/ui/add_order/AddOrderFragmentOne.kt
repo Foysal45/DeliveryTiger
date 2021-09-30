@@ -708,6 +708,12 @@ class AddOrderFragmentOne : Fragment() {
         ft?.commit()
     }*/
 
+    private fun showIsBreakableALert(){
+
+        alert("নির্দেশনা",  "একাউন্ট টাইপ অনুযায়ী, আপনি ভঙ্গুর প্রোডাক্ট নিয়ে কাজ করেন। এক্ষেত্রে আপনার জন্য অতিরিক্ত চার্জ প্রযোজ্য হবে।" , false, "ঠিক আছে ", ).show()
+
+    }
+
     private fun fetchPickupLocation() {
         homeViewModel.pickupLocationList.observe(viewLifecycleOwner, Observer { list ->
             if (list.isNotEmpty()) {
@@ -1177,6 +1183,9 @@ class AddOrderFragmentOne : Fragment() {
                 selectedServiceType = 0 // default
             }
             updateUIAfterDistrict(district)
+            if (isBreakable){
+                showIsBreakableALert()
+            }
         }
         dialog.onClose = { type ->
             Timber.d("dialog.onClose $type")
