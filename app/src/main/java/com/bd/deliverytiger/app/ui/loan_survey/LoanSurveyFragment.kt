@@ -17,7 +17,6 @@ import com.bd.deliverytiger.app.api.model.loan_survey.CourierModel
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
 import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
 import com.bd.deliverytiger.app.databinding.FragmentLoanSurveyBinding
-import com.bd.deliverytiger.app.ui.dana.user_details_info.LoanSurveyAdapter
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide

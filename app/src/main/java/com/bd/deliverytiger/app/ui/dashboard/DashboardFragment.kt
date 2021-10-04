@@ -234,6 +234,16 @@ class DashboardFragment : Fragment() {
                 }
                 binding?.referBtn?.visibility = View.VISIBLE
             }
+            if (!model.referBanner.isNullOrEmpty()) {
+                binding?.surveyBtn?.let { view ->
+                    Glide.with(requireContext())
+                        .load("https://static.ajkerdeal.com/images/merchant/loan_banner.jpg")
+                        .skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .into(view)
+                }
+                binding?.referBtn?.visibility = View.VISIBLE
+            }
         })
     }
 
@@ -469,7 +479,6 @@ class DashboardFragment : Fragment() {
             sliderAdapter.onItemClick = { data, position ->
                 val model = bannerList[position]
                 Timber.d("sliderViewDebug $model")
-                //goToWebView(model.webUrl ?: "")
                 if (model.isWebLinkActive && !model.webUrl.isNullOrEmpty()) {
                     bannerNavigation(model.webUrl!!)
                 }

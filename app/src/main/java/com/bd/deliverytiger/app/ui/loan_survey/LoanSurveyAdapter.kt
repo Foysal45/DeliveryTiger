@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.ui.dana.user_details_info
+package com.bd.deliverytiger.app.ui.loan_survey
 
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
