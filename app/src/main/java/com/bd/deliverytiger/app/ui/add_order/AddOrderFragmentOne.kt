@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
+import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.api.model.district.DistrictData
 import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.location.LocationData
@@ -47,6 +48,8 @@ import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionBo
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationType
 import com.bd.deliverytiger.app.ui.add_order.order_preview.OrderPreviewBottomSheet
 import com.bd.deliverytiger.app.ui.add_order.service_wise_bottom_sheet.ServicesSelectionBottomSheet
+import com.bd.deliverytiger.app.ui.add_order.voucher.VoucherBottomSheet
+import com.bd.deliverytiger.app.ui.all_orders.details_bottomsheet.AllOrdersDetailsBottomSheet
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.utils.*
@@ -86,6 +89,7 @@ class AddOrderFragmentOne : Fragment() {
     private lateinit var checkTerms: AppCompatCheckBox
     private lateinit var checkTermsTV: TextView
     private lateinit var deliveryTypeRV: RecyclerView
+    private lateinit var voucherLayoutButton: LinearLayout
     private lateinit var deliveryButton: LinearLayout
     private lateinit var deliveryTakaButton: LinearLayout
     private lateinit var togglePickupGroup: MaterialButtonToggleGroup
@@ -260,6 +264,7 @@ class AddOrderFragmentOne : Fragment() {
         checkTerms = view.findViewById(R.id.check_terms_condition)
         checkTermsTV = view.findViewById(R.id.check_terms_condition_text)
         deliveryTypeRV = view.findViewById(R.id.delivery_type_selection_rV)
+        voucherLayoutButton = view.findViewById(R.id.voucherLayout)
         deliveryButton = view.findViewById(R.id.deliveryPrepaidTypeLayout)
         deliveryTakaButton = view.findViewById(R.id.deliveryTakaCollectionTypeLayout)
         togglePickupGroup = view.findViewById(R.id.toggleButtonPickupGroup)
@@ -548,6 +553,10 @@ class AddOrderFragmentOne : Fragment() {
             Timber.d("selectedDate $selectedDate")
             isTodaySelected = true
             fetchCollectionTimeSlot()
+        }
+
+        voucherLayoutButton?.setOnClickListener {
+            goToVoucherBottomSheet()
         }
 
         binding?.collectionTomorrow?.setOnClickListener {
@@ -1817,6 +1826,15 @@ class AddOrderFragmentOne : Fragment() {
         }*/
 
         return true
+    }
+
+    private fun goToVoucherBottomSheet() {
+        val tag: String = VoucherBottomSheet.tag
+        val dialog: VoucherBottomSheet = VoucherBottomSheet.newInstance()
+        dialog.show(childFragmentManager, tag)
+        dialog.onOfferSelected = {
+
+        }
     }
 
     private fun goToOrderPreviewBottomSheet(data: OrderPreviewData) {
