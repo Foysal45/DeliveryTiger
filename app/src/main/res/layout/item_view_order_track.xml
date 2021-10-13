@@ -153,6 +153,26 @@
                 />
 
             <TextView
+                android:id="@+id/dcMobileNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_phone_number"
+                android:layout_marginTop="2dp"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                tools:text="01555555555"
+                app:drawableStartCompat="@drawable/ic_call_small"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+
+            <TextView
                 android:id="@+id/courierComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

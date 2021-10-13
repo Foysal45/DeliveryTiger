@@ -9,5 +9,7 @@ data class CourierDeliveryMan(
     @SerializedName("courierDeliveryManName")
     var courierDeliveryManName: String? = "",
     @SerializedName("courierComment")
-    var courierComment: String? = ""
+    var courierComment: String? = "",
+    @SerializedName("eDeshMobileNo")
+    var eDeshMobileNo: String? = "",
 )
