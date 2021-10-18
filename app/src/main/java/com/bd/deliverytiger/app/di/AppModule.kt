@@ -12,6 +12,7 @@ import com.bd.deliverytiger.app.ui.add_order.AddOrderViewModel
 import com.bd.deliverytiger.app.ui.add_order.AddProductViewModel
 import com.bd.deliverytiger.app.ui.add_order.OrderSuccessViewModel
 import com.bd.deliverytiger.app.ui.add_order.service_wise_bottom_sheet.ServiceSelectionBottomSheetViewModel
+import com.bd.deliverytiger.app.ui.add_order.voucher.VoucherViewModel
 import com.bd.deliverytiger.app.ui.all_orders.AllOrderViewModel
 import com.bd.deliverytiger.app.ui.all_orders.order_edit.OrderInfoEditViewModel
 import com.bd.deliverytiger.app.ui.balance_load.BalanceLoadViewModel
@@ -138,5 +139,6 @@ val appModule = module {
     viewModel { ChatComposeViewModel(get()) }
     viewModel { LoanSurveryViewModel(get()) }
     viewModel { PhonebookGroupViewModel(get()) }
+    viewModel { VoucherViewModel(get()) }
 
 }

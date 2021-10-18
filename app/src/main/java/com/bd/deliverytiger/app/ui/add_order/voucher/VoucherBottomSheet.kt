@@ -5,11 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.voucher.VoucherCheckRequest
 import com.bd.deliverytiger.app.databinding.FragmentVoucherBottomSheetBinding
+import com.bd.deliverytiger.app.utils.SessionManager
+import com.bd.deliverytiger.app.utils.toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.koin.android.ext.android.inject
 import kotlin.concurrent.thread
 
 class VoucherBottomSheet : BottomSheetDialogFragment() {
@@ -17,16 +22,21 @@ class VoucherBottomSheet : BottomSheetDialogFragment() {
     private var binding: FragmentVoucherBottomSheetBinding? = null
     var onOfferSelected: ((offerType: Int) -> Unit)? = null
 
+    private val viewModel: VoucherViewModel by inject()
+
+    private var deliveryRangeId: Int = 0
 
     companion object {
 
-        fun newInstance(): VoucherBottomSheet = VoucherBottomSheet().apply {}
+        fun newInstance(deliveryRangeId: Int): VoucherBottomSheet = VoucherBottomSheet().apply {
+            this.deliveryRangeId = deliveryRangeId
+        }
         val tag: String = VoucherBottomSheet::class.java.name
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.BottomSheetDialogTheme)
+        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.BottomSheetDialogTheme2)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -38,7 +48,32 @@ class VoucherBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initClickLister()
 
+    }
+
+    private fun initClickLister(){
+        binding?.applyBtn?.setOnClickListener {
+            val requestBody = VoucherCheckRequest(SessionManager.courierUserId, deliveryRangeId, binding?.voucherCodeET?.text.toString())
+            viewModel.checkVoucher(requestBody).observe(viewLifecycleOwner, Observer { response->
+                if (response.message.isEmpty()){
+                    context?.toast("Successfully Added")
+                }else{
+                    context?.toast(response.message)
+                }
+            })
+        }
+    }
+
+    private fun validate(): Boolean{
+
+        if (binding?.voucherCodeET?.text.isNullOrEmpty()){
+            context?.toast("")
+            binding?.voucherCodeET?.requestFocus()
+            return false
+        }
+
+        return true
     }
 
     override fun onStart() {

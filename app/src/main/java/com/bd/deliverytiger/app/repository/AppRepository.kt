@@ -53,6 +53,7 @@ import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpda
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
 import com.bd.deliverytiger.app.api.model.voice_SMS.VoiceSmsAudiRequestBody
+import com.bd.deliverytiger.app.api.model.voucher.VoucherCheckRequest
 import com.bd.deliverytiger.app.database.AppDatabase
 import com.bd.deliverytiger.app.database.dao.DistrictDao
 import com.bd.deliverytiger.app.database.dao.NotificationDao
@@ -412,6 +413,12 @@ class AppRepository(
     //#region Infobip Voice SMS
 
     suspend fun sendVoiceSms(requestBody: VoiceSmsAudiRequestBody) = apiInterfaceINFOBIP.sendVoiceSms(requestBody)
+
+    //#endregion
+
+    //#region Voucher
+
+    suspend fun checkVoucher(requestBody: VoucherCheckRequest) = apiInterfaceCore.checkVoucher(requestBody)
 
     //#endregion
 }

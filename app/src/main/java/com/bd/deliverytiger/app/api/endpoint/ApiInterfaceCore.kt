@@ -67,6 +67,8 @@ import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequ
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
 import com.bd.deliverytiger.app.api.model.time_slot.TimeSlotData
+import com.bd.deliverytiger.app.api.model.voucher.VoucherCheckRequest
+import com.bd.deliverytiger.app.api.model.voucher.VoucherCheckResponse
 import com.haroldadmin.cnradapter.NetworkResponse
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -318,6 +320,9 @@ interface ApiInterfaceCore {
     // Add customer number to virtual phonebook group
     @POST("api/Entry/AddNumnerInGroup")
     suspend fun addToOwnPhoneBookGroup(@Body requestBody: List<PhonebookData>): NetworkResponse<GenericResponse<Int>, ErrorResponse>
+
+    @POST("api/Voucher/CheckVoucher")
+    suspend fun checkVoucher(@Body requestBody: VoucherCheckRequest): NetworkResponse<GenericResponse<VoucherCheckResponse>, ErrorResponse>
 
 
 }
