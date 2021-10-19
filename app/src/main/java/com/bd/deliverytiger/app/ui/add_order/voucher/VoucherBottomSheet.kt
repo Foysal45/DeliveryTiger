@@ -54,21 +54,23 @@ class VoucherBottomSheet : BottomSheetDialogFragment() {
 
     private fun initClickLister(){
         binding?.applyBtn?.setOnClickListener {
-            val requestBody = VoucherCheckRequest(SessionManager.courierUserId, deliveryRangeId, binding?.voucherCodeET?.text.toString())
-            viewModel.checkVoucher(requestBody).observe(viewLifecycleOwner, Observer { response->
-                if (response.message.isEmpty()){
-                    context?.toast("Successfully Added")
-                }else{
-                    context?.toast(response.message)
-                }
-            })
+            if (validate()){
+                val requestBody = VoucherCheckRequest(SessionManager.courierUserId, deliveryRangeId, binding?.voucherCodeET?.text.toString())
+                viewModel.checkVoucher(requestBody).observe(viewLifecycleOwner, Observer { response->
+                    if (response.message.isEmpty()){
+                        context?.toast("সফলভাবে এপ্লাই করা হয়েছে")
+                    }else{
+                        context?.toast(response.message)
+                    }
+                })
+            }
         }
     }
 
     private fun validate(): Boolean{
 
         if (binding?.voucherCodeET?.text.isNullOrEmpty()){
-            context?.toast("")
+            context?.toast("ভাউচার কোড লিখুন")
             binding?.voucherCodeET?.requestFocus()
             return false
         }

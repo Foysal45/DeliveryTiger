@@ -1830,10 +1830,10 @@ class AddOrderFragmentOne : Fragment() {
 
     private fun goToVoucherBottomSheet() {
         val tag: String = VoucherBottomSheet.tag
-        val dialog: VoucherBottomSheet = VoucherBottomSheet.newInstance(selectedServiceType)
+        val dialog: VoucherBottomSheet = VoucherBottomSheet.newInstance(deliveryRangeId)
         dialog.show(childFragmentManager, tag)
         dialog.onOfferSelected = {
-
+            calculateTotalPrice()
         }
     }
 
