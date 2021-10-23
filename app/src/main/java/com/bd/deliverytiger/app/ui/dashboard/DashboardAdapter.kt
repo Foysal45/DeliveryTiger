@@ -159,10 +159,10 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             binding.countTV.text = "৳ ${DigitConverter.toBanglaDigit(amount, true)}"
 
             if (model.availability && amount > 0) {
-                binding.actionLayout.visibility = View.VISIBLE
+                //binding.actionLayout.visibility = View.VISIBLE
                 binding.paymentMessageLayout.isVisible = false
             } else {
-                binding.actionLayout.visibility = View.GONE
+               // binding.actionLayout.visibility = View.GONE
                 if (model.currentRequestDate.isNotEmpty() && model.currentPaymentStatus == 0) {
                     val requestTime = DigitConverter.formatDate(model.currentRequestDate,"dd-MM-yyyy HH:mm:ss", "hh:mm a',' dd MMM")
                         .replace("AM", "am")

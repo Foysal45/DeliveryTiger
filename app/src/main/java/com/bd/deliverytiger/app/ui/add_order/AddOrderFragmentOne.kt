@@ -178,6 +178,8 @@ class AddOrderFragmentOne : Fragment() {
     private var offerType: String = ""
     private var relationType: String = ""
 
+    private var voucherDiscount = 0.0
+
     private var deliveryType: String = ""
     private var orderType: String = "Only Delivery"
     private var productType: String = "small"
@@ -519,6 +521,7 @@ class AddOrderFragmentOne : Fragment() {
                 putString("productType", productType)
                 putDouble("total", total)
                 putBoolean("isBreakable", isBreakable)
+                putDouble("voucherDiscount", voucherDiscount)
             }
 
             val detailsSheet = DetailsBottomSheet.newInstance(bundle)
@@ -556,7 +559,12 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         voucherLayoutButton?.setOnClickListener {
-            goToVoucherBottomSheet()
+            if (deliveryType.isEmpty()) {
+                context?.showToast("ডেলিভারি টাইপ নির্বাচন করুন")
+            }else{
+                goToVoucherBottomSheet()
+            }
+
         }
 
         binding?.collectionTomorrow?.setOnClickListener {
@@ -1578,9 +1586,9 @@ class AddOrderFragmentOne : Fragment() {
 
         //val payReturnCharge = SessionManager.returnCharge
         if (isCheckBigProduct) {
-            total = payDeliveryCharge + payCODCharge + payCollectionCharge + payPackagingCharge + bigProductCharge
+            total = payDeliveryCharge + payCODCharge + payCollectionCharge + payPackagingCharge + bigProductCharge - voucherDiscount
         } else {
-            total = payDeliveryCharge + payCODCharge + payCollectionCharge + payPackagingCharge
+            total = payDeliveryCharge + payCODCharge + payCollectionCharge + payPackagingCharge - voucherDiscount
         }
 
         //   total = payDeliveryCharge + payCODCharge + payCollectionCharge + payPackagingCharge
@@ -1832,7 +1840,8 @@ class AddOrderFragmentOne : Fragment() {
         val tag: String = VoucherBottomSheet.tag
         val dialog: VoucherBottomSheet = VoucherBottomSheet.newInstance(deliveryRangeId)
         dialog.show(childFragmentManager, tag)
-        dialog.onOfferSelected = {
+        dialog.onVoucherApplied = { model->
+            voucherDiscount = model.voucherDiscount
             calculateTotalPrice()
         }
     }

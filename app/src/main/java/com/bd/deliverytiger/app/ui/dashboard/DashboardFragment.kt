@@ -41,6 +41,8 @@ import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleActivity
+import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleBottomSheet
+import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentRequestBottomSheet
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -370,7 +372,10 @@ class DashboardFragment : Fragment() {
         }
         dashboardAdapter.onPaymentRequestClick = { position, model ->
 
-            if (availability && netAmount > 0) {
+            val tag = InstantPaymentRequestBottomSheet.tag
+            val dialog = InstantPaymentRequestBottomSheet.newInstance()
+            dialog.show(childFragmentManager, tag)
+           /* if (availability && netAmount > 0) {
                 if (netAmount > instantPaymentOTPLimit) {
                     if (!isOTPRequested) {
                         sendOTP()
@@ -385,7 +390,7 @@ class DashboardFragment : Fragment() {
                 alert("নির্দেশনা", availabilityMessage, true, "ঠিক আছে", "ক্যানসেল") {
                 }.show()
                 //binding?.swipeRefresh?.snackbar(availabilityMessage, Snackbar.LENGTH_INDEFINITE, "ঠিক আছে"){}?.show()
-            }
+            }*/
         }
 
         binding?.collectionLayout?.setOnClickListener {

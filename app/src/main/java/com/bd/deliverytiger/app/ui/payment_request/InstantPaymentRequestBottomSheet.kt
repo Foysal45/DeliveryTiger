@@ -1,39 +1,29 @@
-package com.bd.deliverytiger.app.ui.add_order.voucher
+package com.bd.deliverytiger.app.ui.payment_request
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.voucher.VoucherCheckRequest
-import com.bd.deliverytiger.app.api.model.voucher.VoucherCheckResponse
-import com.bd.deliverytiger.app.databinding.FragmentVoucherBottomSheetBinding
-import com.bd.deliverytiger.app.utils.SessionManager
-import com.bd.deliverytiger.app.utils.hideKeyboard
-import com.bd.deliverytiger.app.utils.toast
+import com.bd.deliverytiger.app.databinding.FragmentInstantPaymentRequestBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import org.koin.android.ext.android.inject
 import kotlin.concurrent.thread
 
-class VoucherBottomSheet : BottomSheetDialogFragment() {
+class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
-    private var binding: FragmentVoucherBottomSheetBinding? = null
-    var onVoucherApplied: ((model: VoucherCheckResponse) -> Unit)? = null
+    private var binding: FragmentInstantPaymentRequestBottomSheetBinding? = null
+    var onVoucherApplied: ((model: Int) -> Unit)? = null
 
-    private val viewModel: VoucherViewModel by inject()
 
     private var deliveryRangeId: Int = 0
 
     companion object {
 
-        fun newInstance(deliveryRangeId: Int): VoucherBottomSheet = VoucherBottomSheet().apply {
-            this.deliveryRangeId = deliveryRangeId
-        }
-        val tag: String = VoucherBottomSheet::class.java.name
+        fun newInstance(): InstantPaymentRequestBottomSheet = InstantPaymentRequestBottomSheet().apply {}
+        val tag: String = InstantPaymentRequestBottomSheet::class.java.name
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +32,7 @@ class VoucherBottomSheet : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return FragmentVoucherBottomSheetBinding.inflate(inflater, container, false).also {
+        return FragmentInstantPaymentRequestBottomSheetBinding.inflate(inflater, container, false).also {
             binding = it
         }.root
     }
@@ -50,37 +40,6 @@ class VoucherBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initClickLister()
-
-    }
-
-    private fun initClickLister(){
-        binding?.applyBtn?.setOnClickListener {
-            if (validate()){
-                hideKeyboard()
-                val requestBody = VoucherCheckRequest(SessionManager.courierUserId, deliveryRangeId, binding?.voucherCodeET?.text.toString())
-                viewModel.checkVoucher(requestBody).observe(viewLifecycleOwner, Observer { response->
-                    if (response.message.isEmpty()){
-                        context?.toast("সফলভাবে এপ্লাই করা হয়েছে")
-                        onVoucherApplied?.invoke(response.model)
-                        dismiss()
-                    }else{
-                        context?.toast(response.message)
-                    }
-                })
-            }
-        }
-    }
-
-    private fun validate(): Boolean{
-
-        if (binding?.voucherCodeET?.text.isNullOrEmpty()){
-            context?.toast("ভাউচার কোড লিখুন")
-            binding?.voucherCodeET?.requestFocus()
-            return false
-        }
-
-        return true
     }
 
     override fun onStart() {
