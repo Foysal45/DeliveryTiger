@@ -61,8 +61,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="16dp"
-        android:visibility="gone"
-        tools:visibility="gone"
+        android:visibility="visible"
+        tools:visibility="visible"
         >
 
         <TextView
@@ -78,7 +78,7 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:textStyle="bold"
-            android:text="পেমেন্ট রিকোয়েস্ট" />
+            android:text="রিসিভ পেমেন্ট" />
 
         <ImageView
             android:id="@+id/arrow"
@@ -94,7 +94,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/paymentMessageLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -185,6 +185,6 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </LinearLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
