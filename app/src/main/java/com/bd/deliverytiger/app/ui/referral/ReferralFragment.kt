@@ -81,7 +81,7 @@ class ReferralFragment() : Fragment() {
         val dialog = progressDialog("অপেক্ষা করুন, শেয়ার লিংক তৈরি হচ্ছে")
         dialog.show()
 
-        val referralUrl = "https://deliverytiger.com.bd/sign-up?referrer=${SessionManager.mobile}"
+        val referralUrl = "https://login.deliverytiger.com.bd/sign-up?referrer=${SessionManager.mobile}"
         val uri = Uri.parse(referralUrl)
         val dynamicLink = Firebase.dynamicLinks.dynamicLink {
             link = uri
