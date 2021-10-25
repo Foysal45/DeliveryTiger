@@ -82,6 +82,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
         binding?.packagingChargeTV?.text = "${DigitConverter.toBanglaDigit(payPackagingCharge, true)} ৳"
         binding?.totalTV?.text = "${DigitConverter.toBanglaDigit(total, true)} ৳"
         binding?.voucherDiscountTV?.text = "${DigitConverter.toBanglaDigit(voucherDiscount, true)} ৳"
+        binding?.shipmentAfterDiscountTV?.text = "${DigitConverter.toBanglaDigit(deliveryCharge - voucherDiscount, true)} ৳"
 
         if (isBreakable) {
             binding?.detailsItem5?.text = "এক্সট্রা প্যাকেজিং চার্জ (তরল/ভঙ্গুর প্রোডাক্টের জন্য)"

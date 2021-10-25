@@ -179,6 +179,8 @@ class AddOrderFragmentOne : Fragment() {
     private var relationType: String = ""
 
     private var voucherDiscount = 0.0
+    private var voucherCode: String = ""
+    private var voucherDeliveryRangeId: Int = 0
 
     private var deliveryType: String = ""
     private var orderType: String = "Only Delivery"
@@ -1645,7 +1647,7 @@ class AddOrderFragmentOne : Fragment() {
             payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,
             "android", SessionManager.versionName, true, collectionDistrictId, collectionThanaId,
             deliveryDate, collectionDate, isOfficeDrop, payActualPackagePrice, timeSlotId, selectedCollectionSlotDate,
-            offerType, relationType, serviceType, isHeavyWeight
+            offerType, relationType, serviceType, isHeavyWeight, voucherDiscount.toInt() ?: 0, voucherCode, voucherDeliveryRangeId
         )
 
 
@@ -1842,6 +1844,8 @@ class AddOrderFragmentOne : Fragment() {
         dialog.show(childFragmentManager, tag)
         dialog.onVoucherApplied = { model->
             voucherDiscount = model.voucherDiscount
+            voucherCode = model.voucherCode
+            voucherDeliveryRangeId = model.deliveryRangeId
             calculateTotalPrice()
         }
     }
