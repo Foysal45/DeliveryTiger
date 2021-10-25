@@ -36,8 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="উত্তোলনযোগ্য COD"
-        android:textColor="#626366"
-        android:textSize="20sp"
+        android:textColor="@color/cod_bg_two"
+        android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@+id/view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -47,8 +47,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="১০,৩২৮"
-        android:textColor="#00834A"
-        android:textSize="24sp"
+        android:textColor="@color/cod_bg_three"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/codTitle"
         app:layout_constraintEnd_toEndOf="@id/codTitle"
@@ -123,6 +123,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/transferBtnLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
@@ -151,7 +152,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="80dp"
         android:padding="10dp"
         android:clickable="true"
         android:focusable="true"
@@ -165,7 +166,7 @@
             android:layout_height="wrap_content"
             android:padding="20dp"
             android:layout_weight="6"
-            android:background="@drawable/bg_stroke_regular_payment_btn"
+            android:background="@drawable/bg_stroke_regular_payment"
             android:backgroundTint="@color/cod_bg_eight"
             android:orientation="vertical">
 
@@ -210,6 +211,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/requestBtnLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"

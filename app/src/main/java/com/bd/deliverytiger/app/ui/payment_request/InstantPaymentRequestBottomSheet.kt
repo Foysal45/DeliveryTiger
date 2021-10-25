@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentInstantPaymentRequestBottomSheetBinding
+import com.bd.deliverytiger.app.utils.toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -28,7 +29,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.BottomSheetDialogTheme2)
+        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.BottomSheetDialogTheme3)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -39,6 +40,20 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initClickLister()
+
+    }
+
+    private fun initClickLister(){
+
+        binding?.transferBtnLayout?.setOnClickListener {
+            context?.toast("Transfer Balance")
+        }
+
+        binding?.requestBtnLayout?.setOnClickListener {
+            context?.toast("Requesting for Balance")
+        }
 
     }
 

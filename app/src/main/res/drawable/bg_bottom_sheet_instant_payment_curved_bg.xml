@@ -4,9 +4,10 @@
     <item >
         <shape android:shape="rectangle">
             <corners
-                android:topLeftRadius="@dimen/bottom_sheet_corner_radius"
-                android:topRightRadius="@dimen/bottom_sheet_corner_radius" />
-            <solid android:color="#626366" />
+                android:topLeftRadius="15dp"
+                android:topRightRadius="15dp" />
+            <solid android:color="@color/cod_bg_one" />
+            <stroke android:width=".5dp" android:color="#434447"/>
 
         </shape>
     </item>
