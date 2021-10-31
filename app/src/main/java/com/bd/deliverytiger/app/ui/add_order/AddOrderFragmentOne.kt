@@ -564,9 +564,14 @@ class AddOrderFragmentOne : Fragment() {
             if (deliveryType.isEmpty()) {
                 context?.showToast("ডেলিভারি টাইপ নির্বাচন করুন")
             }else{
-                goToVoucherBottomSheet()
+                val termsSheet = TermsConditionBottomSheet.newInstance()
+                termsSheet.show(childFragmentManager, TermsConditionBottomSheet.tag)
+                termsSheet.onTermsAgreed = {
+                    if(it){
+                        goToVoucherBottomSheet()
+                    }
+                }
             }
-
         }
 
         binding?.collectionTomorrow?.setOnClickListener {
