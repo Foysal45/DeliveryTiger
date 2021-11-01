@@ -372,16 +372,22 @@ class DashboardFragment : Fragment() {
         }
         dashboardAdapter.onPaymentRequestClick = { position, model ->
 
-            val tag = InstantPaymentRequestBottomSheet.tag
-            val dialog = InstantPaymentRequestBottomSheet.newInstance()
-            dialog.show(childFragmentManager, tag)
-           /* if (availability && netAmount > 0) {
+
+            if (availability && netAmount > 0) {
                 if (netAmount > instantPaymentOTPLimit) {
                     if (!isOTPRequested) {
                         sendOTP()
                     }
                 } else {
-                    requestPayment()
+                    val tag = InstantPaymentRequestBottomSheet.tag
+                    val dialog = InstantPaymentRequestBottomSheet.newInstance()
+                    dialog.show(childFragmentManager, tag)
+
+                    dialog.onCloseBottomSheet = {
+                        fetchCODData()
+                        fetchCollection()
+                        fetchAcceptedOrder()
+                    }
                 }
             } else {
                 if (availabilityMessage.isEmpty()) {
@@ -390,7 +396,7 @@ class DashboardFragment : Fragment() {
                 alert("নির্দেশনা", availabilityMessage, true, "ঠিক আছে", "ক্যানসেল") {
                 }.show()
                 //binding?.swipeRefresh?.snackbar(availabilityMessage, Snackbar.LENGTH_INDEFINITE, "ঠিক আছে"){}?.show()
-            }*/
+            }
         }
 
         binding?.collectionLayout?.setOnClickListener {
@@ -1094,7 +1100,9 @@ class DashboardFragment : Fragment() {
         viewModel.checkOTP(mobileNumber, otpCode).observe(viewLifecycleOwner, Observer { flag ->
             if (flag) {
                 context?.toast("OTP কোড ভেরিফাইড")
-                requestPayment()
+                val tag = InstantPaymentRequestBottomSheet.tag
+                val dialog = InstantPaymentRequestBottomSheet.newInstance()
+                dialog.show(childFragmentManager, tag)
             } else {
                 context?.toast("OTP কোড সঠিক নয়")
             }

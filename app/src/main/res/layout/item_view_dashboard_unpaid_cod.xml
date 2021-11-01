@@ -94,7 +94,7 @@
 
     </LinearLayout>
 
-    <!--<LinearLayout
+    <LinearLayout
         android:id="@+id/paymentMessageLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -185,6 +185,6 @@
 
         </LinearLayout>
 
-    </LinearLayout>-->
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

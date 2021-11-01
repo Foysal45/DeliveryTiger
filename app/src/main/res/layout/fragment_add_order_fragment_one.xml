@@ -984,7 +984,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_delivery_taka"
+                        android:src="@drawable/ic_voucher"
                         android:layout_margin="8dp"
                         app:iconTint="@color/black_70"
                         android:contentDescription="@string/cd" />

@@ -2,7 +2,6 @@ package com.bd.deliverytiger.app.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
@@ -18,8 +17,6 @@ import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.databinding.ItemViewDashboardPaymentBinding
 import com.bd.deliverytiger.app.databinding.ItemViewDashboardUnpaidCodBinding
 import com.bd.deliverytiger.app.utils.DigitConverter
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class DashboardAdapter(private val mContext: Context?, private var dataList: MutableList<DashboardData>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -158,11 +155,11 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             val amount = model.totalAmount.toInt()
             binding.countTV.text = "৳ ${DigitConverter.toBanglaDigit(amount, true)}"
 
-            /*if (model.availability && amount > 0) {
-                //binding.actionLayout.visibility = View.VISIBLE
+            if (model.availability && amount > 0) {
+                binding.actionLayout.visibility = View.VISIBLE
                 binding.paymentMessageLayout.isVisible = false
             } else {
-               // binding.actionLayout.visibility = View.GONE
+                binding.actionLayout.visibility = View.GONE
                 if (model.currentRequestDate.isNotEmpty() && model.currentPaymentStatus == 0) {
                     val requestTime = DigitConverter.formatDate(model.currentRequestDate,"dd-MM-yyyy HH:mm:ss", "hh:mm a',' dd MMM")
                         .replace("AM", "am")
@@ -170,12 +167,12 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
                     binding.paymentAmount.text = "৳ ${DigitConverter.toBanglaDigit(model.currentPaymentAmount, true)}"
                     binding.paymentTime.text = "($requestTime)"
                     binding.paymentMessage.text = "${DigitConverter.toBanglaDigit(model.paymentProcessingTime)} ঘণ্টার মধ্যে পেমেন্ট\nবিকাশ নাম্বারে ট্রান্সফার হবে"
+                    binding.paymentMessage.text = "আপনার প্রাপ্য ৫০ টাকা\nসফলভাবে পাঠানো হয়েছে"
                     binding.paymentMessageLayout.isVisible = true
                 } else {
                     binding.paymentMessageLayout.isVisible = false
                 }
-            }*/
-
+            }
         }
     }
 

@@ -13,6 +13,10 @@ import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.instant_payment_status.InstantPaymentStatusData
 import com.bd.deliverytiger.app.api.model.instant_payment_status.InstantPaymentActivationStatusResponse
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
+import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantInstantPaymentRequest
+import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceivableDetailResponse
+import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceiveableDetailRequest
+import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceiveableDetailResponse
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentData
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsRequest
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsResponse
@@ -86,6 +90,12 @@ interface ApiInterfaceADM {
 
     @GET("api/account/reports/MerchantBalanceLoadHistory/{merchantID}")
     suspend fun merchantBalanceLoadHistory(@Path("merchantID") merchantID: Int): NetworkResponse<List<BalanceLoadHistoryData>, ErrorResponse>
+
+    @POST("api/account/reports/MerchantPayableReceiveableDetailForInstantPaymentFromApp")
+    suspend fun merchantPayableReceiveableDetailForInstantPayment(@Body requestBody: MerchantPayableReceiveableDetailRequest): NetworkResponse<MerchantPayableReceivableDetailResponse, ErrorResponse>
+
+    @POST("api/account/reports/InstantOr24hourPayment")
+    suspend fun instantOr24hourPayment(@Body requestBody: MerchantInstantPaymentRequest): NetworkResponse<MerchantPayableReceiveableDetailResponse, ErrorResponse>
 
     @Multipart
     @POST("Image/ImageUploadForFile")

@@ -123,7 +123,7 @@
     <string name="referral">রেফার করুন</string>
     <string name="orderType1">শুধু ডেলিভারি (প্রি-পেইড)</string>
     <string name="orderType2">ডেলিভারি+টাকা কালেকশন (COD)</string>
-    <string name="voucher">ভাউচার এপ্লাই করুন</string>
+    <string name="voucher">ডিসকাউন্ট ভাউচার এপ্লাই করুন</string>
     <string name="pickupType1">&#160;&#160;&#160;&#160;&#160;&#160;হাবে ড্রপ&#160;&#160;&#160;&#160;&#160;&#160;</string>
     <string name="pickupType2">কালেক্টর pick-up*</string>
     <string name="instant_payment">ইনস্ট্যান্ট পেমেন্ট আপডেট</string>
