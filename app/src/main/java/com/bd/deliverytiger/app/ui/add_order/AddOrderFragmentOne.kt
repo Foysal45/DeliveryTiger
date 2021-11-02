@@ -12,10 +12,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatSpinner
@@ -49,7 +46,7 @@ import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationType
 import com.bd.deliverytiger.app.ui.add_order.order_preview.OrderPreviewBottomSheet
 import com.bd.deliverytiger.app.ui.add_order.service_wise_bottom_sheet.ServicesSelectionBottomSheet
 import com.bd.deliverytiger.app.ui.add_order.voucher.VoucherBottomSheet
-import com.bd.deliverytiger.app.ui.all_orders.details_bottomsheet.AllOrdersDetailsBottomSheet
+import com.bd.deliverytiger.app.ui.add_order.voucher.VoucherInformationBottomSheet
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.utils.*
@@ -90,6 +87,7 @@ class AddOrderFragmentOne : Fragment() {
     private lateinit var checkTermsTV: TextView
     private lateinit var deliveryTypeRV: RecyclerView
     private lateinit var voucherLayoutButton: LinearLayout
+    private lateinit var voucherInfoButton: LinearLayout
     private lateinit var deliveryButton: LinearLayout
     private lateinit var deliveryTakaButton: LinearLayout
     private lateinit var togglePickupGroup: MaterialButtonToggleGroup
@@ -269,6 +267,7 @@ class AddOrderFragmentOne : Fragment() {
         checkTermsTV = view.findViewById(R.id.check_terms_condition_text)
         deliveryTypeRV = view.findViewById(R.id.delivery_type_selection_rV)
         voucherLayoutButton = view.findViewById(R.id.voucherLayout)
+        voucherInfoButton = view.findViewById(R.id.voucherInfo)
         deliveryButton = view.findViewById(R.id.deliveryPrepaidTypeLayout)
         deliveryTakaButton = view.findViewById(R.id.deliveryTakaCollectionTypeLayout)
         togglePickupGroup = view.findViewById(R.id.toggleButtonPickupGroup)
@@ -564,14 +563,12 @@ class AddOrderFragmentOne : Fragment() {
             if (deliveryType.isEmpty()) {
                 context?.showToast("ডেলিভারি টাইপ নির্বাচন করুন")
             }else{
-                val termsSheet = TermsConditionBottomSheet.newInstance()
-                termsSheet.show(childFragmentManager, TermsConditionBottomSheet.tag)
-                termsSheet.onTermsAgreed = {
-                    if(it){
-                        goToVoucherBottomSheet()
-                    }
-                }
+                goToVoucherBottomSheet()
             }
+        }
+
+        voucherInfoButton?.setOnClickListener {
+            goToVoucherInformationBottomSheet()
         }
 
         binding?.collectionTomorrow?.setOnClickListener {
@@ -1853,6 +1850,12 @@ class AddOrderFragmentOne : Fragment() {
             voucherDeliveryRangeId = model.deliveryRangeId
             calculateTotalPrice()
         }
+    }
+
+    private fun goToVoucherInformationBottomSheet() {
+        val tag: String = VoucherInformationBottomSheet.tag
+        val dialog: VoucherInformationBottomSheet = VoucherInformationBottomSheet.newInstance()
+        dialog.show(childFragmentManager, tag)
     }
 
     private fun goToOrderPreviewBottomSheet(data: OrderPreviewData) {

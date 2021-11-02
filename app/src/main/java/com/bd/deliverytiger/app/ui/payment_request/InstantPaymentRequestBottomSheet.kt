@@ -1,17 +1,29 @@
 package com.bd.deliverytiger.app.ui.payment_request
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.graphics.Color
+import android.media.AudioAttributes
+import android.media.RingtoneManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantInstantPaymentRequest
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceiveableDetailRequest
 import com.bd.deliverytiger.app.databinding.FragmentInstantPaymentRequestBottomSheetBinding
+import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -73,7 +85,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     private fun initData(){
 
         binding?.paymentAmount?.text = HtmlCompat.fromHtml("<font color='#626366'>৳ </font> <font color='#f05a2b'>${DigitConverter.toBanglaDigit(payableAmount, true)}</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-        binding?.instantPaymentTransferCharge?.text = "${DigitConverter.toBanglaDigit(instantTransferCharge)}"
+        binding?.instantPaymentTransferCharge?.text =HtmlCompat.fromHtml("( <font color='#EC6639'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য )", HtmlCompat.FROM_HTML_MODE_LEGACY)
 
         if (payableAmount == 0){
             binding?.transferBtnLayout?.isEnabled = false
@@ -87,7 +99,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     private fun initClickLister(){
 
         binding?.transferBtnLayout?.setOnClickListener {
-            alert("নির্দেশনা", "আপনি কি ইনস্ট্যান্ট পেমেন্ট ট্রান্সফার করতে চান।",true, "হ্যাঁ", "না") {
+            alert("", HtmlCompat.fromHtml("<font><b>আপনি কি এখনই টাকা আপনার বিকাশ একাউন্টে (${SessionManager.bkashNumber}) নিতে চান?।</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
                 if (it == AlertDialog.BUTTON_POSITIVE) {
                     instantPaymentRequestAndTransfer(2) // for transfer balance 2
                 }
@@ -96,17 +108,11 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         }
 
         binding?.requestBtnLayout?.setOnClickListener {
-            alert("নির্দেশনা", "আপনি কি রেগুলার পেমেন্ট রিকোয়েস্ট করতে চান।",true, "হ্যাঁ", "না") {
+            alert("",  HtmlCompat.fromHtml("<font><b>আপনি কি রেগুলার পেমেন্ট রিকোয়েস্ট করতে চান।</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
                 if (it == AlertDialog.BUTTON_POSITIVE) {
                     instantPaymentRequestAndTransfer(1) // for transfer balance 1
                 }
             }.show()
-        }
-
-        binding?.paymentAmount?.setOnClickListener {
-            val progressDialog = progressDialog("আপনার পেমেন্ট টি প্রসেসিং হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন...")
-            progressDialog.setCancelable(false)
-            progressDialog.show()
         }
 
     }
@@ -126,7 +132,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun instantPaymentRequestAndTransfer( paymentType: Int){
-        val progressDialog = progressDialog("আপনার পেমেন্ট টি প্রসেসিং হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন...")
+        val progressDialog = progressDialog("আপনার পেমেন্টটি প্রসেসিং হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন...")
         progressDialog.setCancelable(false)
         progressDialog.show()
         var charge = instantTransferCharge
@@ -147,30 +153,32 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                     when (paymentType) {
                         1 -> {
                             if (model.message == 1){
-                                alert("নির্দেশনা", "আপনার রিকোয়েস্ট টি সফল হয়েছে।",false, "ঠিক আছে") {
+                                showLocalNotification("","আপনার রিকোয়েস্ট টি সফল হয়েছে।", "")
+                                alert("", "আপনার রিকোয়েস্ট টি সফল হয়েছে।",false, "ঠিক আছে") {
                                     if (it == AlertDialog.BUTTON_POSITIVE) {
                                         onCloseBottomSheet?.invoke()
                                     }
                                 }.show()
                             }else{
-                                alert("নির্দেশনা", "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন।",false, "ঠিক আছে") {}.show()
+                                alert("", "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন।",false, "ঠিক আছে") {}.show()
                             }
                         }
                         2 -> {
                             if (model.message == 1 && !model.transactionId.isNullOrEmpty()){
-                                alert("নির্দেশনা", "আপনার লেনদেনটি সফলভাবে সম্পন্ন হয়েছে।",false, "ঠিক আছে") {
+                                showLocalNotification("","টাকা বিকাশে ট্রান্সফার হয়েছে", "")
+                                alert("", "আপনার লেনদেনটি সফলভাবে সম্পন্ন হয়েছে।",false, "ঠিক আছে") {
                                     if (it == AlertDialog.BUTTON_POSITIVE) {
                                         onCloseBottomSheet?.invoke()
                                     }
                                 }.show()
                             }else if (model.message == 1 && model.transactionId.isNullOrEmpty()){
-                                alert("নির্দেশনা", "অনুগ্রহ পূর্বক ডেলিভারি টাইগার এর একাউন্টস ডিপার্মেন্ট এর সাথে যোগাযোগ করুন।",false, "ঠিক আছে") {
+                                alert("", "অনুগ্রহ পূর্বক ডেলিভারি টাইগার এর একাউন্টস ডিপার্মেন্ট এর সাথে যোগাযোগ করুন।",false, "ঠিক আছে") {
                                     if (it == AlertDialog.BUTTON_POSITIVE) {
                                         onCloseBottomSheet?.invoke()
                                     }
                                 }.show()
                             }else{
-                                alert("নির্দেশনা", "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন।",false, "ঠিক আছে") {}.show()
+                                alert("", "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন।",false, "ঠিক আছে") {}.show()
                             }
                         }
                     }
@@ -183,7 +191,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         }else{
             progressDialog.dismiss()
             dismiss()
-            alert("নির্দেশনা", "আপনার ট্রান্সফার করার মতো ব্যালান্স নেই ",false, "ঠিক আছে") {}.show()
+            alert("", "আপনার ট্রান্সফার করার মতো ব্যালান্স নেই ",false, "ঠিক আছে") {}.show()
         }
 
     }
@@ -217,6 +225,67 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                         }*/
                     }
                 })
+        }
+    }
+
+    private fun showLocalNotification(title: String, body: String, theData: String) {
+        val notificationManager: NotificationManager =
+            activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        createNotificationChannels(notificationManager)
+        val builder = createNotification(
+            getString(R.string.default_notification_channel_id),
+            title, body, createLocalPendingIntent(theData)
+        )
+
+        notificationManager.notify(1001, builder.build())
+    }
+
+    private fun createLocalPendingIntent(theData: String): PendingIntent {
+        val intent = Intent(requireContext(), HomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.putExtra("data", theData)
+        return PendingIntent.getActivity(
+            requireContext(),
+            System.currentTimeMillis().toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+    }
+
+    private fun createNotification(channelId: String, title: String, body: String, pendingIntent: PendingIntent): NotificationCompat.Builder {
+        return NotificationCompat.Builder(requireContext(), channelId).apply {
+            setSmallIcon(R.drawable.ic_tiger)
+            setContentTitle(title)
+            setContentText(body)
+            setAutoCancel(true)
+            color = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+            setDefaults(NotificationCompat.DEFAULT_ALL)
+            priority = NotificationCompat.PRIORITY_DEFAULT
+            setContentIntent(pendingIntent)
+        }
+    }
+
+    private fun createNotificationChannels(notificationManager: NotificationManager) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                .build()
+
+            val channelList: MutableList<NotificationChannel> = mutableListOf()
+            val channel1 = NotificationChannel(getString(R.string.default_notification_channel_id_instant_payment), "Instant Payment", NotificationManager.IMPORTANCE_DEFAULT).apply {
+                description = "Delivery Tiger Instant Payment"
+                setShowBadge(true)
+                enableLights(true)
+                lightColor = Color.GREEN
+                enableVibration(true)
+                setSound(soundUri, audioAttributes)
+            }
+            channelList.add(channel1)
+
+            notificationManager.createNotificationChannels(channelList)
         }
     }
 

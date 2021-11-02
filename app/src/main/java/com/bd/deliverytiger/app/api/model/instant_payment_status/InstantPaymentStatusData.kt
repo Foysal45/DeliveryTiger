@@ -10,6 +10,8 @@ data class InstantPaymentStatusData(
     var lastPaymentStatus: Int = 0,
     @SerializedName("CurrentPaymentAmount")
     var currentPaymentAmount: Int = 0,
+    @SerializedName("PaymentMethod")
+    var paymentMethod: Int = 0,
     @SerializedName("CurrentPaymentStatus")
     var currentPaymentStatus: Int = 0,
     @SerializedName("LastPaymentDate")

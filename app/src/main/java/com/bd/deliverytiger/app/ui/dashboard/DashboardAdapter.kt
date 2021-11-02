@@ -166,8 +166,12 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
                         .replace("PM", "pm") // (2.28 pm, 28 Feb)
                     binding.paymentAmount.text = "৳ ${DigitConverter.toBanglaDigit(model.currentPaymentAmount, true)}"
                     binding.paymentTime.text = "($requestTime)"
-                    binding.paymentMessage.text = "${DigitConverter.toBanglaDigit(model.paymentProcessingTime)} ঘণ্টার মধ্যে পেমেন্ট\nবিকাশ নাম্বারে ট্রান্সফার হবে"
-                    binding.paymentMessage.text = "আপনার প্রাপ্য ৫০ টাকা\nসফলভাবে পাঠানো হয়েছে"
+                    if (model.currentPaymentType == 1){
+                        binding.paymentMessage.text = "${DigitConverter.toBanglaDigit(model.paymentProcessingTime)} ঘণ্টার মধ্যে পেমেন্ট\nবিকাশ নাম্বারে ট্রান্সফার হবে"
+                    }else if (model.currentPaymentType == 2){
+                        binding.paymentMessage.text = "টাকা বিকাশে ট্রান্সফার হয়েছে"
+                        binding.countTV.text = "৳ ${DigitConverter.toBanglaDigit(0, true)}"
+                    }
                     binding.paymentMessageLayout.isVisible = true
                 } else {
                     binding.paymentMessageLayout.isVisible = false

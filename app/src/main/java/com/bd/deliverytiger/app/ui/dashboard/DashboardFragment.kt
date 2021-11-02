@@ -811,6 +811,7 @@ class DashboardFragment : Fragment() {
                     this.currentRequestDate = model1.currentRequestDate ?: ""
                     this.currentPaymentAmount = model1.currentPaymentAmount
                     this.currentPaymentStatus = model1.currentPaymentStatus
+                    this.currentPaymentType = model1.paymentMethod
                 }
                 if (dataList.isNotEmpty()) {
                     dataList.last().apply {
@@ -823,6 +824,7 @@ class DashboardFragment : Fragment() {
                         this.currentRequestDate = model1.currentRequestDate ?: ""
                         this.currentPaymentAmount = model1.currentPaymentAmount
                         this.currentPaymentStatus = model1.currentPaymentStatus
+                        this.currentPaymentType = model1.paymentMethod
                     }
                     dashboardAdapter.notifyItemChanged(dataList.lastIndex)
                 }

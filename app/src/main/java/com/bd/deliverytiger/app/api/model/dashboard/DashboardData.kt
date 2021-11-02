@@ -35,6 +35,7 @@ data class DashboardData(
 
     var currentRequestDate: String = "",
     var currentPaymentAmount: Int = 0,
-    var currentPaymentStatus: Int = 0
+    var currentPaymentStatus: Int = 0,
+    var currentPaymentType: Int = 0
 
 )
