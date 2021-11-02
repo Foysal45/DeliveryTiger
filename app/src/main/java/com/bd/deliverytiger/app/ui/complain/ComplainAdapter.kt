@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.ui.complain
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
@@ -46,6 +47,7 @@ class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
 
             binding.orderCode.text = "DT-${model.orderId}"
+            if(model.complainType == "Pending") binding.orderCode.setTextColor(Color.RED)
             if (model.complaintDate != null) {
                 val formattedDate = DigitConverter.toBanglaDate(model.complaintDate!!,"yyyy-MM-dd", false)
                 binding.date.text = formattedDate
