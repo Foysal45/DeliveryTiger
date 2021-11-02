@@ -36,6 +36,8 @@ data class PaymentDetailsResponse(
     var netPayableAmount: Int = 0,
     @SerializedName("NetAdvanceReceivable")
     var netAdvanceReceivable: Int = 0,
+    @SerializedName("IPCharge")
+    var iPCharge: Int = 0,
 
     @SerializedName("ModeOfPayment")
     var modeOfPayment: String? = "",

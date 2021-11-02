@@ -66,6 +66,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         initClickLister()
         fetchData()
+        showLocalNotification("", "test", "")
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
