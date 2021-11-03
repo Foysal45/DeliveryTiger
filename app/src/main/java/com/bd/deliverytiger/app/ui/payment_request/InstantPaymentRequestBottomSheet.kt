@@ -188,7 +188,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                         }
                     }
                 }else{
-                    val message = "কোথাও কোনো সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                    val message = "কোথাও কোনো সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন।"
                     context?.toast(message)
                     dismiss()
                 }
@@ -196,7 +196,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         }else{
             progressDialog.dismiss()
             dismiss()
-            alert("", "আপনার ট্রান্সফার করার মতো ব্যালান্স নেই ",false, "ঠিক আছে") {}.show()
+            alert("", "আপনার ট্রান্সফার করার মতো ব্যালান্স নেই।",false, "ঠিক আছে") {}.show()
         }
 
     }
