@@ -182,5 +182,8 @@
     <string name="pickup_options">বেছে নিন</string>
     <string name="submit">সাবমিট</string>
 
+    <string-array name="pick_options">
+        <item>"বেছে নিন"</item>
+    </string-array>
 
 </resources>

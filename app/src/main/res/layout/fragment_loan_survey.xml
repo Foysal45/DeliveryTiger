@@ -13,27 +13,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:clipToPadding="false"
         android:orientation="vertical"
-        android:clipToPadding="false">
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <ImageView
             android:id="@+id/bannerImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="-16dp"
+            android:layout_marginTop="-16dp"
+            android:layout_marginEnd="-16dp"
             android:adjustViewBounds="true"
             android:contentDescription="@string/cd"
             android:minHeight="100dp"
-            android:layout_marginTop="-16dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_banner_place"
-            />
+            tools:src="@drawable/ic_banner_place" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/merchantGender"
@@ -46,33 +44,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="এই প্রতিষ্ঠানের প্রধান উদ্যোক্তা একজন:"
-                android:textStyle="bold"
                 android:textColor="@color/black_80"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <RadioGroup
                 android:id="@+id/merchantGenderRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/merchantGenderTV"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/merchantGenderTV">
 
                 <RadioButton
                     android:id="@+id/merchantGenderMale"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="পুরুষ"/>
+                    android:text="পুরুষ" />
 
                 <RadioButton
                     android:id="@+id/merchantGenderFemale"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="মহিলা"
-                    android:layout_marginStart="8dp"/>
+                    android:layout_marginStart="8dp"
+                    android:text="মহিলা" />
 
             </RadioGroup>
 
@@ -81,13 +79,13 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="আপনার নাম লিখুন"
                 android:layout_marginBottom="12dp"
-                app:layout_constraintTop_toBottomOf="@id/merchantGenderRadioGroup"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:hint="আপনার নাম লিখুন"
                 android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/merchantGenderRadioGroup"
                 tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -97,7 +95,6 @@
                     android:imeOptions="actionNext"
                     android:importantForAutofill="no"
                     android:inputType="text"
-                    android:maxLength="15"
                     android:textColor="@color/black_80"
                     android:textSize="14sp" />
 
@@ -106,9 +103,350 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/spinnerAgeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/spinnerAgeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="আপনার বয়সসীমা নির্বাচন করুন"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ageRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerAgeText"
+                tools:itemCount="1"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_view_courier_options"
+                tools:orientation="vertical"
+                tools:spanCount="2">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/spinnerEducationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/spinneEducationText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="আপনার শিক্ষাগত যোগ্যতা নির্বাচন করুন"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinnereducationType"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_item_unselected_border"
+                android:overlapAnchor="false"
+                android:spinnerMode="dropdown"
+                android:theme="@style/custom_spinner_style"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinneEducationText"
+                tools:entries="@array/pick_options" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/cd"
+                app:layout_constraintBottom_toBottomOf="@id/spinnereducationType"
+                app:layout_constraintEnd_toEndOf="@id/spinnereducationType"
+                app:layout_constraintTop_toTopOf="@id/spinnereducationType"
+                app:srcCompat="@drawable/ic_arrow_drop_down" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/spinnerFamilyMemNumLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/spinnerFamilyMemNumText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="আপনার পরিবারের সদস্য সংখ্যা"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/FamilyMemNumRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerFamilyMemNumText"
+                tools:itemCount="1"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_view_courier_options"
+                tools:orientation="vertical"
+                tools:spanCount="2">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/houseOwnerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/spinnerhouseOwnerText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="আপনার বাসার মালিকানা"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/houseOwnerRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerhouseOwnerText"
+                tools:itemCount="1"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_view_courier_options"
+                tools:orientation="vertical"
+                tools:spanCount="2">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/spinnerresidence_locationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/spinnerresidence_locationText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="আপনার বাসার অবস্থান"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/residence_locationRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerresidence_locationText"
+                tools:itemCount="1"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_view_courier_options"
+                tools:orientation="vertical"
+                tools:spanCount="2">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/spinnermarriagLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/spinnermarriageStatusText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="আপনার বৈবাহিক অবস্থা?"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/marriageRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnermarriageStatusText"
+                tools:itemCount="1"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_view_courier_options"
+                tools:orientation="vertical"
+                tools:spanCount="2">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/spinnerAverageBasketLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/spinneraverageBasketText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="আপনার গড় বাস্কেট উল্লেখ করুন"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinneraverageBasketType"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_item_unselected_border"
+                android:overlapAnchor="false"
+                android:spinnerMode="dropdown"
+                android:theme="@style/custom_spinner_style"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinneraverageBasketText"
+                tools:entries="@array/pick_options" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/cd"
+                app:layout_constraintBottom_toBottomOf="@id/spinneraverageBasketType"
+                app:layout_constraintEnd_toEndOf="@id/spinneraverageBasketType"
+                app:layout_constraintTop_toTopOf="@id/spinneraverageBasketType"
+                app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/spinnerKnownToMerchantLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/spinnerknownToMerchanText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="আপনার মার্চেন্টের সাথে কত বছরের পরিচয়?"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinneraverKnownToMerchnat"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_item_unselected_border"
+                android:overlapAnchor="false"
+                android:spinnerMode="dropdown"
+                android:theme="@style/custom_spinner_style"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerknownToMerchanText"
+                tools:entries="@array/pick_options" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/cd"
+                app:layout_constraintBottom_toBottomOf="@id/spinneraverKnownToMerchnat"
+                app:layout_constraintEnd_toEndOf="@id/spinneraverKnownToMerchnat"
+                app:layout_constraintTop_toTopOf="@id/spinneraverKnownToMerchnat"
+                app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/spinnerLoanRangeLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loanRangeETLayout"
@@ -116,9 +454,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="আপনি কত টাকা পর্যন্ত লোন নিতে ইচ্ছুক?"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/loanRangeET"
@@ -127,7 +465,7 @@
                     android:imeOptions="actionNext"
                     android:importantForAutofill="no"
                     android:inputType="number"
-                    android:maxLength="15"
+                    android:maxLength="8"
                     android:textColor="@color/black_80"
                     android:textSize="14sp" />
 
@@ -140,7 +478,8 @@
             android:id="@+id/spinnerMonthlyTransactionLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/monthlyTransactionETLayout"
@@ -148,9 +487,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="অনলাইন/ফেসবুকের মাধ্যমে মাসে কত বিক্রি?"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/monthlyTransactionET"
@@ -159,7 +498,7 @@
                     android:imeOptions="actionDone"
                     android:importantForAutofill="no"
                     android:inputType="number"
-                    android:maxLength="15"
+                    android:maxLength="8"
                     android:textColor="@color/black_80"
                     android:textSize="14sp" />
 
@@ -171,40 +510,44 @@
             android:id="@+id/merchantPhysicalShopExistsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:id="@+id/merchantPhysicalShopExistsTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="আপনার কি ফিজিক্যাল দোকান আছে?"
-                android:textStyle="bold"
                 android:textColor="@color/black_80"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/merchantPhysicalShopExistsRadioGroup"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <RadioGroup
                 android:id="@+id/merchantPhysicalShopExistsRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/merchantPhysicalShopExistsTV"
+                app:layout_constraintBottom_toTopOf="@id/totalMonthlyAverageSellETLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/merchantPhysicalShopExistsTV">
 
                 <RadioButton
                     android:id="@+id/merchantPhysicalShopExistsYes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="হ্যাঁ"/>
+                    android:text="হ্যাঁ" />
 
                 <RadioButton
                     android:id="@+id/merchantPhysicalShopExistsNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="না"
-                    android:layout_marginStart="8dp"/>
+                    android:layout_marginStart="8dp"
+                    android:text="না" />
 
             </RadioGroup>
 
@@ -213,13 +556,12 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="প্রতিমাসে ফিজিক্যাল দোকান থেকে অ্যাভারেজ কত বিক্রি হয়?"
                 android:layout_marginBottom="8dp"
-                app:layout_constraintTop_toBottomOf="@id/merchantPhysicalShopExistsRadioGroup"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:hint="প্রতিমাসে ফিজিক্যাল দোকান থেকে অ্যাভারেজ কত বিক্রি হয়?"
                 android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/merchantPhysicalShopExistsRadioGroup"
                 tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -238,33 +580,85 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintTop_toBottomOf="@id/merchantPhysicalShopExistsLayout">
+
+            <TextView
+                android:id="@+id/typeofoownershipInBuisnessTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="আপনার দোকানের মালিকানা নির্বাচন করুনঃ"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <RadioGroup
+                android:id="@+id/OwnertypeofoownershipInBuisnessRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/typeofoownershipInBuisnessTV">
+
+                <RadioButton
+                    android:id="@+id/InBuisnessRadioButtonOwner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="নিজের" />
+
+                <RadioButton
+                    android:id="@+id/InBuisnessRadioButtonRental"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="ভাড়া" />
+
+                <RadioButton
+                    android:id="@+id/InBuisnessRadioButtonFamily"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="পরিবারের নিজস্ব" />
+
+            </RadioGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/totalCODFromOtherServices"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:id="@+id/totalCODFromOtherServicesTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="ডেলিভারি টাইগার সহ অন্য কুরিয়ার থেকে মাসিক সর্বমোট কত টাকা COD কালেক্ট করেন?"
-                android:textStyle="bold"
-                android:textColor="@color/black_80"
                 android:textAlignment="inherit"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/totalCODFromOtherServicesETLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="মাসিক সর্বমোট COD পরিমান লিখুন"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/totalCODFromOtherServicesTV"
+                android:hint="মাসিক সর্বমোট COD পরিমান লিখুন"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/totalCODFromOtherServicesTV">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/totalCODFromOtherServicesET"
@@ -285,18 +679,19 @@
             android:id="@+id/otherServices"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:id="@+id/otherServicesTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="ডেলিভারি টাইগার ব্যাতিত অন্য আর কার কার সার্ভিস গ্রহণ করেন?"
-                android:textStyle="bold"
                 android:textColor="@color/black_80"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewOtherServices"
@@ -322,55 +717,55 @@
             android:id="@+id/merchantTakeLoanLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:id="@+id/merchantTakeLoanTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="আপনার অন্য কোনো লোন নেয়া আছে কিনা?"
-                android:textStyle="bold"
                 android:textColor="@color/black_80"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <RadioGroup
                 android:id="@+id/merchantTakeLoanRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/merchantTakeLoanTV"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/merchantTakeLoanTV">
 
                 <RadioButton
                     android:id="@+id/merchantTakeLoanAccountYes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="হ্যাঁ"/>
+                    android:text="হ্যাঁ" />
 
                 <RadioButton
                     android:id="@+id/merchantTakeLoanAccountNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="না"
-                    android:layout_marginStart="8dp"/>
+                    android:layout_marginStart="8dp"
+                    android:text="না" />
 
             </RadioGroup>
-
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/merchantLoanAmountETLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="লোনের পরিমান"
                 android:layout_marginBottom="12dp"
-                app:layout_constraintTop_toBottomOf="@id/merchantTakeLoanRadioGroup"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:hint="লোনের পরিমান"
                 android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/merchantTakeLoanRadioGroup"
                 tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -391,13 +786,12 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="ব্যাংকের নাম"
                 android:layout_marginBottom="12dp"
-                app:layout_constraintTop_toBottomOf="@id/merchantLoanAmountETLayout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:hint="ব্যাংকের নাম"
                 android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/merchantLoanAmountETLayout"
                 tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -407,12 +801,59 @@
                     android:imeOptions="actionNext"
                     android:importantForAutofill="no"
                     android:inputType="text"
-                    android:maxLength="15"
                     android:textColor="@color/black_80"
                     android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/loanRepayMonthlyLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bankNameETETLayout">
+
+                <TextView
+                    android:id="@+id/loanRepayTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="আপনার লোন পরিশোধের ধরণ"
+                    android:textColor="@color/black_80"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RadioGroup
+                    android:id="@+id/loanRepayRadioGroupType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/loanRepayTV">
+
+                    <RadioButton
+                        android:id="@+id/loanRepayWeekly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="সাপ্তাহিক" />
+
+                    <RadioButton
+                        android:id="@+id/loanRepayMonthly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="মাসিক" />
+
+                </RadioGroup>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -420,83 +861,265 @@
             android:id="@+id/merchantHasBankAccountLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:id="@+id/merchantHasBankAccountTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="আপনার প্রতিষ্ঠানের নামে কি ব্যাংক একাউন্ট আছে?"
-                android:textStyle="bold"
                 android:textColor="@color/black_80"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <RadioGroup
                 android:id="@+id/merchantHasBankAccountRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/merchantHasBankAccountTV"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/merchantHasBankAccountTV">
 
                 <RadioButton
                     android:id="@+id/merchantHasBankAccountYes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="হ্যাঁ"/>
+                    android:text="হ্যাঁ" />
 
                 <RadioButton
                     android:id="@+id/merchantHasBankAccountNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="না"
-                    android:layout_marginStart="8dp"/>
+                    android:layout_marginStart="8dp"
+                    android:text="না" />
 
             </RadioGroup>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/haveAnyCreditCardLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/haveAnyCreditCardRadioGroupTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="আপনার কোন ক্রেডিট কার্ড আছে?"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RadioGroup
+                android:id="@+id/haveAnyCreditCardRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/haveAnyCreditCardRadioGroupTV">
+
+                <RadioButton
+                    android:id="@+id/yes_haveAnyCreditCard_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="হ্যাঁ"
+                    android:textColor="@color/black_80"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/no_haveAnyCreditCard_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="5dp"
+                    android:text="না"
+                    android:textColor="@color/black_80"
+                    android:textSize="14sp" />
+            </RadioGroup>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/bankLayoutVisibility"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+
+            tools:visibility="visible">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/bankNameLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:hint="আপনার ব্যাংকের নাম">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/creditCardName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/black_80"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/cardLimitLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:hint="আপনার কারডের লিমিট">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/creditCardLimit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+
+                    android:textColor="@color/black_80"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/haveAnyTeamRadioGroupTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="আপনার কোন TIIN আছে "
+            android:textColor="@color/black_80"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linearForInnerREf"
+            android:layout_marginBottom="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- <androidx.constraintlayout.widget.ConstraintLayout
+                 android:id="@+id/haveAnyTeamLayout"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content">-->
+            <RadioGroup
+                android:id="@+id/haveAnyTIINRadioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent">
+
+                <RadioButton
+                    android:id="@+id/yes_haveAnyTeam_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="হ্যাঁ"
+                    android:textColor="@color/black_80"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/no_haveAnyTeam_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="5dp"
+                    android:text="না"
+                    android:textColor="@color/black_80"
+                    android:textSize="14sp" />
+            </RadioGroup>
+
+            <!--  </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TIINNumberLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="TIIN নাম্বার"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/teamTIINNumberET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:textColor="@color/black_80"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/merchantHasTradeLicenceLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:id="@+id/merchantHasTradeLicenceTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="আপনার প্রতিষ্ঠানের কি ট্রেড লাইসেন্স আছে?"
-                android:textStyle="bold"
                 android:textColor="@color/black_80"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <RadioGroup
                 android:id="@+id/merchantHasTradeLicenceRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/merchantHasTradeLicenceTV"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/merchantHasTradeLicenceTV">
 
                 <RadioButton
                     android:id="@+id/merchantHasTradeLicenceYes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="হ্যাঁ"/>
+                    android:text="হ্যাঁ" />
 
                 <RadioButton
                     android:id="@+id/merchantHasTradeLicenceNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="না"
-                    android:layout_marginStart="8dp"/>
+                    android:layout_marginStart="8dp"
+                    android:text="না" />
 
             </RadioGroup>
 
@@ -506,10 +1129,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:orientation="vertical"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/merchantHasTradeLicenceRadioGroup"
                 android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/merchantHasTradeLicenceRadioGroup"
                 tools:visibility="visible">
 
                 <TextView
@@ -520,19 +1143,19 @@
                     android:text="ট্রেড লাইসেন্সএর ছবি আপলোড করুন"
                     android:textColor="@color/black_70"
                     android:textSize="14sp"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/imageTradeLicenceAddIV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="80dp"
                     android:layout_margin="8dp"
                     android:background="@drawable/bg_live_cart_count"
                     android:contentDescription="@string/cd"
                     android:gravity="center"
+                    android:minHeight="80dp"
                     android:padding="30dp"
                     android:src="@drawable/ic_add"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -563,40 +1186,41 @@
             android:id="@+id/merchantHasGuarantorLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:id="@+id/merchantHasGuarantorTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=" আপনার কি কোনো গ্যারেন্টর আছে?"
-                android:textStyle="bold"
                 android:textColor="@color/black_80"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <RadioGroup
                 android:id="@+id/merchantHasGuarantorRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/merchantHasGuarantorTV"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/merchantHasGuarantorTV">
 
                 <RadioButton
                     android:id="@+id/merchantHasGuarantorYes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="হ্যাঁ"/>
+                    android:text="হ্যাঁ" />
 
                 <RadioButton
                     android:id="@+id/merchantHasGuarantorNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="না"
-                    android:layout_marginStart="8dp"/>
+                    android:layout_marginStart="8dp"
+                    android:text="না" />
 
             </RadioGroup>
 
@@ -605,10 +1229,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/merchantHasGuarantorRadioGroup"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/merchantHasGuarantorRadioGroup"
                 tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -617,9 +1241,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="গ্যারেন্টরের নাম"
-                    app:layout_constraintTop_toBottomOf="@id/merchantHasGuarantorRadioGroup"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    app:layout_constraintTop_toBottomOf="@id/merchantHasGuarantorRadioGroup">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/merchantGuarantorNameET"
@@ -628,7 +1252,6 @@
                         android:imeOptions="actionNext"
                         android:importantForAutofill="no"
                         android:inputType="text"
-                        android:maxLength="24"
                         android:textColor="@color/black_80"
                         android:textSize="14sp" />
 
@@ -639,11 +1262,11 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="গ্যারেন্টরের ফোন নম্বর"
                     android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toBottomOf="@id/merchantGuarantorNameETLayout"
+                    android:hint="গ্যারেন্টরের ফোন নম্বর"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    app:layout_constraintTop_toBottomOf="@id/merchantGuarantorNameETLayout">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/merchantGuarantorNumberET"
@@ -661,12 +1284,152 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="* গ্যারেন্টরের সাথে যোগাযোগ করা হবে \n(গ্যারেন্টর পরিবারের কোনো সদস্য হতে পারবেন না)"
-                    android:textSize="14sp"
                     android:textColor="@color/red_900"
-                    android:layout_marginTop="8dp"/>
+                    android:textSize="14sp" />
 
             </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/AverageOrderToMerchnaText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="আপনার গড় অর্ডার"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/AverageOrderToMerchnat"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_item_unselected_border"
+                android:overlapAnchor="false"
+                android:spinnerMode="dropdown"
+                android:theme="@style/custom_spinner_style"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/AverageOrderToMerchnaText"
+                tools:entries="@array/pick_options" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/cd"
+                app:layout_constraintBottom_toBottomOf="@id/AverageOrderToMerchnat"
+                app:layout_constraintEnd_toEndOf="@id/AverageOrderToMerchnat"
+                app:layout_constraintTop_toTopOf="@id/AverageOrderToMerchnat"
+                app:srcCompat="@drawable/ic_arrow_drop_down" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--       <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal">
+
+
+                   <androidx.constraintlayout.widget.ConstraintLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="2dp"
+                       android:layout_weight="1"
+                       android:orientation="vertical">
+
+                       <TextView
+                           android:id="@+id/marketPositionText"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:text="মারকেটের অবস্থান"
+                           android:textColor="@color/black_80"
+                           android:textStyle="bold"
+                           app:layout_constraintEnd_toEndOf="parent"
+                           app:layout_constraintStart_toStartOf="parent"
+                           app:layout_constraintTop_toTopOf="parent" />
+
+
+                       <androidx.appcompat.widget.AppCompatSpinner
+                           android:id="@+id/marketPositionSpinner"
+                           android:layout_width="match_parent"
+                           android:layout_height="48dp"
+                           android:layout_marginTop="8dp"
+                           android:background="@drawable/bg_item_unselected_border"
+                           android:overlapAnchor="false"
+                           android:spinnerMode="dropdown"
+                           android:theme="@style/custom_spinner_style"
+                           app:layout_constraintBottom_toBottomOf="parent"
+                           app:layout_constraintEnd_toEndOf="parent"
+                           app:layout_constraintStart_toStartOf="parent"
+                           app:layout_constraintTop_toBottomOf="@id/marketPositionText"
+                           tools:entries="@array/pick_options" />
+
+                       <ImageView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginEnd="8dp"
+                           android:contentDescription="@string/cd"
+                           app:layout_constraintBottom_toBottomOf="@id/marketPositionSpinner"
+                           app:layout_constraintEnd_toEndOf="@id/marketPositionSpinner"
+                           app:layout_constraintTop_toTopOf="@id/marketPositionSpinner"
+                           app:srcCompat="@drawable/ic_arrow_drop_down" />
+                   </androidx.constraintlayout.widget.ConstraintLayout>
+
+               </LinearLayout>-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/recommendationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/recommendationText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="সুপারিশ করুন"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recommendationRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recommendationText"
+                tools:itemCount="1"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_view_courier_options"
+                tools:orientation="vertical"
+                tools:spanCount="2">
+
+            </androidx.recyclerview.widget.RecyclerView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -677,11 +1440,10 @@
             android:layout_gravity="center"
             android:layout_margin="24dp"
             android:enabled="true"
-            android:text="@string/submit"
-            android:textSize="16sp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            />
+            android:text="@string/submit"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
