@@ -26,6 +26,7 @@ import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookDat
 import com.bd.deliverytiger.app.api.model.voice_SMS.Message
 import com.bd.deliverytiger.app.api.model.voice_SMS.VoiceSmsAudiRequestBody
 import com.bd.deliverytiger.app.databinding.FragmentLeadManagementBinding
+import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.lead_management.customer_details_bottomsheet.CustomerDetailsBottomSheet
 import com.bd.deliverytiger.app.ui.lead_management.phonebook.PhonebookFormBottomSheet
@@ -218,6 +219,7 @@ class LeadManagementFragment : Fragment() {
 
         binding?.sendSMSBtn?.setOnClickListener {
             if (dataAdapter.getSelectedItemCount() > 0) {
+                UserLogger.logGenie("Chumbok_Send_SMS")
                 goToSmsSendBottomSheet(dataAdapter.getSelectedItemModelList())
             }
         }
@@ -239,6 +241,7 @@ class LeadManagementFragment : Fragment() {
                     selectedNameList.addAll(selectedCustomerList.map { it.customerName ?: "" })
                     selectedVoiceNumberList.clear()
                     selectedVoiceNumberList.addAll(selectedCustomerList.map { "88" + it.mobile })
+                    UserLogger.logGenie("Chumbok_Send_Voice_SMS")
                     goToRecordingBottomSheet()
                 } else {
                     context?.toast("ভয়েস SMS লিমিট শেষ হয়ে গিয়েছে")
@@ -357,6 +360,7 @@ class LeadManagementFragment : Fragment() {
             )
             viewModel.sendVoiceSms(requestBody).observe(viewLifecycleOwner, Observer {
                 context?.toast("Voice SMS Send")
+                UserLogger.logGenie("Chumbok_Send_Voice_SMS_Successfully")
                 updateVoiceSMSCount(selectedNameList.size)
             })
         }

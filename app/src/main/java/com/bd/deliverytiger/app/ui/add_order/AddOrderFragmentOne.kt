@@ -41,6 +41,7 @@ import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceInfoData
 import com.bd.deliverytiger.app.databinding.FragmentAddOrderFragmentOneBinding
+import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionBottomSheet
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationType
 import com.bd.deliverytiger.app.ui.add_order.order_preview.OrderPreviewBottomSheet
@@ -566,6 +567,7 @@ class AddOrderFragmentOne : Fragment() {
             if (deliveryType.isEmpty()) {
                 context?.showToast("ডেলিভারি টাইপ নির্বাচন করুন")
             }else{
+                UserLogger.logGenie("Voucher_apply_open")
                 goToVoucherBottomSheet()
             }
         }

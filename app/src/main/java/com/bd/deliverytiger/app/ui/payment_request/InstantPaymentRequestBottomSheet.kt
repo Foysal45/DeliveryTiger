@@ -26,6 +26,7 @@ import com.bd.deliverytiger.app.api.model.instant_payment_rate.InstantPaymentRat
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantInstantPaymentRequest
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceiveableDetailRequest
 import com.bd.deliverytiger.app.databinding.FragmentInstantPaymentRequestBottomSheetBinding
+import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -108,6 +109,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         binding?.transferBtnLayout?.setOnClickListener {
             alert("", HtmlCompat.fromHtml("<font><b>আপনি কি এখনই টাকা আপনার বিকাশ একাউন্টে (${SessionManager.bkashNumber}) নিতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
                 if (it == AlertDialog.BUTTON_POSITIVE) {
+                    UserLogger.logGenie("Instant_payment_transfer_clicked")
                     instantPaymentRequestAndTransfer(2) // for transfer balance 2
                 }
             }.show()
@@ -117,6 +119,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         binding?.requestBtnLayout?.setOnClickListener {
             alert("",  HtmlCompat.fromHtml("<font><b>আপনি কি রেগুলার পেমেন্ট রিকোয়েস্ট করতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
                 if (it == AlertDialog.BUTTON_POSITIVE) {
+                    UserLogger.logGenie("Regular_payment_Request_Click")
                     instantPaymentRequestAndTransfer(1) // for transfer balance 1
                 }
             }.show()
@@ -193,6 +196,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                             if (model.message == 1){
                                 showLocalNotification("রেগুলার পেমেন্ট","আপনার রিকোয়েস্ট টি সফল হয়েছে।", "")
                                 alert("", "আপনার রিকোয়েস্ট টি সফল হয়েছে।",false, "ঠিক আছে") {
+                                    UserLogger.logGenie("Regular_payment_request_Successfully")
                                     if (it == AlertDialog.BUTTON_POSITIVE) {
                                         onCloseBottomSheet?.invoke()
                                     }
@@ -205,6 +209,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                             if (model.message == 1 && !model.transactionId.isNullOrEmpty()){
                                 showLocalNotification("ইনস্ট্যান্ট পেমেন্ট","টাকা বিকাশে ট্রান্সফার হয়েছে", "")
                                 alert("", "আপনার লেনদেনটি সফলভাবে সম্পন্ন হয়েছে।",false, "ঠিক আছে") {
+                                    UserLogger.logGenie("Instant_payment_transfer_Successfully")
                                     if (it == AlertDialog.BUTTON_POSITIVE) {
                                         onCloseBottomSheet?.invoke()
                                     }
