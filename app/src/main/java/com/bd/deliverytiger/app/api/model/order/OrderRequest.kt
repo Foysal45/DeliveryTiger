@@ -87,5 +87,11 @@ data class OrderRequest(
     @SerializedName("serviceType")
     var serviceType: String = "",
     @SerializedName("isHeavyWeight")
-    var isHeavyWeight: Boolean = false
+    var isHeavyWeight: Boolean = false,
+    @SerializedName("voucherDiscount")
+    var voucherDiscount: Int = 0,
+    @SerializedName("voucherCode")
+    var voucherCode: String = "",
+    @SerializedName("voucherDeliveryRangeId")
+    var voucherDeliveryRangeId: Int = 0
 )

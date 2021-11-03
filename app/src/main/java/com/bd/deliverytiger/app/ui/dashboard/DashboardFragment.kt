@@ -41,6 +41,8 @@ import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleActivity
+import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleBottomSheet
+import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentRequestBottomSheet
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -370,13 +372,22 @@ class DashboardFragment : Fragment() {
         }
         dashboardAdapter.onPaymentRequestClick = { position, model ->
 
+
             if (availability && netAmount > 0) {
                 if (netAmount > instantPaymentOTPLimit) {
                     if (!isOTPRequested) {
                         sendOTP()
                     }
                 } else {
-                    requestPayment()
+                    val tag = InstantPaymentRequestBottomSheet.tag
+                    val dialog = InstantPaymentRequestBottomSheet.newInstance()
+                    dialog.show(childFragmentManager, tag)
+
+                    dialog.onCloseBottomSheet = {
+                        fetchCODData()
+                        fetchCollection()
+                        fetchAcceptedOrder()
+                    }
                 }
             } else {
                 if (availabilityMessage.isEmpty()) {
@@ -800,6 +811,8 @@ class DashboardFragment : Fragment() {
                     this.currentRequestDate = model1.currentRequestDate ?: ""
                     this.currentPaymentAmount = model1.currentPaymentAmount
                     this.currentPaymentStatus = model1.currentPaymentStatus
+                    this.currentPaymentType = model1.paymentType
+                    this.isPaymentProcessing = model1.processing
                 }
                 if (dataList.isNotEmpty()) {
                     dataList.last().apply {
@@ -812,6 +825,8 @@ class DashboardFragment : Fragment() {
                         this.currentRequestDate = model1.currentRequestDate ?: ""
                         this.currentPaymentAmount = model1.currentPaymentAmount
                         this.currentPaymentStatus = model1.currentPaymentStatus
+                        this.currentPaymentType = model1.paymentType
+                        this.isPaymentProcessing = model1.processing
                     }
                     dashboardAdapter.notifyItemChanged(dataList.lastIndex)
                 }
@@ -1089,7 +1104,9 @@ class DashboardFragment : Fragment() {
         viewModel.checkOTP(mobileNumber, otpCode).observe(viewLifecycleOwner, Observer { flag ->
             if (flag) {
                 context?.toast("OTP কোড ভেরিফাইড")
-                requestPayment()
+                val tag = InstantPaymentRequestBottomSheet.tag
+                val dialog = InstantPaymentRequestBottomSheet.newInstance()
+                dialog.show(childFragmentManager, tag)
             } else {
                 context?.toast("OTP কোড সঠিক নয়")
             }

@@ -40,6 +40,8 @@ import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.UpdateOrderReqBody
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackReqBody
+import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantInstantPaymentRequest
+import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceiveableDetailRequest
 import com.bd.deliverytiger.app.api.model.payment_statement.PaymentDetailsRequest
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
@@ -53,6 +55,7 @@ import com.bd.deliverytiger.app.api.model.service_bill_pay.MonthlyReceivableUpda
 import com.bd.deliverytiger.app.api.model.service_selection.ServiceDistrictsRequest
 import com.bd.deliverytiger.app.api.model.sms.SMSModel
 import com.bd.deliverytiger.app.api.model.voice_SMS.VoiceSmsAudiRequestBody
+import com.bd.deliverytiger.app.api.model.voucher.VoucherCheckRequest
 import com.bd.deliverytiger.app.database.AppDatabase
 import com.bd.deliverytiger.app.database.dao.DistrictDao
 import com.bd.deliverytiger.app.database.dao.NotificationDao
@@ -232,6 +235,8 @@ class AppRepository(
 
     suspend fun updateInstantPaymentRequest(courierUserId: Int) = apiInterfaceADM.updateInstantPaymentRequest(courierUserId)
 
+    suspend fun getInstantPaymentRate() = apiInterfaceADM.getInstantPaymentRate()
+
     suspend fun fetchMerchantCurrentAdvanceBalance(courierUserId: Int) = apiInterfaceADM.fetchMerchantCurrentAdvanceBalance(courierUserId)
 
     suspend fun fetchDTMerchantInstantPaymentStatus(courierUserId: Int) = apiInterfaceADM.fetchDTMerchantInstantPaymentStatus(courierUserId)
@@ -241,6 +246,10 @@ class AppRepository(
     suspend fun getComplainHistory(bookingCode: Int, isVisibleToMerchant: Int) = apiInterfaceADM.getComplainHistory(bookingCode, isVisibleToMerchant)
 
     suspend fun merchantBalanceLoadHistory(merchantID: Int) = apiInterfaceADM.merchantBalanceLoadHistory(merchantID)
+
+    suspend fun merchantPayableReceiveableDetailForInstantPayment(requestBody: MerchantPayableReceiveableDetailRequest) = apiInterfaceADM.merchantPayableReceiveableDetailForInstantPayment(requestBody)
+
+    suspend fun instantOr24hourPayment(requestBody: MerchantInstantPaymentRequest) = apiInterfaceADM.instantOr24hourPayment(requestBody)
 
     suspend fun fetchCourierList() = apiInterfaceCore.fetchCourierList()
 
@@ -412,6 +421,12 @@ class AppRepository(
     //#region Infobip Voice SMS
 
     suspend fun sendVoiceSms(requestBody: VoiceSmsAudiRequestBody) = apiInterfaceINFOBIP.sendVoiceSms(requestBody)
+
+    //#endregion
+
+    //#region Voucher
+
+    suspend fun checkVoucher(requestBody: VoucherCheckRequest) = apiInterfaceCore.checkVoucher(requestBody)
 
     //#endregion
 }

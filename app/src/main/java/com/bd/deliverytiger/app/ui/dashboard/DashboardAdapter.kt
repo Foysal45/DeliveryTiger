@@ -2,7 +2,6 @@ package com.bd.deliverytiger.app.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
@@ -18,8 +17,6 @@ import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.databinding.ItemViewDashboardPaymentBinding
 import com.bd.deliverytiger.app.databinding.ItemViewDashboardUnpaidCodBinding
 import com.bd.deliverytiger.app.utils.DigitConverter
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class DashboardAdapter(private val mContext: Context?, private var dataList: MutableList<DashboardData>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -169,13 +166,22 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
                         .replace("PM", "pm") // (2.28 pm, 28 Feb)
                     binding.paymentAmount.text = "৳ ${DigitConverter.toBanglaDigit(model.currentPaymentAmount, true)}"
                     binding.paymentTime.text = "($requestTime)"
-                    binding.paymentMessage.text = "${DigitConverter.toBanglaDigit(model.paymentProcessingTime)} ঘণ্টার মধ্যে পেমেন্ট\nবিকাশ নাম্বারে ট্রান্সফার হবে"
+                    if (model.currentPaymentType == 1){
+                        binding.paymentMessage.text = "${DigitConverter.toBanglaDigit(model.paymentProcessingTime)} ঘণ্টার মধ্যে পেমেন্ট\nবিকাশ নাম্বারে ট্রান্সফার হবে"
+                    }else if (model.currentPaymentType == 2){
+                        if (model.isPaymentProcessing == 0){
+                            binding.paymentMessage.text = "টাকা বিকাশে ট্রান্সফার হয়েছে"
+                        }else{
+                            binding.paymentMessage.text = "পেমেন্টটি প্রসেসিং এ আছে\nঅনুগ্রহ পূর্বক একাউন্টস ডিপার্মেন্ট এ যোগাযোগ করুন।"
+                        }
+
+                        binding.countTV.text = "৳ ${DigitConverter.toBanglaDigit(0, true)}"
+                    }
                     binding.paymentMessageLayout.isVisible = true
                 } else {
                     binding.paymentMessageLayout.isVisible = false
                 }
             }
-
         }
     }
 
@@ -218,9 +224,6 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
                 if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
                     onPaymentRequestClick?.invoke(absoluteAdapterPosition, dataList[absoluteAdapterPosition])
                 }
-            }
-            binding.paymentMessageLayout.setOnClickListener {
-
             }
         }
     }

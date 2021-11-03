@@ -103,6 +103,12 @@ class PaymentStatementDetailFragment : Fragment() {
             binding?.totalCollectionAmount?.text = "${DigitConverter.toBanglaDigit(model?.netCollectedAmount.toString())} ৳"
             binding?.totalCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.netTotalCharge.toString())} ৳"
             binding?.totalAdjustment?.text = "- ${DigitConverter.toBanglaDigit(model?.netAdjustedAmount.toString())} ৳"
+            if (model.iPCharge > 0){
+                binding?.key10?.isVisible = true
+                binding?.instantPaymentCharge?.isVisible = true
+                binding?.instantPaymentCharge?.text = "- ${DigitConverter.toBanglaDigit(model?.iPCharge.toString())} ৳"
+            }
+
             if ((model?.netAdvanceReceivable ?: 0) > 0) {
                 binding?.key9?.isVisible = true
                 binding?.adjustmentReceivable?.isVisible = true

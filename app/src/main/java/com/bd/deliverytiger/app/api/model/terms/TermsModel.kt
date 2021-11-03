@@ -8,6 +8,8 @@ data class TermsModel(
     var id: Int = 0,
     @SerializedName("termsConditions")
     var termsConditions: String? = "",
+    @SerializedName("voucherTermsConditions")
+    var voucherTermsConditions: String? = "",
     @SerializedName("registerTermsConditions")
     var registerTermsConditions: String? = ""
 )

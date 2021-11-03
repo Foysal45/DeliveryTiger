@@ -12,10 +12,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatSpinner
@@ -33,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
+import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.api.model.district.DistrictData
 import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.location.LocationData
@@ -47,6 +45,8 @@ import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionBo
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationType
 import com.bd.deliverytiger.app.ui.add_order.order_preview.OrderPreviewBottomSheet
 import com.bd.deliverytiger.app.ui.add_order.service_wise_bottom_sheet.ServicesSelectionBottomSheet
+import com.bd.deliverytiger.app.ui.add_order.voucher.VoucherBottomSheet
+import com.bd.deliverytiger.app.ui.add_order.voucher.VoucherInformationBottomSheet
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.utils.*
@@ -86,6 +86,8 @@ class AddOrderFragmentOne : Fragment() {
     private lateinit var checkTerms: AppCompatCheckBox
     private lateinit var checkTermsTV: TextView
     private lateinit var deliveryTypeRV: RecyclerView
+    private lateinit var voucherLayoutButton: LinearLayout
+    private lateinit var voucherInfoButton: LinearLayout
     private lateinit var deliveryButton: LinearLayout
     private lateinit var deliveryTakaButton: LinearLayout
     private lateinit var togglePickupGroup: MaterialButtonToggleGroup
@@ -174,6 +176,12 @@ class AddOrderFragmentOne : Fragment() {
     private var offerType: String = ""
     private var relationType: String = ""
 
+    //Voucher
+    private var voucherDiscount = 0.0
+    private var isVoucherApplied: Boolean = false
+    private var voucherCode: String = ""
+    private var voucherDeliveryRangeId: Int = 0
+
     private var deliveryType: String = ""
     private var orderType: String = "Only Delivery"
     private var productType: String = "small"
@@ -260,6 +268,8 @@ class AddOrderFragmentOne : Fragment() {
         checkTerms = view.findViewById(R.id.check_terms_condition)
         checkTermsTV = view.findViewById(R.id.check_terms_condition_text)
         deliveryTypeRV = view.findViewById(R.id.delivery_type_selection_rV)
+        voucherLayoutButton = view.findViewById(R.id.voucherLayout)
+        voucherInfoButton = view.findViewById(R.id.voucherInfo)
         deliveryButton = view.findViewById(R.id.deliveryPrepaidTypeLayout)
         deliveryTakaButton = view.findViewById(R.id.deliveryTakaCollectionTypeLayout)
         togglePickupGroup = view.findViewById(R.id.toggleButtonPickupGroup)
@@ -419,6 +429,7 @@ class AddOrderFragmentOne : Fragment() {
                 alert("নির্দেশনা", "ভঙ্গুর/তরল পার্সেলের ডেলিভারি নেক্সট ডে সম্ভব হবে না", false).show()
             }*/
 
+            clearVoucher()
             calculateTotalPrice()
             fetchCollectionTimeSlot()
 
@@ -514,6 +525,7 @@ class AddOrderFragmentOne : Fragment() {
                 putString("productType", productType)
                 putDouble("total", total)
                 putBoolean("isBreakable", isBreakable)
+                putDouble("voucherDiscount", voucherDiscount)
             }
 
             val detailsSheet = DetailsBottomSheet.newInstance(bundle)
@@ -548,6 +560,18 @@ class AddOrderFragmentOne : Fragment() {
             Timber.d("selectedDate $selectedDate")
             isTodaySelected = true
             fetchCollectionTimeSlot()
+        }
+
+        voucherLayoutButton?.setOnClickListener {
+            if (deliveryType.isEmpty()) {
+                context?.showToast("ডেলিভারি টাইপ নির্বাচন করুন")
+            }else{
+                goToVoucherBottomSheet()
+            }
+        }
+
+        voucherInfoButton?.setOnClickListener {
+            goToVoucherInformationBottomSheet()
         }
 
         binding?.collectionTomorrow?.setOnClickListener {
@@ -1569,9 +1593,9 @@ class AddOrderFragmentOne : Fragment() {
 
         //val payReturnCharge = SessionManager.returnCharge
         if (isCheckBigProduct) {
-            total = payDeliveryCharge + payCODCharge + payCollectionCharge + payPackagingCharge + bigProductCharge
+            total = payDeliveryCharge + payCODCharge + payCollectionCharge + payPackagingCharge + bigProductCharge - voucherDiscount
         } else {
-            total = payDeliveryCharge + payCODCharge + payCollectionCharge + payPackagingCharge
+            total = payDeliveryCharge + payCODCharge + payCollectionCharge + payPackagingCharge - voucherDiscount
         }
 
         //   total = payDeliveryCharge + payCODCharge + payCollectionCharge + payPackagingCharge
@@ -1628,7 +1652,7 @@ class AddOrderFragmentOne : Fragment() {
             payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,
             "android", SessionManager.versionName, true, collectionDistrictId, collectionThanaId,
             deliveryDate, collectionDate, isOfficeDrop, payActualPackagePrice, timeSlotId, selectedCollectionSlotDate,
-            offerType, relationType, serviceType, isHeavyWeight
+            offerType, relationType, serviceType, isHeavyWeight, voucherDiscount.toInt() ?: 0, voucherCode, voucherDeliveryRangeId
         )
 
 
@@ -1817,6 +1841,36 @@ class AddOrderFragmentOne : Fragment() {
         }*/
 
         return true
+    }
+
+    private fun goToVoucherBottomSheet() {
+        val tag: String = VoucherBottomSheet.tag
+        val dialog: VoucherBottomSheet = VoucherBottomSheet.newInstance(deliveryRangeId)
+        dialog.show(childFragmentManager, tag)
+        dialog.onVoucherApplied = { model, isVoucherApplied->
+            this.isVoucherApplied = isVoucherApplied
+            if (this.isVoucherApplied){
+                voucherLayoutButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.dotted_selected)
+            }
+            voucherDiscount = model.voucherDiscount
+            voucherCode = model.voucherCode
+            voucherDeliveryRangeId = model.deliveryRangeId
+            calculateTotalPrice()
+        }
+    }
+
+    private fun clearVoucher(){
+        this.isVoucherApplied = false
+        voucherLayoutButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.dotted_voucher)
+        voucherDiscount = 0.0
+        voucherCode = ""
+        voucherDeliveryRangeId = 0
+    }
+
+    private fun goToVoucherInformationBottomSheet() {
+        val tag: String = VoucherInformationBottomSheet.tag
+        val dialog: VoucherInformationBottomSheet = VoucherInformationBottomSheet.newInstance()
+        dialog.show(childFragmentManager, tag)
     }
 
     private fun goToOrderPreviewBottomSheet(data: OrderPreviewData) {

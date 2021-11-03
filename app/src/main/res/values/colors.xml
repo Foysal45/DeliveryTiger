@@ -118,4 +118,15 @@
     <color name="file_send_background">#EFEFEF</color>
     <color name="unread_background">#e6f6ed</color>
     <color name="read_background">#ffffff</color>
+
+    <color name="cod_bg_one">#626366</color>
+    <color name="cod_bg_two">#626366</color>
+    <color name="cod_bg_three">#00834A</color>
+    <color name="cod_bg_four">#FAD2BD</color>
+    <color name="cod_bg_five">#FFEFE6</color>
+    <color name="cod_bg_six">#EC6639</color>
+    <color name="cod_bg_seven">#B1C8B2</color>
+    <color name="cod_bg_eight">#ECF1EB</color>
+    <color name="cod_bg_nine">#00834A</color>
+    <color name="cod_bg_ten">#626366</color>
 </resources>
