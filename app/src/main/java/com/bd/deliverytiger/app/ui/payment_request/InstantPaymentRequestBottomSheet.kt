@@ -116,6 +116,10 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             }.show()
         }
 
+        binding?.chargeInfo?.setOnClickListener {
+
+        }
+
     }
 
 
