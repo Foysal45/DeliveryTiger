@@ -527,6 +527,7 @@ class AddOrderFragmentOne : Fragment() {
                 putDouble("total", total)
                 putBoolean("isBreakable", isBreakable)
                 putDouble("voucherDiscount", voucherDiscount)
+                putString("voucherCode", voucherCode)
             }
 
             val detailsSheet = DetailsBottomSheet.newInstance(bundle)
@@ -1853,6 +1854,9 @@ class AddOrderFragmentOne : Fragment() {
             this.isVoucherApplied = isVoucherApplied
             if (this.isVoucherApplied){
                 voucherLayoutButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.dotted_selected)
+                binding?.voucherText?.text = "${model.voucherCode}   -৳ ${model.voucherDiscount}"
+            }else{
+                binding?.voucherText?.text = "ডিসকাউন্ট ভাউচার এপ্লাই করুন"
             }
             voucherDiscount = model.voucherDiscount
             voucherCode = model.voucherCode

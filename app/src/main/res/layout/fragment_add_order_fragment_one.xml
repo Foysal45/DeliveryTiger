@@ -995,9 +995,10 @@
                             android:contentDescription="@string/cd" />
 
                         <TextView
+                            android:id="@+id/voucherText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/voucher"
+                            tools:text="@string/voucher"
                             android:layout_gravity="center_vertical"
                             android:textColor="@color/black_90"/>
 

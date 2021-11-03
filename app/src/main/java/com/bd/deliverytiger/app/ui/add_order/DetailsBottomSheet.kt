@@ -30,6 +30,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
     private var bigProductCharge: Double = 0.0
     private var total: Double = 0.0
     private var voucherDiscount: Double = 0.0
+    private var voucherCode: String = ""
     private var productType: String = ""
     private var isBreakable: Boolean = false
 
@@ -70,6 +71,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
                 total = getDouble("total", 0.0)
                 isBreakable = getBoolean("isBreakable", false)
                 voucherDiscount = getDouble("voucherDiscount", 0.0)
+                voucherCode = getString("voucherCode", "")
             }
         }
 
@@ -81,8 +83,12 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
         binding?.collectionChargeTV?.text = "${DigitConverter.toBanglaDigit(payCollectionCharge, true)} ৳"
         binding?.packagingChargeTV?.text = "${DigitConverter.toBanglaDigit(payPackagingCharge, true)} ৳"
         binding?.totalTV?.text = "${DigitConverter.toBanglaDigit(total, true)} ৳"
-        binding?.voucherDiscountTV?.text = "${DigitConverter.toBanglaDigit(voucherDiscount, true)} ৳"
+        binding?.voucherDiscountTV?.text = "-${DigitConverter.toBanglaDigit(voucherDiscount, true)} ৳"
         binding?.shipmentAfterDiscountTV?.text = "${DigitConverter.toBanglaDigit(deliveryCharge - voucherDiscount, true)} ৳"
+
+        if (!voucherCode.isNullOrEmpty()){
+            binding?.voucherDiscountTitle?.text = "${DigitConverter.toBanglaDigit(voucherCode)}"
+        }
 
         if (isBreakable) {
             binding?.detailsItem5?.text = "এক্সট্রা প্যাকেজিং চার্জ (তরল/ভঙ্গুর প্রোডাক্টের জন্য)"
