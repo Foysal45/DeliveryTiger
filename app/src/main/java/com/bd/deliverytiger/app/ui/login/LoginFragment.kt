@@ -4,21 +4,15 @@ package com.bd.deliverytiger.app.ui.login
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.widget.AppCompatCheckBox
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.RetrofitSingleton
@@ -36,7 +30,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
-
 
 /**
  * A simple [Fragment] subclass.
@@ -56,6 +49,7 @@ class LoginFragment: Fragment() {
     private lateinit var loginBtn: MaterialButton
     private lateinit var forgotPasswordTV: TextView
     private lateinit var signUpTV: TextView
+    private lateinit var toggleVisibilityPassword: ImageButton
     //private lateinit var checkRememberMe: AppCompatCheckBox
     private var sendOTP = false
     private var isSessionOut = false
@@ -86,6 +80,7 @@ class LoginFragment: Fragment() {
         mobileET = view.findViewById(R.id.etLoginMobileNo)
         passwordET = view.findViewById(R.id.etLoginPassword)
         loginBtn = view.findViewById(R.id.btnLogin)
+        toggleVisibilityPassword = view.findViewById(R.id.toggleVisibilityPassword)
         forgotPasswordTV = view.findViewById(R.id.tvLoginForgotPassword)
         signUpTV = view.findViewById(R.id.tvLoginSignUp)
         //checkRememberMe = view.findViewById(R.id.login_checkBox_remember_me)
@@ -149,6 +144,19 @@ class LoginFragment: Fragment() {
         signUpTV.setOnClickListener {
             goToSignUp()
             UserLogger.logGenie("Registration_start")
+        }
+
+        var tempSwitch = false
+        toggleVisibilityPassword.setOnClickListener {
+            if(tempSwitch){
+                toggleVisibilityPassword.setImageDrawable(resources.getDrawable(R.drawable.ic_eye_hidden))
+                tempSwitch = false
+                passwordET.transformationMethod = null
+            }else{
+                tempSwitch = true
+                passwordET.transformationMethod = PasswordTransformationMethod()
+                toggleVisibilityPassword.setImageDrawable(resources.getDrawable(R.drawable.ic_eye_visible))
+            }
         }
 
         if (SessionManager.isRememberMe){

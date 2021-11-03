@@ -123,52 +123,85 @@
                         android:layout_height="1px"
                         android:background="@color/login_title_color" />
 
-                    <EditText
-                        android:id="@+id/etSignUpPassword"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/login_view_height"
-                        android:background="@drawable/bg_login_middle_edit_text"
-                        android:hint="পাসওয়ার্ড"
-                        android:importantForAutofill="no"
-                        android:inputType="textPassword"
-                        android:maxLength="30"
-                        android:paddingStart="16dp"
-                        android:paddingTop="8dp"
-                        android:paddingEnd="16dp"
-                        android:paddingBottom="8dp"
-                        android:textColor="@color/black_80"
-                        android:textSize="@dimen/text_14"
-                        app:drawableEndCompat="@drawable/ic_star"
-                        app:drawableTint="@color/red"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etSignUpMobileNo" />
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:layout_weight="1"
+                            android:id="@+id/etSignUpPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/login_view_height"
+                            android:background="@drawable/bg_login_middle_edit_text"
+                            android:hint="পাসওয়ার্ড"
+                            android:importantForAutofill="no"
+                            android:inputType="textPassword"
+                            android:maxLength="30"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:paddingEnd="16dp"
+                            android:paddingBottom="8dp"
+                            android:textColor="@color/black_80"
+                            android:textSize="@dimen/text_14"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/etSignUpMobileNo" />
+                        <ImageButton
+                            android:layout_marginEnd="5dp"
+                            android:id="@+id/toggleVisibilityPasswordFirstTime"
+                            android:layout_width="30dp"
+                            android:background="#00000000"
+                            android:src="@drawable/ic_eye_visible"
+                            android:scaleType="fitXY"
+                            app:tint="@color/gray_500"
+                            android:adjustViewBounds="true"
+                            android:layout_gravity="center"
+                            android:layout_height="30dp"/>
+                    </LinearLayout>
+
+
+
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:background="@color/login_title_color" />
-
-                    <EditText
-                        android:id="@+id/etSignUpConfirmPassword"
+                    <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/login_view_height"
-                        android:background="@drawable/bg_login_bottom_edit_text"
-                        android:hint="পুনরায় পাসওয়ার্ড"
-                        android:importantForAutofill="no"
-                        android:inputType="textPassword"
-                        android:maxLength="30"
-                        android:paddingStart="16dp"
-                        android:paddingTop="8dp"
-                        android:paddingEnd="16dp"
-                        android:paddingBottom="8dp"
-                        android:textColor="@color/black_80"
-                        android:textSize="@dimen/text_14"
-                        app:drawableEndCompat="@drawable/ic_star"
-                        app:drawableTint="@color/red"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etSignUpPassword" />
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:layout_weight="1"
+                            android:id="@+id/etSignUpConfirmPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/login_view_height"
+                            android:background="@drawable/bg_login_bottom_edit_text"
+                            android:hint="পুনরায় পাসওয়ার্ড"
+                            android:importantForAutofill="no"
+                            android:inputType="textPassword"
+                            android:maxLength="30"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:paddingEnd="16dp"
+                            android:paddingBottom="8dp"
+                            android:textColor="@color/black_80"
+                            android:textSize="@dimen/text_14"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/etSignUpPassword" />
+
+                        <ImageButton
+                            android:layout_marginEnd="5dp"
+                            android:id="@+id/toggleVisibilityPasswordSecondTime"
+                            android:layout_width="30dp"
+                            android:layout_height="26dp"
+                            android:layout_gravity="center"
+                            android:adjustViewBounds="true"
+                            android:background="#00000000"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_eye_visible"
+                            app:tint="@color/gray_500" />
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
