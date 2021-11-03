@@ -5,6 +5,7 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,14 +24,12 @@ import com.bd.deliverytiger.app.api.endpoint.OtherApiInterface
 import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.category.CategoryData
 import com.bd.deliverytiger.app.api.model.category.SubCategoryData
-import com.bd.deliverytiger.app.api.model.district.DistrictData
 import com.bd.deliverytiger.app.api.model.location.LocationData
 import com.bd.deliverytiger.app.api.model.login.*
 import com.bd.deliverytiger.app.api.model.terms.TermsModel
 import com.bd.deliverytiger.app.databinding.FragmentSignUpBinding
 import com.bd.deliverytiger.app.enums.CategoryType
 import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationSelectionBottomSheet
-import com.bd.deliverytiger.app.ui.add_order.district_dialog.LocationType
 import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.VariousTask.hideSoftKeyBoard
 import com.bd.deliverytiger.app.utils.VariousTask.showShortToast
@@ -212,6 +211,31 @@ class SignUpFragment() : Fragment(), View.OnClickListener {
             }
 
         }*/
+        var tempSwitch1 = false
+        binding?.toggleVisibilityPasswordFirstTime?.setOnClickListener {
+            if(tempSwitch1){
+                binding?.toggleVisibilityPasswordFirstTime?.setImageDrawable(resources.getDrawable(R.drawable.ic_eye_hidden))
+                tempSwitch1 = false
+                binding?.etSignUpPassword?.transformationMethod = null
+            }else{
+                tempSwitch1 = true
+                binding?.etSignUpPassword?.transformationMethod = PasswordTransformationMethod()
+                binding?.toggleVisibilityPasswordFirstTime?.setImageDrawable(resources.getDrawable(R.drawable.ic_eye_visible))
+            }
+        }
+
+        var tempSwitch2 = false
+        binding?.toggleVisibilityPasswordSecondTime?.setOnClickListener {
+            if(tempSwitch2){
+                binding?.toggleVisibilityPasswordSecondTime?.setImageDrawable(resources.getDrawable(R.drawable.ic_eye_hidden))
+                tempSwitch2 = false
+                binding?.etSignUpConfirmPassword?.transformationMethod = null
+            }else{
+                tempSwitch2 = true
+                binding?.etSignUpConfirmPassword?.transformationMethod = PasswordTransformationMethod()
+                binding?.toggleVisibilityPasswordSecondTime?.setImageDrawable(resources.getDrawable(R.drawable.ic_eye_visible))
+            }
+        }
     }
 
     override fun onClick(p0: View?) {
