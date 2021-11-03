@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bd.deliverytiger.app.api.model.loan_survey.CourierModel
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
+import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBodyV2
 import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
@@ -110,9 +111,9 @@ class LoanSurveryViewModel(private val repository: AppRepository) : ViewModel() 
         return responseData
     }
 
-    fun submitLoanSurvey(requestBody: LoanSurveyRequestBody): LiveData<LoanSurveyRequestBody> {
+    fun submitLoanSurvey(requestBody: LoanSurveyRequestBodyV2): LiveData<LoanSurveyRequestBodyV2> {
 
-        val responseData: MutableLiveData<LoanSurveyRequestBody> = MutableLiveData()
+        val responseData: MutableLiveData<LoanSurveyRequestBodyV2> = MutableLiveData()
 
         viewState.value = ViewState.ProgressState(true)
         viewModelScope.launch(Dispatchers.IO) {
