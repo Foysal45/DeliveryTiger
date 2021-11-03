@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="ইনস্ট্যান্ট পেমেন্ট "
+                android:text="ইনস্ট্যান্ট পেমেন্ট"
                 android:textColor="@color/cod_bg_ten"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -161,7 +161,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="রেগুলার পেমেন্ট "
+                android:text="রেগুলার পেমেন্ট"
                 android:textColor="@color/cod_bg_ten"
                 android:textSize="18sp"
                 android:textStyle="bold"

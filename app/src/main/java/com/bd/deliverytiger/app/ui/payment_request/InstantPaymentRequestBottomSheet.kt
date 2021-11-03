@@ -42,6 +42,8 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
     private var model: InstantPaymentRateModel = InstantPaymentRateModel()
 
+    private val notificationId: Int = 100032
+
     var onCloseBottomSheet: (() -> Unit)? = null
 
 
@@ -71,7 +73,6 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         initClickLister()
         fetchData()
-        showLocalNotification("", "test", "")
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -190,7 +191,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                     when (paymentType) {
                         1 -> {
                             if (model.message == 1){
-                                showLocalNotification("","আপনার রিকোয়েস্ট টি সফল হয়েছে।", "")
+                                showLocalNotification("রেগুলার পেমেন্ট","আপনার রিকোয়েস্ট টি সফল হয়েছে।", "")
                                 alert("", "আপনার রিকোয়েস্ট টি সফল হয়েছে।",false, "ঠিক আছে") {
                                     if (it == AlertDialog.BUTTON_POSITIVE) {
                                         onCloseBottomSheet?.invoke()
@@ -202,7 +203,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                         }
                         2 -> {
                             if (model.message == 1 && !model.transactionId.isNullOrEmpty()){
-                                showLocalNotification("","টাকা বিকাশে ট্রান্সফার হয়েছে", "")
+                                showLocalNotification("ইনস্ট্যান্ট পেমেন্ট","টাকা বিকাশে ট্রান্সফার হয়েছে", "")
                                 alert("", "আপনার লেনদেনটি সফলভাবে সম্পন্ন হয়েছে।",false, "ঠিক আছে") {
                                     if (it == AlertDialog.BUTTON_POSITIVE) {
                                         onCloseBottomSheet?.invoke()
@@ -274,7 +275,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             title, body, createLocalPendingIntent(theData)
         )
 
-        notificationManager.notify(1001, builder.build())
+        notificationManager.notify(notificationId, builder.build())
     }
 
     private fun createLocalPendingIntent(theData: String): PendingIntent {
