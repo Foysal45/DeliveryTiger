@@ -22,11 +22,12 @@ import kotlin.concurrent.thread
 class VoucherBottomSheet : BottomSheetDialogFragment() {
 
     private var binding: FragmentVoucherBottomSheetBinding? = null
-    var onVoucherApplied: ((model: VoucherCheckResponse) -> Unit)? = null
+    var onVoucherApplied: ((model: VoucherCheckResponse, isVoucherApplied: Boolean) -> Unit)? = null
 
     private val viewModel: VoucherViewModel by inject()
 
     private var deliveryRangeId: Int = 0
+    private var isVoucherApplied: Boolean = false
 
     companion object {
 
@@ -62,9 +63,11 @@ class VoucherBottomSheet : BottomSheetDialogFragment() {
                 viewModel.checkVoucher(requestBody).observe(viewLifecycleOwner, Observer { response->
                     if (response.message.isEmpty()){
                         context?.toast("সফলভাবে এপ্লাই করা হয়েছে")
-                        onVoucherApplied?.invoke(response.model)
+                        isVoucherApplied = true
+                        onVoucherApplied?.invoke(response.model, isVoucherApplied)
                         dismiss()
                     }else{
+                        isVoucherApplied = false
                         context?.toast(response.message)
                     }
                 })

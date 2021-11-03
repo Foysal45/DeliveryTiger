@@ -176,7 +176,9 @@ class AddOrderFragmentOne : Fragment() {
     private var offerType: String = ""
     private var relationType: String = ""
 
+    //Voucher
     private var voucherDiscount = 0.0
+    private var isVoucherApplied: Boolean = false
     private var voucherCode: String = ""
     private var voucherDeliveryRangeId: Int = 0
 
@@ -427,6 +429,7 @@ class AddOrderFragmentOne : Fragment() {
                 alert("নির্দেশনা", "ভঙ্গুর/তরল পার্সেলের ডেলিভারি নেক্সট ডে সম্ভব হবে না", false).show()
             }*/
 
+            clearVoucher()
             calculateTotalPrice()
             fetchCollectionTimeSlot()
 
@@ -1844,12 +1847,24 @@ class AddOrderFragmentOne : Fragment() {
         val tag: String = VoucherBottomSheet.tag
         val dialog: VoucherBottomSheet = VoucherBottomSheet.newInstance(deliveryRangeId)
         dialog.show(childFragmentManager, tag)
-        dialog.onVoucherApplied = { model->
+        dialog.onVoucherApplied = { model, isVoucherApplied->
+            this.isVoucherApplied = isVoucherApplied
+            if (this.isVoucherApplied){
+                voucherLayoutButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.dotted_selected)
+            }
             voucherDiscount = model.voucherDiscount
             voucherCode = model.voucherCode
             voucherDeliveryRangeId = model.deliveryRangeId
             calculateTotalPrice()
         }
+    }
+
+    private fun clearVoucher(){
+        this.isVoucherApplied = false
+        voucherLayoutButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.dotted_voucher)
+        voucherDiscount = 0.0
+        voucherCode = ""
+        voucherDeliveryRangeId = 0
     }
 
     private fun goToVoucherInformationBottomSheet() {

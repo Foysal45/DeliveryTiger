@@ -812,6 +812,7 @@ class DashboardFragment : Fragment() {
                     this.currentPaymentAmount = model1.currentPaymentAmount
                     this.currentPaymentStatus = model1.currentPaymentStatus
                     this.currentPaymentType = model1.paymentType
+                    this.isPaymentProcessing = model1.processing
                 }
                 if (dataList.isNotEmpty()) {
                     dataList.last().apply {
@@ -825,6 +826,7 @@ class DashboardFragment : Fragment() {
                         this.currentPaymentAmount = model1.currentPaymentAmount
                         this.currentPaymentStatus = model1.currentPaymentStatus
                         this.currentPaymentType = model1.paymentType
+                        this.isPaymentProcessing = model1.processing
                     }
                     dashboardAdapter.notifyItemChanged(dataList.lastIndex)
                 }

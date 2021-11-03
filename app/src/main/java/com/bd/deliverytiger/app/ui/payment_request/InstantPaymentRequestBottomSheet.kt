@@ -106,7 +106,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     private fun initClickLister(){
 
         binding?.transferBtnLayout?.setOnClickListener {
-            alert("", HtmlCompat.fromHtml("<font><b>আপনি কি এখনই টাকা আপনার বিকাশ একাউন্টে (${SessionManager.bkashNumber}) নিতে চান?।</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
+            alert("", HtmlCompat.fromHtml("<font><b>আপনি কি এখনই টাকা আপনার বিকাশ একাউন্টে (${SessionManager.bkashNumber}) নিতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
                 if (it == AlertDialog.BUTTON_POSITIVE) {
                     instantPaymentRequestAndTransfer(2) // for transfer balance 2
                 }
@@ -115,7 +115,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         }
 
         binding?.requestBtnLayout?.setOnClickListener {
-            alert("",  HtmlCompat.fromHtml("<font><b>আপনি কি রেগুলার পেমেন্ট রিকোয়েস্ট করতে চান।</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
+            alert("",  HtmlCompat.fromHtml("<font><b>আপনি কি রেগুলার পেমেন্ট রিকোয়েস্ট করতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
                 if (it == AlertDialog.BUTTON_POSITIVE) {
                     instantPaymentRequestAndTransfer(1) // for transfer balance 1
                 }
