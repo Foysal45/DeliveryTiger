@@ -335,6 +335,9 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         checkTermsTV.text = HtmlCompat.fromHtml("আমি <font color='#00844A'>শর্তাবলী</font> মেনে নিলাম", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        if (!isVoucherApplied){
+            binding?.voucherText?.text = "ডিসকাউন্ট ভাউচার এপ্লাই করুন"
+        }
 
         val calender = Calendar.getInstance()
         val todayDate = calender.timeInMillis
@@ -1855,8 +1858,6 @@ class AddOrderFragmentOne : Fragment() {
             if (this.isVoucherApplied){
                 voucherLayoutButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.dotted_selected)
                 binding?.voucherText?.text = "${model.voucherCode}   -৳ ${model.voucherDiscount}"
-            }else{
-                binding?.voucherText?.text = "ডিসকাউন্ট ভাউচার এপ্লাই করুন"
             }
             voucherDiscount = model.voucherDiscount
             voucherCode = model.voucherCode
