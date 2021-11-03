@@ -10,6 +10,7 @@ import com.bd.deliverytiger.app.api.model.complain.ComplainData
 import com.bd.deliverytiger.app.api.model.complain.ComplainHistoryData
 import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
+import com.bd.deliverytiger.app.api.model.instant_payment_rate.InstantPaymentRateModel
 import com.bd.deliverytiger.app.api.model.instant_payment_status.InstantPaymentStatusData
 import com.bd.deliverytiger.app.api.model.instant_payment_status.InstantPaymentActivationStatusResponse
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
@@ -90,6 +91,9 @@ interface ApiInterfaceADM {
 
     @GET("api/account/reports/MerchantBalanceLoadHistory/{merchantID}")
     suspend fun merchantBalanceLoadHistory(@Path("merchantID") merchantID: Int): NetworkResponse<List<BalanceLoadHistoryData>, ErrorResponse>
+
+    @GET("api/account/reports/GetInstantPaymentRate")
+    suspend fun getInstantPaymentRate(): NetworkResponse<InstantPaymentRateModel, ErrorResponse>
 
     @POST("api/account/reports/MerchantPayableReceiveableDetailForInstantPaymentFromApp")
     suspend fun merchantPayableReceiveableDetailForInstantPayment(@Body requestBody: MerchantPayableReceiveableDetailRequest): NetworkResponse<MerchantPayableReceivableDetailResponse, ErrorResponse>

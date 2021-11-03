@@ -6,20 +6,23 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.DisplayMetrics
+import android.view.*
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.instant_payment_rate.InstantPaymentRateModel
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantInstantPaymentRequest
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceiveableDetailRequest
 import com.bd.deliverytiger.app.databinding.FragmentInstantPaymentRequestBottomSheetBinding
@@ -36,6 +39,8 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     private var binding: FragmentInstantPaymentRequestBottomSheetBinding? = null
 
     private val viewModel: InstantPaymentUpdateViewModel by inject()
+
+    private var model: InstantPaymentRateModel = InstantPaymentRateModel()
 
     var onCloseBottomSheet: (() -> Unit)? = null
 
@@ -117,12 +122,13 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         }
 
         binding?.chargeInfo?.setOnClickListener {
-
+            if (model.charge.isNotEmpty() && model.discount.isNotEmpty()){
+                viewInstantPaymentRateDialog(model)
+            } else{
+                context?.toast("কোন তথ্য পাওয়া যায়নি!")
+            }
         }
-
     }
-
-
 
     private fun fetchData(){
         val requestBody = MerchantPayableReceiveableDetailRequest(SessionManager.courierUserId, 0)
@@ -134,6 +140,32 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                 initData()
             }
         })
+
+        viewModel.getInstantPaymentRate().observe(viewLifecycleOwner, { model->
+            if(model.charge.isNotEmpty() && model.discount.isNotEmpty()){
+                this.model = model
+            }
+        })
+    }
+
+    private fun viewInstantPaymentRateDialog(model: InstantPaymentRateModel) {
+
+        val myDialog = LayoutInflater.from(context).inflate(R.layout.item_view_instant_payment_rate_dialog, null)
+        val mBuilder = AlertDialog.Builder(requireActivity()).setView(myDialog)
+        val mAlertDialog = mBuilder.show()
+
+        mAlertDialog.window?.attributes?.width = (getDeviceMetrics(requireContext())?.widthPixels?.times(0.80))?.toInt()
+        mAlertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val instantRV = mAlertDialog.findViewById<RecyclerView>(R.id.instantPaymentRateRv)
+        val infoAdapter = InstantPaymentRateAdapter()
+        with(instantRV!!) {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = infoAdapter
+        }
+        infoAdapter.initData(model.charge as MutableList<String>, model.discount as MutableList<String>)
+
     }
 
     private fun instantPaymentRequestAndTransfer( paymentType: Int){
@@ -292,6 +324,14 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
             notificationManager.createNotificationChannels(channelList)
         }
+    }
+
+    private fun getDeviceMetrics(context: Context): DisplayMetrics? {
+        val metrics = DisplayMetrics()
+        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display: Display = wm.defaultDisplay
+        display.getMetrics(metrics)
+        return metrics
     }
 
     override fun onDestroyView() {
