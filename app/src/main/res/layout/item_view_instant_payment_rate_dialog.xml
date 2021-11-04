@@ -15,7 +15,7 @@
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:text="ইনস্ট্যান্ট পেমেন্ট চার্জ"
+        android:text="ইনস্ট্যান্ট ট্রান্সফার চার্জ"
         android:background="@drawable/bg_bottom_sheet_instant_payment_curved_bg"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp"
