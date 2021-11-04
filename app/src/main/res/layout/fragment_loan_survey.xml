@@ -1005,11 +1005,11 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/haveAnyTeamRadioGroupTV"
+            android:id="@+id/haveAnyTinRadioGroupTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="আপনার কোন TIIN আছে "
+            android:text="আপনার কোন TIN নাম্বার আছে? "
             android:textColor="@color/black_80"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -1028,7 +1028,7 @@
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content">-->
             <RadioGroup
-                android:id="@+id/haveAnyTIINRadioGroup"
+                android:id="@+id/haveAnyTINRadioGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -1038,7 +1038,7 @@
                 app:layout_constraintTop_toBottomOf="parent">
 
                 <RadioButton
-                    android:id="@+id/yes_haveAnyTeam_radio_button"
+                    android:id="@+id/yes_haveAnyTin_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:text="হ্যাঁ"
@@ -1046,7 +1046,7 @@
                     android:textSize="14sp" />
 
                 <RadioButton
-                    android:id="@+id/no_haveAnyTeam_radio_button"
+                    android:id="@+id/no_haveAnyTin_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_marginStart="5dp"
@@ -1063,12 +1063,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:hint="TIIN নাম্বার"
+                android:hint="TIN নাম্বার"
                 android:visibility="gone"
                 tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/teamTIINNumberET"
+                    android:id="@+id/teamTINNumberET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"

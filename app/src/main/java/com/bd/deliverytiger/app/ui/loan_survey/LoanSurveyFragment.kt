@@ -163,7 +163,7 @@ class LoanSurveyFragment : Fragment() {
                     guarantorMobile = guarantorNumber,
                     guarantorName = guarantorName,
                     hasCreditCard = binding?.haveAnyCreditCardRadioGroup?.checkedRadioButtonId == R.id.yes_haveAnyCreditCard_radio_button,
-                    hasTin = binding?.haveAnyTIINRadioGroup?.checkedRadioButtonId == R.id.yes_haveAnyTeam_radio_button,
+                    hasTin = binding?.haveAnyTINRadioGroup?.checkedRadioButtonId == R.id.yes_haveAnyTin_radio_button,
                     homeOwnership = houseOwnerAdapter.selectedItem,
                     interestedAmount = if (binding?.loanAMountET?.text.toString().trim().isEmpty()) 0 else binding?.loanAMountET?.text.toString().toInt(),
                     isBankAccount = hasBankAccount,
@@ -181,7 +181,7 @@ class LoanSurveyFragment : Fragment() {
                     relationMarchent = selectedKnownMerchantDuration,
                     repayType = if (binding?.loanRepayRadioGroupType?.checkedRadioButtonId == R.id.loanRepayWeekly) "weekly" else "monthly",
                     shopOwnership = selectedOwnerShipOfMarket,
-                    tinNumber = binding?.teamTIINNumberET?.text.toString(),
+                    tinNumber = binding?.teamTINNumberET?.text.toString(),
                     tradeLicenseImageUrl = imageTradeLicencePath,
                     transactionAmount = totalMonthlyCOD.toInt()
                     /*SessionManager.courierUserId,
@@ -357,17 +357,17 @@ class LoanSurveyFragment : Fragment() {
             }
         }
         binding?.apply {
-            haveAnyTIINRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+            haveAnyTINRadioGroup.setOnCheckedChangeListener { group, checkedId ->
                 when (checkedId) {
-                    R.id.yes_haveAnyTeam_radio_button -> {
+                    R.id.yes_haveAnyTin_radio_button -> {
                         hasTin = true
                         TIINNumberLayout.isVisible = true
-                        teamTIINNumberET.isVisible = true
+                        teamTINNumberET.isVisible = true
                     }
-                    R.id.no_haveAnyTeam_radio_button -> {
+                    R.id.no_haveAnyTin_radio_button -> {
                         hasTin = false
                         TIINNumberLayout.isVisible = false
-                        teamTIINNumberET.isVisible = false
+                        teamTINNumberET.isVisible = false
                     }
                 }
             }
@@ -541,14 +541,14 @@ class LoanSurveyFragment : Fragment() {
             }
         }
 
-        if (binding?.haveAnyTIINRadioGroup?.checkedRadioButtonId == -1) {
-            context?.toast("আপনার TIIN তথ্য দিন")
+        if (binding?.haveAnyTINRadioGroup?.checkedRadioButtonId == -1) {
+            context?.toast("আপনার TIN তথ্য দিন")
             return false
         }
 
         if (hasTin){
-            if (binding?.teamTIINNumberET?.text.toString().isEmpty()){
-                context?.toast("আপনার TIIN নাম্বার দিন")
+            if (binding?.teamTINNumberET?.text.toString().isEmpty()){
+                context?.toast("আপনার TIN নাম্বার দিন")
                 return false
             }
         }
