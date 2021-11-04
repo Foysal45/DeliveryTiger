@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentDetailsBottomSheetBinding
@@ -83,7 +84,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
         binding?.collectionChargeTV?.text = "${DigitConverter.toBanglaDigit(payCollectionCharge, true)} ৳"
         binding?.packagingChargeTV?.text = "${DigitConverter.toBanglaDigit(payPackagingCharge, true)} ৳"
         binding?.totalTV?.text = "${DigitConverter.toBanglaDigit(total, true)} ৳"
-        binding?.voucherDiscountTV?.text = "-${DigitConverter.toBanglaDigit(voucherDiscount, true)} ৳"
+        binding?.voucherDiscountTV?.text = HtmlCompat.fromHtml("<font color='#e11f27'>- ${DigitConverter.toBanglaDigit(voucherDiscount, true)} ৳</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
         binding?.shipmentAfterDiscountTV?.text = "${DigitConverter.toBanglaDigit(deliveryCharge - voucherDiscount, true)} ৳"
 
         if (!voucherCode.isNullOrEmpty()){

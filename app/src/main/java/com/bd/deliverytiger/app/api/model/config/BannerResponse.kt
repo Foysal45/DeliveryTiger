@@ -18,6 +18,8 @@ data class BannerResponse(
     var instantPaymentHourLimit: Int = 12,
     @SerializedName("referBanner")
     var referBanner: String? = "",
+    @SerializedName("loanSurveyBanner")
+    var loanSurveyBanner: String? = "",
     @SerializedName("instantPaymentHourLimitRange")
     var instantPaymentHourLimitRange: String? = "",
     @SerializedName("currentAppVersionCode")

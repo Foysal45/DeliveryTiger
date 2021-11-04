@@ -236,15 +236,15 @@ class DashboardFragment : Fragment() {
                 }
                 binding?.referBtn?.visibility = View.VISIBLE
             }
-            if (!model.referBanner.isNullOrEmpty()) {
-                binding?.surveyBtn?.let { view ->
+            if (!model.loanSurveyBanner.isNullOrEmpty()) {
+                binding?.loanSurveyBtn?.let { view ->
                     Glide.with(requireContext())
-                        .load("https://static.ajkerdeal.com/images/merchant/loan_banner.jpg")
+                        .load(model.loanSurveyBanner)
                         .skipMemoryCache(true)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(view)
                 }
-                binding?.referBtn?.visibility = View.VISIBLE
+                binding?.loanSurveyBtn?.visibility = View.VISIBLE
             }
         })
     }
@@ -413,6 +413,12 @@ class DashboardFragment : Fragment() {
             //addFragment(ReferralFragment.newInstance(), ReferralFragment.tag)
             findNavController().navigate(R.id.nav_dashboard_referral)
             UserLogger.logGenie("Dashboard_Referral")
+        }
+
+        binding?.loanSurveyBtn?.setOnClickListener {
+            //addFragment(ReferralFragment.newInstance(), ReferralFragment.tag)
+            findNavController().navigate(R.id.nav_loanSurvey)
+            UserLogger.logGenie("Dashboard_Loan_Survey")
         }
 
         binding?.callCollectorBtn?.setOnClickListener {

@@ -89,6 +89,7 @@ class AddOrderFragmentOne : Fragment() {
     private lateinit var deliveryTypeRV: RecyclerView
     private lateinit var voucherLayoutButton: LinearLayout
     private lateinit var voucherInfoButton: LinearLayout
+    private lateinit var voucherClearButton: LinearLayout
     private lateinit var deliveryButton: LinearLayout
     private lateinit var deliveryTakaButton: LinearLayout
     private lateinit var togglePickupGroup: MaterialButtonToggleGroup
@@ -271,6 +272,7 @@ class AddOrderFragmentOne : Fragment() {
         deliveryTypeRV = view.findViewById(R.id.delivery_type_selection_rV)
         voucherLayoutButton = view.findViewById(R.id.voucherLayout)
         voucherInfoButton = view.findViewById(R.id.voucherInfo)
+        voucherClearButton = view.findViewById(R.id.voucherClear)
         deliveryButton = view.findViewById(R.id.deliveryPrepaidTypeLayout)
         deliveryTakaButton = view.findViewById(R.id.deliveryTakaCollectionTypeLayout)
         togglePickupGroup = view.findViewById(R.id.toggleButtonPickupGroup)
@@ -337,7 +339,10 @@ class AddOrderFragmentOne : Fragment() {
         checkTermsTV.text = HtmlCompat.fromHtml("আমি <font color='#00844A'>শর্তাবলী</font> মেনে নিলাম", HtmlCompat.FROM_HTML_MODE_LEGACY)
         if (!isVoucherApplied){
             binding?.voucherText?.text = "ডিসকাউন্ট ভাউচার এপ্লাই করুন"
+            binding?.voucherInfo?.visibility = View.VISIBLE
+            binding?.voucherClear?.visibility = View.GONE
         }
+
 
         val calender = Calendar.getInstance()
         val todayDate = calender.timeInMillis
@@ -455,6 +460,7 @@ class AddOrderFragmentOne : Fragment() {
 
                 handler.removeCallbacks(runnable)
                 runnable = Runnable {
+                    clearVoucher()
                     calculateTotalPrice()
                     //Timber.d(logTag, "$p0")
                 }
@@ -471,6 +477,7 @@ class AddOrderFragmentOne : Fragment() {
             actualPackageAmountET.visibility = View.VISIBLE
             isCollection = false
             orderType = "Only Delivery"
+            clearVoucher()
             calculateTotalPrice()
             actualPackageAmountET.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.red))
         }
@@ -484,6 +491,7 @@ class AddOrderFragmentOne : Fragment() {
             collectionAmountET.requestFocus()
             isCollection = true
             orderType = "Delivery Taka Collection"
+            clearVoucher()
             calculateTotalPrice()
             collectionAmountET.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.red))
         }
@@ -571,13 +579,20 @@ class AddOrderFragmentOne : Fragment() {
             if (deliveryType.isEmpty()) {
                 context?.showToast("ডেলিভারি টাইপ নির্বাচন করুন")
             }else{
-                UserLogger.logGenie("Voucher_apply_open")
-                goToVoucherBottomSheet()
+                if (isVoucherApplied){
+                    context?.showToast("ভাউচার এপ্লাই করা আছে")
+                }else{
+                    UserLogger.logGenie("Voucher_apply_open")
+                    goToVoucherBottomSheet()
+                }
             }
         }
 
         voucherInfoButton?.setOnClickListener {
             goToVoucherInformationBottomSheet()
+        }
+        voucherClearButton?.setOnClickListener {
+            clearVoucher()
         }
 
         binding?.collectionTomorrow?.setOnClickListener {
@@ -1857,7 +1872,9 @@ class AddOrderFragmentOne : Fragment() {
             this.isVoucherApplied = isVoucherApplied
             if (this.isVoucherApplied){
                 voucherLayoutButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.dotted_selected)
-                binding?.voucherText?.text = "${model.voucherCode}   -৳ ${model.voucherDiscount}"
+                binding?.voucherText?.text = HtmlCompat.fromHtml("${model.voucherCode}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#e11f27'>৳ -${DigitConverter.toBanglaDigit(model.voucherDiscount.toInt() ?: 0)}</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+                binding?.voucherClear?.visibility = View.VISIBLE
+                binding?.voucherInfo?.visibility = View.GONE
             }
             voucherDiscount = model.voucherDiscount
             voucherCode = model.voucherCode
@@ -1872,6 +1889,10 @@ class AddOrderFragmentOne : Fragment() {
         voucherDiscount = 0.0
         voucherCode = ""
         voucherDeliveryRangeId = 0
+        binding?.voucherText?.text = "ডিসকাউন্ট ভাউচার এপ্লাই করুন"
+        binding?.voucherInfo?.visibility = View.VISIBLE
+        binding?.voucherClear?.visibility = View.GONE
+        calculateTotalPrice()
     }
 
     private fun goToVoucherInformationBottomSheet() {

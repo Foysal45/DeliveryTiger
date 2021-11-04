@@ -1010,7 +1010,9 @@
                         android:layout_height="match_parent"
                         android:clickable="true"
                         android:focusable="true"
-                        android:layout_weight=".08">
+                        android:layout_weight=".08"
+                        android:visibility="gone"
+                        tools:visibility="visible">
 
                         <ImageView
                             android:layout_width="25dp"
@@ -1019,6 +1021,27 @@
                             android:padding="3dp"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_info"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/voucherClear"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_weight=".08"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_marginStart="3dp"
+                            android:padding="3dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_close"
+                            app:tint="@color/colorPrimary"/>
 
                     </LinearLayout>
 

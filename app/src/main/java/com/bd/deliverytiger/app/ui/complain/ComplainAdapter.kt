@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.complain.ComplainData
 import com.bd.deliverytiger.app.databinding.ItemViewComplainBinding
 import com.bd.deliverytiger.app.utils.DigitConverter
@@ -47,7 +48,9 @@ class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
 
             binding.orderCode.text = "DT-${model.orderId}"
-            if(model.complainType == "Pending") binding.orderCode.setTextColor(Color.RED)
+            if(model.complainType == "Pending") {
+                binding.orderCode.setTextColor(Color.RED)
+            }
             if (model.complaintDate != null) {
                 val formattedDate = DigitConverter.toBanglaDate(model.complaintDate!!,"yyyy-MM-dd", false)
                 binding.date.text = formattedDate
@@ -55,7 +58,11 @@ class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 binding.date.text = ""
             }
 
-            binding.status.text = "স্ট্যাটাস: ${model.complainType}"
+            if(model.complainType == "Pending"){
+                binding.status.text = HtmlCompat.fromHtml("স্ট্যাটাস: <font color='#e11f27'>${model.complainType}</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+            }else{
+                binding.status.text = "স্ট্যাটাস: ${model.complainType}"
+            }
             if (model.solvedDate != null && model.solvedDate != "0001-01-01T00:00:00Z") {
                 val formattedDate = DigitConverter.toBanglaDate(model.solvedDate!!,"yyyy-MM-dd", true)
                 binding.status.append(" ($formattedDate)")
