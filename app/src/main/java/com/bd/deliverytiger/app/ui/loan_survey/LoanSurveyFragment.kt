@@ -67,7 +67,7 @@ class LoanSurveyFragment : Fragment() {
     private var imagePickFlag = 0
     private var imageTradeLicencePath: String = ""
 
-    private var selectedEduaction = ""
+    private var selectedEducation = ""
     private var selectedAverageBasket = ""
     private var selectedKnownMerchantDuration = ""
     private var selectedAverageOrder = ""
@@ -145,7 +145,7 @@ class LoanSurveyFragment : Fragment() {
             dataAdapter.multipleSelection(model, position)
         }
         //2021-11-01T09:17:08.977Z
-        var sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         binding?.applyLoanBtn?.setOnClickListener {
             if (verify()) {
                 Timber.d("dataDebud $previousTakingLoanAmount $bankName")
@@ -157,7 +157,7 @@ class LoanSurveyFragment : Fragment() {
                     cardHolder = binding?.creditCardName?.text.toString(),
                     cardLimit = binding?.creditCardLimit?.text.toString(),
                     courierUserId = SessionManager.courierUserId,
-                    eduLevel = selectedEduaction,
+                    eduLevel = selectedEducation,
                     famMem = familyMemNumAdapter.selectedItem,
                     gender = merchantGender,
                     guarantorMobile = guarantorNumber,
@@ -411,7 +411,7 @@ class LoanSurveyFragment : Fragment() {
             context?.toast("আপনার বয়স নির্বাচন করুন")
             return false
         }
-        if (selectedEduaction.isEmpty()) {
+        if (selectedEducation.isEmpty()) {
             context?.toast("শিক্ষাগত যোগ্যতা নির্বাচন করুন")
             return false
         }
@@ -576,11 +576,11 @@ class LoanSurveyFragment : Fragment() {
             if (guarantorName.isEmpty()) {
                 context?.toast("গ্যারান্টার এর নাম লিখুন")
                 return false
-            } else if (guarantorNumber.isEmpty() || guarantorNumber.length != 11 || !isValidMobileNumber(
-                    guarantorNumber
-                )
-            ) {
+            } else if (guarantorNumber.isEmpty()) {
                 context?.toast("গ্যারান্টার এর মোবাইল নাম্বার লিখুন")
+                return false
+            } else if(guarantorNumber.length != 11 || !isValidMobileNumber(guarantorNumber)){
+                context?.toast("গ্যারান্টার এর সঠিক মোবাইল নাম্বার লিখুন")
                 return false
             }
         }
@@ -887,7 +887,7 @@ class LoanSurveyFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
-                    selectedEduaction = if (position > 0) {
+                    selectedEducation = if (position > 0) {
                         spinnerAdapter.getItem(position)!!
                     } else{
                         ""
