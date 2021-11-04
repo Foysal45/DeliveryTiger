@@ -686,7 +686,7 @@
                 android:id="@+id/otherServicesTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="ডেলিভারি টাইগার ব্যাতিত অন্য আর কার কার সার্ভিস গ্রহণ করেন?"
+                android:text="ডেলিভারি টাইগার ব্যতীত অন্য আর কার কার সার্ভিস গ্রহণ করেন?"
                 android:textColor="@color/black_80"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
