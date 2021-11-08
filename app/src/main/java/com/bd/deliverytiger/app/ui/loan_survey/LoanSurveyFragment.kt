@@ -58,7 +58,6 @@ class LoanSurveyFragment : Fragment() {
     private var hasTin = false
     private var hasBankAccount = false
     private var hasPhysicalShop = false
-    private var isOwnerOfShop = false
     private var hasTradeLicence = false
     private var hasGuarantor = false
     private var hasPreviousLoan = false
@@ -71,6 +70,8 @@ class LoanSurveyFragment : Fragment() {
     private var selectedAverageBasket = ""
     private var selectedKnownMerchantDuration = ""
     private var selectedAverageOrder = ""
+    private var selectedMonthlyExp = ""
+    private var selectedCurrentLoanEMI = ""
     private var selectedMarketPosition = ""
     private var selectedOwnerShipOfMarket = ""
 
@@ -124,6 +125,8 @@ class LoanSurveyFragment : Fragment() {
         recommendationRecycler()
         houseOwnerRecycler()
         setUpSpinnerAverageOrderSpinner()
+        setUpSpinnerMonthlyExpSpinner()
+        setUpSpinnerCurrentLoanEMISpinner()
         //setUpSpinnerMarketPositionSpinner()
     }
 
@@ -167,9 +170,9 @@ class LoanSurveyFragment : Fragment() {
                     homeOwnership = houseOwnerAdapter.selectedItem,
                     interestedAmount = if (binding?.loanAMountET?.text.toString().trim().isEmpty()) 0 else binding?.loanAMountET?.text.toString().toInt(),
                     isBankAccount = hasBankAccount,
-                    isLocalShop = isOwnerOfShop,
+                    isLocalShop = hasPhysicalShop,
                     loanAmount = if(hasPreviousLoan) previousTakingLoanAmount else 0,
-                    loanEmi = if (binding?.loanRepayRadioGroupType?.checkedRadioButtonId == R.id.loanRepayWeekly) "weekly" else "monthly",
+                    loanEmi = selectedCurrentLoanEMI,
                     loanSurveyId = 0,
                     married = marriageStatusAdapter.selectedItem,
                     merchantName = merchantName,
@@ -183,7 +186,7 @@ class LoanSurveyFragment : Fragment() {
                     shopOwnership = selectedOwnerShipOfMarket,
                     tinNumber = binding?.teamTINNumberET?.text.toString(),
                     tradeLicenseImageUrl = imageTradeLicencePath,
-                    transactionAmount = totalMonthlyCOD.toInt()
+                    transactionAmount = 0
                     /*SessionManager.courierUserId,
                     merchantName,
                     merchantGender,
@@ -306,12 +309,14 @@ class LoanSurveyFragment : Fragment() {
                     binding?.merchantLoanAmountETLayout?.isVisible = true
                     binding?.bankNameETETLayout?.isVisible = true
                     binding?.loanRepayMonthlyLayout?.isVisible = true
+                    binding?.spinnerCurrentLoanEMILayout?.isVisible = true
                 }
                 R.id.merchantTakeLoanAccountNo -> {
                     hasPreviousLoan = false
                     binding?.merchantLoanAmountETLayout?.isVisible = false
                     binding?.bankNameETETLayout?.isVisible = false
                     binding?.loanRepayMonthlyLayout?.isVisible = false
+                    binding?.spinnerCurrentLoanEMILayout?.isVisible = false
                 }
             }
         }
@@ -321,15 +326,15 @@ class LoanSurveyFragment : Fragment() {
             when (checkedId) {
                 R.id.InBuisnessRadioButtonOwner -> {
                     selectedOwnerShipOfMarket = "নিজের"
-                    isOwnerOfShop = true
+
                 }
                 R.id.InBuisnessRadioButtonRental -> {
                     selectedOwnerShipOfMarket = "ভাড়া"
-                    isOwnerOfShop = true
+
                 }
                 R.id.InBuisnessRadioButtonFamily -> {
                     selectedOwnerShipOfMarket = "পরিবারের নিজস্ব"
-                    isOwnerOfShop = true
+
                 }
             }
         }
@@ -514,6 +519,10 @@ class LoanSurveyFragment : Fragment() {
                 context?.toast("আপনার লোন পরিশোধের ধরণ নির্বাচন করুন")
                 return false
             }
+            if (selectedCurrentLoanEMI.isEmpty()) {
+                context?.toast("আপনার লোন ই এম আই এর পরিমান দিন")
+                return false
+            }
 
         } else {
             previousTakingLoanAmount = 0
@@ -587,6 +596,10 @@ class LoanSurveyFragment : Fragment() {
 
         if (selectedAverageOrder.isEmpty()) {
             context?.toast("আপনার গড় অর্ডার এর তথ্য দিন")
+            return false
+        }
+        if (selectedMonthlyExp.isEmpty()) {
+            context?.toast("আপনার মাসিক ব্যায় এর পরিমান দিন")
             return false
         }
 
@@ -986,6 +999,76 @@ class LoanSurveyFragment : Fragment() {
                     id: Long
                 ) {
                     selectedAverageOrder = if (position > 0) {
+                        spinnerAdapter.getItem(position)!!
+                    } else{
+                        ""
+                    }
+                }
+            }
+    }
+
+    private fun setUpSpinnerMonthlyExpSpinner() {
+
+        val MonthlyExp: MutableList<String> = mutableListOf(
+            "বেছে নিন",
+            "০-৫,০০০",
+            "৫,০০০-১০,০০০",
+            "১০,০০০-১৫,০০০",
+            "১৫,০০০-২০,০০০",
+            "২০,০০০-২৫,০০০",
+            "২৫,০০০-৩০,০০০",
+            "৩০,০০০-৪০,০০০",
+            "৪০,০০০-৬০,০০০",
+            "৬০,০০০-১,০০,০০০"
+        )
+        val spinnerAdapter =
+            CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, MonthlyExp)
+        binding?.spinnerMonthlyExpType?.adapter = spinnerAdapter
+        binding?.spinnerMonthlyExpType?.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedMonthlyExp = if (position > 0) {
+                        spinnerAdapter.getItem(position)!!
+                    } else{
+                        ""
+                    }
+                }
+            }
+    }
+
+    private fun setUpSpinnerCurrentLoanEMISpinner() {
+
+        val CurrentLoanEMI: MutableList<String> = mutableListOf(
+            "বেছে নিন",
+            "৫০০-১০০০",
+            "১০০০-২০০০",
+            "২০০০-৪০০০",
+            "৪০০০-৬০০০",
+            "৬০০০-৮০০০",
+            "৮০০০-১০০০০",
+            "১০০০০-১২০০০",
+            "১২০০০-১৫০০০",
+            "১৫০০০-২০০০০"
+        )
+        val spinnerAdapter =
+            CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, CurrentLoanEMI)
+        binding?.spinnerCurrentLoanEMIType?.adapter = spinnerAdapter
+        binding?.spinnerCurrentLoanEMIType?.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedCurrentLoanEMI = if (position > 0) {
                         spinnerAdapter.getItem(position)!!
                     } else{
                         ""

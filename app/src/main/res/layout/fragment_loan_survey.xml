@@ -395,6 +395,53 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/spinnerMonthlyExpLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/spinnerMonthlyExpText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="আপনার মাসিক ব্যয় কত "
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinnerMonthlyExpType"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_item_unselected_border"
+                android:overlapAnchor="false"
+                android:spinnerMode="dropdown"
+                android:theme="@style/custom_spinner_style"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerMonthlyExpText"
+                tools:entries="@array/pick_options" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/cd"
+                app:layout_constraintBottom_toBottomOf="@id/spinnerMonthlyExpText"
+                app:layout_constraintEnd_toEndOf="@id/spinnerMonthlyExpText"
+                app:layout_constraintTop_toTopOf="@id/spinnerMonthlyExpText"
+                app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/spinnerKnownToMerchantLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -593,9 +640,9 @@
                 android:text="আপনার দোকানের মালিকানা নির্বাচন করুনঃ"
                 android:textColor="@color/black_80"
                 android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <RadioGroup
                 android:id="@+id/OwnertypeofoownershipInBuisnessRadioGroup"
@@ -763,6 +810,7 @@
                 android:layout_marginBottom="12dp"
                 android:hint="লোনের পরিমান"
                 android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/bankNameETETLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/merchantTakeLoanRadioGroup"
@@ -809,24 +857,26 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/loanRepayMonthlyLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"
                 android:visibility="gone"
-                tools:visibility="visible"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/spinnerCurrentLoanEMILayout"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bankNameETETLayout">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bankNameETETLayout"
+                tools:visibility="visible">
 
                 <TextView
                     android:id="@+id/loanRepayTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="আপনার লোন পরিশোধের ধরণ"
                     android:textColor="@color/black_80"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/loanRepayRadioGroupType"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <RadioGroup
@@ -834,9 +884,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/loanRepayTV">
 
                     <RadioButton
@@ -855,6 +905,56 @@
                 </RadioGroup>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/spinnerCurrentLoanEMILayout"
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loanRepayMonthlyLayout">
+
+                <TextView
+                    android:id="@+id/spinnerCurrentLoanEMIText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="বর্তমান লোনের ই এম আই এর পরিমাণ"
+                    android:textColor="@color/black_80"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/spinnerCurrentLoanEMIType"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spinnerCurrentLoanEMIType"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_item_unselected_border"
+                    android:overlapAnchor="false"
+                    android:spinnerMode="dropdown"
+                    android:theme="@style/custom_spinner_style"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerCurrentLoanEMIText"
+                    tools:entries="@array/pick_options" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@string/cd"
+                    app:layout_constraintBottom_toBottomOf="@id/spinnerCurrentLoanEMIType"
+                    app:layout_constraintEnd_toEndOf="@id/spinnerCurrentLoanEMIType"
+                    app:layout_constraintTop_toTopOf="@id/spinnerCurrentLoanEMIType"
+                    app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -871,6 +971,7 @@
                 android:text="আপনার প্রতিষ্ঠানের নামে কি ব্যাংক একাউন্ট আছে?"
                 android:textColor="@color/black_80"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/merchantHasBankAccountRadioGroup"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -1018,9 +1119,9 @@
 
         <LinearLayout
             android:id="@+id/linearForInnerREf"
-            android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:orientation="vertical">
 
             <!-- <androidx.constraintlayout.widget.ConstraintLayout
