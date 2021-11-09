@@ -168,7 +168,8 @@ class LoanSurveyFragment : Fragment() {
                     hasCreditCard = binding?.haveAnyCreditCardRadioGroup?.checkedRadioButtonId == R.id.yes_haveAnyCreditCard_radio_button,
                     hasTin = binding?.haveAnyTINRadioGroup?.checkedRadioButtonId == R.id.yes_haveAnyTin_radio_button,
                     homeOwnership = houseOwnerAdapter.selectedItem,
-                    interestedAmount = if (binding?.loanAMountET?.text.toString().trim().isEmpty()) 0 else binding?.loanAMountET?.text.toString().toInt(),
+                    //interestedAmount = if (binding?.loanAMountET?.text.toString().trim().isEmpty()) 0 else binding?.loanAMountET?.text.toString().toInt(),
+                    interestedAmount = loanRange.toInt(),
                     isBankAccount = hasBankAccount,
                     isLocalShop = hasPhysicalShop,
                     loanAmount = if(hasPreviousLoan) previousTakingLoanAmount else 0,
@@ -176,7 +177,7 @@ class LoanSurveyFragment : Fragment() {
                     loanSurveyId = 0,
                     married = marriageStatusAdapter.selectedItem,
                     merchantName = merchantName,
-                    monthlyExp = totalMonthlyCOD,
+                    monthlyExp = selectedMonthlyExp,
                     monthlyOrder = selectedAverageOrder,
                     monthlyTotalAverageSale = if (hasPhysicalShop) totalMonthlyAverageSell.toInt() else 0,
                     monthlyTotalCodAmount = totalMonthlyCOD.toInt(),
@@ -186,7 +187,7 @@ class LoanSurveyFragment : Fragment() {
                     shopOwnership = selectedOwnerShipOfMarket,
                     tinNumber = binding?.teamTINNumberET?.text.toString(),
                     tradeLicenseImageUrl = imageTradeLicencePath,
-                    transactionAmount = 0
+                    transactionAmount = monthlyTransaction.toInt()
                     /*SessionManager.courierUserId,
                     merchantName,
                     merchantGender,
@@ -443,6 +444,11 @@ class LoanSurveyFragment : Fragment() {
 
         if (selectedAverageBasket.isEmpty()) {
             context?.toast("আপনার গড় বাস্কেট তথ্য নির্বাচন করুন")
+            return false
+        }
+
+        if (selectedMonthlyExp.isEmpty()) {
+            context?.toast("আপনার মাসিক ব্যায়ের তথ্য দিন")
             return false
         }
 
