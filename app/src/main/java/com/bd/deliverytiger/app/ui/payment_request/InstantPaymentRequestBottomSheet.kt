@@ -113,6 +113,8 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         binding?.paymentAmount?.text = HtmlCompat.fromHtml("<font color='#626366'>৳ </font> <font color='#f05a2b'>${DigitConverter.toBanglaDigit(payableAmount, true)}</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
         binding?.instantPaymentTransferCharge?.text =HtmlCompat.fromHtml("( <font color='#EC6639'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য )", HtmlCompat.FROM_HTML_MODE_LEGACY)
 
+        binding?.expressServiceCharge?.text =HtmlCompat.fromHtml("( <font color='#EC6639'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য )", HtmlCompat.FROM_HTML_MODE_LEGACY)
+
         val normalServiceImage = binding?.normalServiceImage
         val expressServiceImage = binding?.expressServiceImage
 

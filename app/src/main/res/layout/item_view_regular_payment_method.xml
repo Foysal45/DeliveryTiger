@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/deliveryTypeImage"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="55dp"
         android:minWidth="94dp"
         android:padding="8dp"
         android:adjustViewBounds="true"
