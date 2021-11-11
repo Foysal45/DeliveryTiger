@@ -4,6 +4,7 @@
     android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+
     android:orientation="vertical">
 
     <TextView
@@ -22,43 +23,51 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <TextView
-        android:id="@+id/codTitle"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/codAmountLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="উত্তোলনযোগ্য COD"
-        android:textColor="@color/cod_bg_two"
-        android:textSize="16sp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTV"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
 
-    <TextView
-        android:id="@+id/paymentAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="৳ ০"
-        android:textColor="@color/cod_bg_three"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/codTitle"
-        app:layout_constraintEnd_toEndOf="@id/codTitle"
-        app:layout_constraintTop_toBottomOf="@id/codTitle"/>
+        <TextView
+            android:id="@+id/codTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text="উত্তোলনযোগ্য COD"
+            android:textColor="@color/cod_bg_two"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/paymentAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:text="৳ ০"
+            android:textColor="@color/cod_bg_three"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/transferLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="20dp"
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/paymentAmount">
+        app:layout_constraintTop_toBottomOf="@+id/codAmountLayout">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -133,92 +142,187 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/requestInnerLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="80dp"
-        android:padding="10dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/transferLayout">
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="10dp"
+        android:padding="18dp"
 
-        <LinearLayout
+        android:layout_marginBottom="100dp"
+        android:layout_weight="6"
+        android:background="@drawable/bg_stroke_regular_payment"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/transferLayout"
+        app:layout_constraintStart_toStartOf="@+id/transferLayout"
+        app:layout_constraintEnd_toEndOf="@+id/transferLayout"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewPaymentMethod"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="18dp"
-            android:layout_weight="6"
-            android:background="@drawable/bg_stroke_regular_payment"
-            android:backgroundTint="@color/cod_bg_eight"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:padding="5dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
 
-            <TextView
-                android:id="@+id/regularPaymentTv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="রেগুলার পেমেন্ট"
-                android:textColor="@color/cod_bg_ten"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                />
+            tools:itemCount="3"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/item_view_regular_payment_method"
+            app:spanCount="3"
+            tools:orientation="vertical" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/serviceLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewPaymentMethod"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/expressServiceLayout"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/check_express"
+                    android:layout_width="26dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="3dp"
-                    android:text="২৪-৪৮ ঘন্টা"
-                    android:textColor="@color/cod_bg_six"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
+                    android:text="@null"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14" />
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text=" (অতিরিক্ত চার্জ নেই )"
-                    android:textColor="@color/cod_bg_ten"
-                    android:textSize="10sp" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="২৪ ঘন্টা"
+                        android:textColor="@color/red"
+                        android:background="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+
+                    <ImageView
+                        android:id="@+id/expressServiceImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:contentDescription="@string/cd"
+                        tools:srcCompat="@drawable/ic_express_payment" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
+                        android:text="( ০ টাকা চার্জ প্রযোজ্য )"
+                        android:textColor="@color/cod_bg_ten"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/check_normal"
+                    android:layout_width="26dp"
+                    android:layout_height="match_parent"
+                    android:text="@null"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14" />
 
-        <LinearLayout
-            android:id="@+id/requestBtnLayout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="৪৮-৭২ ঘন্টা"
+                        android:textColor="@color/red"
+                        android:background="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+
+                    <ImageView
+                        android:id="@+id/normalServiceImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:contentDescription="@string/cd"
+                        tools:srcCompat="@drawable/ic_normal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
+                        android:text="( অতিরিক্ত চার্জ নেই )"
+                        android:textColor="@color/cod_bg_ten"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/saveBtn"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textSize="@dimen/text_14"
+            android:text="রিকোয়েস্ট"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/colorPrimary"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/bg_stroke_regular_payment_btn"
-            android:backgroundTint="@color/cod_bg_nine">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/serviceLayout"/>
 
-            <TextView
-                android:id="@+id/requestTv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="রিকোয়েস্ট"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginEnd="8dp" />
 
-        </LinearLayout>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/regularPaymentTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="-16dp"
+        android:padding="4dp"
+        android:text="রেগুলার পেমেন্ট"
+        android:textColor="@color/cod_bg_ten"
+        android:background="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/requestInnerLayout"
+        app:layout_constraintTop_toTopOf="@+id/requestInnerLayout"/>
 
     <ProgressBar
         android:id="@+id/progressBar"

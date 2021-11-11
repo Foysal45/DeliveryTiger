@@ -19,16 +19,19 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.instant_payment_rate.InstantPaymentRateModel
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantInstantPaymentRequest
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceiveableDetailRequest
+import com.bd.deliverytiger.app.api.model.payment_receieve.OptionImageUrl
 import com.bd.deliverytiger.app.databinding.FragmentInstantPaymentRequestBottomSheetBinding
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -41,6 +44,8 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
     private val viewModel: InstantPaymentUpdateViewModel by inject()
 
+    private var dataAdapter: RequestPaymentMethodAdapter = RequestPaymentMethodAdapter()
+
     private var model: InstantPaymentRateModel = InstantPaymentRateModel()
 
     private val notificationId: Int = 100032
@@ -51,6 +56,8 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     private var instantPayableAmount: Int = 0
     private var payableAmount: Int = 0
     private var instantTransferCharge: Int = 0
+
+    private var paymentMethodLists: MutableList<OptionImageUrl> = mutableListOf()
 
     companion object {
 
@@ -71,6 +78,17 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding?.recyclerViewPaymentMethod?.let { view->
+            with(view){
+                setHasFixedSize(false)
+                isNestedScrollingEnabled = false
+                layoutManager = GridLayoutManager(context, 3, androidx.recyclerview.widget.RecyclerView.VERTICAL, false)
+                layoutAnimation = null
+                adapter = dataAdapter
+            }
+        }
+
 
         initClickLister()
         fetchData()
@@ -95,13 +113,18 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         binding?.paymentAmount?.text = HtmlCompat.fromHtml("<font color='#626366'>৳ </font> <font color='#f05a2b'>${DigitConverter.toBanglaDigit(payableAmount, true)}</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
         binding?.instantPaymentTransferCharge?.text =HtmlCompat.fromHtml("( <font color='#EC6639'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য )", HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-        if (payableAmount == 0){
-            binding?.transferBtnLayout?.isEnabled = false
-            binding?.requestBtnLayout?.isEnabled = false
-        }else{
-            binding?.transferBtnLayout?.isEnabled = true
-            binding?.requestBtnLayout?.isEnabled = true
-        }
+        val normalServiceImage = binding?.normalServiceImage
+        val expressServiceImage = binding?.expressServiceImage
+
+        Glide.with(normalServiceImage!!)
+            .load(R.drawable.ic_normal)
+            .dontAnimate()
+            .into(normalServiceImage)
+
+        Glide.with(expressServiceImage!!)
+            .load(R.drawable.ic_express_payment)
+            .dontAnimate()
+            .into(expressServiceImage)
     }
 
     private fun initClickLister(){
@@ -116,7 +139,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         }
 
-        binding?.requestBtnLayout?.setOnClickListener {
+        binding?.transferBtnLayout?.setOnClickListener {
             alert("",  HtmlCompat.fromHtml("<font><b>আপনি কি রেগুলার পেমেন্ট রিকোয়েস্ট করতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
                 if (it == AlertDialog.BUTTON_POSITIVE) {
                     UserLogger.logGenie("Regular_payment_Request_Click")
@@ -142,6 +165,16 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                 instantPayableAmount = model.netPayableAmount
                 instantTransferCharge = model.instantPaymentCharge
                 initData()
+                paymentMethodLists.clear()
+                model.optionImageUrl.forEach {
+                    if (it.imageUrl.isNotEmpty()){
+                        paymentMethodLists.add(it)
+                    }
+                }
+
+                if (paymentMethodLists.isNotEmpty()){
+                    dataAdapter.initData(paymentMethodLists)
+                }
             }
         })
 
