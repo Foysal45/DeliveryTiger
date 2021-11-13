@@ -157,6 +157,10 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                 context?.toast("কোন তথ্য পাওয়া যায়নি!")
             }
         }
+
+        dataAdapter.onItemClick = { model, position ->
+            context?.toast("Clicked")
+        }
     }
 
     private fun fetchData(){

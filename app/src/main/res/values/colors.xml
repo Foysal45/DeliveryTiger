@@ -90,6 +90,7 @@
     <color name="selection_color">#c6edd6</color>
 
     <color name="ash">#727272</color>
+    <color name="ash_instant">#bababa</color>
 
     <color name="actionButtonColor">@color/blue</color>
     <color name="product_selected_color">#80008FD3</color>

@@ -1,9 +1,7 @@
 package com.bd.deliverytiger.app.ui.payment_request
 
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.payment_receieve.OptionImageUrl
@@ -41,10 +39,10 @@ class RequestPaymentMethodAdapter:  RecyclerView.Adapter<RecyclerView.ViewHolder
                 .dontAnimate()
                 .into(binding?.deliveryTypeImage)
 
-            if (selectedPosition > 0) {
-                binding.parent.setBackgroundResource(R.drawable.bg_stroke_payment_method_selected)
+            if (selectedPosition == position) {
+                binding.deliveryTypeImage.setBackgroundResource(R.drawable.bg_stroke_payment_method_selected)
             } else {
-                binding.parent.setBackgroundResource(R.drawable.bg_stroke_payment_method_unselected)
+                binding.deliveryTypeImage.setBackgroundResource(R.drawable.bg_stroke_payment_method_unselected)
             }
         }
     }
