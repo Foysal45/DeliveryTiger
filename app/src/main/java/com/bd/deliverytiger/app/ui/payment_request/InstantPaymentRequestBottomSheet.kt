@@ -36,6 +36,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.android.ext.android.inject
+import javax.annotation.meta.When
 import kotlin.concurrent.thread
 
 class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
@@ -53,9 +54,14 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     var onCloseBottomSheet: (() -> Unit)? = null
 
 
-    private var instantPayableAmount: Int = 0
     private var payableAmount: Int = 0
+    private var instantPayableAmount: Int = 0
     private var instantTransferCharge: Int = 0
+    private var isExpress: Boolean = false
+    private var expressPayableAmount: Int = 0
+    private var expressRequestCharge: Int = 0
+
+    private var requestPaymentType: Int = 0
 
     private var paymentMethodLists: MutableList<OptionImageUrl> = mutableListOf()
 
@@ -141,13 +147,18 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         }
 
-        binding?.transferBtnLayout?.setOnClickListener {
-            alert("",  HtmlCompat.fromHtml("<font><b>আপনি কি রেগুলার পেমেন্ট রিকোয়েস্ট করতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
-                if (it == AlertDialog.BUTTON_POSITIVE) {
-                    UserLogger.logGenie("Regular_payment_Request_Click")
-                    instantPaymentRequestAndTransfer(1) // for transfer balance 1
-                }
-            }.show()
+        binding?.requestBtn?.setOnClickListener {
+            if (requestPaymentType != 0){
+                alert("",  HtmlCompat.fromHtml("<font><b>আপনি কি রেগুলার পেমেন্ট রিকোয়েস্ট করতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
+                    if (it == AlertDialog.BUTTON_POSITIVE) {
+                        UserLogger.logGenie("Regular_payment_Request_Click")
+                        instantPaymentRequestAndTransfer(requestPaymentType) // for request
+                    }
+                }.show()
+            }else{
+                context?.toast("পেমেন্ট টাইপ নির্বাচন করুন")
+            }
+
         }
 
         binding?.chargeInfo?.setOnClickListener {
@@ -158,8 +169,8 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             }
         }
 
-        dataAdapter.onItemClick = { model, position ->
-            context?.toast("Clicked")
+        dataAdapter.onItemClick = { model, _ ->
+            requestPaymentType = model.paymentMethod
         }
     }
 
@@ -170,6 +181,8 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                 payableAmount = model.payableAmount
                 instantPayableAmount = model.netPayableAmount
                 instantTransferCharge = model.instantPaymentCharge
+                expressPayableAmount = model.expressNetPayableAmount
+                expressRequestCharge = model.expressCharge
                 initData()
                 paymentMethodLists.clear()
                 model.optionImageUrl.forEach {
@@ -217,13 +230,22 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         progressDialog.show()
         var charge = instantTransferCharge
         var amount = 0
-        if (paymentType == 1) {
-            charge = 0
-            amount = payableAmount
-        } else if (paymentType == 2){
-            amount = instantPayableAmount
-            charge = instantTransferCharge
+        when(paymentType){
+            1, 3, 4, 5->{
+                if (isExpress){
+                    charge = expressRequestCharge
+                    amount = expressPayableAmount
+                }else{
+                    charge = 0
+                    amount = payableAmount
+                }
+            }
+            2->{
+                charge = instantTransferCharge
+                amount = instantPayableAmount
+            }
         }
+
         if (amount > 0){
             val requestBody = MerchantInstantPaymentRequest(charge, SessionManager.courierUserId, amount, paymentType)
             viewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { model->
