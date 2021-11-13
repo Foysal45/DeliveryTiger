@@ -89,7 +89,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             with(view){
                 setHasFixedSize(false)
                 isNestedScrollingEnabled = false
-                layoutManager = GridLayoutManager(context, 3, androidx.recyclerview.widget.RecyclerView.VERTICAL, false)
+                layoutManager = GridLayoutManager(context, 3, RecyclerView.VERTICAL, false)
                 layoutAnimation = null
                 adapter = dataAdapter
             }
@@ -117,11 +117,14 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     private fun initData(){
 
         binding?.paymentAmount?.text = HtmlCompat.fromHtml("<font color='#626366'>৳ </font> <font color='#f05a2b'>${DigitConverter.toBanglaDigit(payableAmount, true)}</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-        binding?.instantPaymentTransferCharge?.text =HtmlCompat.fromHtml("( <font color='#EC6639'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য )", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        binding?.instantPaymentTransferCharge?.text =HtmlCompat.fromHtml("(<font color='#EC6639'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-        binding?.expressServiceCharge?.text =HtmlCompat.fromHtml("( <font color='#EC6639'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য )", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        //binding?.expressServiceCharge?.text =HtmlCompat.fromHtml("(<font color='#EC6639'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-        val normalServiceImage = binding?.normalServiceImage
+        binding?.checkExpress?.setTextWith("২৪ ঘন্টা", "EXPRESS", HtmlCompat.fromHtml("(<font color='#EC6639'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY),0)
+        binding?.checkNormal?.setTextWith("২৪-৭২ ঘন্টা", "NORMAL", "Charge Required",1)
+
+        /*val normalServiceImage = binding?.normalServiceImage
         val expressServiceImage = binding?.expressServiceImage
 
         Glide.with(normalServiceImage!!)
@@ -132,7 +135,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         Glide.with(expressServiceImage!!)
             .load(R.drawable.ic_express_payment)
             .dontAnimate()
-            .into(expressServiceImage)
+            .into(expressServiceImage)*/
     }
 
     private fun initClickLister(){
@@ -172,6 +175,19 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         dataAdapter.onItemClick = { model, _ ->
             requestPaymentType = model.paymentMethod
         }
+
+        binding?.normalExpressRadioGroup?.setOnCheckedChangeListener { group, checkedId ->
+
+            when(checkedId){
+                R.id.check_express->{
+                    context?.toast("Express Checked")
+                }
+                R.id.check_normal ->{
+                    context?.toast("Normal Checked")
+                }
+            }
+        }
+
     }
 
     private fun fetchData(){
