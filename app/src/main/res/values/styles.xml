@@ -140,7 +140,7 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-    <style name="BaseBottomSheetDialog3" parent="@style/Theme.MaterialComponents.Light.BottomSheetDialog">
+    <style name="BaseBottomSheetDialog3" parent="@style/Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
         <item name="bottomSheetStyle">@style/BottomSheet1</item>
         <item name="android:windowSoftInputMode">adjustResize|stateHidden</item>
@@ -149,6 +149,7 @@
     <style name="BottomSheetDialogTheme3" parent="BaseBottomSheetDialog3">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@color/black_100</item>
+        <item name="android:colorPrimary">@color/colorPrimary</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 

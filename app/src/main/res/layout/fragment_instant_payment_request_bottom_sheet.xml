@@ -4,7 +4,6 @@
     android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     android:orientation="vertical">
 
     <TextView
@@ -64,7 +63,6 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"
-        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/codAmountLayout">
@@ -146,10 +144,9 @@
         android:id="@+id/requestInnerLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="50dp"
         android:padding="5dp"
-        android:layout_marginBottom="70dp"
-        android:layout_weight="6"
         android:background="@drawable/bg_stroke_regular_payment"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@+id/transferLayout"
@@ -303,15 +300,15 @@
 
             <com.bd.deliverytiger.app.utils.CustomRadioButton
                 android:id="@+id/check_express"
-                style="@style/Widget.AppCompat.CompoundButton.RadioButton"
+                android:layout_marginEnd="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <com.bd.deliverytiger.app.utils.CustomRadioButton
                 android:id="@+id/check_normal"
+                android:layout_marginStart="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-
 
         </RadioGroup>
 
