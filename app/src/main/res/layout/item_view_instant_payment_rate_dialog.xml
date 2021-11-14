@@ -4,9 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_dialog_curved"
     android:elevation="5dp"
-    android:paddingBottom="10dp"
     android:orientation="vertical">
 
     <TextView
@@ -16,7 +14,7 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:text="ইনস্ট্যান্ট ট্রান্সফার চার্জ"
-        android:background="@drawable/bg_bottom_sheet_instant_payment_curved_bg"
+        android:background="@color/colorPrimary"
         android:textColor="@color/white"
         android:textSize="14sp"
         android:textStyle="bold"
@@ -25,13 +23,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginHorizontal = "1dp"
+        android:layout_marginBottom="1dp"
         android:id="@+id/instantPaymentRateRv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:nestedScrollingEnabled="false"
         android:overScrollMode="never"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_view_instant_payment_rate"
-        tools:itemCount="5"/>
+        tools:itemCount="5"
+        tools:listitem="@layout/item_view_instant_payment_rate" />
 
 </LinearLayout>

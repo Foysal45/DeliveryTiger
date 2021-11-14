@@ -261,7 +261,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         val mAlertDialog = mBuilder.show()
 
         mAlertDialog.window?.attributes?.width = (getDeviceMetrics(requireContext())?.widthPixels?.times(0.80))?.toInt()
-        mAlertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        mAlertDialog.window?.setBackgroundDrawable( resources.getDrawable(R.drawable.bg_stroke3))
 
         val instantRV = mAlertDialog.findViewById<RecyclerView>(R.id.instantPaymentRateRv)
         val infoAdapter = InstantPaymentRateAdapter()
