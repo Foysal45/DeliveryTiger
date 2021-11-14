@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.util.AttributeSet
 import android.view.View
+import android.widget.ImageView
 
 class CustomRadioButton : AppCompatRadioButton {
     private var view: View? = null
@@ -32,20 +33,20 @@ class CustomRadioButton : AppCompatRadioButton {
 
     // setText is a final method in ancestor, so we must take another name.
     fun setTextWith(resId: Int, resId2: Int, resId3: Int) {
-        textView!!.setText(resId)
-        textView1!!.setText(resId2)
-        textView2!!.setText(resId3)
+        textView?.setText(resId)
+        textView1?.setText(resId2)
+        textView2?.setText(resId3)
         redrawLayout()
     }
 
     fun setTextWith(text: CharSequence?, text1: CharSequence?, text2: CharSequence?, flag: Int) {
         if (flag == 1) {
-            textView!!.textSize = 12f
-            textView!!.setTextColor(resources.getColor(R.color.cod_bg_ten))
+            textView?.textSize = 12f
+            textView?.setTextColor(resources.getColor(R.color.cod_bg_ten))
         }
-        textView!!.text = text
-        textView1!!.text = text1
-        textView2!!.text = text2
+        textView?.text = text
+        textView1?.text = text1
+        textView2?.text = text2
         redrawLayout()
     }
 
@@ -58,13 +59,13 @@ class CustomRadioButton : AppCompatRadioButton {
     }
 
     private fun redrawLayout() {
-        view!!.isDrawingCacheEnabled = true
-        view!!.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
-        view!!.layout(0, 0, view!!.measuredWidth, view!!.measuredHeight)
-        view!!.buildDrawingCache(true)
-        val bitmap = Bitmap.createBitmap(view!!.drawingCache)
+        view?.isDrawingCacheEnabled = true
+        view?.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
+        view?.layout(0, 0, view?.measuredWidth!!, view?.measuredHeight!!)
+        view?.buildDrawingCache(true)
+        val bitmap = Bitmap.createBitmap(view?.drawingCache!!)
         setCompoundDrawablesWithIntrinsicBounds(BitmapDrawable(resources, bitmap), null, null, null)
-        view!!.isDrawingCacheEnabled = false
+        view?.isDrawingCacheEnabled = false
     }
 
     private fun dp2px(context: Context, dp: Int): Int {

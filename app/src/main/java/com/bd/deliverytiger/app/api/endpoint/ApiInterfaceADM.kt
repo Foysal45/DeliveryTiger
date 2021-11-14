@@ -94,6 +94,9 @@ interface ApiInterfaceADM {
     @GET("api/account/reports/GetInstantPaymentRate")
     suspend fun getInstantPaymentRate(): NetworkResponse<InstantPaymentRateModel, ErrorResponse>
 
+    @GET("api/account/reports/GetEFTPaymentRate")
+    suspend fun getEftPaymentRate(): NetworkResponse<InstantPaymentRateModel, ErrorResponse>
+
     @POST("api/account/reports/MerchantPayableReceiveableDetailForInstantPaymentFromAppV2")
     suspend fun merchantPayableReceiveableDetailForInstantPayment(@Body requestBody: MerchantPayableReceiveableDetailRequest): NetworkResponse<MerchantPayableReceivableDetailResponse, ErrorResponse>
 

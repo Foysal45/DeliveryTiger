@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -50,6 +51,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     private var dataAdapter: RequestPaymentMethodAdapter = RequestPaymentMethodAdapter()
 
     private var model: InstantPaymentRateModel = InstantPaymentRateModel()
+    private var model2: InstantPaymentRateModel = InstantPaymentRateModel()
 
     private val notificationId: Int = 100032
 
@@ -171,7 +173,15 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         binding?.chargeInfo?.setOnClickListener {
             if (model.charge.isNotEmpty() && model.discount.isNotEmpty()){
-                viewInstantPaymentRateDialog(model)
+                viewInstantPaymentRateDialog(model, "ইনস্ট্যান্ট ট্রান্সফার চার্জ")
+            } else{
+                context?.toast("কোন তথ্য পাওয়া যায়নি!")
+            }
+        }
+
+        binding?.expressChargeInfo?.setOnClickListener {
+            if (model2.charge.isNotEmpty() && model2.discount.isNotEmpty()){
+                viewInstantPaymentRateDialog(model2, "এক্সপ্রেস ট্রান্সফার চার্জ")
             } else{
                 context?.toast("কোন তথ্য পাওয়া যায়নি!")
             }
@@ -239,6 +249,13 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                 this.model = model
             }
         })
+
+        viewModel.getEftPaymentRate().observe(viewLifecycleOwner, { model->
+            if(model.charge.isNotEmpty() && model.discount.isNotEmpty()){
+                this.model2 = model
+            }
+        })
+
     }
 
     private fun setPaymentMethod(paymentMethodType: Int){
@@ -253,7 +270,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
-    private fun viewInstantPaymentRateDialog(model: InstantPaymentRateModel) {
+    private fun viewInstantPaymentRateDialog(model: InstantPaymentRateModel, title: String) {
 
         val myDialog = LayoutInflater.from(context).inflate(R.layout.item_view_instant_payment_rate_dialog, null)
         val mBuilder = AlertDialog.Builder(requireActivity()).setView(myDialog)
@@ -261,6 +278,9 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         mAlertDialog.window?.attributes?.width = (getDeviceMetrics(requireContext())?.widthPixels?.times(0.80))?.toInt()
         mAlertDialog.window?.setBackgroundDrawable( resources.getDrawable(R.drawable.bg_stroke3))
+
+        val titleTv = mAlertDialog.findViewById<TextView>(R.id.titleTV)
+        titleTv?.text = title
 
         val instantRV = mAlertDialog.findViewById<RecyclerView>(R.id.instantPaymentRateRv)
         val infoAdapter = InstantPaymentRateAdapter()

@@ -294,7 +294,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginHorizontal="12dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@+id/recyclerViewPaymentMethod"
             android:visibility="gone"
@@ -302,9 +302,19 @@
 
             <com.bd.deliverytiger.app.utils.CustomRadioButton
                 android:id="@+id/check_express"
-                android:layout_marginEnd="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/expressChargeInfo"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginStart="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="5dp"
+                android:layout_gravity="bottom"
+                android:src="@drawable/ic_info" />
 
             <com.bd.deliverytiger.app.utils.CustomRadioButton
                 android:id="@+id/check_normal"
