@@ -163,7 +163,6 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                 alert("",  HtmlCompat.fromHtml("<font><b>আপনি কি রেগুলার পেমেন্ট রিকোয়েস্ট করতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
                     if (it == AlertDialog.BUTTON_POSITIVE) {
                         UserLogger.logGenie("Regular_payment_Request_Click")
-                        context?.toast("$isExpress")
                         instantPaymentRequestAndTransfer(1) // for request
                     }
                 }.show()
@@ -281,32 +280,37 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         var charge = instantTransferCharge
         var amount = 0
         when(paymentType){
-            1, 4, 5->{
-                charge = 0
-                amount = payableAmount
+            1->{
+                when(requestPaymentMethod){
+                    1,5->{
+                        charge = 0
+                        amount = payableAmount
+                    }
+                    3->{
+                        when (isExpress) {
+                            1 -> {
+                                charge = expressRequestCharge
+                                amount = expressPayableAmount
+                            }
+                            2 -> {
+                                charge = 0
+                                amount = payableAmount
+                            }
+                        }
+                    }
+                }
             }
             2->{
                 charge = instantTransferCharge
                 amount = instantPayableAmount
             }
-            3->{
-                when (isExpress) {
-                    1 -> {
-                        charge = expressRequestCharge
-                        amount = expressPayableAmount
-                    }
-                    2 -> {
-                        charge = 0
-                        amount = payableAmount
-                    }
-                }
-            }
+
         }
 
         if (amount > 0){
             val requestBody = MerchantInstantPaymentRequest(charge, SessionManager.courierUserId, amount, paymentType, requestPaymentMethod)
             Timber.d("requestBodyDebug $requestBody")
-            /*viewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { model->
+            viewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { model->
                 progressDialog.dismiss()
                 dismiss()
                 if (model != null) {
@@ -349,7 +353,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                     context?.toast(message)
                     dismiss()
                 }
-            })*/
+            })
         }else{
             progressDialog.dismiss()
             dismiss()
