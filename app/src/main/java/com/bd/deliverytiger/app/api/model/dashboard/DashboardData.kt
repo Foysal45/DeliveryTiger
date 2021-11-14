@@ -37,6 +37,7 @@ data class DashboardData(
     var currentPaymentAmount: Int = 0,
     var currentPaymentStatus: Int = 0,
     var currentPaymentType: Int = 0,
+    var currentPaymentMethod: Int = 0,
     var isPaymentProcessing: Int = 0
 
 )

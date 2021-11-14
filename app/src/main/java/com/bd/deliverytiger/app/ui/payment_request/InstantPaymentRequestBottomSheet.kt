@@ -130,21 +130,9 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         //binding?.expressServiceCharge?.text =HtmlCompat.fromHtml("(<font color='#EC6639'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-        binding?.checkExpress?.setTextWith("২৪ ঘন্টা", "EXPRESS", HtmlCompat.fromHtml("(<font color='#EC6639'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY),0)
+        binding?.checkExpress?.setTextWith("২৪ ঘন্টা", "EXPRESS", HtmlCompat.fromHtml("(<font color='#EC6639'>${DigitConverter.toBanglaDigit(expressRequestCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY),0)
         binding?.checkNormal?.setTextWith("২৪-৭২ ঘন্টা", "NORMAL", "(অতিরিক্ত চার্জ নেই)",1)
 
-        /*val normalServiceImage = binding?.normalServiceImage
-        val expressServiceImage = binding?.expressServiceImage
-
-        Glide.with(normalServiceImage!!)
-            .load(R.drawable.ic_normal)
-            .dontAnimate()
-            .into(normalServiceImage)
-
-        Glide.with(expressServiceImage!!)
-            .load(R.drawable.ic_express_payment)
-            .dontAnimate()
-            .into(expressServiceImage)*/
     }
 
     private fun initClickLister(){
@@ -189,7 +177,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         dataAdapter.onItemClick = { model, _ ->
 
-            setPaymentMethod(model.paymentMethod)
+            requestPaymentMethod = model.paymentMethod
             isPaymentTypeSelect = true
             if (isBankEnable && model.paymentMethod == 3){
                 binding?.normalExpressRadioGroup?.visibility = View.VISIBLE
@@ -258,18 +246,6 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
     }
 
-    private fun setPaymentMethod(paymentMethodType: Int){
-        requestPaymentMethod = if (isBkashEnable && paymentMethodType == 1){
-            paymentMethodType
-        }else if (isNogodEnable && paymentMethodType == 5){
-            paymentMethodType
-        } else if (isBankEnable && paymentMethodType == 3){
-            paymentMethodType
-        }else{
-            0
-        }
-    }
-
     private fun viewInstantPaymentRateDialog(model: InstantPaymentRateModel, title: String) {
 
         val myDialog = LayoutInflater.from(context).inflate(R.layout.item_view_instant_payment_rate_dialog, null)
@@ -293,13 +269,15 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
     }
 
-    private fun instantPaymentRequestAndTransfer( paymentType: Int){
+    private fun instantPaymentRequestAndTransfer( payType: Int){
         val progressDialog = progressDialog("আপনার পেমেন্টটি প্রসেসিং হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন...")
         progressDialog.setCancelable(false)
         progressDialog.show()
         var charge = instantTransferCharge
+        var paymentType = payType
+        var paymentMethod = requestPaymentMethod
         var amount = 0
-        when(paymentType){
+        when(payType){
             1->{
                 when(requestPaymentMethod){
                     1,5->{
@@ -309,6 +287,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                     3->{
                         when (isExpress) {
                             1 -> {
+                                paymentType = 2 // express only
                                 charge = expressRequestCharge
                                 amount = expressPayableAmount
                             }
@@ -321,6 +300,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                 }
             }
             2->{
+                paymentMethod = 1
                 charge = instantTransferCharge
                 amount = instantPayableAmount
             }
@@ -328,7 +308,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         }
 
         if (amount > 0){
-            val requestBody = MerchantInstantPaymentRequest(charge, SessionManager.courierUserId, amount, paymentType, requestPaymentMethod)
+            val requestBody = MerchantInstantPaymentRequest(charge, SessionManager.courierUserId, amount, paymentType, paymentMethod)
             Timber.d("requestBodyDebug $requestBody")
             viewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { model->
                 progressDialog.dismiss()
@@ -349,22 +329,36 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                             }
                         }
                         2 -> {
-                            if (model.message == 1 && !model.transactionId.isNullOrEmpty()){
-                                showLocalNotification("ইনস্ট্যান্ট পেমেন্ট","টাকা বিকাশে ট্রান্সফার হয়েছে", "")
-                                alert("", "আপনার লেনদেনটি সফলভাবে সম্পন্ন হয়েছে।",false, "ঠিক আছে") {
-                                    UserLogger.logGenie("Instant_payment_transfer_Successfully")
-                                    if (it == AlertDialog.BUTTON_POSITIVE) {
-                                        onCloseBottomSheet?.invoke()
-                                    }
-                                }.show()
-                            }else if (model.message == 1 && model.transactionId.isNullOrEmpty()){
-                                alert("", "অনুগ্রহ পূর্বক ডেলিভারি টাইগার এর একাউন্টস ডিপার্মেন্ট এর সাথে যোগাযোগ করুন।",false, "ঠিক আছে") {
-                                    if (it == AlertDialog.BUTTON_POSITIVE) {
-                                        onCloseBottomSheet?.invoke()
-                                    }
-                                }.show()
-                            }else{
-                                alert("", "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন।",false, "ঠিক আছে") {}.show()
+                            if (model.paymentType == 2 && model.paymentMethod == 3){
+                                if (model.message == 1){
+                                    showLocalNotification("এক্সপ্রেস পেমেন্ট","টাকা ২৪ ঘন্টার মধ্যে ব্যাংক অ্যাকাউন্টে ট্র্যান্সফার হবে", "")
+                                    alert("", "আপনার লেনদেনটি সফলভাবে সম্পন্ন হয়েছে।",false, "ঠিক আছে") {
+                                        UserLogger.logGenie("Instant_payment_transfer_Successfully")
+                                        if (it == AlertDialog.BUTTON_POSITIVE) {
+                                            onCloseBottomSheet?.invoke()
+                                        }
+                                    }.show()
+                                }else{
+                                    alert("", "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন।",false, "ঠিক আছে") {}.show()
+                                }
+                            }else if (model.paymentType == 2 && model.paymentMethod == 1){
+                                if (model.message == 1 && !model.transactionId.isNullOrEmpty()){
+                                    showLocalNotification("ইনস্ট্যান্ট পেমেন্ট","টাকা বিকাশে ট্রান্সফার হয়েছে", "")
+                                    alert("", "আপনার লেনদেনটি সফলভাবে সম্পন্ন হয়েছে।",false, "ঠিক আছে") {
+                                        UserLogger.logGenie("Instant_payment_transfer_Successfully")
+                                        if (it == AlertDialog.BUTTON_POSITIVE) {
+                                            onCloseBottomSheet?.invoke()
+                                        }
+                                    }.show()
+                                }else if (model.message == 1 && model.transactionId.isNullOrEmpty()){
+                                    alert("", "অনুগ্রহ পূর্বক ডেলিভারি টাইগার এর একাউন্টস ডিপার্মেন্ট এর সাথে যোগাযোগ করুন।",false, "ঠিক আছে") {
+                                        if (it == AlertDialog.BUTTON_POSITIVE) {
+                                            onCloseBottomSheet?.invoke()
+                                        }
+                                    }.show()
+                                }else{
+                                    alert("", "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন।",false, "ঠিক আছে") {}.show()
+                                }
                             }
                         }
                     }
@@ -457,28 +451,27 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             context?.toast("পেমেন্ট টাইপ নির্বাচন করুন")
             return false
         }
-
+        if (isPaymentTypeSelect && requestPaymentMethod == 1 && !isBkashEnable){
+            showAccountEnableAlert(1)
+            return false
+        }
+        if (isPaymentTypeSelect && requestPaymentMethod == 5 && !isNogodEnable){
+            showAccountEnableAlert(5)
+            return false
+        }
+        if (isPaymentTypeSelect && requestPaymentMethod == 3 && !isBankEnable){
+            showAccountEnableAlert(3)
+            return false
+        }
         if (requestPaymentMethod == 3 && isExpress == 0){
             context?.toast("সার্ভিস টাইপ নির্বাচন করুন")
-            return false
-        }
-        if (isPaymentTypeSelect && !isBkashEnable){
-            showAccountEnableAlert()
-            return false
-        }
-        if (isPaymentTypeSelect && !isNogodEnable){
-            showAccountEnableAlert()
-            return false
-        }
-        if (isPaymentTypeSelect && !isBankEnable){
-            showAccountEnableAlert()
             return false
         }
         return true
     }
 
-    private fun showAccountEnableAlert(){
-        when (requestPaymentMethod) {
+    private fun showAccountEnableAlert(method: Int){
+        when (method) {
             3 -> {
                 alert ( "", "আপনার ব্যাংক একাউন্ট  এক্টিভ করা নেই। এক্টিভ করার জন্য একাউন্ট ম্যানেজার এর সাথে যোগাযোগ করুন।", false, "ঠিক আছে" ).show()
             }
