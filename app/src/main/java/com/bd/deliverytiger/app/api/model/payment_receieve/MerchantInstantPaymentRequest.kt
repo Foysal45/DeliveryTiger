@@ -11,5 +11,7 @@ data class MerchantInstantPaymentRequest(
     @SerializedName("NetPayableAmount")
     val netPayableAmount: Int = 0,
     @SerializedName("PaymentType")
-    val paymentType: Int = 0
+    val paymentType: Int = 0,
+    @SerializedName("PaymentMethod")
+    val paymentMethod: Int = 0
 )

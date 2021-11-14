@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,6 +37,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 import javax.annotation.meta.When
 import kotlin.concurrent.thread
 
@@ -57,11 +59,16 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     private var payableAmount: Int = 0
     private var instantPayableAmount: Int = 0
     private var instantTransferCharge: Int = 0
-    private var isExpress: Boolean = false
+    private var isExpress: Int = 0
     private var expressPayableAmount: Int = 0
     private var expressRequestCharge: Int = 0
 
-    private var requestPaymentType: Int = 0
+    //enable account check
+    private var requestPaymentMethod: Int = 0
+    private var isPaymentTypeSelect: Boolean = false
+    private var isBankEnable: Boolean = false
+    private var isBkashEnable: Boolean = false
+    private var isNogodEnable: Boolean = false
 
     private var paymentMethodLists: MutableList<OptionImageUrl> = mutableListOf()
 
@@ -122,7 +129,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         //binding?.expressServiceCharge?.text =HtmlCompat.fromHtml("(<font color='#EC6639'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY)
 
         binding?.checkExpress?.setTextWith("২৪ ঘন্টা", "EXPRESS", HtmlCompat.fromHtml("(<font color='#EC6639'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY),0)
-        binding?.checkNormal?.setTextWith("২৪-৭২ ঘন্টা", "NORMAL", "Charge Required",1)
+        binding?.checkNormal?.setTextWith("২৪-৭২ ঘন্টা", "NORMAL", "(অতিরিক্ত চার্জ নেই)",1)
 
         /*val normalServiceImage = binding?.normalServiceImage
         val expressServiceImage = binding?.expressServiceImage
@@ -151,17 +158,16 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         }
 
         binding?.requestBtn?.setOnClickListener {
-            if (requestPaymentType != 0){
+
+            if (validateRequest()){
                 alert("",  HtmlCompat.fromHtml("<font><b>আপনি কি রেগুলার পেমেন্ট রিকোয়েস্ট করতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
                     if (it == AlertDialog.BUTTON_POSITIVE) {
                         UserLogger.logGenie("Regular_payment_Request_Click")
-                        instantPaymentRequestAndTransfer(requestPaymentType) // for request
+                        context?.toast("$isExpress")
+                        instantPaymentRequestAndTransfer(1) // for request
                     }
                 }.show()
-            }else{
-                context?.toast("পেমেন্ট টাইপ নির্বাচন করুন")
             }
-
         }
 
         binding?.chargeInfo?.setOnClickListener {
@@ -173,17 +179,27 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         }
 
         dataAdapter.onItemClick = { model, _ ->
-            requestPaymentType = model.paymentMethod
+
+            setPaymentMethod(model.paymentMethod)
+            isPaymentTypeSelect = true
+            if (isBankEnable && model.paymentMethod == 3){
+                binding?.normalExpressRadioGroup?.visibility = View.VISIBLE
+            }else{
+                binding?.normalExpressRadioGroup?.visibility = View.GONE
+            }
         }
 
         binding?.normalExpressRadioGroup?.setOnCheckedChangeListener { group, checkedId ->
 
-            when(checkedId){
+            isExpress = when(checkedId){
                 R.id.check_express->{
-                    context?.toast("Express Checked")
+                    1
                 }
                 R.id.check_normal ->{
-                    context?.toast("Normal Checked")
+                    2
+                }
+                else->{
+                    0
                 }
             }
         }
@@ -191,14 +207,20 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun fetchData(){
+        binding?.progressBar?.isVisible = true
         val requestBody = MerchantPayableReceiveableDetailRequest(SessionManager.courierUserId, 0)
         viewModel.getMerchantPayableDetailForInstantPayment(requestBody).observe(viewLifecycleOwner, Observer { model->
+
+            binding?.progressBar?.isVisible = false
             if (model != null){
                 payableAmount = model.payableAmount
                 instantPayableAmount = model.netPayableAmount
                 instantTransferCharge = model.instantPaymentCharge
                 expressPayableAmount = model.expressNetPayableAmount
                 expressRequestCharge = model.expressCharge
+                isBankEnable = model.bankStatus > 0
+                isBkashEnable = model.bKashStatus > 0
+                isNogodEnable = model.nagadNoStatus > 0
                 initData()
                 paymentMethodLists.clear()
                 model.optionImageUrl.forEach {
@@ -218,6 +240,18 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                 this.model = model
             }
         })
+    }
+
+    private fun setPaymentMethod(paymentMethodType: Int){
+        requestPaymentMethod = if (isBkashEnable && paymentMethodType == 1){
+            paymentMethodType
+        }else if (isNogodEnable && paymentMethodType == 5){
+            paymentMethodType
+        } else if (isBankEnable && paymentMethodType == 3){
+            paymentMethodType
+        }else{
+            0
+        }
     }
 
     private fun viewInstantPaymentRateDialog(model: InstantPaymentRateModel) {
@@ -247,24 +281,32 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         var charge = instantTransferCharge
         var amount = 0
         when(paymentType){
-            1, 3, 4, 5->{
-                if (isExpress){
-                    charge = expressRequestCharge
-                    amount = expressPayableAmount
-                }else{
-                    charge = 0
-                    amount = payableAmount
-                }
+            1, 4, 5->{
+                charge = 0
+                amount = payableAmount
             }
             2->{
                 charge = instantTransferCharge
                 amount = instantPayableAmount
             }
+            3->{
+                when (isExpress) {
+                    1 -> {
+                        charge = expressRequestCharge
+                        amount = expressPayableAmount
+                    }
+                    2 -> {
+                        charge = 0
+                        amount = payableAmount
+                    }
+                }
+            }
         }
 
         if (amount > 0){
-            val requestBody = MerchantInstantPaymentRequest(charge, SessionManager.courierUserId, amount, paymentType)
-            viewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { model->
+            val requestBody = MerchantInstantPaymentRequest(charge, SessionManager.courierUserId, amount, paymentType, requestPaymentMethod)
+            Timber.d("requestBodyDebug $requestBody")
+            /*viewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { model->
                 progressDialog.dismiss()
                 dismiss()
                 if (model != null) {
@@ -307,7 +349,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                     context?.toast(message)
                     dismiss()
                 }
-            })
+            })*/
         }else{
             progressDialog.dismiss()
             dismiss()
@@ -383,6 +425,47 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             priority = NotificationCompat.PRIORITY_DEFAULT
             setContentIntent(pendingIntent)
         }
+    }
+
+    private fun validateRequest(): Boolean{
+
+        if (!isPaymentTypeSelect){
+            context?.toast("পেমেন্ট টাইপ নির্বাচন করুন")
+            return false
+        }
+
+        if (requestPaymentMethod == 3 && isExpress == 0){
+            context?.toast("সার্ভিস টাইপ নির্বাচন করুন")
+            return false
+        }
+        if (isPaymentTypeSelect && !isBkashEnable){
+            showAccountEnableAlert()
+            return false
+        }
+        if (isPaymentTypeSelect && !isNogodEnable){
+            showAccountEnableAlert()
+            return false
+        }
+        if (isPaymentTypeSelect && !isBankEnable){
+            showAccountEnableAlert()
+            return false
+        }
+        return true
+    }
+
+    private fun showAccountEnableAlert(){
+        when (requestPaymentMethod) {
+            3 -> {
+                alert ( "", "আপনার ব্যাংক একাউন্ট  এক্টিভ করা নেই। এক্টিভ করার জন্য একাউন্ট ম্যানেজার এর সাথে যোগাযোগ করুন।", false, "ঠিক আছে" ).show()
+            }
+            5 -> {
+                alert ( "", "আপনার নগদ একাউন্ট  এক্টিভ করা নেই। এক্টিভ করার জন্য একাউন্ট ম্যানেজার এর সাথে যোগাযোগ করুন।", false, "ঠিক আছে" ).show()
+            }
+            1 -> {
+                alert ( "", "আপনার বিকাশ একাউন্ট  এক্টিভ করা নেই। এক্টিভ করার জন্য একাউন্ট ম্যানেজার এর সাথে যোগাযোগ করুন।", false, "ঠিক আছে" ).show()
+            }
+        }
+
     }
 
     private fun createNotificationChannels(notificationManager: NotificationManager) {
