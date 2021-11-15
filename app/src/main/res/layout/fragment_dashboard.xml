@@ -442,35 +442,76 @@
 
                         </LinearLayout>
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/callCollectorBtn"
-                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:id="@+id/collectorContactLayout"
+                            android:layout_width="0dp"
                             android:layout_height="40dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="10dp"
-                            android:insetTop="0dp"
-                            android:insetBottom="0dp"
-                            android:paddingStart="8dp"
-                            android:paddingTop="0dp"
-                            android:paddingEnd="10dp"
-                            android:paddingBottom="0dp"
-                            android:text="কালেক্টর কল"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="14sp"
-                            android:backgroundTint="@color/lightGreen"
-                            app:strokeColor="@color/colorPrimary"
-                            app:icon="@drawable/ic_call"
-                            app:iconGravity="start"
-                            app:iconSize="20dp" />
+                            android:layout_marginEnd="4dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_collector_contact"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:visibility="visible"
+                            tools:ignore="UselessParent"
+                            tools:visibility="visible">
 
-                        <ImageView
-                            android:id="@+id/chatWithRiderBtn"
-                            android:layout_width="24dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginEnd="8dp"
-                            android:contentDescription="@string/cd"
-                            android:src="@drawable/ic_chat1" />
+                            <LinearLayout
+                                android:id="@+id/callCollectorBtn"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_marginStart="8dp"
+                                    android:contentDescription="@string/cd"
+                                    android:src="@drawable/ic_call"
+                                    app:tint="@color/colorPrimary"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:ellipsize="end"
+                                    android:maxLines="2"
+                                    android:text="কল"
+                                    app:tint="@color/colorPrimary"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/chatWithRiderBtn"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:contentDescription="@string/cd"
+                                    android:src="@drawable/ic_chat3"
+                                    app:tint="@color/colorPrimary"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:ellipsize="end"
+                                    android:maxLines="2"
+                                    android:text="কল"
+                                    app:tint="@color/colorPrimary"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
 
                         <LinearLayout
                             android:id="@+id/collectorTrackBtn"
