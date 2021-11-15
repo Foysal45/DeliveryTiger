@@ -45,6 +45,11 @@ fun Activity.hideKeyboard() {
     hideKeyboard(currentFocus ?: View(this))
 }
 
+fun isValidDTCode(code: String): Boolean {
+    return code.matches("^DT-[\\d]+\$".toRegex())
+}
+
+
 fun Context.hideKeyboard(view: View) {
     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(view.windowToken, 0)

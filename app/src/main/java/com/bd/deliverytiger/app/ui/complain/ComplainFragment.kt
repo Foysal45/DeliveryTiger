@@ -152,13 +152,21 @@ class ComplainFragment(): Fragment() {
         })
     }
 
+
     private fun validate(): Boolean {
 
         val orderCode = binding?.orderCodeTV?.text.toString()
         val complain = binding?.complainTV?.text.toString()
 
-        if (orderCode.trim().isEmpty()) {
-            context?.toast("অর্ডার আইডি লিখুন")
+        if (selectedType == 1 || selectedType == 2) {
+            if (orderCode.trim().isEmpty()) {
+                context?.toast("অর্ডার আইডি লিখুন")
+                return false
+            }
+        }
+
+        if (orderCode.trim().isNotEmpty() && !isValidDTCode(orderCode)) {
+            context?.toast("সঠিক অর্ডার আইডি লিখুন")
             return false
         }
 
@@ -167,9 +175,11 @@ class ComplainFragment(): Fragment() {
             return false
         }
 
-        if (complain.trim().isEmpty()) {
-            context?.toast("আপনার অভিযোগ / মতামত লিখুন")
-            return false
+        if (selectedType == 5) {
+            if (complain.trim().isEmpty()) {
+                context?.toast("আপনার অভিযোগ / মতামত লিখুন")
+                return false
+            }
         }
 
         return true
@@ -191,12 +201,14 @@ class ComplainFragment(): Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 selectedType = position
+                binding?.orderCodeTV?.visibility = View.GONE
                 if (position > 0) {
                     binding?.complainTV?.setText(pickupDistrictList[position])
+                    binding?.orderCodeTV?.visibility = View.VISIBLE
                     if (position == pickupDistrictList.lastIndex) {
                         binding?.complainTV?.text?.clear()
                         binding?.complainTV?.visibility = View.VISIBLE
-                    } else {
+                    }else{
                         binding?.complainTV?.visibility = View.GONE
                     }
                 } else {

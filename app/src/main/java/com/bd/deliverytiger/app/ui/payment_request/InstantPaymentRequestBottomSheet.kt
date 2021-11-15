@@ -61,6 +61,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     private var payableAmount: Int = 0
     private var instantPayableAmount: Int = 0
     private var instantTransferCharge: Int = 0
+    private var normalTransferTime: String = ""
     private var isExpress: Int = 0
     private var expressPayableAmount: Int = 0
     private var expressRequestCharge: Int = 0
@@ -126,12 +127,12 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     private fun initData(){
 
         binding?.paymentAmount?.text = HtmlCompat.fromHtml("<font color='#626366'>৳ </font> <font color='#f05a2b'>${DigitConverter.toBanglaDigit(payableAmount, true)}</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-        binding?.instantPaymentTransferCharge?.text =HtmlCompat.fromHtml("(<font color='#EC6639'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        binding?.instantPaymentTransferCharge?.text =HtmlCompat.fromHtml("(<font color='#626366'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY)
 
         //binding?.expressServiceCharge?.text =HtmlCompat.fromHtml("(<font color='#EC6639'>${DigitConverter.toBanglaDigit(instantTransferCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY)
 
         binding?.checkExpress?.setTextWith("২৪ ঘন্টা", "EXPRESS", HtmlCompat.fromHtml("(<font color='#EC6639'>${DigitConverter.toBanglaDigit(expressRequestCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY),0)
-        binding?.checkNormal?.setTextWith("২৪-৭২ ঘন্টা", "NORMAL", "(অতিরিক্ত চার্জ নেই)",1)
+        binding?.checkNormal?.setTextWith("$normalTransferTime ঘন্টা", "NORMAL", "(অতিরিক্ত চার্জ নেই)",1)
 
     }
 
@@ -218,6 +219,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                 isBankEnable = model.bankStatus > 0
                 isBkashEnable = model.bKashStatus > 0
                 isNogodEnable = model.nagadNoStatus > 0
+                normalTransferTime = model.normalTime
                 initData()
                 paymentMethodLists.clear()
                 model.optionImageUrl.forEach {

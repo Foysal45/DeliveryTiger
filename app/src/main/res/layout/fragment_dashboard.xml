@@ -464,6 +464,14 @@
                             app:iconGravity="start"
                             app:iconSize="20dp" />
 
+                        <ImageView
+                            android:id="@+id/chatWithRiderBtn"
+                            android:layout_width="24dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="8dp"
+                            android:contentDescription="@string/cd"
+                            android:src="@drawable/ic_chat1" />
+
                         <LinearLayout
                             android:id="@+id/collectorTrackBtn"
                             android:layout_width="wrap_content"

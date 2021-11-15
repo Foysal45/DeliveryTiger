@@ -72,23 +72,6 @@
                 android:text="নতুন কমপ্লেইন এন্ট্রি করুন"
                 />
 
-            <EditText
-                android:id="@+id/orderCodeTV"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_view_height"
-                android:background="@drawable/bg_add_order_edit_text"
-                android:hint="অর্ডার আইডি Ex. DT-xxxx"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/text_14"
-                android:layout_marginTop="12dp"
-                />
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -122,6 +105,24 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <EditText
+                android:id="@+id/orderCodeTV"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_view_height"
+                android:background="@drawable/bg_add_order_edit_text"
+                android:hint="অর্ডার আইডি Ex. DT-xxxx"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:paddingStart="16dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/text_14"
+                android:layout_marginTop="12dp"
+                />
 
             <EditText
                 android:id="@+id/complainTV"

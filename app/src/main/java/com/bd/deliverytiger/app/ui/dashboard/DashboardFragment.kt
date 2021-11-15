@@ -263,7 +263,9 @@ class DashboardFragment : Fragment() {
         binding?.collectorTrackBtn?.setOnClickListener {
             findNavController().navigate(R.id.nav_dashboard_map)
             UserLogger.logGenie("Dashboard_Collector_Track")
-            //goToChatActivityRider()
+        }
+        binding?.chatWithRiderBtn?.setOnClickListener {
+            goToChatActivityRider()
         }
         binding?.orderTrackingBtn?.setOnClickListener {
             //addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
