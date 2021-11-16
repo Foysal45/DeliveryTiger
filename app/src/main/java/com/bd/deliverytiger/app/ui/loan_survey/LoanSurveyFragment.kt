@@ -562,7 +562,7 @@ class LoanSurveyFragment : Fragment() {
         }
 
         if (hasTin){
-            if (binding?.teamTINNumberET?.text.toString().isEmpty()){
+            if (binding?.teamTINNumberET?.text.toString().isEmpty() || (binding?.teamTINNumberET?.text.toString().trim().length < 12)){
                 context?.toast("আপনার TIN নাম্বার দিন")
                 return false
             }
