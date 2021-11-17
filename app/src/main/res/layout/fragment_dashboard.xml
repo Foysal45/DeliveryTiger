@@ -255,6 +255,71 @@
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     tools:src="@tools:sample/avatars" />
 
+                                <LinearLayout
+                                    android:id="@+id/phoneNumberLayout"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:paddingVertical="6dp"
+                                    android:layout_marginTop="4dp"
+                                    android:visibility="gone"
+                                    tools:visibility="visible"
+                                    app:layout_constraintTop_toBottomOf="@+id/callTextImageLayout"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent">
+
+                                    <TextView
+                                        android:id="@+id/phoneNumber1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="2dp"
+                                        android:textIsSelectable="true"
+                                        android:text="@string/_01847069209"
+                                        android:textSize="14sp"
+                                        android:textColor="@color/black_80"/>
+
+                                    <TextView
+                                        android:id="@+id/comma"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="2dp"
+                                        android:text=","
+                                        android:textSize="14sp"
+                                        android:textColor="@color/black_80"/>
+
+                                    <TextView
+                                        android:id="@+id/phoneNumber2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textIsSelectable="true"
+                                        android:layout_marginEnd="2dp"
+                                        android:text="@string/_01811487984"
+                                        android:textSize="14sp"
+                                        android:textColor="@color/black_80"/>
+
+                                    <TextView
+                                        android:id="@+id/comma1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="2dp"
+                                        android:text=","
+                                        android:textSize="14sp"
+                                        android:textColor="@color/black_80"/>
+
+                                    <TextView
+                                        android:id="@+id/phoneNumber3"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textIsSelectable="true"
+                                        android:layout_marginEnd="2dp"
+                                        android:text="@string/_01844503545"
+                                        android:textSize="14sp"
+                                        android:textColor="@color/black_80"/>
+
+
+                                </LinearLayout>
+
                                 <TextView
                                     android:id="@+id/retentionManagerName"
                                     android:layout_width="0dp"
@@ -306,23 +371,39 @@
                                     app:icon="@drawable/ic_call"
                                     app:layout_constraintVertical_chainStyle="packed"
                                     app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
-                                    app:layout_constraintBottom_toTopOf="@id/callBtnTV"
+                                    app:layout_constraintBottom_toTopOf="@id/callTextImageLayout"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"/>
 
-                                <TextView
-                                    android:id="@+id/callBtnTV"
+                                <LinearLayout
+                                    android:id="@+id/callTextImageLayout"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:maxLines="1"
-                                    android:text="কল"
-                                    android:textColor="@color/black_80"
-                                    android:textSize="14sp"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
                                     android:layout_marginTop="2dp"
                                     app:layout_constraintEnd_toEndOf="@+id/callBtn"
                                     app:layout_constraintStart_toStartOf="@id/callBtn"
                                     app:layout_constraintTop_toBottomOf="@id/callBtn"
-                                    app:layout_constraintBottom_toBottomOf="parent"/>
+                                    app:layout_constraintBottom_toBottomOf="parent">
+
+                                    <TextView
+                                        android:id="@+id/callBtnTV"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:maxLines="1"
+                                        android:text="কল"
+                                        android:textColor="@color/black_80"
+                                        android:textSize="14sp" />
+
+                                    <ImageView
+                                        android:layout_width="15dp"
+                                        android:layout_height="15dp"
+                                        android:src="@drawable/ic_arrow_drop_down"/>
+
+                                </LinearLayout>
+
+
 
                                 <com.google.android.material.button.MaterialButton
                                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"

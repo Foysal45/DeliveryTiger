@@ -111,6 +111,7 @@ class DashboardFragment : Fragment() {
     private var collectorInformation: CollectorInformation = CollectorInformation()
     private var countDownTimer: CountDownTimer? = null
     private var adminUser: AdminUser? = null
+    private var isPhoneVisible = false
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -416,6 +417,16 @@ class DashboardFragment : Fragment() {
                 alert("নির্দেশনা", availabilityMessage, true, "ঠিক আছে", "ক্যানসেল") {
                 }.show()
                 //binding?.swipeRefresh?.snackbar(availabilityMessage, Snackbar.LENGTH_INDEFINITE, "ঠিক আছে"){}?.show()
+            }
+        }
+
+        binding?.callTextImageLayout?.setOnClickListener {
+            if(isPhoneVisible){
+                binding?.phoneNumberLayout?.visibility = View.GONE
+                isPhoneVisible = false
+            } else{
+                binding?.phoneNumberLayout?.visibility = View.VISIBLE
+                isPhoneVisible = true
             }
         }
 
