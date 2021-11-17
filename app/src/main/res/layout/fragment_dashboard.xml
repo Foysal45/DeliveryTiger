@@ -400,7 +400,7 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_marginEnd="4dp"
-                            android:layout_weight="1"
+                            android:layout_weight="1.5"
                             android:background="@drawable/bg_collector_present"
                             android:gravity="center"
                             android:orientation="horizontal"
@@ -411,7 +411,7 @@
                             <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="4dp"
                                 android:contentDescription="@string/cd"
                                 android:src="@drawable/ic_collector"
                                 app:tint="@color/collector" />
@@ -419,7 +419,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="4dp"
                                 android:ellipsize="end"
                                 android:maxLines="2"
                                 android:text="কালেক্টর আসেনি"
@@ -447,6 +447,7 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_marginEnd="4dp"
+                            android:layout_marginStart="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_collector_contact"
                             android:gravity="center"
@@ -466,7 +467,6 @@
                                 <ImageView
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
-                                    android:layout_marginStart="8dp"
                                     android:contentDescription="@string/cd"
                                     android:src="@drawable/ic_call"
                                     app:tint="@color/colorPrimary"/>
@@ -474,7 +474,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
+                                    android:layout_marginStart="2dp"
                                     android:ellipsize="end"
                                     android:maxLines="2"
                                     android:text="কল"
@@ -501,17 +501,16 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
+                                    android:layout_marginStart="2dp"
                                     android:ellipsize="end"
                                     android:maxLines="2"
-                                    android:text="কল"
+                                    android:text="চ্যাট"
                                     app:tint="@color/colorPrimary"
                                     android:textSize="14sp" />
 
                             </LinearLayout>
 
                         </LinearLayout>
-
 
                         <LinearLayout
                             android:id="@+id/collectorTrackBtn"

@@ -9,10 +9,10 @@
     <ImageView
         android:id="@+id/deliveryTypeImage"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="50dp"
         android:minWidth="94dp"
         android:padding="8dp"
-        android:layout_marginHorizontal="5dp"
+        android:layout_marginHorizontal="10dp"
         android:adjustViewBounds="true"
         android:background="@drawable/bg_stroke_payment_method_unselected"
         android:contentDescription="@string/cd"

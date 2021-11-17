@@ -31,7 +31,8 @@ data class DashboardData(
     var paymentDate: String = "",
     var availability: Boolean = false,
     var availabilityMessage: String = "",
-    var paymentProcessingTime: String = "12-24",
+    var paymentProcessingTime: String = "",
+    var bankPaymentProcessingTime: String = "",
 
     var currentRequestDate: String = "",
     var currentPaymentAmount: Int = 0,

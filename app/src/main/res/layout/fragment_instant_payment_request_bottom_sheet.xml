@@ -171,122 +171,19 @@
             app:spanCount="3"
             tools:orientation="vertical" />
 
-        <!--<RadioGroup
-            android:id="@+id/normalExpressRadioGroup"
+        <TextView
+            android:id="@+id/informationText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="8dp"
             android:gravity="center"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerViewPaymentMethod">
-
-            <LinearLayout
-                android:id="@+id/expressServiceLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/check_express"
-                    android:layout_width="26dp"
-                    android:layout_height="match_parent"
-                    android:scaleX="0.7"
-                    android:scaleY="0.7"
-                    android:text="" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="২৪ ঘন্টা"
-                        android:textColor="@color/red"
-                        android:background="@color/white"
-                        android:textSize="14sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:includeFontPadding="false"
-                        android:text="EXPRESS"
-                        android:textColor="#595A5C"
-                        android:textStyle="bold"
-                        android:textSize="16sp"/>
-
-                    <TextView
-                        android:id="@+id/expressServiceCharge"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="2dp"
-                        android:text="(১০ টাকা চার্জ প্রযোজ্য)"
-                        android:textColor="@color/cod_bg_ten"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/check_normal"
-                    android:layout_width="26dp"
-                    android:layout_height="match_parent"
-                    android:scaleX="0.7"
-                    android:scaleY="0.7"
-                    android:text="" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="৪৮-৭২ ঘন্টা"
-                        android:textColor="@color/cod_bg_ten"
-                        android:background="@color/white"
-                        android:textSize="12sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:includeFontPadding="false"
-                        android:text="NORMAL"
-                        android:textColor="#595A5C"
-                        android:textStyle="bold"
-                        android:textSize="16sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="2dp"
-                        android:text="(অতিরিক্ত চার্জ নেই)"
-                        android:textColor="@color/cod_bg_ten"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-        </RadioGroup>-->
+            android:maxLines="2"
+            tools:text="৪৮-৭২ ঘন্টার মধ্যে অতিরিক্ত কোন চার্জ ছাড়া পেমেন্ট পাবেন।"
+            android:textSize="12sp"
+            android:textColor="@color/cod_bg_ten"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewPaymentMethod"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
         <RadioGroup
             android:id="@+id/normalExpressRadioGroup"
@@ -295,14 +192,16 @@
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerViewPaymentMethod"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/informationText"
             android:visibility="gone"
             tools:visibility="visible">
 
             <com.bd.deliverytiger.app.utils.CustomRadioButton
                 android:id="@+id/check_express"
                 android:layout_width="wrap_content"
+                android:scaleX=".8"
+                android:scaleY=".8"
                 android:layout_height="wrap_content"/>
 
             <ImageView
@@ -310,7 +209,7 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginStart="1dp"
-                android:layout_marginBottom="1dp"
+                android:layout_marginBottom="5dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="5dp"
                 android:layout_gravity="bottom"
@@ -319,6 +218,8 @@
             <com.bd.deliverytiger.app.utils.CustomRadioButton
                 android:id="@+id/check_normal"
                 android:layout_marginStart="5dp"
+                android:scaleX=".8"
+                android:scaleY=".8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

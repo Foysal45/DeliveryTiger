@@ -26,6 +26,7 @@ import com.bd.deliverytiger.app.api.model.chat.ChatUserData
 import com.bd.deliverytiger.app.api.model.chat.FirebaseCredential
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
 import com.bd.deliverytiger.app.api.model.collector_info.CollectorInfoRequest
+import com.bd.deliverytiger.app.api.model.collector_info.CollectorInformation
 import com.bd.deliverytiger.app.api.model.config.BannerModel
 import com.bd.deliverytiger.app.api.model.courier_info.AdminUser
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
@@ -107,6 +108,7 @@ class DashboardFragment : Fragment() {
     private var worker: Runnable? = null
     private var handler = Handler(Looper.getMainLooper())
     private var paymentDashboardModel: DashboardData = DashboardData(dashboardSpanCount = 3, viewType = 1)
+    private var collectorInformation: CollectorInformation = CollectorInformation()
     private var countDownTimer: CountDownTimer? = null
     private var adminUser: AdminUser? = null
 
@@ -264,8 +266,24 @@ class DashboardFragment : Fragment() {
             findNavController().navigate(R.id.nav_dashboard_map)
             UserLogger.logGenie("Dashboard_Collector_Track")
         }
+        binding?.callCollectorBtn?.setOnClickListener {
+            getRidersOfficeInfo()
+            if (collectorInformation.mobile.isNullOrEmpty()) {
+                context?.toast("কালেক্টর মোবাইল নাম্বার তথ্য নেই")
+            } else {
+                callHelplineNumber(collectorInformation.mobile ?: "")
+                UserLogger.logGenie("Dashboard_CollectorCall_${collectorInformation.mobile}")
+            }
+            UserLogger.logGenie("Dashboard_CollectorCall")
+        }
         binding?.chatWithRiderBtn?.setOnClickListener {
-            goToChatActivityRider()
+            getRidersOfficeInfo()
+            if (collectorInformation.mobile.isNullOrEmpty()) {
+                context?.toast("কোনো তথ্য নেই")
+            } else {
+                goToChatActivityRider()
+                UserLogger.logGenie("Dashboard_CollectorChat_${collectorInformation.name}")
+            }
         }
         binding?.orderTrackingBtn?.setOnClickListener {
             //addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
@@ -421,11 +439,6 @@ class DashboardFragment : Fragment() {
             //addFragment(ReferralFragment.newInstance(), ReferralFragment.tag)
             findNavController().navigate(R.id.nav_loanSurvey)
             UserLogger.logGenie("Dashboard_Loan_Survey")
-        }
-
-        binding?.callCollectorBtn?.setOnClickListener {
-            getRidersOfficeInfo()
-            UserLogger.logGenie("Dashboard_CollectorCall")
         }
 
         binding?.paymentHistoryBtn?.setOnClickListener {
@@ -670,12 +683,7 @@ class DashboardFragment : Fragment() {
             if (model == null) {
                 context?.toast("কোনো তথ্য নেই")
             } else {
-                if (model.mobile.isNullOrEmpty()) {
-                    context?.toast("কালেক্টর মোবাইল নাম্বার তথ্য নেই")
-                } else {
-                    callHelplineNumber(model.mobile ?: "")
-                    UserLogger.logGenie("Dashboard_CollectorCall_${model.mobile}")
-                }
+                collectorInformation = model
             }
 
         })
@@ -814,8 +822,9 @@ class DashboardFragment : Fragment() {
                     this.totalAmount = model.netAdjustedAmount.toDouble()
                     this.availability = model.availability
                     this.availabilityMessage = model.availabilityMessage
-                    this.paymentProcessingTime = instantPaymentHourLimit
 
+                    this.paymentProcessingTime = model1.bkashRime ?: ""
+                    this.bankPaymentProcessingTime = model1.bankTime ?: ""
                     this.currentRequestDate = model1.currentRequestDate ?: ""
                     this.currentPaymentAmount = model1.currentPaymentAmount
                     this.currentPaymentStatus = model1.currentPaymentStatus
@@ -1283,8 +1292,8 @@ class DashboardFragment : Fragment() {
             fcmToken = SessionManager.firebaseToken
         )
         val receiverData = if (adminUser != null) {
-            ChatUserData("14".toString(), "Rider Abin", "01715269261",
-                imageUrl = "https://static.ajkerdeal.com/images/bondhuprofileimage/14/profileimage.jpg",
+            ChatUserData(collectorInformation.id.toString(), collectorInformation.name ?: "", collectorInformation.mobile ?: "" ,
+                imageUrl = "https://static.ajkerdeal.com/images/bondhuprofileimage/${collectorInformation.id}/profileimage.jpg",
                 role = "bondhu"
             )
         } else {

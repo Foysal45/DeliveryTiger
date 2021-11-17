@@ -167,17 +167,21 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
                     binding.paymentAmount.text = "৳ ${DigitConverter.toBanglaDigit(model.currentPaymentAmount, true)}"
                     binding.paymentTime.text = "($requestTime)"
                     if (model.currentPaymentType == 1){
+                        var amount = ""
                         var account = ""
                         if (model.currentPaymentMethod == 3){
                             account = "ব্যাংক অ্যাকাউন্টে"
+                            amount = "${DigitConverter.toBanglaDigit(model.bankPaymentProcessingTime)}"
                         }
                         if (model.currentPaymentMethod == 5){
                             account = "নগদ অ্যাকাউন্টে"
+                            amount = "${DigitConverter.toBanglaDigit(model.paymentProcessingTime)}"
                         }
                         if (model.currentPaymentMethod == 1){
                             account = "বিকাশ অ্যাকাউন্টে"
+                            amount = "${DigitConverter.toBanglaDigit(model.bankPaymentProcessingTime)}"
                         }
-                        binding.paymentMessage.text = "${DigitConverter.toBanglaDigit(model.paymentProcessingTime)} ঘণ্টার মধ্যে পেমেন্ট\n$account ট্রান্সফার হবে"
+                        binding.paymentMessage.text = "$amount ঘণ্টার মধ্যে পেমেন্ট\n$account ট্রান্সফার হবে"
                     }else if (model.currentPaymentType == 2 && model.currentPaymentMethod == 1){
                         if (model.isPaymentProcessing == 0){
                             binding.paymentMessage.text = "টাকা বিকাশে ট্রান্সফার হয়েছে"
@@ -188,7 +192,7 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
                         binding.countTV.text = "৳ ${DigitConverter.toBanglaDigit(0, true)}"
                     }else if (model.currentPaymentType == 2 && model.currentPaymentMethod == 3){
                         if (model.isPaymentProcessing == 0){
-                            binding.paymentMessage.text = "টাকা ২৪ ঘন্টার মধ্যে ব্যাংক অ্যাকাউন্টে ট্র্যান্সফার হবে"
+                            binding.paymentMessage.text = "২৪ ঘন্টার মধ্যে আপনার ব্যাংক অ্যাকাউন্টে ট্র্যান্সফার হবে"
                         }else{
                             binding.paymentMessage.text = "পেমেন্টটি প্রসেসিং এ আছে\nঅনুগ্রহ পূর্বক আপনার একাউন্ট ম্যানেজার এর সাথে যোগাযোগ করুন।"
                         }
