@@ -279,12 +279,8 @@ class DashboardFragment : Fragment() {
         }
         binding?.chatWithRiderBtn?.setOnClickListener {
             getRidersOfficeInfo()
-            if (collectorInformation.mobile.isNullOrEmpty()) {
-                context?.toast("কোনো তথ্য নেই")
-            } else {
-                goToChatActivityRider()
-                UserLogger.logGenie("Dashboard_CollectorChat_${collectorInformation.name}")
-            }
+            goToChatActivityRider()
+            UserLogger.logGenie("Dashboard_CollectorChat_${collectorInformation.name}")
         }
         binding?.orderTrackingBtn?.setOnClickListener {
             //addFragment(OrderTrackingFragment.newInstance(""), OrderTrackingFragment.tag)
@@ -1303,8 +1299,8 @@ class DashboardFragment : Fragment() {
             fcmToken = SessionManager.firebaseToken
         )
         val receiverData = if (adminUser != null) {
-            ChatUserData(collectorInformation.id.toString(), collectorInformation.name ?: "", collectorInformation.mobile ?: "" ,
-                imageUrl = "https://static.ajkerdeal.com/images/bondhuprofileimage/${collectorInformation.id}/profileimage.jpg",
+            ChatUserData("906","Post Shipment Admin", "" ,
+                imageUrl = "https://static.ajkerdeal.com/images/bondhuprofileimage/906/profileimage.jpg",
                 role = "bondhu"
             )
         } else {

@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentAccountsMailFormatBottomsheetBinding
+import com.bd.deliverytiger.app.utils.DigitConverter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -40,9 +41,9 @@ class AccountsMailFormatBottomSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        binding?.accountsMailFormatText?.text = HtmlCompat.fromHtml(
-            "<p>ব্যাংক ট্রান্সফার এক্টিভেট করতে হলে আপনার নিম্নোক্ত তথ্য সহ ইমেইল করুন</p>\n" +
-                    "<p>এখানে - <font color='#00844A'>payment@deliverytiger.com.bd</font></p>\n" +
+        binding?.top?.text = "ব্যাংক ট্রান্সফার এক্টিভেট করতে হলে আপনার নিম্নোক্ত তথ্য সহ ইমেইল করুন"
+        binding?.email?.text = HtmlCompat.fromHtml("<font color='#00844A'>payment@deliverytiger.com.bd</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        binding?.body?.text = HtmlCompat.fromHtml(
                     "<p>একাউন্ট নামঃ</p>\n" +
                     "<p>একাউন্ট নম্বরঃ</p>\n" +
                     "<p>ব্যাংক নামঃ</p>\n" +

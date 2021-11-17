@@ -252,7 +252,7 @@
                                     android:src="@drawable/ic_avater_demo"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
-                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintBottom_toTopOf="@+id/phoneNumberLayout"
                                     tools:src="@tools:sample/avatars" />
 
                                 <LinearLayout
@@ -381,11 +381,10 @@
                                     android:layout_height="wrap_content"
                                     android:orientation="horizontal"
                                     android:gravity="center"
-                                    android:layout_marginTop="2dp"
                                     app:layout_constraintEnd_toEndOf="@+id/callBtn"
                                     app:layout_constraintStart_toStartOf="@id/callBtn"
                                     app:layout_constraintTop_toBottomOf="@id/callBtn"
-                                    app:layout_constraintBottom_toBottomOf="parent">
+                                    app:layout_constraintBottom_toTopOf="@+id/phoneNumberLayout">
 
                                     <TextView
                                         android:id="@+id/callBtnTV"
@@ -452,7 +451,7 @@
                                     app:layout_constraintEnd_toEndOf="@+id/chatBtn"
                                     app:layout_constraintStart_toStartOf="@id/chatBtn"
                                     app:layout_constraintTop_toBottomOf="@id/chatBtn"
-                                    app:layout_constraintBottom_toBottomOf="parent"/>
+                                    app:layout_constraintBottom_toBottomOf="@+id/callTextImageLayout"/>
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -583,6 +582,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="2dp"
+                                    android:layout_marginEnd="6dp"
                                     android:ellipsize="end"
                                     android:maxLines="2"
                                     android:text="চ্যাট"
@@ -934,6 +934,45 @@
                         android:src="@drawable/ic_banner_place"
                         android:visibility="gone"
                         tools:visibility="visible" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_marginEnd="18dp"
+                        android:background="@drawable/bg_collector_contact"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+
+
+                        <LinearLayout
+                            android:id="@+id/danaLoanBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:background="@color/colorPrimary"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            tools:ignore="UselessParent">
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="LOAN আবেদনের জন্য আরো তথ্য দিন"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"

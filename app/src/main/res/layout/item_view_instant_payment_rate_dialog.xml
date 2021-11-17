@@ -14,7 +14,7 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:text="ইনস্ট্যান্ট ট্রান্সফার চার্জ"
-        android:background="@color/colorPrimary"
+        android:background="@color/orange"
         android:textColor="@color/white"
         android:textSize="14sp"
         android:textStyle="bold"
