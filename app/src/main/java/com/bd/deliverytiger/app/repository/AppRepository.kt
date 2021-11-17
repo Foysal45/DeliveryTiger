@@ -34,6 +34,7 @@ import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookDat
 import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookGroupData
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBodyV2
+import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBodyV3
 import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
@@ -254,7 +255,7 @@ class AppRepository(
 
     suspend fun fetchCourierList() = apiInterfaceCore.fetchCourierList()
 
-    suspend fun submitLoanSurvey(requestBody: LoanSurveyRequestBodyV2) = apiInterfaceCore.submitLoanSurvey(requestBody)
+    suspend fun submitLoanSurvey(requestBody: LoanSurveyRequestBodyV3) = apiInterfaceCore.submitLoanSurvey(requestBody)
 
     suspend fun submitCourierList(requestBody: List<SelectedCourierModel>) = apiInterfaceCore.submitCourierList(requestBody)
 
