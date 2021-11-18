@@ -34,6 +34,8 @@ data class MerchantPayableReceivableDetailResponse(
     val nagadNo: String = "",
     @SerializedName("BkashTime")
     val bkashTime: String = "",
+    @SerializedName("BankLimit")
+    val bankLimit: Int = 0,
     @SerializedName("OptionImageUrl")
     val optionImageUrl: List<OptionImageUrl> = listOf(),
     @SerializedName("PayableAmount")

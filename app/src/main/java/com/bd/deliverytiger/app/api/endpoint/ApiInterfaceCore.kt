@@ -41,6 +41,7 @@ import com.bd.deliverytiger.app.api.model.lead_management.customer_details.Custo
 import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookData
 import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookGroupData
 import com.bd.deliverytiger.app.api.model.loan_survey.*
+import com.bd.deliverytiger.app.api.model.loan_survey.get_loan_survey.LoanSurveyData
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.*
@@ -296,6 +297,9 @@ interface ApiInterfaceCore {
 
     @POST("api/Loan/AddLoanSurvey")
     suspend fun submitLoanSurvey(@Body requestBody: LoanSurveyRequestBody): NetworkResponse<GenericResponse<LoanSurveyResponseBody>, ErrorResponse>
+
+    @GET("api/Loan/GetLoanSurveyByCourierUser/{CourierUserId}")
+    suspend fun getLoanSurveyByCourierUser(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<LoanSurveyData>, ErrorResponse>
 
     @POST("api/Entry/AddCouriersWithLoanSurvey")
     suspend fun submitCourierList(@Body requestBody: List<SelectedCourierModel>): NetworkResponse<List<SelectedCourierModel>, ErrorResponse>

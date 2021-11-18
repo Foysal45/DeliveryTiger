@@ -257,6 +257,8 @@ class AppRepository(
 
     suspend fun submitLoanSurvey(requestBody: LoanSurveyRequestBody) = apiInterfaceCore.submitLoanSurvey(requestBody)
 
+    suspend fun getLoanSurveyByCourierUser(courierUserId: Int) = apiInterfaceCore.getLoanSurveyByCourierUser(courierUserId)
+
     suspend fun submitCourierList(requestBody: List<SelectedCourierModel>) = apiInterfaceCore.submitCourierList(requestBody)
 
     suspend fun saveCustomerSMSLog(requestBody: List<SMSLogData>) = apiInterfaceCore.saveCustomerSMSLog(requestBody)

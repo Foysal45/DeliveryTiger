@@ -175,7 +175,7 @@ class ComplainFragment(): Fragment() {
             return false
         }
 
-        if (selectedType == 5) {
+        if (selectedType == 6) {
             if (complain.trim().isEmpty()) {
                 context?.toast("আপনার অভিযোগ / মতামত লিখুন")
                 return false
@@ -193,6 +193,7 @@ class ComplainFragment(): Fragment() {
         pickupDistrictList.add("রিটার্ন পার্সেল এখনো বুঝে পাই নাই")
         pickupDistrictList.add("COD পেমেন্ট এখনো পাই নাই")
         pickupDistrictList.add("পার্সেল এখনো কালেকশন হয় নাই")
+        pickupDistrictList.add("একাউন্ট ম্যানেজার রেসপন্স করে না")
         pickupDistrictList.add("অন্য কমপ্লেইন")
 
         val spinnerAdapter = CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, pickupDistrictList)

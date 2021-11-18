@@ -349,17 +349,23 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                     3->{
                         when (isExpress) {
                             1 -> {
-                                paymentType = 2 // express only
-                                charge = model.expressCharge
-                                amount = model.expressNetPayableAmount
-                            }
-                            2 -> {
-                                if(model.payableAmount < 1000){
-                                    charge = 0
-                                    amount = 0
+
+                                if(model.expressNetPayableAmount > 1000 && model.expressNetPayableAmount < model.bankLimit){
+                                    paymentType = 2 // express only
+                                    charge = model.expressCharge
+                                    amount = model.expressNetPayableAmount
                                 }else{
                                     charge = 0
+                                    amount = 0
+                                }
+                            }
+                            2 -> {
+                                if(model.payableAmount > 1000){
+                                    charge = 0
                                     amount = model.payableAmount
+                                }else{
+                                    charge = 0
+                                    amount = 0
                                 }
                             }
                         }
@@ -447,8 +453,10 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             progressDialog.dismiss()
             dismiss()
             var msg = ""
-            msg = if (paymentMethod == 3){
+            msg = if (paymentMethod == 3 && paymentType == 1){
                 "ব্যাংক ট্রান্সফার লিমিট নূন্যতম ১০০০ টাকা। "
+            }else if (paymentMethod == 3 && paymentType == 2){
+                "ব্যাংক ট্রান্সফার লিমিট ১,৫০,০০০ টাকা। "
             }else{
                 "আপনার ট্রান্সফার করার মতো ব্যালান্স নেই।"
             }

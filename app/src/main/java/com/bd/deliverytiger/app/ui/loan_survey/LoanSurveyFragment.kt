@@ -93,8 +93,6 @@ class LoanSurveyFragment : Fragment() {
     private val locationAdapter = LocalUniversalAdapter()
     private val marriageStatusAdapter = LocalUniversalAdapter()
 
-
-    private val recommendationAdapter = LocalUniversalAdapter()
     private val houseOwnerAdapter = LocalUniversalAdapter()
 
 
@@ -116,9 +114,11 @@ class LoanSurveyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (SessionManager.isSurveyComplete) {
+
+        if (SessionManager.isSurveyComplete){
             warning()
         }
+
         fetchBanner()
         init()
         fetchCourierList()
@@ -134,7 +134,6 @@ class LoanSurveyFragment : Fragment() {
         marriageStatusRecycler()
         setUpAverageBasketSpinner()
         setUpSpinnerKnownToMerchnatSpinner()
-        recommendationRecycler()
         houseOwnerRecycler()
         setUpSpinnerAverageOrderSpinner()
         setUpSpinnerMonthlyExpSpinner()
@@ -198,7 +197,7 @@ class LoanSurveyFragment : Fragment() {
                     monthlyTotalCodAmount = totalMonthlyCOD.toInt(),
                     nidNo = nidCardNo,
                     othersIncome = binding?.otherIncomeET?.text.toString().trim().toInt() ?: 0,
-                    recommend = recommendationAdapter.selectedItem,
+                    recommend = "",
                     relationMarchent = selectedKnownMerchantDuration,
                     repayType = if (binding?.loanRepayRadioGroupType?.checkedRadioButtonId == R.id.loanRepayWeekly) "weekly" else "monthly",
                     reqTenorMonth = loanRepayMonthPeriod,
@@ -507,30 +506,30 @@ class LoanSurveyFragment : Fragment() {
             return false
         }
 
-        loanRange = binding?.loanRangeET?.text.toString()
+        loanRange = binding?.loanRangeET?.text.toString() ?: ""
         if (loanRange.isEmpty()) {
             context?.toast("আপনার কাঙ্ক্ষিত লোন রেঞ্জ লিখুন")
             return false
         }
 
-        loanRepayMonthPeriod = binding?.reqTenorMonthET?.text.toString()
+        loanRepayMonthPeriod = binding?.reqTenorMonthET?.text.toString() ?: ""
         if (loanRepayMonthPeriod.isEmpty()) {
             context?.toast("আপনি কত মাসের মধ্যে লোন পরিশোধ করতে ইচ্ছুক")
             return false
         }
 
-        yearlyTotalIncome = binding?.yearlyTotalIncomehET?.text.toString().toInt()
+        yearlyTotalIncome = binding?.yearlyTotalIncomehET?.text.toString().toInt() ?: 0
         if (yearlyTotalIncome == 0) {
             context?.toast("আপনার বাৎসরিক সর্বমোট আয় উল্লেখ করুন")
             return false
         }
-        otherIncome = binding?.otherIncomeET?.text.toString()
+        otherIncome = binding?.otherIncomeET?.text.toString() ?: ""
         if (otherIncome.isEmpty()) {
             context?.toast("অন্যান্য উৎস থেকে সর্বমোট আয় উল্লেখ করুন")
             return false
         }
 
-        monthlyTransaction = binding?.monthlyTransactionET?.text.toString()
+        monthlyTransaction = binding?.monthlyTransactionET?.text.toString()?: ""
         if (monthlyTransaction.isEmpty()) {
             context?.toast("মাসিক অনলাইন ট্রানজেকশন লিখুন")
             return false
@@ -557,7 +556,7 @@ class LoanSurveyFragment : Fragment() {
         }
 
 
-        totalMonthlyCOD = binding?.totalCODFromOtherServicesET?.text.toString()
+        totalMonthlyCOD = binding?.totalCODFromOtherServicesET?.text.toString()?: ""
         if (totalMonthlyCOD.isEmpty()) {
             context?.toast("আপনার টোটাল মাসিক COD দিন")
             return false
@@ -574,19 +573,18 @@ class LoanSurveyFragment : Fragment() {
         }
 
         if (hasPreviousLoan) {
-            if (binding?.loanAMountET?.text.isNullOrBlank() || binding?.loanAMountET?.text.toString()
-                    .toInt() < 1
+            if (binding?.loanAMountET?.text.isNullOrBlank() || binding?.loanAMountET?.text.toString().toInt() ?: 0 < 1
             ) {
                 context?.toast("পূর্বের লোনের পরিমাণ লিখুন")
                 return false
             } else {
-                previousTakingLoanAmount = binding?.loanAMountET?.text.toString().toInt()
+                previousTakingLoanAmount = binding?.loanAMountET?.text.toString().toInt() ?: 0
             }
             if (binding?.bankNameET?.text!!.isEmpty()) {
                 context?.toast("ব্যাংকের নাম লিখুন")
                 return false
             } else {
-                bankName = binding?.bankNameET?.text.toString()
+                bankName = binding?.bankNameET?.text.toString() ?: ""
             }
 
             if (binding?.loanRepayRadioGroupType?.checkedRadioButtonId == -1) {
@@ -702,10 +700,10 @@ class LoanSurveyFragment : Fragment() {
             return false
         }*/
 
-        if (recommendationAdapter.selectedItem == "") {
+        /*if (recommendationAdapter.selectedItem == "") {
             context?.toast("সুপারিশের তথ্য দিন")
             return false
-        }
+        }*/
         return true
     }
 
@@ -823,20 +821,21 @@ class LoanSurveyFragment : Fragment() {
     private fun showAlert() {
         val titleText = "নির্দেশনা"
         val descriptionText = "সার্ভেটি পূরণ করার জন্য ধন্যবাদ।"
-        alert(titleText, descriptionText, false, "ঠিক আছে", "না") {
-            findNavController().popBackStack()
-        }.show()
+        alert(titleText, descriptionText, false, "ঠিক আছে", "না").show()
     }
 
     private fun warning() {
         val titleText = "নির্দেশনা"
         val descriptionText =
             "আপনি ইতিপূর্বে একবার সার্ভেটি পূরণ করেছেন, আপনি কি আবার পূরণ করতে ইচ্ছুক?"
-        alert(titleText, descriptionText, true, "হ্যাঁ", "না") {
-            if (it == AlertDialog.BUTTON_NEGATIVE) {
+        alert(titleText, descriptionText, false, "হ্যাঁ") {
+            if (it == AlertDialog.BUTTON_POSITIVE) {
                 findNavController().popBackStack()
             }
-        }.show()
+        }.apply {
+            setCanceledOnTouchOutside(false)
+            show()
+        }
     }
 
     private fun fetchBanner() {
@@ -933,7 +932,7 @@ class LoanSurveyFragment : Fragment() {
     }
 
 
-    private fun recommendationRecycler() {
+    /*private fun recommendationRecycler() {
 
         val recommendation: List<String> = listOf(
             "মোটামুটি",
@@ -951,7 +950,7 @@ class LoanSurveyFragment : Fragment() {
                 itemAnimator = null
             }
         }
-    }
+    }*/
 
     private fun houseOwnerRecycler() {
         val houseOwner: List<String> = listOf(
@@ -1238,6 +1237,5 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 */
-
 
 }
