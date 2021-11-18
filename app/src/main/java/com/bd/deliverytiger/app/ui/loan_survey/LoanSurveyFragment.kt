@@ -14,9 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.loan_survey.CourierModel
-import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBodyV2
-import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
+import com.bd.deliverytiger.app.api.model.loan_survey.*
 import com.bd.deliverytiger.app.databinding.FragmentLoanSurveyBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.loan_survey.adapters.LocalUniversalAdapter
@@ -28,6 +26,7 @@ import com.bumptech.glide.signature.ObjectKey
 import com.github.dhaval2404.imagepicker.ImagePicker
 import org.koin.android.ext.android.inject
 import timber.log.Timber
+import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -45,6 +44,10 @@ class LoanSurveyFragment : Fragment() {
     private var merchantGender = ""
 
     private var loanRange = ""
+    private var loanRepayMonthPeriod = ""
+    private var yearlyTotalIncome = 0
+    private var otherIncome = ""
+    private var nidCardNo = ""
     private var monthlyTransaction = ""
 
     private var totalMonthlyCOD = ""
@@ -61,6 +64,7 @@ class LoanSurveyFragment : Fragment() {
     private var hasTradeLicence = false
     private var hasGuarantor = false
     private var hasPreviousLoan = false
+    private var isExpireDateofTradeLisenseSelectd = false
 
     private var imagePath: String = ""
     private var imagePickFlag = 0
@@ -74,6 +78,14 @@ class LoanSurveyFragment : Fragment() {
     private var selectedCurrentLoanEMI = ""
     private var selectedMarketPosition = ""
     private var selectedOwnerShipOfMarket = ""
+
+    private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+    private val sdf1 = SimpleDateFormat("dd MMM, yyyy", Locale.US)
+
+    private var selectedDateTradeLisence = "2001-01-01"
+    private var selectedDateDOB = "2001-01-01"
+    private var selectedDateFormattedTradeLisence = ""
+    private var selectedDateFormattedDOB = ""
 
 
     private val adapterAge = LocalUniversalAdapter()
@@ -152,14 +164,18 @@ class LoanSurveyFragment : Fragment() {
         binding?.applyLoanBtn?.setOnClickListener {
             if (verify()) {
                 Timber.d("dataDebud $previousTakingLoanAmount $bankName")
-                val requestBody = LoanSurveyRequestBodyV2(
+
+                var requestBody2 = LoanSurveyRequestBody(
                     age = adapterAge.selectedItem,
-                    applicationDate = sdf.format(Date().time),
+                    annualTotalIncome = yearlyTotalIncome ?: 0,
                     bankName = binding?.bankNameET?.text.toString(),
                     basketvalue = selectedAverageBasket,
                     cardHolder = binding?.creditCardName?.text.toString(),
                     cardLimit = binding?.creditCardLimit?.text.toString(),
+                    companyBankAccName = binding?.conmapyBankNameTextInput?.text.toString().trim(),
+                    companyBankAccNo = binding?.bankAccountNumberET?.text.toString().trim(),
                     courierUserId = SessionManager.courierUserId,
+                    dateOfBirth = selectedDateDOB,
                     eduLevel = selectedEducation,
                     famMem = familyMemNumAdapter.selectedItem,
                     gender = merchantGender,
@@ -167,63 +183,56 @@ class LoanSurveyFragment : Fragment() {
                     guarantorName = guarantorName,
                     hasCreditCard = binding?.haveAnyCreditCardRadioGroup?.checkedRadioButtonId == R.id.yes_haveAnyCreditCard_radio_button,
                     hasTin = binding?.haveAnyTINRadioGroup?.checkedRadioButtonId == R.id.yes_haveAnyTin_radio_button,
+                    hasTradeLicense = binding?.merchantHasTradeLicenceRadioGroup?.checkedRadioButtonId == R.id.merchantHasTradeLicenceYes,
                     homeOwnership = houseOwnerAdapter.selectedItem,
-                    //interestedAmount = if (binding?.loanAMountET?.text.toString().trim().isEmpty()) 0 else binding?.loanAMountET?.text.toString().toInt(),
                     interestedAmount = loanRange.toInt(),
                     isBankAccount = hasBankAccount,
                     isLocalShop = hasPhysicalShop,
-                    loanAmount = if(hasPreviousLoan) previousTakingLoanAmount else 0,
+                    loanAmount = if (hasPreviousLoan) previousTakingLoanAmount else 0,
                     loanEmi = selectedCurrentLoanEMI,
-                    loanSurveyId = 0,
                     married = marriageStatusAdapter.selectedItem,
                     merchantName = merchantName,
                     monthlyExp = selectedMonthlyExp,
                     monthlyOrder = selectedAverageOrder,
                     monthlyTotalAverageSale = if (hasPhysicalShop) totalMonthlyAverageSell.toInt() else 0,
                     monthlyTotalCodAmount = totalMonthlyCOD.toInt(),
+                    nidNo = nidCardNo,
+                    othersIncome = binding?.otherIncomeET?.text.toString().trim().toInt() ?: 0,
                     recommend = recommendationAdapter.selectedItem,
                     relationMarchent = selectedKnownMerchantDuration,
                     repayType = if (binding?.loanRepayRadioGroupType?.checkedRadioButtonId == R.id.loanRepayWeekly) "weekly" else "monthly",
+                    reqTenorMonth = loanRepayMonthPeriod,
+                    residenceLocation = locationAdapter.selectedItem,
                     shopOwnership = selectedOwnerShipOfMarket,
-                    tinNumber = binding?.teamTINNumberET?.text.toString(),
+                    tinNumber = binding?.teamTINNumberET?.text.toString().trim(),
+                    tradeLicenseExpireDate = selectedDateTradeLisence,
                     tradeLicenseImageUrl = imageTradeLicencePath,
+                    tradeLicenseNo = binding?.tradeliesenceNOTV?.text.toString().trim(),
                     transactionAmount = monthlyTransaction.toInt()
-                    /*SessionManager.courierUserId,
-                    merchantName,
-                    merchantGender,
-                    "",
-                    loanRange,
-                    monthlyTransaction,
-                    hasBankAccount,
-                    hasPhysicalShop,
-                    totalMonthlyAverageSell,
-                    totalMonthlyCOD,
-                    guarantorName,
-                    guarantorNumber,
-                    0,
-                    previousTakingLoanAmount,
-                    bankName*/
                 )
                 if (imagePickFlag == 1) {
-                    requestBody.apply {
+                    requestBody2.apply {
                         tradeLicenseImageUrl =
                             "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg"
                     }
-                    Timber.d("requestBody 1 $requestBody")
+                    Timber.d("requestBody 1 $requestBody2")
 
                     uploadImage(
                         "trade_${SessionManager.courierUserId}.jpg",
                         "delivery_tiger/trade_license",
-                        imageTradeLicencePath, requestBody
+                        imageTradeLicencePath, requestBody2
                     )
                 } else {
-                    Timber.d("requestBody 2 $requestBody")
+                    Timber.d("requestBody 2 $requestBody2")
 
-                    submitLoanSurveyData(requestBody)
+                    submitLoanSurveyData(requestBody2)
                 }
             }
-        }
 
+        }
+        binding?.tradeliesencExpireDateTV?.setOnClickListener {
+            datePickerTradeLisence()
+        }
         //region merchantGender
         binding?.merchantGenderRadioGroup?.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
@@ -243,11 +252,25 @@ class LoanSurveyFragment : Fragment() {
             when (checkedId) {
                 R.id.merchantHasBankAccountYes -> {
                     hasBankAccount = true
+                    binding?.hasBankAccountLayout?.visibility = View.VISIBLE
+                    binding?.companyBankNameLayout?.visibility = View.VISIBLE
+                    binding?.conmapyBankNameTextInput?.visibility = View.VISIBLE
+                    binding?.bankAccountNumberLayout?.visibility = View.VISIBLE
+                    binding?.bankAccountNumberET?.visibility = View.VISIBLE
                 }
                 R.id.merchantHasBankAccountNo -> {
                     hasBankAccount = false
+                    binding?.hasBankAccountLayout?.visibility = View.GONE
+                    binding?.bankAccountNumberLayout?.visibility = View.GONE
+                    binding?.bankAccountNumberET?.visibility = View.GONE
+                    binding?.companyBankNameLayout?.visibility = View.GONE
+                    binding?.conmapyBankNameTextInput?.visibility = View.GONE
                 }
             }
+        }
+
+        binding?.DOBET?.setOnClickListener {
+            datePickerDOB()
         }
         //endregion
 
@@ -273,11 +296,22 @@ class LoanSurveyFragment : Fragment() {
                     hasTradeLicence = true
                     imagePickFlag = 1
                     binding?.merchantTradeLicenceLayout?.isVisible = true
+                    binding?.tradeliesencenoandexpiredateLayout?.visibility = View.VISIBLE
+                    binding?.tradeliesenceNOLayout?.visibility = View.VISIBLE
+                    binding?.tradeliesenceNOTV?.visibility = View.VISIBLE
+                    binding?.tradeliesencExpireDateLayout?.visibility = View.VISIBLE
+                    binding?.tradeliesencExpireDateTV?.visibility = View.VISIBLE
                 }
                 R.id.merchantHasTradeLicenceNo -> {
                     hasTradeLicence = false
                     imagePickFlag = 0
                     binding?.merchantTradeLicenceLayout?.isVisible = false
+                    binding?.tradeliesencenoandexpiredateLayout?.visibility = View.GONE
+                    binding?.tradeliesenceNOLayout?.visibility = View.GONE
+                    binding?.tradeliesenceNOTV?.visibility = View.GONE
+                    binding?.tradeliesencExpireDateLayout?.visibility = View.GONE
+                    binding?.tradeliesencExpireDateTV?.visibility = View.GONE
+
                 }
             }
         }
@@ -311,6 +345,8 @@ class LoanSurveyFragment : Fragment() {
                     binding?.bankNameETETLayout?.isVisible = true
                     binding?.loanRepayMonthlyLayout?.isVisible = true
                     binding?.spinnerCurrentLoanEMILayout?.isVisible = true
+                    binding?.spinnerCurrentLoanEMIType?.isVisible = true
+                    binding?.spinnerCurrentLoanEMIText?.isVisible = true
                 }
                 R.id.merchantTakeLoanAccountNo -> {
                     hasPreviousLoan = false
@@ -318,6 +354,8 @@ class LoanSurveyFragment : Fragment() {
                     binding?.bankNameETETLayout?.isVisible = false
                     binding?.loanRepayMonthlyLayout?.isVisible = false
                     binding?.spinnerCurrentLoanEMILayout?.isVisible = false
+                    binding?.spinnerCurrentLoanEMIType?.isVisible = false
+                    binding?.spinnerCurrentLoanEMIText?.isVisible = false
                 }
             }
         }
@@ -417,6 +455,18 @@ class LoanSurveyFragment : Fragment() {
             context?.toast("আপনার বয়স নির্বাচন করুন")
             return false
         }
+
+        nidCardNo = binding?.nidCardNoET?.text.toString()
+        if (nidCardNo.isEmpty()) {
+            context?.toast("আপনার এনআইডি নাম্বার উল্লেখ করুন")
+            return false
+        }
+
+        if (binding?.DOBET?.text.toString().isEmpty()) {
+            context?.toast("আপনার আপনার জন্মতারিখ উল্লেখ করুন")
+            return false
+        }
+
         if (selectedEducation.isEmpty()) {
             context?.toast("শিক্ষাগত যোগ্যতা নির্বাচন করুন")
             return false
@@ -460,6 +510,23 @@ class LoanSurveyFragment : Fragment() {
         loanRange = binding?.loanRangeET?.text.toString()
         if (loanRange.isEmpty()) {
             context?.toast("আপনার কাঙ্ক্ষিত লোন রেঞ্জ লিখুন")
+            return false
+        }
+
+        loanRepayMonthPeriod = binding?.reqTenorMonthET?.text.toString()
+        if (loanRepayMonthPeriod.isEmpty()) {
+            context?.toast("আপনি কত মাসের মধ্যে লোন পরিশোধ করতে ইচ্ছুক")
+            return false
+        }
+
+        yearlyTotalIncome = binding?.yearlyTotalIncomehET?.text.toString().toInt()
+        if (yearlyTotalIncome == 0) {
+            context?.toast("আপনার বাৎসরিক সর্বমোট আয় উল্লেখ করুন")
+            return false
+        }
+        otherIncome = binding?.otherIncomeET?.text.toString()
+        if (otherIncome.isEmpty()) {
+            context?.toast("অন্যান্য উৎস থেকে সর্বমোট আয় উল্লেখ করুন")
             return false
         }
 
@@ -507,7 +574,8 @@ class LoanSurveyFragment : Fragment() {
         }
 
         if (hasPreviousLoan) {
-            if (binding?.loanAMountET?.text.isNullOrBlank() || binding?.loanAMountET?.text.toString().toInt() < 1
+            if (binding?.loanAMountET?.text.isNullOrBlank() || binding?.loanAMountET?.text.toString()
+                    .toInt() < 1
             ) {
                 context?.toast("পূর্বের লোনের পরিমাণ লিখুন")
                 return false
@@ -539,18 +607,25 @@ class LoanSurveyFragment : Fragment() {
             context?.toast("পূর্বের কোনো ব্যাংক একাউন্ট তথ্য যদি থাকে তবে তা নির্বাচন করুন")
             return false
         }
+        if (binding?.merchantHasBankAccountRadioGroup?.checkedRadioButtonId == R.id.merchantHasBankAccountYes
+            && (binding?.bankAccountNumberET?.text.toString()
+                .isEmpty() || binding?.conmapyBankNameTextInput?.text.toString().isEmpty())
+        ) {
+            context?.toast("পূর্বের কোনো ব্যাংক একাউন্ট তথ্য যদি থাকে তবে তা নির্বাচন করুন")
+            return false
+        }
 
         if (binding?.haveAnyCreditCardRadioGroup?.checkedRadioButtonId == -1) {
             context?.toast("আপনার কার্ডের তথ্য দিন")
             return false
         }
 
-        if (hasCreditCard){
-            if(binding?.creditCardName?.text.toString().isEmpty()){
+        if (hasCreditCard) {
+            if (binding?.creditCardName?.text.toString().isEmpty()) {
                 context?.toast("ব্যাংকের নাম লিখুন")
                 return false
             }
-            if (binding?.creditCardLimit?.text.toString().isEmpty()){
+            if (binding?.creditCardLimit?.text.toString().isEmpty()) {
                 context?.toast("ক্রেডিট কার্ডের লিমিট দিন")
                 return false
             }
@@ -561,8 +636,10 @@ class LoanSurveyFragment : Fragment() {
             return false
         }
 
-        if (hasTin){
-            if (binding?.teamTINNumberET?.text.toString().isEmpty() || (binding?.teamTINNumberET?.text.toString().trim().length < 12)){
+        if (hasTin) {
+            if (binding?.teamTINNumberET?.text.toString()
+                    .isEmpty() || (binding?.teamTINNumberET?.text.toString().trim().length < 12)
+            ) {
                 context?.toast("আপনার TIN নাম্বার দিন")
                 return false
             }
@@ -572,17 +649,28 @@ class LoanSurveyFragment : Fragment() {
             context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
             return false
         }
-
+        if (binding?.merchantHasTradeLicenceRadioGroup?.checkedRadioButtonId == R.id.merchantHasTradeLicenceYes
+            && (binding?.tradeliesenceNOTV?.text.toString()
+                .isEmpty() || binding?.tradeliesencExpireDateTV?.text.toString().isEmpty())
+        ) {
+            context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
+            return false
+        }
         if (imagePickFlag == 1) {
             if (imageTradeLicencePath.isEmpty()) {
                 context?.toast("ট্রেড লাইসেন্স এর ছবি অ্যাড করুন")
                 return false
             }
         }
+        if (!isExpireDateofTradeLisenseSelectd) {
+            context?.toast("ট্রেড লাইসেন্স এর এক্সপায়ার ডেট এড করুন")
+            return false
+        }
+
 
         if (binding?.merchantHasGuarantorRadioGroup?.checkedRadioButtonId == -1) {
             context?.toast("গ্যারান্টার এর তথ্য দিন")
-                return false
+            return false
         }
 
         guarantorName = binding?.merchantGuarantorNameET?.text.toString()
@@ -594,7 +682,7 @@ class LoanSurveyFragment : Fragment() {
             } else if (guarantorNumber.isEmpty()) {
                 context?.toast("গ্যারান্টার এর মোবাইল নাম্বার লিখুন")
                 return false
-            } else if(guarantorNumber.length != 11 || !isValidMobileNumber(guarantorNumber)){
+            } else if (guarantorNumber.length != 11 || !isValidMobileNumber(guarantorNumber)) {
                 context?.toast("গ্যারান্টার এর সঠিক মোবাইল নাম্বার লিখুন")
                 return false
             }
@@ -685,7 +773,7 @@ class LoanSurveyFragment : Fragment() {
         fileName: String,
         imagePath: String,
         fileUrl: String,
-        requestBody: LoanSurveyRequestBodyV2
+        requestBody: LoanSurveyRequestBody
     ) {
 
         val progressDialog = progressDialog()
@@ -705,10 +793,10 @@ class LoanSurveyFragment : Fragment() {
             })
     }
 
-    private fun submitLoanSurveyData(requestBody: LoanSurveyRequestBodyV2) {
+    private fun submitLoanSurveyData(requestBody: LoanSurveyRequestBody) {
         val progressDialog = progressDialog()
         progressDialog.show()
-
+        progressDialog.setCanceledOnTouchOutside(false)
         viewModel.submitLoanSurvey(requestBody).observe(viewLifecycleOwner, Observer { model ->
             SessionManager.isSurveyComplete = true
             val tempLoanSurveyId = model.loanSurveyId
@@ -727,6 +815,7 @@ class LoanSurveyFragment : Fragment() {
             Timber.d("requestBody 3 $selectedCourierList")
             viewModel.submitCourierList(selectedCourierList)
             progressDialog.dismiss()
+            findNavController().popBackStack()
             showAlert()
         })
     }
@@ -908,7 +997,7 @@ class LoanSurveyFragment : Fragment() {
                 ) {
                     selectedEducation = if (position > 0) {
                         spinnerAdapter.getItem(position)!!
-                    } else{
+                    } else {
                         ""
                     }
                 }
@@ -940,7 +1029,7 @@ class LoanSurveyFragment : Fragment() {
                 ) {
                     selectedAverageBasket = if (position > 0) {
                         spinnerAdapter.getItem(position)!!
-                    } else{
+                    } else {
                         ""
                     }
                 }
@@ -974,7 +1063,7 @@ class LoanSurveyFragment : Fragment() {
                 ) {
                     selectedKnownMerchantDuration = if (position > 0) {
                         spinnerAdapter.getItem(position)!!
-                    } else{
+                    } else {
                         ""
                     }
                 }
@@ -1006,7 +1095,7 @@ class LoanSurveyFragment : Fragment() {
                 ) {
                     selectedAverageOrder = if (position > 0) {
                         spinnerAdapter.getItem(position)!!
-                    } else{
+                    } else {
                         ""
                     }
                 }
@@ -1041,7 +1130,7 @@ class LoanSurveyFragment : Fragment() {
                 ) {
                     selectedMonthlyExp = if (position > 0) {
                         spinnerAdapter.getItem(position)!!
-                    } else{
+                    } else {
                         ""
                     }
                 }
@@ -1076,11 +1165,48 @@ class LoanSurveyFragment : Fragment() {
                 ) {
                     selectedCurrentLoanEMI = if (position > 0) {
                         spinnerAdapter.getItem(position)!!
-                    } else{
+                    } else {
                         ""
                     }
                 }
             }
+    }
+
+    private fun datePickerTradeLisence() {
+        val builder = MaterialDatePicker.Builder.datePicker()
+        builder.setTheme(R.style.CustomMaterialCalendarTheme)
+        builder.setTitleText("Select trade license ")
+        val picker = builder.build()
+        picker.show(childFragmentManager, "Picker")
+        picker.addOnPositiveButtonClickListener {
+            selectedDateTradeLisence = sdf.format(it)
+            selectedDateFormattedTradeLisence = sdf1.format(it)
+            setDateRangePickerTitleTradeLisencee()
+        }
+    }
+
+    private fun setDateRangePickerTitleTradeLisencee() {
+        binding?.tradeliesencExpireDateTV?.setText(selectedDateFormattedTradeLisence)
+        isExpireDateofTradeLisenseSelectd = true
+    }
+
+
+    private fun datePickerDOB() {
+        val builder = MaterialDatePicker.Builder.datePicker()
+        builder.setTheme(R.style.CustomMaterialCalendarTheme)
+        builder.setTitleText("Select your birthday")
+        val picker = builder.build()
+        picker.show(childFragmentManager, "Picker")
+        picker.addOnPositiveButtonClickListener {
+            selectedDateDOB = sdf.format(it)
+            selectedDateFormattedDOB = sdf1.format(it)
+            setDateRangePickerTitleDOB()
+        }
+    }
+
+    private fun setDateRangePickerTitleDOB() {
+        binding?.DOBET?.setText(selectedDateFormattedDOB)
+        isExpireDateofTradeLisenseSelectd = true
     }
     /*
     private fun setUpSpinnerMarketPositionSpinner() {

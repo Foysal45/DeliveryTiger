@@ -3,7 +3,7 @@ package com.bd.deliverytiger.app.api.model.loan_survey
 
 import com.google.gson.annotations.SerializedName
 
-data class LoanSurveyRequestBody(
+data class LoanSurveyRequestBodyV3(
     @SerializedName("Age")
     var age: String = "",
     @SerializedName("AnnualTotalIncome")

@@ -5,10 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bd.deliverytiger.app.api.model.loan_survey.CourierModel
-import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
-import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBodyV2
-import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
+import com.bd.deliverytiger.app.api.model.loan_survey.*
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -111,9 +108,9 @@ class LoanSurveryViewModel(private val repository: AppRepository) : ViewModel() 
         return responseData
     }
 
-    fun submitLoanSurvey(requestBody: LoanSurveyRequestBodyV2): LiveData<LoanSurveyRequestBodyV2> {
+    fun submitLoanSurvey(requestBody: LoanSurveyRequestBody): LiveData<LoanSurveyResponseBody> {
 
-        val responseData: MutableLiveData<LoanSurveyRequestBodyV2> = MutableLiveData()
+        val responseData: MutableLiveData<LoanSurveyResponseBody> = MutableLiveData()
 
         viewState.value = ViewState.ProgressState(true)
         viewModelScope.launch(Dispatchers.IO) {
