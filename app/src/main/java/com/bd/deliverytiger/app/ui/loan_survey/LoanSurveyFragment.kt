@@ -207,7 +207,8 @@ class LoanSurveyFragment : Fragment() {
                     tradeLicenseExpireDate = selectedDateTradeLisence,
                     tradeLicenseImageUrl = imageTradeLicencePath,
                     tradeLicenseNo = binding?.tradeliesenceNOTV?.text.toString().trim(),
-                    transactionAmount = monthlyTransaction.toInt()
+                    transactionAmount = monthlyTransaction.toInt(),
+                    hasPreviousLoan=  hasPreviousLoan
                 )
                 if (imagePickFlag == 1) {
                     requestBody2.apply {

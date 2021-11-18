@@ -89,5 +89,7 @@ data class LoanSurveyRequestBody(
     @SerializedName("TradeLicenseNo")
     var tradeLicenseNo: String = "",
     @SerializedName("TransactionAmount")
-    var transactionAmount: Int = 0
+    var transactionAmount: Int = 0,
+    @SerializedName("hasPreviousLoan")
+    var hasPreviousLoan: Boolean = false
 )
