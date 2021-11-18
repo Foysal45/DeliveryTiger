@@ -33,7 +33,6 @@ import com.bd.deliverytiger.app.api.model.lead_management.customer_details.Custo
 import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookData
 import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookGroupData
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
-import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBodyV2
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBodyV3
 import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
@@ -65,7 +64,6 @@ import com.bd.deliverytiger.app.fcm.FCMData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
-import retrofit2.http.Path
 
 class AppRepository(
     private val apiInterfaceADM: ApiInterfaceADM,
@@ -255,7 +253,7 @@ class AppRepository(
 
     suspend fun fetchCourierList() = apiInterfaceCore.fetchCourierList()
 
-    suspend fun submitLoanSurvey(requestBody: LoanSurveyRequestBodyV3) = apiInterfaceCore.submitLoanSurvey(requestBody)
+    suspend fun submitLoanSurvey(requestBody: LoanSurveyRequestBody) = apiInterfaceCore.submitLoanSurvey(requestBody)
 
     suspend fun submitCourierList(requestBody: List<SelectedCourierModel>) = apiInterfaceCore.submitCourierList(requestBody)
 

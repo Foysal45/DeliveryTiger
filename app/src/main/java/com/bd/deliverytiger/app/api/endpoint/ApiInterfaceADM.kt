@@ -13,7 +13,6 @@ import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.instant_payment_rate.InstantPaymentRateModel
 import com.bd.deliverytiger.app.api.model.instant_payment_status.InstantPaymentStatusData
 import com.bd.deliverytiger.app.api.model.instant_payment_status.InstantPaymentActivationStatusResponse
-import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantInstantPaymentRequest
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceivableDetailResponse
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceiveableDetailRequest

@@ -14,10 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bd.deliverytiger.app.R
-import com.bd.deliverytiger.app.api.model.loan_survey.CourierModel
-import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBodyV2
-import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBodyV3
-import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
+import com.bd.deliverytiger.app.api.model.loan_survey.*
 import com.bd.deliverytiger.app.databinding.FragmentLoanSurveyBinding
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.loan_survey.adapters.LocalUniversalAdapter
@@ -168,7 +165,7 @@ class LoanSurveyFragment : Fragment() {
             if (verify()) {
                 Timber.d("dataDebud $previousTakingLoanAmount $bankName")
 
-                var requestBody2 = LoanSurveyRequestBodyV3(
+                var requestBody2 = LoanSurveyRequestBody(
                     age = adapterAge.selectedItem,
                     annualTotalIncome = yearlyTotalIncome ?: 0,
                     bankName = binding?.bankNameET?.text.toString(),
@@ -200,7 +197,7 @@ class LoanSurveyFragment : Fragment() {
                     monthlyTotalAverageSale = if (hasPhysicalShop) totalMonthlyAverageSell.toInt() else 0,
                     monthlyTotalCodAmount = totalMonthlyCOD.toInt(),
                     nidNo = nidCardNo,
-                    othersIncome = 0,
+                    othersIncome = binding?.otherIncomeET?.text.toString().trim().toInt() ?: 0,
                     recommend = recommendationAdapter.selectedItem,
                     relationMarchent = selectedKnownMerchantDuration,
                     repayType = if (binding?.loanRepayRadioGroupType?.checkedRadioButtonId == R.id.loanRepayWeekly) "weekly" else "monthly",
@@ -212,58 +209,6 @@ class LoanSurveyFragment : Fragment() {
                     tradeLicenseImageUrl = imageTradeLicencePath,
                     tradeLicenseNo = binding?.tradeliesenceNOTV?.text.toString().trim(),
                     transactionAmount = monthlyTransaction.toInt()
-                )
-                val requestBody = LoanSurveyRequestBodyV2(
-                    age = adapterAge.selectedItem,
-                    applicationDate = sdf.format(Date().time),
-                    bankName = binding?.bankNameET?.text.toString(),
-                    basketvalue = selectedAverageBasket,
-                    cardHolder = binding?.creditCardName?.text.toString(),
-                    cardLimit = binding?.creditCardLimit?.text.toString(),
-                    courierUserId = SessionManager.courierUserId,
-                    eduLevel = selectedEducation,
-                    famMem = familyMemNumAdapter.selectedItem,
-                    gender = merchantGender,
-                    guarantorMobile = guarantorNumber,
-                    guarantorName = guarantorName,
-                    hasCreditCard = binding?.haveAnyCreditCardRadioGroup?.checkedRadioButtonId == R.id.yes_haveAnyCreditCard_radio_button,
-                    hasTin = binding?.haveAnyTINRadioGroup?.checkedRadioButtonId == R.id.yes_haveAnyTin_radio_button,
-                    homeOwnership = houseOwnerAdapter.selectedItem,
-                    //interestedAmount = if (binding?.loanAMountET?.text.toString().trim().isEmpty()) 0 else binding?.loanAMountET?.text.toString().toInt(),
-                    interestedAmount = loanRange.toInt(),
-                    isBankAccount = hasBankAccount,
-                    isLocalShop = hasPhysicalShop,
-                    loanAmount = if (hasPreviousLoan) previousTakingLoanAmount else 0,
-                    loanEmi = selectedCurrentLoanEMI,
-                    loanSurveyId = 0,
-                    married = marriageStatusAdapter.selectedItem,
-                    merchantName = merchantName,
-                    monthlyExp = selectedMonthlyExp,
-                    monthlyOrder = selectedAverageOrder,
-                    monthlyTotalAverageSale = if (hasPhysicalShop) totalMonthlyAverageSell.toInt() else 0,
-                    monthlyTotalCodAmount = totalMonthlyCOD.toInt(),
-                    recommend = recommendationAdapter.selectedItem,
-                    relationMarchent = selectedKnownMerchantDuration,
-                    repayType = if (binding?.loanRepayRadioGroupType?.checkedRadioButtonId == R.id.loanRepayWeekly) "weekly" else "monthly",
-                    shopOwnership = selectedOwnerShipOfMarket,
-                    tinNumber = binding?.teamTINNumberET?.text.toString(),
-                    tradeLicenseImageUrl = imageTradeLicencePath,
-                    transactionAmount = monthlyTransaction.toInt()
-                    /*SessionManager.courierUserId,
-                    merchantName,
-                    merchantGender,
-                    "",
-                    loanRange,
-                    monthlyTransaction,
-                    hasBankAccount,
-                    hasPhysicalShop,
-                    totalMonthlyAverageSell,
-                    totalMonthlyCOD,
-                    guarantorName,
-                    guarantorNumber,
-                    0,
-                    previousTakingLoanAmount,
-                    bankName*/
                 )
                 if (imagePickFlag == 1) {
                     requestBody2.apply {
@@ -324,7 +269,7 @@ class LoanSurveyFragment : Fragment() {
             }
         }
 
-        binding?.DOBET?.setOnClickListener{
+        binding?.DOBET?.setOnClickListener {
             datePickerDOB()
         }
         //endregion
@@ -401,6 +346,7 @@ class LoanSurveyFragment : Fragment() {
                     binding?.loanRepayMonthlyLayout?.isVisible = true
                     binding?.spinnerCurrentLoanEMILayout?.isVisible = true
                     binding?.spinnerCurrentLoanEMIType?.isVisible = true
+                    binding?.spinnerCurrentLoanEMIText?.isVisible = true
                 }
                 R.id.merchantTakeLoanAccountNo -> {
                     hasPreviousLoan = false
@@ -409,6 +355,7 @@ class LoanSurveyFragment : Fragment() {
                     binding?.loanRepayMonthlyLayout?.isVisible = false
                     binding?.spinnerCurrentLoanEMILayout?.isVisible = false
                     binding?.spinnerCurrentLoanEMIType?.isVisible = false
+                    binding?.spinnerCurrentLoanEMIText?.isVisible = false
                 }
             }
         }
@@ -826,7 +773,7 @@ class LoanSurveyFragment : Fragment() {
         fileName: String,
         imagePath: String,
         fileUrl: String,
-        requestBody: LoanSurveyRequestBodyV3
+        requestBody: LoanSurveyRequestBody
     ) {
 
         val progressDialog = progressDialog()
@@ -846,10 +793,10 @@ class LoanSurveyFragment : Fragment() {
             })
     }
 
-    private fun submitLoanSurveyData(requestBody: LoanSurveyRequestBodyV3) {
+    private fun submitLoanSurveyData(requestBody: LoanSurveyRequestBody) {
         val progressDialog = progressDialog()
         progressDialog.show()
-
+        progressDialog.setCanceledOnTouchOutside(false)
         viewModel.submitLoanSurvey(requestBody).observe(viewLifecycleOwner, Observer { model ->
             SessionManager.isSurveyComplete = true
             val tempLoanSurveyId = model.loanSurveyId
@@ -868,6 +815,7 @@ class LoanSurveyFragment : Fragment() {
             Timber.d("requestBody 3 $selectedCourierList")
             viewModel.submitCourierList(selectedCourierList)
             progressDialog.dismiss()
+            findNavController().popBackStack()
             showAlert()
         })
     }
