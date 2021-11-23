@@ -27,6 +27,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import com.google.android.material.datepicker.MaterialDatePicker
+import okhttp3.internal.concurrent.formatDuration
 import org.koin.android.ext.android.bind
 import java.text.SimpleDateFormat
 import java.util.*
@@ -123,7 +124,7 @@ class LoanSurveyFragment : Fragment() {
         fetchBanner()
         init()
         initData()
-        fetchCourierList()
+        //fetchCourierList()
         initClickListener()
         //initViews()
     }
@@ -146,11 +147,16 @@ class LoanSurveyFragment : Fragment() {
     private fun initData(){
         viewModel.previousLoanSurveyResponse(1).observe(viewLifecycleOwner, Observer {
             Timber.d("testing if recieved $it")
-            binding?.merchantGenderRadioGroup?.check( if(it.gender == "male") R.id.merchantGenderMale else R.id.merchantGenderFemale)
+            binding?.merchantGenderRadioGroup?.check(
+                if(it.gender == "male")
+                    R.id.merchantGenderMale
+                else
+                    R.id.merchantGenderFemale
+            )
             binding?.merchantNameET?.setText(it.merchantName)
             ageRecycler(it.age, true)
             binding?.nidCardNoET?.setText(it.nidNo)
-            binding?.DOBET?.setText(sdf1.format(it.dateOfBirth))
+            binding?.DOBET?.setText(DigitConverter.formatDate(it.dateOfBirth,"yyyy-MM-dd", "dd MMM, yyyy" ))
             setUpEduactionSpinner(it.eduLevel)
             familyMemNumRecycler(it.famMem, true)
             houseOwnerRecycler(it.homeOwnership, true)
@@ -160,10 +166,124 @@ class LoanSurveyFragment : Fragment() {
             setUpSpinnerMonthlyExpSpinner(it.monthlyExp)
             setUpSpinnerKnownToMerchnatSpinner(it.relationMarchent)
             binding?.loanRangeET?.setText(it.loanAmount.toString())
-            binding?.reqTenorMonthET?.setText(it.reqTenorMonth)
+            binding?.reqTenorMonthET?.setText(it.reqTenorMonth.toString())
             binding?.yearlyTotalIncomehET?.setText(it.annualTotalIncome.toString())
             binding?.otherIncomeET?.setText(it.othersIncome.toString())
             binding?.monthlyTransactionET?.setText(it.monthlyTotalCodAmount.toString())
+            binding?.merchantPhysicalShopExistsRadioGroup?.check(
+                if(it.isLocalShop)
+                    R.id.merchantPhysicalShopExistsYes
+                else
+                    R.id.merchantPhysicalShopExistsNo
+            )
+            binding?.totalMonthlyAverageSellET?.setText(it.monthlyTotalAverageSale.toString())
+            binding?.OwnertypeofoownershipInBuisnessRadioGroup?.check(
+                when (it.shopOwnership) {
+                    "নিজের" -> {
+                        R.id.InBuisnessRadioButtonOwner
+                    }
+                    "ভাড়া" -> {
+                        R.id.InBuisnessRadioButtonRental
+                    }
+                    "পরিবারের নিজস্ব" -> {
+                        R.id.InBuisnessRadioButtonFamily
+                    }
+                    else->{
+                        R.id.InBuisnessRadioButtonOwner
+                    }
+                }
+            )
+            binding?.totalCODFromOtherServicesET?.setText(it.monthlyTotalCodAmount.toString())
+            //todo courrierUsersListInflate
+            binding?.merchantTakeLoanRadioGroup?.check(
+                if(it.hasPreviousLoan){
+                    R.id.merchantTakeLoanAccountYes
+                }else{
+                    R.id.merchantTakeLoanAccountNo
+                }
+            )
+            binding?.loanAMountET?.setText(it.loanAmount.toString())
+            binding?.bankNameET?.setText(it.bankName)
+            binding?.loanRepayRadioGroupType?.check(
+                if(it.repayType == "weekly"){
+                    R.id.loanRepayWeekly
+                }else{
+                    R.id.loanRepayMonthly
+                }
+            )
+            setUpSpinnerCurrentLoanEMISpinner(it.loanEmi, true)
+            binding?.merchantHasBankAccountRadioGroup?.check(
+                if(it.isBankAccount){
+                    R.id.merchantHasBankAccountYes
+                }else{
+                    R.id.merchantHasBankAccountNo
+                }
+            )
+            binding?.conmapyBankNameTextInput?.setText(it.companyBankAccName)
+            binding?.bankAccountNumberET?.setText(it.companyBankAccNo)
+            binding?.haveAnyCreditCardRadioGroup?.check(
+                if(it.hasCreditCard){
+                    R.id.yes_haveAnyCreditCard_radio_button
+                }else{
+                    R.id.no_haveAnyCreditCard_radio_button
+                }
+            )
+            binding?.creditCardName?.setText(it.cardHolder)
+            binding?.creditCardLimit?.setText(it.cardLimit)
+            binding?.haveAnyTINRadioGroup?.check(
+                if(it.hasTin){
+                    R.id.yes_haveAnyTin_radio_button
+                }else{
+                    R.id.no_haveAnyTin_radio_button
+                }
+            )
+            binding?.teamTINNumberET?.setText(it.tinNumber)
+            binding?.merchantHasTradeLicenceRadioGroup?.check(
+                if(it.hasTradeLicense){
+                    R.id.merchantHasTradeLicenceYes
+                }else{
+                    R.id.merchantHasTradeLicenceNo
+                }
+            )
+            binding?.tradeliesenceNOTV?.setText(it.tradeLicenseNo)
+            binding?.tradeliesencExpireDateTV?.setText(it.tradeLicenseExpireDate)
+            if(it.tradeLicenseImageUrl.isNotEmpty()){
+                binding?.imageTradeLicenceAddIV?.let { image ->
+                    val options = RequestOptions()
+                        .placeholder(R.drawable.ic_banner_place)
+                        .signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
+                    Glide.with(image)
+                        .load(it.tradeLicenseImageUrl)
+                        .apply(options)
+                        .into(image)
+                }
+            }
+            binding?.merchantHasGuarantorRadioGroup?.check(
+                if(it.guarantorMobile.isNotEmpty() && it.guarantorName.isNotEmpty()){
+                    R.id.merchantHasGuarantorYes
+                }else{
+                    R.id.merchantHasGuarantorNo
+                }
+            )
+            binding?.merchantGuarantorNameET?.setText(it.guarantorName)
+            binding?.merchantGuarantorNumberET?.setText(it.guarantorMobile)
+            setUpSpinnerAverageOrderSpinner(it.monthlyOrder)
+
+            courierList.clear()
+
+            viewModel.fetchCourierList().observe(viewLifecycleOwner, Observer { list ->
+                if (list.isNotEmpty()) {
+                    for(index  in 0 until list.size){
+                        it.courierWithLoanSurvey.forEach { courrersofcurrnetUser->
+                            if(courrersofcurrnetUser.courierId == list[index].courierId){
+                                dataAdapter.multipleSelection(list[index], index)
+                            }
+                        }
+                    }
+                    courierList.addAll(list)
+                    dataAdapter.initLoad(courierList)
+                }
+            })
 
 
         })
@@ -212,7 +332,7 @@ class LoanSurveyFragment : Fragment() {
                     hasTin = binding?.haveAnyTINRadioGroup?.checkedRadioButtonId == R.id.yes_haveAnyTin_radio_button,
                     hasTradeLicense = binding?.merchantHasTradeLicenceRadioGroup?.checkedRadioButtonId == R.id.merchantHasTradeLicenceYes,
                     homeOwnership = houseOwnerAdapter.selectedItem,
-                    interestedAmount = loanRange.toInt(),
+                    interestedAmount = loanRange.toDouble().toInt(),
                     isBankAccount = hasBankAccount,
                     isLocalShop = hasPhysicalShop,
                     loanAmount = if (hasPreviousLoan) previousTakingLoanAmount else 0,
@@ -221,10 +341,10 @@ class LoanSurveyFragment : Fragment() {
                     merchantName = merchantName,
                     monthlyExp = selectedMonthlyExp,
                     monthlyOrder = selectedAverageOrder,
-                    monthlyTotalAverageSale = if (hasPhysicalShop) totalMonthlyAverageSell.toInt() else 0,
-                    monthlyTotalCodAmount = totalMonthlyCOD.toInt(),
+                    monthlyTotalAverageSale = if (hasPhysicalShop) totalMonthlyAverageSell.toDouble().toInt() else 0,
+                    monthlyTotalCodAmount = totalMonthlyCOD.toDouble().toInt(),
                     nidNo = nidCardNo,
-                    othersIncome = binding?.otherIncomeET?.text.toString().trim().toInt() ?: 0,
+                    othersIncome = binding?.otherIncomeET?.text.toString().trim().toDouble().toInt() ?: 0,
                     recommend = "",
                     relationMarchent = selectedKnownMerchantDuration,
                     repayType = if (binding?.loanRepayRadioGroupType?.checkedRadioButtonId == R.id.loanRepayWeekly) "weekly" else "monthly",
@@ -235,7 +355,7 @@ class LoanSurveyFragment : Fragment() {
                     tradeLicenseExpireDate = selectedDateTradeLisence,
                     tradeLicenseImageUrl = imageTradeLicencePath,
                     tradeLicenseNo = binding?.tradeliesenceNOTV?.text.toString().trim(),
-                    transactionAmount = monthlyTransaction.toInt(),
+                    transactionAmount = monthlyTransaction.toDouble().toInt(),
                     hasPreviousLoan=  hasPreviousLoan
                 )
                 if (imagePickFlag == 1) {
@@ -547,7 +667,7 @@ class LoanSurveyFragment : Fragment() {
             return false
         }
 
-        yearlyTotalIncome = binding?.yearlyTotalIncomehET?.text.toString().toInt() ?: 0
+        yearlyTotalIncome = binding?.yearlyTotalIncomehET?.text.toString().toDouble().toInt() ?: 0
         if (yearlyTotalIncome == 0) {
             context?.toast("আপনার বাৎসরিক সর্বমোট আয় উল্লেখ করুন")
             return false
@@ -602,12 +722,12 @@ class LoanSurveyFragment : Fragment() {
         }
 
         if (hasPreviousLoan) {
-            if (binding?.loanAMountET?.text.isNullOrBlank() || binding?.loanAMountET?.text.toString().toInt() ?: 0 < 1
+            if (binding?.loanAMountET?.text.isNullOrBlank() || binding?.loanAMountET?.text.toString().toDouble().toInt() ?: 0 < 1
             ) {
                 context?.toast("পূর্বের লোনের পরিমাণ লিখুন")
                 return false
             } else {
-                previousTakingLoanAmount = binding?.loanAMountET?.text.toString().toInt() ?: 0
+                previousTakingLoanAmount = binding?.loanAMountET?.text.toString().toDouble().toInt() ?: 0
             }
             if (binding?.bankNameET?.text!!.isEmpty()) {
                 context?.toast("ব্যাংকের নাম লিখুন")
@@ -677,8 +797,8 @@ class LoanSurveyFragment : Fragment() {
             return false
         }
         if (binding?.merchantHasTradeLicenceRadioGroup?.checkedRadioButtonId == R.id.merchantHasTradeLicenceYes
-            && (binding?.tradeliesenceNOTV?.text.toString()
-                .isEmpty() || binding?.tradeliesencExpireDateTV?.text.toString().isEmpty())
+            && ((binding?.tradeliesenceNOTV?.text.toString()
+                .isEmpty() || binding?.tradeliesencExpireDateTV?.text.toString().isEmpty()))
         ) {
             context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
             return false
@@ -859,7 +979,7 @@ class LoanSurveyFragment : Fragment() {
             "আপনি ইতিপূর্বে একবার সার্ভেটি পূরণ করেছেন, আপনি কি আবার পূরণ করতে ইচ্ছুক?"
         alert(titleText, descriptionText, false, "হ্যাঁ") {
             if (it == AlertDialog.BUTTON_POSITIVE) {
-                findNavController().popBackStack()
+//                findNavController().popBackStack()
             }
         }.apply {
             setCanceledOnTouchOutside(false)
@@ -1114,7 +1234,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private fun setUpSpinnerAverageOrderSpinner() {
+    private fun setUpSpinnerAverageOrderSpinner(preselectedItem:String = "", hasPreviousSelection: Boolean = false) {
 
         val averageOrder: MutableList<String> = mutableListOf(
             "বেছে নিন",
@@ -1125,9 +1245,11 @@ class LoanSurveyFragment : Fragment() {
             "২০০০-৩০০০",
             "৩০০০-৪০০০"
         )
+        val indexOfselectedItem = averageOrder.indexOf(preselectedItem)
         val spinnerAdapter =
             CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, averageOrder)
         binding?.AverageOrderToMerchnat?.adapter = spinnerAdapter
+        binding?.AverageOrderToMerchnat?.setSelection(indexOfselectedItem)
         binding?.AverageOrderToMerchnat?.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -1184,7 +1306,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private fun setUpSpinnerCurrentLoanEMISpinner() {
+    private fun setUpSpinnerCurrentLoanEMISpinner(preselectedItem:String = "", hasPreviousSelection: Boolean = false) {
 
         val CurrentLoanEMI: MutableList<String> = mutableListOf(
             "বেছে নিন",
@@ -1198,9 +1320,11 @@ class LoanSurveyFragment : Fragment() {
             "১২০০০-১৫০০০",
             "১৫০০০-২০০০০"
         )
+        val indexOfselectedItem = CurrentLoanEMI.indexOf(preselectedItem)
         val spinnerAdapter =
             CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, CurrentLoanEMI)
         binding?.spinnerCurrentLoanEMIType?.adapter = spinnerAdapter
+        binding?.spinnerCurrentLoanEMIType?.setSelection(indexOfselectedItem)
         binding?.spinnerCurrentLoanEMIType?.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
