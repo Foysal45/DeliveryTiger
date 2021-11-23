@@ -14,6 +14,7 @@ class LocalUniversalAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
 
     var onItemClicked: ((model: String, position: Int) -> Unit)? = null
 
+    var hasPrevSelection = false
 
     var selectedPosition: Int = -1
 
@@ -36,7 +37,9 @@ class LocalUniversalAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
 
             binding.title.text = model
 
-
+            if(hasPrevSelection){
+                selectedItem = dataList[selectedPosition]
+            }
             val color = if (selectedPosition == position) {
                 ContextCompat.getColor(binding.title.context, R.color.black_100)
             } else {
@@ -77,7 +80,9 @@ class LocalUniversalAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
         }
     }
 
-    fun initLoad(list: List<String>) {
+    fun initLoad(list: List<String>, selectedItemFromAPi: Int = 0, hasPreviousSelection: Boolean = false) {
+        selectedPosition = selectedItemFromAPi
+        hasPrevSelection = hasPreviousSelection
         dataList.clear()
         dataList.addAll(list)
         notifyDataSetChanged()

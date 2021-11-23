@@ -432,5 +432,7 @@ class AppRepository(
 
     suspend fun checkVoucher(requestBody: VoucherCheckRequest) = apiInterfaceCore.checkVoucher(requestBody)
 
+    suspend fun getPreviousLoanSurveyResponse(courrierUserId: Int) = apiInterfaceCore.previousLoanSurveyResponse(courrierUserId)
+
     //#endregion
 }

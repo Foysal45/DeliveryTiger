@@ -42,6 +42,7 @@ import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookDat
 import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookGroupData
 import com.bd.deliverytiger.app.api.model.loan_survey.*
 import com.bd.deliverytiger.app.api.model.loan_survey.get_loan_survey.LoanSurveyData
+import com.bd.deliverytiger.app.api.model.loan_survey.get_loan_survey.PreviousLoanSurveyResponse
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.*
@@ -325,6 +326,9 @@ interface ApiInterfaceCore {
 
     @POST("api/Voucher/CheckVoucher")
     suspend fun checkVoucher(@Body requestBody: VoucherCheckRequest): NetworkResponse<GenericResponse<VoucherCheckResponse>, ErrorResponse>
+
+    @GET("api/Loan/GetLoanSurveyByCourierUser/{courrierUserId}")
+    suspend fun previousLoanSurveyResponse(@Path("courrierUserId") courrierUserId: Int): NetworkResponse<GenericResponse<List<PreviousLoanSurveyResponse>>, ErrorResponse>
 
 
 }

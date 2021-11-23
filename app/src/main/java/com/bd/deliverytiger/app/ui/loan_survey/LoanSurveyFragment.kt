@@ -27,6 +27,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import com.google.android.material.datepicker.MaterialDatePicker
+import org.koin.android.ext.android.bind
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -121,9 +122,10 @@ class LoanSurveyFragment : Fragment() {
 
         fetchBanner()
         init()
+        initData()
         fetchCourierList()
         initClickListener()
-        initViews()
+        //initViews()
     }
 
     private fun initViews() {
@@ -139,6 +141,32 @@ class LoanSurveyFragment : Fragment() {
         setUpSpinnerMonthlyExpSpinner()
         setUpSpinnerCurrentLoanEMISpinner()
         //setUpSpinnerMarketPositionSpinner()
+    }
+
+    private fun initData(){
+        viewModel.previousLoanSurveyResponse(1).observe(viewLifecycleOwner, Observer {
+            Timber.d("testing if recieved $it")
+            binding?.merchantGenderRadioGroup?.check( if(it.gender == "male") R.id.merchantGenderMale else R.id.merchantGenderFemale)
+            binding?.merchantNameET?.setText(it.merchantName)
+            ageRecycler(it.age, true)
+            binding?.nidCardNoET?.setText(it.nidNo)
+            binding?.DOBET?.setText(sdf1.format(it.dateOfBirth))
+            setUpEduactionSpinner(it.eduLevel)
+            familyMemNumRecycler(it.famMem, true)
+            houseOwnerRecycler(it.homeOwnership, true)
+            homeLocationRecycler(it.residenceLocation, true)
+            marriageStatusRecycler(it.married, true)
+            setUpAverageBasketSpinner(it.basketValue)
+            setUpSpinnerMonthlyExpSpinner(it.monthlyExp)
+            setUpSpinnerKnownToMerchnatSpinner(it.relationMarchent)
+            binding?.loanRangeET?.setText(it.loanAmount.toString())
+            binding?.reqTenorMonthET?.setText(it.reqTenorMonth)
+            binding?.yearlyTotalIncomehET?.setText(it.annualTotalIncome.toString())
+            binding?.otherIncomeET?.setText(it.othersIncome.toString())
+            binding?.monthlyTransactionET?.setText(it.monthlyTotalCodAmount.toString())
+
+
+        })
     }
 
     private fun init() {
@@ -851,7 +879,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun ageRecycler() {
+    private fun ageRecycler(preselectedItem:String = "", hasPreviousSelection: Boolean = false) {
 
         val dataListAge: MutableList<String> = mutableListOf()
         dataListAge.add("১৮-২৫")
@@ -859,7 +887,13 @@ class LoanSurveyFragment : Fragment() {
         dataListAge.add("৩০-৩৫")
         dataListAge.add("৩৫-৬৫")
 
-        adapterAge.initLoad(dataListAge)
+     /*   dataListAge.apply{
+            removeAt(dataListAge.indexOf(preselectedItem))
+            add(0,preselectedItem)
+        }*/
+        val indexOfselectedItem = dataListAge.indexOf(preselectedItem)
+
+        adapterAge.initLoad(dataListAge, indexOfselectedItem, hasPreviousSelection)
         binding?.ageRecyclerView?.let { recyclerView ->
             recyclerView.apply {
                 layoutManager =
@@ -872,7 +906,7 @@ class LoanSurveyFragment : Fragment() {
     }
 
 
-    private fun familyMemNumRecycler() {
+    private fun familyMemNumRecycler(preselectedItem:String = "", hasPreviousSelection: Boolean = false) {
 
         val education: List<String> = listOf(
             "২-৫",
@@ -880,8 +914,8 @@ class LoanSurveyFragment : Fragment() {
             "৭-১০",
             "১০-১৫"
         )
-
-        familyMemNumAdapter.initLoad(education)
+        val indexOfselectedItem = education.indexOf(preselectedItem)
+        familyMemNumAdapter.initLoad(education,indexOfselectedItem, hasPreviousSelection)
         binding?.FamilyMemNumRecyclerView?.let { recyclerView ->
             recyclerView.apply {
                 layoutManager =
@@ -892,7 +926,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun homeLocationRecycler() {
+    private fun homeLocationRecycler(preselectedItem:String = "", hasPreviousSelection: Boolean = false) {
 
         val location: List<String> = listOf(
             "মহানগর",
@@ -900,8 +934,9 @@ class LoanSurveyFragment : Fragment() {
             "শহরে",
             "গ্রামে"
         )
+        val indexOfselectedItem = location.indexOf(preselectedItem)
 
-        locationAdapter.initLoad(location)
+        locationAdapter.initLoad(location, indexOfselectedItem, hasPreviousSelection)
         binding?.residenceLocationRecyclerView?.let { recyclerView ->
             recyclerView.apply {
                 layoutManager =
@@ -912,7 +947,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun marriageStatusRecycler() {
+    private fun marriageStatusRecycler(preselectedItem:String = "", hasPreviousSelection: Boolean = false) {
 
         val location: List<String> = listOf(
             "বিবাহিত",
@@ -920,8 +955,8 @@ class LoanSurveyFragment : Fragment() {
             "তালাকপ্রাপ্ত",
             "বিধবা/ বিপত্নীক"
         )
-
-        marriageStatusAdapter.initLoad(location)
+        val indexOfselectedItem = location.indexOf(preselectedItem)
+        marriageStatusAdapter.initLoad(location, indexOfselectedItem, hasPreviousSelection)
         binding?.marriageRecyclerView?.let { recyclerView ->
             recyclerView.apply {
                 layoutManager =
@@ -953,13 +988,15 @@ class LoanSurveyFragment : Fragment() {
         }
     }*/
 
-    private fun houseOwnerRecycler() {
+    private fun houseOwnerRecycler(  preselectedItem:String = "", hasPreviousSelection: Boolean = false) {
         val houseOwner: List<String> = listOf(
             "নিজের",
             "পরিবারের নিজস্ব",
             "ভাড়া"
         )
-        houseOwnerAdapter.initLoad(houseOwner)
+        val indexOfselectedItem = houseOwner.indexOf(preselectedItem)
+
+        houseOwnerAdapter.initLoad(houseOwner,indexOfselectedItem, hasPreviousSelection)
         binding?.houseOwnerRecyclerView?.let { recyclerView ->
             recyclerView.apply {
                 layoutManager =
@@ -970,7 +1007,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun setUpEduactionSpinner() {
+    private fun setUpEduactionSpinner(preselectedItem: String = "") {
 
         val dataListAge: MutableList<String> = mutableListOf(
             "বেছে নিন",
@@ -982,10 +1019,13 @@ class LoanSurveyFragment : Fragment() {
             "স্নাতক",
             "স্নাতকোত্তর"
         )
+        val indexOfselectedItem = dataListAge.indexOf(preselectedItem)
 
         val spinnerAdapter =
             CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, dataListAge)
+
         binding?.spinnereducationType?.adapter = spinnerAdapter
+        binding?.spinnereducationType?.setSelection(indexOfselectedItem)
         binding?.spinnereducationType?.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -1004,7 +1044,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private fun setUpAverageBasketSpinner() {
+    private fun setUpAverageBasketSpinner(preselectedItem:String = "") {
 
         val AverageBasket: MutableList<String> = mutableListOf(
             "বেছে নিন",
@@ -1015,9 +1055,11 @@ class LoanSurveyFragment : Fragment() {
             "৮০০০০০-১০০০০০০",
             "১০০০০০০-১২০০০০০"
         )
+        val indexOfselectedItem = AverageBasket.indexOf(preselectedItem)
         val spinnerAdapter =
             CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, AverageBasket)
         binding?.spinneraverageBasketType?.adapter = spinnerAdapter
+        binding?.spinneraverageBasketType?.setSelection(indexOfselectedItem)
         binding?.spinneraverageBasketType?.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -1036,7 +1078,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private fun setUpSpinnerKnownToMerchnatSpinner() {
+    private fun setUpSpinnerKnownToMerchnatSpinner(preselectedItem:String = "") {
 
         val knownToMerchant: MutableList<String> = mutableListOf(
             "বেছে নিন",
@@ -1049,9 +1091,11 @@ class LoanSurveyFragment : Fragment() {
             "১০-১৫",
             "১৫-২০"
         )
+        val indexOfselectedItem = knownToMerchant.indexOf(preselectedItem)
         val spinnerAdapter =
             CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, knownToMerchant)
         binding?.spinneraverKnownToMerchnat?.adapter = spinnerAdapter
+        binding?.spinneraverKnownToMerchnat?.setSelection(indexOfselectedItem)
         binding?.spinneraverKnownToMerchnat?.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -1102,7 +1146,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private fun setUpSpinnerMonthlyExpSpinner() {
+    private fun setUpSpinnerMonthlyExpSpinner(preselectedItem:String = "") {
 
         val MonthlyExp: MutableList<String> = mutableListOf(
             "বেছে নিন",
@@ -1116,9 +1160,12 @@ class LoanSurveyFragment : Fragment() {
             "৪০,০০০-৬০,০০০",
             "৬০,০০০-১,০০,০০০"
         )
+
+        val indexOfselectedItem = MonthlyExp.indexOf(preselectedItem)
         val spinnerAdapter =
             CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, MonthlyExp)
         binding?.spinnerMonthlyExpType?.adapter = spinnerAdapter
+        binding?.spinnerMonthlyExpType?.setSelection(indexOfselectedItem)
         binding?.spinnerMonthlyExpType?.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
