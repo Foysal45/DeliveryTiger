@@ -416,6 +416,10 @@ class DashboardFragment : Fragment() {
             }
         }
 
+        dashboardAdapter.onPreviousPaymentHistoryClick = {
+            goToPreviousPaymentHistory()
+        }
+
         binding?.callTextImageLayout?.setOnClickListener {
             if(isPhoneVisible){
                 binding?.phoneNumberLayout?.visibility = View.GONE
@@ -446,11 +450,6 @@ class DashboardFragment : Fragment() {
             //addFragment(ReferralFragment.newInstance(), ReferralFragment.tag)
             findNavController().navigate(R.id.nav_loanSurvey)
             UserLogger.logGenie("Dashboard_Loan_Survey")
-        }
-
-        binding?.paymentHistoryBtn?.setOnClickListener {
-            findNavController().navigate(R.id.nav_payment_history)
-            UserLogger.logGenie("Dashboard_PaymentStatement")
         }
 
         /* binding?.dateRangePicker?.setOnClickListener {
@@ -501,6 +500,11 @@ class DashboardFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun goToPreviousPaymentHistory(){
+        findNavController().navigate(R.id.nav_payment_history)
+        UserLogger.logGenie("Dashboard_PaymentStatement")
     }
 
     private fun showBanner(bannerModel: BannerModel) {

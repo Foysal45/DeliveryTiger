@@ -25,6 +25,7 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
     var onPayDetailsClick: ((position: Int, model: DashboardData) -> Unit)? = null
     var onCODCollectionClick: ((position: Int, model: DashboardData) -> Unit)? = null
     var onPaymentRequestClick: ((position: Int, model: DashboardData) -> Unit)? = null
+    var onPreviousPaymentHistoryClick: (() -> Unit)? = null
 
     override fun getItemViewType(position: Int): Int {
         return dataList[position].viewType
@@ -245,6 +246,11 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
             binding.actionLayout.setOnClickListener {
                 if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
                     onPaymentRequestClick?.invoke(absoluteAdapterPosition, dataList[absoluteAdapterPosition])
+                }
+            }
+            binding.paymentHistoryBtn.setOnClickListener {
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                    onPreviousPaymentHistoryClick?.invoke()
                 }
             }
         }
