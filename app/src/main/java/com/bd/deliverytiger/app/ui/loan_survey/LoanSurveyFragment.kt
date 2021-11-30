@@ -165,7 +165,7 @@ class LoanSurveyFragment : Fragment() {
             setUpAverageBasketSpinner(it.basketValue)
             setUpSpinnerMonthlyExpSpinner(it.monthlyExp)
             setUpSpinnerKnownToMerchnatSpinner(it.relationMarchent)
-            binding?.loanRangeET?.setText(it.loanAmount.toString())
+            binding?.loanRangeET?.setText(it.interestedAmount.toString())
             binding?.reqTenorMonthET?.setText(it.reqTenorMonth.toString())
             binding?.yearlyTotalIncomehET?.setText(it.annualTotalIncome.toString())
             binding?.otherIncomeET?.setText(it.othersIncome.toString())
@@ -248,14 +248,18 @@ class LoanSurveyFragment : Fragment() {
             binding?.tradeliesenceNOTV?.setText(it.tradeLicenseNo)
             binding?.tradeliesencExpireDateTV?.setText(it.tradeLicenseExpireDate)
             if(it.tradeLicenseImageUrl.isNotEmpty()){
-                binding?.imageTradeLicenceAddIV?.let { image ->
-                    val options = RequestOptions()
-                        .placeholder(R.drawable.ic_banner_place)
-                        .signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
+                Timber.d("has trade lisence url ${it.tradeLicenseImageUrl}")
+                binding?.imageTradeLicencePickedIV?.isVisible = true
+                binding?.imageTradeLicencePickedIV?.let { image ->
+                    val options: RequestOptions = RequestOptions()
+                        //.centerCrop()
+                        .placeholder(R.mipmap.ic_launcher_round)
+                        .error(R.mipmap.ic_launcher_round)
                     Glide.with(image)
                         .load(it.tradeLicenseImageUrl)
                         .apply(options)
                         .into(image)
+                    imageTradeLicencePath = imagePath
                 }
             }
             binding?.merchantHasGuarantorRadioGroup?.check(
@@ -664,6 +668,9 @@ class LoanSurveyFragment : Fragment() {
         loanRepayMonthPeriod = binding?.reqTenorMonthET?.text.toString() ?: ""
         if (loanRepayMonthPeriod.isEmpty()) {
             context?.toast("আপনি কত মাসের মধ্যে লোন পরিশোধ করতে ইচ্ছুক")
+            return false
+        }else if(loanRepayMonthPeriod.toDouble().toInt() ?: 0 >= 60){
+            context?.toast("লোন পরিশোধের সময় ৬০ মাসের মধ্যে হয়া বাধ্যতামূলক")
             return false
         }
 
