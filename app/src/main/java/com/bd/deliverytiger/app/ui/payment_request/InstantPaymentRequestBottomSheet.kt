@@ -164,7 +164,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                         }
                     }.show()
                 }else{
-                    showAlert("ইন্সট্যান্ট পেমেন্ট ট্রান্সফারের সর্বোচ্চ লিমিট ১৫,০০০ টাকা, অনুগ্রহ করে রেগুলার পেমেন্ট সেবা নিন।")
+                    showAlert("ইন্সট্যান্ট পেমেন্ট ট্রান্সফারের সর্বোচ্চ লিমিট ${DigitConverter.toBanglaDigit(model.limit, true)} টাকা, অনুগ্রহ করে রেগুলার পেমেন্ট সেবা নিন।")
                 }
 
             }else{
@@ -456,7 +456,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             msg = if (paymentMethod == 3 && paymentType == 1){
                 "ব্যাংক ট্রান্সফার লিমিট নূন্যতম ১০০০ টাকা। "
             }else if (paymentMethod == 3 && paymentType == 2){
-                "ব্যাংক ট্রান্সফার লিমিট ১,৫০,০০০ টাকা। "
+                "ব্যাংক ট্রান্সফার লিমিট ${DigitConverter.toBanglaDigit(model.bankLimit, true)} টাকা। "
             }else{
                 "আপনার ট্রান্সফার করার মতো ব্যালান্স নেই।"
             }
