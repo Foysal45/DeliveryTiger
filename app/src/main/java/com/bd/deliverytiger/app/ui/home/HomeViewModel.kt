@@ -47,6 +47,10 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
 
     val netAmount = MutableLiveData<Int>(0)
 
+    var paymentServiceType : Int = 0
+    var paymentServiceCharge : Double = 0.0
+    var pohBalance : Double = 0.0
+
     fun getBannerInfo(): LiveData<BannerResponse> {
 
         viewState.value = ViewState.ProgressState(true)

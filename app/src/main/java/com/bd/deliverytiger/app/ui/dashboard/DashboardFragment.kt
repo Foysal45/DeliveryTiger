@@ -675,7 +675,9 @@ class DashboardFragment : Fragment() {
 
     private fun getCourierUsersInformation() {
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
-            SessionManager.paymentServiceType = model.paymentServiceType
+            homeViewModel.paymentServiceType = model.paymentServiceType
+            homeViewModel.paymentServiceCharge = model.paymentServiceCharge
+            homeViewModel.pohBalance = model.pohBalance
             adminUser = model?.adminUsers
             initRetentionManagerData(
                 model?.adminUsers?.userId ?: 0,

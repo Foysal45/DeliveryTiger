@@ -187,6 +187,10 @@ class AddOrderFragmentOne : Fragment() {
     private var voucherCode: String = ""
     private var voucherDeliveryRangeId: Int = 0
 
+    //POH
+    private var isPohEnable: Boolean = false
+    private var pohCharge: Double = 0.0
+
     private var deliveryType: String = ""
     private var orderType: String = "Only Delivery"
     private var productType: String = "small"
@@ -347,12 +351,14 @@ class AddOrderFragmentOne : Fragment() {
             binding?.voucherInfo?.visibility = View.VISIBLE
             binding?.voucherClear?.visibility = View.GONE
         }
-        if (SessionManager.paymentServiceType > 0){
+        if (homeViewModel.paymentServiceType > 0){
             binding?.pohLayout?.visibility = View.VISIBLE
+            pohCharge = homeViewModel.paymentServiceCharge
         }else{
             binding?.pohLayout?.visibility = View.GONE
         }
 
+        isPohEnable = isAgreeInPOH && homeViewModel.paymentServiceType > 0
 
         val calender = Calendar.getInstance()
         val todayDate = calender.timeInMillis
@@ -523,7 +529,19 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         checkPoh.setOnCheckedChangeListener { compoundButton, b ->
-            isAgreeInPOH = b
+            if (merchantDistrict == districtId && b){
+                val msg = "Same City Not Applicable"
+                alert(getString(R.string.instruction), msg, false, getString(R.string.ok), getString(R.string.cancel)) {
+                    if (it == AlertDialog.BUTTON_POSITIVE) {
+                        checkPoh.isChecked = false
+                    }
+                }.apply {
+                    setCancelable(false)
+                    show()
+                }
+            }else{
+                isAgreeInPOH = b
+            }
         }
         checkTermsTV.setOnClickListener {
 
@@ -1829,6 +1847,11 @@ class AddOrderFragmentOne : Fragment() {
 
         if (timeSlotId == 0) {
             context?.toast(getString(R.string.select_yr_time_slot))
+            return false
+        }
+
+        if (!isAgreeTerms) {
+            context?.showToast("শর্তাবলী মেনে অর্ডার দিন")
             return false
         }
 

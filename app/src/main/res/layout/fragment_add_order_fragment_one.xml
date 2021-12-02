@@ -1073,8 +1073,6 @@
                         android:text="POH নিতে চাই"
                         android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
-                        app:drawableEndCompat="@drawable/ic_star"
-                        app:drawableTint="@color/red"
                         android:drawablePadding="4dp"
                         />
                 </LinearLayout>
