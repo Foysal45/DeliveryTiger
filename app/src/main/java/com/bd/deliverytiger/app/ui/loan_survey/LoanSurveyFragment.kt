@@ -279,7 +279,8 @@ class LoanSurveyFragment : Fragment() {
                 if (list.isNotEmpty()) {
                     for(index  in 0 until list.size){
                         it.courierWithLoanSurvey.forEach { courrersofcurrnetUser->
-                            if(courrersofcurrnetUser.courierId == list[index].courierId){
+                            if(courrersofcurrnetUser.courierId == list[index].courierId
+                            ){
                                 dataAdapter.multipleSelection(list[index], index)
                             }
                         }
@@ -589,280 +590,6 @@ class LoanSurveyFragment : Fragment() {
                 startImagePickerResult.launch(intent)
             }
     }
-
-    private fun verify(): Boolean {
-
-        if (merchantGender.isEmpty()) {
-            context?.toast("লিঙ্গ নির্বাচন করুন")
-            return false
-        }
-
-        merchantName = binding?.merchantNameET?.text.toString()
-        if (merchantName.isEmpty()) {
-            context?.toast("আপনার নাম লিখুন")
-            return false
-        }
-
-        if (adapterAge.selectedItem == "") {
-            context?.toast("আপনার বয়স নির্বাচন করুন")
-            return false
-        }
-
-        nidCardNo = binding?.nidCardNoET?.text.toString()
-        if (nidCardNo.isEmpty()) {
-            context?.toast("আপনার এনআইডি নাম্বার উল্লেখ করুন")
-            return false
-        }
-
-        if (binding?.DOBET?.text.toString().isEmpty()) {
-            context?.toast("আপনার আপনার জন্মতারিখ উল্লেখ করুন")
-            return false
-        }
-
-        if (selectedEducation.isEmpty()) {
-            context?.toast("শিক্ষাগত যোগ্যতা নির্বাচন করুন")
-            return false
-        }
-
-        if (familyMemNumAdapter.selectedItem == "") {
-            context?.toast("পরিবারের সদস্য সংখ্যা লিখুন")
-            return false
-        }
-
-        if (houseOwnerAdapter.selectedItem == "") {
-            context?.toast("আপনার বাসার মালিকানা তথ্য নির্বাচন করুন")
-            return false
-        }
-
-        if (locationAdapter.selectedItem == "") {
-            context?.toast("আপনার বাসার অবস্থান নির্বাচন করুন")
-            return false
-        }
-
-        if (marriageStatusAdapter.selectedItem == "") {
-            context?.toast("বৈবাহিক অবস্থা নির্বাচন করুন")
-            return false
-        }
-
-        if (selectedAverageBasket.isEmpty()) {
-            context?.toast("আপনার গড় বাস্কেট তথ্য নির্বাচন করুন")
-            return false
-        }
-
-        if (selectedMonthlyExp.isEmpty()) {
-            context?.toast("আপনার মাসিক ব্যায়ের তথ্য দিন")
-            return false
-        }
-
-        if (selectedKnownMerchantDuration.isEmpty()) {
-            context?.toast("আপনার মার্চেন্ট এর সাথে পরিচয়ের সময়কাল নির্বাচন করুন")
-            return false
-        }
-
-        loanRange = binding?.loanRangeET?.text.toString() ?: ""
-        if (loanRange.isEmpty()) {
-            context?.toast("আপনার কাঙ্ক্ষিত লোন রেঞ্জ লিখুন")
-            return false
-        }
-
-        loanRepayMonthPeriod = binding?.reqTenorMonthET?.text.toString() ?: ""
-        if (loanRepayMonthPeriod.isEmpty()) {
-            context?.toast("আপনি কত মাসের মধ্যে লোন পরিশোধ করতে ইচ্ছুক")
-            return false
-        }else if(loanRepayMonthPeriod.toDouble().toInt() ?: 0 >= 60){
-            context?.toast("লোন পরিশোধের সময় ৬০ মাসের মধ্যে হয়া বাধ্যতামূলক")
-            return false
-        }
-
-        yearlyTotalIncome = binding?.yearlyTotalIncomehET?.text.toString().toDouble().toInt() ?: 0
-        if (yearlyTotalIncome == 0) {
-            context?.toast("আপনার বাৎসরিক সর্বমোট আয় উল্লেখ করুন")
-            return false
-        }
-        otherIncome = binding?.otherIncomeET?.text.toString() ?: ""
-        if (otherIncome.isEmpty()) {
-            context?.toast("অন্যান্য উৎস থেকে সর্বমোট আয় উল্লেখ করুন")
-            return false
-        }
-
-        monthlyTransaction = binding?.monthlyTransactionET?.text.toString()?: ""
-        if (monthlyTransaction.isEmpty()) {
-            context?.toast("মাসিক অনলাইন ট্রানজেকশন লিখুন")
-            return false
-        }
-
-        if (binding?.merchantPhysicalShopExistsRadioGroup?.checkedRadioButtonId == -1) {
-            context?.toast("ফিজিকাল দোকানের তথ্য দিন")
-            return false
-        }
-
-        if (hasPhysicalShop) {
-            totalMonthlyAverageSell = binding?.totalMonthlyAverageSellET?.text.toString()
-            if (totalMonthlyAverageSell.isEmpty()) {
-                context?.toast("আপনার গড় মাসিক বিক্রির তথ্য লিখুন")
-                return false
-            }
-        } else {
-            totalMonthlyAverageSell = ""
-        }
-
-        if (binding?.OwnertypeofoownershipInBuisnessRadioGroup?.checkedRadioButtonId == -1) {
-            context?.toast("আপনার ব্যবসার মালিকানা নির্বাচন করুন")
-            return false
-        }
-
-
-        totalMonthlyCOD = binding?.totalCODFromOtherServicesET?.text.toString()?: ""
-        if (totalMonthlyCOD.isEmpty()) {
-            context?.toast("আপনার টোটাল মাসিক COD দিন")
-            return false
-        }
-
-        if (dataAdapter.getSelectedItemModelList().isEmpty()) {
-            context?.toast("অন্য যে কুরিয়ার সার্ভিস সেবা গ্রহণ করেন তা নির্বাচন করুন")
-            return false
-        }
-
-        if (binding?.merchantTakeLoanRadioGroup?.checkedRadioButtonId == -1) {
-            context?.toast("পূর্বের লোনের তথ্য দিন")
-            return false
-        }
-
-        if (hasPreviousLoan) {
-            if (binding?.loanAMountET?.text.isNullOrBlank() || binding?.loanAMountET?.text.toString().toDouble().toInt() ?: 0 < 1
-            ) {
-                context?.toast("পূর্বের লোনের পরিমাণ লিখুন")
-                return false
-            } else {
-                previousTakingLoanAmount = binding?.loanAMountET?.text.toString().toDouble().toInt() ?: 0
-            }
-            if (binding?.bankNameET?.text!!.isEmpty()) {
-                context?.toast("ব্যাংকের নাম লিখুন")
-                return false
-            } else {
-                bankName = binding?.bankNameET?.text.toString() ?: ""
-            }
-
-            if (binding?.loanRepayRadioGroupType?.checkedRadioButtonId == -1) {
-                context?.toast("আপনার লোন পরিশোধের ধরণ নির্বাচন করুন")
-                return false
-            }
-            if (selectedCurrentLoanEMI.isEmpty()) {
-                context?.toast("আপনার লোন ই এম আই এর পরিমান দিন")
-                return false
-            }
-
-        } else {
-            previousTakingLoanAmount = 0
-            bankName = ""
-        }
-
-        if (binding?.merchantHasBankAccountRadioGroup?.checkedRadioButtonId == -1) {
-            context?.toast("পূর্বের কোনো ব্যাংক একাউন্ট তথ্য যদি থাকে তবে তা নির্বাচন করুন")
-            return false
-        }
-        if (binding?.merchantHasBankAccountRadioGroup?.checkedRadioButtonId == R.id.merchantHasBankAccountYes
-            && (binding?.bankAccountNumberET?.text.toString()
-                .isEmpty() || binding?.conmapyBankNameTextInput?.text.toString().isEmpty())
-        ) {
-            context?.toast("পূর্বের কোনো ব্যাংক একাউন্ট তথ্য যদি থাকে তবে তা নির্বাচন করুন")
-            return false
-        }
-
-        if (binding?.haveAnyCreditCardRadioGroup?.checkedRadioButtonId == -1) {
-            context?.toast("আপনার কার্ডের তথ্য দিন")
-            return false
-        }
-
-        if (hasCreditCard) {
-            if (binding?.creditCardName?.text.toString().isEmpty()) {
-                context?.toast("ব্যাংকের নাম লিখুন")
-                return false
-            }
-            if (binding?.creditCardLimit?.text.toString().isEmpty()) {
-                context?.toast("ক্রেডিট কার্ডের লিমিট দিন")
-                return false
-            }
-        }
-
-        if (binding?.haveAnyTINRadioGroup?.checkedRadioButtonId == -1) {
-            context?.toast("আপনার TIN তথ্য দিন")
-            return false
-        }
-
-        if (hasTin) {
-            if (binding?.teamTINNumberET?.text.toString()
-                    .isEmpty() || (binding?.teamTINNumberET?.text.toString().trim().length < 12)
-            ) {
-                context?.toast("আপনার TIN নাম্বার দিন")
-                return false
-            }
-        }
-
-        if (binding?.merchantHasTradeLicenceRadioGroup?.checkedRadioButtonId == -1) {
-            context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
-            return false
-        }
-        if (binding?.merchantHasTradeLicenceRadioGroup?.checkedRadioButtonId == R.id.merchantHasTradeLicenceYes
-            && ((binding?.tradeliesenceNOTV?.text.toString()
-                .isEmpty() || binding?.tradeliesencExpireDateTV?.text.toString().isEmpty()))
-        ) {
-            context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
-            return false
-        }
-        if (imagePickFlag == 1) {
-            if (imageTradeLicencePath.isEmpty()) {
-                context?.toast("ট্রেড লাইসেন্স এর ছবি অ্যাড করুন")
-                return false
-            }
-        }
-        if (!isExpireDateofTradeLisenseSelectd) {
-            context?.toast("ট্রেড লাইসেন্স এর এক্সপায়ার ডেট এড করুন")
-            return false
-        }
-
-
-        if (binding?.merchantHasGuarantorRadioGroup?.checkedRadioButtonId == -1) {
-            context?.toast("গ্যারান্টার এর তথ্য দিন")
-            return false
-        }
-
-        guarantorName = binding?.merchantGuarantorNameET?.text.toString()
-        guarantorNumber = binding?.merchantGuarantorNumberET?.text.toString()
-        if (hasGuarantor) {
-            if (guarantorName.isEmpty()) {
-                context?.toast("গ্যারান্টার এর নাম লিখুন")
-                return false
-            } else if (guarantorNumber.isEmpty()) {
-                context?.toast("গ্যারান্টার এর মোবাইল নাম্বার লিখুন")
-                return false
-            } else if (guarantorNumber.length != 11 || !isValidMobileNumber(guarantorNumber)) {
-                context?.toast("গ্যারান্টার এর সঠিক মোবাইল নাম্বার লিখুন")
-                return false
-            }
-        }
-
-        if (selectedAverageOrder.isEmpty()) {
-            context?.toast("আপনার গড় অর্ডার এর তথ্য দিন")
-            return false
-        }
-        if (selectedMonthlyExp.isEmpty()) {
-            context?.toast("আপনার মাসিক ব্যায় এর পরিমান দিন")
-            return false
-        }
-
-        /*if (selectedMarketPosition.isEmpty()) {
-            context?.toast("Please Fill in your market position information")
-            return false
-        }*/
-
-        /*if (recommendationAdapter.selectedItem == "") {
-            context?.toast("সুপারিশের তথ্য দিন")
-            return false
-        }*/
-        return true
-    }
-
     private val startImagePickerResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val resultCode = result.resultCode
@@ -1416,5 +1143,276 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 */
+    private fun verify(): Boolean {
 
+        if (merchantGender.isEmpty()) {
+            context?.toast("লিঙ্গ নির্বাচন করুন")
+            return false
+        }
+
+        merchantName = binding?.merchantNameET?.text.toString()
+        if (merchantName.isEmpty()) {
+            context?.toast("আপনার নাম লিখুন")
+            return false
+        }
+
+        if (adapterAge.selectedItem == "") {
+            context?.toast("আপনার বয়স নির্বাচন করুন")
+            return false
+        }
+
+        nidCardNo = binding?.nidCardNoET?.text.toString()
+        if (nidCardNo.isEmpty()) {
+            context?.toast("আপনার এনআইডি নাম্বার উল্লেখ করুন")
+            return false
+        }
+
+        if (binding?.DOBET?.text.toString().isEmpty()) {
+            context?.toast("আপনার আপনার জন্মতারিখ উল্লেখ করুন")
+            return false
+        }
+
+        if (selectedEducation.isEmpty()) {
+            context?.toast("শিক্ষাগত যোগ্যতা নির্বাচন করুন")
+            return false
+        }
+
+        if (familyMemNumAdapter.selectedItem == "") {
+            context?.toast("পরিবারের সদস্য সংখ্যা লিখুন")
+            return false
+        }
+
+        if (houseOwnerAdapter.selectedItem == "") {
+            context?.toast("আপনার বাসার মালিকানা তথ্য নির্বাচন করুন")
+            return false
+        }
+
+        if (locationAdapter.selectedItem == "") {
+            context?.toast("আপনার বাসার অবস্থান নির্বাচন করুন")
+            return false
+        }
+
+        if (marriageStatusAdapter.selectedItem == "") {
+            context?.toast("বৈবাহিক অবস্থা নির্বাচন করুন")
+            return false
+        }
+
+        if (selectedAverageBasket.isEmpty()) {
+            context?.toast("আপনার গড় বাস্কেট তথ্য নির্বাচন করুন")
+            return false
+        }
+
+        if (selectedMonthlyExp.isEmpty()) {
+            context?.toast("আপনার মাসিক ব্যায়ের তথ্য দিন")
+            return false
+        }
+
+        if (selectedKnownMerchantDuration.isEmpty()) {
+            context?.toast("আপনার মার্চেন্ট এর সাথে পরিচয়ের সময়কাল নির্বাচন করুন")
+            return false
+        }
+
+        loanRange = binding?.loanRangeET?.text.toString() ?: ""
+        if (loanRange.isEmpty()) {
+            context?.toast("আপনার কাঙ্ক্ষিত লোন রেঞ্জ লিখুন")
+            return false
+        }
+
+        loanRepayMonthPeriod = binding?.reqTenorMonthET?.text.toString() ?: ""
+        if (loanRepayMonthPeriod.isEmpty()) {
+            context?.toast("আপনি কত মাসের মধ্যে লোন পরিশোধ করতে ইচ্ছুক")
+            return false
+        }else if(loanRepayMonthPeriod.toDouble().toInt() ?: 0 >= 60){
+            context?.toast("লোন পরিশোধের সময় ৬০ মাসের মধ্যে হয়া বাধ্যতামূলক")
+            return false
+        }
+
+        yearlyTotalIncome = binding?.yearlyTotalIncomehET?.text.toString().toDouble().toInt() ?: 0
+        if (yearlyTotalIncome == 0) {
+            context?.toast("আপনার বাৎসরিক সর্বমোট আয় উল্লেখ করুন")
+            return false
+        }
+        otherIncome = binding?.otherIncomeET?.text.toString() ?: ""
+        if (otherIncome.isEmpty()) {
+            context?.toast("অন্যান্য উৎস থেকে সর্বমোট আয় উল্লেখ করুন")
+            return false
+        }
+
+        monthlyTransaction = binding?.monthlyTransactionET?.text.toString()?: ""
+        if (monthlyTransaction.isEmpty()) {
+            context?.toast("মাসিক অনলাইন ট্রানজেকশন লিখুন")
+            return false
+        }
+
+        if (binding?.merchantPhysicalShopExistsRadioGroup?.checkedRadioButtonId == -1) {
+            context?.toast("ফিজিকাল দোকানের তথ্য দিন")
+            return false
+        }
+
+        if (hasPhysicalShop) {
+            totalMonthlyAverageSell = binding?.totalMonthlyAverageSellET?.text.toString()
+            if (totalMonthlyAverageSell.isEmpty()) {
+                context?.toast("আপনার গড় মাসিক বিক্রির তথ্য লিখুন")
+                return false
+            }
+        } else {
+            totalMonthlyAverageSell = ""
+        }
+
+        if (binding?.OwnertypeofoownershipInBuisnessRadioGroup?.checkedRadioButtonId == -1) {
+            context?.toast("আপনার ব্যবসার মালিকানা নির্বাচন করুন")
+            return false
+        }
+
+
+        totalMonthlyCOD = binding?.totalCODFromOtherServicesET?.text.toString()?: ""
+        if (totalMonthlyCOD.isEmpty()) {
+            context?.toast("আপনার টোটাল মাসিক COD দিন")
+            return false
+        }
+
+        if (dataAdapter.getSelectedItemModelList().isEmpty()) {
+            context?.toast("অন্য যে কুরিয়ার সার্ভিস সেবা গ্রহণ করেন তা নির্বাচন করুন")
+            return false
+        }
+
+        if (binding?.merchantTakeLoanRadioGroup?.checkedRadioButtonId == -1) {
+            context?.toast("পূর্বের লোনের তথ্য দিন")
+            return false
+        }
+
+        if (hasPreviousLoan) {
+            if (binding?.loanAMountET?.text.isNullOrBlank() || binding?.loanAMountET?.text.toString().toDouble().toInt() ?: 0 < 1
+            ) {
+                context?.toast("পূর্বের লোনের পরিমাণ লিখুন")
+                return false
+            } else {
+                previousTakingLoanAmount = binding?.loanAMountET?.text.toString().toDouble().toInt() ?: 0
+            }
+            if (binding?.bankNameET?.text!!.isEmpty()) {
+                context?.toast("ব্যাংকের নাম লিখুন")
+                return false
+            } else {
+                bankName = binding?.bankNameET?.text.toString() ?: ""
+            }
+
+            if (binding?.loanRepayRadioGroupType?.checkedRadioButtonId == -1) {
+                context?.toast("আপনার লোন পরিশোধের ধরণ নির্বাচন করুন")
+                return false
+            }
+            if (selectedCurrentLoanEMI.isEmpty()) {
+                context?.toast("আপনার লোন ই এম আই এর পরিমান দিন")
+                return false
+            }
+
+        } else {
+            previousTakingLoanAmount = 0
+            bankName = ""
+        }
+
+        if (binding?.merchantHasBankAccountRadioGroup?.checkedRadioButtonId == -1) {
+            context?.toast("পূর্বের কোনো ব্যাংক একাউন্ট তথ্য যদি থাকে তবে তা নির্বাচন করুন")
+            return false
+        }
+        if (binding?.merchantHasBankAccountRadioGroup?.checkedRadioButtonId == R.id.merchantHasBankAccountYes
+            && (binding?.bankAccountNumberET?.text.toString()
+                .isEmpty() || binding?.conmapyBankNameTextInput?.text.toString().isEmpty())
+        ) {
+            context?.toast("পূর্বের কোনো ব্যাংক একাউন্ট তথ্য যদি থাকে তবে তা নির্বাচন করুন")
+            return false
+        }
+
+        if (binding?.haveAnyCreditCardRadioGroup?.checkedRadioButtonId == -1) {
+            context?.toast("আপনার কার্ডের তথ্য দিন")
+            return false
+        }
+
+        if (hasCreditCard) {
+            if (binding?.creditCardName?.text.toString().isEmpty()) {
+                context?.toast("ব্যাংকের নাম লিখুন")
+                return false
+            }
+            if (binding?.creditCardLimit?.text.toString().isEmpty()) {
+                context?.toast("ক্রেডিট কার্ডের লিমিট দিন")
+                return false
+            }
+        }
+
+        if (binding?.haveAnyTINRadioGroup?.checkedRadioButtonId == -1) {
+            context?.toast("আপনার TIN তথ্য দিন")
+            return false
+        }
+
+        if (hasTin) {
+            if (binding?.teamTINNumberET?.text.toString()
+                    .isEmpty() || (binding?.teamTINNumberET?.text.toString().trim().length < 12)
+            ) {
+                context?.toast("আপনার TIN নাম্বার দিন")
+                return false
+            }
+        }
+
+        if (binding?.merchantHasTradeLicenceRadioGroup?.checkedRadioButtonId == -1) {
+            context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
+            return false
+        }
+        if (binding?.merchantHasTradeLicenceRadioGroup?.checkedRadioButtonId == R.id.merchantHasTradeLicenceYes
+            && ((binding?.tradeliesenceNOTV?.text.toString()
+                .isEmpty() || binding?.tradeliesencExpireDateTV?.text.toString().isEmpty()))
+        ) {
+            context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
+            return false
+        }
+        if (imagePickFlag == 1) {
+            if (imageTradeLicencePath.isEmpty()) {
+                context?.toast("ট্রেড লাইসেন্স এর ছবি অ্যাড করুন")
+                return false
+            }
+        }
+        if (!isExpireDateofTradeLisenseSelectd) {
+            context?.toast("ট্রেড লাইসেন্স এর এক্সপায়ার ডেট এড করুন")
+            return false
+        }
+
+
+        if (binding?.merchantHasGuarantorRadioGroup?.checkedRadioButtonId == -1) {
+            context?.toast("গ্যারান্টার এর তথ্য দিন")
+            return false
+        }
+
+        guarantorName = binding?.merchantGuarantorNameET?.text.toString()
+        guarantorNumber = binding?.merchantGuarantorNumberET?.text.toString()
+        if (hasGuarantor) {
+            if (guarantorName.isEmpty()) {
+                context?.toast("গ্যারান্টার এর নাম লিখুন")
+                return false
+            } else if (guarantorNumber.isEmpty()) {
+                context?.toast("গ্যারান্টার এর মোবাইল নাম্বার লিখুন")
+                return false
+            } else if (guarantorNumber.length != 11 || !isValidMobileNumber(guarantorNumber)) {
+                context?.toast("গ্যারান্টার এর সঠিক মোবাইল নাম্বার লিখুন")
+                return false
+            }
+        }
+
+        if (selectedAverageOrder.isEmpty()) {
+            context?.toast("আপনার গড় অর্ডার এর তথ্য দিন")
+            return false
+        }
+        if (selectedMonthlyExp.isEmpty()) {
+            context?.toast("আপনার মাসিক ব্যায় এর পরিমান দিন")
+            return false
+        }
+
+        /*if (selectedMarketPosition.isEmpty()) {
+            context?.toast("Please Fill in your market position information")
+            return false
+        }*/
+
+        /*if (recommendationAdapter.selectedItem == "") {
+            context?.toast("সুপারিশের তথ্য দিন")
+            return false
+        }*/
+        return true
+    }
 }
