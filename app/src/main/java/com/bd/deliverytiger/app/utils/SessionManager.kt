@@ -307,16 +307,6 @@ object SessionManager {
             }
         }
 
-    var paymentServiceType: Int
-        get() {
-            return pref.getInt("paymentServiceType", 0)
-        }
-        set(value) {
-            pref.edit {
-                putInt("paymentServiceType", value)
-            }
-        }
-
     var address: String
         get() {
             return pref.getString("address", "")!!

@@ -91,7 +91,7 @@ class ComplainFragment(): Fragment() {
                 val complain = binding?.complainTV?.text.toString().trim()
                 val code = orderCode.toUpperCase(Locale.US).replace("DT-", "")
 
-                val requestBody = ComplainRequest(orderCode, complain, "app", SessionManager.companyName, SessionManager.mobile, SessionManager.adminUserId)
+                val requestBody = ComplainRequest(orderCode, complain, "app", SessionManager.companyName, SessionManager.mobile)
                 viewModel.submitComplain(requestBody).observe(viewLifecycleOwner, Observer { complainStatus->
                     when {
                         complainStatus > 0 -> {
