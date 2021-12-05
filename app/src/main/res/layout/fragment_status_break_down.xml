@@ -29,6 +29,40 @@
         android:background="@color/separator"
         app:layout_constraintTop_toBottomOf="@id/titleTV" />
 
+    <LinearLayout
+        android:id="@+id/chatLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"
+        >
+
+        <ImageView
+            android:id="@+id/chatBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_chat1"
+            android:contentDescription="@string/cd"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="রিটার্ন টিমের সাথে লাইভ চ্যাট করুন"
+            android:textSize="16sp"
+            android:textColor="@color/black_80"
+            android:layout_marginStart="8dp"
+            />
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
