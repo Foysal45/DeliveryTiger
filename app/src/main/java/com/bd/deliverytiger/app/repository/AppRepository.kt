@@ -10,6 +10,7 @@ import com.bd.deliverytiger.app.api.model.collector_info.CollectorInfoRequest
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
+import com.bd.deliverytiger.app.api.model.complain.general_complain.GeneralComplainListRequest
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.deal_management.DealManagementRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
@@ -227,6 +228,8 @@ class AppRepository(
     suspend fun submitComplain(requestBody: ComplainRequest) = apiInterfaceADM.submitComplain(requestBody)
 
     suspend fun fetchComplainList(requestBody: ComplainListRequest) = apiInterfaceADM.fetchComplainList(requestBody)
+
+    suspend fun fetchWithoutOrderCodeComplains(requestBody: GeneralComplainListRequest) = apiInterfaceADM.fetchWithoutOrderCodeComplains(requestBody)
 
     suspend fun fetchBillPayHistory(courierUserId: Int) = apiInterfaceADM.fetchBillPayHistory(courierUserId)
 

@@ -10,6 +10,8 @@ import com.bd.deliverytiger.app.api.model.complain.ComplainData
 import com.bd.deliverytiger.app.api.model.complain.ComplainHistoryData
 import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
+import com.bd.deliverytiger.app.api.model.complain.general_complain.GeneralComplainListRequest
+import com.bd.deliverytiger.app.api.model.complain.general_complain.GeneralComplainResponse
 import com.bd.deliverytiger.app.api.model.instant_payment_rate.InstantPaymentRateModel
 import com.bd.deliverytiger.app.api.model.instant_payment_status.InstantPaymentStatusData
 import com.bd.deliverytiger.app.api.model.instant_payment_status.InstantPaymentActivationStatusResponse
@@ -66,6 +68,9 @@ interface ApiInterfaceADM {
 
     @POST("api/Complain/ComplainList")
     suspend fun fetchComplainList(@Body requestBody: ComplainListRequest):NetworkResponse<List<ComplainData>, ErrorResponse>
+
+    @POST("api/Complain/GetAllWithoutOrderCodeComplains")
+    suspend fun fetchWithoutOrderCodeComplains(@Body requestBody: GeneralComplainListRequest):NetworkResponse<List<GeneralComplainResponse>, ErrorResponse>
 
     @GET("api/account/reports/GetDTCollectedFromMerchantData/{courierUserId}")
     suspend fun fetchBillPayHistory(@Path("courierUserId") courierUserId: Int): NetworkResponse<List<BillPayHistoryResponse>, ErrorResponse>

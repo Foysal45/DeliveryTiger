@@ -92,12 +92,6 @@ data class CourierInfoModel(
     var isBreakAble: Boolean = false,
     @SerializedName("isHeavyWeight")
     var isHeavyWeight: Boolean = false,
-    @SerializedName("paymentServiceType")
-    var paymentServiceType: Int = 0,
-    @SerializedName("paymentServiceCharge")
-    var paymentServiceCharge: Double = 0.0,
-    @SerializedName("pohBalance")
-    var pohBalance: Double = 0.0,
     @SerializedName("customerSMSLimit")
     var customerSMSLimit: Int = 0,
     @SerializedName("isLoanActive")

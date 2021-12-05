@@ -13,12 +13,17 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.chat.ChatUserData
 import com.bd.deliverytiger.app.api.model.chat.FirebaseCredential
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
+import com.bd.deliverytiger.app.api.model.complain.general_complain.GeneralComplainListRequest
 import com.bd.deliverytiger.app.databinding.FragmentComplainBinding
 import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.complain.complain_history.ComplainHistoryBottomSheet
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.tabs.TabLayout
 import org.koin.android.ext.android.inject
+import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ComplainFragment(): Fragment() {
@@ -31,6 +36,14 @@ class ComplainFragment(): Fragment() {
     private var selectedType = 0
 
     private var orderId: String? = null
+
+    private var sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+    private var sdf1 = SimpleDateFormat("dd MM", Locale.US)
+
+    private var fromDate = ""
+    private var displayFromDate = ""
+    private var toDate = ""
+    private var displayToDate = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentComplainBinding.inflate(inflater, container, false).also {
@@ -53,6 +66,7 @@ class ComplainFragment(): Fragment() {
 
         setUpSpinner()
         initComplainList()
+        initDate()
         fetchComplain()
 
         binding?.orderCodeTV?.setText(orderId)
@@ -103,6 +117,10 @@ class ComplainFragment(): Fragment() {
             goToChatActivity()
         }
 
+        binding?.datePicker?.setOnClickListener {
+            dateRangePicker()
+        }
+
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
                 is ViewState.ShowMessage -> {
@@ -120,6 +138,32 @@ class ComplainFragment(): Fragment() {
                 }
             }
         })
+
+        binding?.tabLayout?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> {
+                        binding?.dateFilterCard?.visibility = View.GONE
+                        fetchComplain()
+                    }
+                    1 -> {
+                        binding?.dateFilterCard?.visibility = View.VISIBLE
+                        fetchGeneralComplain()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun initDate() {
+        val calender = Calendar.getInstance()
+        fromDate = sdf.format(calender.timeInMillis)
+        displayFromDate = sdf1.format(calender.time)
+        toDate = sdf.format(calender.timeInMillis)
+        displayToDate = sdf1.format(calender.time)
+        setDateRangePickerTitle()
     }
 
     private fun initComplainList() {
@@ -144,10 +188,43 @@ class ComplainFragment(): Fragment() {
         dialog.show(childFragmentManager, tag)
     }
 
+    private fun dateRangePicker() {
+        val builder = MaterialDatePicker.Builder.dateRangePicker()
+        builder.setTheme(R.style.CustomMaterialCalendarTheme)
+        builder.setTitleText("ডেট রেঞ্জ সিলেক্ট করুন")
+        val picker = builder.build()
+        picker.show(childFragmentManager, "Picker")
+        picker.addOnPositiveButtonClickListener {
+
+            fromDate = sdf.format(it.first)
+            displayFromDate = sdf.format(it.first)
+            toDate = sdf.format(it.second)
+            displayToDate = sdf.format(it.second)
+            setDateRangePickerTitle()
+            fetchGeneralComplain()
+        }
+    }
+
+    private fun setDateRangePickerTitle() {
+        val msg = "${DigitConverter.toBanglaDate(displayFromDate, "yyyy-MM-dd")} - ${DigitConverter.toBanglaDate(displayToDate, "yyyy-MM-dd")}"
+        binding?.datePicker?.text = msg
+    }
+
     private fun fetchComplain() {
 
         viewModel.fetchComplainList(SessionManager.courierUserId, 0).observe(viewLifecycleOwner, Observer { list ->
             dataAdapter.initLoad(list)
+            if (list.isNotEmpty()){
+                binding?.complaintTitle?.visibility = View.VISIBLE
+            }
+        })
+    }
+
+    private fun fetchGeneralComplain() {
+
+        var requestBody = GeneralComplainListRequest(fromDate, toDate)
+        viewModel.fetchWithoutOrderCodeComplains(requestBody).observe(viewLifecycleOwner, Observer { list ->
+            dataAdapter.initGeneralLoad(list)
             if (list.isNotEmpty()){
                 binding?.complaintTitle?.visibility = View.VISIBLE
             }
