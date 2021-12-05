@@ -330,5 +330,11 @@ interface ApiInterfaceCore {
     @GET("api/Loan/GetLoanSurveyByCourierUser/{courrierUserId}")
     suspend fun previousLoanSurveyResponse(@Path("courrierUserId") courrierUserId: Int): NetworkResponse<GenericResponse<List<PreviousLoanSurveyResponse>>, ErrorResponse>
 
+    @PUT("/api/Update/UpdateLoanSurvey/{loanSurveyId}")
+    suspend fun updateLoanSurvey(@Path("loanSurveyId") loanSurveyId: Int, @Body requestBody: LoanSurveyRequestBody): NetworkResponse<GenericResponse<Int>, ErrorResponse>
+
+    @PUT("api/Update/UpdateCourierWithLoanSurvey/{loanSurveyId}")
+    suspend fun UpdateCourierWithLoanSurvey(@Body requestBody: List<SelectedCourierModel>, @Path("loanSurveyId") loanSurveyId: Int): NetworkResponse<Int, ErrorResponse>
+
 
 }

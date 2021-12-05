@@ -3,99 +3,95 @@ package com.bd.deliverytiger.app.api.model.loan_survey
 
 import com.google.gson.annotations.SerializedName
 
-data class LoanSurveyRequestBody(
+data class UpdateLoanSurveyRequest(
     @SerializedName("age")
-    var age: String = "",
+    val age: String = "",
     @SerializedName("annualTotalIncome")
-    var annualTotalIncome: Int = 0,
+    val annualTotalIncome: Int = 0,
     @SerializedName("applicationDate")
-    var applicationDate: String = "",
+    val applicationDate: String = "",
     @SerializedName("bankName")
-    var bankName: String = "",
+    val bankName: String = "",
     @SerializedName("basketValue")
-    var basketValue: String = "",
+    val basketValue: String = "",
     @SerializedName("cardHolder")
-    var cardHolder: String = "",
+    val cardHolder: String = "",
     @SerializedName("cardLimit")
-    var cardLimit: String = "",
+    val cardLimit: String = "",
     @SerializedName("companyBankAccName")
-    var companyBankAccName: String = "",
+    val companyBankAccName: String = "",
     @SerializedName("companyBankAccNo")
-    var companyBankAccNo: String = "",
-    @SerializedName("courierUserId")
-    var courierUserId: Int = 0,
+    val companyBankAccNo: String = "",
     @SerializedName("dateOfBirth")
-    var dateOfBirth: String = "",
+    val dateOfBirth: String = "",
     @SerializedName("eduLevel")
-    var eduLevel: String = "",
+    val eduLevel: String = "",
     @SerializedName("famMem")
-    var famMem: String = "",
+    val famMem: String = "",
     @SerializedName("gender")
-    var gender: String = "",
+    val gender: String = "",
     @SerializedName("guarantorMobile")
-    var guarantorMobile: String = "",
+    val guarantorMobile: String = "",
     @SerializedName("guarantorName")
-    var guarantorName: String = "",
+    val guarantorName: String = "",
     @SerializedName("hasCreditCard")
-    var hasCreditCard: Boolean = false,
+    val hasCreditCard: Boolean = false,
     @SerializedName("hasPreviousLoan")
-    var hasPreviousLoan: Boolean = false,
+    val hasPreviousLoan: Boolean = false,
     @SerializedName("hasTin")
-    var hasTin: Boolean = false,
+    val hasTin: Boolean = false,
     @SerializedName("hasTradeLicense")
-    var hasTradeLicense: Boolean = false,
+    val hasTradeLicense: Boolean = false,
     @SerializedName("homeOwnership")
-    var homeOwnership: String = "",
+    val homeOwnership: String = "",
     @SerializedName("interestedAmount")
-    var interestedAmount: Int = 0,
+    val interestedAmount: Int = 0,
     @SerializedName("isBankAccount")
-    var isBankAccount: Boolean = false,
+    val isBankAccount: Boolean = false,
     @SerializedName("isLocalShop")
-    var isLocalShop: Boolean = false,
-   /* @SerializedName("lenderType")
-    var lenderType: String = "",*/
+    val isLocalShop: Boolean = false,
     @SerializedName("loanAmount")
-    var loanAmount: Int = 0,
+    val loanAmount: Int = 0,
     @SerializedName("loanEmi")
-    var loanEmi: String = "",
+    val loanEmi: String = "",
     @SerializedName("loanSurveyId")
-    var loanSurveyId: Int = 0,
+    val loanSurveyId: Int = 0,
     @SerializedName("married")
-    var married: String = "",
+    val married: String = "",
     @SerializedName("merchantName")
-    var merchantName: String = "",
+    val merchantName: String = "",
     @SerializedName("monthlyExp")
-    var monthlyExp: String = "",
+    val monthlyExp: String = "",
     @SerializedName("monthlyOrder")
-    var monthlyOrder: String = "",
+    val monthlyOrder: String = "",
     @SerializedName("monthlyTotalAverageSale")
-    var monthlyTotalAverageSale: Int = 0,
+    val monthlyTotalAverageSale: Int = 0,
     @SerializedName("monthlyTotalCodAmount")
-    var monthlyTotalCodAmount: Int = 0,
+    val monthlyTotalCodAmount: Int = 0,
     @SerializedName("nidNo")
-    var nidNo: String = "",
+    val nidNo: String = "",
     @SerializedName("othersIncome")
-    var othersIncome: Int = 0,
+    val othersIncome: Int = 0,
     @SerializedName("recommend")
-    var recommend: String = "",
+    val recommend: String = "",
     @SerializedName("relationMarchent")
-    var relationMarchent: String = "",
+    val relationMarchent: String = "",
     @SerializedName("repayType")
-    var repayType: String = "",
+    val repayType: String = "",
     @SerializedName("reqTenorMonth")
-    var reqTenorMonth: Int = 0,
+    val reqTenorMonth: Int = 0,
     @SerializedName("residenceLocation")
-    var residenceLocation: String = "",
+    val residenceLocation: String = "",
     @SerializedName("shopOwnership")
-    var shopOwnership: String = "",
+    val shopOwnership: String = "",
     @SerializedName("tinNumber")
-    var tinNumber: String = "",
+    val tinNumber: String = "",
     @SerializedName("tradeLicenseExpireDate")
-    var tradeLicenseExpireDate: String = "",
+    val tradeLicenseExpireDate: String = "",
     @SerializedName("tradeLicenseImageUrl")
     var tradeLicenseImageUrl: String = "",
     @SerializedName("tradeLicenseNo")
-    var tradeLicenseNo: String = "",
+    val tradeLicenseNo: String = "",
     @SerializedName("transactionAmount")
-    var transactionAmount: Int = 0
+    val transactionAmount: Int = 0
 )

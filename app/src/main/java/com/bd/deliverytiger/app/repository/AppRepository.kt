@@ -33,7 +33,6 @@ import com.bd.deliverytiger.app.api.model.lead_management.customer_details.Custo
 import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookData
 import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookGroupData
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
-import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBodyV3
 import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
@@ -435,4 +434,9 @@ class AppRepository(
     suspend fun getPreviousLoanSurveyResponse(courrierUserId: Int) = apiInterfaceCore.previousLoanSurveyResponse(courrierUserId)
 
     //#endregion
+
+    suspend fun UpdateCourierWithLoanSurvey(requestBody: List<SelectedCourierModel>, loanSurveyId: Int) = apiInterfaceCore.UpdateCourierWithLoanSurvey(requestBody, loanSurveyId)
+
+    suspend fun updateLoanSurvey(loanSurveyId: Int, requestBody: LoanSurveyRequestBody) = apiInterfaceCore.updateLoanSurvey(loanSurveyId, requestBody)
+
 }
