@@ -24,7 +24,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.chat.ChatUserData
+import com.bd.deliverytiger.app.api.model.chat.FirebaseCredential
 import com.bd.deliverytiger.app.api.model.instant_payment_rate.InstantPaymentRateModel
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantInstantPaymentRequest
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceivableDetailResponse
@@ -34,6 +37,7 @@ import com.bd.deliverytiger.app.databinding.FragmentInstantPaymentRequestBottomS
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.accounts_mail_format.AccountsMailFormatBottomSheet
 import com.bd.deliverytiger.app.ui.add_order.AddProductBottomSheet
+import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
@@ -169,6 +173,10 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
     private fun initClickLister(){
 
+        binding?.chatLayout?.setOnClickListener {
+            gotoChatActivity()
+        }
+
         binding?.transferBtnLayout?.setOnClickListener {
             if (model.payableAmount != 0){
                 if (model.payableAmount <= model.limit){
@@ -286,6 +294,27 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         }
 
+    }
+
+    private fun gotoChatActivity() {
+        val firebaseCredential = FirebaseCredential(
+            firebaseWebApiKey = BuildConfig.FirebaseWebApiKey
+        )
+        val senderData = ChatUserData(SessionManager.courierUserId.toString(), SessionManager.companyName, SessionManager.mobile,
+            imageUrl = "https://static.ajkerdeal.com/delivery_tiger/profile/${SessionManager.courierUserId}.jpg",
+            role = "dt",
+            fcmToken = SessionManager.firebaseToken
+        )
+        val receiverData = ChatUserData("1444", "Accounts Team", "01200000000",
+            imageUrl = "https://static.ajkerdeal.com/images/admin_users/dt/938.jpg",
+            role = "retention"
+        )
+        ChatConfigure(
+            "dt-retention",
+            senderData,
+            firebaseCredential = firebaseCredential,
+            receiver = receiverData
+        ).config(requireContext())
     }
 
     private fun fetchData(){

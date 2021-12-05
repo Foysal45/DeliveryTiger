@@ -42,7 +42,6 @@ import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleActivity
-import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleBottomSheet
 import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentRequestBottomSheet
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
@@ -982,24 +981,28 @@ class DashboardFragment : Fragment() {
 
         val dataList: MutableList<DashboardData>
         var title = ""
+        var flag = 0
         when (dashboardRouteUrl) {
             "shipment" -> {
                 dataList = shipmentDataList
                 title = "শিপমেন্টে আছে"
+                flag = 1
             }
             "customer_not_found" -> {
                 dataList = customerNotFoundDataList
                 title = "কাস্টমারকে পাওয়া যাচ্ছে না"
+                flag = 2
             }
             "return" -> {
                 dataList = returnDataList
                 title = "রিটার্নে আছে"
+                flag = 3
             }
             else -> return
         }
 
         val tag = StatusBreakDownBottomSheet.tag
-        val dialog = StatusBreakDownBottomSheet.newInstance(title, dataList)
+        val dialog = StatusBreakDownBottomSheet.newInstance(title, dataList, flag)
         dialog.show(childFragmentManager, tag)
         dialog.onItemClicked = { model, position ->
             dialog.dismiss()
