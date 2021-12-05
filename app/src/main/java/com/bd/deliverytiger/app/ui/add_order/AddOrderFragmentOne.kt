@@ -168,6 +168,7 @@ class AddOrderFragmentOne : Fragment() {
     private var isOpenBoxCheck: Boolean = false
     private var isOfficeDrop: Boolean = true
     private var isCollectionLocationSelected: Boolean = false
+    private var removeCollectionTimeSlotId: Int = 0
     private var isCollectionTypeSelected: Boolean = false
     private var collectionAmountLimit: Double = 0.0
     private var actualPackagePriceLimit: Double = 0.0
@@ -795,6 +796,7 @@ class AddOrderFragmentOne : Fragment() {
                 collectionAddress = pickupLocation.pickupAddress ?: ""
                 collectionAddressET.setText(collectionAddress)
                 isCollectionLocationSelected = true
+                removeCollectionTimeSlotId = pickupLocation.collectionTimeSlotId
                 merchantDistrict = collectionDistrictId
             } else {
                 isOfficeDrop = true
@@ -1540,6 +1542,11 @@ class AddOrderFragmentOne : Fragment() {
                         // keep only first one
                         timeSlotList.removeAll { it.collectionTimeSlotId != 1 }
                     }
+                    if (isCollectionLocationSelected) {
+                        if (removeCollectionTimeSlotId != 0){
+                            timeSlotList.removeAll { it.collectionTimeSlotId == removeCollectionTimeSlotId }
+                        }
+                    }
                 }
                 timeSlotDataAdapter.initLoad(timeSlotList)
                 binding?.emptyView?.isVisible = timeSlotList.isEmpty()
@@ -1553,6 +1560,11 @@ class AddOrderFragmentOne : Fragment() {
                     if (isHeavyWeight) {
                         // keep only first one
                         timeSlotList.removeAll { it.collectionTimeSlotId != 1 }
+                    }
+                    if (isCollectionLocationSelected) {
+                        if (removeCollectionTimeSlotId != 0){
+                            timeSlotList.removeAll { it.collectionTimeSlotId == removeCollectionTimeSlotId }
+                        }
                     }
                 }
                 timeSlotDataAdapter.initLoad(timeSlotList)

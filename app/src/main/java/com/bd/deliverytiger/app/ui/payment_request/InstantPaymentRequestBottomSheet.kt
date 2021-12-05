@@ -152,6 +152,21 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         return isPopupShow
     }
 
+    private fun checkTime(): Boolean {
+
+        //Fetch 7 days data
+        val calendar = Calendar.getInstance()
+        val simpleTimeFormat = SimpleDateFormat("HH:mm", Locale.US)
+        var isInTime = false
+        time = simpleTimeFormat.format(calendar.time)
+        var timeLimit = time.split(":")
+        if (Integer.parseInt(timeLimit[0]) in 1..14 && Integer.parseInt(timeLimit[1]) in 0..55){
+            isInTime = true
+        }
+
+        return isInTime
+    }
+
     private fun initClickLister(){
 
         binding?.transferBtnLayout?.setOnClickListener {
@@ -249,9 +264,16 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
              when(checkedId){
                 R.id.check_express->{
-                    isExpress = 1
-                    if (checkDay()){
-                        showAlert("শুক্র ও শনিবার ব্যাংক বন্ধ থাকায় 'এক্সপ্রেস পেমেন্ট' আপনার ব্যাংক একাউন্টে রবিবার ট্রান্সফার হবে। জরুরি প্রয়োজন  বিকাশের মাধ্যমে শুক্ত ও শনিবার পেমেন্ট ট্রান্সফার করতে পারেন ।")
+                    if (checkTime()){
+                        isExpress = 1
+                        binding?.checkExpress?.isChecked = true
+                        if (checkDay()){
+                            showAlert("শুক্র ও শনিবার ব্যাংক বন্ধ থাকায় 'এক্সপ্রেস পেমেন্ট' আপনার ব্যাংক একাউন্টে রবিবার ট্রান্সফার হবে। জরুরি প্রয়োজন বিকাশের মাধ্যমে শুক্ত ও শনিবার পেমেন্ট ট্রান্সফার করতে পারেন ।")
+                        }
+                    }else{
+                        showAlert("সম্মানিত গ্রাহক, আপনি দুপুর ১২ টা পর্যন্ত আমাদের 'এক্সপ্রেস পেমেন্ট' সেবাটি নিতে পারবেন। জরুরি প্রয়োজন বিকাশের মাধ্যমে পেমেন্ট ট্রান্সফার করতে পারেন ।")
+                        isExpress = 0
+                        binding?.checkExpress?.isChecked = false
                     }
                 }
                 R.id.check_normal ->{
@@ -412,7 +434,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                         2 -> {
                             if (responseModel.paymentType == 2 && responseModel.paymentMethod == 3){
                                 if (responseModel.message == 1){
-                                    showLocalNotification("এক্সপ্রেস পেমেন্ট","২৪ ঘন্টার মধ্যে আপনার ব্যাংক অ্যাকাউন্টে ট্র্যান্সফার হবে", "")
+                                    showLocalNotification("এক্সপ্রেস পেমেন্ট","${model.expressTime} ঘন্টার মধ্যে আপনার ব্যাংক অ্যাকাউন্টে ট্র্যান্সফার হবে", "")
                                     alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${model.expressTime} ঘন্টার মধ্যে ${model.expressNetPayableAmount} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
                                         UserLogger.logGenie("Instant_payment_transfer_Successfully")
                                         if (it == AlertDialog.BUTTON_POSITIVE) {

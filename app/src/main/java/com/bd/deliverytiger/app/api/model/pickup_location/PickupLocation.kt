@@ -25,5 +25,7 @@ data class PickupLocation(
     @SerializedName("mobile")
     var mobile: String? = "",
     @SerializedName("acceptedOrderCount")
-    var acceptedOrderCount: Int = 0
+    var acceptedOrderCount: Int = 0,
+    @SerializedName("collectionTimeSlotId")
+    var collectionTimeSlotId: Int = 0
 )
