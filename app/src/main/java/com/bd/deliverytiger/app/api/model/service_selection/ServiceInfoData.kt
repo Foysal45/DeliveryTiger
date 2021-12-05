@@ -13,6 +13,8 @@ data class ServiceInfoData(
     var serviceInfo: String? = "",
     @SerializedName("deliveryRangeId")
     var deliveryRangeId: List<Int> = listOf(),
+    @SerializedName("serviceTypeShow")
+    var serviceTypeShow: List<String> = listOf(),
 
     // private
     var districtList: List<DistrictData> = listOf(),

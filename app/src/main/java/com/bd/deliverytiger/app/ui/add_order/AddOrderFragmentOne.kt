@@ -85,6 +85,8 @@ class AddOrderFragmentOne : Fragment() {
     private lateinit var checkBoxBreakable: AppCompatCheckBox
     private lateinit var collectionAddressET: EditText
     private lateinit var checkTerms: AppCompatCheckBox
+    private lateinit var checkPoh: AppCompatCheckBox
+    private lateinit var checkPohTV: TextView
     private lateinit var checkTermsTV: TextView
     private lateinit var deliveryTypeRV: RecyclerView
     private lateinit var voucherLayoutButton: LinearLayout
@@ -152,6 +154,7 @@ class AddOrderFragmentOne : Fragment() {
     private var isBreakable: Boolean = false
     private var isHeavyWeight: Boolean = false
     private var isAgreeTerms: Boolean = false
+    private var isAgreeInPOH: Boolean = false
     private var isWeightSelected: Boolean = false
     private var isPackagingSelected: Boolean = true
     private var payCollectionAmount: Double = 0.0
@@ -267,6 +270,8 @@ class AddOrderFragmentOne : Fragment() {
         spinnerPackaging = view.findViewById(R.id.spinner_packaging_selection)
         checkBoxBreakable = view.findViewById(R.id.check_breakable)
         collectionAddressET = view.findViewById(R.id.collectionAddress)
+        checkPoh = view.findViewById(R.id.check_poh)
+        checkPohTV = view.findViewById(R.id.check_poh_text)
         checkTerms = view.findViewById(R.id.check_terms_condition)
         checkTermsTV = view.findViewById(R.id.check_terms_condition_text)
         deliveryTypeRV = view.findViewById(R.id.delivery_type_selection_rV)
@@ -341,6 +346,11 @@ class AddOrderFragmentOne : Fragment() {
             binding?.voucherText?.text = "ডিসকাউন্ট ভাউচার এপ্লাই করুন"
             binding?.voucherInfo?.visibility = View.VISIBLE
             binding?.voucherClear?.visibility = View.GONE
+        }
+        if (SessionManager.paymentServiceType > 0){
+            binding?.pohLayout?.visibility = View.VISIBLE
+        }else{
+            binding?.pohLayout?.visibility = View.GONE
         }
 
 
@@ -510,6 +520,10 @@ class AddOrderFragmentOne : Fragment() {
         }
         checkTerms.setOnCheckedChangeListener { compoundButton, b ->
             isAgreeTerms = b
+        }
+
+        checkPoh.setOnCheckedChangeListener { compoundButton, b ->
+            isAgreeInPOH = b
         }
         checkTermsTV.setOnClickListener {
 

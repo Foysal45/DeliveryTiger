@@ -20,13 +20,13 @@ class ComplainViewModel(private val repository: AppRepository): ViewModel() {
 
     val viewState = MutableLiveData<ViewState>(ViewState.NONE)
 
-    fun submitComplain(orderCode: String, comment: String): LiveData<Int> {
+    fun submitComplain(requestBody: ComplainRequest): LiveData<Int> {
 
         val responseData: MutableLiveData<Int> = MutableLiveData()
 
         viewState.value = ViewState.ProgressState(true)
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.submitComplain(ComplainRequest(orderCode, comment))
+            val response = repository.submitComplain(requestBody)
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {

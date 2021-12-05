@@ -12,6 +12,7 @@ import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.chat.ChatUserData
 import com.bd.deliverytiger.app.api.model.chat.FirebaseCredential
+import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.databinding.FragmentComplainBinding
 import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.complain.complain_history.ComplainHistoryBottomSheet
@@ -76,7 +77,8 @@ class ComplainFragment(): Fragment() {
                 val complain = binding?.complainTV?.text.toString().trim()
                 val code = orderCode.toUpperCase(Locale.US).replace("DT-", "")
 
-                viewModel.submitComplain(orderCode, complain).observe(viewLifecycleOwner, Observer { complainStatus->
+                val requestBody = ComplainRequest(orderCode, complain, "app", SessionManager.companyName, SessionManager.mobile)
+                viewModel.submitComplain(requestBody).observe(viewLifecycleOwner, Observer { complainStatus->
                     when {
                         complainStatus > 0 -> {
                             binding?.orderCodeTV?.text?.clear()
