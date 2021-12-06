@@ -24,7 +24,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.accounts.BankCheckForEftRequest
+import com.bd.deliverytiger.app.api.model.chat.ChatUserData
+import com.bd.deliverytiger.app.api.model.chat.FirebaseCredential
 import com.bd.deliverytiger.app.api.model.instant_payment_rate.InstantPaymentRateModel
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantInstantPaymentRequest
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceivableDetailResponse
@@ -34,6 +38,7 @@ import com.bd.deliverytiger.app.databinding.FragmentInstantPaymentRequestBottomS
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.accounts_mail_format.AccountsMailFormatBottomSheet
 import com.bd.deliverytiger.app.ui.add_order.AddProductBottomSheet
+import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
@@ -152,7 +157,33 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         return isPopupShow
     }
 
+    private fun checkTime(): Boolean {
+
+        //Fetch 7 days data
+        val calendar = Calendar.getInstance()
+        val simpleTimeFormat = SimpleDateFormat("HH:mm", Locale.US)
+        var isInTime = false
+        time = simpleTimeFormat.format(calendar.time)
+        var timeLimit = time.split(":")
+        var cutOffTime = model.cutOffTime.split(":")
+        if (Integer.parseInt(cutOffTime[0]) == 0){
+            if (Integer.parseInt(timeLimit[0]) in 1..Integer.parseInt(cutOffTime[0])){
+                isInTime = true
+            }
+        }else{
+            if (Integer.parseInt(timeLimit[0]) in 1..Integer.parseInt(cutOffTime[0]) && Integer.parseInt(timeLimit[1]) in 0..Integer.parseInt(cutOffTime[1])){
+                isInTime = true
+            }
+        }
+
+        return isInTime
+    }
+
     private fun initClickLister(){
+
+        binding?.chatLayout?.setOnClickListener {
+            gotoChatActivity()
+        }
 
         binding?.transferBtnLayout?.setOnClickListener {
             if (model.payableAmount != 0){
@@ -249,9 +280,16 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
              when(checkedId){
                 R.id.check_express->{
-                    isExpress = 1
-                    if (checkDay()){
-                        showAlert("শুক্র ও শনিবার ব্যাংক বন্ধ থাকায় 'এক্সপ্রেস পেমেন্ট' আপনার ব্যাংক একাউন্টে রবিবার ট্রান্সফার হবে। জরুরি প্রয়োজন  বিকাশের মাধ্যমে শুক্ত ও শনিবার পেমেন্ট ট্রান্সফার করতে পারেন ।")
+                    if (checkTime()){
+                        isExpress = 1
+                        binding?.checkExpress?.isChecked = true
+                        if (checkDay()){
+                            showAlert("শুক্র ও শনিবার ব্যাংক বন্ধ থাকায় 'এক্সপ্রেস পেমেন্ট' আপনার ব্যাংক একাউন্টে রবিবার ট্রান্সফার হবে। জরুরি প্রয়োজন বিকাশের মাধ্যমে শুক্ত ও শনিবার পেমেন্ট ট্রান্সফার করতে পারেন ।")
+                        }
+                    }else{
+                        showAlert("সম্মানিত গ্রাহক, আপনি দুপুর ${DigitConverter.toBanglaDigit(model.cutOffTime)} মিনিট পর্যন্ত আমাদের 'এক্সপ্রেস পেমেন্ট' সেবাটি নিতে পারবেন। জরুরি প্রয়োজন বিকাশের মাধ্যমে পেমেন্ট ট্রান্সফার করতে পারেন ।")
+                        isExpress = 0
+                        binding?.checkExpress?.isChecked = false
                     }
                 }
                 R.id.check_normal ->{
@@ -264,6 +302,28 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         }
 
+    }
+
+    private fun gotoChatActivity() {
+        val firebaseCredential = FirebaseCredential(
+            firebaseWebApiKey = BuildConfig.FirebaseWebApiKey
+        )
+        val senderData = ChatUserData(SessionManager.courierUserId.toString(), SessionManager.companyName, SessionManager.mobile,
+            imageUrl = "https://static.ajkerdeal.com/delivery_tiger/profile/${SessionManager.courierUserId}.jpg",
+            role = "dt",
+            fcmToken = SessionManager.firebaseToken
+        )
+        val receiverData = ChatUserData("1444", "Accounts Team", "01200000000",
+            imageUrl = "https://static.ajkerdeal.com/images/admin_users/dt/938.jpg",
+            role = "retention"
+        )
+        ChatConfigure(
+            "dt-retention",
+            senderData,
+            firebaseCredential = firebaseCredential,
+            receiver = receiverData
+        ).config(requireContext())
+        dismiss()
     }
 
     private fun fetchData(){
@@ -384,6 +444,10 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             val requestBody = MerchantInstantPaymentRequest(charge, SessionManager.courierUserId, amount, paymentType, paymentMethod)
             Timber.d("requestBodyDebug $requestBody")
             viewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { responseModel->
+                var isMatchBankAccount = 0
+                viewModel.checkBankNameForEFT(BankCheckForEftRequest(model.bankName)).observe(viewLifecycleOwner, Observer {
+                    isMatchBankAccount = it.isMatch
+                })
                 progressDialog.dismiss()
                 dismiss()
                 if (responseModel != null) {
@@ -412,8 +476,8 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                         2 -> {
                             if (responseModel.paymentType == 2 && responseModel.paymentMethod == 3){
                                 if (responseModel.message == 1){
-                                    showLocalNotification("এক্সপ্রেস পেমেন্ট","২৪ ঘন্টার মধ্যে আপনার ব্যাংক অ্যাকাউন্টে ট্র্যান্সফার হবে", "")
-                                    alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${model.expressTime} ঘন্টার মধ্যে ${model.expressNetPayableAmount} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
+                                    showLocalNotification("এক্সপ্রেস পেমেন্ট","${model.expressTime} ঘন্টার মধ্যে আপনার ব্যাংক অ্যাকাউন্টে ট্র্যান্সফার হবে", "")
+                                    alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${if (isMatchBankAccount == 1){model.expressTime}else{"12-24"}} ঘন্টার মধ্যে ${model.expressNetPayableAmount} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
                                         UserLogger.logGenie("Instant_payment_transfer_Successfully")
                                         if (it == AlertDialog.BUTTON_POSITIVE) {
                                             onCloseBottomSheet?.invoke()

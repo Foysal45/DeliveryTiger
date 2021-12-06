@@ -2,6 +2,7 @@ package com.bd.deliverytiger.app.repository
 
 import com.bd.deliverytiger.app.api.ApiInterfaceInfobip
 import com.bd.deliverytiger.app.api.endpoint.*
+import com.bd.deliverytiger.app.api.model.accounts.BankCheckForEftRequest
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody
 import com.bd.deliverytiger.app.api.model.bulk_status.StatusUpdateData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
@@ -254,6 +255,8 @@ class AppRepository(
     suspend fun merchantPayableReceiveableDetailForInstantPayment(requestBody: MerchantPayableReceiveableDetailRequest) = apiInterfaceADM.merchantPayableReceiveableDetailForInstantPayment(requestBody)
 
     suspend fun instantOr24hourPayment(requestBody: MerchantInstantPaymentRequest) = apiInterfaceADM.instantOr24hourPayment(requestBody)
+
+    suspend fun checkBankNameForEFT(requestBody: BankCheckForEftRequest) = apiInterfaceADM.checkBankNameForEFT(requestBody)
 
     suspend fun fetchCourierList() = apiInterfaceCore.fetchCourierList()
 

@@ -32,6 +32,8 @@ data class MerchantPayableReceivableDetailResponse(
     val bKashNo: String = "",
     @SerializedName("NagadNo")
     val nagadNo: String = "",
+    @SerializedName("CutOffTime")
+    val cutOffTime: String = "",
     @SerializedName("BkashTime")
     val bkashTime: String = "",
     @SerializedName("BankLimit")
