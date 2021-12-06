@@ -83,10 +83,10 @@ class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 if (!model.comments.isNullOrEmpty()) {
                     binding.complainType.text = model.comments
                 } else {
-                    binding.complainType.text = ""
+                    binding.complainType.text = "No Comments"
                 }
 
-                binding.orderCode.text = if (model.companyName != null){ model.companyName} else {"Merchant Name"}
+                binding.orderCode.text = if (model.companyName.isNotEmpty()){ model.companyName} else {"Merchant Name"}
                 if(model.complainType == "Pending") {
                     binding.orderCode.setTextColor(Color.RED)
                 }
@@ -100,7 +100,7 @@ class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 if(model.complainType == "Pending"){
                     binding.status.text = HtmlCompat.fromHtml("স্ট্যাটাস: <font color='#e11f27'>${model.complainType}</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
                 }else{
-                    binding.status.text = "স্ট্যাটাস: ${if (model.isIssueSolved == 0) {"solved"} else {"solved"}}"
+                    binding.status.text = "স্ট্যাটাস: ${if (model.isIssueSolved == 0) {"solved"} else {"pending"}}"
                 }
             }
 

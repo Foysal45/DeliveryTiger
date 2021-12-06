@@ -275,7 +275,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginEnd="2dp"
                                         android:textIsSelectable="true"
-                                        android:text="@string/_01847069209"
+                                        android:text="@string/shohag_vai_mobile"
                                         android:textSize="14sp"
                                         android:textColor="@color/black_80"/>
 
@@ -294,7 +294,7 @@
                                         android:layout_height="wrap_content"
                                         android:textIsSelectable="true"
                                         android:layout_marginEnd="2dp"
-                                        android:text="@string/_01811487984"
+                                        android:text="@string/sourov_vai_mobile"
                                         android:textSize="14sp"
                                         android:textColor="@color/black_80"/>
 
@@ -313,7 +313,7 @@
                                         android:layout_height="wrap_content"
                                         android:textIsSelectable="true"
                                         android:layout_marginEnd="2dp"
-                                        android:text="@string/_01844503545"
+                                        android:text="@string/rezu_vai_mobile"
                                         android:textSize="14sp"
                                         android:textColor="@color/black_80"/>
 
