@@ -78,6 +78,8 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
     private var paymentMethodLists: MutableList<OptionImageUrl> = mutableListOf()
 
+    var isMatchBankAccount = 0
+
     companion object {
 
         fun newInstance(): InstantPaymentRequestBottomSheet = InstantPaymentRequestBottomSheet().apply {}
@@ -135,6 +137,10 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         binding?.checkExpress?.setTextWith("${model.expressTime} ঘন্টা", "EXPRESS", HtmlCompat.fromHtml("(<font color='#E84545'>${DigitConverter.toBanglaDigit(model.expressCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY),0)
         binding?.checkNormal?.setTextWith("${model.normalTime} ঘন্টা", "NORMAL", "(অতিরিক্ত চার্জ নেই)",1)
 
+        viewModel.checkBankNameForEFT(BankCheckForEftRequest(model.bankName)).observe(viewLifecycleOwner, Observer {
+            isMatchBankAccount = it.isMatch
+        })
+
     }
 
     private fun checkDay(): Boolean {
@@ -163,10 +169,16 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         val calendar = Calendar.getInstance()
         val simpleTimeFormat = SimpleDateFormat("HH:mm", Locale.US)
         var isInTime = false
+        var cutOffTimeRange = ""
         time = simpleTimeFormat.format(calendar.time)
         var timeLimit = time.split(":")
-        var cutOffTime = model.cutOffTime.split(":")
-        if (Integer.parseInt(cutOffTime[0]) == 0){
+        cutOffTimeRange = if (isMatchBankAccount == 1){
+            "20:00"
+        }else{
+            model.cutOffTime
+        }
+        var cutOffTime = cutOffTimeRange.split(":")
+        if (Integer.parseInt(cutOffTime[1]) == 0){
             if (Integer.parseInt(timeLimit[0]) in 1..Integer.parseInt(cutOffTime[0])){
                 isInTime = true
             }
@@ -287,7 +299,13 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                             showAlert("শুক্র ও শনিবার ব্যাংক বন্ধ থাকায় 'এক্সপ্রেস পেমেন্ট' আপনার ব্যাংক একাউন্টে রবিবার ট্রান্সফার হবে। জরুরি প্রয়োজন বিকাশের মাধ্যমে শুক্ত ও শনিবার পেমেন্ট ট্রান্সফার করতে পারেন ।")
                         }
                     }else{
-                        showAlert("সম্মানিত গ্রাহক, আপনি দুপুর ${DigitConverter.toBanglaDigit(model.cutOffTime)} মিনিট পর্যন্ত আমাদের 'এক্সপ্রেস পেমেন্ট' সেবাটি নিতে পারবেন। জরুরি প্রয়োজন বিকাশের মাধ্যমে পেমেন্ট ট্রান্সফার করতে পারেন ।")
+
+                        if (isMatchBankAccount == 1){
+                            showAlert("সম্মানিত গ্রাহক, আপনি ${DigitConverter.toBanglaDigit("8:30")} মিনিট পর্যন্ত আমাদের 'এক্সপ্রেস পেমেন্ট' সেবাটি নিতে পারবেন। জরুরি প্রয়োজন বিকাশের মাধ্যমে পেমেন্ট ট্রান্সফার করতে পারেন ।")
+                        }else{
+                            showAlert("সম্মানিত গ্রাহক, আপনি ${DigitConverter.toBanglaDigit(model.cutOffTime)} মিনিট পর্যন্ত আমাদের 'এক্সপ্রেস পেমেন্ট' সেবাটি নিতে পারবেন। জরুরি প্রয়োজন বিকাশের মাধ্যমে পেমেন্ট ট্রান্সফার করতে পারেন ।")
+                        }
+
                         isExpress = 0
                         binding?.checkExpress?.isChecked = false
                     }
@@ -444,10 +462,6 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             val requestBody = MerchantInstantPaymentRequest(charge, SessionManager.courierUserId, amount, paymentType, paymentMethod)
             Timber.d("requestBodyDebug $requestBody")
             viewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { responseModel->
-                var isMatchBankAccount = 0
-                viewModel.checkBankNameForEFT(BankCheckForEftRequest(model.bankName)).observe(viewLifecycleOwner, Observer {
-                    isMatchBankAccount = it.isMatch
-                })
                 progressDialog.dismiss()
                 dismiss()
                 if (responseModel != null) {
