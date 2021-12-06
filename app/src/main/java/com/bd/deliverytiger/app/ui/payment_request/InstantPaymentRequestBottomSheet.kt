@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.accounts.BankCheckForEftRequest
 import com.bd.deliverytiger.app.api.model.chat.ChatUserData
 import com.bd.deliverytiger.app.api.model.chat.FirebaseCredential
 import com.bd.deliverytiger.app.api.model.instant_payment_rate.InstantPaymentRateModel
@@ -443,6 +444,10 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             val requestBody = MerchantInstantPaymentRequest(charge, SessionManager.courierUserId, amount, paymentType, paymentMethod)
             Timber.d("requestBodyDebug $requestBody")
             viewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { responseModel->
+                var isMatchBankAccount = 0
+                viewModel.checkBankNameForEFT(BankCheckForEftRequest(model.bankName)).observe(viewLifecycleOwner, Observer {
+                    isMatchBankAccount = it.isMatch
+                })
                 progressDialog.dismiss()
                 dismiss()
                 if (responseModel != null) {
@@ -472,7 +477,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                             if (responseModel.paymentType == 2 && responseModel.paymentMethod == 3){
                                 if (responseModel.message == 1){
                                     showLocalNotification("এক্সপ্রেস পেমেন্ট","${model.expressTime} ঘন্টার মধ্যে আপনার ব্যাংক অ্যাকাউন্টে ট্র্যান্সফার হবে", "")
-                                    alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${model.expressTime} ঘন্টার মধ্যে ${model.expressNetPayableAmount} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
+                                    alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${if (isMatchBankAccount == 1){model.expressTime}else{"12-24"}} ঘন্টার মধ্যে ${model.expressNetPayableAmount} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
                                         UserLogger.logGenie("Instant_payment_transfer_Successfully")
                                         if (it == AlertDialog.BUTTON_POSITIVE) {
                                             onCloseBottomSheet?.invoke()

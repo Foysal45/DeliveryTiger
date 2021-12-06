@@ -1,9 +1,7 @@
 package com.bd.deliverytiger.app.api.endpoint
 
 import com.bd.deliverytiger.app.api.model.ErrorResponse
-import com.bd.deliverytiger.app.api.model.accounts.AccountDetailsResponse
-import com.bd.deliverytiger.app.api.model.accounts.AccountsData
-import com.bd.deliverytiger.app.api.model.accounts.AdvanceBalanceData
+import com.bd.deliverytiger.app.api.model.accounts.*
 import com.bd.deliverytiger.app.api.model.balance_load.BalanceLoadHistoryData
 import com.bd.deliverytiger.app.api.model.bill_pay_history.BillPayHistoryResponse
 import com.bd.deliverytiger.app.api.model.complain.ComplainData
@@ -107,6 +105,9 @@ interface ApiInterfaceADM {
 
     @POST("api/account/reports/InstantOr24hourPaymentV2")
     suspend fun instantOr24hourPayment(@Body requestBody: MerchantInstantPaymentRequest): NetworkResponse<MerchantPayableReceiveableDetailResponse, ErrorResponse>
+
+    @POST("api/account/reports/CheckbankNameForEFT")
+    suspend fun checkBankNameForEFT(@Body requestBody: BankCheckForEftRequest): NetworkResponse<BankCheckForEftResponse, ErrorResponse>
 
     @Multipart
     @POST("Image/ImageUploadForFile")
