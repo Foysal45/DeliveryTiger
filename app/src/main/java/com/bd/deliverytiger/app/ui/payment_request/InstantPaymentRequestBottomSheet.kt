@@ -164,8 +164,15 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         var isInTime = false
         time = simpleTimeFormat.format(calendar.time)
         var timeLimit = time.split(":")
-        if (Integer.parseInt(timeLimit[0]) in 1..14 && Integer.parseInt(timeLimit[1]) in 0..55){
-            isInTime = true
+        var cutOffTime = model.cutOffTime.split(":")
+        if (Integer.parseInt(cutOffTime[0]) == 0){
+            if (Integer.parseInt(timeLimit[0]) in 1..Integer.parseInt(cutOffTime[0])){
+                isInTime = true
+            }
+        }else{
+            if (Integer.parseInt(timeLimit[0]) in 1..Integer.parseInt(cutOffTime[0]) && Integer.parseInt(timeLimit[1]) in 0..Integer.parseInt(cutOffTime[1])){
+                isInTime = true
+            }
         }
 
         return isInTime
@@ -279,7 +286,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                             showAlert("শুক্র ও শনিবার ব্যাংক বন্ধ থাকায় 'এক্সপ্রেস পেমেন্ট' আপনার ব্যাংক একাউন্টে রবিবার ট্রান্সফার হবে। জরুরি প্রয়োজন বিকাশের মাধ্যমে শুক্ত ও শনিবার পেমেন্ট ট্রান্সফার করতে পারেন ।")
                         }
                     }else{
-                        showAlert("সম্মানিত গ্রাহক, আপনি দুপুর ১২ টা পর্যন্ত আমাদের 'এক্সপ্রেস পেমেন্ট' সেবাটি নিতে পারবেন। জরুরি প্রয়োজন বিকাশের মাধ্যমে পেমেন্ট ট্রান্সফার করতে পারেন ।")
+                        showAlert("সম্মানিত গ্রাহক, আপনি দুপুর ${DigitConverter.toBanglaDigit(model.cutOffTime)} মিনিট পর্যন্ত আমাদের 'এক্সপ্রেস পেমেন্ট' সেবাটি নিতে পারবেন। জরুরি প্রয়োজন বিকাশের মাধ্যমে পেমেন্ট ট্রান্সফার করতে পারেন ।")
                         isExpress = 0
                         binding?.checkExpress?.isChecked = false
                     }
@@ -315,6 +322,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             firebaseCredential = firebaseCredential,
             receiver = receiverData
         ).config(requireContext())
+        dismiss()
     }
 
     private fun fetchData(){
