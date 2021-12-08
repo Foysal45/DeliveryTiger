@@ -168,6 +168,7 @@ class AddOrderFragmentOne : Fragment() {
     private var isOpenBoxCheck: Boolean = false
     private var isOfficeDrop: Boolean = true
     private var isNextDay: Boolean = false
+    private var isNextDayActive: Boolean = false
     private var isCollectionLocationSelected: Boolean = false
     private var removeCollectionTimeSlotId: Int = 0
     private var isCollectionTypeSelected: Boolean = false
@@ -201,6 +202,7 @@ class AddOrderFragmentOne : Fragment() {
 
     private var deliveryTypeFlag: Int = 0
     private var alertMsg: String = ""
+    private var alertMsg2: String = ""
     private var logicExpression: String = ""
     private var dayAdvance: String = ""
     private var isSameDay: Boolean = false
@@ -360,7 +362,8 @@ class AddOrderFragmentOne : Fragment() {
             deliveryType = "${model.deliveryType} ${model.days}"
             deliveryRangeId = model.deliveryRangeId
             weightRangeId = model.weightRangeId
-            alertMsg = model.deliveryAlertMessage ?: ""
+            //alertMsg = model.deliveryAlertMessage ?: ""
+            alertMsg = alertMsg2 ?: ""
             logicExpression = model.loginHours?.trim() ?: ""
             dayAdvance = model.dateAdvance ?: ""
             val showHide = model.showHide
@@ -390,7 +393,10 @@ class AddOrderFragmentOne : Fragment() {
                     deliveryDatePicker.text = ""
                     collectionDate = ""
                     collectionDatePicker.text = ""
-                    isNextDay = false
+
+                    if (isNextDayActive){
+                        isNextDay = false
+                    }
                 }
                 // Show delivery date collection date
                 1 -> {
@@ -401,7 +407,10 @@ class AddOrderFragmentOne : Fragment() {
                     deliveryDatePicker.text = ""
                     collectionDate = ""
                     collectionDatePicker.text = ""
-                    isNextDay = false
+
+                    if (isNextDayActive){
+                        isNextDay = false
+                    }
                 }
                 // Show office drop
                 2 -> {
@@ -412,11 +421,19 @@ class AddOrderFragmentOne : Fragment() {
                     deliveryDatePicker.text = ""
                     collectionDate = ""
                     collectionDatePicker.text = ""
-                    isNextDay = false
+
+                    if (isNextDayActive){
+                        isNextDay = false
+                    }
+
                 }
                 // Delivery alert msg show
                 3 -> {
-                    isNextDay = true
+
+                    if (isNextDayActive){
+                        isNextDay = true
+                    }
+
                     if (selectedDeliveryType != deliveryType) {
                         selectedDeliveryType = deliveryType
                         if (logicExpression.isNotEmpty()) {
@@ -424,17 +441,23 @@ class AddOrderFragmentOne : Fragment() {
                             val hour24 = calendar.get(Calendar.HOUR_OF_DAY)
                             val timeValidity = executeExpression("$hour24 $logicExpression")
                             if (timeValidity) {
-                                alert("নির্দেশনা", alertMsg) {
-                                }.show()
+                                if (!alertMsg.isNullOrEmpty()){
+                                    alert("নির্দেশনা", alertMsg) {
+                                    }.show()
+                                }
                             }
                         } else {
-                            alert("নির্দেশনা", alertMsg) {
-                            }.show()
+                            if (!alertMsg.isNullOrEmpty()){
+                                    alert("নির্দেশনা", alertMsg) {
+                                    }.show()
+                                }
                         }
                     }
                 }
                 else -> {
-                    isNextDay = false
+                    if (isNextDayActive){
+                        isNextDay = false
+                    }
                 }
             }
 
@@ -1192,6 +1215,18 @@ class AddOrderFragmentOne : Fragment() {
                 val area = list.find { it.districtId == areaID }
                 etAriaPostOffice.setText(area?.districtBng)
             }
+            //new logic for timeSlot
+            alertMsg2 = district?.nextDayAlertMessage ?:""
+            if (district?.nextDayAlertMessage.isNullOrEmpty()){
+                isNextDayActive = false
+                isNextDay = false
+            } else{
+                isNextDayActive = true
+                isNextDay = true
+            }
+            fetchCollectionTimeSlot()
+            Timber.d("alertMsg ${district?.nextDayAlertMessage}")
+            //new logic end
         })
     }
 
@@ -1391,6 +1426,19 @@ class AddOrderFragmentOne : Fragment() {
                     filteredThanaLists.clear()
                     filteredAreaLists.clear()
 
+                    //new logic for timeSlot
+                    if (!model.alertMsg.isNullOrEmpty()){
+                        alertMsg = model.alertMsg.toString()
+                        isNextDayActive = true
+                        isNextDay = true
+                    } else{
+                        isNextDayActive = false
+                        isNextDay = false
+                    }
+                    fetchCollectionTimeSlot()
+                    context?.toast("isNextDayActive $isNextDayActive")
+                    //new logic end
+
                     if (list.isNotEmpty()) {
                         val locationModel = list.find { it.districtId == model.id }
                         locationModel?.let {
@@ -1404,6 +1452,17 @@ class AddOrderFragmentOne : Fragment() {
                     areaId = 0
                     etAriaPostOffice.setText("")
                     filteredAreaLists.clear()
+
+                    //new logic for timeSlot
+                    /*if (!model.alertMsg.isNullOrEmpty()){
+                        alertMsg = model.alertMsg.toString()
+                        isNextDayActive = true
+                    } else{
+                        isNextDayActive = false
+                        isNextDay = false
+                    }
+                    context?.toast("isNextDayActive $isNextDayActive")*/
+                    //new logic end
 
                     getDeliveryCharge(districtId, thanaId, 0, serviceType)
                     fetchLocationById(thanaId, LocationType.AREA, true)
@@ -1446,6 +1505,17 @@ class AddOrderFragmentOne : Fragment() {
         areaId = 0
         etAriaPostOffice.setText("")
         etAriaPostOfficeLayout.visibility = View.GONE
+
+        //new logic for timeSlot
+        if (!model.alertMsg.isNullOrEmpty()){
+            alertMsg2 = model.alertMsg ?: ""
+            isNextDayActive = true
+        } else{
+            isNextDayActive = false
+            isNextDay = false
+        }
+        Timber.d("Bool $isNextDayActive")
+        //new logic end
 
         val selectedDistrict = filteredDistrictLists.find { it.districtId == districtId }
         selectedDistrict?.let { district ->

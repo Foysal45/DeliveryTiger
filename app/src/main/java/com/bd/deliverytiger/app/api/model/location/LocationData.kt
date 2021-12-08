@@ -11,7 +11,8 @@ data class LocationData(
     var displayNameEng: String? = "",
     var displayPostalCode: String? = "",
     var searchKey: String = "", // lower case
-    var isDeactivate: Boolean = false
+    var isDeactivate: Boolean = false,
+    var alertMsg: String? = ""
 ) {
 
     companion object {
@@ -22,7 +23,8 @@ data class LocationData(
                 model.district,
                 model.postalCode,
                 model.district?.lowercase(Locale.US) ?: "",
-                model.isActiveForCorona
+                model.isActiveForCorona,
+                model.nextDayAlertMessage
             )
         }
 
