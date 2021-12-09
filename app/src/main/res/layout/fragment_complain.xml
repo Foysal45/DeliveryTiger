@@ -246,95 +246,122 @@
                 android:textColor="@color/black_90"
                 android:textStyle="bold"
                 android:text="পূর্বের সকল কমপ্লেইন"
-                android:visibility="gone"
                 tools:visibility="visible"
                 />
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@id/complaintTitle"
                 app:layout_constraintStart_toStartOf="parent"
-                app:tabTextAppearance="@style/TabLayoutTextStyle"
-                tools:visibility="visible">
+                app:layout_constraintEnd_toEndOf="parent">
 
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="কমপ্লেইন (আইডি সহ)" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="কমপ্লেইন (সাধারন)" />
-            </com.google.android.material.tabs.TabLayout>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/dateFilterCard"
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="6dp"
-
-                app:cardBackgroundColor="@color/white"
-                app:cardElevation="0dp"
-                app:contentPadding="4dp"
-                app:layout_constraintTop_toBottomOf="@id/tabLayout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:visibility="gone"
-                tools:visibility="visible">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:tabTextAppearance="@style/TabLayoutTextStyle"
+                    tools:visibility="visible">
 
-                    <TextView
-                        android:id="@+id/datePicker"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:hint="Date"
-                        android:textSize="12sp"
-                        android:gravity="center_vertical"
-                        android:includeFontPadding="false"
-                        android:paddingStart="16dp"
-                        android:paddingTop="8dp"
-                        android:paddingEnd="16dp"
-                        android:paddingBottom="8dp"
-                        android:textColor="@color/black_60"
-                        app:drawableEndCompat="@drawable/ic_date"
-                        app:drawableTint="@color/black_40"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="কমপ্লেইন (আইডি সহ)" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="কমপ্লেইন (সাধারন)" />
+                </com.google.android.material.tabs.TabLayout>
 
-            </androidx.cardview.widget.CardView>
+                <View
+                    android:id="@+id/viewUnderTabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height=".5dp"
+                    android:background="@color/colorPrimary"
+                    app:layout_constraintTop_toBottomOf="@+id/tabLayout"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:overScrollMode="never"
-                app:layout_constraintTop_toBottomOf="@id/dateFilterCard"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/dateFilterCard"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_marginTop="6dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardElevation="3dp"
+                    app:layout_constraintTop_toBottomOf="@id/viewUnderTabLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
-                tools:itemCount="4"
-                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_view_complain"
-                tools:orientation="vertical"
-                tools:spanCount="2"
-                tools:visibility="visible"
-                />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/datePicker"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:hint="Date"
+                            android:textSize="12sp"
+                            android:gravity="center_vertical"
+                            android:includeFontPadding="false"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:paddingEnd="16dp"
+                            android:paddingBottom="8dp"
+                            android:textColor="@color/black_60"
+                            app:drawableEndCompat="@drawable/ic_date"
+                            app:drawableTint="@color/black_40"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    app:layout_constraintTop_toBottomOf="@id/dateFilterCard"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="5dp"
+                    android:paddingHorizontal="12dp"
+                    tools:itemCount="4"
+                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_view_complain"
+                    tools:orientation="vertical"
+                    tools:spanCount="2"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar2"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="100dp"
+                    android:elevation="4dp"
+                    android:indeterminateTint="@color/colorPrimary"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

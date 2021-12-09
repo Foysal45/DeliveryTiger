@@ -27,5 +27,8 @@ data class GeneralComplainResponse(
     @SerializedName("UpdatedBy")
     val updatedBy: Int = 0,
     @SerializedName("UpdatedOn")
-    val updatedOn: String = ""
+    val updatedOn: String = "",
+
+    //Internal use only
+    var isExpand: Boolean = false
 )

@@ -149,7 +149,6 @@ class ComplainFragment(): Fragment() {
                         fetchComplain()
                     }
                     1 -> {
-                        binding?.dateFilterCard?.visibility = View.VISIBLE
                         fetchGeneralComplain()
                     }
                 }
@@ -160,9 +159,9 @@ class ComplainFragment(): Fragment() {
     private fun initDate() {
         val calender = Calendar.getInstance()
         fromDate = sdf.format(calender.timeInMillis)
-        displayFromDate = sdf1.format(calender.time)
+        displayFromDate = sdf.format(calender.time)
         toDate = sdf.format(calender.timeInMillis)
-        displayToDate = sdf1.format(calender.time)
+        displayToDate = sdf.format(calender.time)
         setDateRangePickerTitle()
     }
 
@@ -211,8 +210,11 @@ class ComplainFragment(): Fragment() {
     }
 
     private fun fetchComplain() {
-
+        binding?.recyclerview?.visibility = View.GONE
+        binding?.progressBar2?.visibility = View.VISIBLE
         viewModel.fetchComplainList(SessionManager.courierUserId, 0).observe(viewLifecycleOwner, Observer { list ->
+            binding?.progressBar2?.visibility = View.GONE
+            binding?.recyclerview?.visibility = View.VISIBLE
             dataAdapter.initLoad(list)
             if (list.isNotEmpty()){
                 binding?.complaintTitle?.visibility = View.VISIBLE
@@ -222,8 +224,13 @@ class ComplainFragment(): Fragment() {
 
     private fun fetchGeneralComplain() {
 
+        binding?.recyclerview?.visibility = View.GONE
+        binding?.progressBar2?.visibility = View.VISIBLE
         var requestBody = GeneralComplainListRequest(fromDate, toDate)
         viewModel.fetchWithoutOrderCodeComplains(requestBody).observe(viewLifecycleOwner, Observer { list ->
+            binding?.progressBar2?.visibility = View.GONE
+            binding?.dateFilterCard?.visibility = View.VISIBLE
+            binding?.recyclerview?.visibility = View.VISIBLE
             dataAdapter.initGeneralLoad(list)
             if (list.isNotEmpty()){
                 binding?.complaintTitle?.visibility = View.VISIBLE
