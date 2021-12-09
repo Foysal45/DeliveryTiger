@@ -258,6 +258,8 @@ class AppRepository(
 
     suspend fun instantOr24hourPayment(requestBody: MerchantInstantPaymentRequest) = apiInterfaceADM.instantOr24hourPayment(requestBody)
 
+    suspend fun getMessageAlertForIP() = apiInterfaceADM.getMessageAlertForIP()
+
     suspend fun checkBankNameForEFT(requestBody: BankCheckForEftRequest) = apiInterfaceADM.checkBankNameForEFT(requestBody)
 
     suspend fun fetchCourierList() = apiInterfaceCore.fetchCourierList()

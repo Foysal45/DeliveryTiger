@@ -33,6 +33,7 @@ import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsR
 import com.bd.deliverytiger.app.api.model.district.DistrictData
 import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
 import com.bd.deliverytiger.app.api.model.helpline_number.HelpLineNumberModel
+import com.bd.deliverytiger.app.api.model.instant_payment_rate.AllAlertMessage
 import com.bd.deliverytiger.app.api.model.instant_payment_update.InstantPaymentUpdateResponse
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
 import com.bd.deliverytiger.app.api.model.lead_management.*

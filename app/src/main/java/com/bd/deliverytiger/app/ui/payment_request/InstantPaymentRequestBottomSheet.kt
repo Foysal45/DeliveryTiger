@@ -29,6 +29,7 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.accounts.BankCheckForEftRequest
 import com.bd.deliverytiger.app.api.model.chat.ChatUserData
 import com.bd.deliverytiger.app.api.model.chat.FirebaseCredential
+import com.bd.deliverytiger.app.api.model.instant_payment_rate.AllAlertMessage
 import com.bd.deliverytiger.app.api.model.instant_payment_rate.InstantPaymentRateModel
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantInstantPaymentRequest
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceivableDetailResponse
@@ -61,6 +62,8 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     private var dataAdapter: RequestPaymentMethodAdapter = RequestPaymentMethodAdapter()
 
     private var model: MerchantPayableReceivableDetailResponse = MerchantPayableReceivableDetailResponse()
+
+    private var messageLists: AllAlertMessage = AllAlertMessage()
 
     private var chargeModel: InstantPaymentRateModel = InstantPaymentRateModel()
     private var expressChargeModel: InstantPaymentRateModel = InstantPaymentRateModel()
@@ -140,8 +143,12 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         viewModel.checkBankNameForEFT(BankCheckForEftRequest(model.bankName)).observe(viewLifecycleOwner, Observer {
             isMatchBankAccount = it.isMatch
+            if (isPaymentTypeSelect){
+                binding?.bankTransferLayout?.visibility = View.VISIBLE
+            }else{
+                binding?.bankTransferLayout?.visibility = View.GONE
+            }
         })
-
     }
 
     private fun checkDay(): Boolean {
@@ -203,7 +210,25 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                         }
                     }.show()
                 }else{
-                    showAlert("InstantPaymentLimitAlert ইন্সট্যান্ট পেমেন্ট ট্রান্সফারের সর্বোচ্চ লিমিট ${DigitConverter.toBanglaDigit(model.limit, true)} টাকা, অনুগ্রহ করে রেগুলার পেমেন্ট সেবা নিন।")
+                    showAlert(messageLists.instantPaymentLimitAlert)
+                }
+
+            }else{
+                context?.toast("আপনার তথ্য লোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন ।")
+            }
+        }
+
+        binding?.bankTransferBtnLayout?.setOnClickListener {
+            if (model.payableAmount != 0){
+                if (model.payableAmount <= model.limit){
+                    alert("", HtmlCompat.fromHtml("<font><b>আপনি কি ব্যাংক অ্যাকাউন্টে (${model.bankName} অ্যাকাউন্ট নাম্বারঃ ${model.bankACNo}) পেমেন্ট নিতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
+                        if (it == AlertDialog.BUTTON_POSITIVE) {
+                            UserLogger.logGenie("Instant_payment_transfer_clicked")
+                            instantPaymentRequestAndTransfer(2) // for transfer balance 2
+                        }
+                    }.show()
+                }else{
+                    showAlert(messageLists.instantPaymentLimitAlert)
                 }
 
             }else{
@@ -235,7 +260,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         binding?.chargeInfo?.setOnClickListener {
             if (chargeModel.charge.isNotEmpty() && chargeModel.discount.isNotEmpty()){
-                viewInstantPaymentRateDialog(chargeModel, "ইনস্ট্যান্ট ট্রান্সফার চার্জ", false)
+                viewInstantPaymentRateDialog(chargeModel, messageLists.instantChargeTitle, false)
             } else{
                 context?.toast("কোন তথ্য পাওয়া যায়নি!")
             }
@@ -243,7 +268,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         binding?.bankChargeInfo?.setOnClickListener {
             if (superExpressChargeModel.charge.isNotEmpty() && superExpressChargeModel.discount.isNotEmpty()){
-                viewInstantPaymentRateDialog(superExpressChargeModel, "ইনস্ট্যান্ট ট্রান্সফার চার্জ", false)
+                viewInstantPaymentRateDialog(superExpressChargeModel, messageLists.superEftChargeTitle, false)
             } else{
                 context?.toast("কোন তথ্য পাওয়া যায়নি!")
             }
@@ -251,7 +276,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         binding?.expressChargeInfo?.setOnClickListener {
             if (expressChargeModel.charge.isNotEmpty() && expressChargeModel.discount.isNotEmpty()){
-                viewInstantPaymentRateDialog(expressChargeModel, "এক্সপ্রেস ট্রান্সফার চার্জ (শুধুমাত্র ব্যাংক)", true)
+                viewInstantPaymentRateDialog(expressChargeModel, messageLists.eftChargeTitle, true)
             } else{
                 context?.toast("কোন তথ্য পাওয়া যায়নি!")
             }
@@ -300,10 +325,10 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                         isExpress = 1
                         binding?.checkExpress?.isChecked = true
                         if (checkDay()){
-                            showAlert("FridayAlert শুক্র ও শনিবার ব্যাংক বন্ধ থাকায় 'এক্সপ্রেস পেমেন্ট' আপনার ব্যাংক একাউন্টে রবিবার ট্রান্সফার হবে। জরুরি প্রয়োজন বিকাশের মাধ্যমে শুক্ত ও শনিবার পেমেন্ট ট্রান্সফার করতে পারেন ।")
+                            showAlert(messageLists.fridayAlert)
                         }
                     }else{
-                        showAlert("ExpressTimeOverAlert সম্মানিত গ্রাহক, আপনি ${DigitConverter.toBanglaDigit(model.cutOffTime)} মিনিট পর্যন্ত আমাদের 'এক্সপ্রেস পেমেন্ট' সেবাটি নিতে পারবেন। জরুরি প্রয়োজন বিকাশের মাধ্যমে পেমেন্ট ট্রান্সফার করতে পারেন ।")
+                        showAlert(messageLists.expressTimeOverAlert)
                         isExpress = 0
                         binding?.checkExpress?.isChecked = false
                     }
@@ -362,6 +387,10 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                     dataAdapter.initData(paymentMethodLists)
                 }
             }
+        })
+
+        viewModel.getMessageAlertForIP().observe(viewLifecycleOwner, { messageLists->
+            this.messageLists = messageLists
         })
 
         viewModel.getInstantPaymentRate().observe(viewLifecycleOwner, { chargeList->
@@ -514,7 +543,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                                         }
                                     }.show()
                                 }else if (responseModel.message == 1 && responseModel.transactionId.isNullOrEmpty()){
-                                    alert("", "TransectionIdNullAlert অনুগ্রহ পূর্বক ডেলিভারি টাইগার এর একাউন্টস ডিপার্মেন্ট এর সাথে যোগাযোগ করুন।",false, "ঠিক আছে") {
+                                    alert("",  messageLists.transectionIdNullAlert,false, "ঠিক আছে") {
                                         if (it == AlertDialog.BUTTON_POSITIVE) {
                                             onCloseBottomSheet?.invoke()
                                         }
@@ -536,11 +565,11 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             dismiss()
             var msg = ""
             msg = if (paymentMethod == 3 && paymentType == 1){
-                "BankTransferMinimumLimit ব্যাংক ট্রান্সফার লিমিট নূন্যতম ১০০০ টাকা। "
+                messageLists.bankTransferMinimumLimit
             }else if (paymentMethod == 3 && paymentType == 2){
-                "BankTransferLimitAlert ব্যাংক ট্রান্সফার লিমিট ${DigitConverter.toBanglaDigit(model.bankLimit, true)} টাকা। "
+                messageLists.bankTransferLimitAlert
             }else{
-                "InsufficiantBalanceAlert আপনার ট্রান্সফার করার মতো ব্যালান্স নেই।"
+                messageLists.insufficiantBalanceAlert
             }
             alert("", msg,false, "ঠিক আছে") {}.show()
         }
