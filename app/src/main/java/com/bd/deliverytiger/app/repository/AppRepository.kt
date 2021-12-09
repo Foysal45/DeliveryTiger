@@ -242,6 +242,8 @@ class AppRepository(
 
     suspend fun getEftPaymentRate() = apiInterfaceADM.getEftPaymentRate()
 
+    suspend fun getSuperEftPaymentRate() = apiInterfaceADM.getSuperEftPaymentRate()
+
     suspend fun fetchMerchantCurrentAdvanceBalance(courierUserId: Int) = apiInterfaceADM.fetchMerchantCurrentAdvanceBalance(courierUserId)
 
     suspend fun fetchDTMerchantInstantPaymentStatus(courierUserId: Int) = apiInterfaceADM.fetchDTMerchantInstantPaymentStatus(courierUserId)
