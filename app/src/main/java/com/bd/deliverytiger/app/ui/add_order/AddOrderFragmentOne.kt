@@ -1436,7 +1436,7 @@ class AddOrderFragmentOne : Fragment() {
                         isNextDay = false
                     }
                     fetchCollectionTimeSlot()
-                    context?.toast("isNextDayActive $isNextDayActive")
+                    //context?.toast("isNextDayActive $isNextDayActive")
                     //new logic end
 
                     if (list.isNotEmpty()) {
