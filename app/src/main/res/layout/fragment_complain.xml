@@ -1,331 +1,381 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:overScrollMode="never">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:clickable="true"
-        android:focusable="true"
-        >
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <LinearLayout
-            android:id="@+id/chatLayout"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:padding="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:clickable="true"
+            android:focusable="true"
             >
 
-            <ImageView
-                android:id="@+id/chatBtn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_chat1"
-                android:contentDescription="@string/cd"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="কমপ্লেইন টিমের সাথে লাইভ চ্যাট করুন"
-                android:textSize="16sp"
-                android:textColor="@color/black_80"
-                android:layout_marginStart="8dp"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/inputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/chatLayout"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/bg_complain_add"
-            android:padding="16dp"
-            >
-
-            <TextView
-                android:id="@+id/formTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textColor="@color/black_90"
-                android:textStyle="bold"
-                android:text="নতুন কমপ্লেইন এন্ট্রি করুন"
-                />
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:id="@+id/chatLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
                 >
-
-                <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/spinnerComplainType"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/login_view_height"
-                    android:background="@drawable/bg_spinner"
-                    android:overlapAnchor="false"
-                    android:spinnerMode="dropdown"
-                    android:theme="@style/custom_spinner_style"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    tools:entries="@array/spinner_array_collection_location" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
+                    android:id="@+id/chatBtn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_chat1"
                     android:contentDescription="@string/cd"
-                    app:layout_constraintBottom_toBottomOf="@id/spinnerComplainType"
-                    app:layout_constraintEnd_toEndOf="@id/spinnerComplainType"
-                    app:layout_constraintTop_toTopOf="@id/spinnerComplainType"
-                    app:srcCompat="@drawable/ic_arrow_drop_down" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <EditText
-                android:id="@+id/orderCodeTV"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_view_height"
-                android:background="@drawable/bg_add_order_edit_text"
-                android:hint="অর্ডার আইডি Ex. DT-xxxx"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/text_14"
-                android:layout_marginTop="12dp"
-                />
-
-            <EditText
-                android:id="@+id/complainTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/bg_add_order_edit_text"
-                android:gravity="top"
-                android:hint="আপনার অভিযোগ / মতামত"
-                android:importantForAutofill="no"
-                android:inputType="textMultiLine"
-                android:minLines="5"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp"
-                android:textColor="@color/black_80"
-                android:textSize="@dimen/text_14"
-                android:visibility="gone"
-                tools:visibility="visible"
-                />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                >
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/submitBtn"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:text="সাবমিট"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_14"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     />
 
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="কমপ্লেইন টিমের সাথে লাইভ চ্যাট করুন"
+                    android:textSize="16sp"
+                    android:textColor="@color/black_80"
                     android:layout_marginStart="8dp"
-                    android:elevation="4dp"
-                    android:indeterminateTint="@color/white"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@id/submitBtn"
-                    app:layout_constraintStart_toStartOf="@id/submitBtn"
-                    app:layout_constraintTop_toTopOf="@id/submitBtn"
-                    tools:visibility="visible" />
+                    />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/helpLineContactLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_stroke2"
-            android:padding="8dp"
-            android:paddingBottom="5dp"
-            android:layout_marginStart="@dimen/left_right_margin"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="@dimen/left_right_margin"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inputLayout"
-            android:visibility="gone"
-            tools:visibility="visible">
-
-            <TextView
+            <LinearLayout
+                android:id="@+id/inputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="আমাদের সার্ভিস সম্পর্কে জানতে কল করুন"
-                android:textSize="@dimen/text_16"
-                android:textColor="@color/black_70"
-                android:gravity="center"/>
-
-            <TextView
-                android:id="@+id/helpLineNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_call"
-                android:drawablePadding="2dp"
-                android:drawableTint="@color/red"
-                android:text="01894811222"
-                android:textSize="@dimen/text_16"
-                android:textColor="@color/red"
-                android:textStyle="bold"
-                android:layout_gravity="center"/>
-
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/complaintTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/helpLineContactLayout"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:textSize="18sp"
-            android:textColor="@color/black_90"
-            android:textStyle="bold"
-            android:text="পূর্বের সকল কমপ্লেইন"
-            android:visibility="gone"
-            tools:visibility="visible"
-            />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@id/complaintTitle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:tabTextAppearance="@style/TabLayoutTextStyle"
-            tools:visibility="visible">
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="কমপ্লেইন (আইডি সহ)" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="কমপ্লেইন (সাধারন)" />
-        </com.google.android.material.tabs.TabLayout>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/dateFilterCard"
-            android:layout_width="0dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="6dp"
-
-            app:cardBackgroundColor="@color/white"
-            app:cardElevation="0dp"
-            app:contentPadding="4dp"
-            app:layout_constraintTop_toBottomOf="@id/tabLayout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="gone"
-            tools:visibility="visible">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/chatLayout"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_complain_add"
+                android:padding="16dp"
+                >
 
                 <TextView
-                    android:id="@+id/datePicker"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:hint="Date"
-                    android:textSize="12sp"
-                    android:gravity="center_vertical"
-                    android:includeFontPadding="false"
+                    android:id="@+id/formTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/black_90"
+                    android:textStyle="bold"
+                    android:text="নতুন কমপ্লেইন এন্ট্রি করুন"
+                    />
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    >
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/spinnerComplainType"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/login_view_height"
+                        android:background="@drawable/bg_spinner"
+                        android:overlapAnchor="false"
+                        android:spinnerMode="dropdown"
+                        android:theme="@style/custom_spinner_style"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:entries="@array/spinner_array_collection_location" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:contentDescription="@string/cd"
+                        app:layout_constraintBottom_toBottomOf="@id/spinnerComplainType"
+                        app:layout_constraintEnd_toEndOf="@id/spinnerComplainType"
+                        app:layout_constraintTop_toTopOf="@id/spinnerComplainType"
+                        app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <EditText
+                    android:id="@+id/orderCodeTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_view_height"
+                    android:background="@drawable/bg_add_order_edit_text"
+                    android:hint="অর্ডার আইডি Ex. DT-xxxx"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
                     android:paddingStart="16dp"
                     android:paddingTop="8dp"
                     android:paddingEnd="16dp"
                     android:paddingBottom="8dp"
-                    android:textColor="@color/black_60"
-                    app:drawableEndCompat="@drawable/ic_date"
-                    app:drawableTint="@color/black_40"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14"
+                    android:layout_marginTop="12dp"
+                    />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <EditText
+                    android:id="@+id/complainTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_add_order_edit_text"
+                    android:gravity="top"
+                    android:hint="আপনার অভিযোগ / মতামত"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine"
+                    android:minLines="5"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/black_80"
+                    android:textSize="@dimen/text_14"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    />
 
-        </androidx.cardview.widget.CardView>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    >
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            app:layout_constraintTop_toBottomOf="@id/dateFilterCard"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/submitBtn"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:text="সাবমিট"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_14"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
 
-            tools:itemCount="4"
-            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_view_complain"
-            tools:orientation="vertical"
-            tools:spanCount="2"
-            tools:visibility="visible"
-            />
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="8dp"
+                        android:elevation="4dp"
+                        android:indeterminateTint="@color/white"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@id/submitBtn"
+                        app:layout_constraintStart_toStartOf="@id/submitBtn"
+                        app:layout_constraintTop_toTopOf="@id/submitBtn"
+                        tools:visibility="visible" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/helpLineContactLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_stroke2"
+                android:padding="8dp"
+                android:paddingBottom="5dp"
+                android:layout_marginStart="@dimen/left_right_margin"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="@dimen/left_right_margin"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputLayout"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="আমাদের সার্ভিস সম্পর্কে জানতে কল করুন"
+                    android:textSize="@dimen/text_16"
+                    android:textColor="@color/black_70"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:id="@+id/helpLineNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_call"
+                    android:drawablePadding="2dp"
+                    android:drawableTint="@color/red"
+                    android:text="01894811222"
+                    android:textSize="@dimen/text_16"
+                    android:textColor="@color/red"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/complaintTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/helpLineContactLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:textSize="18sp"
+                android:textColor="@color/black_90"
+                android:textStyle="bold"
+                android:text="পূর্বের সকল কমপ্লেইন"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@id/complaintTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:tabTextAppearance="@style/TabLayoutTextStyle"
+                tools:visibility="visible">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="কমপ্লেইন (আইডি সহ)" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="কমপ্লেইন (সাধারন)" />
+            </com.google.android.material.tabs.TabLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/dateFilterCard"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="6dp"
+
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="0dp"
+                app:contentPadding="4dp"
+                app:layout_constraintTop_toBottomOf="@id/tabLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/datePicker"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:hint="Date"
+                        android:textSize="12sp"
+                        android:gravity="center_vertical"
+                        android:includeFontPadding="false"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/black_60"
+                        app:drawableEndCompat="@drawable/ic_date"
+                        app:drawableTint="@color/black_40"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                app:layout_constraintTop_toBottomOf="@id/dateFilterCard"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+
+                tools:itemCount="4"
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_view_complain"
+                tools:orientation="vertical"
+                tools:spanCount="2"
+                tools:visibility="visible"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/leaveFromFloatingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/cd"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_chat1" />-->
+
+    <!--<com.google.android.material.button.MaterialButton
+        android:id="@+id/callBtn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
+        android:padding="0dp"
+        app:iconPadding="0dp"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        app:iconSize="24dp"
+        app:iconGravity="textStart"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:backgroundTint="@color/lightGreen"
+        app:strokeColor="@color/colorPrimary"
+        app:icon="@drawable/ic_chat1"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
