@@ -75,8 +75,8 @@ class InstantPaymentUpdateViewModel (private val repository: AppRepository): Vie
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {
                     is NetworkResponse.Success -> {
-                        if (response.body.model != null) {
-                            responseData.value = response.body.model
+                        if (response.body != null) {
+                            responseData.value = response.body
                         }
                     }
                     is NetworkResponse.ServerError -> {

@@ -69,7 +69,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     private var expressChargeModel: InstantPaymentRateModel = InstantPaymentRateModel()
     private var superExpressChargeModel: InstantPaymentRateModel = InstantPaymentRateModel()
 
-    private val notificationId: Int = 100032
+    private val notificationId: Int = 10003200
 
     var onCloseBottomSheet: (() -> Unit)? = null
 
@@ -143,7 +143,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         viewModel.checkBankNameForEFT(BankCheckForEftRequest(model.bankName)).observe(viewLifecycleOwner, Observer {
             isMatchBankAccount = it.isMatch
-            if (isPaymentTypeSelect){
+            if (isMatchBankAccount == 1){
                 binding?.bankTransferLayout?.visibility = View.VISIBLE
             }else{
                 binding?.bankTransferLayout?.visibility = View.GONE
@@ -389,7 +389,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             }
         })
 
-        viewModel.getMessageAlertForIP().observe(viewLifecycleOwner, { messageLists->
+        viewModel.getMessageAlertForIP().observe(viewLifecycleOwner, Observer{ messageLists->
             this.messageLists = messageLists
         })
 

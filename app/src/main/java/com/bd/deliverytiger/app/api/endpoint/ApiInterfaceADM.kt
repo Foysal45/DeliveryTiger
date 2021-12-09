@@ -115,7 +115,7 @@ interface ApiInterfaceADM {
     suspend fun checkBankNameForEFT(@Body requestBody: BankCheckForEftRequest): NetworkResponse<BankCheckForEftResponse, ErrorResponse>
 
     @GET("api/account/reports/GetMessageAlertForIP")
-    suspend fun getMessageAlertForIP(): NetworkResponse<GenericResponse<AllAlertMessage>, ErrorResponse>
+    suspend fun getMessageAlertForIP(): NetworkResponse<AllAlertMessage, ErrorResponse>
 
     @Multipart
     @POST("Image/ImageUploadForFile")
