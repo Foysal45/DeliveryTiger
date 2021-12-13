@@ -278,7 +278,7 @@ class DashboardFragment : Fragment() {
         }
         binding?.chatWithRiderBtn?.setOnClickListener {
             getRidersOfficeInfo()
-            goToChatActivityRider()
+            goToChatActivityRider(collectorInformation)
             UserLogger.logGenie("Dashboard_CollectorChat_${collectorInformation.name}")
         }
         binding?.orderTrackingBtn?.setOnClickListener {
@@ -1300,7 +1300,7 @@ class DashboardFragment : Fragment() {
         ).config(requireContext())
     }
 
-    private fun goToChatActivityRider() {
+    private fun goToChatActivityRider(collectorInformation: CollectorInformation) {
         val firebaseCredential = FirebaseCredential(
             firebaseWebApiKey = BuildConfig.FirebaseWebApiKey
         )
@@ -1309,13 +1309,16 @@ class DashboardFragment : Fragment() {
             role = "dt",
             fcmToken = SessionManager.firebaseToken
         )
-        val receiverData = if (adminUser != null) {
+        val receiverData = if (collectorInformation.id == 0 || collectorInformation.name == null) {
             ChatUserData("906","Post Shipment Admin", "" ,
                 imageUrl = "https://static.ajkerdeal.com/images/bondhuprofileimage/906/profileimage.jpg",
                 role = "bondhu"
             )
         } else {
-            ChatUserData()
+            ChatUserData(collectorInformation.id.toString(),collectorInformation.name.toString(), collectorInformation.mobile.toString() ,
+                imageUrl = "https://static.ajkerdeal.com/images/bondhuprofileimage/${collectorInformation.id}/profileimage.jpg",
+                role = "bondhu"
+            )
         }
         ChatConfigure(
             "dt-bondhu",
