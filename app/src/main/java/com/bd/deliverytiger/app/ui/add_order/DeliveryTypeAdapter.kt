@@ -68,6 +68,7 @@ class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun addRemoveSpecialService(isSpecialServiceAvailable: Boolean, list:List<WeightRangeWiseData>){
+
         if (!list.isNullOrEmpty()){
             dataList.addAll(list)
         }
@@ -76,6 +77,7 @@ class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             dataList.removeAll(data)
         }
         notifyDataSetChanged()
+
     }
 
     fun selectPreSelection() {
