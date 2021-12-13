@@ -34,6 +34,7 @@ class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewModel) {
+
             if (dataList.isNotEmpty()){
                 val model = dataList[position]
                 val binding = holder.binding
@@ -76,18 +77,35 @@ class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     binding.status.append(" ($formattedDate)")
                 }
             }
+
             if (generalDataList.isNotEmpty()){
                 val model = generalDataList[position]
                 val binding = holder.binding
                 //model.complain = "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet."
                 if (!model.comments.isNullOrEmpty()) {
+                    if (!model.isExpand && model.comments!!.length > charLimit) {
+                        val subString = model.comments!!.substring(0, charLimit-1) + "...<font color='#00844A'>বিস্তারিত</font>"
+                        binding.complainType.text = HtmlCompat.fromHtml(subString, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                        binding.complainType.setOnClickListener {
+                            if (!model.isExpand) {
+                                model.isExpand = true
+                                notifyItemChanged(position)
+                            }
+                        }
+                    } else {
+                        binding.complainType.text = model.comments
+                    }
+                } else {
+                    binding.complainType.text = ""
+                }
+                /*if (!model.comments.isNullOrEmpty()) {
                     binding.complainType.text = model.comments
                 } else {
                     binding.complainType.text = "No Comments"
-                }
+                }*/
 
                 binding.orderCode.text = if (model.companyName.isNotEmpty()){ model.companyName} else {"Merchant Name"}
-                if(model.complainType == "Pending") {
+                if(model.isIssueSolved == 0) {
                     binding.orderCode.setTextColor(Color.RED)
                 }
                 if (model.postedOn != null) {
@@ -97,13 +115,12 @@ class ComplainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     binding.date.text = ""
                 }
 
-                if(model.complainType == "Pending"){
-                    binding.status.text = HtmlCompat.fromHtml("স্ট্যাটাস: <font color='#e11f27'>${model.complainType}</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+                if(model.isIssueSolved == 0){
+                    binding.status.text = HtmlCompat.fromHtml("স্ট্যাটাস: <font color='#e11f27'>Pending</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
                 }else{
-                    binding.status.text = "স্ট্যাটাস: ${if (model.isIssueSolved == 0) {"solved"} else {"pending"}}"
+                    binding.status.text = "স্ট্যাটাস: Solved"
                 }
             }
-
 
         }
     }

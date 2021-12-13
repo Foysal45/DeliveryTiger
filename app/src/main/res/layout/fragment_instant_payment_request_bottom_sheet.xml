@@ -23,45 +23,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/chatLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTV"
-        android:padding="8dp"
-        android:layout_marginTop="8dp"
-        >
-
-        <ImageView
-            android:id="@+id/chatBtn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_chat1"
-            android:contentDescription="@string/cd"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="অ্যাকাউন্টস টিমের সাথে লাইভ চ্যাট করুন"
-            android:textSize="16sp"
-            android:textColor="@color/black_80"
-            android:layout_marginStart="8dp"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/codAmountLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chatLayout"
+        app:layout_constraintTop_toBottomOf="@+id/titleTV"
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
@@ -86,107 +55,270 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/transferLayout"
-        android:layout_width="0dp"
+        android:id="@+id/transferParentLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginTop="10dp"
         android:layout_marginHorizontal="20dp"
         android:clickable="true"
         android:focusable="true"
-        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/codAmountLayout">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:layout_weight="6"
-            android:backgroundTint="@color/cod_bg_five"
-            android:background="@drawable/bg_stroke_instant_payment"
-            android:orientation="vertical">
+            android:id="@+id/transferLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/codAmountLayout">
+
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:paddingVertical="12dp"
+                android:layout_weight="6"
+                android:gravity="center"
+                android:backgroundTint="@color/cod_bg_five"
+                android:background="@drawable/bg_stroke_instant_payment"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/instantPayment_Tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="ইনস্ট্যান্ট পেমেন্ট"
-                    android:textColor="@color/cod_bg_ten"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/deliveryTypeImage"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="6dp"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/cd"
-                    tools:srcCompat="@drawable/ic_bkash"
-                    />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginVertical="2dp"
+                        android:src="@drawable/ic_bkash"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <TextView
+                            android:id="@+id/instantPayment_Tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="ইনস্ট্যান্ট পেমেন্ট"
+                            android:textColor="@color/cod_bg_ten"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/instantPaymentTransferCharge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="( ০ টাকা চার্জ প্রযোজ্য )"
+                                android:textColor="@color/cod_bg_ten"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/chargeInfo"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginVertical="2dp"
+                                android:src="@drawable/ic_info"
+                                />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
-
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
+                android:id="@+id/transferBtnLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@color/cod_bg_six"
+                android:background="@drawable/bg_stroke_instant_payment_btn">
                 <TextView
-                    android:id="@+id/instantPaymentTransferCharge"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/transfer_Tv"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="3dp"
+                    android:layout_weight="2"
                     android:gravity="center"
-                    android:text="( ০ টাকা চার্জ প্রযোজ্য )"
-                    android:textColor="@color/cod_bg_ten"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/chargeInfo"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginVertical="2dp"
-                    android:src="@drawable/ic_info"
-                    />
+                    android:text="ট্রান্সফার"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="8dp" />
 
             </LinearLayout>
-
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/transferBtnLayout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:layout_gravity="center_horizontal"
-            android:backgroundTint="@color/cod_bg_six"
-            android:background="@drawable/bg_stroke_instant_payment_btn">
-            <TextView
-                android:id="@+id/transfer_Tv"
-                android:layout_width="match_parent"
+            android:id="@+id/bankTransferLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/transferLayout"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="ট্রান্সফার"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginEnd="8dp" />
+                android:paddingVertical="8dp"
+                android:layout_weight="6"
+                android:backgroundTint="@color/bank_instant_payment_background"
+                android:background="@drawable/bg_stroke_instant_payment"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginVertical="2dp"
+                        android:src="@drawable/ic_bank_vertical"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.9"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <TextView
+                            android:id="@+id/instantBankPayment_Tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="ইনস্ট্যান্ট ব্যাংক পেমেন্ট"
+                            android:textColor="@color/cod_bg_ten"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/paymentTimeType"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:includeFontPadding="false"
+                                android:paddingBottom="2dp"
+                                tools:text="Same day (সর্বোচ্চ ৩ ঘন্টা)"
+                                android:textColor="@color/bank_instant_payment_transfer_background"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/instantBankPaymentTransferCharge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="( ০ টাকা চার্জ প্রযোজ্য )"
+                                android:textColor="@color/cod_bg_ten"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/bankChargeInfo"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginVertical="2dp"
+                                android:src="@drawable/ic_info"
+                                />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bankTransferBtnLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@color/bank_instant_payment_transfer_background"
+                android:background="@drawable/bg_stroke_instant_bank_payment_btn">
+                <TextView
+                    android:id="@+id/bank_transfer_Tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="3dp"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="ট্রান্সফার"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="8dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -201,10 +333,9 @@
         android:padding="5dp"
         android:background="@drawable/bg_stroke_regular_payment"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/transferLayout"
-        app:layout_constraintStart_toStartOf="@+id/transferLayout"
-        app:layout_constraintEnd_toEndOf="@+id/transferLayout"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/transferParentLayout"
+        app:layout_constraintStart_toStartOf="@+id/transferParentLayout"
+        app:layout_constraintEnd_toEndOf="@+id/transferParentLayout">
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -321,8 +452,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="gone"
-        tools:visibility="visible"
-        />
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/chatLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="2dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/transferParentLayout"
+        app:layout_constraintTop_toBottomOf="@+id/requestInnerLayout"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/chatBtn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_chat4"
+            android:contentDescription="@string/cd" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="লাইভ চ্যাট "
+            android:textSize="16sp"
+            android:textColor="@color/black_60"
+            android:textStyle=""
+            android:layout_marginStart="8dp" />
+
+    </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

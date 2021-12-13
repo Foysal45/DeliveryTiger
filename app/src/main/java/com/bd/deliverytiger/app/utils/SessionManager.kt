@@ -558,6 +558,16 @@ object SessionManager {
             }
         }
 
+    var isEligibleForSpecialService: Boolean
+        get() {
+            return pref.getBoolean("isEligibleForSpecialService", false)
+        }
+        set(value) {
+            pref.edit {
+                putBoolean("isEligibleForSpecialService", value)
+            }
+        }
+
     var retentionManagerName: String
         get() {
             return pref.getString("retentionManagerName", "")!!

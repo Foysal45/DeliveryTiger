@@ -16,6 +16,14 @@ data class InstantPaymentStatusData(
     val paymentMethod: Int = 0,
     @SerializedName("Processing")
     var processing: Int = 0,
+    @SerializedName("FailedTransferMsg")
+    var failedTransferMsg: String = "",
+    @SerializedName("SuccessbkashTransferMsg")
+    var successBkashTransferMsg: String = "",
+    @SerializedName("SuccessExpressTransferMsg")
+    var successExpressTransferMsg: String = "",
+    @SerializedName("SuccessSuperExpressTransferMsg")
+    var successSuperExpressTransferMsg: String = "",
     @SerializedName("CurrentPaymentStatus")
     var currentPaymentStatus: Int = 0,
     @SerializedName("LastPaymentDate")

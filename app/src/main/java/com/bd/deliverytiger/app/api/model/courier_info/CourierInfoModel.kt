@@ -92,6 +92,8 @@ data class CourierInfoModel(
     var isBreakAble: Boolean = false,
     @SerializedName("isHeavyWeight")
     var isHeavyWeight: Boolean = false,
+    @SerializedName("merchantAssignActive")
+    var merchantAssignActive: Boolean = false,
     @SerializedName("customerSMSLimit")
     var customerSMSLimit: Int = 0,
     @SerializedName("isLoanActive")

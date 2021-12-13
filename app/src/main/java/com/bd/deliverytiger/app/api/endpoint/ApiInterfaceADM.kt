@@ -1,6 +1,7 @@
 package com.bd.deliverytiger.app.api.endpoint
 
 import com.bd.deliverytiger.app.api.model.ErrorResponse
+import com.bd.deliverytiger.app.api.model.GenericResponse
 import com.bd.deliverytiger.app.api.model.accounts.*
 import com.bd.deliverytiger.app.api.model.balance_load.BalanceLoadHistoryData
 import com.bd.deliverytiger.app.api.model.bill_pay_history.BillPayHistoryResponse
@@ -10,6 +11,7 @@ import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
 import com.bd.deliverytiger.app.api.model.complain.general_complain.GeneralComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.general_complain.GeneralComplainResponse
+import com.bd.deliverytiger.app.api.model.instant_payment_rate.AllAlertMessage
 import com.bd.deliverytiger.app.api.model.instant_payment_rate.InstantPaymentRateModel
 import com.bd.deliverytiger.app.api.model.instant_payment_status.InstantPaymentStatusData
 import com.bd.deliverytiger.app.api.model.instant_payment_status.InstantPaymentActivationStatusResponse
@@ -100,7 +102,10 @@ interface ApiInterfaceADM {
     @GET("api/account/reports/GetEFTPaymentRate")
     suspend fun getEftPaymentRate(): NetworkResponse<InstantPaymentRateModel, ErrorResponse>
 
-    @POST("api/account/reports/MerchantPayableReceiveableDetailForInstantPaymentFromAppV2")
+    @GET("api/account/reports/GetSuperExpressCharge")
+    suspend fun getSuperEftPaymentRate(): NetworkResponse<InstantPaymentRateModel, ErrorResponse>
+
+    @POST("api/account/reports/MerchantPayableReceiveableDetailForInstantPaymentFromAppV3")
     suspend fun merchantPayableReceiveableDetailForInstantPayment(@Body requestBody: MerchantPayableReceiveableDetailRequest): NetworkResponse<MerchantPayableReceivableDetailResponse, ErrorResponse>
 
     @POST("api/account/reports/InstantOr24hourPaymentV2")
@@ -108,6 +113,9 @@ interface ApiInterfaceADM {
 
     @POST("api/account/reports/CheckbankNameForEFT")
     suspend fun checkBankNameForEFT(@Body requestBody: BankCheckForEftRequest): NetworkResponse<BankCheckForEftResponse, ErrorResponse>
+
+    @GET("api/account/reports/GetMessageAlertForIP")
+    suspend fun getMessageAlertForIP(): NetworkResponse<AllAlertMessage, ErrorResponse>
 
     @Multipart
     @POST("Image/ImageUploadForFile")

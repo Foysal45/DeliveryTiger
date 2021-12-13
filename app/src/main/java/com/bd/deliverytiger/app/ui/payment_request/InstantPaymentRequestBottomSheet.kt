@@ -29,6 +29,7 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.accounts.BankCheckForEftRequest
 import com.bd.deliverytiger.app.api.model.chat.ChatUserData
 import com.bd.deliverytiger.app.api.model.chat.FirebaseCredential
+import com.bd.deliverytiger.app.api.model.instant_payment_rate.AllAlertMessage
 import com.bd.deliverytiger.app.api.model.instant_payment_rate.InstantPaymentRateModel
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantInstantPaymentRequest
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceivableDetailResponse
@@ -62,10 +63,13 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
     private var model: MerchantPayableReceivableDetailResponse = MerchantPayableReceivableDetailResponse()
 
+    private var messageLists: AllAlertMessage = AllAlertMessage()
+
     private var chargeModel: InstantPaymentRateModel = InstantPaymentRateModel()
     private var expressChargeModel: InstantPaymentRateModel = InstantPaymentRateModel()
+    private var superExpressChargeModel: InstantPaymentRateModel = InstantPaymentRateModel()
 
-    private val notificationId: Int = 100032
+    private val notificationId: Int = 11119999
 
     var onCloseBottomSheet: (() -> Unit)? = null
 
@@ -77,6 +81,8 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     var time = ""
 
     private var paymentMethodLists: MutableList<OptionImageUrl> = mutableListOf()
+
+    var isMatchBankAccount = 0
 
     companion object {
 
@@ -131,10 +137,21 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         binding?.paymentAmount?.text = HtmlCompat.fromHtml("<font color='#626366'>৳ </font> <font color='#f05a2b'>${DigitConverter.toBanglaDigit(model.payableAmount, true)}</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
         binding?.instantPaymentTransferCharge?.text =HtmlCompat.fromHtml("(<font color='#E84545'>${DigitConverter.toBanglaDigit(model.instantPaymentCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        binding?.instantBankPaymentTransferCharge?.text =HtmlCompat.fromHtml("(<font color='#E84545'>${DigitConverter.toBanglaDigit(model.superExpressCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+        binding?.paymentTimeType?.text = model.superExpressTimeLimit
 
         binding?.checkExpress?.setTextWith("${model.expressTime} ঘন্টা", "EXPRESS", HtmlCompat.fromHtml("(<font color='#E84545'>${DigitConverter.toBanglaDigit(model.expressCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY),0)
         binding?.checkNormal?.setTextWith("${model.normalTime} ঘন্টা", "NORMAL", "(অতিরিক্ত চার্জ নেই)",1)
 
+        viewModel.checkBankNameForEFT(BankCheckForEftRequest(model.bankName)).observe(viewLifecycleOwner, Observer {
+            isMatchBankAccount = it.isMatch
+            if (isMatchBankAccount == 1){
+                binding?.bankTransferLayout?.visibility = View.VISIBLE
+            }else{
+                binding?.bankTransferLayout?.visibility = View.GONE
+            }
+        })
     }
 
     private fun checkDay(): Boolean {
@@ -165,8 +182,9 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         var isInTime = false
         time = simpleTimeFormat.format(calendar.time)
         var timeLimit = time.split(":")
+
         var cutOffTime = model.cutOffTime.split(":")
-        if (Integer.parseInt(cutOffTime[0]) == 0){
+        if (Integer.parseInt(cutOffTime[1]) == 0){
             if (Integer.parseInt(timeLimit[0]) in 1..Integer.parseInt(cutOffTime[0])){
                 isInTime = true
             }
@@ -187,17 +205,42 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         binding?.transferBtnLayout?.setOnClickListener {
             if (model.payableAmount != 0){
-                if (model.payableAmount <= model.limit){
-                    alert("", HtmlCompat.fromHtml("<font><b>আপনি কি এখনই আপনার বিকাশ একাউন্টে (${model.bKashNo}) পেমেন্ট নিতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
-                        if (it == AlertDialog.BUTTON_POSITIVE) {
-                            UserLogger.logGenie("Instant_payment_transfer_clicked")
-                            instantPaymentRequestAndTransfer(2) // for transfer balance 2
-                        }
-                    }.show()
+                if (model.bKashStatus == 1){
+                    if (model.payableAmount <= model.limit){
+                        alert("", HtmlCompat.fromHtml("<font><b>আপনি কি এখনই আপনার বিকাশ একাউন্টে (${model.bKashNo}) পেমেন্ট নিতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
+                            if (it == AlertDialog.BUTTON_POSITIVE) {
+                                UserLogger.logGenie("Instant_payment_transfer_clicked")
+                                instantPaymentRequestAndTransfer(2) // for transfer balance 2
+                            }
+                        }.show()
+                    }else{
+                        showAlert(messageLists.instantPaymentLimitAlert)
+                    }
                 }else{
-                    showAlert("ইন্সট্যান্ট পেমেন্ট ট্রান্সফারের সর্বোচ্চ লিমিট ${DigitConverter.toBanglaDigit(model.limit, true)} টাকা, অনুগ্রহ করে রেগুলার পেমেন্ট সেবা নিন।")
+                    showAccountEnableAlert(1)
                 }
 
+            }else{
+                context?.toast("আপনার তথ্য লোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন ।")
+            }
+        }
+
+        binding?.bankTransferBtnLayout?.setOnClickListener {
+            if (model.netPayableAmount != 0){
+                if (model.bankStatus == 1){
+                    if (model.superExpressNetPayableAmount <= model.bankLimit){
+                        alert("", HtmlCompat.fromHtml("<font><b>আপনি কি ব্যাংক অ্যাকাউন্টে (${model.bankName} অ্যাকাউন্ট নাম্বারঃ ${model.bankACNo}) পেমেন্ট নিতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
+                            if (it == AlertDialog.BUTTON_POSITIVE) {
+                                UserLogger.logGenie("Instant_bank_payment_transfer_clicked")
+                                instantPaymentRequestAndTransfer(3) // for instant bank transfer 3
+                            }
+                        }.show()
+                    }else{
+                        showAlert(messageLists.instantPaymentLimitAlert)
+                    }
+                }else{
+                    showAccountEnableAlert(3)
+                }
             }else{
                 context?.toast("আপনার তথ্য লোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন ।")
             }
@@ -227,7 +270,15 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         binding?.chargeInfo?.setOnClickListener {
             if (chargeModel.charge.isNotEmpty() && chargeModel.discount.isNotEmpty()){
-                viewInstantPaymentRateDialog(chargeModel, "ইনস্ট্যান্ট ট্রান্সফার চার্জ", false)
+                viewInstantPaymentRateDialog(chargeModel, messageLists.instantChargeTitle, "orange")
+            } else{
+                context?.toast("কোন তথ্য পাওয়া যায়নি!")
+            }
+        }
+
+        binding?.bankChargeInfo?.setOnClickListener {
+            if (superExpressChargeModel.charge.isNotEmpty() && superExpressChargeModel.discount.isNotEmpty()){
+                viewInstantPaymentRateDialog(superExpressChargeModel, messageLists.superEftChargeTitle, "blue")
             } else{
                 context?.toast("কোন তথ্য পাওয়া যায়নি!")
             }
@@ -235,7 +286,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         binding?.expressChargeInfo?.setOnClickListener {
             if (expressChargeModel.charge.isNotEmpty() && expressChargeModel.discount.isNotEmpty()){
-                viewInstantPaymentRateDialog(expressChargeModel, "এক্সপ্রেস ট্রান্সফার চার্জ (শুধুমাত্র ব্যাংক)", true)
+                viewInstantPaymentRateDialog(expressChargeModel, messageLists.eftChargeTitle, "green")
             } else{
                 context?.toast("কোন তথ্য পাওয়া যায়নি!")
             }
@@ -284,10 +335,10 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                         isExpress = 1
                         binding?.checkExpress?.isChecked = true
                         if (checkDay()){
-                            showAlert("শুক্র ও শনিবার ব্যাংক বন্ধ থাকায় 'এক্সপ্রেস পেমেন্ট' আপনার ব্যাংক একাউন্টে রবিবার ট্রান্সফার হবে। জরুরি প্রয়োজন বিকাশের মাধ্যমে শুক্ত ও শনিবার পেমেন্ট ট্রান্সফার করতে পারেন ।")
+                            showAlert(messageLists.fridayAlert)
                         }
                     }else{
-                        showAlert("সম্মানিত গ্রাহক, আপনি দুপুর ${DigitConverter.toBanglaDigit(model.cutOffTime)} মিনিট পর্যন্ত আমাদের 'এক্সপ্রেস পেমেন্ট' সেবাটি নিতে পারবেন। জরুরি প্রয়োজন বিকাশের মাধ্যমে পেমেন্ট ট্রান্সফার করতে পারেন ।")
+                        showAlert(messageLists.expressTimeOverAlert)
                         isExpress = 0
                         binding?.checkExpress?.isChecked = false
                     }
@@ -348,6 +399,10 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             }
         })
 
+        viewModel.getMessageAlertForIP().observe(viewLifecycleOwner, Observer{ messageLists->
+            this.messageLists = messageLists
+        })
+
         viewModel.getInstantPaymentRate().observe(viewLifecycleOwner, { chargeList->
             if(chargeList.charge.isNotEmpty() && chargeList.discount.isNotEmpty()){
                 this.chargeModel = chargeList
@@ -360,9 +415,15 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             }
         })
 
+        viewModel.getSuperEftPaymentRate().observe(viewLifecycleOwner, { superExpressChargeList->
+            if(superExpressChargeList.charge.isNotEmpty() && superExpressChargeList.discount.isNotEmpty()){
+                this.superExpressChargeModel = superExpressChargeList
+            }
+        })
+
     }
 
-    private fun viewInstantPaymentRateDialog(chargeInfo: InstantPaymentRateModel, title: String, isGreen: Boolean) {
+    private fun viewInstantPaymentRateDialog(chargeInfo: InstantPaymentRateModel, title: String, color: String) {
 
         val myDialog = LayoutInflater.from(context).inflate(R.layout.item_view_instant_payment_rate_dialog, null)
         val mBuilder = AlertDialog.Builder(requireActivity()).setView(myDialog)
@@ -374,10 +435,10 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         val titleTv = mAlertDialog.findViewById<TextView>(R.id.titleTV)
         titleTv?.text = title
 
-        if (isGreen){
-            titleTv?.setBackgroundResource(R.color.colorPrimary)
-        }else{
-            titleTv?.setBackgroundResource(R.color.orange)
+        when(color){
+            "green"->{titleTv?.setBackgroundResource(R.color.colorPrimary)}
+            "blue"->{titleTv?.setBackgroundResource(R.color.bank_instant_payment_transfer_background)}
+            "orange"->{titleTv?.setBackgroundResource(R.color.orange)}
         }
 
         val instantRV = mAlertDialog.findViewById<RecyclerView>(R.id.instantPaymentRateRv)
@@ -409,8 +470,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                     3->{
                         when (isExpress) {
                             1 -> {
-
-                                if(model.expressNetPayableAmount > 1000 && model.expressNetPayableAmount < model.bankLimit){
+                                if(model.expressNetPayableAmount > model.bankLowerLimit && model.expressNetPayableAmount < model.bankLimit){
                                     paymentType = 2 // express only
                                     charge = model.expressCharge
                                     amount = model.expressNetPayableAmount
@@ -420,7 +480,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                                 }
                             }
                             2 -> {
-                                if(model.payableAmount > 1000){
+                                if(model.payableAmount > model.bankLowerLimit){
                                     charge = 0
                                     amount = model.payableAmount
                                 }else{
@@ -437,24 +497,31 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                 charge = model.instantPaymentCharge
                 amount = model.netPayableAmount
             }
-
+            3->{
+                if(model.superExpressNetPayableAmount > model.bankLowerLimit && model.superExpressNetPayableAmount < model.bankLimit){
+                    paymentMethod = 3
+                    charge = model.superExpressCharge
+                    amount = model.superExpressNetPayableAmount
+                }else{
+                    paymentMethod = 3
+                    charge = 0
+                    amount = 0
+                }
+            }
         }
 
         if (amount > 0){
             val requestBody = MerchantInstantPaymentRequest(charge, SessionManager.courierUserId, amount, paymentType, paymentMethod)
             Timber.d("requestBodyDebug $requestBody")
+            progressDialog.dismiss()
             viewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { responseModel->
-                var isMatchBankAccount = 0
-                viewModel.checkBankNameForEFT(BankCheckForEftRequest(model.bankName)).observe(viewLifecycleOwner, Observer {
-                    isMatchBankAccount = it.isMatch
-                })
                 progressDialog.dismiss()
                 dismiss()
                 if (responseModel != null) {
                     when (paymentType) {
                         1 -> {
                             if (responseModel.message == 1 && responseModel.paymentMethod == 3){
-                                showLocalNotification("রেগুলার পেমেন্ট","আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট হয়েছে। আগামী ${model.normalTime} ঘন্টার মধ্যে ${model.payableAmount} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।", "")
+                                showLocalNotification("রেগুলার পেমেন্ট","আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট হয়েছে। আগামী ${model.normalTime} ঘন্টার মধ্যে ${DigitConverter.toBanglaDigit(model.payableAmount)} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।", "")
                                 alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${model.normalTime} ঘন্টার মধ্যে ${model.payableAmount} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
                                     UserLogger.logGenie("Regular_payment_request_Successfully")
                                     if (it == AlertDialog.BUTTON_POSITIVE) {
@@ -462,7 +529,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                                     }
                                 }.show()
                             }else if(responseModel.message == 1 && responseModel.paymentMethod == 1){
-                                showLocalNotification("রেগুলার পেমেন্ট","আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট হয়েছে। আগামী ${model.normalTime} ঘন্টার মধ্যে ${model.payableAmount} টাকা আপনার বিকাশ অ্যাকাউন্টে ট্রান্সফার হবে।", "")
+                                showLocalNotification("রেগুলার পেমেন্ট","আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট হয়েছে। আগামী ${model.normalTime} ঘন্টার মধ্যে ${DigitConverter.toBanglaDigit(model.payableAmount)} টাকা আপনার বিকাশ অ্যাকাউন্টে ট্রান্সফার হবে।", "")
                                 alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${model.normalTime} ঘন্টার মধ্যে ${model.payableAmount} টাকা আপনার বিকাশ অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
                                     UserLogger.logGenie("Regular_payment_request_Successfully")
                                     if (it == AlertDialog.BUTTON_POSITIVE) {
@@ -477,7 +544,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                             if (responseModel.paymentType == 2 && responseModel.paymentMethod == 3){
                                 if (responseModel.message == 1){
                                     showLocalNotification("এক্সপ্রেস পেমেন্ট","${model.expressTime} ঘন্টার মধ্যে আপনার ব্যাংক অ্যাকাউন্টে ট্র্যান্সফার হবে", "")
-                                    alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${if (isMatchBankAccount == 1){model.expressTime}else{"12-24"}} ঘন্টার মধ্যে ${model.expressNetPayableAmount} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
+                                    alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${model.expressTime} ঘন্টার মধ্যে ${DigitConverter.toBanglaDigit(model.expressNetPayableAmount)} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
                                         UserLogger.logGenie("Instant_payment_transfer_Successfully")
                                         if (it == AlertDialog.BUTTON_POSITIVE) {
                                             onCloseBottomSheet?.invoke()
@@ -496,7 +563,22 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                                         }
                                     }.show()
                                 }else if (responseModel.message == 1 && responseModel.transactionId.isNullOrEmpty()){
-                                    alert("", "অনুগ্রহ পূর্বক ডেলিভারি টাইগার এর একাউন্টস ডিপার্মেন্ট এর সাথে যোগাযোগ করুন।",false, "ঠিক আছে") {
+                                    alert("",  messageLists.transectionIdNullAlert,false, "ঠিক আছে") {
+                                        if (it == AlertDialog.BUTTON_POSITIVE) {
+                                            onCloseBottomSheet?.invoke()
+                                        }
+                                    }.show()
+                                }else{
+                                    showAlert("কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন।")
+                                }
+                            }
+                        }
+                        3 -> {
+                            if (responseModel.paymentType == 3 && responseModel.paymentMethod == 3){
+                                if (responseModel.message == 1){
+                                    showLocalNotification("ইনস্ট্যান্ট ব্যাংক পেমেন্ট","${model.superExpressTime} ঘন্টার মধ্যে আপনার ব্যাংক অ্যাকাউন্টে ট্র্যান্সফার হবে", "")
+                                    alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${model.superExpressTime} ঘন্টার মধ্যে ${DigitConverter.toBanglaDigit(model.superExpressNetPayableAmount)} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
+                                        UserLogger.logGenie("Instant_payment_transfer_Successfully")
                                         if (it == AlertDialog.BUTTON_POSITIVE) {
                                             onCloseBottomSheet?.invoke()
                                         }
@@ -517,13 +599,35 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             progressDialog.dismiss()
             dismiss()
             var msg = ""
-            msg = if (paymentMethod == 3 && paymentType == 1){
-                "ব্যাংক ট্রান্সফার লিমিট নূন্যতম ১০০০ টাকা। "
-            }else if (paymentMethod == 3 && paymentType == 2){
-                "ব্যাংক ট্রান্সফার লিমিট ${DigitConverter.toBanglaDigit(model.bankLimit, true)} টাকা। "
-            }else{
-                "আপনার ট্রান্সফার করার মতো ব্যালান্স নেই।"
+            if (paymentMethod == 3){
+                msg = when(paymentType){
+                    1->{
+                        if (model.netPayableAmount < model.bankLowerLimit){
+                            messageLists.bankTransferMinimumLimit
+                        }else{
+                            messageLists.bankTransferLimitAlert
+                        }
+                    }
+                    2->{
+                        if (model.expressCharge < model.bankLowerLimit){
+                            messageLists.bankTransferMinimumLimit
+                        }else{
+                            messageLists.bankTransferLimitAlert
+                        }
+                    }
+                    3->{
+                        if (model.superExpressNetPayableAmount < model.bankLowerLimit){
+                            messageLists.bankTransferMinimumLimit
+                        }else{
+                            messageLists.bankTransferLimitAlert
+                        }
+                    }
+                    else->{
+                        messageLists.insufficiantBalanceAlert
+                    }
+                }
             }
+
             alert("", msg,false, "ঠিক আছে") {}.show()
         }
 

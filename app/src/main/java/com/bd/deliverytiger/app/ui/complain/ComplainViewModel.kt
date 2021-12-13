@@ -59,12 +59,12 @@ class ComplainViewModel(private val repository: AppRepository): ViewModel() {
     fun fetchComplainList(courierUserId: Int, index: Int = 0): LiveData<List<ComplainData>> {
 
         val responseData: MutableLiveData<List<ComplainData>> = MutableLiveData()
-        viewState.value = ViewState.ProgressState(true)
+        //viewState.value = ViewState.ProgressState(true)
 
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.fetchComplainList(ComplainListRequest(courierUserId, index))
             withContext(Dispatchers.Main) {
-                viewState.value = ViewState.ProgressState(false)
+                //viewState.value = ViewState.ProgressState(false)
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body != null) {
@@ -94,12 +94,12 @@ class ComplainViewModel(private val repository: AppRepository): ViewModel() {
     fun fetchWithoutOrderCodeComplains(requestBody: GeneralComplainListRequest): LiveData<List<GeneralComplainResponse>> {
 
         val responseData: MutableLiveData<List<GeneralComplainResponse>> = MutableLiveData()
-        viewState.value = ViewState.ProgressState(true)
+        //viewState.value = ViewState.ProgressState(true)
 
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.fetchWithoutOrderCodeComplains(requestBody)
             withContext(Dispatchers.Main) {
-                viewState.value = ViewState.ProgressState(false)
+                //viewState.value = ViewState.ProgressState(false)
                 when (response) {
                     is NetworkResponse.Success -> {
                         if (response.body != null) {
