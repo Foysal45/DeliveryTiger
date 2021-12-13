@@ -306,7 +306,7 @@ class LoanSurveryViewModel(private val repository: AppRepository) : ViewModel() 
         val responseData: MutableLiveData<Int> = MutableLiveData()
         viewState.value = ViewState.ProgressState(true)
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.UpdateCourierWithLoanSurvey(requestBody, loanSurveyId)
+            val response = repository.updateCourierWithLoanSurvey(requestBody, loanSurveyId)
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {

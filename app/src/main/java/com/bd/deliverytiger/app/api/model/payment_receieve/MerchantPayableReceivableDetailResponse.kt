@@ -20,6 +20,10 @@ data class MerchantPayableReceivableDetailResponse(
     val expressNetPayableAmount: Int = 0,
     @SerializedName("InstantPaymentCharge")
     val instantPaymentCharge: Int = 0,
+    @SerializedName("SuperExpressNetPayableAmount")
+    val superExpressNetPayableAmount: Int = 0,
+    @SerializedName("SuperExpressCharge")
+    val superExpressCharge: Int = 0,
     @SerializedName("NetPayableAmount")
     val netPayableAmount: Int = 0,
     @SerializedName("NormalTime")
@@ -38,6 +42,8 @@ data class MerchantPayableReceivableDetailResponse(
     val bkashTime: String = "",
     @SerializedName("BankLimit")
     val bankLimit: Int = 0,
+    @SerializedName("BankLowerLimit")
+    val bankLowerLimit: Int = 0,
     @SerializedName("OptionImageUrl")
     val optionImageUrl: List<OptionImageUrl> = listOf(),
     @SerializedName("PayableAmount")

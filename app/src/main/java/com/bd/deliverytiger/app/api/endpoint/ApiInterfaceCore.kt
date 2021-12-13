@@ -12,9 +12,7 @@ import com.bd.deliverytiger.app.api.model.calculator.DeliveryChargeInfo
 import com.bd.deliverytiger.app.api.model.calculator.WeightPrice
 import com.bd.deliverytiger.app.api.model.category.CategoryData
 import com.bd.deliverytiger.app.api.model.category.SubCategoryData
-import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
-import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
-import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
+import com.bd.deliverytiger.app.api.model.charge.*
 import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
@@ -335,7 +333,9 @@ interface ApiInterfaceCore {
     suspend fun updateLoanSurvey(@Path("loanSurveyId") loanSurveyId: Int, @Body requestBody: LoanSurveyRequestBody): NetworkResponse<GenericResponse<Int>, ErrorResponse>
 
     @PUT("api/Update/UpdateCourierWithLoanSurvey/{loanSurveyId}")
-    suspend fun UpdateCourierWithLoanSurvey(@Body requestBody: List<SelectedCourierModel>, @Path("loanSurveyId") loanSurveyId: Int): NetworkResponse<Int, ErrorResponse>
+    suspend fun updateCourierWithLoanSurvey(@Body requestBody: List<SelectedCourierModel>, @Path("loanSurveyId") loanSurveyId: Int): NetworkResponse<Int, ErrorResponse>
 
+    @POST("api/Fetch/GetSpecialService")
+    suspend fun fetchSpecialService(@Body requestBody: SpecialServiceRequestBody): NetworkResponse<GenericResponse<List<WeightRangeWiseData>>, ErrorResponse>
 
 }

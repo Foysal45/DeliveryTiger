@@ -837,6 +837,10 @@ class DashboardFragment : Fragment() {
                     this.currentPaymentType = model1.paymentType
                     this.currentPaymentMethod = model1.paymentMethod
                     this.isPaymentProcessing = model1.processing
+                    this.failedTransferMsg = model1.failedTransferMsg
+                    this.successBkashTransferMsg = model1.successBkashTransferMsg
+                    this.successExpressTransferMsg = model1.successExpressTransferMsg
+                    this.successSuperExpressTransferMsg = model1.successSuperExpressTransferMsg
                 }
                 if (dataList.isNotEmpty()) {
                     dataList.last().apply {
@@ -852,6 +856,10 @@ class DashboardFragment : Fragment() {
                         this.currentPaymentType = model1.paymentType
                         this.currentPaymentMethod = model1.paymentMethod
                         this.isPaymentProcessing = model1.processing
+                        this.failedTransferMsg = model1.failedTransferMsg
+                        this.successBkashTransferMsg = model1.successBkashTransferMsg
+                        this.successExpressTransferMsg = model1.successExpressTransferMsg
+                        this.successSuperExpressTransferMsg = model1.successSuperExpressTransferMsg
                     }
                     dashboardAdapter.notifyItemChanged(dataList.lastIndex)
                 }

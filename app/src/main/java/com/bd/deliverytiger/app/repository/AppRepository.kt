@@ -6,6 +6,7 @@ import com.bd.deliverytiger.app.api.model.accounts.BankCheckForEftRequest
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody
 import com.bd.deliverytiger.app.api.model.bulk_status.StatusUpdateData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
+import com.bd.deliverytiger.app.api.model.charge.SpecialServiceRequestBody
 import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.collector_info.CollectorInfoRequest
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
@@ -441,12 +442,14 @@ class AppRepository(
 
     suspend fun checkVoucher(requestBody: VoucherCheckRequest) = apiInterfaceCore.checkVoucher(requestBody)
 
-    suspend fun getPreviousLoanSurveyResponse(courrierUserId: Int) = apiInterfaceCore.previousLoanSurveyResponse(courrierUserId)
+    suspend fun getPreviousLoanSurveyResponse(courierUserId: Int) = apiInterfaceCore.previousLoanSurveyResponse(courierUserId)
 
     //#endregion
 
-    suspend fun UpdateCourierWithLoanSurvey(requestBody: List<SelectedCourierModel>, loanSurveyId: Int) = apiInterfaceCore.UpdateCourierWithLoanSurvey(requestBody, loanSurveyId)
+    suspend fun updateCourierWithLoanSurvey(requestBody: List<SelectedCourierModel>, loanSurveyId: Int) = apiInterfaceCore.updateCourierWithLoanSurvey(requestBody, loanSurveyId)
 
     suspend fun updateLoanSurvey(loanSurveyId: Int, requestBody: LoanSurveyRequestBody) = apiInterfaceCore.updateLoanSurvey(loanSurveyId, requestBody)
+
+    suspend fun fetchSpecialService(requestBody: SpecialServiceRequestBody) = apiInterfaceCore.fetchSpecialService(requestBody)
 
 }

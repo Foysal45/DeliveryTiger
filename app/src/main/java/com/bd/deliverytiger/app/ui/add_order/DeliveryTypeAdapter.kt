@@ -13,6 +13,7 @@ import java.util.*
 class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList: MutableList<WeightRangeWiseData> = mutableListOf()
+    private val specialList: MutableList<WeightRangeWiseData> = mutableListOf()
     var onItemClick: ((position: Int, model: WeightRangeWiseData) -> Unit)? = null
     private var selectedItem: Int = -1
 
@@ -60,9 +61,13 @@ class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    fun initLoad(list: List<WeightRangeWiseData>) {
+    fun initLoad(list: List<WeightRangeWiseData>, isSpecialServiceAvailable: Boolean) {
         dataList.clear()
         dataList.addAll(list)
+        if (!isSpecialServiceAvailable){
+            var data = dataList.filter { it.deliveryType == "Special Service" }
+            dataList.removeAll(data)
+        }
         notifyDataSetChanged()
     }
 

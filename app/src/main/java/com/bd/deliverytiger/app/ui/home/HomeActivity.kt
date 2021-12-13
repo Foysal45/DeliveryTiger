@@ -1118,6 +1118,7 @@ class HomeActivity : AppCompatActivity(),
             SessionManager.merchantDistrict = model.districtId
             SessionManager.isBreakAble = model.isBreakAble
             SessionManager.isHeavyWeight = model.isHeavyWeight
+            SessionManager.isEligibleForSpecialService = model.merchantAssignActive
             isQuickBookingEnable = model.isQuickOrderActive
         })
     }
