@@ -61,9 +61,16 @@ class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    fun initLoad(list: List<WeightRangeWiseData>, isSpecialServiceAvailable: Boolean) {
+    fun initLoad(list: List<WeightRangeWiseData>) {
         dataList.clear()
         dataList.addAll(list)
+        notifyDataSetChanged()
+    }
+
+    fun addRemoveSpecialService(isSpecialServiceAvailable: Boolean, list:List<WeightRangeWiseData>){
+        if (!list.isNullOrEmpty()){
+            dataList.addAll(list)
+        }
         if (!isSpecialServiceAvailable){
             var data = dataList.filter { it.deliveryType == "Special Service" }
             dataList.removeAll(data)

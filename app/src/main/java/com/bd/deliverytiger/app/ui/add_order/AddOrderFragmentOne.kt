@@ -32,7 +32,6 @@ import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.SpecialServiceRequestBody
 import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
-import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.api.model.district.DistrictData
 import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.location.LocationData
@@ -1117,8 +1116,8 @@ class AddOrderFragmentOne : Fragment() {
                         if (merchantDistrict != 14) {
                             filterDeliveryTypeList = model2.weightRangeWiseData.filterNot { it.type == "express" }
                         }
-                        filterDeliveryTypeList = filterDeliveryTypeList.plus(specialServiceList)
-                        deliveryTypeAdapter.initLoad(filterDeliveryTypeList, isSpecialServiceAvailable)
+                        getSpecialService(districtId,thanaId,areaId)
+                        deliveryTypeAdapter.initLoad(filterDeliveryTypeList)
                         deliveryTypeAdapter.selectPreSelection()
                     } else {
                         isWeightSelected = false
@@ -1129,8 +1128,7 @@ class AddOrderFragmentOne : Fragment() {
                             if (merchantDistrict != 14) {
                                 filterDeliveryTypeList = model2.weightRangeWiseData.filterNot { it.type == "express" }
                             }
-                            filterDeliveryTypeList = filterDeliveryTypeList.plus(specialServiceList)
-                            deliveryTypeAdapter.initLoad(filterDeliveryTypeList, isSpecialServiceAvailable)
+                            deliveryTypeAdapter.initLoad(filterDeliveryTypeList)
                             //Reset change
                             payShipmentCharge = 0.0
                             deliveryCharge = 0.0
@@ -1626,6 +1624,7 @@ class AddOrderFragmentOne : Fragment() {
                 specialServiceList.clear()
                 specialServiceList.addAll(list)
                 isSpecialServiceAvailable = list.isNotEmpty()
+                deliveryTypeAdapter.addRemoveSpecialService(isSpecialServiceAvailable, specialServiceList)
             })
         }
     }
