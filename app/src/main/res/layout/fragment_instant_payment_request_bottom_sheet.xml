@@ -249,12 +249,12 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/paymentType"
+                                android:id="@+id/paymentTimeType"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:includeFontPadding="false"
                                 android:paddingBottom="2dp"
-                                android:text="Same day (সর্বোচ্চ ৩ দিন)"
+                                tools:text="Same day (সর্বোচ্চ ৩ ঘন্টা)"
                                 android:textColor="@color/bank_instant_payment_transfer_background"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />

@@ -14,6 +14,10 @@ data class MerchantPayableReceivableDetailResponse(
     val limit: Int = 0,
     @SerializedName("ExpressTime")
     val expressTime: String = "",
+    @SerializedName("SuperExpressTimeLimit")
+    val superExpressTimeLimit: String = "",
+    @SerializedName("SuperExpressTime")
+    val superExpressTime: String = "",
     @SerializedName("ExpressCharge")
     val expressCharge: Int = 0,
     @SerializedName("ExpressNetPayableAmount")

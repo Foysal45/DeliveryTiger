@@ -69,7 +69,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     private var expressChargeModel: InstantPaymentRateModel = InstantPaymentRateModel()
     private var superExpressChargeModel: InstantPaymentRateModel = InstantPaymentRateModel()
 
-    private val notificationId: Int = 10003200
+    private val notificationId: Int = 11119999
 
     var onCloseBottomSheet: (() -> Unit)? = null
 
@@ -138,6 +138,8 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         binding?.paymentAmount?.text = HtmlCompat.fromHtml("<font color='#626366'>৳ </font> <font color='#f05a2b'>${DigitConverter.toBanglaDigit(model.payableAmount, true)}</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
         binding?.instantPaymentTransferCharge?.text =HtmlCompat.fromHtml("(<font color='#E84545'>${DigitConverter.toBanglaDigit(model.instantPaymentCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY)
         binding?.instantBankPaymentTransferCharge?.text =HtmlCompat.fromHtml("(<font color='#E84545'>${DigitConverter.toBanglaDigit(model.superExpressCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+        binding?.paymentTimeType?.text = model.superExpressTimeLimit
 
         binding?.checkExpress?.setTextWith("${model.expressTime} ঘন্টা", "EXPRESS", HtmlCompat.fromHtml("(<font color='#E84545'>${DigitConverter.toBanglaDigit(model.expressCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY),0)
         binding?.checkNormal?.setTextWith("${model.normalTime} ঘন্টা", "NORMAL", "(অতিরিক্ত চার্জ নেই)",1)
@@ -519,7 +521,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                     when (paymentType) {
                         1 -> {
                             if (responseModel.message == 1 && responseModel.paymentMethod == 3){
-                                showLocalNotification("রেগুলার পেমেন্ট","আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট হয়েছে। আগামী ${model.normalTime} ঘন্টার মধ্যে ${model.payableAmount} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।", "")
+                                showLocalNotification("রেগুলার পেমেন্ট","আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট হয়েছে। আগামী ${model.normalTime} ঘন্টার মধ্যে ${DigitConverter.toBanglaDigit(model.payableAmount)} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।", "")
                                 alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${model.normalTime} ঘন্টার মধ্যে ${model.payableAmount} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
                                     UserLogger.logGenie("Regular_payment_request_Successfully")
                                     if (it == AlertDialog.BUTTON_POSITIVE) {
@@ -527,7 +529,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                                     }
                                 }.show()
                             }else if(responseModel.message == 1 && responseModel.paymentMethod == 1){
-                                showLocalNotification("রেগুলার পেমেন্ট","আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট হয়েছে। আগামী ${model.normalTime} ঘন্টার মধ্যে ${model.payableAmount} টাকা আপনার বিকাশ অ্যাকাউন্টে ট্রান্সফার হবে।", "")
+                                showLocalNotification("রেগুলার পেমেন্ট","আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট হয়েছে। আগামী ${model.normalTime} ঘন্টার মধ্যে ${DigitConverter.toBanglaDigit(model.payableAmount)} টাকা আপনার বিকাশ অ্যাকাউন্টে ট্রান্সফার হবে।", "")
                                 alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${model.normalTime} ঘন্টার মধ্যে ${model.payableAmount} টাকা আপনার বিকাশ অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
                                     UserLogger.logGenie("Regular_payment_request_Successfully")
                                     if (it == AlertDialog.BUTTON_POSITIVE) {
@@ -542,7 +544,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                             if (responseModel.paymentType == 2 && responseModel.paymentMethod == 3){
                                 if (responseModel.message == 1){
                                     showLocalNotification("এক্সপ্রেস পেমেন্ট","${model.expressTime} ঘন্টার মধ্যে আপনার ব্যাংক অ্যাকাউন্টে ট্র্যান্সফার হবে", "")
-                                    alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${model.expressTime} ঘন্টার মধ্যে ${model.expressNetPayableAmount} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
+                                    alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${model.expressTime} ঘন্টার মধ্যে ${DigitConverter.toBanglaDigit(model.expressNetPayableAmount)} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
                                         UserLogger.logGenie("Instant_payment_transfer_Successfully")
                                         if (it == AlertDialog.BUTTON_POSITIVE) {
                                             onCloseBottomSheet?.invoke()
@@ -574,8 +576,8 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                         3 -> {
                             if (responseModel.paymentType == 3 && responseModel.paymentMethod == 3){
                                 if (responseModel.message == 1){
-                                    showLocalNotification("ইনস্ট্যান্ট ব্যাংক পেমেন্ট","${model.expressTime} ঘন্টার মধ্যে আপনার ব্যাংক অ্যাকাউন্টে ট্র্যান্সফার হবে", "")
-                                    alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${model.expressTime} ঘন্টার মধ্যে ${model.superExpressNetPayableAmount} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
+                                    showLocalNotification("ইনস্ট্যান্ট ব্যাংক পেমেন্ট","${model.superExpressTime} ঘন্টার মধ্যে আপনার ব্যাংক অ্যাকাউন্টে ট্র্যান্সফার হবে", "")
+                                    alert("", "আপনার পেমেন্ট রিকোয়েস্টটি প্রসেসিং এর জন্য সাবমিট করা হয়েছে। আগামী ${model.superExpressTime} ঘন্টার মধ্যে ${DigitConverter.toBanglaDigit(model.superExpressNetPayableAmount)} টাকা আপনার ব্যাংক অ্যাকাউন্টে ট্রান্সফার হবে।",false, "ঠিক আছে") {
                                         UserLogger.logGenie("Instant_payment_transfer_Successfully")
                                         if (it == AlertDialog.BUTTON_POSITIVE) {
                                             onCloseBottomSheet?.invoke()

@@ -108,7 +108,7 @@ interface ApiInterfaceADM {
     @POST("api/account/reports/MerchantPayableReceiveableDetailForInstantPaymentFromAppV3")
     suspend fun merchantPayableReceiveableDetailForInstantPayment(@Body requestBody: MerchantPayableReceiveableDetailRequest): NetworkResponse<MerchantPayableReceivableDetailResponse, ErrorResponse>
 
-    @POST("api/account/reports/InstantOr24hourPaymentV3")
+    @POST("api/account/reports/InstantOr24hourPaymentV2")
     suspend fun instantOr24hourPayment(@Body requestBody: MerchantInstantPaymentRequest): NetworkResponse<MerchantPayableReceiveableDetailResponse, ErrorResponse>
 
     @POST("api/account/reports/CheckbankNameForEFT")
