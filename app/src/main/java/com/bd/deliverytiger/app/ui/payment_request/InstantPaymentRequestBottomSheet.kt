@@ -513,7 +513,6 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         if (amount > 0){
             val requestBody = MerchantInstantPaymentRequest(charge, SessionManager.courierUserId, amount, paymentType, paymentMethod)
             Timber.d("requestBodyDebug $requestBody")
-            progressDialog.dismiss()
             viewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { responseModel->
                 progressDialog.dismiss()
                 dismiss()
