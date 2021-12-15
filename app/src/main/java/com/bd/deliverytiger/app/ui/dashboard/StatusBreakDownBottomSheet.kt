@@ -14,6 +14,7 @@ import com.bd.deliverytiger.app.api.model.dashboard.DashboardData
 import com.bd.deliverytiger.app.databinding.FragmentStatusBreakDownBinding
 import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.utils.SessionManager
+import com.bd.deliverytiger.app.utils.callHelplineNumber
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -83,6 +84,10 @@ class StatusBreakDownBottomSheet(): BottomSheetDialogFragment() {
             binding?.chatLayout?.visibility = View.VISIBLE
         } else{
             binding?.chatLayout?.visibility = View.GONE
+        }
+
+        binding?.callBtn?.setOnClickListener {
+            callHelplineNumber("01844152088")
         }
 
         val dataAdapter = ReturnAdapter()

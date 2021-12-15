@@ -83,6 +83,38 @@
         app:layout_constraintBottom_toTopOf="@id/chatLayout"/>
 
     <LinearLayout
+        android:id="@+id/callBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="2dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@+id/chatLayout"
+        app:layout_constraintTop_toTopOf="@+id/chatLayout"
+        app:layout_constraintBottom_toBottomOf="@+id/chatLayout">
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:contentDescription="@string/cd"
+            android:src="@drawable/ic_call"
+            app:tint="@color/colorPrimary"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="কল"
+            app:tint="@color/colorPrimary"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/chatLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -172,7 +172,6 @@ class AddOrderFragmentOne : Fragment() {
     private var payActualPackagePrice: Double = 0.0
     private var isOpenBoxCheck: Boolean = false
     private var isOfficeDrop: Boolean = true
-    private var isNextDay: Boolean = false
     private var isCollectionLocationSelected: Boolean = false
     private var removeCollectionTimeSlotId: Int = 0
     private var isCollectionTypeSelected: Boolean = false
@@ -395,7 +394,6 @@ class AddOrderFragmentOne : Fragment() {
                     deliveryDatePicker.text = ""
                     collectionDate = ""
                     collectionDatePicker.text = ""
-                    isNextDay = false
                 }
                 // Show delivery date collection date
                 1 -> {
@@ -406,7 +404,6 @@ class AddOrderFragmentOne : Fragment() {
                     deliveryDatePicker.text = ""
                     collectionDate = ""
                     collectionDatePicker.text = ""
-                    isNextDay = false
                 }
                 // Show office drop
                 2 -> {
@@ -417,11 +414,9 @@ class AddOrderFragmentOne : Fragment() {
                     deliveryDatePicker.text = ""
                     collectionDate = ""
                     collectionDatePicker.text = ""
-                    isNextDay = false
                 }
                 // Delivery alert msg show
                 3 -> {
-                    isNextDay = true
                     if (selectedDeliveryType != deliveryType) {
                         selectedDeliveryType = deliveryType
                         if (logicExpression.isNotEmpty()) {
@@ -437,9 +432,6 @@ class AddOrderFragmentOne : Fragment() {
                             }.show()
                         }
                     }
-                }
-                else -> {
-                    isNextDay = false
                 }
             }
 
@@ -1571,9 +1563,6 @@ class AddOrderFragmentOne : Fragment() {
                             timeSlotList.removeAll { it.collectionTimeSlotId == removeCollectionTimeSlotId }
                         }
                     }
-                    if (isNextDay){
-                        timeSlotList.removeAll{it.collectionTimeSlotId != 1}
-                    }
                 }
                 timeSlotDataAdapter.initLoad(timeSlotList)
                 Timber.d("timeSlotDebug $timeSlotList")
@@ -1593,9 +1582,6 @@ class AddOrderFragmentOne : Fragment() {
                         if (removeCollectionTimeSlotId != 0){
                             timeSlotList.removeAll { it.collectionTimeSlotId == removeCollectionTimeSlotId }
                         }
-                    }
-                    if (isNextDay){
-                        timeSlotList.removeAll{it.collectionTimeSlotId != 1}
                     }
                 }
                 timeSlotDataAdapter.initLoad(timeSlotList)

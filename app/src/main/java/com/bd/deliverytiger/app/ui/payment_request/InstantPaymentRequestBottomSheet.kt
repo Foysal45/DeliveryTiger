@@ -323,6 +323,10 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             }
         }
 
+        binding?.callBtn?.setOnClickListener {
+            callHelplineNumber("01847214770")
+        }
+
         dataAdapter.onItemClick = { paymentMethodList, _ ->
 
             requestPaymentMethod = paymentMethodList.paymentMethod
@@ -362,7 +366,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
              when(checkedId){
                 R.id.check_express->{
-                    fetchTime("6:00")//model.cutOffTime)
+                    fetchTime(model.cutOffTime)
                     if (isTimeLoaded){
                         if (isValidTime){
                             isExpress = 1
