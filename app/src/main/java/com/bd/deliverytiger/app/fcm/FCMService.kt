@@ -149,13 +149,13 @@ class FCMService : FirebaseMessagingService() {
                 )
                 notificationManager.notify(notificationId, builder1.build())
             }
-            "4" ->{
+            /*"4" ->{
                 val builder1 = createNotification(
                     getString(R.string.notification_channel_loan_survey),
                     title, body, createPendingIntentLoanSurvey(fcmModel)
                 )
                 notificationManager.notify(notificationId, builder1.build())
-            }
+            }*/
             // Notification message handle
             else -> {
                 Timber.d("Notification message handle called")
