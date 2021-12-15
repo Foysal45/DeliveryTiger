@@ -144,6 +144,7 @@ class LoanSurveyFragment : Fragment() {
         setUpSpinnerAverageOrderSpinner()
         setUpSpinnerMonthlyExpSpinner()
         setUpSpinnerCurrentLoanEMISpinner()
+        fetchCourierList()
     }
 
     private fun initData() {
