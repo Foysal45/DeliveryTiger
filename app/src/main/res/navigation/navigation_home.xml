@@ -291,7 +291,11 @@
         android:name="com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment"
         android:label="@string/notification"
         tools:layout="@layout/fragment_notification_preview"
-        />
+        >
+        <action
+            android:id="@+id/action_nav_notification_preview_to_nav_loanSurvey"
+            app:destination="@id/nav_loanSurvey" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_paymentDetails"

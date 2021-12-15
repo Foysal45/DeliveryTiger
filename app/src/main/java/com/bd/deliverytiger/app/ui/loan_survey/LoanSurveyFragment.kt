@@ -165,18 +165,18 @@ class LoanSurveyFragment : Fragment() {
                         else
                             R.id.merchantGenderFemale
                     )
-                    if (it[0].merchantName.isNotEmpty()) {
+                    if (!it[0].merchantName.isNullOrEmpty()) {
                         merchantName = it[0].merchantName
                         binding?.merchantNameET?.setText(it[0].merchantName)
                     }
-                    if (it[0].age.isNotEmpty()) {
+                    if (!it[0].age.isNullOrEmpty()) {
                         ageRecycler(it[0].age, true)
                     } else {
                         ageRecycler(it[0].age, false)
                     }
                     setDateRangePickerTitleTradeLisencee(0, true, it[0].tradeLicenseExpireDate)
                     setDateRangePickerTitleDOB(0, true, it[0].dateOfBirth)
-                    if (it[0].nidNo.isNotEmpty()) {
+                    if (!it[0].nidNo.isNullOrEmpty()) {
                         binding?.nidCardNoET?.setText(it[0].nidNo)
                     }
                     binding?.DOBET?.setText(
@@ -186,52 +186,52 @@ class LoanSurveyFragment : Fragment() {
                             "dd MMM, yyyy"
                         )
                     )
-                    if (it[0].eduLevel.isNotEmpty()) {
+                    if (!it[0].eduLevel.isNullOrEmpty()) {
                         setUpEduactionSpinner(it[0].eduLevel, true)
                     } else {
                         setUpEduactionSpinner(it[0].eduLevel, false)
                     }
-                    if (it[0].loanEmi.isNotEmpty()) {
+                    if (!it[0].loanEmi.isNullOrEmpty()) {
                         setUpSpinnerCurrentLoanEMISpinner(it[0].loanEmi, true)
                     } else {
                         setUpSpinnerCurrentLoanEMISpinner(it[0].loanEmi, false)
                     }
-                    if (it[0].monthlyOrder.isNotEmpty()) {
+                    if (!it[0].monthlyOrder.isNullOrEmpty()) {
                         setUpSpinnerAverageOrderSpinner(it[0].monthlyOrder, true)
                     } else {
                         setUpSpinnerAverageOrderSpinner(it[0].monthlyOrder, false)
                     }
-                    if (it[0].famMem.isNotEmpty()) {
+                    if (!it[0].famMem.isNullOrEmpty()) {
                         familyMemNumRecycler(it[0].famMem, true)
                     } else {
                         familyMemNumRecycler(it[0].famMem, false)
                     }
-                    if (it[0].homeOwnership.isNotEmpty()) {
+                    if (!it[0].homeOwnership.isNullOrEmpty()) {
                         houseOwnerRecycler(it[0].homeOwnership, true)
                     } else {
                         houseOwnerRecycler(it[0].homeOwnership, false)
                     }
-                    if (it[0].residenceLocation.isNotEmpty()) {
+                    if (!it[0].residenceLocation.isNullOrEmpty()) {
                         homeLocationRecycler(it[0].residenceLocation, true)
                     } else {
                         homeLocationRecycler(it[0].residenceLocation, false)
                     }
-                    if (it[0].married.isNotEmpty()) {
+                    if (!it[0].married.isNullOrEmpty()) {
                         marriageStatusRecycler(it[0].married, true)
                     } else {
                         marriageStatusRecycler(it[0].married, false)
                     }
-                    if (it[0].basketValue.isNotEmpty()) {
+                    if (!it[0].basketValue.isNullOrEmpty()) {
                         setUpAverageBasketSpinner(it[0].basketValue, true)
                     } else {
                         setUpAverageBasketSpinner(it[0].basketValue, false)
                     }
-                    if (it[0].monthlyExp.isNotEmpty()) {
+                    if (!it[0].monthlyExp.isNullOrEmpty()) {
                         setUpSpinnerMonthlyExpSpinner(it[0].monthlyExp, true)
                     } else {
                         setUpSpinnerMonthlyExpSpinner(it[0].monthlyExp, false)
                     }
-                    if (it[0].relationMarchent.isNotEmpty()) {
+                    if (!it[0].relationMarchent.isNullOrEmpty()) {
                         setUpSpinnerKnownToMerchnatSpinner(it[0].relationMarchent, true)
                     } else {
                         setUpSpinnerKnownToMerchnatSpinner(it[0].relationMarchent, false)
@@ -274,7 +274,7 @@ class LoanSurveyFragment : Fragment() {
                         }
                     )
                     binding?.loanAMountET?.setText(it[0].loanAmount.toInt().toString())
-                    if (it[0].bankName.isNotEmpty()) {
+                    if (!it[0].bankName.isNullOrEmpty()) {
                         binding?.bankNameET?.setText(it[0].bankName)
                     }
                     binding?.loanRepayRadioGroupType?.check(
@@ -291,10 +291,10 @@ class LoanSurveyFragment : Fragment() {
                             R.id.merchantHasBankAccountNo
                         }
                     )
-                    if (it[0].companyBankAccName.isNotEmpty()) {
+                    if (!it[0].companyBankAccName.isNullOrEmpty()) {
                         binding?.conmapyBankNameTextInput?.setText(it[0].companyBankAccName)
                     }
-                    if (it[0].companyBankAccNo.isNotEmpty()) {
+                    if (!it[0].companyBankAccNo.isNullOrEmpty()) {
                         binding?.bankAccountNumberET?.setText(it[0].companyBankAccNo)
                     }
                     binding?.haveAnyCreditCardRadioGroup?.check(
@@ -304,10 +304,10 @@ class LoanSurveyFragment : Fragment() {
                             R.id.no_haveAnyCreditCard_radio_button
                         }
                     )
-                    if (it[0].cardHolder.isNotEmpty()) {
+                    if (!it[0].cardHolder.isNullOrEmpty()) {
                         binding?.creditCardName?.setText(it[0].cardHolder)
                     }
-                    if (it[0].cardLimit.isNotEmpty()) {
+                    if (!it[0].cardLimit.isNullOrEmpty()) {
                         binding?.creditCardLimit?.setText(it[0].cardLimit)
                     }
                     binding?.haveAnyTINRadioGroup?.check(
@@ -317,7 +317,7 @@ class LoanSurveyFragment : Fragment() {
                             R.id.no_haveAnyTin_radio_button
                         }
                     )
-                    if (it[0].tinNumber.isNotEmpty()) {
+                    if (!it[0].tinNumber.isNullOrEmpty()) {
                         binding?.teamTINNumberET?.setText(it[0].tinNumber)
                     }
                     binding?.merchantHasTradeLicenceRadioGroup?.check(
@@ -327,10 +327,10 @@ class LoanSurveyFragment : Fragment() {
                             R.id.merchantHasTradeLicenceNo
                         }
                     )
-                    if (it[0].tradeLicenseNo.isNotEmpty()) {
+                    if (!it[0].tradeLicenseNo.isNullOrEmpty()) {
                         binding?.tradeliesenceNOTV?.setText(it[0].tradeLicenseNo)
                     }
-                    if (it[0].tradeLicenseExpireDate.isNotEmpty()) {
+                    if (!it[0].tradeLicenseExpireDate.isNullOrEmpty()) {
                         binding?.tradeliesencExpireDateTV?.setText(
                             DigitConverter.formatDate(
                                 it[0].tradeLicenseExpireDate,
@@ -340,7 +340,7 @@ class LoanSurveyFragment : Fragment() {
                         )
                     }
 
-                    if (it[0].tradeLicenseImageUrl.isNotEmpty()) {
+                    if (!it[0].tradeLicenseImageUrl.isNullOrEmpty()) {
                         binding?.imageTradeLicencePickedIV?.isVisible = true
                         binding?.imageTradeLicencePickedIV?.let { image ->
                             Glide.with(image)
@@ -351,7 +351,7 @@ class LoanSurveyFragment : Fragment() {
                         }
                     }
                     binding?.merchantHasGuarantorRadioGroup?.check(
-                        if (it[0].guarantorMobile.isNotEmpty() && it[0].guarantorName.isNotEmpty()) {
+                        if (!it[0].guarantorMobile.isNullOrEmpty() && !it[0].guarantorName.isNullOrEmpty()) {
                             R.id.merchantHasGuarantorYes
                         } else {
                             R.id.merchantHasGuarantorNo
@@ -371,7 +371,7 @@ class LoanSurveyFragment : Fragment() {
                     courierList.clear()
 
                     viewModel.fetchCourierList().observe(viewLifecycleOwner, Observer { list ->
-                        if (list.isNotEmpty()) {
+                        if (!list.isNullOrEmpty()) {
                             for (index in 0 until list.size) {
                                 it[0].courierWithLoanSurvey.forEach { courrersofcurrnetUser ->
                                     if (courrersofcurrnetUser.courierId == list[index].courierId
@@ -462,13 +462,13 @@ class LoanSurveyFragment : Fragment() {
                         tradeLicenseImageUrl =
                             "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg"
                     }
-                    if(imageTradeLicencePath != ""){
+                    if (imageTradeLicencePath != "") {
                         uploadImage(
                             "trade_${SessionManager.courierUserId}.jpg",
                             "delivery_tiger/trade_license",
                             imageTradeLicencePath, requestBody2
                         )
-                    }else{
+                    } else {
                         submitLoanSurveyData(requestBody2)
                     }
                 } else {
@@ -665,7 +665,7 @@ class LoanSurveyFragment : Fragment() {
         courierList.clear()
 
         viewModel.fetchCourierList().observe(viewLifecycleOwner, Observer { list ->
-            if (list.isNotEmpty()) {
+            if (!list.isNullOrEmpty()) {
                 courierList.addAll(list)
                 dataAdapter.initLoad(courierList)
             }
@@ -767,7 +767,7 @@ class LoanSurveyFragment : Fragment() {
         progressDialog.setCanceledOnTouchOutside(false)
         if (isPut) {
             viewModel.updateLoanSurvey(requestBody, SessionManager.accessToken)
-                .observe(viewLifecycleOwner, {model->
+                .observe(viewLifecycleOwner, { model ->
                     SessionManager.isSurveyComplete = true
                     val tempLoanSurveyId = globalIDFOrLoan
                     selectedCourierList.clear()
