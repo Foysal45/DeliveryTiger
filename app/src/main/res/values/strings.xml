@@ -44,6 +44,7 @@
     <string name="default_notification_channel_id_instant_payment">Instant Payment</string>
     <string name="notification_channel_chat">Chat</string>
     <string name="notification_channel_chat_name">Chat</string>
+    <string name="notification_channel_loan_survey">Chat</string>
 
     <string name="waiting">অপেক্ষা করুন</string>
     <string name="dashboard_spinner_temp">মাস অথবা ডেট রেঞ্জ সিলেক্ট করুন</string>
