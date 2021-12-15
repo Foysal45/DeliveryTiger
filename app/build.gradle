@@ -25,6 +25,14 @@ android {
             debugSymbolLevel 'SYMBOL_TABLE'
         }
         buildConfigField("String", "FirebaseWebApiKey", firebaseWebApiKey)
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
     signingConfigs {
         release
