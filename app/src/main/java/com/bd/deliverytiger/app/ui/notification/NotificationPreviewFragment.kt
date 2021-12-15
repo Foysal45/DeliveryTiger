@@ -40,7 +40,8 @@ class NotificationPreviewFragment : Fragment() {
 
         model = arguments?.getParcelable("fcmData")
 
-        binding?.title?.setOnClickListener {
+        checkIfShouldGoToLoanSurvey()
+       /* binding?.title?.setOnClickListener {
             checkIfShouldGoToLoanSurvey()
         }
         binding?.description?.setOnClickListener {
@@ -51,7 +52,7 @@ class NotificationPreviewFragment : Fragment() {
         }
         binding?.bigImage?.setOnClickListener {
             checkIfShouldGoToLoanSurvey()
-        }
+        }*/
 
 
         binding?.title?.text = toHTML(model?.title ?: "")
@@ -72,7 +73,7 @@ class NotificationPreviewFragment : Fragment() {
         }
     }
     private fun checkIfShouldGoToLoanSurvey() {
-        if (model?.body?.contains("লোন") == true) {
+        if (model?.body?.contains("deliverytiger.com/loan") == true) {
             findNavController().navigate(R.id.action_nav_notification_preview_to_nav_loanSurvey)
         }
     }
