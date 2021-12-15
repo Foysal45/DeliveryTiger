@@ -1128,6 +1128,7 @@ class AddOrderFragmentOne : Fragment() {
                             if (merchantDistrict != 14) {
                                 filterDeliveryTypeList = model2.weightRangeWiseData.filterNot { it.type == "express" }
                             }
+                            getSpecialService(districtId,thanaId,areaId)
                             deliveryTypeAdapter.initLoad(filterDeliveryTypeList)
                             //Reset change
                             payShipmentCharge = 0.0
@@ -1409,6 +1410,7 @@ class AddOrderFragmentOne : Fragment() {
                             showLocationAlert(it, LocationType.DISTRICT)
                         }
                     }
+                    updateUIAfterDistrict(model)
                 }
                 LocationType.THANA -> {
                     thanaId = model.id
