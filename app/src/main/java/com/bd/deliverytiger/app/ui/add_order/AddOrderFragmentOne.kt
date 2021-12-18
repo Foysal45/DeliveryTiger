@@ -448,15 +448,25 @@ class AddOrderFragmentOne : Fragment() {
                             val timeValidity = executeExpression("$hour24 $logicExpression")
                             if (timeValidity) {
                                 if (!alertMsg.isNullOrEmpty()){
+                                    isMsgShown = true
                                     alert("নির্দেশনা", alertMsg) {
                                     }.show()
                                 }
                             }
                         } else {
                             if (!alertMsg.isNullOrEmpty()){
+                                    isMsgShown = true
                                     alert("নির্দেশনা", alertMsg) {
                                     }.show()
                                 }
+                        }
+                    } else {
+                        if (!isMsgShown){
+                            if(!alertMsg.isNullOrEmpty()){
+                                isMsgShown = true
+                                alert("নির্দেশনা", alertMsg) {
+                                }.show()
+                            }
                         }
                     }
                 }
