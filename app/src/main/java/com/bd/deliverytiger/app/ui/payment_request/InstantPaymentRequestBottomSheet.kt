@@ -64,12 +64,21 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
     private var model: MerchantPayableReceivableDetailResponse = MerchantPayableReceivableDetailResponse()
 
     private var messageLists: AllAlertMessage = AllAlertMessage()
+    private val superExpressBankLists: MutableList<String> = mutableListOf()
 
     private var chargeModel: InstantPaymentRateModel = InstantPaymentRateModel()
     private var expressChargeModel: InstantPaymentRateModel = InstantPaymentRateModel()
     private var superExpressChargeModel: InstantPaymentRateModel = InstantPaymentRateModel()
 
+    private var bankNames: String = ""
     private val notificationId: Int = 11119999
+
+    private var isValidTime: Boolean = false
+    private var isTimeVerified: Boolean = false
+    private var isTimeVerifiedSuperExpress: Boolean = false
+    private var isValidTimeSuperExpress: Boolean = false
+    private var isTimeLoaded: Boolean = false
+    private var isTimeLoadedSuperExpress: Boolean = false
 
     var onCloseBottomSheet: (() -> Unit)? = null
 
@@ -137,21 +146,22 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
         binding?.paymentAmount?.text = HtmlCompat.fromHtml("<font color='#626366'>৳ </font> <font color='#f05a2b'>${DigitConverter.toBanglaDigit(model.payableAmount, true)}</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
         binding?.instantPaymentTransferCharge?.text =HtmlCompat.fromHtml("(<font color='#E84545'>${DigitConverter.toBanglaDigit(model.instantPaymentCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY)
-        binding?.instantBankPaymentTransferCharge?.text =HtmlCompat.fromHtml("(<font color='#E84545'>${DigitConverter.toBanglaDigit(model.superExpressCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        binding?.instantBankPaymentTransferCharge?.text =HtmlCompat.fromHtml("<font color='#3A85C6'>সর্বোচ্চ ৩ ঘন্টা </font>(<font color='#E84545'>${DigitConverter.toBanglaDigit(model.superExpressCharge, true)}</font> টাকা চার্জ)", HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-        binding?.paymentTimeType?.text = model.superExpressTimeLimit
+        //binding?.paymentTimeType?.text = model.superExpressTimeLimit
 
         binding?.checkExpress?.setTextWith("${model.expressTime} ঘন্টা", "EXPRESS", HtmlCompat.fromHtml("(<font color='#E84545'>${DigitConverter.toBanglaDigit(model.expressCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY),0)
         binding?.checkNormal?.setTextWith("${model.normalTime} ঘন্টা", "NORMAL", "(অতিরিক্ত চার্জ নেই)",1)
 
-        viewModel.checkBankNameForEFT(BankCheckForEftRequest(model.bankName)).observe(viewLifecycleOwner, Observer {
-            isMatchBankAccount = it.isMatch
-            if (isMatchBankAccount == 1){
-                binding?.bankTransferLayout?.visibility = View.VISIBLE
-            }else{
-                binding?.bankTransferLayout?.visibility = View.GONE
+        viewModel.checkBankNameForEFT(BankCheckForEftRequest(model.bankName)).observe(viewLifecycleOwner, Observer { bankModel->
+            isMatchBankAccount = if (bankModel.isMatch == 1){1}else{2}
+            superExpressBankLists.clear()
+            superExpressBankLists.clear()
+            bankModel?.bank?.forEach {
+                superExpressBankLists.add(it.bankName ?: "")
             }
         })
+
     }
 
     private fun checkDay(): Boolean {
@@ -174,27 +184,51 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         return isPopupShow
     }
 
-    private fun checkTime(): Boolean {
+    private fun fetchTime(cutOffTime: String){
+        viewModel.getMessageAlertForIP().observe(viewLifecycleOwner, Observer { model->
+            if (model.currentTime == "" || cutOffTime == ""){
+                isTimeLoaded = false
+            }else{
+                isTimeLoaded = true
+                checkTime(model.currentTime, cutOffTime, 1)
+            }
+        })
+    }
+    private fun fetchTimeSuperExpress(cutOffTime: String){
+        viewModel.getMessageAlertForIP().observe(viewLifecycleOwner, Observer { model->
+            if (model.currentTime == "" || cutOffTime == ""){
+                isTimeLoadedSuperExpress = false
+            }else{
+                isTimeLoadedSuperExpress = true
+                checkTime(model.currentTime, cutOffTime, 2)
+            }
+        })
+    }
 
-        //Fetch 7 days data
-        val calendar = Calendar.getInstance()
-        val simpleTimeFormat = SimpleDateFormat("HH:mm", Locale.US)
-        var isInTime = false
-        time = simpleTimeFormat.format(calendar.time)
-        var timeLimit = time.split(":")
+    private fun checkTime(currentTime: String, cutOffTime: String, isExpressTime: Int){
 
-        var cutOffTime = model.cutOffTime.split(":")
-        if (Integer.parseInt(cutOffTime[1]) == 0){
-            if (Integer.parseInt(timeLimit[0]) in 1..Integer.parseInt(cutOffTime[0])){
-                isInTime = true
+        val timeLimit = currentTime.split(":")
+        val range = cutOffTime.split(":")
+        if (Integer.parseInt(range[1]) == 0){
+            var limitIfLastZero = Integer.parseInt(range[0]) - 1
+            if (Integer.parseInt(timeLimit[0]) in 1..limitIfLastZero){
+                when (isExpressTime){
+                    1->{isValidTime = true}
+                    2->{isValidTimeSuperExpress = true}
+                }
             }
         }else{
-            if (Integer.parseInt(timeLimit[0]) in 1..Integer.parseInt(cutOffTime[0]) && Integer.parseInt(timeLimit[1]) in 0..Integer.parseInt(cutOffTime[1])){
-                isInTime = true
+            if (Integer.parseInt(timeLimit[0]) in 1..Integer.parseInt(range[0]) && Integer.parseInt(timeLimit[1]) in 0..Integer.parseInt(range[1])){
+                when (isExpressTime){
+                    1->{isValidTime = true}
+                    2->{isValidTimeSuperExpress = true}
+                }
             }
         }
-
-        return isInTime
+        when (isExpressTime){
+            1->{isTimeVerified = true}
+            2->{isTimeVerifiedSuperExpress = true}
+        }
     }
 
     private fun initClickLister(){
@@ -226,23 +260,20 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         }
 
         binding?.bankTransferBtnLayout?.setOnClickListener {
-            if (model.netPayableAmount != 0){
-                if (model.bankStatus == 1){
-                    if (model.superExpressNetPayableAmount <= model.bankLimit){
-                        alert("", HtmlCompat.fromHtml("<font><b>আপনি কি ব্যাংক অ্যাকাউন্টে (${model.bankName} অ্যাকাউন্ট নাম্বারঃ ${model.bankACNo}) পেমেন্ট নিতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
-                            if (it == AlertDialog.BUTTON_POSITIVE) {
-                                UserLogger.logGenie("Instant_bank_payment_transfer_clicked")
-                                instantPaymentRequestAndTransfer(3) // for instant bank transfer 3
-                            }
-                        }.show()
-                    }else{
-                        showAlert(messageLists.instantPaymentLimitAlert)
-                    }
+            fetchTimeSuperExpress(model.superExpressCutOffTime)
+            if (validateSuperExpress()){
+                if (isValidTimeSuperExpress){
+                    alert("", HtmlCompat.fromHtml("<font><b>আপনি কি ব্যাংক অ্যাকাউন্টে (${model.bankName} অ্যাকাউন্ট নাম্বারঃ ${model.bankACNo}) পেমেন্ট নিতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
+                        if (it == AlertDialog.BUTTON_POSITIVE) {
+                            UserLogger.logGenie("Instant_bank_payment_transfer_clicked")
+                            instantPaymentRequestAndTransfer(3) // for instant bank transfer 3
+                        }
+                    }.show()
                 }else{
-                    showAccountEnableAlert(3)
+                    if (isTimeVerifiedSuperExpress){
+                        showAlert(messageLists.superExpressTimeOverAlert)
+                    }
                 }
-            }else{
-                context?.toast("আপনার তথ্য লোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন ।")
             }
         }
 
@@ -292,6 +323,10 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             }
         }
 
+        binding?.callBtn?.setOnClickListener {
+            callHelplineNumber("01847214770")
+        }
+
         dataAdapter.onItemClick = { paymentMethodList, _ ->
 
             requestPaymentMethod = paymentMethodList.paymentMethod
@@ -331,17 +366,27 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
              when(checkedId){
                 R.id.check_express->{
-                    if (checkTime()){
-                        isExpress = 1
-                        binding?.checkExpress?.isChecked = true
-                        if (checkDay()){
-                            showAlert(messageLists.fridayAlert)
+                    fetchTime(model.cutOffTime)
+                    if (isTimeLoaded){
+                        if (isValidTime){
+                            isExpress = 1
+                            binding?.checkExpress?.isChecked = true
+                            if (checkDay()){
+                                showAlert(messageLists.fridayAlert)
+                            }
+                        }else{
+                            if (isTimeVerified){
+                                showAlert(messageLists.expressTimeOverAlert)
+                            }
+                            isExpress = 0
+                            binding?.checkExpress?.isChecked = false
                         }
                     }else{
-                        showAlert(messageLists.expressTimeOverAlert)
                         isExpress = 0
                         binding?.checkExpress?.isChecked = false
+                        context?.toast("আপনার তথ্য লোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন..")
                     }
+
                 }
                 R.id.check_normal ->{
                     isExpress = 2
@@ -699,6 +744,44 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             priority = NotificationCompat.PRIORITY_DEFAULT
             setContentIntent(pendingIntent)
         }
+    }
+
+    private fun validateSuperExpress(): Boolean{
+
+        if (model.netPayableAmount == 0){
+            context?.toast("আপনার তথ্য লোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন..")
+            return false
+        }
+
+        if (model.bankStatus != 1){
+            showAccountEnableAlert(3)
+            return false
+        }
+
+        if (isMatchBankAccount == 0){
+            context?.toast("আপনার তথ্য লোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন..")
+            return false
+        }
+
+
+        if (isMatchBankAccount == 2){
+            if (superExpressBankLists.isNotEmpty()){
+                bankNames = superExpressBankLists.joinToString()
+                showAlert("সম্মানিত গ্রাহক, আমাদের Same Day পেমেন্ট  সেবাটি শুধুমাত্র, $bankNames ব্যাংকের ক্ষেত্রে প্রযোজ্য।")
+            }
+            return false
+        }
+
+        if (model.superExpressNetPayableAmount > model.bankLimit){
+            showAlert(messageLists.instantPaymentLimitAlert)
+            return false
+        }
+        if (!isTimeLoadedSuperExpress && !isTimeVerifiedSuperExpress){
+            context?.toast("আপনার তথ্য লোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন..")
+            return false
+        }
+
+        return true
     }
 
     private fun validateRequest(): Boolean{

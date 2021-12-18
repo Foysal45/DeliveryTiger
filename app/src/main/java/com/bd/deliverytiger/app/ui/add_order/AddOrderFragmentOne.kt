@@ -1458,6 +1458,7 @@ class AddOrderFragmentOne : Fragment() {
                             showLocationAlert(it, LocationType.DISTRICT)
                         }
                     }
+                    updateUIAfterDistrict(model)
                 }
                 LocationType.THANA -> {
                     thanaId = model.id

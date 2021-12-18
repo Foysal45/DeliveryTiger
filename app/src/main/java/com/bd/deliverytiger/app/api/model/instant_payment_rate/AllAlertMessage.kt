@@ -4,6 +4,8 @@ package com.bd.deliverytiger.app.api.model.instant_payment_rate
 import com.google.gson.annotations.SerializedName
 
 data class AllAlertMessage(
+    @SerializedName("CurrentTime")
+    var currentTime: String = "",
     @SerializedName("BankTransferLimitAlert")
     var bankTransferLimitAlert: String = "",
     @SerializedName("BankTransferMinimumLimit")
@@ -12,6 +14,8 @@ data class AllAlertMessage(
     var eftChargeTitle: String = "",
     @SerializedName("ExpressTimeOverAlert")
     var expressTimeOverAlert: String = "",
+    @SerializedName("SuperExpressTimeOverAlert")
+    var superExpressTimeOverAlert: String = "",
     @SerializedName("FridayAlert")
     var fridayAlert: String = "",
     @SerializedName("InstantChargeTitle")
