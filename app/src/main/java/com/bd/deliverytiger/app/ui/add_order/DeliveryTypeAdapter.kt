@@ -76,6 +76,7 @@ class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             var data = dataList.filter { it.deliveryType == "Special Service" }
             dataList.removeAll(data)
         }
+        selectPreSelection()
         notifyDataSetChanged()
 
     }

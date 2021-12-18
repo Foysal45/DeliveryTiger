@@ -174,6 +174,7 @@ class AddOrderFragmentOne : Fragment() {
     private var isOfficeDrop: Boolean = true
     private var isNextDay: Boolean = false
     private var isNextDayActive: Boolean = false
+    private var isMsgShown: Boolean = false
     private var isCollectionLocationSelected: Boolean = false
     private var removeCollectionTimeSlotId: Int = 0
     private var isCollectionTypeSelected: Boolean = false
@@ -1440,7 +1441,7 @@ class AddOrderFragmentOne : Fragment() {
 
                     //new logic for timeSlot
                     if (!model.alertMsg.isNullOrEmpty()){
-                        alertMsg = model.alertMsg.toString()
+                        alertMsg2 = model.alertMsg.toString()
                         isNextDayActive = true
                         isNextDay = true
                     } else{
