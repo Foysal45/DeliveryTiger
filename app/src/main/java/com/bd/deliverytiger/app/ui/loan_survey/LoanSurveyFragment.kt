@@ -47,7 +47,7 @@ class LoanSurveyFragment : Fragment() {
 
     private var loanRange = ""
     private var loanRepayMonthPeriod = ""
-    private var yearlyTotalIncome = 0
+    private var yearlyTotalIncome = ""
     private var otherIncome = ""
     private var nidCardNo = ""
     private var monthlyTransaction = ""
@@ -410,7 +410,7 @@ class LoanSurveyFragment : Fragment() {
             if (verify()) {
                 var requestBody2 = LoanSurveyRequestBody(
                     age = adapterAge.selectedItem,
-                    annualTotalIncome = yearlyTotalIncome ?: 0,
+                    annualTotalIncome = yearlyTotalIncome.toDouble().toInt() ?: 0,
                     bankName = binding?.bankNameET?.text.toString(),
                     basketValue = selectedAverageBasket,
                     cardHolder = binding?.creditCardName?.text.toString(),
@@ -441,7 +441,7 @@ class LoanSurveyFragment : Fragment() {
                         .toInt() else 0,
                     monthlyTotalCodAmount = totalMonthlyCOD.toDouble().toInt(),
                     nidNo = nidCardNo,
-                    othersIncome = binding?.otherIncomeET?.text.toString().trim().toDouble().toInt()
+                    othersIncome = binding?.otherIncomeET?.text.toString().trim().toDouble().toInt() ?:0
                         ?: 0,
                     recommend = "",
                     relationMarchent = selectedKnownMerchantDuration,
@@ -453,7 +453,7 @@ class LoanSurveyFragment : Fragment() {
                     tradeLicenseExpireDate = selectedDateTradeLisence,
                     tradeLicenseImageUrl = tradeLicenseImageUrl,
                     tradeLicenseNo = binding?.tradeliesenceNOTV?.text.toString().trim(),
-                    transactionAmount = monthlyTransaction.toDouble().toInt(),
+                    transactionAmount = monthlyTransaction.toDouble().toInt() ?: 0,
                     hasPreviousLoan = hasPreviousLoan,
                     loanSurveyId = globalIDFOrLoan,
                     applicationDate = applicationDate
@@ -1272,8 +1272,8 @@ class LoanSurveyFragment : Fragment() {
             return false
         }
 
-        yearlyTotalIncome = binding?.yearlyTotalIncomehET?.text.toString().toDouble().toInt() ?: 0
-        if (yearlyTotalIncome == 0) {
+        yearlyTotalIncome = binding?.yearlyTotalIncomehET?.text.toString()
+        if (yearlyTotalIncome.isNullOrEmpty()) {
             context?.toast("আপনার বাৎসরিক সর্বমোট আয় উল্লেখ করুন")
             return false
         }
@@ -1403,13 +1403,14 @@ class LoanSurveyFragment : Fragment() {
             context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
             return false
         }
-        if (binding?.merchantHasTradeLicenceRadioGroup?.checkedRadioButtonId == R.id.merchantHasTradeLicenceYes
-            && ((binding?.tradeliesenceNOTV?.text.toString()
-                .isEmpty() || binding?.tradeliesencExpireDateTV?.text.toString().isEmpty()))
-        ) {
-            context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
-            return false
+
+        if (binding?.merchantHasTradeLicenceRadioGroup?.checkedRadioButtonId == R.id.merchantHasTradeLicenceYes) {
+            if (binding?.tradeliesenceNOTV?.text.toString().isEmpty() || binding?.tradeliesencExpireDateTV?.text.toString().isEmpty()){
+                context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
+                return false
+            }
         }
+
         if (imagePickFlag == 1) {
             if (imageTradeLicencePath.isEmpty()) {
                 context?.toast("ট্রেড লাইসেন্স এর ছবি অ্যাড করুন")
