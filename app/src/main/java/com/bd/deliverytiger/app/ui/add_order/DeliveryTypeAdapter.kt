@@ -16,6 +16,7 @@ class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val specialList: MutableList<WeightRangeWiseData> = mutableListOf()
     var onItemClick: ((position: Int, model: WeightRangeWiseData) -> Unit)? = null
     private var selectedItem: Int = -1
+    private var selectedItemModel: WeightRangeWiseData? = null
 
     private val options = RequestOptions()
         .signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
@@ -55,6 +56,7 @@ class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 if (position != RecyclerView.NO_POSITION) {
                     onItemClick?.invoke(position, dataList[position])
                     selectedItem = position
+                    selectedItemModel = dataList[selectedItem]
                     notifyDataSetChanged()
                 }
             }
@@ -77,6 +79,7 @@ class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             dataList.removeAll(data)
         }
         selectPreSelection()
+        //selectPreSelectionV2()
         notifyDataSetChanged()
 
     }
@@ -85,6 +88,16 @@ class DeliveryTypeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         if (selectedItem != -1) {
             if (selectedItem in 0..dataList.lastIndex) {
                 onItemClick?.invoke(selectedItem, dataList[selectedItem])
+            }
+        }
+    }
+
+    fun selectPreSelectionV2(){
+        if(selectedItem != -1){
+            if (selectedItemModel != null){
+                if (selectedItemModel in dataList){
+                    onItemClick?.invoke(selectedItem, selectedItemModel!!)
+                }
             }
         }
     }

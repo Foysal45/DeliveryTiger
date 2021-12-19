@@ -1153,6 +1153,7 @@ class AddOrderFragmentOne : Fragment() {
                         getSpecialService(districtId,thanaId,areaId)
                         deliveryTypeAdapter.initLoad(filterDeliveryTypeList)
                         deliveryTypeAdapter.selectPreSelection()
+                        //deliveryTypeAdapter.selectPreSelectionV2()
                     } else {
                         isWeightSelected = false
                         deliveryType = ""
@@ -1173,6 +1174,7 @@ class AddOrderFragmentOne : Fragment() {
                                 deliveryTypeAdapter.selectByDeliveryRangeId(selectedServiceType)
                             } else {
                                 deliveryTypeAdapter.selectPreSelection()
+                                //deliveryTypeAdapter.selectPreSelectionV2()
                             }
                         } else {
                             deliveryTypeAdapter.clearList()
@@ -1458,6 +1460,7 @@ class AddOrderFragmentOne : Fragment() {
                         isNextDayActive = false
                         isNextDay = false
                     }
+                    //deliveryTypeAdapter.clearSelection()
                     fetchCollectionTimeSlot()
                     //context?.toast("isNextDayActive $isNextDayActive")
                     //new logic end
