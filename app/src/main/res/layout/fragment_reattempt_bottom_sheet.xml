@@ -132,7 +132,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="* প্রতি রি-এটেম্পটের জন্য ২ টাকা চার্জ প্রযোজ্য"
+        tools:text="* প্রতি রি-এটেম্পটের জন্য ২ টাকা চার্জ প্রযোজ্য"
         android:textAlignment="center"
         android:textColor="@color/red"
         android:textSize="@dimen/text_12"
