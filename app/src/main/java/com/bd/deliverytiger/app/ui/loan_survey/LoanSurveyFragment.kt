@@ -26,10 +26,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import com.github.dhaval2404.imagepicker.ImagePicker
 import org.koin.android.ext.android.inject
-import timber.log.Timber
 import com.google.android.material.datepicker.MaterialDatePicker
-import okhttp3.internal.concurrent.formatDuration
-import org.koin.android.ext.android.bind
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -91,7 +89,7 @@ class LoanSurveyFragment : Fragment() {
     private var selectedDateDOB = "2001-01-01"
     private var selectedDateFormattedTradeLisence = ""
     private var selectedDateFormattedDOB = ""
-    private var tradeLicenseImageUrl = ""
+    private var tradeLicenseImageUrlFrag = ""
     private var applicationDate = ""
 
 
@@ -350,6 +348,7 @@ class LoanSurveyFragment : Fragment() {
                     }
 
                     if (!it[0].tradeLicenseImageUrl.isNullOrEmpty()) {
+                        binding?.imageTradeLicenceAddIV?.isVisible = false
                         binding?.imageTradeLicencePickedIV?.isVisible = true
                         binding?.imageTradeLicencePickedIV?.let { image ->
                             Glide.with(image)
@@ -359,7 +358,7 @@ class LoanSurveyFragment : Fragment() {
                                 .skipMemoryCache(true)
                                 .into(image)
                         }
-                        tradeLicenseImageUrl = it[0].tradeLicenseImageUrl
+                        tradeLicenseImageUrlFrag = it[0].tradeLicenseImageUrl
                     }
                     binding?.merchantHasGuarantorRadioGroup?.check(
                         if (!it[0].guarantorMobile.isNullOrEmpty() && !it[0].guarantorName.isNullOrEmpty()) {
@@ -461,7 +460,7 @@ class LoanSurveyFragment : Fragment() {
                     shopOwnership = selectedOwnerShipOfMarket,
                     tinNumber = binding?.teamTINNumberET?.text.toString().trim(),
                     tradeLicenseExpireDate = selectedDateTradeLisence,
-                    tradeLicenseImageUrl = tradeLicenseImageUrl,
+                    tradeLicenseImageUrl = tradeLicenseImageUrlFrag,
                     tradeLicenseNo = binding?.tradeliesenceNOTV?.text.toString().trim(),
                     transactionAmount = monthlyTransaction.toDouble().toInt() ?: 0,
                     hasPreviousLoan = hasPreviousLoan,
@@ -470,8 +469,7 @@ class LoanSurveyFragment : Fragment() {
                 )
                 if (imagePickFlag == 1) {
                     requestBody2.apply {
-                        tradeLicenseImageUrl =
-                            "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg"
+                        tradeLicenseImageUrl = tradeLicenseImageUrlFrag
                     }
                     if (imageTradeLicencePath != "") {
                         uploadImage(
@@ -479,12 +477,13 @@ class LoanSurveyFragment : Fragment() {
                             "delivery_tiger/trade_license",
                             imageTradeLicencePath, requestBody2
                         )
-                    } else {
+                    } /*else {
                         submitLoanSurveyData(requestBody2)
-                    }
-                } else {
+                    }*/
+                } /*else {
                     submitLoanSurveyData(requestBody2)
-                }
+                }*/
+                Timber.d("reqBodyFrag $requestBody2")
             }
         }
         binding?.tradeliesencExpireDateTV?.setOnClickListener {
@@ -562,6 +561,8 @@ class LoanSurveyFragment : Fragment() {
                 R.id.merchantHasTradeLicenceNo -> {
                     hasTradeLicence = false
                     imagePickFlag = 0
+                    tradeLicenseImageUrlFrag = ""
+                    binding?.tradeliesenceNOTV?.setText("")
                     binding?.merchantTradeLicenceLayout?.isVisible = false
                     binding?.tradeliesencenoandexpiredateLayout?.visibility = View.GONE
                     binding?.tradeliesenceNOLayout?.visibility = View.GONE
@@ -712,6 +713,7 @@ class LoanSurveyFragment : Fragment() {
                                 .into(view)
                         }
                         imageTradeLicencePath = imagePath
+                        tradeLicenseImageUrlFrag = "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg"
                     }
                     2 -> {
                         /*binding?.imagePayslipAddIV?.isVisible = false
@@ -763,7 +765,7 @@ class LoanSurveyFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer { model ->
                 progressDialog.dismiss()
                 if (model) {
-                    submitLoanSurveyData(requestBody)
+                    //submitLoanSurveyData(requestBody)
                     context?.toast("Uploaded successfully")
                 } else {
                     context?.toast("Uploaded Failed")
@@ -1433,7 +1435,7 @@ class LoanSurveyFragment : Fragment() {
         }
 
         if (imagePickFlag == 1) {
-            if (tradeLicenseImageUrl.isEmpty()) {
+            if (tradeLicenseImageUrlFrag.isEmpty()) {
                 context?.toast("ট্রেড লাইসেন্স এর ছবি অ্যাড করুন")
                 return false
             }
