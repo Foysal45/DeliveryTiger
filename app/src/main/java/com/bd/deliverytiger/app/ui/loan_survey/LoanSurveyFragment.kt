@@ -789,7 +789,7 @@ class LoanSurveyFragment : Fragment() {
         } else {
             viewModel.submitLoanSurvey(requestBody).observe(viewLifecycleOwner, Observer { model ->
                 SessionManager.isSurveyComplete = true
-                val tempLoanSurveyId = globalIDFOrLoan
+                val tempLoanSurveyId = if(globalIDFOrLoan == 0) model.loanSurveyId else globalIDFOrLoan
                 selectedCourierList.clear()
                 for (item in dataAdapter.getSelectedItemModelList()) {
                     item.apply {
