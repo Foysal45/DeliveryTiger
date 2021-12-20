@@ -119,9 +119,9 @@ class LoanSurveyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        if (SessionManager.isSurveyComplete) {
+        /*if (SessionManager.isSurveyComplete) {
             warning()
-        }
+        }*/
 
         fetchBanner()
         init()
@@ -376,8 +376,9 @@ class LoanSurveyFragment : Fragment() {
                     )
                     binding?.otherIncomeET?.setText(it[0].othersIncome.toInt().toString())
                     binding?.monthlyTransactionET?.setText(
-                        it[0].monthlyTotalCodAmount.toInt().toString()
+                        it[0].monthlyTotalCodAmount.toDouble().toInt().toString()
                     )
+                    Timber.d(" always 12 ${it[0].monthlyTotalCodAmount}")
                     courierList.clear()
 
                     viewModel.fetchCourierList().observe(viewLifecycleOwner, Observer { list ->
@@ -477,12 +478,12 @@ class LoanSurveyFragment : Fragment() {
                             "delivery_tiger/trade_license",
                             imageTradeLicencePath, requestBody2
                         )
-                    } /*else {
+                    } else {
                         submitLoanSurveyData(requestBody2)
-                    }*/
-                } /*else {
+                    }
+                } else {
                     submitLoanSurveyData(requestBody2)
-                }*/
+                }
                 Timber.d("reqBodyFrag $requestBody2")
             }
         }
@@ -516,6 +517,8 @@ class LoanSurveyFragment : Fragment() {
                 }
                 R.id.merchantHasBankAccountNo -> {
                     hasBankAccount = false
+                    binding?.bankAccountNumberET?.setText("")
+                    binding?.conmapyBankNameTextInput?.setText("")
                     binding?.hasBankAccountLayout?.visibility = View.GONE
                     binding?.bankAccountNumberLayout?.visibility = View.GONE
                     binding?.bankAccountNumberET?.visibility = View.GONE
@@ -539,6 +542,7 @@ class LoanSurveyFragment : Fragment() {
                 }
                 R.id.merchantPhysicalShopExistsNo -> {
                     hasPhysicalShop = false
+                    binding?.totalMonthlyAverageSellET?.setText("")
                     binding?.totalMonthlyAverageSellETLayout?.isVisible = false
                 }
             }
@@ -560,6 +564,8 @@ class LoanSurveyFragment : Fragment() {
                 }
                 R.id.merchantHasTradeLicenceNo -> {
                     hasTradeLicence = false
+                    binding?.imageTradeLicenceAddIV?.isVisible = true
+                    binding?.imageTradeLicencePickedIV?.isVisible = false
                     imagePickFlag = 0
                     tradeLicenseImageUrlFrag = ""
                     binding?.tradeliesenceNOTV?.setText("")
@@ -588,6 +594,8 @@ class LoanSurveyFragment : Fragment() {
                 }
                 R.id.merchantHasGuarantorNo -> {
                     hasGuarantor = false
+                    binding?.merchantGuarantorNameET?.setText("")
+                    binding?.merchantGuarantorNumberET?.setText("")
                     binding?.merchantGuarantorLayout?.isVisible = false
                 }
             }
@@ -608,6 +616,8 @@ class LoanSurveyFragment : Fragment() {
                 }
                 R.id.merchantTakeLoanAccountNo -> {
                     hasPreviousLoan = false
+                    binding?.loanAMountET?.setText("")
+                    binding?.bankNameET?.setText("")
                     binding?.merchantLoanAmountETLayout?.isVisible = false
                     binding?.bankNameETETLayout?.isVisible = false
                     binding?.loanRepayMonthlyLayout?.isVisible = false
@@ -646,6 +656,8 @@ class LoanSurveyFragment : Fragment() {
                     }
                     R.id.no_haveAnyCreditCard_radio_button -> {
                         hasCreditCard = false
+                        binding?.creditCardLimit?.setText("")
+                        binding?.creditCardName?.setText("")
                         bankLayoutVisibility?.isVisible = false
                         cardLimitLayout?.isVisible = false
                         bankNameLayout?.isVisible = false
@@ -665,6 +677,7 @@ class LoanSurveyFragment : Fragment() {
                     }
                     R.id.no_haveAnyTin_radio_button -> {
                         hasTin = false
+                        binding?.teamTINNumberET?.setText("")
                         TIINNumberLayout.isVisible = false
                         teamTINNumberET.isVisible = false
                     }
@@ -713,7 +726,8 @@ class LoanSurveyFragment : Fragment() {
                                 .into(view)
                         }
                         imageTradeLicencePath = imagePath
-                        tradeLicenseImageUrlFrag = "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg"
+                        tradeLicenseImageUrlFrag =
+                            "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg"
                     }
                     2 -> {
                         /*binding?.imagePayslipAddIV?.isVisible = false
@@ -765,7 +779,8 @@ class LoanSurveyFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer { model ->
                 progressDialog.dismiss()
                 if (model) {
-                    //submitLoanSurveyData(requestBody)
+                    submitLoanSurveyData(requestBody)
+                    Timber.d("reqBodyFrag $requestBody")
                     context?.toast("Uploaded successfully")
                 } else {
                     context?.toast("Uploaded Failed")
@@ -1426,7 +1441,7 @@ class LoanSurveyFragment : Fragment() {
                 context?.toast("ট্রেড লাইসেন্স এর এক্সপায়ার ডেট এড করুন")
                 false
             } else if (binding?.tradeliesenceNOTV?.text.toString().isEmpty()) {
-                context?.toast("টট্রেড লাইসেন্স এর নাম্বার দিন")
+                context?.toast("ট্রেড লাইসেন্স এর নাম্বার দিন")
                 false
             } else {
                 context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
