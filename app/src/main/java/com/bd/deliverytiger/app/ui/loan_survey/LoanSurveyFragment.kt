@@ -243,7 +243,11 @@ class LoanSurveyFragment : Fragment() {
                             R.id.merchantPhysicalShopExistsNo
                     )
                     binding?.totalMonthlyAverageSellET?.setText(
-                        it[0].monthlyTotalAverageSale.toInt().toString()
+                        if (it[0].monthlyTotalAverageSale.toInt().toString() == "0") {
+                            ""
+                        } else {
+                            it[0].monthlyTotalAverageSale.toInt().toString()
+                        }
                     )
                     binding?.OwnertypeofoownershipInBuisnessRadioGroup?.check(
                         when (it[0].shopOwnership) {
@@ -271,7 +275,14 @@ class LoanSurveyFragment : Fragment() {
                             R.id.merchantTakeLoanAccountNo
                         }
                     )
-                    binding?.loanAMountET?.setText(it[0].loanAmount.toInt().toString())
+                    binding?.loanAMountET?.setText(
+                        if (it[0].loanAmount.toInt().toString() == 0.toString()) {
+                            ""
+                        } else {
+                            it[0].loanAmount.toInt().toString()
+                        }
+                    )
+                    /*binding?.loanAMountET?.setText(it[0].loanAmount.toInt().toString())*/
                     if (!it[0].bankName.isNullOrEmpty()) {
                         binding?.bankNameET?.setText(it[0].bankName)
                     }
@@ -789,7 +800,8 @@ class LoanSurveyFragment : Fragment() {
         } else {
             viewModel.submitLoanSurvey(requestBody).observe(viewLifecycleOwner, Observer { model ->
                 SessionManager.isSurveyComplete = true
-                val tempLoanSurveyId = if(globalIDFOrLoan == 0) model.loanSurveyId else globalIDFOrLoan
+                val tempLoanSurveyId =
+                    if (globalIDFOrLoan == 0) model.loanSurveyId else globalIDFOrLoan
                 selectedCourierList.clear()
                 for (item in dataAdapter.getSelectedItemModelList()) {
                     item.apply {
