@@ -40,7 +40,6 @@ class NotificationPreviewFragment : Fragment() {
 
         model = arguments?.getParcelable("fcmData")
 
-        checkIfShouldGoToLoanSurvey()
        /* binding?.title?.setOnClickListener {
             checkIfShouldGoToLoanSurvey()
         }
@@ -70,11 +69,6 @@ class NotificationPreviewFragment : Fragment() {
                     .load(model?.imageUrl)
                     .into(imageView)
             }
-        }
-    }
-    private fun checkIfShouldGoToLoanSurvey() {
-        if (model?.body?.contains("deliverytiger.com/loan") == true) {
-            findNavController().navigate(R.id.action_nav_notification_preview_to_nav_loanSurvey)
         }
     }
 
