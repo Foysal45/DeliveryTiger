@@ -693,7 +693,7 @@ object SessionManager {
         }
 
 
-    var isSurveyComplete: Boolean
+    var isSurveyUpdate: Boolean
         get() {
             return pref.getBoolean(Key_SurveyComplete, false)
         }

@@ -99,17 +99,7 @@ class LoanSurveyFragment : Fragment() {
     private val marriageStatusAdapter = LocalUniversalAdapter()
     private val houseOwnerAdapter = LocalUniversalAdapter()
 
-
-    override fun onResume() {
-        super.onResume()
-        (activity as HomeActivity).setToolbarTitle(getString(R.string.loan_survey))
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentLoanSurveyBinding.inflate(inflater).also {
             binding = it
         }.root
@@ -118,17 +108,15 @@ class LoanSurveyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        /*if (SessionManager.isSurveyComplete) {
-            warning()
-        }*/
-
         fetchBanner()
         init()
         initData()
-        //fetchCourierList()
         initClickListener()
-        //initViews()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle(getString(R.string.loan_survey))
     }
 
     private fun initViews() {
@@ -704,8 +692,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private val startImagePickerResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val startImagePickerResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val resultCode = result.resultCode
             val data = result.data
             if (resultCode == Activity.RESULT_OK) {
@@ -765,12 +752,7 @@ class LoanSurveyFragment : Fragment() {
             }
         }
 
-    private fun uploadImage(
-        fileName: String,
-        imagePath: String,
-        fileUrl: String,
-        requestBody: LoanSurveyRequestBody
-    ) {
+    private fun uploadImage(fileName: String, imagePath: String, fileUrl: String, requestBody: LoanSurveyRequestBody) {
         val progressDialog = progressDialog()
         progressDialog.show()
         viewModel.imageUploadForFile(requireContext(), fileName, imagePath, fileUrl)
@@ -793,7 +775,7 @@ class LoanSurveyFragment : Fragment() {
         if (isPut) {
             viewModel.updateLoanSurvey(requestBody, SessionManager.accessToken)
                 .observe(viewLifecycleOwner, { model ->
-                    SessionManager.isSurveyComplete = true
+                    SessionManager.isSurveyUpdate = true
                     val tempLoanSurveyId = globalIDFOrLoan
                     selectedCourierList.clear()
                     for (item in dataAdapter.getSelectedItemModelList()) {
@@ -814,7 +796,7 @@ class LoanSurveyFragment : Fragment() {
                 })
         } else {
             viewModel.submitLoanSurvey(requestBody).observe(viewLifecycleOwner, Observer { model ->
-                SessionManager.isSurveyComplete = true
+                SessionManager.isSurveyUpdate = false
                 val tempLoanSurveyId =
                     if (globalIDFOrLoan == 0) model.loanSurveyId else globalIDFOrLoan
                 selectedCourierList.clear()
@@ -836,7 +818,7 @@ class LoanSurveyFragment : Fragment() {
         val titleText = "নির্দেশনা"
         val descriptionText = "সার্ভেটি পূরণ করার জন্য ধন্যবাদ।"
         val descriptionTextOnUpdate = "সার্ভেটি আপডেট করার জন্য ধন্যবাদ।"
-        if (SessionManager.isSurveyComplete) {
+        if (SessionManager.isSurveyUpdate) {
             alert(titleText, descriptionTextOnUpdate, false, "ঠিক আছে", "না").show()
         } else {
             alert(titleText, descriptionText, false, "ঠিক আছে", "না").show()
@@ -888,11 +870,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-
-    private fun familyMemNumRecycler(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun familyMemNumRecycler(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val education: List<String> = listOf("২-৫", "৫-৭", "৭-১০", "১০-১৫")
         val indexOfselectedItem = education.indexOf(preselectedItem)
@@ -907,10 +885,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun homeLocationRecycler(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun homeLocationRecycler(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val location: List<String> = listOf("মহানগর", "সিটি কর্পোরেশন", "শহরে", "গ্রামে")
         val indexOfselectedItem = location.indexOf(preselectedItem)
@@ -926,10 +901,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun marriageStatusRecycler(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun marriageStatusRecycler(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val location: List<String> =
             listOf("বিবাহিত", "অবিবাহিত", "তালাকপ্রাপ্ত", "বিধবা/ বিপত্নীক")
@@ -945,10 +917,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun houseOwnerRecycler(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun houseOwnerRecycler(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
         val houseOwner: List<String> = listOf("নিজের", "পরিবারের নিজস্ব", "ভাড়া")
         val indexOfselectedItem = houseOwner.indexOf(preselectedItem)
 
@@ -963,10 +932,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun setUpEduactionSpinner(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun setUpEduactionSpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val dataListAge: MutableList<String> = mutableListOf(
             "বেছে নিন", "প্রাতিষ্ঠানিক শিক্ষা নেই", "পি এস সি", "জে এস সি", "এস এস সি",
@@ -999,10 +965,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private fun setUpAverageBasketSpinner(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun setUpAverageBasketSpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val AverageBasket: MutableList<String> = mutableListOf(
             "বেছে নিন", "১০০০০০-২০০০০০",
@@ -1031,10 +994,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private fun setUpSpinnerKnownToMerchnatSpinner(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun setUpSpinnerKnownToMerchnatSpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val knownToMerchant: MutableList<String> = mutableListOf(
             "বেছে নিন", "০-১", "১-২", "২-৪", "৪-৬", "৬-৮", "৮-১০", "১০-১৫", "১৫-২০"
@@ -1062,10 +1022,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private fun setUpSpinnerAverageOrderSpinner(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun setUpSpinnerAverageOrderSpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val averageOrder: MutableList<String> = mutableListOf(
             "বেছে নিন", "০-৫০০", "৫০০-১০০০", "১০০০-১৫০০", "১৫০০-২০০০", "২০০০-৩০০০", "৩০০০-৪০০০"
@@ -1093,10 +1050,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private fun setUpSpinnerMonthlyExpSpinner(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun setUpSpinnerMonthlyExpSpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val MonthlyExp: MutableList<String> = mutableListOf(
             "বেছে নিন", "০-৫,০০০", "৫,০০০-১০,০০০", "১০,০০০-১৫,০০০", "১৫,০০০-২০,০০০",
@@ -1126,10 +1080,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private fun setUpSpinnerCurrentLoanEMISpinner(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun setUpSpinnerCurrentLoanEMISpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val CurrentLoanEMI: MutableList<String> = mutableListOf(
             "বেছে নিন", "৫০০-১০০০", "১০০০-২০০০", "২০০০-৪০০০", "৪০০০-৬০০০", "৬০০০-৮০০০",
@@ -1158,7 +1109,6 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-
     private fun datePickerTradeLisence() {
         val builder = MaterialDatePicker.Builder.datePicker()
         builder.setTheme(R.style.CustomMaterialCalendarTheme)
@@ -1170,11 +1120,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun setDateRangePickerTitleTradeLisencee(
-        selectedDOB: Long,
-        fromInit: Boolean = false,
-        serverDate: String = ""
-    ) {
+    private fun setDateRangePickerTitleTradeLisencee(selectedDOB: Long, fromInit: Boolean = false, serverDate: String = "") {
         if (fromInit) {
             selectedDateTradeLisence =
                 DigitConverter.formatDate(serverDate, "yyyy-MM-dd", "yyyy-MM-dd")
@@ -1201,11 +1147,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun setDateRangePickerTitleDOB(
-        selectedDOB: Long,
-        fromInit: Boolean = false,
-        serverDate: String = ""
-    ) {
+    private fun setDateRangePickerTitleDOB(selectedDOB: Long, fromInit: Boolean = false, serverDate: String = "") {
         if (fromInit) {
             selectedDateDOB = DigitConverter.formatDate(serverDate, "yyyy-MM-dd", "yyyy-MM-dd")
             selectedDateFormattedDOB =
