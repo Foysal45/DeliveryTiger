@@ -29,7 +29,6 @@ import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
@@ -42,15 +41,12 @@ import com.bd.deliverytiger.app.broadcast.ConnectivityReceiver
 import com.bd.deliverytiger.app.databinding.ActivityHomeBinding
 import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.log.UserLogger
-import com.bd.deliverytiger.app.services.DistrictCacheWorker
 import com.bd.deliverytiger.app.services.LocationUpdatesService
 import com.bd.deliverytiger.app.ui.chat.ChatActivity
 import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.dialog.PopupDialog
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
-import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivity
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleActivity
-import com.bd.deliverytiger.app.ui.loan_survey.LoanSurveyFragment
 import com.bd.deliverytiger.app.ui.location.LocationUsesBottomSheet
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
@@ -72,11 +68,9 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 import org.koin.android.ext.android.inject
-import org.koin.core.component.KoinApiExtension
 import timber.log.Timber
 import java.io.File
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 class HomeActivity : AppCompatActivity(),
@@ -252,7 +246,7 @@ class HomeActivity : AppCompatActivity(),
             Timber.d("BundleLog ${intent.extras?.bundleToString()}")
             val model: FCMData? = intent.getParcelableExtra("data")
             if (model != null) {
-                goToNotificationPreview(model)
+                checkIfShouldGoToLoanSurvey(model)
                 intent.removeExtra("data")
             } else {
                 val bundleExt = intent.extras
@@ -270,7 +264,7 @@ class HomeActivity : AppCompatActivity(),
                         )
                         Timber.d("BundleLog FCMData $fcmModel")
                         viewModel.saveNotificationData(fcmModel)
-                        goToNotificationPreview(fcmModel)
+                        checkIfShouldGoToLoanSurvey(fcmModel)
                     }
                 }
                 intent.removeExtra("notificationType")
@@ -291,6 +285,14 @@ class HomeActivity : AppCompatActivity(),
         ft.add(R.id.mainActivityContainer, fragment, tag)
         ft.addToBackStack(tag)
         ft.commit()*/
+    }
+
+    private fun checkIfShouldGoToLoanSurvey(fcmModel: FCMData) {
+        if (fcmModel?.body?.contains("deliverytiger.com/loan") == true) {
+            navController.navigate(R.id.nav_loanSurvey)
+        } else{
+            goToNotificationPreview(fcmModel)
+        }
     }
 
     override fun onBackPressed() {
