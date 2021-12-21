@@ -264,7 +264,7 @@ class LoanSurveyFragment : Fragment() {
                         }
                     )
                     binding?.totalCODFromOtherServicesET?.setText(
-                        it[0].monthlyTotalCodAmount.toInt().toString()
+                        it[0].monthlyTotalCodAmount.toDouble().toInt().toString()
                     )
                     binding?.merchantTakeLoanRadioGroup?.check(
                         if (it[0].hasPreviousLoan) {
@@ -376,9 +376,8 @@ class LoanSurveyFragment : Fragment() {
                     )
                     binding?.otherIncomeET?.setText(it[0].othersIncome.toInt().toString())
                     binding?.monthlyTransactionET?.setText(
-                        it[0].monthlyTotalCodAmount.toDouble().toInt().toString()
+                        it[0].transactionAmount.toDouble().toInt().toString()
                     )
-                    Timber.d(" always 12 ${it[0].monthlyTotalCodAmount}")
                     courierList.clear()
 
                     viewModel.fetchCourierList().observe(viewLifecycleOwner, Observer { list ->
