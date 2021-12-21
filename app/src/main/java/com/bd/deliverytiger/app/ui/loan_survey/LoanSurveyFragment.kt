@@ -835,7 +835,12 @@ class LoanSurveyFragment : Fragment() {
     private fun showAlert() {
         val titleText = "নির্দেশনা"
         val descriptionText = "সার্ভেটি পূরণ করার জন্য ধন্যবাদ।"
-        alert(titleText, descriptionText, false, "ঠিক আছে", "না").show()
+        val descriptionTextOnUpdate = "সার্ভেটি আপডেট করার জন্য ধন্যবাদ।"
+        if (SessionManager.isSurveyComplete) {
+            alert(titleText, descriptionTextOnUpdate, false, "ঠিক আছে", "না").show()
+        } else {
+            alert(titleText, descriptionText, false, "ঠিক আছে", "না").show()
+        }
     }
 
     private fun warning() {
