@@ -1,13 +1,13 @@
-package com.bd.deliverytiger.app.api.model.loan_survey
+package com.bd.deliverytiger.app.api.model.loan_survey.get_loan_survey
 
 
 import com.google.gson.annotations.SerializedName
 
-data class LoanSurveyRequestBody(
+data class PreviousLoanSurveyResponse(
     @SerializedName("age")
     var age: String = "",
     @SerializedName("annualTotalIncome")
-    var annualTotalIncome: Int = 0,
+    var annualTotalIncome: Double = 0.0,
     @SerializedName("applicationDate")
     var applicationDate: String = "",
     @SerializedName("bankName")
@@ -22,8 +22,8 @@ data class LoanSurveyRequestBody(
     var companyBankAccName: String = "",
     @SerializedName("companyBankAccNo")
     var companyBankAccNo: String = "",
-    @SerializedName("courierUserId")
-    var courierUserId: Int = 0,
+    @SerializedName("courierWithLoanSurvey")
+    var courierWithLoanSurvey: List<CourierWithLoanSurveyX> = listOf(),
     @SerializedName("dateOfBirth")
     var dateOfBirth: String = "",
     @SerializedName("eduLevel")
@@ -47,15 +47,13 @@ data class LoanSurveyRequestBody(
     @SerializedName("homeOwnership")
     var homeOwnership: String = "",
     @SerializedName("interestedAmount")
-    var interestedAmount: Int = 0,
+    var interestedAmount: Double = 0.0,
     @SerializedName("isBankAccount")
     var isBankAccount: Boolean = false,
     @SerializedName("isLocalShop")
     var isLocalShop: Boolean = false,
-   /* @SerializedName("lenderType")
-    var lenderType: String = "",*/
     @SerializedName("loanAmount")
-    var loanAmount: Int = 0,
+    var loanAmount: Double = 0.0,
     @SerializedName("loanEmi")
     var loanEmi: String = "",
     @SerializedName("loanSurveyId")
@@ -69,13 +67,13 @@ data class LoanSurveyRequestBody(
     @SerializedName("monthlyOrder")
     var monthlyOrder: String = "",
     @SerializedName("monthlyTotalAverageSale")
-    var monthlyTotalAverageSale: Int = 0,
+    var monthlyTotalAverageSale: Double = 0.0,
     @SerializedName("monthlyTotalCodAmount")
-    var monthlyTotalCodAmount: Int = 0,
+    var monthlyTotalCodAmount: Double = 0.0,
     @SerializedName("nidNo")
     var nidNo: String = "",
     @SerializedName("othersIncome")
-    var othersIncome: Int = 0,
+    var othersIncome: Double = 0.0,
     @SerializedName("recommend")
     var recommend: String = "",
     @SerializedName("relationMarchent")
@@ -97,5 +95,5 @@ data class LoanSurveyRequestBody(
     @SerializedName("tradeLicenseNo")
     var tradeLicenseNo: String = "",
     @SerializedName("transactionAmount")
-    var transactionAmount: Int = 0
+    var transactionAmount: Double = 0.0
 )

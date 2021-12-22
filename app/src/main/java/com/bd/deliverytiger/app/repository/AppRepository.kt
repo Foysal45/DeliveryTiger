@@ -2,14 +2,17 @@ package com.bd.deliverytiger.app.repository
 
 import com.bd.deliverytiger.app.api.ApiInterfaceInfobip
 import com.bd.deliverytiger.app.api.endpoint.*
+import com.bd.deliverytiger.app.api.model.accounts.BankCheckForEftRequest
 import com.bd.deliverytiger.app.api.model.billing_service.BillingServiceReqBody
 import com.bd.deliverytiger.app.api.model.bulk_status.StatusUpdateData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
+import com.bd.deliverytiger.app.api.model.charge.SpecialServiceRequestBody
 import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.collector_info.CollectorInfoRequest
 import com.bd.deliverytiger.app.api.model.collector_status.StatusLocationRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainListRequest
 import com.bd.deliverytiger.app.api.model.complain.ComplainRequest
+import com.bd.deliverytiger.app.api.model.complain.general_complain.GeneralComplainListRequest
 import com.bd.deliverytiger.app.api.model.dashboard.DashBoardReqBody
 import com.bd.deliverytiger.app.api.model.deal_management.DealManagementRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
@@ -33,7 +36,6 @@ import com.bd.deliverytiger.app.api.model.lead_management.customer_details.Custo
 import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookData
 import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookGroupData
 import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBody
-import com.bd.deliverytiger.app.api.model.loan_survey.LoanSurveyRequestBodyV3
 import com.bd.deliverytiger.app.api.model.loan_survey.SelectedCourierModel
 import com.bd.deliverytiger.app.api.model.log_sms.SMSLogRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
@@ -229,6 +231,8 @@ class AppRepository(
 
     suspend fun fetchComplainList(requestBody: ComplainListRequest) = apiInterfaceADM.fetchComplainList(requestBody)
 
+    suspend fun fetchWithoutOrderCodeComplains(requestBody: GeneralComplainListRequest) = apiInterfaceADM.fetchWithoutOrderCodeComplains(requestBody)
+
     suspend fun fetchBillPayHistory(courierUserId: Int) = apiInterfaceADM.fetchBillPayHistory(courierUserId)
 
     suspend fun fetchUnpaidCOD(courierUserId: Int) = apiInterfaceADM.fetchUnpaidCOD(courierUserId)
@@ -238,6 +242,8 @@ class AppRepository(
     suspend fun getInstantPaymentRate() = apiInterfaceADM.getInstantPaymentRate()
 
     suspend fun getEftPaymentRate() = apiInterfaceADM.getEftPaymentRate()
+
+    suspend fun getSuperEftPaymentRate() = apiInterfaceADM.getSuperEftPaymentRate()
 
     suspend fun fetchMerchantCurrentAdvanceBalance(courierUserId: Int) = apiInterfaceADM.fetchMerchantCurrentAdvanceBalance(courierUserId)
 
@@ -252,6 +258,10 @@ class AppRepository(
     suspend fun merchantPayableReceiveableDetailForInstantPayment(requestBody: MerchantPayableReceiveableDetailRequest) = apiInterfaceADM.merchantPayableReceiveableDetailForInstantPayment(requestBody)
 
     suspend fun instantOr24hourPayment(requestBody: MerchantInstantPaymentRequest) = apiInterfaceADM.instantOr24hourPayment(requestBody)
+
+    suspend fun getMessageAlertForIP() = apiInterfaceADM.getMessageAlertForIP()
+
+    suspend fun checkBankNameForEFT(requestBody: BankCheckForEftRequest) = apiInterfaceADM.checkBankNameForEFT(requestBody)
 
     suspend fun fetchCourierList() = apiInterfaceCore.fetchCourierList()
 
@@ -432,5 +442,14 @@ class AppRepository(
 
     suspend fun checkVoucher(requestBody: VoucherCheckRequest) = apiInterfaceCore.checkVoucher(requestBody)
 
+    suspend fun getPreviousLoanSurveyResponse(courierUserId: Int) = apiInterfaceCore.previousLoanSurveyResponse(courierUserId)
+
     //#endregion
+
+    suspend fun updateCourierWithLoanSurvey(requestBody: List<SelectedCourierModel>, loanSurveyId: Int) = apiInterfaceCore.updateCourierWithLoanSurvey(requestBody, loanSurveyId)
+
+    suspend fun updateLoanSurvey(loanSurveyId: Int, requestBody: LoanSurveyRequestBody) = apiInterfaceCore.updateLoanSurvey(loanSurveyId, requestBody)
+
+    suspend fun fetchSpecialService(requestBody: SpecialServiceRequestBody) = apiInterfaceCore.fetchSpecialService(requestBody)
+
 }

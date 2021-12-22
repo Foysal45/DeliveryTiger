@@ -10,6 +10,8 @@ import androidx.core.view.isVisible
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
 import com.bd.deliverytiger.app.databinding.FragmentReattemptBottomSheetBinding
+import com.bd.deliverytiger.app.utils.DigitConverter
+import com.bd.deliverytiger.app.utils.SessionManager
 import com.bd.deliverytiger.app.utils.callHelplineNumber
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -60,6 +62,7 @@ class ReattemptBottomSheet : BottomSheetDialogFragment() {
 
     private fun initView() {
         binding?.mobile?.text = data?.courierAddressContactInfo?.mobile
+        binding?.smsChargeInfo?.text = DigitConverter.toBanglaDigit(SessionManager.reAttemptCharge)
         if (!data?.courierAddressContactInfo?.otherMobile.isNullOrEmpty()) {
             binding?.alternateMobileNumber?.isVisible = true
             binding?.alternateMobileNumber?.text = data?.courierAddressContactInfo?.otherMobile

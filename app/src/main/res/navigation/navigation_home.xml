@@ -290,8 +290,8 @@
         android:id="@+id/nav_notification_preview"
         android:name="com.bd.deliverytiger.app.ui.notification.NotificationPreviewFragment"
         android:label="@string/notification"
-        tools:layout="@layout/fragment_notification_preview"
-        />
+        tools:layout="@layout/fragment_notification_preview">
+    </fragment>
 
     <fragment
         android:id="@+id/nav_paymentDetails"

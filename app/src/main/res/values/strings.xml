@@ -44,6 +44,7 @@
     <string name="default_notification_channel_id_instant_payment">Instant Payment</string>
     <string name="notification_channel_chat">Chat</string>
     <string name="notification_channel_chat_name">Chat</string>
+    <string name="notification_channel_loan_survey">Chat</string>
 
     <string name="waiting">অপেক্ষা করুন</string>
     <string name="dashboard_spinner_temp">মাস অথবা ডেট রেঞ্জ সিলেক্ট করুন</string>
@@ -181,9 +182,9 @@
     <string name="loan_survey">লোনের জন্য আবেদন</string>
     <string name="pickup_options">বেছে নিন</string>
     <string name="submit">সাবমিট</string>
-    <string name="_01847069209">01847069209</string>
-    <string name="_01811487984">01811487984</string>
-    <string name="_01844503545">01844503545</string>
+    <string name="shohag_vai_mobile">01844503545</string>
+    <string name="rezu_vai_mobile">01688117286</string>
+    <string name="sourov_vai_mobile">01811487984</string>
 
     <string-array name="pick_options">
         <item>"বেছে নিন"</item>

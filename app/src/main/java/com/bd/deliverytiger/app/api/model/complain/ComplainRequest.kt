@@ -9,6 +9,10 @@ data class ComplainRequest(
     @SerializedName("Comments")
     var comments: String?,
     @SerializedName("OrderFrom")
-    var orderFrom: String = "app"
+    var orderFrom: String = "app",
+    @SerializedName("CompanyName")
+    var companyName: String = "",
+    @SerializedName("Mobile")
+    var mobile: String = ""
 
 )

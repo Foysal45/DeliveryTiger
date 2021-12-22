@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.databinding.FragmentNotificationPreviewBinding
 import com.bd.deliverytiger.app.fcm.FCMData
@@ -24,7 +25,11 @@ class NotificationPreviewFragment : Fragment() {
         val fragmentTag: String = NotificationPreviewFragment::class.java.name
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return FragmentNotificationPreviewBinding.inflate(inflater, container, false).also {
             binding = it
         }.root
@@ -34,6 +39,20 @@ class NotificationPreviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         model = arguments?.getParcelable("fcmData")
+
+       /* binding?.title?.setOnClickListener {
+            checkIfShouldGoToLoanSurvey()
+        }
+        binding?.description?.setOnClickListener {
+            checkIfShouldGoToLoanSurvey()
+        }
+        binding?.bigText?.setOnClickListener {
+            checkIfShouldGoToLoanSurvey()
+        }
+        binding?.bigImage?.setOnClickListener {
+            checkIfShouldGoToLoanSurvey()
+        }*/
+
 
         binding?.title?.text = toHTML(model?.title ?: "")
         binding?.description?.text = toHTML(model?.body ?: "")

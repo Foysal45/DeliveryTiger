@@ -19,6 +19,7 @@ import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.ui.chat.ChatActivity
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.SessionManager
+import com.bd.deliverytiger.app.utils.toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
@@ -148,6 +149,13 @@ class FCMService : FirebaseMessagingService() {
                 )
                 notificationManager.notify(notificationId, builder1.build())
             }
+            /*"4" ->{
+                val builder1 = createNotification(
+                    getString(R.string.notification_channel_loan_survey),
+                    title, body, createPendingIntentLoanSurvey(fcmModel)
+                )
+                notificationManager.notify(notificationId, builder1.build())
+            }*/
             // Notification message handle
             else -> {
                 Timber.d("Notification message handle called")
@@ -185,6 +193,18 @@ class FCMService : FirebaseMessagingService() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         intent.putExtra("data", fcmModel)
         return PendingIntent.getActivity(this, System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    }
+
+    private fun createPendingIntentLoanSurvey(fcmModel: FCMData): PendingIntent {
+        val intent = Intent(this, HomeActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("data", fcmModel)
+            putExtra("notificationType", fcmModel.notificationType)
+        }
+        return TaskStackBuilder.create(this).run {
+            addNextIntentWithParentStack(intent)
+            getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)!!
+        }
     }
 
     private fun createChatPendingIntent(fcmModel: FCMData): PendingIntent {

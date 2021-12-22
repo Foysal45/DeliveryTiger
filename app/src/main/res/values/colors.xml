@@ -131,4 +131,7 @@
     <color name="cod_bg_eight">#ECF1EB</color>
     <color name="cod_bg_nine">#00834A</color>
     <color name="cod_bg_ten">#626366</color>
+
+    <color name="bank_instant_payment_background">#EBEFF8</color>
+    <color name="bank_instant_payment_transfer_background">#3A85C6</color>
 </resources>

@@ -4,7 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bd.deliverytiger.app.api.model.accounts.BankCheckForEftRequest
+import com.bd.deliverytiger.app.api.model.accounts.BankCheckForEftResponse
 import com.bd.deliverytiger.app.api.model.courier_info.CourierInfoModel
+import com.bd.deliverytiger.app.api.model.instant_payment_rate.AllAlertMessage
 import com.bd.deliverytiger.app.api.model.instant_payment_rate.InstantPaymentRateModel
 import com.bd.deliverytiger.app.api.model.instant_payment_status.InstantPaymentStatusData
 import com.bd.deliverytiger.app.api.model.instant_payment_status.InstantPaymentActivationStatusResponse
@@ -40,6 +43,40 @@ class InstantPaymentUpdateViewModel (private val repository: AppRepository): Vie
                     is NetworkResponse.Success -> {
                         if (response.body.model != null) {
                             responseData.value = response.body.model
+                        }
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
+    }
+
+    fun getMessageAlertForIP(): LiveData<AllAlertMessage> {
+
+        val responseData: MutableLiveData<AllAlertMessage> = MutableLiveData()
+
+        viewState.value = ViewState.ProgressState(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getMessageAlertForIP()
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        if (response.body != null) {
+                            responseData.value = response.body
                         }
                     }
                     is NetworkResponse.ServerError -> {
@@ -216,11 +253,71 @@ class InstantPaymentUpdateViewModel (private val repository: AppRepository): Vie
         return responseBody
     }
 
+    fun getSuperEftPaymentRate(): LiveData<InstantPaymentRateModel> {
+        viewState.value = ViewState.ProgressState(true)
+        val responseBody = MutableLiveData<InstantPaymentRateModel>()
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getSuperEftPaymentRate()
+            withContext(Dispatchers.Main){
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        responseBody.value = response.body
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }.exhaustive
+            }
+        }
+        return responseBody
+    }
+
     fun instantOr24hourPayment(requestBody: MerchantInstantPaymentRequest): LiveData<MerchantPayableReceiveableDetailResponse> {
         viewState.value = ViewState.ProgressState(true)
         val responseBody = MutableLiveData<MerchantPayableReceiveableDetailResponse>()
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.instantOr24hourPayment(requestBody)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        responseBody.value = response.body
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }.exhaustive
+            }
+        }
+        return responseBody
+    }
+
+    fun checkBankNameForEFT(requestBody: BankCheckForEftRequest): LiveData<BankCheckForEftResponse> {
+        viewState.value = ViewState.ProgressState(true)
+        val responseBody = MutableLiveData<BankCheckForEftResponse>()
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.checkBankNameForEFT(requestBody)
             withContext(Dispatchers.Main) {
                 viewState.value = ViewState.ProgressState(false)
                 when (response) {

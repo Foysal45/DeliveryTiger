@@ -29,7 +29,6 @@ import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
@@ -42,15 +41,12 @@ import com.bd.deliverytiger.app.broadcast.ConnectivityReceiver
 import com.bd.deliverytiger.app.databinding.ActivityHomeBinding
 import com.bd.deliverytiger.app.fcm.FCMData
 import com.bd.deliverytiger.app.log.UserLogger
-import com.bd.deliverytiger.app.services.DistrictCacheWorker
 import com.bd.deliverytiger.app.services.LocationUpdatesService
 import com.bd.deliverytiger.app.ui.chat.ChatActivity
 import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.dialog.PopupDialog
 import com.bd.deliverytiger.app.ui.filter.FilterFragment
-import com.bd.deliverytiger.app.ui.live.home.LiveHomeActivity
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleActivity
-import com.bd.deliverytiger.app.ui.loan_survey.LoanSurveyFragment
 import com.bd.deliverytiger.app.ui.location.LocationUsesBottomSheet
 import com.bd.deliverytiger.app.ui.login.LoginActivity
 import com.bd.deliverytiger.app.ui.notification.NotificationFragment
@@ -72,11 +68,9 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 import org.koin.android.ext.android.inject
-import org.koin.core.component.KoinApiExtension
 import timber.log.Timber
 import java.io.File
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 class HomeActivity : AppCompatActivity(),
@@ -100,7 +94,7 @@ class HomeActivity : AppCompatActivity(),
     private lateinit var parent: Toolbar
     private lateinit var actionBtn: TextView
 
-    private lateinit var binding: ActivityHomeBinding
+    private var binding: ActivityHomeBinding? = null
     private val viewModel: HomeViewModel by inject()
     private var doubleBackToExitPressedOnce = false
     private var menuItem: MenuItem? = null
@@ -127,6 +121,7 @@ class HomeActivity : AppCompatActivity(),
     private lateinit var receiver: MyReceiver
     private var foregroundService: LocationUpdatesService? = null
     private var mBound: Boolean = false
+    private var isRegistered: Boolean = false
     private var currentLocation: Location? = null
 
     //Data
@@ -137,7 +132,7 @@ class HomeActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(binding?.root)
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -145,9 +140,9 @@ class HomeActivity : AppCompatActivity(),
         navController = findNavController(R.id.navHostFragment)
         appBarConfiguration = AppBarConfiguration(setOf(
             R.id.nav_dashboard/*, R.id.nav_order_tracking, R.id.nav_lead_management*/
-        ), binding.drawerLayout)
-        binding.appBarHome.toolbar.setupWithNavController(navController, appBarConfiguration)
-        binding.appBarHome.bottomNavigationView.setupWithNavController(navController)
+        ), binding?.drawerLayout)
+        binding?.appBarHome?.toolbar?.setupWithNavController(navController, appBarConfiguration)
+        binding?.appBarHome?.bottomNavigationView?.setupWithNavController(navController)
 
         //drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
@@ -166,8 +161,8 @@ class HomeActivity : AppCompatActivity(),
         actionBtn = findViewById(R.id.actionBtn)
 
 
-        binding.appBarHome.bottomNavigationView.background = null
-        binding.appBarHome.bottomNavigationView.menu.getItem(2).isEnabled = false
+        binding?.appBarHome?.bottomNavigationView?.background = null
+        binding?.appBarHome?.bottomNavigationView?.menu?.getItem(2)?.isEnabled = false
 
 
         /*toolbar.setNavigationIcon(R.drawable.ic_menu)
@@ -179,7 +174,7 @@ class HomeActivity : AppCompatActivity(),
             }
         }*/
 
-        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, navViewRight)
+        binding?.drawerLayout?.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, navViewRight)
         manageNavigationSelection()
         drawerListener()
         onBackStackChangeListener()
@@ -251,7 +246,7 @@ class HomeActivity : AppCompatActivity(),
             Timber.d("BundleLog ${intent.extras?.bundleToString()}")
             val model: FCMData? = intent.getParcelableExtra("data")
             if (model != null) {
-                goToNotificationPreview(model)
+                checkIfShouldGoToLoanSurvey(model)
                 intent.removeExtra("data")
             } else {
                 val bundleExt = intent.extras
@@ -269,7 +264,7 @@ class HomeActivity : AppCompatActivity(),
                         )
                         Timber.d("BundleLog FCMData $fcmModel")
                         viewModel.saveNotificationData(fcmModel)
-                        goToNotificationPreview(fcmModel)
+                        checkIfShouldGoToLoanSurvey(fcmModel)
                     }
                 }
                 intent.removeExtra("notificationType")
@@ -292,25 +287,36 @@ class HomeActivity : AppCompatActivity(),
         ft.commit()*/
     }
 
+    private fun checkIfShouldGoToLoanSurvey(fcmModel: FCMData) {
+        if (fcmModel?.body?.contains("deliverytiger.com/loan") == true) {
+            navController.navigate(R.id.nav_loanSurvey)
+        } else{
+            goToNotificationPreview(fcmModel)
+        }
+    }
+
     override fun onBackPressed() {
 
         when {
-            binding.drawerLayout.isDrawerOpen(GravityCompat.START) || binding.drawerLayout.isDrawerOpen(
-                GravityCompat.END
-            ) -> {
-                if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    binding.drawerLayout.closeDrawer(GravityCompat.START)
-                }
-                if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
-                    binding.drawerLayout.closeDrawer(GravityCompat.END)
+
+            binding?.drawerLayout?.isDrawerOpen(GravityCompat.START) == true || binding?.drawerLayout?.isDrawerOpen(GravityCompat.END) == true -> {
+                if (binding!=null){
+                    if (binding?.drawerLayout?.isDrawerOpen(GravityCompat.START)!!) {
+                        binding?.drawerLayout?.closeDrawer(GravityCompat.START)
+                    }
+                    if (binding?.drawerLayout?.isDrawerOpen(GravityCompat.END)!!) {
+                        binding?.drawerLayout?.closeDrawer(GravityCompat.END)
+                    }
                 }
             }
+
             navController.currentDestination?.id != navController.graph.startDestination -> {
                 super.onBackPressed()
             }
             /*supportFragmentManager.backStackEntryCount > 0 -> {
                 supportFragmentManager.popBackStack()
             }*/
+
             else -> {
                 if (doubleBackToExitPressedOnce) {
                     super.onBackPressed()
@@ -331,7 +337,7 @@ class HomeActivity : AppCompatActivity(),
             when (destination.id) {
                 R.id.nav_dashboard -> {
                     initToolbarActions()
-                    binding.appBarHome.bottomAppBar.isVisible = true
+                    binding?.appBarHome?.bottomAppBar?.isVisible = true
                     addOrderFab.show()
                 }
                 R.id.nav_payment_history_details -> {
@@ -339,12 +345,12 @@ class HomeActivity : AppCompatActivity(),
                 }
                 R.id.nav_web_view -> {
                     clearToolbar()
-                    binding.appBarHome.bottomAppBar.isVisible = false
+                    binding?.appBarHome?.bottomAppBar?.isVisible = false
                     addOrderFab.hide()
                 }
                 R.id.nav_order_tracking -> {
                     clearToolbar()
-                    binding.appBarHome.bottomAppBar.isVisible = true
+                    binding?.appBarHome?.bottomAppBar?.isVisible = true
                     addOrderFab.show()
                 }
                 R.id.nav_lead_management -> {
@@ -352,13 +358,13 @@ class HomeActivity : AppCompatActivity(),
                 }
                 else -> {
                     clearToolbar()
-                    binding.appBarHome.bottomAppBar.isVisible = false
+                    binding?.appBarHome?.bottomAppBar?.isVisible = false
                     addOrderFab.hide()
                 }
             }
 
 
-            binding.appBarHome.bottomNavigationView.menu.forEach { item ->
+            binding?.appBarHome?.bottomNavigationView?.menu?.forEach { item ->
                 if (item.itemId == destination.id) {
                     item.isChecked = true
                 }
@@ -533,13 +539,13 @@ class HomeActivity : AppCompatActivity(),
     }
 
     private fun manageNavigationSelection() {
-        binding.navView.setNavigationItemSelectedListener { item ->
+        binding?.navView?.setNavigationItemSelectedListener { item ->
             menuItem = item
             val handled = NavigationUI.onNavDestinationSelected(item, navController)
             if (handled) {
-                binding.drawerLayout.closeDrawer(GravityCompat.START)
+                binding?.drawerLayout?.closeDrawer(GravityCompat.START)
             } else {
-                binding.drawerLayout.closeDrawer(GravityCompat.START)
+                binding?.drawerLayout?.closeDrawer(GravityCompat.START)
                 when (menuItem!!.itemId) {
                     R.id.nav_live_home -> {
                         goToLiveActivity()
@@ -605,7 +611,7 @@ class HomeActivity : AppCompatActivity(),
     }
 
     private fun bottomNavigationLister() {
-        binding.appBarHome.bottomNavigationView.setOnItemSelectedListener { item ->
+        binding?.appBarHome?.bottomNavigationView?.setOnItemSelectedListener { item ->
             if (navController.currentDestination?.id == item.itemId) false
             when (item.itemId) {
                 R.id.nav_dashboard -> {
@@ -636,17 +642,19 @@ class HomeActivity : AppCompatActivity(),
     }
 
     private fun drawerListener() {
-        binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+        binding?.drawerLayout?.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {
                 if (newState == DrawerLayout.STATE_SETTLING) {
-                    if (!binding?.drawerLayout.isDrawerOpen(GravityCompat.END)) {
-                        // Drawer started opening
+                    if (binding != null){
+                        if (!binding?.drawerLayout!!.isDrawerOpen(GravityCompat.END)) {
+                            // Drawer started opening
 
-                    } else {
-                        // Drawer started closing
-                        val currentFragment = supportFragmentManager.findFragmentById(R.id.container_drawer)
-                        if (currentFragment is FilterFragment) {
-                            currentFragment.forceHideKeyboard()
+                        } else {
+                            // Drawer started closing
+                            val currentFragment = supportFragmentManager.findFragmentById(R.id.container_drawer)
+                            if (currentFragment is FilterFragment) {
+                                currentFragment.forceHideKeyboard()
+                            }
                         }
                     }
                 }
@@ -660,18 +668,22 @@ class HomeActivity : AppCompatActivity(),
     }
 
     fun openRightDrawer() {
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        if (binding!=null){
+            if (binding?.drawerLayout?.isDrawerOpen(GravityCompat.START) == true) {
+                binding?.drawerLayout?.closeDrawer(GravityCompat.START)
+            }
+            binding?.drawerLayout?.openDrawer(GravityCompat.END)
         }
-        binding.drawerLayout.openDrawer(GravityCompat.END)
     }
 
     fun closeDrawer() {
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
-        }
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
-            binding.drawerLayout.closeDrawer(GravityCompat.END)
+        if (binding!=null){
+            if (binding?.drawerLayout?.isDrawerOpen(GravityCompat.START) == true) {
+                binding?.drawerLayout?.closeDrawer(GravityCompat.START)
+            }
+            if (binding?.drawerLayout?.isDrawerOpen(GravityCompat.END) == true) {
+                binding?.drawerLayout?.closeDrawer(GravityCompat.END)
+            }
         }
     }
 
@@ -1022,12 +1034,12 @@ class HomeActivity : AppCompatActivity(),
         profileEdit.setOnClickListener {
             //navId = R.id.nav_header_profile_edit
             navController.navigate(R.id.nav_profile)
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            binding?.drawerLayout?.closeDrawer(GravityCompat.START)
         }
         headerPic.setOnClickListener {
             //navId = R.id.nav_header_profile_edit
             navController.navigate(R.id.nav_profile)
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            binding?.drawerLayout?.closeDrawer(GravityCompat.START)
         }
         nearbyHub.setOnClickListener {
             //navId = R.id.nav_nearby_hub
@@ -1035,7 +1047,7 @@ class HomeActivity : AppCompatActivity(),
                 "isNearByHubView" to true
             )
             navController.navigate(R.id.nav_map, bundle)
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            binding?.drawerLayout?.closeDrawer(GravityCompat.START)
             //goToNearByHubMap()
         }
         /*referralApply.setOnClickListener {
@@ -1108,6 +1120,7 @@ class HomeActivity : AppCompatActivity(),
             SessionManager.merchantDistrict = model.districtId
             SessionManager.isBreakAble = model.isBreakAble
             SessionManager.isHeavyWeight = model.isHeavyWeight
+            SessionManager.isEligibleForSpecialService = model.merchantAssignActive
             isQuickBookingEnable = model.isQuickOrderActive
         })
     }
@@ -1420,12 +1433,13 @@ class HomeActivity : AppCompatActivity(),
 
     override fun onResume() {
         super.onResume()
+        isRegistered = true
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, IntentFilter(LocationUpdatesService.ACTION_BROADCAST))
-
         checkStalledUpdate()
     }
 
     override fun onPause() {
+        isRegistered = false
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver)
         super.onPause()
     }
@@ -1504,9 +1518,12 @@ class HomeActivity : AppCompatActivity(),
                 viewModel.currentLocation.value = location
                 foregroundService?.removeLocationUpdates()
                 foregroundService = null
-                mBound = false
-
-                unbindService(serviceConnection)
+                if (isRegistered){
+                    if(mBound){
+                        mBound = false
+                        unbindService(serviceConnection)
+                    }
+                }
             }
         }
     }

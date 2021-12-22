@@ -42,7 +42,6 @@ import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleActivity
-import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleBottomSheet
 import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentRequestBottomSheet
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
@@ -279,7 +278,7 @@ class DashboardFragment : Fragment() {
         }
         binding?.chatWithRiderBtn?.setOnClickListener {
             getRidersOfficeInfo()
-            goToChatActivityRider()
+            goToChatActivityRider(collectorInformation)
             UserLogger.logGenie("Dashboard_CollectorChat_${collectorInformation.name}")
         }
         binding?.orderTrackingBtn?.setOnClickListener {
@@ -842,6 +841,10 @@ class DashboardFragment : Fragment() {
                     this.currentPaymentType = model1.paymentType
                     this.currentPaymentMethod = model1.paymentMethod
                     this.isPaymentProcessing = model1.processing
+                    this.failedTransferMsg = model1.failedTransferMsg
+                    this.successBkashTransferMsg = model1.successBkashTransferMsg
+                    this.successExpressTransferMsg = model1.successExpressTransferMsg
+                    this.successSuperExpressTransferMsg = model1.successSuperExpressTransferMsg
                 }
                 if (dataList.isNotEmpty()) {
                     dataList.last().apply {
@@ -857,6 +860,10 @@ class DashboardFragment : Fragment() {
                         this.currentPaymentType = model1.paymentType
                         this.currentPaymentMethod = model1.paymentMethod
                         this.isPaymentProcessing = model1.processing
+                        this.failedTransferMsg = model1.failedTransferMsg
+                        this.successBkashTransferMsg = model1.successBkashTransferMsg
+                        this.successExpressTransferMsg = model1.successExpressTransferMsg
+                        this.successSuperExpressTransferMsg = model1.successSuperExpressTransferMsg
                     }
                     dashboardAdapter.notifyItemChanged(dataList.lastIndex)
                 }
@@ -986,24 +993,28 @@ class DashboardFragment : Fragment() {
 
         val dataList: MutableList<DashboardData>
         var title = ""
+        var flag = 0
         when (dashboardRouteUrl) {
             "shipment" -> {
                 dataList = shipmentDataList
                 title = "শিপমেন্টে আছে"
+                flag = 1
             }
             "customer_not_found" -> {
                 dataList = customerNotFoundDataList
                 title = "কাস্টমারকে পাওয়া যাচ্ছে না"
+                flag = 2
             }
             "return" -> {
                 dataList = returnDataList
                 title = "রিটার্নে আছে"
+                flag = 3
             }
             else -> return
         }
 
         val tag = StatusBreakDownBottomSheet.tag
-        val dialog = StatusBreakDownBottomSheet.newInstance(title, dataList)
+        val dialog = StatusBreakDownBottomSheet.newInstance(title, dataList, flag)
         dialog.show(childFragmentManager, tag)
         dialog.onItemClicked = { model, position ->
             dialog.dismiss()
@@ -1293,7 +1304,7 @@ class DashboardFragment : Fragment() {
         ).config(requireContext())
     }
 
-    private fun goToChatActivityRider() {
+    private fun goToChatActivityRider(collectorInformation: CollectorInformation) {
         val firebaseCredential = FirebaseCredential(
             firebaseWebApiKey = BuildConfig.FirebaseWebApiKey
         )
@@ -1302,13 +1313,16 @@ class DashboardFragment : Fragment() {
             role = "dt",
             fcmToken = SessionManager.firebaseToken
         )
-        val receiverData = if (adminUser != null) {
+        val receiverData = if (collectorInformation.id == 0 || collectorInformation.name == null) {
             ChatUserData("906","Post Shipment Admin", "" ,
                 imageUrl = "https://static.ajkerdeal.com/images/bondhuprofileimage/906/profileimage.jpg",
                 role = "bondhu"
             )
         } else {
-            ChatUserData()
+            ChatUserData(collectorInformation.id.toString(),collectorInformation.name.toString(), collectorInformation.mobile.toString() ,
+                imageUrl = "https://static.ajkerdeal.com/images/bondhuprofileimage/${collectorInformation.id}/profileimage.jpg",
+                role = "bondhu"
+            )
         }
         ChatConfigure(
             "dt-bondhu",

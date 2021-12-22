@@ -185,17 +185,26 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
                         binding.paymentMessage.text = "$amount ঘণ্টার মধ্যে পেমেন্ট\n$account ট্রান্সফার হবে"
                     }else if (model.currentPaymentType == 2 && model.currentPaymentMethod == 1){
                         if (model.isPaymentProcessing == 0){
-                            binding.paymentMessage.text = "টাকা বিকাশে ট্রান্সফার হয়েছে"
+                            binding.paymentMessage.text = model.successBkashTransferMsg
                         }else{
-                            binding.paymentMessage.text = "পেমেন্টটি প্রসেসিং এ আছে\nঅনুগ্রহ পূর্বক আপনার একাউন্ট ম্যানেজার এর সাথে যোগাযোগ করুন।"
+                            binding.paymentMessage.text = model.failedTransferMsg
                         }
 
                         binding.countTV.text = "৳ ${DigitConverter.toBanglaDigit(0, true)}"
                     }else if (model.currentPaymentType == 2 && model.currentPaymentMethod == 3){
                         if (model.isPaymentProcessing == 0){
-                            binding.paymentMessage.text = "২৪ ঘন্টার মধ্যে আপনার ব্যাংক অ্যাকাউন্টে ট্র্যান্সফার হবে"
+                            binding.paymentMessage.text = model.successExpressTransferMsg
                         }else{
-                            binding.paymentMessage.text = "পেমেন্টটি প্রসেসিং এ আছে\nঅনুগ্রহ পূর্বক আপনার একাউন্ট ম্যানেজার এর সাথে যোগাযোগ করুন।"
+                            binding.paymentMessage.text = model.failedTransferMsg
+                        }
+
+                        binding.countTV.text = "৳ ${DigitConverter.toBanglaDigit(0, true)}"
+                    }
+                    else if (model.currentPaymentType == 3 && model.currentPaymentMethod == 3){
+                        if (model.isPaymentProcessing == 0){
+                            binding.paymentMessage.text = model.successSuperExpressTransferMsg
+                        }else{
+                            binding.paymentMessage.text = model.failedTransferMsg
                         }
 
                         binding.countTV.text = "৳ ${DigitConverter.toBanglaDigit(0, true)}"

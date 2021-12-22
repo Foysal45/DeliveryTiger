@@ -39,6 +39,10 @@ data class DashboardData(
     var currentPaymentStatus: Int = 0,
     var currentPaymentType: Int = 0,
     var currentPaymentMethod: Int = 0,
-    var isPaymentProcessing: Int = 0
+    var isPaymentProcessing: Int = 0,
+    var failedTransferMsg: String = "",
+    var successBkashTransferMsg: String = "",
+    var successExpressTransferMsg: String = "",
+    var successSuperExpressTransferMsg: String = ""
 
 )

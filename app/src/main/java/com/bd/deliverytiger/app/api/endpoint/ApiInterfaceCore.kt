@@ -12,9 +12,7 @@ import com.bd.deliverytiger.app.api.model.calculator.DeliveryChargeInfo
 import com.bd.deliverytiger.app.api.model.calculator.WeightPrice
 import com.bd.deliverytiger.app.api.model.category.CategoryData
 import com.bd.deliverytiger.app.api.model.category.SubCategoryData
-import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
-import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
-import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeResponse
+import com.bd.deliverytiger.app.api.model.charge.*
 import com.bd.deliverytiger.app.api.model.cod_collection.CODReqBody
 import com.bd.deliverytiger.app.api.model.cod_collection.CODResponse
 import com.bd.deliverytiger.app.api.model.cod_collection.HubInfo
@@ -33,6 +31,7 @@ import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsR
 import com.bd.deliverytiger.app.api.model.district.DistrictData
 import com.bd.deliverytiger.app.api.model.generic_limit.GenericLimitData
 import com.bd.deliverytiger.app.api.model.helpline_number.HelpLineNumberModel
+import com.bd.deliverytiger.app.api.model.instant_payment_rate.AllAlertMessage
 import com.bd.deliverytiger.app.api.model.instant_payment_update.InstantPaymentUpdateResponse
 import com.bd.deliverytiger.app.api.model.instant_payment_update.UpdatePaymentCycleRequest
 import com.bd.deliverytiger.app.api.model.lead_management.*
@@ -42,6 +41,7 @@ import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookDat
 import com.bd.deliverytiger.app.api.model.lead_management.phonebook.PhonebookGroupData
 import com.bd.deliverytiger.app.api.model.loan_survey.*
 import com.bd.deliverytiger.app.api.model.loan_survey.get_loan_survey.LoanSurveyData
+import com.bd.deliverytiger.app.api.model.loan_survey.get_loan_survey.PreviousLoanSurveyResponse
 import com.bd.deliverytiger.app.api.model.login.LoginResponse
 import com.bd.deliverytiger.app.api.model.offer.OfferUpdateRequest
 import com.bd.deliverytiger.app.api.model.order.*
@@ -326,5 +326,16 @@ interface ApiInterfaceCore {
     @POST("api/Voucher/CheckVoucher")
     suspend fun checkVoucher(@Body requestBody: VoucherCheckRequest): NetworkResponse<GenericResponse<VoucherCheckResponse>, ErrorResponse>
 
+    @GET("api/Loan/GetLoanSurveyByCourierUser/{courrierUserId}")
+    suspend fun previousLoanSurveyResponse(@Path("courrierUserId") courrierUserId: Int): NetworkResponse<GenericResponse<List<PreviousLoanSurveyResponse>>, ErrorResponse>
+
+    @PUT("/api/Update/UpdateLoanSurvey/{loanSurveyId}")
+    suspend fun updateLoanSurvey(@Path("loanSurveyId") loanSurveyId: Int, @Body requestBody: LoanSurveyRequestBody): NetworkResponse<GenericResponse<Int>, ErrorResponse>
+
+    @PUT("api/Update/UpdateCourierWithLoanSurvey/{loanSurveyId}")
+    suspend fun updateCourierWithLoanSurvey(@Body requestBody: List<SelectedCourierModel>, @Path("loanSurveyId") loanSurveyId: Int): NetworkResponse<Int, ErrorResponse>
+
+    @POST("api/Fetch/GetSpecialService")
+    suspend fun fetchSpecialService(@Body requestBody: SpecialServiceRequestBody): NetworkResponse<GenericResponse<List<WeightRangeWiseData>>, ErrorResponse>
 
 }

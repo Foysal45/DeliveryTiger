@@ -329,7 +329,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginEnd="2dp"
                                         android:textIsSelectable="true"
-                                        android:text="@string/_01847069209"
+                                        android:text="@string/shohag_vai_mobile"
                                         android:textSize="14sp"
                                         android:textColor="@color/black_80"/>
 
@@ -348,7 +348,7 @@
                                         android:layout_height="wrap_content"
                                         android:textIsSelectable="true"
                                         android:layout_marginEnd="2dp"
-                                        android:text="@string/_01811487984"
+                                        android:text="@string/sourov_vai_mobile"
                                         android:textSize="14sp"
                                         android:textColor="@color/black_80"/>
 
@@ -367,7 +367,7 @@
                                         android:layout_height="wrap_content"
                                         android:textIsSelectable="true"
                                         android:layout_marginEnd="2dp"
-                                        android:text="@string/_01844503545"
+                                        android:text="@string/rezu_vai_mobile"
                                         android:textSize="14sp"
                                         android:textColor="@color/black_80"/>
 
@@ -457,29 +457,6 @@
                                 </LinearLayout>
 
 
-
-                                <com.google.android.material.button.MaterialButton
-                                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
-                                    android:padding="0dp"
-                                    app:iconPadding="0dp"
-                                    android:insetLeft="0dp"
-                                    android:insetTop="0dp"
-                                    android:insetRight="0dp"
-                                    android:insetBottom="0dp"
-                                    app:iconSize="24dp"
-                                    android:layout_marginEnd="8dp"
-                                    app:iconGravity="textStart"
-                                    android:textAllCaps="false"
-                                    app:icon="@drawable/ic_chat"
-                                    app:layout_constraintVertical_chainStyle="packed"
-                                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
-                                    app:layout_constraintBottom_toTopOf="@id/chatBtnTV"
-                                    app:layout_constraintEnd_toStartOf="@id/callBtn"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    android:visibility="gone"/>
-
                                 <ImageView
                                     android:id="@+id/chatBtn"
                                     android:layout_width="40dp"
@@ -489,7 +466,7 @@
                                     android:layout_marginEnd="20dp"
                                     app:layout_constraintVertical_chainStyle="packed"
                                     app:layout_constraintBottom_toTopOf="@id/chatBtnTV"
-                                    app:layout_constraintEnd_toStartOf="@id/callBtn"
+                                    app:layout_constraintEnd_toEndOf="@+id/chatBtnTV"
                                     app:layout_constraintTop_toTopOf="parent"
                                     />
 
@@ -498,12 +475,11 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:maxLines="1"
-                                    android:text="লাইভ চ্যাট"
+                                    android:layout_marginEnd="3dp"
+                                    android:text="একাউন্ট ম্যানেজার"
                                     android:textColor="@color/black_80"
                                     android:textSize="14sp"
-                                    android:layout_marginTop="2dp"
-                                    app:layout_constraintEnd_toEndOf="@+id/chatBtn"
-                                    app:layout_constraintStart_toStartOf="@id/chatBtn"
+                                    app:layout_constraintEnd_toStartOf="@+id/callBtn"
                                     app:layout_constraintTop_toBottomOf="@id/chatBtn"
                                     app:layout_constraintBottom_toBottomOf="@+id/callTextImageLayout"/>
 
@@ -534,7 +510,7 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_marginEnd="4dp"
-                            android:layout_weight="1.5"
+                            android:layout_weight="1.25"
                             android:background="@drawable/bg_collector_present"
                             android:gravity="center"
                             android:orientation="horizontal"
@@ -564,7 +540,6 @@
                                 android:id="@+id/switchCollector"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="6dp"
                                 android:textColor="@color/black_80"
                                 android:textSize="@dimen/text_14"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -582,7 +557,7 @@
                             android:layout_height="40dp"
                             android:layout_marginEnd="4dp"
                             android:layout_marginStart="10dp"
-                            android:layout_weight="1"
+                            android:layout_weight="1.10"
                             android:background="@drawable/bg_collector_contact"
                             android:gravity="center"
                             android:orientation="horizontal"
@@ -595,7 +570,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:layout_weight="1"
+                                android:layout_weight="1.1"
                                 android:orientation="horizontal">
 
                                 <ImageView
@@ -621,7 +596,7 @@
                                 android:id="@+id/chatWithRiderBtn"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="1"
+                                android:layout_weight="1.8"
                                 android:gravity="center"
                                 android:orientation="horizontal">
 
@@ -639,7 +614,7 @@
                                     android:layout_marginEnd="6dp"
                                     android:ellipsize="end"
                                     android:maxLines="2"
-                                    android:text="চ্যাট"
+                                    android:text="রাইডার"
                                     app:tint="@color/colorPrimary"
                                     android:textSize="14sp" />
 

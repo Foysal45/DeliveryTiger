@@ -134,63 +134,57 @@ fun Activity.alert(title: CharSequence? = null, message: CharSequence? = null, s
     return dialog
 }
 
-
-fun Fragment.customAlert(titleText: String, descriptionText: String, noBtnText: String, yesBtnText: String, listener: ((type: Int) -> Unit)? = null) {
+fun Fragment.customAlert(title: CharSequence? = null, message: CharSequence? = null, setCanceledOnTouchOutside: Boolean = true, showCancel: Boolean = false, positiveButtonText: String = "ঠিক আছে", negativeButtonText: String = "ক্যানসেল", listener: ((type: Int) -> Unit)? = null): AlertDialog {
 
     val builder = MaterialAlertDialogBuilder(requireContext())
-    val view = layoutInflater.inflate(R.layout.dialog_instant_live, null)
-    val title = view.findViewById<TextView>(R.id.title)
-    val description = view.findViewById<TextView>(R.id.description)
-    val noBtn = view.findViewById<MaterialButton>(R.id.noBtn)
-    val yesBtn = view.findViewById<MaterialButton>(R.id.yesBtn)
-
-    title.text = titleText
-    description.text = descriptionText
-    noBtn.text = noBtnText
-    yesBtn.text = yesBtnText
-
-    builder.setView(view)
+    builder.setTitle(title)
+    // Display a message on alert dialog
+    builder.setMessage(message)
+    // Set a positive button and its click listener on alert dialog
+    builder.setPositiveButton(positiveButtonText) { dialog, which ->
+        dialog.dismiss()
+        listener?.invoke(AlertDialog.BUTTON_POSITIVE)
+    }
+    // Display a negative button on alert dialog
+    if (showCancel) {
+        builder.setNegativeButton(negativeButtonText) { dialog, which ->
+            dialog.dismiss()
+            listener?.invoke(AlertDialog.BUTTON_NEGATIVE)
+        }
+    }
 
     val dialog = builder.create()
-    dialog.show()
-
-    noBtn.setOnClickListener() {
-        dialog.dismiss()
-        listener?.invoke(2)
-    }
-    yesBtn.setOnClickListener() {
-        dialog.dismiss()
-        listener?.invoke(1)
-    }
+    dialog.setCanceledOnTouchOutside(setCanceledOnTouchOutside)
+    val typeface = ResourcesCompat.getFont(requireContext(), R.font.solaiman)
+    val textView = dialog.findViewById<TextView>(android.R.id.message)
+    textView?.typeface = typeface
+    return dialog
 }
 
-fun Activity.customAlert(titleText: String, descriptionText: String, noBtnText: String, yesBtnText: String, listener: ((type: Int) -> Unit)? = null) {
+fun Activity.customAlert(title: CharSequence? = null, message: CharSequence? = null, showCancel: Boolean = false, positiveButtonText: String = "ঠিক আছে", negativeButtonText: String = "ক্যানসেল", listener: ((type: Int) -> Unit)? = null): AlertDialog {
 
     val builder = MaterialAlertDialogBuilder(this)
-    val view = layoutInflater.inflate(R.layout.dialog_instant_live, null)
-    val title = view.findViewById<TextView>(R.id.title)
-    val description = view.findViewById<TextView>(R.id.description)
-    val noBtn = view.findViewById<MaterialButton>(R.id.noBtn)
-    val yesBtn = view.findViewById<MaterialButton>(R.id.yesBtn)
-
-    title.text = titleText
-    description.text = descriptionText
-    noBtn.text = noBtnText
-    yesBtn.text = yesBtnText
-
-    builder.setView(view)
+    builder.setTitle(title)
+    // Display a message on alert dialog
+    builder.setMessage(message)
+    // Set a positive button and its click listener on alert dialog
+    builder.setPositiveButton(positiveButtonText) { dialog, which ->
+        dialog.dismiss()
+        listener?.invoke(AlertDialog.BUTTON_POSITIVE)
+    }
+    // Display a negative button on alert dialog
+    if (showCancel) {
+        builder.setNegativeButton(negativeButtonText) { dialog, which ->
+            dialog.dismiss()
+            listener?.invoke(AlertDialog.BUTTON_NEGATIVE)
+        }
+    }
 
     val dialog = builder.create()
-    dialog.show()
-
-    noBtn.setOnClickListener() {
-        dialog.dismiss()
-        listener?.invoke(2)
-    }
-    yesBtn.setOnClickListener() {
-        dialog.dismiss()
-        listener?.invoke(1)
-    }
+    val typeface = ResourcesCompat.getFont(this, R.font.solaiman)
+    val textView = dialog.findViewById<TextView>(android.R.id.message)
+    textView?.typeface = typeface
+    return dialog
 }
 
 fun Context.toast(msg: String?, time: Int = Toast.LENGTH_SHORT) {

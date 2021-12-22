@@ -21,12 +21,13 @@ import com.bd.deliverytiger.app.ui.loan_survey.adapters.LocalUniversalAdapter
 import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.Validator.isValidMobileNumber
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import com.github.dhaval2404.imagepicker.ImagePicker
 import org.koin.android.ext.android.inject
-import timber.log.Timber
 import com.google.android.material.datepicker.MaterialDatePicker
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -45,7 +46,7 @@ class LoanSurveyFragment : Fragment() {
 
     private var loanRange = ""
     private var loanRepayMonthPeriod = ""
-    private var yearlyTotalIncome = 0
+    private var yearlyTotalIncome = ""
     private var otherIncome = ""
     private var nidCardNo = ""
     private var monthlyTransaction = ""
@@ -65,9 +66,11 @@ class LoanSurveyFragment : Fragment() {
     private var hasGuarantor = false
     private var hasPreviousLoan = false
     private var isExpireDateofTradeLisenseSelectd = false
+    private var isPut: Boolean = false
 
     private var imagePath: String = ""
     private var imagePickFlag = 0
+    private var globalIDFOrLoan = 0
     private var imageTradeLicencePath: String = ""
 
     private var selectedEducation = ""
@@ -86,26 +89,17 @@ class LoanSurveyFragment : Fragment() {
     private var selectedDateDOB = "2001-01-01"
     private var selectedDateFormattedTradeLisence = ""
     private var selectedDateFormattedDOB = ""
+    private var tradeLicenseImageUrlFrag = ""
+    private var applicationDate = ""
 
 
     private val adapterAge = LocalUniversalAdapter()
     private val familyMemNumAdapter = LocalUniversalAdapter()
     private val locationAdapter = LocalUniversalAdapter()
     private val marriageStatusAdapter = LocalUniversalAdapter()
-
     private val houseOwnerAdapter = LocalUniversalAdapter()
 
-
-    override fun onResume() {
-        super.onResume()
-        (activity as HomeActivity).setToolbarTitle(getString(R.string.loan_survey))
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentLoanSurveyBinding.inflate(inflater).also {
             binding = it
         }.root
@@ -114,16 +108,15 @@ class LoanSurveyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        if (SessionManager.isSurveyComplete){
-            warning()
-        }
-
         fetchBanner()
         init()
-        fetchCourierList()
+        initData()
         initClickListener()
-        initViews()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle(getString(R.string.loan_survey))
     }
 
     private fun initViews() {
@@ -138,7 +131,258 @@ class LoanSurveyFragment : Fragment() {
         setUpSpinnerAverageOrderSpinner()
         setUpSpinnerMonthlyExpSpinner()
         setUpSpinnerCurrentLoanEMISpinner()
-        //setUpSpinnerMarketPositionSpinner()
+        fetchCourierList()
+    }
+
+    private fun initData() {
+        viewModel.previousLoanSurveyResponse(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model->
+                if (model.isEmpty()) {
+                    isPut = false
+                    initViews()
+                } else {
+                    isPut = true
+                    globalIDFOrLoan = model.first().loanSurveyId
+                    applicationDate = model.first().applicationDate
+                    binding?.merchantGenderRadioGroup?.check(
+                        if (model.first().gender == "male")
+                            R.id.merchantGenderMale
+                        else
+                            R.id.merchantGenderFemale
+                    )
+                    if (!model.first().merchantName.isNullOrEmpty()) {
+                        merchantName = model.first().merchantName
+                        binding?.merchantNameET?.setText(model.first().merchantName)
+                    }
+                    if (!model.first().age.isNullOrEmpty()) {
+                        ageRecycler(model.first().age, true)
+                    } else {
+                        ageRecycler(model.first().age, false)
+                    }
+                    setDateRangePickerTitleTradeLisencee(0, true, model.first().tradeLicenseExpireDate)
+                    setDateRangePickerTitleDOB(0, true, model.first().dateOfBirth)
+                    if (!model.first().nidNo.isNullOrEmpty()) {
+                        binding?.nidCardNoET?.setText(model.first().nidNo)
+                    }
+                    binding?.DOBET?.setText(
+                        DigitConverter.formatDate(
+                            model.first().dateOfBirth,
+                            "yyyy-MM-dd",
+                            "dd MMM, yyyy"
+                        )
+                    )
+                    if (!model.first().eduLevel.isNullOrEmpty()) {
+                        setUpEduactionSpinner(model.first().eduLevel, true)
+                    } else {
+                        setUpEduactionSpinner(model.first().eduLevel, false)
+                    }
+                    if (!model.first().loanEmi.isNullOrEmpty()) {
+                        setUpSpinnerCurrentLoanEMISpinner(model.first().loanEmi, true)
+                    } else {
+                        setUpSpinnerCurrentLoanEMISpinner(model.first().loanEmi, false)
+                    }
+                    if (!model.first().monthlyOrder.isNullOrEmpty()) {
+                        setUpSpinnerAverageOrderSpinner(model.first().monthlyOrder, true)
+                    } else {
+                        setUpSpinnerAverageOrderSpinner(model.first().monthlyOrder, false)
+                    }
+                    if (!model.first().famMem.isNullOrEmpty()) {
+                        familyMemNumRecycler(model.first().famMem, true)
+                    } else {
+                        familyMemNumRecycler(model.first().famMem, false)
+                    }
+                    if (!model.first().homeOwnership.isNullOrEmpty()) {
+                        houseOwnerRecycler(model.first().homeOwnership, true)
+                    } else {
+                        houseOwnerRecycler(model.first().homeOwnership, false)
+                    }
+                    if (!model.first().residenceLocation.isNullOrEmpty()) {
+                        homeLocationRecycler(model.first().residenceLocation, true)
+                    } else {
+                        homeLocationRecycler(model.first().residenceLocation, false)
+                    }
+                    if (!model.first().married.isNullOrEmpty()) {
+                        marriageStatusRecycler(model.first().married, true)
+                    } else {
+                        marriageStatusRecycler(model.first().married, false)
+                    }
+                    if (!model.first().basketValue.isNullOrEmpty()) {
+                        setUpAverageBasketSpinner(model.first().basketValue, true)
+                    } else {
+                        setUpAverageBasketSpinner(model.first().basketValue, false)
+                    }
+                    if (!model.first().monthlyExp.isNullOrEmpty()) {
+                        setUpSpinnerMonthlyExpSpinner(model.first().monthlyExp, true)
+                    } else {
+                        setUpSpinnerMonthlyExpSpinner(model.first().monthlyExp, false)
+                    }
+                    if (!model.first().relationMarchent.isNullOrEmpty()) {
+                        setUpSpinnerKnownToMerchnatSpinner(model.first().relationMarchent, true)
+                    } else {
+                        setUpSpinnerKnownToMerchnatSpinner(model.first().relationMarchent, false)
+                    }
+
+                    binding?.merchantPhysicalShopExistsRadioGroup?.check(
+                        if (model.first().isLocalShop)
+                            R.id.merchantPhysicalShopExistsYes
+                        else
+                            R.id.merchantPhysicalShopExistsNo
+                    )
+                    binding?.totalMonthlyAverageSellET?.setText(
+                        if (model.first().monthlyTotalAverageSale.toInt().toString() == "0") {
+                            ""
+                        } else {
+                            model.first().monthlyTotalAverageSale.toInt().toString()
+                        }
+                    )
+                    binding?.OwnertypeofoownershipInBuisnessRadioGroup?.check(
+                        when (model.first().shopOwnership) {
+                            "নিজের" -> {
+                                R.id.InBuisnessRadioButtonOwner
+                            }
+                            "ভাড়া" -> {
+                                R.id.InBuisnessRadioButtonRental
+                            }
+                            "পরিবারের নিজস্ব" -> {
+                                R.id.InBuisnessRadioButtonFamily
+                            }
+                            else -> {
+                                R.id.InBuisnessRadioButtonOwner
+                            }
+                        }
+                    )
+                    binding?.totalCODFromOtherServicesET?.setText(
+                        model.first().monthlyTotalCodAmount.toDouble().toInt().toString()
+                    )
+                    binding?.merchantTakeLoanRadioGroup?.check(
+                        if (model.first().hasPreviousLoan) {
+                            R.id.merchantTakeLoanAccountYes
+                        } else {
+                            R.id.merchantTakeLoanAccountNo
+                        }
+                    )
+                    binding?.loanAMountET?.setText(
+                        if (model.first().loanAmount.toInt().toString() == 0.toString()) {
+                            ""
+                        } else {
+                            model.first().loanAmount.toInt().toString()
+                        }
+                    )
+                    /*binding?.loanAMountET?.setText(model.first().loanAmount.toInt().toString())*/
+                    if (!model.first().bankName.isNullOrEmpty()) {
+                        binding?.bankNameET?.setText(model.first().bankName)
+                    }
+                    binding?.loanRepayRadioGroupType?.check(
+                        if (model.first().repayType == "weekly") {
+                            R.id.loanRepayWeekly
+                        } else {
+                            R.id.loanRepayMonthly
+                        }
+                    )
+                    binding?.merchantHasBankAccountRadioGroup?.check(
+                        if (model.first().isBankAccount) {
+                            R.id.merchantHasBankAccountYes
+                        } else {
+                            R.id.merchantHasBankAccountNo
+                        }
+                    )
+                    if (!model.first().companyBankAccName.isNullOrEmpty()) {
+                        binding?.conmapyBankNameTextInput?.setText(model.first().companyBankAccName)
+                    }
+                    if (!model.first().companyBankAccNo.isNullOrEmpty()) {
+                        binding?.bankAccountNumberET?.setText(model.first().companyBankAccNo)
+                    }
+                    binding?.haveAnyCreditCardRadioGroup?.check(
+                        if (model.first().hasCreditCard) {
+                            R.id.yes_haveAnyCreditCard_radio_button
+                        } else {
+                            R.id.no_haveAnyCreditCard_radio_button
+                        }
+                    )
+                    if (!model.first().cardHolder.isNullOrEmpty()) {
+                        binding?.creditCardName?.setText(model.first().cardHolder)
+                    }
+                    if (!model.first().cardLimit.isNullOrEmpty()) {
+                        binding?.creditCardLimit?.setText(model.first().cardLimit)
+                    }
+                    binding?.haveAnyTINRadioGroup?.check(
+                        if (model.first().hasTin) {
+                            R.id.yes_haveAnyTin_radio_button
+                        } else {
+                            R.id.no_haveAnyTin_radio_button
+                        }
+                    )
+                    if (!model.first().tinNumber.isNullOrEmpty()) {
+                        binding?.teamTINNumberET?.setText(model.first().tinNumber)
+                    }
+                    binding?.merchantHasTradeLicenceRadioGroup?.check(
+                        if (model.first().hasTradeLicense) {
+                            R.id.merchantHasTradeLicenceYes
+                        } else {
+                            R.id.merchantHasTradeLicenceNo
+                        }
+                    )
+                    if (!model.first().tradeLicenseNo.isNullOrEmpty()) {
+                        binding?.tradeliesenceNOTV?.setText(model.first().tradeLicenseNo)
+                    }
+                    if (!model.first().tradeLicenseExpireDate.isNullOrEmpty()) {
+                        binding?.tradeliesencExpireDateTV?.setText(
+                            DigitConverter.formatDate(
+                                model.first().tradeLicenseExpireDate,
+                                "yyyy-MM-dd",
+                                "dd MMM yyyy"
+                            )
+                        )
+                    }
+
+                    if (!model.first().tradeLicenseImageUrl.isNullOrEmpty()) {
+                        binding?.imageTradeLicenceAddIV?.isVisible = false
+                        binding?.imageTradeLicencePickedIV?.isVisible = true
+                        binding?.imageTradeLicencePickedIV?.let { image ->
+                            Glide.with(image)
+                                .load(model.first().tradeLicenseImageUrl)
+                                .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .into(image)
+                        }
+                        tradeLicenseImageUrlFrag = model.first().tradeLicenseImageUrl
+                    }
+                    binding?.merchantHasGuarantorRadioGroup?.check(
+                        if (!model.first().guarantorMobile.isNullOrEmpty() && !model.first().guarantorName.isNullOrEmpty()) {
+                            R.id.merchantHasGuarantorYes
+                        } else {
+                            R.id.merchantHasGuarantorNo
+                        }
+                    )
+                    binding?.merchantGuarantorNameET?.setText(model.first().guarantorName)
+                    binding?.merchantGuarantorNumberET?.setText(model.first().guarantorMobile)
+                    binding?.loanRangeET?.setText(model.first().interestedAmount.toInt().toString())
+                    binding?.reqTenorMonthET?.setText(model.first().reqTenorMonth.toInt().toString())
+                    binding?.yearlyTotalIncomehET?.setText(
+                        model.first().annualTotalIncome.toInt().toString()
+                    )
+                    binding?.otherIncomeET?.setText(model.first().othersIncome.toInt().toString())
+                    binding?.monthlyTransactionET?.setText(
+                        model.first().transactionAmount.toDouble().toInt().toString()
+                    )
+                    courierList.clear()
+
+                    viewModel.fetchCourierList().observe(viewLifecycleOwner, Observer { list ->
+                        if (!list.isNullOrEmpty()) {
+                            for (index in 0 until list.size) {
+                                model.first().courierWithLoanSurvey.forEach { courrersofcurrnetUser ->
+                                    if (courrersofcurrnetUser.courierId == list[index].courierId
+                                    ) {
+                                        dataAdapter.multipleSelection(list[index], index)
+                                    }
+                                }
+                            }
+                            courierList.addAll(list)
+                            dataAdapter.initLoad(courierList)
+                        }
+                    })
+                }
+            })
     }
 
     private fun init() {
@@ -155,20 +399,16 @@ class LoanSurveyFragment : Fragment() {
     private fun initClickListener() {
 
         dataAdapter.onItemClicked = { model, position ->
-            //context?.toast(model)
             dataAdapter.multipleSelection(model, position)
         }
-        //2021-11-01T09:17:08.977Z
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         binding?.applyLoanBtn?.setOnClickListener {
             if (verify()) {
-                Timber.d("dataDebud $previousTakingLoanAmount $bankName")
-
                 var requestBody2 = LoanSurveyRequestBody(
                     age = adapterAge.selectedItem,
-                    annualTotalIncome = yearlyTotalIncome ?: 0,
+                    annualTotalIncome = yearlyTotalIncome.toDouble().toInt() ?: 0,
                     bankName = binding?.bankNameET?.text.toString(),
-                    basketvalue = selectedAverageBasket,
+                    basketValue = selectedAverageBasket,
                     cardHolder = binding?.creditCardName?.text.toString(),
                     cardLimit = binding?.creditCardLimit?.text.toString(),
                     companyBankAccName = binding?.conmapyBankNameTextInput?.text.toString().trim(),
@@ -184,7 +424,7 @@ class LoanSurveyFragment : Fragment() {
                     hasTin = binding?.haveAnyTINRadioGroup?.checkedRadioButtonId == R.id.yes_haveAnyTin_radio_button,
                     hasTradeLicense = binding?.merchantHasTradeLicenceRadioGroup?.checkedRadioButtonId == R.id.merchantHasTradeLicenceYes,
                     homeOwnership = houseOwnerAdapter.selectedItem,
-                    interestedAmount = loanRange.toInt(),
+                    interestedAmount = loanRange.toDouble().toInt(),
                     isBankAccount = hasBankAccount,
                     isLocalShop = hasPhysicalShop,
                     loanAmount = if (hasPreviousLoan) previousTakingLoanAmount else 0,
@@ -193,42 +433,45 @@ class LoanSurveyFragment : Fragment() {
                     merchantName = merchantName,
                     monthlyExp = selectedMonthlyExp,
                     monthlyOrder = selectedAverageOrder,
-                    monthlyTotalAverageSale = if (hasPhysicalShop) totalMonthlyAverageSell.toInt() else 0,
-                    monthlyTotalCodAmount = totalMonthlyCOD.toInt(),
+                    monthlyTotalAverageSale = if (hasPhysicalShop) totalMonthlyAverageSell.toDouble()
+                        .toInt() else 0,
+                    monthlyTotalCodAmount = totalMonthlyCOD.toDouble().toInt(),
                     nidNo = nidCardNo,
-                    othersIncome = binding?.otherIncomeET?.text.toString().trim().toInt() ?: 0,
+                    othersIncome = binding?.otherIncomeET?.text.toString().trim().toDouble().toInt()
+                        ?: 0,
                     recommend = "",
                     relationMarchent = selectedKnownMerchantDuration,
                     repayType = if (binding?.loanRepayRadioGroupType?.checkedRadioButtonId == R.id.loanRepayWeekly) "weekly" else "monthly",
-                    reqTenorMonth = loanRepayMonthPeriod,
+                    reqTenorMonth = loanRepayMonthPeriod.toInt() ?: 0,
                     residenceLocation = locationAdapter.selectedItem,
                     shopOwnership = selectedOwnerShipOfMarket,
                     tinNumber = binding?.teamTINNumberET?.text.toString().trim(),
                     tradeLicenseExpireDate = selectedDateTradeLisence,
-                    tradeLicenseImageUrl = imageTradeLicencePath,
+                    tradeLicenseImageUrl = tradeLicenseImageUrlFrag,
                     tradeLicenseNo = binding?.tradeliesenceNOTV?.text.toString().trim(),
-                    transactionAmount = monthlyTransaction.toInt(),
-                    hasPreviousLoan=  hasPreviousLoan
+                    transactionAmount = monthlyTransaction.toDouble().toInt() ?: 0,
+                    hasPreviousLoan = hasPreviousLoan,
+                    loanSurveyId = globalIDFOrLoan,
+                    applicationDate = if (applicationDate == "") sdf.format(Calendar.getInstance().time) else applicationDate
                 )
                 if (imagePickFlag == 1) {
                     requestBody2.apply {
-                        tradeLicenseImageUrl =
-                            "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg"
+                        tradeLicenseImageUrl = tradeLicenseImageUrlFrag
                     }
-                    Timber.d("requestBody 1 $requestBody2")
-
-                    uploadImage(
-                        "trade_${SessionManager.courierUserId}.jpg",
-                        "delivery_tiger/trade_license",
-                        imageTradeLicencePath, requestBody2
-                    )
+                    if (imageTradeLicencePath != "") {
+                        uploadImage(
+                            "trade_${SessionManager.courierUserId}.jpg",
+                            "delivery_tiger/trade_license",
+                            imageTradeLicencePath, requestBody2
+                        )
+                    } else {
+                        submitLoanSurveyData(requestBody2)
+                    }
                 } else {
-                    Timber.d("requestBody 2 $requestBody2")
-
                     submitLoanSurveyData(requestBody2)
                 }
+                Timber.d("reqBodyFrag $requestBody2")
             }
-
         }
         binding?.tradeliesencExpireDateTV?.setOnClickListener {
             datePickerTradeLisence()
@@ -260,6 +503,8 @@ class LoanSurveyFragment : Fragment() {
                 }
                 R.id.merchantHasBankAccountNo -> {
                     hasBankAccount = false
+                    binding?.bankAccountNumberET?.setText("")
+                    binding?.conmapyBankNameTextInput?.setText("")
                     binding?.hasBankAccountLayout?.visibility = View.GONE
                     binding?.bankAccountNumberLayout?.visibility = View.GONE
                     binding?.bankAccountNumberET?.visibility = View.GONE
@@ -283,6 +528,7 @@ class LoanSurveyFragment : Fragment() {
                 }
                 R.id.merchantPhysicalShopExistsNo -> {
                     hasPhysicalShop = false
+                    binding?.totalMonthlyAverageSellET?.setText("")
                     binding?.totalMonthlyAverageSellETLayout?.isVisible = false
                 }
             }
@@ -304,7 +550,11 @@ class LoanSurveyFragment : Fragment() {
                 }
                 R.id.merchantHasTradeLicenceNo -> {
                     hasTradeLicence = false
+                    binding?.imageTradeLicenceAddIV?.isVisible = true
+                    binding?.imageTradeLicencePickedIV?.isVisible = false
                     imagePickFlag = 0
+                    tradeLicenseImageUrlFrag = ""
+                    binding?.tradeliesenceNOTV?.setText("")
                     binding?.merchantTradeLicenceLayout?.isVisible = false
                     binding?.tradeliesencenoandexpiredateLayout?.visibility = View.GONE
                     binding?.tradeliesenceNOLayout?.visibility = View.GONE
@@ -330,6 +580,8 @@ class LoanSurveyFragment : Fragment() {
                 }
                 R.id.merchantHasGuarantorNo -> {
                     hasGuarantor = false
+                    binding?.merchantGuarantorNameET?.setText("")
+                    binding?.merchantGuarantorNumberET?.setText("")
                     binding?.merchantGuarantorLayout?.isVisible = false
                 }
             }
@@ -350,6 +602,8 @@ class LoanSurveyFragment : Fragment() {
                 }
                 R.id.merchantTakeLoanAccountNo -> {
                     hasPreviousLoan = false
+                    binding?.loanAMountET?.setText("")
+                    binding?.bankNameET?.setText("")
                     binding?.merchantLoanAmountETLayout?.isVisible = false
                     binding?.bankNameETETLayout?.isVisible = false
                     binding?.loanRepayMonthlyLayout?.isVisible = false
@@ -365,15 +619,12 @@ class LoanSurveyFragment : Fragment() {
             when (checkedId) {
                 R.id.InBuisnessRadioButtonOwner -> {
                     selectedOwnerShipOfMarket = "নিজের"
-
                 }
                 R.id.InBuisnessRadioButtonRental -> {
                     selectedOwnerShipOfMarket = "ভাড়া"
-
                 }
                 R.id.InBuisnessRadioButtonFamily -> {
                     selectedOwnerShipOfMarket = "পরিবারের নিজস্ব"
-
                 }
             }
         }
@@ -391,6 +642,8 @@ class LoanSurveyFragment : Fragment() {
                     }
                     R.id.no_haveAnyCreditCard_radio_button -> {
                         hasCreditCard = false
+                        binding?.creditCardLimit?.setText("")
+                        binding?.creditCardName?.setText("")
                         bankLayoutVisibility?.isVisible = false
                         cardLimitLayout?.isVisible = false
                         bankNameLayout?.isVisible = false
@@ -410,6 +663,7 @@ class LoanSurveyFragment : Fragment() {
                     }
                     R.id.no_haveAnyTin_radio_button -> {
                         hasTin = false
+                        binding?.teamTINNumberET?.setText("")
                         TIINNumberLayout.isVisible = false
                         teamTINNumberET.isVisible = false
                     }
@@ -422,7 +676,7 @@ class LoanSurveyFragment : Fragment() {
         courierList.clear()
 
         viewModel.fetchCourierList().observe(viewLifecycleOwner, Observer { list ->
-            if (list.isNotEmpty()) {
+            if (!list.isNullOrEmpty()) {
                 courierList.addAll(list)
                 dataAdapter.initLoad(courierList)
             }
@@ -436,6 +690,474 @@ class LoanSurveyFragment : Fragment() {
             .createIntent { intent ->
                 startImagePickerResult.launch(intent)
             }
+    }
+
+    private val startImagePickerResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val resultCode = result.resultCode
+            val data = result.data
+            if (resultCode == Activity.RESULT_OK) {
+                val uri = data?.data!!
+
+                when (imagePickFlag) {
+                    1 -> {
+                        binding?.imageTradeLicenceAddIV?.isVisible = false
+                        binding?.imageTradeLicencePickedIV?.isVisible = true
+
+                        imagePath = uri.path ?: ""
+                        binding?.imageTradeLicencePickedIV?.let { view ->
+                            Glide.with(requireContext())
+                                .load(imagePath)
+                                .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
+                                .into(view)
+                        }
+                        imageTradeLicencePath = imagePath
+                        tradeLicenseImageUrlFrag =
+                            "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg"
+                    }
+                    2 -> {
+                        /*binding?.imagePayslipAddIV?.isVisible = false
+                        binding?.imagePayslipPickedIV?.isVisible = true
+
+                        imagePath = uri.path ?: ""
+                        binding?.imagePayslipPickedIV?.let { view ->
+                            Glide.with(requireContext())
+                                .load(imagePath)
+                                .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
+                                .into(view)
+                        }
+                        imagePayslipPath = imagePath*/
+                        imagePickFlag = 0
+                    }
+                    3 -> {
+                        //binding?.imageIdAddIV?.isVisible = false
+                        //binding?.imageIdPickedIV?.isVisible = true
+
+                        imagePath = uri.path ?: ""
+                        /*binding?.imageIdPickedIV?.let { view ->
+                            Glide.with(requireContext())
+                                .load(imagePath)
+                                .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
+                                .into(view)
+                        }
+                        imageIdPath = imagePath*/
+                        imagePickFlag = 0
+                    }
+                    else -> {
+                        imagePickFlag = 0
+                    }
+                }
+            } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                context?.toast(ImagePicker.getError(data))
+                imagePickFlag = 0
+            }
+        }
+
+    private fun uploadImage(fileName: String, imagePath: String, fileUrl: String, requestBody: LoanSurveyRequestBody) {
+        val progressDialog = progressDialog()
+        progressDialog.show()
+        viewModel.imageUploadForFile(requireContext(), fileName, imagePath, fileUrl)
+            .observe(viewLifecycleOwner, Observer { model ->
+                progressDialog.dismiss()
+                if (model) {
+                    submitLoanSurveyData(requestBody)
+                    Timber.d("reqBodyFrag $requestBody")
+                    context?.toast("Uploaded successfully")
+                } else {
+                    context?.toast("Uploaded Failed")
+                }
+            })
+    }
+
+    private fun submitLoanSurveyData(requestBody: LoanSurveyRequestBody) {
+        val progressDialog = progressDialog()
+        progressDialog.show()
+        progressDialog.setCanceledOnTouchOutside(false)
+        if (isPut) {
+            viewModel.updateLoanSurvey(requestBody, SessionManager.accessToken)
+                .observe(viewLifecycleOwner, { model ->
+                    SessionManager.isSurveyUpdate = true
+                    val tempLoanSurveyId = globalIDFOrLoan
+                    selectedCourierList.clear()
+                    for (item in dataAdapter.getSelectedItemModelList()) {
+                        item.apply {
+                            loanSurveyId = tempLoanSurveyId
+                        }
+                        selectedCourierList.add(item)
+                    }
+                    viewModel.updateCourierWithLoanSurvey(
+                        selectedCourierList,
+                        tempLoanSurveyId,
+                        SessionManager.accessToken
+                    )
+                        .observe(viewLifecycleOwner, {})
+                    progressDialog.dismiss()
+                    findNavController().popBackStack()
+                    showAlert()
+                })
+        } else {
+            viewModel.submitLoanSurvey(requestBody).observe(viewLifecycleOwner, Observer { model ->
+                SessionManager.isSurveyUpdate = false
+                val tempLoanSurveyId =
+                    if (globalIDFOrLoan == 0) model.loanSurveyId else globalIDFOrLoan
+                selectedCourierList.clear()
+                for (item in dataAdapter.getSelectedItemModelList()) {
+                    item.apply {
+                        loanSurveyId = tempLoanSurveyId
+                    }
+                    selectedCourierList.add(item)
+                }
+                viewModel.submitCourierList(selectedCourierList)
+                progressDialog.dismiss()
+                findNavController().popBackStack()
+                showAlert()
+            })
+        }
+    }
+
+    private fun showAlert() {
+        val titleText = "নির্দেশনা"
+        val descriptionText = "সার্ভেটি পূরণ করার জন্য ধন্যবাদ।"
+        val descriptionTextOnUpdate = "সার্ভেটি আপডেট করার জন্য ধন্যবাদ।"
+        if (SessionManager.isSurveyUpdate) {
+            alert(titleText, descriptionTextOnUpdate, false, "ঠিক আছে", "না").show()
+        } else {
+            alert(titleText, descriptionText, false, "ঠিক আছে", "না").show()
+        }
+    }
+
+    private fun warning() {
+        val titleText = "নির্দেশনা"
+        val descriptionText =
+            "আপনি ইতিপূর্বে একবার সার্ভেটি পূরণ করেছেন, আপনি কি আবার পূরণ করতে ইচ্ছুক?"
+        alert(titleText, descriptionText, false, "হ্যাঁ") {
+            if (it == AlertDialog.BUTTON_POSITIVE) {
+//                findNavController().popBackStack()
+            }
+        }.apply {
+            setCanceledOnTouchOutside(false)
+            show()
+        }
+    }
+
+    private fun fetchBanner() {
+        val options = RequestOptions()
+            .placeholder(R.drawable.ic_banner_place)
+            .signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
+        binding?.bannerImage?.let { image ->
+            Glide.with(image)
+                .load("https://static.ajkerdeal.com/images/merchant/loan_banner.jpg")
+                .apply(options)
+                .into(image)
+        }
+    }
+
+    private fun ageRecycler(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
+
+        val dataListAge: MutableList<String> = mutableListOf()
+        dataListAge.add("১৮-২৫")
+        dataListAge.add("২৫-৩০")
+        dataListAge.add("৩০-৩৫")
+        dataListAge.add("৩৫-৬৫")
+        val indexOfselectedItem = dataListAge.indexOf(preselectedItem)
+        adapterAge.initLoad(dataListAge, indexOfselectedItem, hasPreviousSelection)
+        binding?.ageRecyclerView?.let { recyclerView ->
+            recyclerView.apply {
+                layoutManager =
+                    GridLayoutManager(requireContext(), 4, GridLayoutManager.VERTICAL, false)
+                adapter = adapterAge
+                itemAnimator = null
+            }
+        }
+    }
+
+    private fun familyMemNumRecycler(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
+
+        val education: List<String> = listOf("২-৫", "৫-৭", "৭-১০", "১০-১৫")
+        val indexOfselectedItem = education.indexOf(preselectedItem)
+        familyMemNumAdapter.initLoad(education, indexOfselectedItem, hasPreviousSelection)
+        binding?.FamilyMemNumRecyclerView?.let { recyclerView ->
+            recyclerView.apply {
+                layoutManager =
+                    GridLayoutManager(requireContext(), 4, GridLayoutManager.VERTICAL, false)
+                adapter = familyMemNumAdapter
+                itemAnimator = null
+            }
+        }
+    }
+
+    private fun homeLocationRecycler(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
+
+        val location: List<String> = listOf("মহানগর", "সিটি কর্পোরেশন", "শহরে", "গ্রামে")
+        val indexOfselectedItem = location.indexOf(preselectedItem)
+
+        locationAdapter.initLoad(location, indexOfselectedItem, hasPreviousSelection)
+        binding?.residenceLocationRecyclerView?.let { recyclerView ->
+            recyclerView.apply {
+                layoutManager =
+                    GridLayoutManager(requireContext(), 4, GridLayoutManager.VERTICAL, false)
+                adapter = locationAdapter
+                itemAnimator = null
+            }
+        }
+    }
+
+    private fun marriageStatusRecycler(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
+
+        val location: List<String> =
+            listOf("বিবাহিত", "অবিবাহিত", "তালাকপ্রাপ্ত", "বিধবা/ বিপত্নীক")
+        val indexOfselectedItem = location.indexOf(preselectedItem)
+        marriageStatusAdapter.initLoad(location, indexOfselectedItem, hasPreviousSelection)
+        binding?.marriageRecyclerView?.let { recyclerView ->
+            recyclerView.apply {
+                layoutManager =
+                    GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
+                adapter = marriageStatusAdapter
+                itemAnimator = null
+            }
+        }
+    }
+
+    private fun houseOwnerRecycler(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
+        val houseOwner: List<String> = listOf("নিজের", "পরিবারের নিজস্ব", "ভাড়া")
+        val indexOfselectedItem = houseOwner.indexOf(preselectedItem)
+
+        houseOwnerAdapter.initLoad(houseOwner, indexOfselectedItem, hasPreviousSelection)
+        binding?.houseOwnerRecyclerView?.let { recyclerView ->
+            recyclerView.apply {
+                layoutManager =
+                    GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
+                adapter = houseOwnerAdapter
+                itemAnimator = null
+            }
+        }
+    }
+
+    private fun setUpEduactionSpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
+
+        val dataListAge: MutableList<String> = mutableListOf(
+            "বেছে নিন", "প্রাতিষ্ঠানিক শিক্ষা নেই", "পি এস সি", "জে এস সি", "এস এস সি",
+            "এইচ এস সি", "স্নাতক", "স্নাতকোত্তর"
+        )
+        val indexOfselectedItem = dataListAge.indexOf(preselectedItem)
+
+        val spinnerAdapter =
+            CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, dataListAge)
+
+        binding?.spinnereducationType?.adapter = spinnerAdapter
+        if (indexOfselectedItem > 0) {
+            binding?.spinnereducationType?.setSelection(indexOfselectedItem)
+        }
+        binding?.spinnereducationType?.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedEducation = if (position > 0) {
+                        spinnerAdapter.getItem(position)!!
+                    } else {
+                        ""
+                    }
+                }
+            }
+    }
+
+    private fun setUpAverageBasketSpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
+
+        val AverageBasket: MutableList<String> = mutableListOf(
+            "বেছে নিন", "১০০০০০-২০০০০০",
+            "২০০০০০-৪০০০০০", "৪০০০০০-৬০০০০০", "৬০০০০০-৮০০০০০", "৮০০০০০-১০০০০০০", "১০০০০০০-১২০০০০০"
+        )
+        val indexOfselectedItem = AverageBasket.indexOf(preselectedItem)
+        val spinnerAdapter =
+            CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, AverageBasket)
+        binding?.spinneraverageBasketType?.adapter = spinnerAdapter
+        binding?.spinneraverageBasketType?.setSelection(indexOfselectedItem)
+        binding?.spinneraverageBasketType?.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedAverageBasket = if (position > 0) {
+                        spinnerAdapter.getItem(position)!!
+                    } else {
+                        ""
+                    }
+                }
+            }
+    }
+
+    private fun setUpSpinnerKnownToMerchnatSpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
+
+        val knownToMerchant: MutableList<String> = mutableListOf(
+            "বেছে নিন", "০-১", "১-২", "২-৪", "৪-৬", "৬-৮", "৮-১০", "১০-১৫", "১৫-২০"
+        )
+        val indexOfselectedItem = knownToMerchant.indexOf(preselectedItem)
+        val spinnerAdapter =
+            CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, knownToMerchant)
+        binding?.spinneraverKnownToMerchnat?.adapter = spinnerAdapter
+        binding?.spinneraverKnownToMerchnat?.setSelection(indexOfselectedItem)
+        binding?.spinneraverKnownToMerchnat?.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedKnownMerchantDuration = if (position > 0) {
+                        spinnerAdapter.getItem(position)!!
+                    } else {
+                        ""
+                    }
+                }
+            }
+    }
+
+    private fun setUpSpinnerAverageOrderSpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
+
+        val averageOrder: MutableList<String> = mutableListOf(
+            "বেছে নিন", "০-৫০০", "৫০০-১০০০", "১০০০-১৫০০", "১৫০০-২০০০", "২০০০-৩০০০", "৩০০০-৪০০০"
+        )
+        val indexOfselectedItem = averageOrder.indexOf(preselectedItem)
+        val spinnerAdapter =
+            CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, averageOrder)
+        binding?.AverageOrderToMerchnat?.adapter = spinnerAdapter
+        binding?.AverageOrderToMerchnat?.setSelection(indexOfselectedItem)
+        binding?.AverageOrderToMerchnat?.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedAverageOrder = if (position > 0) {
+                        spinnerAdapter.getItem(position)!!
+                    } else {
+                        ""
+                    }
+                }
+            }
+    }
+
+    private fun setUpSpinnerMonthlyExpSpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
+
+        val MonthlyExp: MutableList<String> = mutableListOf(
+            "বেছে নিন", "০-৫,০০০", "৫,০০০-১০,০০০", "১০,০০০-১৫,০০০", "১৫,০০০-২০,০০০",
+            "২০,০০০-২৫,০০০", "২৫,০০০-৩০,০০০", "৩০,০০০-৪০,০০০", "৪০,০০০-৬০,০০০", "৬০,০০০-১,০০,০০০"
+        )
+
+        val indexOfselectedItem = MonthlyExp.indexOf(preselectedItem)
+        val spinnerAdapter =
+            CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, MonthlyExp)
+        binding?.spinnerMonthlyExpType?.adapter = spinnerAdapter
+        binding?.spinnerMonthlyExpType?.setSelection(indexOfselectedItem)
+        binding?.spinnerMonthlyExpType?.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedMonthlyExp = if (position > 0) {
+                        spinnerAdapter.getItem(position)!!
+                    } else {
+                        ""
+                    }
+                }
+            }
+    }
+
+    private fun setUpSpinnerCurrentLoanEMISpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
+
+        val CurrentLoanEMI: MutableList<String> = mutableListOf(
+            "বেছে নিন", "৫০০-১০০০", "১০০০-২০০০", "২০০০-৪০০০", "৪০০০-৬০০০", "৬০০০-৮০০০",
+            "৮০০০-১০০০০", "১০০০০-১২০০০", "১২০০০-১৫০০০", "১৫০০০-২০০০০"
+        )
+        val indexOfselectedItem = CurrentLoanEMI.indexOf(preselectedItem)
+        val spinnerAdapter =
+            CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, CurrentLoanEMI)
+        binding?.spinnerCurrentLoanEMIType?.adapter = spinnerAdapter
+        binding?.spinnerCurrentLoanEMIType?.setSelection(indexOfselectedItem)
+        binding?.spinnerCurrentLoanEMIType?.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedCurrentLoanEMI = if (position > 0) {
+                        spinnerAdapter.getItem(position)!!
+                    } else {
+                        ""
+                    }
+                }
+            }
+    }
+
+    private fun datePickerTradeLisence() {
+        val builder = MaterialDatePicker.Builder.datePicker()
+        builder.setTheme(R.style.CustomMaterialCalendarTheme)
+        builder.setTitleText("Select trade license ")
+        val picker = builder.build()
+        picker.show(childFragmentManager, "Picker")
+        picker.addOnPositiveButtonClickListener {
+            setDateRangePickerTitleTradeLisencee(it)
+        }
+    }
+
+    private fun setDateRangePickerTitleTradeLisencee(selectedDOB: Long, fromInit: Boolean = false, serverDate: String = "") {
+        if (fromInit) {
+            selectedDateTradeLisence =
+                DigitConverter.formatDate(serverDate, "yyyy-MM-dd", "yyyy-MM-dd")
+            selectedDateFormattedTradeLisence =
+                DigitConverter.formatDate(serverDate, "yyyy-MM-dd", "dd MMM yyyy")
+            binding?.tradeliesencExpireDateTV?.setText(selectedDateFormattedTradeLisence)
+            isExpireDateofTradeLisenseSelectd = true
+        } else {
+            selectedDateTradeLisence = sdf.format(selectedDOB)
+            selectedDateFormattedTradeLisence = sdf1.format(selectedDOB)
+            binding?.tradeliesencExpireDateTV?.setText(selectedDateFormattedTradeLisence)
+            isExpireDateofTradeLisenseSelectd = true
+        }
+    }
+
+    private fun datePickerDOB() {
+        val builder = MaterialDatePicker.Builder.datePicker()
+        builder.setTheme(R.style.CustomMaterialCalendarTheme)
+        builder.setTitleText("Select your birthday")
+        val picker = builder.build()
+        picker.show(childFragmentManager, "Picker")
+        picker.addOnPositiveButtonClickListener {
+            setDateRangePickerTitleDOB(it)
+        }
+    }
+
+    private fun setDateRangePickerTitleDOB(selectedDOB: Long, fromInit: Boolean = false, serverDate: String = "") {
+        if (fromInit) {
+            selectedDateDOB = DigitConverter.formatDate(serverDate, "yyyy-MM-dd", "yyyy-MM-dd")
+            selectedDateFormattedDOB =
+                DigitConverter.formatDate(serverDate, "yyyy-MM-dd", "dd MMM yyyy")
+            binding?.DOBET?.setText(selectedDateFormattedDOB)
+        } else {
+            selectedDateDOB = sdf.format(selectedDOB)
+            selectedDateFormattedDOB = sdf1.format(selectedDOB)
+            binding?.DOBET?.setText(selectedDateFormattedDOB)
+        }
     }
 
     private fun verify(): Boolean {
@@ -517,10 +1239,13 @@ class LoanSurveyFragment : Fragment() {
         if (loanRepayMonthPeriod.isEmpty()) {
             context?.toast("আপনি কত মাসের মধ্যে লোন পরিশোধ করতে ইচ্ছুক")
             return false
+        } else if (loanRepayMonthPeriod.toDouble().toInt() ?: 0 >= 60) {
+            context?.toast("লোন পরিশোধের সময় ৬০ মাসের মধ্যে হয়া বাধ্যতামূলক")
+            return false
         }
 
-        yearlyTotalIncome = binding?.yearlyTotalIncomehET?.text.toString().toInt() ?: 0
-        if (yearlyTotalIncome == 0) {
+        yearlyTotalIncome = binding?.yearlyTotalIncomehET?.text.toString()
+        if (yearlyTotalIncome.isNullOrEmpty()) {
             context?.toast("আপনার বাৎসরিক সর্বমোট আয় উল্লেখ করুন")
             return false
         }
@@ -530,7 +1255,7 @@ class LoanSurveyFragment : Fragment() {
             return false
         }
 
-        monthlyTransaction = binding?.monthlyTransactionET?.text.toString()?: ""
+        monthlyTransaction = binding?.monthlyTransactionET?.text.toString() ?: ""
         if (monthlyTransaction.isEmpty()) {
             context?.toast("মাসিক অনলাইন ট্রানজেকশন লিখুন")
             return false
@@ -557,7 +1282,7 @@ class LoanSurveyFragment : Fragment() {
         }
 
 
-        totalMonthlyCOD = binding?.totalCODFromOtherServicesET?.text.toString()?: ""
+        totalMonthlyCOD = binding?.totalCODFromOtherServicesET?.text.toString() ?: ""
         if (totalMonthlyCOD.isEmpty()) {
             context?.toast("আপনার টোটাল মাসিক COD দিন")
             return false
@@ -574,12 +1299,14 @@ class LoanSurveyFragment : Fragment() {
         }
 
         if (hasPreviousLoan) {
-            if (binding?.loanAMountET?.text.isNullOrBlank() || binding?.loanAMountET?.text.toString().toInt() ?: 0 < 1
+            if (binding?.loanAMountET?.text.isNullOrBlank() || binding?.loanAMountET?.text.toString()
+                    .toDouble().toInt() ?: 0 < 1
             ) {
                 context?.toast("পূর্বের লোনের পরিমাণ লিখুন")
                 return false
             } else {
-                previousTakingLoanAmount = binding?.loanAMountET?.text.toString().toInt() ?: 0
+                previousTakingLoanAmount =
+                    binding?.loanAMountET?.text.toString().toDouble().toInt() ?: 0
             }
             if (binding?.bankNameET?.text!!.isEmpty()) {
                 context?.toast("ব্যাংকের নাম লিখুন")
@@ -636,10 +1363,12 @@ class LoanSurveyFragment : Fragment() {
         }
 
         if (hasTin) {
-            if (binding?.teamTINNumberET?.text.toString()
-                    .isEmpty() || (binding?.teamTINNumberET?.text.toString().trim().length < 12)
-            ) {
+            if (binding?.teamTINNumberET?.text.toString().isEmpty()) {
                 context?.toast("আপনার TIN নাম্বার দিন")
+                return false
+            }
+            if (binding?.teamTINNumberET?.text.toString().trim().length < 12) {
+                context?.toast("ট্টিন নাম্বার ১১ ডিজিট হওয়া বাধ্যতামূলক")
                 return false
             }
         }
@@ -648,22 +1377,28 @@ class LoanSurveyFragment : Fragment() {
             context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
             return false
         }
+
         if (binding?.merchantHasTradeLicenceRadioGroup?.checkedRadioButtonId == R.id.merchantHasTradeLicenceYes
             && (binding?.tradeliesenceNOTV?.text.toString()
                 .isEmpty() || binding?.tradeliesencExpireDateTV?.text.toString().isEmpty())
         ) {
-            context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
-            return false
+            return if (!isExpireDateofTradeLisenseSelectd) {
+                context?.toast("ট্রেড লাইসেন্স এর এক্সপায়ার ডেট এড করুন")
+                false
+            } else if (binding?.tradeliesenceNOTV?.text.toString().isEmpty()) {
+                context?.toast("ট্রেড লাইসেন্স এর নাম্বার দিন")
+                false
+            } else {
+                context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
+                false
+            }
         }
+
         if (imagePickFlag == 1) {
-            if (imageTradeLicencePath.isEmpty()) {
+            if (tradeLicenseImageUrlFrag.isEmpty()) {
                 context?.toast("ট্রেড লাইসেন্স এর ছবি অ্যাড করুন")
                 return false
             }
-        }
-        if (!isExpireDateofTradeLisenseSelectd) {
-            context?.toast("ট্রেড লাইসেন্স এর এক্সপায়ার ডেট এড করুন")
-            return false
         }
 
 
@@ -707,536 +1442,4 @@ class LoanSurveyFragment : Fragment() {
         }*/
         return true
     }
-
-    private val startImagePickerResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val resultCode = result.resultCode
-            val data = result.data
-            if (resultCode == Activity.RESULT_OK) {
-                val uri = data?.data!!
-
-                when (imagePickFlag) {
-                    1 -> {
-                        binding?.imageTradeLicenceAddIV?.isVisible = false
-                        binding?.imageTradeLicencePickedIV?.isVisible = true
-
-                        imagePath = uri.path ?: ""
-                        binding?.imageTradeLicencePickedIV?.let { view ->
-                            Glide.with(requireContext())
-                                .load(imagePath)
-                                .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
-                                .into(view)
-                        }
-                        imageTradeLicencePath = imagePath
-                        //imagePickFlag = 0
-                    }
-                    2 -> {
-                        /*binding?.imagePayslipAddIV?.isVisible = false
-                        binding?.imagePayslipPickedIV?.isVisible = true
-
-                        imagePath = uri.path ?: ""
-                        binding?.imagePayslipPickedIV?.let { view ->
-                            Glide.with(requireContext())
-                                .load(imagePath)
-                                .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
-                                .into(view)
-                        }
-                        imagePayslipPath = imagePath*/
-                        imagePickFlag = 0
-                    }
-                    3 -> {
-                        //binding?.imageIdAddIV?.isVisible = false
-                        //binding?.imageIdPickedIV?.isVisible = true
-
-                        imagePath = uri.path ?: ""
-                        /*binding?.imageIdPickedIV?.let { view ->
-                            Glide.with(requireContext())
-                                .load(imagePath)
-                                .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
-                                .into(view)
-                        }
-                        imageIdPath = imagePath*/
-                        imagePickFlag = 0
-                    }
-                    else -> {
-                        imagePickFlag = 0
-                    }
-                }
-            } else if (resultCode == ImagePicker.RESULT_ERROR) {
-                context?.toast(ImagePicker.getError(data))
-                imagePickFlag = 0
-            }
-        }
-
-    private fun uploadImage(
-        fileName: String,
-        imagePath: String,
-        fileUrl: String,
-        requestBody: LoanSurveyRequestBody
-    ) {
-
-        val progressDialog = progressDialog()
-        progressDialog.show()
-
-        Timber.d("requestBody $fileName, $imagePath, $fileUrl")
-        viewModel.imageUploadForFile(requireContext(), fileName, imagePath, fileUrl)
-            .observe(viewLifecycleOwner, Observer { model ->
-                progressDialog.dismiss()
-                if (model) {
-                    submitLoanSurveyData(requestBody)
-                    context?.toast("Uploaded successfully")
-
-                } else {
-                    context?.toast("Uploaded Failed")
-                }
-            })
-    }
-
-    private fun submitLoanSurveyData(requestBody: LoanSurveyRequestBody) {
-        val progressDialog = progressDialog()
-        progressDialog.show()
-        progressDialog.setCanceledOnTouchOutside(false)
-        viewModel.submitLoanSurvey(requestBody).observe(viewLifecycleOwner, Observer { model ->
-            SessionManager.isSurveyComplete = true
-            val tempLoanSurveyId = model.loanSurveyId
-
-
-            Timber.d("requestBody 3 ${model.loanSurveyId}")
-
-            selectedCourierList.clear()
-            for (item in dataAdapter.getSelectedItemModelList()) {
-                item.apply {
-                    loanSurveyId = tempLoanSurveyId
-                }
-                selectedCourierList.add(item)
-            }
-
-            Timber.d("requestBody 3 $selectedCourierList")
-            viewModel.submitCourierList(selectedCourierList)
-            progressDialog.dismiss()
-            findNavController().popBackStack()
-            showAlert()
-        })
-    }
-
-    private fun showAlert() {
-        val titleText = "নির্দেশনা"
-        val descriptionText = "সার্ভেটি পূরণ করার জন্য ধন্যবাদ।"
-        alert(titleText, descriptionText, false, "ঠিক আছে", "না").show()
-    }
-
-    private fun warning() {
-        val titleText = "নির্দেশনা"
-        val descriptionText =
-            "আপনি ইতিপূর্বে একবার সার্ভেটি পূরণ করেছেন, আপনি কি আবার পূরণ করতে ইচ্ছুক?"
-        alert(titleText, descriptionText, false, "হ্যাঁ") {
-            if (it == AlertDialog.BUTTON_POSITIVE) {
-                findNavController().popBackStack()
-            }
-        }.apply {
-            setCanceledOnTouchOutside(false)
-            show()
-        }
-    }
-
-    private fun fetchBanner() {
-        val options = RequestOptions()
-            .placeholder(R.drawable.ic_banner_place)
-            .signature(ObjectKey(Calendar.getInstance().get(Calendar.DAY_OF_YEAR).toString()))
-        binding?.bannerImage?.let { image ->
-            Glide.with(image)
-                .load("https://static.ajkerdeal.com/images/merchant/loan_banner.jpg")
-                .apply(options)
-                .into(image)
-        }
-    }
-
-    private fun ageRecycler() {
-
-        val dataListAge: MutableList<String> = mutableListOf()
-        dataListAge.add("১৮-২৫")
-        dataListAge.add("২৫-৩০")
-        dataListAge.add("৩০-৩৫")
-        dataListAge.add("৩৫-৬৫")
-
-        adapterAge.initLoad(dataListAge)
-        binding?.ageRecyclerView?.let { recyclerView ->
-            recyclerView.apply {
-                layoutManager =
-                    GridLayoutManager(requireContext(), 4, GridLayoutManager.VERTICAL, false)
-                adapter = adapterAge
-                itemAnimator = null
-            }
-        }
-
-    }
-
-
-    private fun familyMemNumRecycler() {
-
-        val education: List<String> = listOf(
-            "২-৫",
-            "৫-৭",
-            "৭-১০",
-            "১০-১৫"
-        )
-
-        familyMemNumAdapter.initLoad(education)
-        binding?.FamilyMemNumRecyclerView?.let { recyclerView ->
-            recyclerView.apply {
-                layoutManager =
-                    GridLayoutManager(requireContext(), 4, GridLayoutManager.VERTICAL, false)
-                adapter = familyMemNumAdapter
-                itemAnimator = null
-            }
-        }
-    }
-
-    private fun homeLocationRecycler() {
-
-        val location: List<String> = listOf(
-            "মহানগর",
-            "সিটি কর্পোরেশন",
-            "শহরে",
-            "গ্রামে"
-        )
-
-        locationAdapter.initLoad(location)
-        binding?.residenceLocationRecyclerView?.let { recyclerView ->
-            recyclerView.apply {
-                layoutManager =
-                    GridLayoutManager(requireContext(), 4, GridLayoutManager.VERTICAL, false)
-                adapter = locationAdapter
-                itemAnimator = null
-            }
-        }
-    }
-
-    private fun marriageStatusRecycler() {
-
-        val location: List<String> = listOf(
-            "বিবাহিত",
-            "অবিবাহিত",
-            "তালাকপ্রাপ্ত",
-            "বিধবা/ বিপত্নীক"
-        )
-
-        marriageStatusAdapter.initLoad(location)
-        binding?.marriageRecyclerView?.let { recyclerView ->
-            recyclerView.apply {
-                layoutManager =
-                    GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
-                adapter = marriageStatusAdapter
-                itemAnimator = null
-            }
-        }
-    }
-
-
-    /*private fun recommendationRecycler() {
-
-        val recommendation: List<String> = listOf(
-            "মোটামুটি",
-            "ভাল",
-            "খুব  ভাল",
-            "চমৎকার"
-        )
-
-        recommendationAdapter.initLoad(recommendation)
-        binding?.recommendationRecyclerView?.let { recyclerView ->
-            recyclerView.apply {
-                layoutManager =
-                    GridLayoutManager(requireContext(), 4, GridLayoutManager.VERTICAL, false)
-                adapter = recommendationAdapter
-                itemAnimator = null
-            }
-        }
-    }*/
-
-    private fun houseOwnerRecycler() {
-        val houseOwner: List<String> = listOf(
-            "নিজের",
-            "পরিবারের নিজস্ব",
-            "ভাড়া"
-        )
-        houseOwnerAdapter.initLoad(houseOwner)
-        binding?.houseOwnerRecyclerView?.let { recyclerView ->
-            recyclerView.apply {
-                layoutManager =
-                    GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
-                adapter = houseOwnerAdapter
-                itemAnimator = null
-            }
-        }
-    }
-
-    private fun setUpEduactionSpinner() {
-
-        val dataListAge: MutableList<String> = mutableListOf(
-            "বেছে নিন",
-            "প্রাতিষ্ঠানিক শিক্ষা নেই",
-            "পি এস সি",
-            "জে এস সি",
-            "এস এস সি",
-            "এইচ এস সি",
-            "স্নাতক",
-            "স্নাতকোত্তর"
-        )
-
-        val spinnerAdapter =
-            CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, dataListAge)
-        binding?.spinnereducationType?.adapter = spinnerAdapter
-        binding?.spinnereducationType?.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    selectedEducation = if (position > 0) {
-                        spinnerAdapter.getItem(position)!!
-                    } else {
-                        ""
-                    }
-                }
-            }
-    }
-
-    private fun setUpAverageBasketSpinner() {
-
-        val AverageBasket: MutableList<String> = mutableListOf(
-            "বেছে নিন",
-            "১০০০০০-২০০০০০",
-            "২০০০০০-৪০০০০০",
-            "৪০০০০০-৬০০০০০",
-            "৬০০০০০-৮০০০০০",
-            "৮০০০০০-১০০০০০০",
-            "১০০০০০০-১২০০০০০"
-        )
-        val spinnerAdapter =
-            CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, AverageBasket)
-        binding?.spinneraverageBasketType?.adapter = spinnerAdapter
-        binding?.spinneraverageBasketType?.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    selectedAverageBasket = if (position > 0) {
-                        spinnerAdapter.getItem(position)!!
-                    } else {
-                        ""
-                    }
-                }
-            }
-    }
-
-    private fun setUpSpinnerKnownToMerchnatSpinner() {
-
-        val knownToMerchant: MutableList<String> = mutableListOf(
-            "বেছে নিন",
-            "০-১",
-            "১-২",
-            "২-৪",
-            "৪-৬",
-            "৬-৮",
-            "৮-১০",
-            "১০-১৫",
-            "১৫-২০"
-        )
-        val spinnerAdapter =
-            CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, knownToMerchant)
-        binding?.spinneraverKnownToMerchnat?.adapter = spinnerAdapter
-        binding?.spinneraverKnownToMerchnat?.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    selectedKnownMerchantDuration = if (position > 0) {
-                        spinnerAdapter.getItem(position)!!
-                    } else {
-                        ""
-                    }
-                }
-            }
-    }
-
-    private fun setUpSpinnerAverageOrderSpinner() {
-
-        val averageOrder: MutableList<String> = mutableListOf(
-            "বেছে নিন",
-            "০-৫০০",
-            "৫০০-১০০০",
-            "১০০০-১৫০০",
-            "১৫০০-২০০০",
-            "২০০০-৩০০০",
-            "৩০০০-৪০০০"
-        )
-        val spinnerAdapter =
-            CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, averageOrder)
-        binding?.AverageOrderToMerchnat?.adapter = spinnerAdapter
-        binding?.AverageOrderToMerchnat?.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    selectedAverageOrder = if (position > 0) {
-                        spinnerAdapter.getItem(position)!!
-                    } else {
-                        ""
-                    }
-                }
-            }
-    }
-
-    private fun setUpSpinnerMonthlyExpSpinner() {
-
-        val MonthlyExp: MutableList<String> = mutableListOf(
-            "বেছে নিন",
-            "০-৫,০০০",
-            "৫,০০০-১০,০০০",
-            "১০,০০০-১৫,০০০",
-            "১৫,০০০-২০,০০০",
-            "২০,০০০-২৫,০০০",
-            "২৫,০০০-৩০,০০০",
-            "৩০,০০০-৪০,০০০",
-            "৪০,০০০-৬০,০০০",
-            "৬০,০০০-১,০০,০০০"
-        )
-        val spinnerAdapter =
-            CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, MonthlyExp)
-        binding?.spinnerMonthlyExpType?.adapter = spinnerAdapter
-        binding?.spinnerMonthlyExpType?.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    selectedMonthlyExp = if (position > 0) {
-                        spinnerAdapter.getItem(position)!!
-                    } else {
-                        ""
-                    }
-                }
-            }
-    }
-
-    private fun setUpSpinnerCurrentLoanEMISpinner() {
-
-        val CurrentLoanEMI: MutableList<String> = mutableListOf(
-            "বেছে নিন",
-            "৫০০-১০০০",
-            "১০০০-২০০০",
-            "২০০০-৪০০০",
-            "৪০০০-৬০০০",
-            "৬০০০-৮০০০",
-            "৮০০০-১০০০০",
-            "১০০০০-১২০০০",
-            "১২০০০-১৫০০০",
-            "১৫০০০-২০০০০"
-        )
-        val spinnerAdapter =
-            CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, CurrentLoanEMI)
-        binding?.spinnerCurrentLoanEMIType?.adapter = spinnerAdapter
-        binding?.spinnerCurrentLoanEMIType?.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    selectedCurrentLoanEMI = if (position > 0) {
-                        spinnerAdapter.getItem(position)!!
-                    } else {
-                        ""
-                    }
-                }
-            }
-    }
-
-    private fun datePickerTradeLisence() {
-        val builder = MaterialDatePicker.Builder.datePicker()
-        builder.setTheme(R.style.CustomMaterialCalendarTheme)
-        builder.setTitleText("Select trade license ")
-        val picker = builder.build()
-        picker.show(childFragmentManager, "Picker")
-        picker.addOnPositiveButtonClickListener {
-            selectedDateTradeLisence = sdf.format(it)
-            selectedDateFormattedTradeLisence = sdf1.format(it)
-            setDateRangePickerTitleTradeLisencee()
-        }
-    }
-
-    private fun setDateRangePickerTitleTradeLisencee() {
-        binding?.tradeliesencExpireDateTV?.setText(selectedDateFormattedTradeLisence)
-        isExpireDateofTradeLisenseSelectd = true
-    }
-
-
-    private fun datePickerDOB() {
-        val builder = MaterialDatePicker.Builder.datePicker()
-        builder.setTheme(R.style.CustomMaterialCalendarTheme)
-        builder.setTitleText("Select your birthday")
-        val picker = builder.build()
-        picker.show(childFragmentManager, "Picker")
-        picker.addOnPositiveButtonClickListener {
-            selectedDateDOB = sdf.format(it)
-            selectedDateFormattedDOB = sdf1.format(it)
-            setDateRangePickerTitleDOB()
-        }
-    }
-
-    private fun setDateRangePickerTitleDOB() {
-        binding?.DOBET?.setText(selectedDateFormattedDOB)
-        isExpireDateofTradeLisenseSelectd = true
-    }
-    /*
-    private fun setUpSpinnerMarketPositionSpinner() {
-
-        val marketPosition: MutableList<String> = mutableListOf(
-            "বেছে নিন",
-            "ভাল না",
-            "মোটামুটি ভাল",
-            "ভাল",
-            "খুব ভাল",
-            "অসাধারণ"
-        )
-        val spinnerAdapter =
-            CustomSpinnerAdapter(requireContext(), R.layout.item_view_spinner_item, marketPosition)
-        binding?.marketPositionSpinner?.adapter = spinnerAdapter
-        binding?.marketPositionSpinner?.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    if (position > 0) {
-                        selectedMarketPosition = spinnerAdapter.getItem(position)!!
-                    }
-                }
-            }
-    }
-*/
-
 }

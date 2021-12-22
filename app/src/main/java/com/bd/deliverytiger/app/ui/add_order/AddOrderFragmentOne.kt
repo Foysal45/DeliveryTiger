@@ -30,7 +30,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
-import com.bd.deliverytiger.app.api.model.cod_collection.CourierOrderViewModel
+import com.bd.deliverytiger.app.api.model.charge.SpecialServiceRequestBody
+import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
 import com.bd.deliverytiger.app.api.model.district.DistrictData
 import com.bd.deliverytiger.app.api.model.lead_management.GetLocationInfoRequest
 import com.bd.deliverytiger.app.api.model.location.LocationData
@@ -130,6 +131,9 @@ class AddOrderFragmentOne : Fragment() {
     private var filteredThanaLists: MutableList<DistrictData> = mutableListOf()
     private var filteredAreaLists: MutableList<DistrictData> = mutableListOf()
 
+    //special service
+    private var specialServiceList: MutableList<WeightRangeWiseData> = mutableListOf()
+    private var isSpecialServiceAvailable = false
     private var isAriaAvailable = true
     private var isProfileComplete: Boolean = false
     private var serviceTypeSelected: Boolean = false
@@ -151,6 +155,7 @@ class AddOrderFragmentOne : Fragment() {
     private var isCollection: Boolean = false
     private var isBreakable: Boolean = false
     private var isHeavyWeight: Boolean = false
+    private var isEligibleForSpecialService: Boolean = false
     private var isAgreeTerms: Boolean = false
     private var isWeightSelected: Boolean = false
     private var isPackagingSelected: Boolean = true
@@ -168,6 +173,7 @@ class AddOrderFragmentOne : Fragment() {
     private var isOpenBoxCheck: Boolean = false
     private var isOfficeDrop: Boolean = true
     private var isCollectionLocationSelected: Boolean = false
+    private var removeCollectionTimeSlotId: Int = 0
     private var isCollectionTypeSelected: Boolean = false
     private var collectionAmountLimit: Double = 0.0
     private var actualPackagePriceLimit: Double = 0.0
@@ -343,7 +349,6 @@ class AddOrderFragmentOne : Fragment() {
             binding?.voucherClear?.visibility = View.GONE
         }
 
-
         val calender = Calendar.getInstance()
         val todayDate = calender.timeInMillis
         selectedDate = sdf.format(todayDate)
@@ -355,7 +360,7 @@ class AddOrderFragmentOne : Fragment() {
     private fun initClickLister() {
 
         deliveryTypeAdapter.onItemClick = { position, model ->
-
+            Timber.d("onItemClick $model")
             deliveryType = "${model.deliveryType} ${model.days}"
             deliveryRangeId = model.deliveryRangeId
             weightRangeId = model.weightRangeId
@@ -796,6 +801,7 @@ class AddOrderFragmentOne : Fragment() {
                 collectionAddress = pickupLocation.pickupAddress ?: ""
                 collectionAddressET.setText(collectionAddress)
                 isCollectionLocationSelected = true
+                removeCollectionTimeSlotId = pickupLocation.collectionTimeSlotId
                 merchantDistrict = collectionDistrictId
             } else {
                 isOfficeDrop = true
@@ -1007,6 +1013,8 @@ class AddOrderFragmentOne : Fragment() {
         collectionChargeApi = SessionManager.collectionCharge
         isBreakable = SessionManager.isBreakAble
         isHeavyWeight = SessionManager.isHeavyWeight
+        isEligibleForSpecialService = SessionManager.isEligibleForSpecialService
+
         //merchantDistrict = SessionManager.merchantDistrict
         fetchPickupLocation()
         initLocationListener()
@@ -1075,6 +1083,7 @@ class AddOrderFragmentOne : Fragment() {
             if (serviceType == "citytocity" && list.isEmpty()) {
                 this.serviceType = "alltoall"
                 getDeliveryCharge(districtId, thanaId, areaId, this.serviceType)
+                getSpecialService(districtId, thanaId, areaId)
                 return@Observer
             }
 
@@ -1099,6 +1108,7 @@ class AddOrderFragmentOne : Fragment() {
                         if (merchantDistrict != 14) {
                             filterDeliveryTypeList = model2.weightRangeWiseData.filterNot { it.type == "express" }
                         }
+                        getSpecialService(districtId,thanaId,areaId)
                         deliveryTypeAdapter.initLoad(filterDeliveryTypeList)
                         deliveryTypeAdapter.selectPreSelection()
                     } else {
@@ -1161,6 +1171,7 @@ class AddOrderFragmentOne : Fragment() {
                 selectServiceType()
 
                 getDeliveryCharge(districtId, thanaId, areaId, serviceType)
+                getSpecialService(districtId, thanaId, areaId)
                 fetchSelectedDistrictInfo(model.districtId, model.thanaId, model.areaId)
             }
             Timber.d("customerInfo $model")
@@ -1333,6 +1344,7 @@ class AddOrderFragmentOne : Fragment() {
                             }
                             fetchLocationById(thanaId, LocationType.AREA, true)
                             getDeliveryCharge(districtId, thanaId, 0, serviceType)
+                            getSpecialService(districtId, thanaId, 0)
                         }
                     }
                 }
@@ -1349,6 +1361,7 @@ class AddOrderFragmentOne : Fragment() {
                             areaId = sadarArea.districtId
                             //etAriaPostOffice.setText(sadarArea.districtBng)
                             getDeliveryCharge(districtId, thanaId, areaId, serviceType)
+                            getSpecialService(districtId, thanaId, areaId)
                         }
                     } else {
                         etAriaPostOfficeLayout.visibility = View.GONE
@@ -1388,6 +1401,7 @@ class AddOrderFragmentOne : Fragment() {
                             showLocationAlert(it, LocationType.DISTRICT)
                         }
                     }
+                    updateUIAfterDistrict(model)
                 }
                 LocationType.THANA -> {
                     thanaId = model.id
@@ -1397,6 +1411,7 @@ class AddOrderFragmentOne : Fragment() {
                     filteredAreaLists.clear()
 
                     getDeliveryCharge(districtId, thanaId, 0, serviceType)
+                    getSpecialService(districtId, thanaId, 0)
                     fetchLocationById(thanaId, LocationType.AREA, true)
 
                     if (list.isNotEmpty()) {
@@ -1416,6 +1431,7 @@ class AddOrderFragmentOne : Fragment() {
                     etAriaPostOffice.setText(areaName)
 
                     getDeliveryCharge(districtId, thanaId, areaId, serviceType)
+                    getSpecialService(districtId, thanaId, areaId)
 
                     if (list.isNotEmpty()) {
                         val locationModel = list.find { it.districtId == model.id }
@@ -1530,7 +1546,7 @@ class AddOrderFragmentOne : Fragment() {
     private fun fetchCollectionTimeSlot() {
         if (isTodaySelected) {
             viewModel.currentTimeSlot.observe(viewLifecycleOwner, Observer { list ->
-                Timber.d("timeSlotDebug current time slot")
+                Timber.d("timeSlotDebug current time slot $list")
                 timeSlotList.clear()
                 timeSlotList.addAll(list)
                 if (timeSlotList.isNotEmpty()) {
@@ -1541,8 +1557,14 @@ class AddOrderFragmentOne : Fragment() {
                         // keep only first one
                         timeSlotList.removeAll { it.collectionTimeSlotId != 1 }
                     }
+                    if (isCollectionLocationSelected) {
+                        if (removeCollectionTimeSlotId != 0){
+                            timeSlotList.removeAll { it.collectionTimeSlotId == removeCollectionTimeSlotId }
+                        }
+                    }
                 }
                 timeSlotDataAdapter.initLoad(timeSlotList)
+                Timber.d("timeSlotDebug $timeSlotList")
                 binding?.emptyView?.isVisible = timeSlotList.isEmpty()
             })
         } else {
@@ -1554,6 +1576,11 @@ class AddOrderFragmentOne : Fragment() {
                     if (isHeavyWeight) {
                         // keep only first one
                         timeSlotList.removeAll { it.collectionTimeSlotId != 1 }
+                    }
+                    if (isCollectionLocationSelected) {
+                        if (removeCollectionTimeSlotId != 0){
+                            timeSlotList.removeAll { it.collectionTimeSlotId == removeCollectionTimeSlotId }
+                        }
                     }
                 }
                 timeSlotDataAdapter.initLoad(timeSlotList)
@@ -1575,6 +1602,18 @@ class AddOrderFragmentOne : Fragment() {
             isShipmentChargeFree = model.isDeliveryCharge
             relationType = model.relationType
         })
+    }
+
+    private fun getSpecialService(districtId: Int, thanaId: Int, areaId: Int) {
+        if (isEligibleForSpecialService){
+            val requestBody = SpecialServiceRequestBody(SessionManager.courierUserId,  districtId, thanaId, areaId)
+            viewModel.fetchSpecialService(requestBody).observe(viewLifecycleOwner, Observer { list->
+                specialServiceList.clear()
+                specialServiceList.addAll(list)
+                isSpecialServiceAvailable = list.isNotEmpty()
+                deliveryTypeAdapter.addRemoveSpecialService(isSpecialServiceAvailable, specialServiceList)
+            })
+        }
     }
 
     private fun calculateTotalPrice() {
