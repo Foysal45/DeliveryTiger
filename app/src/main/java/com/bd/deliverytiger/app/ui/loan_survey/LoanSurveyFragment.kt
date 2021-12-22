@@ -21,14 +21,13 @@ import com.bd.deliverytiger.app.ui.loan_survey.adapters.LocalUniversalAdapter
 import com.bd.deliverytiger.app.utils.*
 import com.bd.deliverytiger.app.utils.Validator.isValidMobileNumber
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import com.github.dhaval2404.imagepicker.ImagePicker
 import org.koin.android.ext.android.inject
-import timber.log.Timber
 import com.google.android.material.datepicker.MaterialDatePicker
-import okhttp3.internal.concurrent.formatDuration
-import org.koin.android.ext.android.bind
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,7 +46,7 @@ class LoanSurveyFragment : Fragment() {
 
     private var loanRange = ""
     private var loanRepayMonthPeriod = ""
-    private var yearlyTotalIncome = 0
+    private var yearlyTotalIncome = ""
     private var otherIncome = ""
     private var nidCardNo = ""
     private var monthlyTransaction = ""
@@ -90,7 +89,7 @@ class LoanSurveyFragment : Fragment() {
     private var selectedDateDOB = "2001-01-01"
     private var selectedDateFormattedTradeLisence = ""
     private var selectedDateFormattedDOB = ""
-    private var tradeLicenseImageUrl = ""
+    private var tradeLicenseImageUrlFrag = ""
     private var applicationDate = ""
 
 
@@ -100,17 +99,7 @@ class LoanSurveyFragment : Fragment() {
     private val marriageStatusAdapter = LocalUniversalAdapter()
     private val houseOwnerAdapter = LocalUniversalAdapter()
 
-
-    override fun onResume() {
-        super.onResume()
-        (activity as HomeActivity).setToolbarTitle(getString(R.string.loan_survey))
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return FragmentLoanSurveyBinding.inflate(inflater).also {
             binding = it
         }.root
@@ -119,17 +108,15 @@ class LoanSurveyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        if (SessionManager.isSurveyComplete) {
-            warning()
-        }
-
         fetchBanner()
         init()
         initData()
-        //fetchCourierList()
         initClickListener()
-        //initViews()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).setToolbarTitle(getString(R.string.loan_survey))
     }
 
     private fun initViews() {
@@ -148,107 +135,107 @@ class LoanSurveyFragment : Fragment() {
     }
 
     private fun initData() {
-        //TODO: fix static courrierID
-        viewModel.previousLoanSurveyResponse(SessionManager.courierUserId)
-            .observe(viewLifecycleOwner, Observer {
-                if (it.isEmpty()) {
+        viewModel.previousLoanSurveyResponse(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model->
+                if (model.isEmpty()) {
                     isPut = false
-                    //TODO load a fresh Empty view , and call POST API
                     initViews()
                 } else {
                     isPut = true
-                    globalIDFOrLoan = it[0].loanSurveyId
-                    applicationDate = it[0].applicationDate
-                    //todo load the existing data and call to PUT api
+                    globalIDFOrLoan = model.first().loanSurveyId
+                    applicationDate = model.first().applicationDate
                     binding?.merchantGenderRadioGroup?.check(
-                        if (it[0].gender == "male")
+                        if (model.first().gender == "male")
                             R.id.merchantGenderMale
                         else
                             R.id.merchantGenderFemale
                     )
-                    if (!it[0].merchantName.isNullOrEmpty()) {
-                        merchantName = it[0].merchantName
-                        binding?.merchantNameET?.setText(it[0].merchantName)
+                    if (!model.first().merchantName.isNullOrEmpty()) {
+                        merchantName = model.first().merchantName
+                        binding?.merchantNameET?.setText(model.first().merchantName)
                     }
-                    if (!it[0].age.isNullOrEmpty()) {
-                        ageRecycler(it[0].age, true)
+                    if (!model.first().age.isNullOrEmpty()) {
+                        ageRecycler(model.first().age, true)
                     } else {
-                        ageRecycler(it[0].age, false)
+                        ageRecycler(model.first().age, false)
                     }
-                    setDateRangePickerTitleTradeLisencee(0, true, it[0].tradeLicenseExpireDate)
-                    setDateRangePickerTitleDOB(0, true, it[0].dateOfBirth)
-                    if (!it[0].nidNo.isNullOrEmpty()) {
-                        binding?.nidCardNoET?.setText(it[0].nidNo)
+                    setDateRangePickerTitleTradeLisencee(0, true, model.first().tradeLicenseExpireDate)
+                    setDateRangePickerTitleDOB(0, true, model.first().dateOfBirth)
+                    if (!model.first().nidNo.isNullOrEmpty()) {
+                        binding?.nidCardNoET?.setText(model.first().nidNo)
                     }
                     binding?.DOBET?.setText(
                         DigitConverter.formatDate(
-                            it[0].dateOfBirth,
+                            model.first().dateOfBirth,
                             "yyyy-MM-dd",
                             "dd MMM, yyyy"
                         )
                     )
-                    if (!it[0].eduLevel.isNullOrEmpty()) {
-                        setUpEduactionSpinner(it[0].eduLevel, true)
+                    if (!model.first().eduLevel.isNullOrEmpty()) {
+                        setUpEduactionSpinner(model.first().eduLevel, true)
                     } else {
-                        setUpEduactionSpinner(it[0].eduLevel, false)
+                        setUpEduactionSpinner(model.first().eduLevel, false)
                     }
-                    if (!it[0].loanEmi.isNullOrEmpty()) {
-                        setUpSpinnerCurrentLoanEMISpinner(it[0].loanEmi, true)
+                    if (!model.first().loanEmi.isNullOrEmpty()) {
+                        setUpSpinnerCurrentLoanEMISpinner(model.first().loanEmi, true)
                     } else {
-                        setUpSpinnerCurrentLoanEMISpinner(it[0].loanEmi, false)
+                        setUpSpinnerCurrentLoanEMISpinner(model.first().loanEmi, false)
                     }
-                    if (!it[0].monthlyOrder.isNullOrEmpty()) {
-                        setUpSpinnerAverageOrderSpinner(it[0].monthlyOrder, true)
+                    if (!model.first().monthlyOrder.isNullOrEmpty()) {
+                        setUpSpinnerAverageOrderSpinner(model.first().monthlyOrder, true)
                     } else {
-                        setUpSpinnerAverageOrderSpinner(it[0].monthlyOrder, false)
+                        setUpSpinnerAverageOrderSpinner(model.first().monthlyOrder, false)
                     }
-                    if (!it[0].famMem.isNullOrEmpty()) {
-                        familyMemNumRecycler(it[0].famMem, true)
+                    if (!model.first().famMem.isNullOrEmpty()) {
+                        familyMemNumRecycler(model.first().famMem, true)
                     } else {
-                        familyMemNumRecycler(it[0].famMem, false)
+                        familyMemNumRecycler(model.first().famMem, false)
                     }
-                    if (!it[0].homeOwnership.isNullOrEmpty()) {
-                        houseOwnerRecycler(it[0].homeOwnership, true)
+                    if (!model.first().homeOwnership.isNullOrEmpty()) {
+                        houseOwnerRecycler(model.first().homeOwnership, true)
                     } else {
-                        houseOwnerRecycler(it[0].homeOwnership, false)
+                        houseOwnerRecycler(model.first().homeOwnership, false)
                     }
-                    if (!it[0].residenceLocation.isNullOrEmpty()) {
-                        homeLocationRecycler(it[0].residenceLocation, true)
+                    if (!model.first().residenceLocation.isNullOrEmpty()) {
+                        homeLocationRecycler(model.first().residenceLocation, true)
                     } else {
-                        homeLocationRecycler(it[0].residenceLocation, false)
+                        homeLocationRecycler(model.first().residenceLocation, false)
                     }
-                    if (!it[0].married.isNullOrEmpty()) {
-                        marriageStatusRecycler(it[0].married, true)
+                    if (!model.first().married.isNullOrEmpty()) {
+                        marriageStatusRecycler(model.first().married, true)
                     } else {
-                        marriageStatusRecycler(it[0].married, false)
+                        marriageStatusRecycler(model.first().married, false)
                     }
-                    if (!it[0].basketValue.isNullOrEmpty()) {
-                        setUpAverageBasketSpinner(it[0].basketValue, true)
+                    if (!model.first().basketValue.isNullOrEmpty()) {
+                        setUpAverageBasketSpinner(model.first().basketValue, true)
                     } else {
-                        setUpAverageBasketSpinner(it[0].basketValue, false)
+                        setUpAverageBasketSpinner(model.first().basketValue, false)
                     }
-                    if (!it[0].monthlyExp.isNullOrEmpty()) {
-                        setUpSpinnerMonthlyExpSpinner(it[0].monthlyExp, true)
+                    if (!model.first().monthlyExp.isNullOrEmpty()) {
+                        setUpSpinnerMonthlyExpSpinner(model.first().monthlyExp, true)
                     } else {
-                        setUpSpinnerMonthlyExpSpinner(it[0].monthlyExp, false)
+                        setUpSpinnerMonthlyExpSpinner(model.first().monthlyExp, false)
                     }
-                    if (!it[0].relationMarchent.isNullOrEmpty()) {
-                        setUpSpinnerKnownToMerchnatSpinner(it[0].relationMarchent, true)
+                    if (!model.first().relationMarchent.isNullOrEmpty()) {
+                        setUpSpinnerKnownToMerchnatSpinner(model.first().relationMarchent, true)
                     } else {
-                        setUpSpinnerKnownToMerchnatSpinner(it[0].relationMarchent, false)
+                        setUpSpinnerKnownToMerchnatSpinner(model.first().relationMarchent, false)
                     }
 
                     binding?.merchantPhysicalShopExistsRadioGroup?.check(
-                        if (it[0].isLocalShop)
+                        if (model.first().isLocalShop)
                             R.id.merchantPhysicalShopExistsYes
                         else
                             R.id.merchantPhysicalShopExistsNo
                     )
                     binding?.totalMonthlyAverageSellET?.setText(
-                        it[0].monthlyTotalAverageSale.toInt().toString()
+                        if (model.first().monthlyTotalAverageSale.toInt().toString() == "0") {
+                            ""
+                        } else {
+                            model.first().monthlyTotalAverageSale.toInt().toString()
+                        }
                     )
                     binding?.OwnertypeofoownershipInBuisnessRadioGroup?.check(
-                        when (it[0].shopOwnership) {
+                        when (model.first().shopOwnership) {
                             "নিজের" -> {
                                 R.id.InBuisnessRadioButtonOwner
                             }
@@ -264,117 +251,126 @@ class LoanSurveyFragment : Fragment() {
                         }
                     )
                     binding?.totalCODFromOtherServicesET?.setText(
-                        it[0].monthlyTotalCodAmount.toInt().toString()
+                        model.first().monthlyTotalCodAmount.toDouble().toInt().toString()
                     )
-                    //todo courrierUsersListInflate
                     binding?.merchantTakeLoanRadioGroup?.check(
-                        if (it[0].hasPreviousLoan) {
+                        if (model.first().hasPreviousLoan) {
                             R.id.merchantTakeLoanAccountYes
                         } else {
                             R.id.merchantTakeLoanAccountNo
                         }
                     )
-                    binding?.loanAMountET?.setText(it[0].loanAmount.toInt().toString())
-                    if (!it[0].bankName.isNullOrEmpty()) {
-                        binding?.bankNameET?.setText(it[0].bankName)
+                    binding?.loanAMountET?.setText(
+                        if (model.first().loanAmount.toInt().toString() == 0.toString()) {
+                            ""
+                        } else {
+                            model.first().loanAmount.toInt().toString()
+                        }
+                    )
+                    /*binding?.loanAMountET?.setText(model.first().loanAmount.toInt().toString())*/
+                    if (!model.first().bankName.isNullOrEmpty()) {
+                        binding?.bankNameET?.setText(model.first().bankName)
                     }
                     binding?.loanRepayRadioGroupType?.check(
-                        if (it[0].repayType == "weekly") {
+                        if (model.first().repayType == "weekly") {
                             R.id.loanRepayWeekly
                         } else {
                             R.id.loanRepayMonthly
                         }
                     )
                     binding?.merchantHasBankAccountRadioGroup?.check(
-                        if (it[0].isBankAccount) {
+                        if (model.first().isBankAccount) {
                             R.id.merchantHasBankAccountYes
                         } else {
                             R.id.merchantHasBankAccountNo
                         }
                     )
-                    if (!it[0].companyBankAccName.isNullOrEmpty()) {
-                        binding?.conmapyBankNameTextInput?.setText(it[0].companyBankAccName)
+                    if (!model.first().companyBankAccName.isNullOrEmpty()) {
+                        binding?.conmapyBankNameTextInput?.setText(model.first().companyBankAccName)
                     }
-                    if (!it[0].companyBankAccNo.isNullOrEmpty()) {
-                        binding?.bankAccountNumberET?.setText(it[0].companyBankAccNo)
+                    if (!model.first().companyBankAccNo.isNullOrEmpty()) {
+                        binding?.bankAccountNumberET?.setText(model.first().companyBankAccNo)
                     }
                     binding?.haveAnyCreditCardRadioGroup?.check(
-                        if (it[0].hasCreditCard) {
+                        if (model.first().hasCreditCard) {
                             R.id.yes_haveAnyCreditCard_radio_button
                         } else {
                             R.id.no_haveAnyCreditCard_radio_button
                         }
                     )
-                    if (!it[0].cardHolder.isNullOrEmpty()) {
-                        binding?.creditCardName?.setText(it[0].cardHolder)
+                    if (!model.first().cardHolder.isNullOrEmpty()) {
+                        binding?.creditCardName?.setText(model.first().cardHolder)
                     }
-                    if (!it[0].cardLimit.isNullOrEmpty()) {
-                        binding?.creditCardLimit?.setText(it[0].cardLimit)
+                    if (!model.first().cardLimit.isNullOrEmpty()) {
+                        binding?.creditCardLimit?.setText(model.first().cardLimit)
                     }
                     binding?.haveAnyTINRadioGroup?.check(
-                        if (it[0].hasTin) {
+                        if (model.first().hasTin) {
                             R.id.yes_haveAnyTin_radio_button
                         } else {
                             R.id.no_haveAnyTin_radio_button
                         }
                     )
-                    if (!it[0].tinNumber.isNullOrEmpty()) {
-                        binding?.teamTINNumberET?.setText(it[0].tinNumber)
+                    if (!model.first().tinNumber.isNullOrEmpty()) {
+                        binding?.teamTINNumberET?.setText(model.first().tinNumber)
                     }
                     binding?.merchantHasTradeLicenceRadioGroup?.check(
-                        if (it[0].hasTradeLicense) {
+                        if (model.first().hasTradeLicense) {
                             R.id.merchantHasTradeLicenceYes
                         } else {
                             R.id.merchantHasTradeLicenceNo
                         }
                     )
-                    if (!it[0].tradeLicenseNo.isNullOrEmpty()) {
-                        binding?.tradeliesenceNOTV?.setText(it[0].tradeLicenseNo)
+                    if (!model.first().tradeLicenseNo.isNullOrEmpty()) {
+                        binding?.tradeliesenceNOTV?.setText(model.first().tradeLicenseNo)
                     }
-                    if (!it[0].tradeLicenseExpireDate.isNullOrEmpty()) {
+                    if (!model.first().tradeLicenseExpireDate.isNullOrEmpty()) {
                         binding?.tradeliesencExpireDateTV?.setText(
                             DigitConverter.formatDate(
-                                it[0].tradeLicenseExpireDate,
+                                model.first().tradeLicenseExpireDate,
                                 "yyyy-MM-dd",
                                 "dd MMM yyyy"
                             )
                         )
                     }
 
-                    if (!it[0].tradeLicenseImageUrl.isNullOrEmpty()) {
+                    if (!model.first().tradeLicenseImageUrl.isNullOrEmpty()) {
+                        binding?.imageTradeLicenceAddIV?.isVisible = false
                         binding?.imageTradeLicencePickedIV?.isVisible = true
                         binding?.imageTradeLicencePickedIV?.let { image ->
                             Glide.with(image)
-                                .load(it[0].tradeLicenseImageUrl)
+                                .load(model.first().tradeLicenseImageUrl)
                                 .apply(RequestOptions().placeholder(R.drawable.ic_banner_place))
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
                                 .into(image)
-                            tradeLicenseImageUrl = it[0].tradeLicenseImageUrl
                         }
+                        tradeLicenseImageUrlFrag = model.first().tradeLicenseImageUrl
                     }
                     binding?.merchantHasGuarantorRadioGroup?.check(
-                        if (!it[0].guarantorMobile.isNullOrEmpty() && !it[0].guarantorName.isNullOrEmpty()) {
+                        if (!model.first().guarantorMobile.isNullOrEmpty() && !model.first().guarantorName.isNullOrEmpty()) {
                             R.id.merchantHasGuarantorYes
                         } else {
                             R.id.merchantHasGuarantorNo
                         }
                     )
-                    binding?.merchantGuarantorNameET?.setText(it[0].guarantorName)
-                    binding?.merchantGuarantorNumberET?.setText(it[0].guarantorMobile)
-                    binding?.loanRangeET?.setText(it[0].interestedAmount.toInt().toString())
-                    binding?.reqTenorMonthET?.setText(it[0].reqTenorMonth.toInt().toString())
+                    binding?.merchantGuarantorNameET?.setText(model.first().guarantorName)
+                    binding?.merchantGuarantorNumberET?.setText(model.first().guarantorMobile)
+                    binding?.loanRangeET?.setText(model.first().interestedAmount.toInt().toString())
+                    binding?.reqTenorMonthET?.setText(model.first().reqTenorMonth.toInt().toString())
                     binding?.yearlyTotalIncomehET?.setText(
-                        it[0].annualTotalIncome.toInt().toString()
+                        model.first().annualTotalIncome.toInt().toString()
                     )
-                    binding?.otherIncomeET?.setText(it[0].othersIncome.toInt().toString())
+                    binding?.otherIncomeET?.setText(model.first().othersIncome.toInt().toString())
                     binding?.monthlyTransactionET?.setText(
-                        it[0].monthlyTotalCodAmount.toInt().toString()
+                        model.first().transactionAmount.toDouble().toInt().toString()
                     )
                     courierList.clear()
 
                     viewModel.fetchCourierList().observe(viewLifecycleOwner, Observer { list ->
                         if (!list.isNullOrEmpty()) {
                             for (index in 0 until list.size) {
-                                it[0].courierWithLoanSurvey.forEach { courrersofcurrnetUser ->
+                                model.first().courierWithLoanSurvey.forEach { courrersofcurrnetUser ->
                                     if (courrersofcurrnetUser.courierId == list[index].courierId
                                     ) {
                                         dataAdapter.multipleSelection(list[index], index)
@@ -410,14 +406,14 @@ class LoanSurveyFragment : Fragment() {
             if (verify()) {
                 var requestBody2 = LoanSurveyRequestBody(
                     age = adapterAge.selectedItem,
-                    annualTotalIncome = yearlyTotalIncome ?: 0,
+                    annualTotalIncome = yearlyTotalIncome.toDouble().toInt() ?: 0,
                     bankName = binding?.bankNameET?.text.toString(),
                     basketValue = selectedAverageBasket,
                     cardHolder = binding?.creditCardName?.text.toString(),
                     cardLimit = binding?.creditCardLimit?.text.toString(),
                     companyBankAccName = binding?.conmapyBankNameTextInput?.text.toString().trim(),
                     companyBankAccNo = binding?.bankAccountNumberET?.text.toString().trim(),
-                    //courierUserId = SessionManager.courierUserId,
+                    courierUserId = SessionManager.courierUserId,
                     dateOfBirth = selectedDateDOB,
                     eduLevel = selectedEducation,
                     famMem = familyMemNumAdapter.selectedItem,
@@ -451,17 +447,16 @@ class LoanSurveyFragment : Fragment() {
                     shopOwnership = selectedOwnerShipOfMarket,
                     tinNumber = binding?.teamTINNumberET?.text.toString().trim(),
                     tradeLicenseExpireDate = selectedDateTradeLisence,
-                    tradeLicenseImageUrl = tradeLicenseImageUrl,
+                    tradeLicenseImageUrl = tradeLicenseImageUrlFrag,
                     tradeLicenseNo = binding?.tradeliesenceNOTV?.text.toString().trim(),
-                    transactionAmount = monthlyTransaction.toDouble().toInt(),
+                    transactionAmount = monthlyTransaction.toDouble().toInt() ?: 0,
                     hasPreviousLoan = hasPreviousLoan,
                     loanSurveyId = globalIDFOrLoan,
-                    applicationDate = applicationDate
+                    applicationDate = if (applicationDate == "") sdf.format(Calendar.getInstance().time) else applicationDate
                 )
                 if (imagePickFlag == 1) {
                     requestBody2.apply {
-                        tradeLicenseImageUrl =
-                            "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg"
+                        tradeLicenseImageUrl = tradeLicenseImageUrlFrag
                     }
                     if (imageTradeLicencePath != "") {
                         uploadImage(
@@ -475,6 +470,7 @@ class LoanSurveyFragment : Fragment() {
                 } else {
                     submitLoanSurveyData(requestBody2)
                 }
+                Timber.d("reqBodyFrag $requestBody2")
             }
         }
         binding?.tradeliesencExpireDateTV?.setOnClickListener {
@@ -507,6 +503,8 @@ class LoanSurveyFragment : Fragment() {
                 }
                 R.id.merchantHasBankAccountNo -> {
                     hasBankAccount = false
+                    binding?.bankAccountNumberET?.setText("")
+                    binding?.conmapyBankNameTextInput?.setText("")
                     binding?.hasBankAccountLayout?.visibility = View.GONE
                     binding?.bankAccountNumberLayout?.visibility = View.GONE
                     binding?.bankAccountNumberET?.visibility = View.GONE
@@ -530,6 +528,7 @@ class LoanSurveyFragment : Fragment() {
                 }
                 R.id.merchantPhysicalShopExistsNo -> {
                     hasPhysicalShop = false
+                    binding?.totalMonthlyAverageSellET?.setText("")
                     binding?.totalMonthlyAverageSellETLayout?.isVisible = false
                 }
             }
@@ -551,7 +550,11 @@ class LoanSurveyFragment : Fragment() {
                 }
                 R.id.merchantHasTradeLicenceNo -> {
                     hasTradeLicence = false
+                    binding?.imageTradeLicenceAddIV?.isVisible = true
+                    binding?.imageTradeLicencePickedIV?.isVisible = false
                     imagePickFlag = 0
+                    tradeLicenseImageUrlFrag = ""
+                    binding?.tradeliesenceNOTV?.setText("")
                     binding?.merchantTradeLicenceLayout?.isVisible = false
                     binding?.tradeliesencenoandexpiredateLayout?.visibility = View.GONE
                     binding?.tradeliesenceNOLayout?.visibility = View.GONE
@@ -577,6 +580,8 @@ class LoanSurveyFragment : Fragment() {
                 }
                 R.id.merchantHasGuarantorNo -> {
                     hasGuarantor = false
+                    binding?.merchantGuarantorNameET?.setText("")
+                    binding?.merchantGuarantorNumberET?.setText("")
                     binding?.merchantGuarantorLayout?.isVisible = false
                 }
             }
@@ -597,6 +602,8 @@ class LoanSurveyFragment : Fragment() {
                 }
                 R.id.merchantTakeLoanAccountNo -> {
                     hasPreviousLoan = false
+                    binding?.loanAMountET?.setText("")
+                    binding?.bankNameET?.setText("")
                     binding?.merchantLoanAmountETLayout?.isVisible = false
                     binding?.bankNameETETLayout?.isVisible = false
                     binding?.loanRepayMonthlyLayout?.isVisible = false
@@ -635,6 +642,8 @@ class LoanSurveyFragment : Fragment() {
                     }
                     R.id.no_haveAnyCreditCard_radio_button -> {
                         hasCreditCard = false
+                        binding?.creditCardLimit?.setText("")
+                        binding?.creditCardName?.setText("")
                         bankLayoutVisibility?.isVisible = false
                         cardLimitLayout?.isVisible = false
                         bankNameLayout?.isVisible = false
@@ -654,6 +663,7 @@ class LoanSurveyFragment : Fragment() {
                     }
                     R.id.no_haveAnyTin_radio_button -> {
                         hasTin = false
+                        binding?.teamTINNumberET?.setText("")
                         TIINNumberLayout.isVisible = false
                         teamTINNumberET.isVisible = false
                     }
@@ -682,8 +692,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private val startImagePickerResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val startImagePickerResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val resultCode = result.resultCode
             val data = result.data
             if (resultCode == Activity.RESULT_OK) {
@@ -702,7 +711,8 @@ class LoanSurveyFragment : Fragment() {
                                 .into(view)
                         }
                         imageTradeLicencePath = imagePath
-                        //imagePickFlag = 0
+                        tradeLicenseImageUrlFrag =
+                            "https://static.ajkerdeal.com/delivery_tiger/trade_license/trade_${SessionManager.courierUserId}.jpg"
                     }
                     2 -> {
                         /*binding?.imagePayslipAddIV?.isVisible = false
@@ -742,12 +752,7 @@ class LoanSurveyFragment : Fragment() {
             }
         }
 
-    private fun uploadImage(
-        fileName: String,
-        imagePath: String,
-        fileUrl: String,
-        requestBody: LoanSurveyRequestBody
-    ) {
+    private fun uploadImage(fileName: String, imagePath: String, fileUrl: String, requestBody: LoanSurveyRequestBody) {
         val progressDialog = progressDialog()
         progressDialog.show()
         viewModel.imageUploadForFile(requireContext(), fileName, imagePath, fileUrl)
@@ -755,6 +760,7 @@ class LoanSurveyFragment : Fragment() {
                 progressDialog.dismiss()
                 if (model) {
                     submitLoanSurveyData(requestBody)
+                    Timber.d("reqBodyFrag $requestBody")
                     context?.toast("Uploaded successfully")
                 } else {
                     context?.toast("Uploaded Failed")
@@ -769,7 +775,7 @@ class LoanSurveyFragment : Fragment() {
         if (isPut) {
             viewModel.updateLoanSurvey(requestBody, SessionManager.accessToken)
                 .observe(viewLifecycleOwner, { model ->
-                    SessionManager.isSurveyComplete = true
+                    SessionManager.isSurveyUpdate = true
                     val tempLoanSurveyId = globalIDFOrLoan
                     selectedCourierList.clear()
                     for (item in dataAdapter.getSelectedItemModelList()) {
@@ -790,8 +796,9 @@ class LoanSurveyFragment : Fragment() {
                 })
         } else {
             viewModel.submitLoanSurvey(requestBody).observe(viewLifecycleOwner, Observer { model ->
-                SessionManager.isSurveyComplete = true
-                val tempLoanSurveyId = globalIDFOrLoan
+                SessionManager.isSurveyUpdate = false
+                val tempLoanSurveyId =
+                    if (globalIDFOrLoan == 0) model.loanSurveyId else globalIDFOrLoan
                 selectedCourierList.clear()
                 for (item in dataAdapter.getSelectedItemModelList()) {
                     item.apply {
@@ -810,7 +817,12 @@ class LoanSurveyFragment : Fragment() {
     private fun showAlert() {
         val titleText = "নির্দেশনা"
         val descriptionText = "সার্ভেটি পূরণ করার জন্য ধন্যবাদ।"
-        alert(titleText, descriptionText, false, "ঠিক আছে", "না").show()
+        val descriptionTextOnUpdate = "সার্ভেটি আপডেট করার জন্য ধন্যবাদ।"
+        if (SessionManager.isSurveyUpdate) {
+            alert(titleText, descriptionTextOnUpdate, false, "ঠিক আছে", "না").show()
+        } else {
+            alert(titleText, descriptionText, false, "ঠিক আছে", "না").show()
+        }
     }
 
     private fun warning() {
@@ -858,11 +870,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-
-    private fun familyMemNumRecycler(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun familyMemNumRecycler(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val education: List<String> = listOf("২-৫", "৫-৭", "৭-১০", "১০-১৫")
         val indexOfselectedItem = education.indexOf(preselectedItem)
@@ -877,10 +885,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun homeLocationRecycler(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun homeLocationRecycler(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val location: List<String> = listOf("মহানগর", "সিটি কর্পোরেশন", "শহরে", "গ্রামে")
         val indexOfselectedItem = location.indexOf(preselectedItem)
@@ -896,10 +901,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun marriageStatusRecycler(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun marriageStatusRecycler(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val location: List<String> =
             listOf("বিবাহিত", "অবিবাহিত", "তালাকপ্রাপ্ত", "বিধবা/ বিপত্নীক")
@@ -915,10 +917,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun houseOwnerRecycler(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun houseOwnerRecycler(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
         val houseOwner: List<String> = listOf("নিজের", "পরিবারের নিজস্ব", "ভাড়া")
         val indexOfselectedItem = houseOwner.indexOf(preselectedItem)
 
@@ -933,10 +932,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun setUpEduactionSpinner(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun setUpEduactionSpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val dataListAge: MutableList<String> = mutableListOf(
             "বেছে নিন", "প্রাতিষ্ঠানিক শিক্ষা নেই", "পি এস সি", "জে এস সি", "এস এস সি",
@@ -969,10 +965,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private fun setUpAverageBasketSpinner(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun setUpAverageBasketSpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val AverageBasket: MutableList<String> = mutableListOf(
             "বেছে নিন", "১০০০০০-২০০০০০",
@@ -1001,10 +994,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private fun setUpSpinnerKnownToMerchnatSpinner(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun setUpSpinnerKnownToMerchnatSpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val knownToMerchant: MutableList<String> = mutableListOf(
             "বেছে নিন", "০-১", "১-২", "২-৪", "৪-৬", "৬-৮", "৮-১০", "১০-১৫", "১৫-২০"
@@ -1032,10 +1022,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private fun setUpSpinnerAverageOrderSpinner(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun setUpSpinnerAverageOrderSpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val averageOrder: MutableList<String> = mutableListOf(
             "বেছে নিন", "০-৫০০", "৫০০-১০০০", "১০০০-১৫০০", "১৫০০-২০০০", "২০০০-৩০০০", "৩০০০-৪০০০"
@@ -1063,10 +1050,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private fun setUpSpinnerMonthlyExpSpinner(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun setUpSpinnerMonthlyExpSpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val MonthlyExp: MutableList<String> = mutableListOf(
             "বেছে নিন", "০-৫,০০০", "৫,০০০-১০,০০০", "১০,০০০-১৫,০০০", "১৫,০০০-২০,০০০",
@@ -1096,10 +1080,7 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-    private fun setUpSpinnerCurrentLoanEMISpinner(
-        preselectedItem: String = "",
-        hasPreviousSelection: Boolean = false
-    ) {
+    private fun setUpSpinnerCurrentLoanEMISpinner(preselectedItem: String = "", hasPreviousSelection: Boolean = false) {
 
         val CurrentLoanEMI: MutableList<String> = mutableListOf(
             "বেছে নিন", "৫০০-১০০০", "১০০০-২০০০", "২০০০-৪০০০", "৪০০০-৬০০০", "৬০০০-৮০০০",
@@ -1128,7 +1109,6 @@ class LoanSurveyFragment : Fragment() {
             }
     }
 
-
     private fun datePickerTradeLisence() {
         val builder = MaterialDatePicker.Builder.datePicker()
         builder.setTheme(R.style.CustomMaterialCalendarTheme)
@@ -1140,11 +1120,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun setDateRangePickerTitleTradeLisencee(
-        selectedDOB: Long,
-        fromInit: Boolean = false,
-        serverDate: String = ""
-    ) {
+    private fun setDateRangePickerTitleTradeLisencee(selectedDOB: Long, fromInit: Boolean = false, serverDate: String = "") {
         if (fromInit) {
             selectedDateTradeLisence =
                 DigitConverter.formatDate(serverDate, "yyyy-MM-dd", "yyyy-MM-dd")
@@ -1171,11 +1147,7 @@ class LoanSurveyFragment : Fragment() {
         }
     }
 
-    private fun setDateRangePickerTitleDOB(
-        selectedDOB: Long,
-        fromInit: Boolean = false,
-        serverDate: String = ""
-    ) {
+    private fun setDateRangePickerTitleDOB(selectedDOB: Long, fromInit: Boolean = false, serverDate: String = "") {
         if (fromInit) {
             selectedDateDOB = DigitConverter.formatDate(serverDate, "yyyy-MM-dd", "yyyy-MM-dd")
             selectedDateFormattedDOB =
@@ -1272,8 +1244,8 @@ class LoanSurveyFragment : Fragment() {
             return false
         }
 
-        yearlyTotalIncome = binding?.yearlyTotalIncomehET?.text.toString().toDouble().toInt() ?: 0
-        if (yearlyTotalIncome == 0) {
+        yearlyTotalIncome = binding?.yearlyTotalIncomehET?.text.toString()
+        if (yearlyTotalIncome.isNullOrEmpty()) {
             context?.toast("আপনার বাৎসরিক সর্বমোট আয় উল্লেখ করুন")
             return false
         }
@@ -1391,10 +1363,12 @@ class LoanSurveyFragment : Fragment() {
         }
 
         if (hasTin) {
-            if (binding?.teamTINNumberET?.text.toString()
-                    .isEmpty() || (binding?.teamTINNumberET?.text.toString().trim().length < 12)
-            ) {
+            if (binding?.teamTINNumberET?.text.toString().isEmpty()) {
                 context?.toast("আপনার TIN নাম্বার দিন")
+                return false
+            }
+            if (binding?.teamTINNumberET?.text.toString().trim().length < 12) {
+                context?.toast("ট্টিন নাম্বার ১১ ডিজিট হওয়া বাধ্যতামূলক")
                 return false
             }
         }
@@ -1403,22 +1377,28 @@ class LoanSurveyFragment : Fragment() {
             context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
             return false
         }
+
         if (binding?.merchantHasTradeLicenceRadioGroup?.checkedRadioButtonId == R.id.merchantHasTradeLicenceYes
-            && ((binding?.tradeliesenceNOTV?.text.toString()
-                .isEmpty() || binding?.tradeliesencExpireDateTV?.text.toString().isEmpty()))
+            && (binding?.tradeliesenceNOTV?.text.toString()
+                .isEmpty() || binding?.tradeliesencExpireDateTV?.text.toString().isEmpty())
         ) {
-            context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
-            return false
+            return if (!isExpireDateofTradeLisenseSelectd) {
+                context?.toast("ট্রেড লাইসেন্স এর এক্সপায়ার ডেট এড করুন")
+                false
+            } else if (binding?.tradeliesenceNOTV?.text.toString().isEmpty()) {
+                context?.toast("ট্রেড লাইসেন্স এর নাম্বার দিন")
+                false
+            } else {
+                context?.toast("ট্রেড লাইসেন্স এর তথ্য দিন")
+                false
+            }
         }
+
         if (imagePickFlag == 1) {
-            if (imageTradeLicencePath.isEmpty()) {
+            if (tradeLicenseImageUrlFrag.isEmpty()) {
                 context?.toast("ট্রেড লাইসেন্স এর ছবি অ্যাড করুন")
                 return false
             }
-        }
-        if (!isExpireDateofTradeLisenseSelectd) {
-            context?.toast("ট্রেড লাইসেন্স এর এক্সপায়ার ডেট এড করুন")
-            return false
         }
 
 
