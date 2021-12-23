@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 data class BankCheckForEftRequest(
     @SerializedName("BankName")
-    val bankName: String = ""
+    val bankName: String? = ""
 )

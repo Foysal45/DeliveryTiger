@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.os.Build
@@ -38,11 +37,9 @@ import com.bd.deliverytiger.app.api.model.payment_receieve.OptionImageUrl
 import com.bd.deliverytiger.app.databinding.FragmentInstantPaymentRequestBottomSheetBinding
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.accounts_mail_format.AccountsMailFormatBottomSheet
-import com.bd.deliverytiger.app.ui.add_order.AddProductBottomSheet
 import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.utils.*
-import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -50,7 +47,6 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.annotation.meta.When
 import kotlin.concurrent.thread
 
 class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
@@ -153,7 +149,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         binding?.checkExpress?.setTextWith("${model.expressTime} ঘন্টা", "EXPRESS", HtmlCompat.fromHtml("(<font color='#E84545'>${DigitConverter.toBanglaDigit(model.expressCharge, true)}</font> টাকা চার্জ প্রযোজ্য)", HtmlCompat.FROM_HTML_MODE_LEGACY),0)
         binding?.checkNormal?.setTextWith("${model.normalTime} ঘন্টা", "NORMAL", "(অতিরিক্ত চার্জ নেই)",1)
 
-        viewModel.checkBankNameForEFT(BankCheckForEftRequest(model.bankName)).observe(viewLifecycleOwner, Observer { bankModel->
+        viewModel.checkBankNameForEFT(BankCheckForEftRequest(model.bankName ?: "")).observe(viewLifecycleOwner, Observer { bankModel->
             isMatchBankAccount = if (bankModel.isMatch == 1){1}else{2}
             superExpressBankLists.clear()
             superExpressBankLists.clear()
@@ -263,7 +259,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
             fetchTimeSuperExpress(model.superExpressCutOffTime)
             if (validateSuperExpress()){
                 if (isValidTimeSuperExpress){
-                    alert("", HtmlCompat.fromHtml("<font><b>আপনি কি ব্যাংক অ্যাকাউন্টে (${model.bankName} অ্যাকাউন্ট নাম্বারঃ ${model.bankACNo}) পেমেন্ট নিতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
+                    alert("", HtmlCompat.fromHtml("<font><b>আপনি কি ব্যাংক অ্যাকাউন্টে (${model.bankName ?: ""} অ্যাকাউন্ট নাম্বারঃ ${model.bankACNo}) পেমেন্ট নিতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
                         if (it == AlertDialog.BUTTON_POSITIVE) {
                             UserLogger.logGenie("Instant_bank_payment_transfer_clicked")
                             instantPaymentRequestAndTransfer(3) // for instant bank transfer 3
@@ -284,7 +280,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
                     if (requestPaymentMethod == 1){
                         message = "আপনি কি বিকাশ অ্যাকাউন্টে (${model.bKashNo}) পেমেন্ট নিতে চান?"
                     }else if (requestPaymentMethod == 3){
-                        message = "আপনি কি ব্যাংক অ্যাকাউন্টে (${model.bankName} অ্যাকাউন্ট নাম্বারঃ ${model.bankACNo}) পেমেন্ট নিতে চান?"
+                        message = "আপনি কি ব্যাংক অ্যাকাউন্টে (${model.bankName ?: ""} অ্যাকাউন্ট নাম্বারঃ ${model.bankACNo}) পেমেন্ট নিতে চান?"
                     }
                     alert("",  HtmlCompat.fromHtml("<font><b>$message</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
                         if (it == AlertDialog.BUTTON_POSITIVE) {

@@ -35,7 +35,7 @@ data class MerchantPayableReceivableDetailResponse(
     @SerializedName("BankACNo")
     val bankACNo: String = "",
     @SerializedName("BankName")
-    val bankName: String = "",
+    val bankName: String? = "",
     @SerializedName("BKashNo")
     val bKashNo: String = "",
     @SerializedName("NagadNo")
