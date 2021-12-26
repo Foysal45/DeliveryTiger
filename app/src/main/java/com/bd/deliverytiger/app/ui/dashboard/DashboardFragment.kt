@@ -42,6 +42,7 @@ import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleActivity
+import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleBottomSheet
 import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentRequestBottomSheet
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
@@ -674,6 +675,9 @@ class DashboardFragment : Fragment() {
 
     private fun getCourierUsersInformation() {
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            homeViewModel.paymentServiceType = model.paymentServiceType
+            homeViewModel.paymentServiceCharge = model.paymentServiceCharge
+            homeViewModel.pohBalance = model.pohBalance
             adminUser = model?.adminUsers
             initRetentionManagerData(
                 model?.adminUsers?.userId ?: 0,

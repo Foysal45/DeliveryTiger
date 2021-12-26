@@ -86,6 +86,8 @@ class AddOrderFragmentOne : Fragment() {
     private lateinit var checkBoxBreakable: AppCompatCheckBox
     private lateinit var collectionAddressET: EditText
     private lateinit var checkTerms: AppCompatCheckBox
+    private lateinit var checkPoh: AppCompatCheckBox
+    private lateinit var checkPohTV: TextView
     private lateinit var checkTermsTV: TextView
     private lateinit var deliveryTypeRV: RecyclerView
     private lateinit var voucherLayoutButton: LinearLayout
@@ -157,6 +159,7 @@ class AddOrderFragmentOne : Fragment() {
     private var isHeavyWeight: Boolean = false
     private var isEligibleForSpecialService: Boolean = false
     private var isAgreeTerms: Boolean = false
+    private var isAgreeInPOH: Boolean = false
     private var isWeightSelected: Boolean = false
     private var isPackagingSelected: Boolean = true
     private var payCollectionAmount: Double = 0.0
@@ -189,6 +192,10 @@ class AddOrderFragmentOne : Fragment() {
     private var isVoucherApplied: Boolean = false
     private var voucherCode: String = ""
     private var voucherDeliveryRangeId: Int = 0
+
+    //POH
+    private var isPohEnable: Boolean = false
+    private var pohCharge: Double = 0.0
 
     private var deliveryType: String = ""
     private var orderType: String = "Only Delivery"
@@ -273,6 +280,8 @@ class AddOrderFragmentOne : Fragment() {
         spinnerPackaging = view.findViewById(R.id.spinner_packaging_selection)
         checkBoxBreakable = view.findViewById(R.id.check_breakable)
         collectionAddressET = view.findViewById(R.id.collectionAddress)
+        checkPoh = view.findViewById(R.id.check_poh)
+        checkPohTV = view.findViewById(R.id.check_poh_text)
         checkTerms = view.findViewById(R.id.check_terms_condition)
         checkTermsTV = view.findViewById(R.id.check_terms_condition_text)
         deliveryTypeRV = view.findViewById(R.id.delivery_type_selection_rV)
@@ -348,6 +357,14 @@ class AddOrderFragmentOne : Fragment() {
             binding?.voucherInfo?.visibility = View.VISIBLE
             binding?.voucherClear?.visibility = View.GONE
         }
+        if (homeViewModel.paymentServiceType > 0){
+            binding?.pohLayout?.visibility = View.VISIBLE
+            pohCharge = homeViewModel.paymentServiceCharge
+        }else{
+            binding?.pohLayout?.visibility = View.GONE
+        }
+
+        isPohEnable = isAgreeInPOH && homeViewModel.paymentServiceType > 0
 
         val calender = Calendar.getInstance()
         val todayDate = calender.timeInMillis
@@ -515,6 +532,22 @@ class AddOrderFragmentOne : Fragment() {
         }
         checkTerms.setOnCheckedChangeListener { compoundButton, b ->
             isAgreeTerms = b
+        }
+
+        checkPoh.setOnCheckedChangeListener { compoundButton, b ->
+            if (merchantDistrict == districtId && b){
+                val msg = "Same City Not Applicable"
+                alert(getString(R.string.instruction), msg, false, getString(R.string.ok), getString(R.string.cancel)) {
+                    if (it == AlertDialog.BUTTON_POSITIVE) {
+                        checkPoh.isChecked = false
+                    }
+                }.apply {
+                    setCancelable(false)
+                    show()
+                }
+            }else{
+                isAgreeInPOH = b
+            }
         }
         checkTermsTV.setOnClickListener {
 
