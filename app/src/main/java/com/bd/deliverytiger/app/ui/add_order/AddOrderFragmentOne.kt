@@ -791,9 +791,9 @@ class AddOrderFragmentOne : Fragment() {
         ft?.commit()
     }*/
 
-    private fun showIsBreakableALert(){
+    private fun showIsBreakableAlert(){
 
-        alert("নির্দেশনা",  "একাউন্ট টাইপ অনুযায়ী, আপনি ভঙ্গুর প্রোডাক্ট নিয়ে কাজ করেন। এক্ষেত্রে আপনার জন্য অতিরিক্ত চার্জ প্রযোজ্য হবে।" , false, "ঠিক আছে ", ).show()
+        alert("নির্দেশনা", "একাউন্ট টাইপ অনুযায়ী, আপনি ভঙ্গুর প্রোডাক্ট নিয়ে কাজ করেন। এক্ষেত্রে আপনার জন্য অতিরিক্ত চার্জ প্রযোজ্য হবে।" , false, "ঠিক আছে ", ).show()
 
     }
 
@@ -1203,6 +1203,7 @@ class AddOrderFragmentOne : Fragment() {
 
                 selectServiceType()
 
+                clearPoh()
                 getDeliveryCharge(districtId, thanaId, areaId, serviceType)
                 getSpecialService(districtId, thanaId, areaId)
                 fetchSelectedDistrictInfo(model.districtId, model.thanaId, model.areaId)
@@ -1273,7 +1274,7 @@ class AddOrderFragmentOne : Fragment() {
             }
             updateUIAfterDistrict(district)
             if (isBreakable){
-                showIsBreakableALert()
+                showIsBreakableAlert()
             }
         }
         dialog.onClose = { type ->
@@ -1435,6 +1436,7 @@ class AddOrderFragmentOne : Fragment() {
                         }
                     }
                     updateUIAfterDistrict(model)
+                    clearPoh()
                 }
                 LocationType.THANA -> {
                     thanaId = model.id
@@ -1965,6 +1967,11 @@ class AddOrderFragmentOne : Fragment() {
         binding?.voucherInfo?.visibility = View.VISIBLE
         binding?.voucherClear?.visibility = View.GONE
         calculateTotalPrice()
+    }
+
+    private fun clearPoh(){
+        checkPoh?.isChecked = false
+        isAgreeInPOH = false
     }
 
     private fun goToVoucherInformationBottomSheet() {
