@@ -257,7 +257,7 @@ class DashboardAdapter(private val mContext: Context?, private var dataList: Mut
                     onPaymentRequestClick?.invoke(absoluteAdapterPosition, dataList[absoluteAdapterPosition])
                 }
             }
-            binding.paymentHistoryBtn.setOnClickListener {
+            binding.paymentHistoryLayout.setOnClickListener {
                 if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
                     onPreviousPaymentHistoryClick?.invoke()
                 }

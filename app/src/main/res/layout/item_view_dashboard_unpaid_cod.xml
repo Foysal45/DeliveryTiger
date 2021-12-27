@@ -59,7 +59,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/bodyTV"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="16dp"
-        android:visibility="visible"
+        android:visibility="gone"
         tools:visibility="visible"
         >
 
@@ -182,34 +182,44 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/paymentHistoryBtn"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/paymentHistoryLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="8dp"
-        android:paddingTop="6dp"
-        android:paddingEnd="6dp"
-        android:paddingBottom="6dp"
-        android:layout_marginBottom="4dp"
-        android:text="পূর্বের সকল পেমেন্ট"
-        android:textStyle="bold"
-        android:textColor="@color/black_90"
-        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bodyTV" />
+        app:layout_constraintTop_toBottomOf="@id/bodyTV">
 
-    <ImageView
-        android:id="@+id/arrowAllPayment"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:src="@drawable/ic_arrow_right"
-        android:contentDescription="@string/cd"
-        app:layout_constraintTop_toTopOf="@id/paymentHistoryBtn"
-        app:layout_constraintBottom_toBottomOf="@id/paymentHistoryBtn"
-        app:layout_constraintStart_toEndOf="@id/paymentHistoryBtn"
-        app:tint="@color/black_90"
-        />
+        <TextView
+            android:id="@+id/paymentHistoryBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="6dp"
+            android:paddingBottom="6dp"
+            android:layout_marginBottom="4dp"
+            android:text="পূর্বের সকল পেমেন্ট"
+            android:textStyle="bold"
+            android:textColor="@color/black_80"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/arrowAllPayment"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_arrow_right"
+            android:contentDescription="@string/cd"
+            app:layout_constraintTop_toTopOf="@id/paymentHistoryBtn"
+            app:layout_constraintBottom_toBottomOf="@id/paymentHistoryBtn"
+            app:layout_constraintStart_toEndOf="@id/paymentHistoryBtn"
+            app:tint="@color/black_80"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
