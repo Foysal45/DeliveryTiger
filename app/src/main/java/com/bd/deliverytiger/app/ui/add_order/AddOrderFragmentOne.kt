@@ -1630,7 +1630,51 @@ class AddOrderFragmentOne : Fragment() {
                     e.printStackTrace()
                 }
             }
-            payCODCharge = (payCollectionAmount / 100.0) * codChargePercentage
+            if (districtId == 14){
+                when (homeViewModel.codChargeTypeFlag){
+                1->{
+                    context?.toast("1")
+                     if (homeViewModel.codChargeDhaka > -1.0) {
+                         context?.toast("2, ${homeViewModel.codChargeDhaka}")
+                         payCODCharge = homeViewModel.codChargeDhaka
+                     }
+                }
+                2->{
+                    context?.toast("3")
+                    if (homeViewModel.codChargePercentageDhaka > -1.0) {
+                        context?.toast("4")
+                        codChargePercentage = homeViewModel.codChargePercentageDhaka
+                        payCODCharge = (payCollectionAmount / 100.0) * codChargePercentage
+                    }
+                }
+                else->{
+                    context?.toast("5")
+                    payCODCharge = (payCollectionAmount / 100.0) * codChargePercentage
+                }
+            }
+            }else{
+                when (homeViewModel.codChargeTypeOutsideFlag){
+                1->{
+                    context?.toast("6, ${homeViewModel.codChargeOutsideDhaka}")
+                     if (homeViewModel.codChargeOutsideDhaka > -1.0) {
+                         payCODCharge = homeViewModel.codChargeOutsideDhaka
+                     }
+                }
+                2->{
+                    context?.toast("7")
+                    if (homeViewModel.codChargePercentageOutsideDhaka > -1.0) {
+                        codChargePercentage = homeViewModel.codChargePercentageOutsideDhaka
+                        payCODCharge = (payCollectionAmount / 100.0) * codChargePercentage
+                        context?.toast("7, ${homeViewModel.codChargePercentageOutsideDhaka}, ${payCODCharge}")
+                    }
+                }
+                else->{
+                    context?.toast("8")
+                    payCODCharge = (payCollectionAmount / 100.0) * codChargePercentage
+                }
+            }
+            }
+
             if (payCODCharge < codChargeMin) {
                 payCODCharge = codChargeMin.toDouble()
             }
