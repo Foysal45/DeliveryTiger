@@ -100,12 +100,12 @@ class AllOrdersDetailsBottomSheet : BottomSheetDialogFragment() {
 
         binding?.shipmentTV?.text = "${DigitConverter.toBanglaDigit(model.courierPrice?.deliveryCharge, true)} ৳"
 
-        val codChargePercentage = if (model.courierAddressContactInfo?.districtId == 14) {
+        /*val codChargePercentage = if (model.courierAddressContactInfo?.districtId == 14) {
             SessionManager.codChargePercentageInsideDhaka
         } else {
             SessionManager.codChargePercentageOutsideDhaka
-        }
-        val codMsg = "COD চার্জঃ (সর্বনিম্ন ${DigitConverter.toBanglaDigit(SessionManager.codChargeMin)}৳) (${DigitConverter.toBanglaDigit(codChargePercentage)}% × ${DigitConverter.toBanglaDigit(model.courierPrice?.collectionAmount, true)} ৳)"
+        }*/
+        val codMsg = "COD চার্জঃ" //"(সর্বনিম্ন ${DigitConverter.toBanglaDigit(SessionManager.codChargeMin)}৳) (${DigitConverter.toBanglaDigit(codChargePercentage)}% × ${DigitConverter.toBanglaDigit(model.courierPrice?.collectionAmount, true)} ৳)"
         binding?.key003?.text = codMsg
         binding?.codChargeTV?.text = "${DigitConverter.toBanglaDigit(model.courierPrice?.codCharge, true)} ৳"
         binding?.breakableChargeTV?.text = "${DigitConverter.toBanglaDigit(model.courierPrice?.breakableCharge, true)} ৳"
