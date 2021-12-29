@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.SpecialServiceRequestBody
 import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
@@ -149,6 +150,8 @@ class AddOrderFragmentOne : Fragment() {
     private var collectionChargeApi: Double = 0.0
     private var collectionChargeExtraWeightWiseApi: Double = 0.0
     private var isCheckBigProduct: Boolean = false
+    private var codChargeInsideDhaka: Double = 0.0
+    private var codChargeOutsideDhaka: Double = 0.0
     private var codChargePercentageInsideDhaka: Double = 0.0
     private var codChargePercentageOutsideDhaka: Double = 0.0
 
@@ -1041,8 +1044,12 @@ class AddOrderFragmentOne : Fragment() {
             breakableChargeApi = model.breakableCharge
             codChargeMin = model.codChargeMin
             bigProductCharge = model.bigProductCharge
+            codChargeInsideDhaka = model.codChargeDhaka
+            codChargeOutsideDhaka = model.codChargeOutsideDhaka
             codChargePercentageInsideDhaka = model.codChargeDhakaPercentage
             codChargePercentageOutsideDhaka = model.codChargePercentage
+            SessionManager.codChargeInsideDhaka = codChargeInsideDhaka
+            SessionManager.codChargeOutsideDhaka = codChargeOutsideDhaka
             SessionManager.codChargePercentageInsideDhaka = codChargePercentageInsideDhaka
             SessionManager.codChargePercentageOutsideDhaka = codChargePercentageOutsideDhaka
             SessionManager.codChargeMin = codChargeMin
@@ -1553,11 +1560,11 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         selectServiceType()
-        codChargePercentage = if (districtId == 14) {
+        /*codChargePercentage = if (districtId == 14) {
             codChargePercentageInsideDhaka
         } else {
             codChargePercentageOutsideDhaka
-        }
+        }*/
         calculateTotalPrice()
         fetchLocationById(districtId, LocationType.THANA, true)
 
@@ -1728,10 +1735,48 @@ class AddOrderFragmentOne : Fragment() {
                     e.printStackTrace()
                 }
             }
-            payCODCharge = (payCollectionAmount / 100.0) * codChargePercentage
-            if (payCODCharge < codChargeMin) {
-                payCODCharge = codChargeMin.toDouble()
+            if (districtId == 14){
+                when (homeViewModel.codChargeTypeFlag){
+                    1->{
+                        payCODCharge = if (homeViewModel.codChargeDhaka < 0.0) {
+                            codChargeInsideDhaka
+                        }else{
+                            homeViewModel.codChargeDhaka
+                        }
+                    }
+                    2->{
+                        if (homeViewModel.codChargePercentageDhaka < 0.0) {
+                            setCodChargeWithPercentage(codChargePercentageInsideDhaka)
+                        }else{
+                            setCodChargeWithPercentage(homeViewModel.codChargePercentageDhaka)
+                        }
+                        if (payCODCharge < codChargeMin) {
+                            payCODCharge = codChargeMin.toDouble()
+                        }
+                    }
+                }
+            }else{
+                when (homeViewModel.codChargeTypeOutsideFlag){
+                    1->{
+                        payCODCharge = if (homeViewModel.codChargeOutsideDhaka < 0.0) {
+                            codChargeOutsideDhaka
+                        }else{
+                            homeViewModel.codChargeOutsideDhaka
+                        }
+                    }
+                    2->{
+                        if (homeViewModel.codChargePercentageOutsideDhaka < 0.0) {
+                            setCodChargeWithPercentage(codChargePercentageOutsideDhaka)
+                        }else{
+                            setCodChargeWithPercentage(homeViewModel.codChargePercentageOutsideDhaka)
+                        }
+                        if (payCODCharge < codChargeMin) {
+                            payCODCharge = codChargeMin.toDouble()
+                        }
+                    }
+                }
             }
+
             if (SessionManager.maxCodCharge != 0.0) {
                 if (payCODCharge > SessionManager.maxCodCharge) {
                     payCODCharge = SessionManager.maxCodCharge
@@ -1741,6 +1786,7 @@ class AddOrderFragmentOne : Fragment() {
         } else {
             payCollectionAmount = 0.0
             payCODCharge = 0.0
+            codChargePercentage = 0.0
         }
 
         if (isOfficeDrop) {
@@ -1771,6 +1817,11 @@ class AddOrderFragmentOne : Fragment() {
 
         totalTV.text = "${DigitConverter.toBanglaDigit(total.toInt(), true)} ৳"
 
+    }
+
+    private fun setCodChargeWithPercentage( percentage: Double){
+        codChargePercentage = percentage
+        payCODCharge = (payCollectionAmount / 100.0) * codChargePercentage
     }
 
     private fun submitOrder() {

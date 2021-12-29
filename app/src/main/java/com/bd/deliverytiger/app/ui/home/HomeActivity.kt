@@ -1122,6 +1122,13 @@ class HomeActivity : AppCompatActivity(),
             SessionManager.isHeavyWeight = model.isHeavyWeight
             SessionManager.isEligibleForSpecialService = model.merchantAssignActive
             isQuickBookingEnable = model.isQuickOrderActive
+            //custom cod charge
+            viewModel.codChargeTypeFlag = model.codChargeTypeFlag
+            viewModel.codChargeTypeOutsideFlag = model.codChargeTypeOutsideFlag
+            viewModel.codChargeDhaka = model.codChargeDhaka
+            viewModel.codChargeOutsideDhaka = model.codChargeOutsideDhaka
+            viewModel.codChargePercentageDhaka = model.codChargePercentageDhaka
+            viewModel.codChargePercentageOutsideDhaka = model.codChargePercentageOutsideDhaka
         })
     }
 
