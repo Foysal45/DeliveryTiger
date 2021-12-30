@@ -1566,7 +1566,7 @@ class AddOrderFragmentOne : Fragment() {
             codChargePercentageOutsideDhaka
         }*/
         calculateTotalPrice()
-        fetchLocationById(districtId, LocationType.THANA, true)
+        fetchLocationById(districtId, LocationType.THANA, districtId != 14)
 
         /*val filterList = allLocationList.filter { it.parentId == districtId }
         filteredThanaLists.clear()
