@@ -586,10 +586,10 @@ class DashboardFragment : Fragment() {
         viewModel.getMerchantPayableDetailForInstantPayment(requestBody).observe(viewLifecycleOwner, Observer { data->
             if (data != null){
                 binding?.countTV?.text = "৳ ${DigitConverter.toBanglaDigit(data.pohPaybleAmount)}"
-                if (data.pohPaybleAmount == 0){
-                    binding?.actionTV?.visibility = View.GONE
+                if (data.pohPaybleAmount < 1){
+                    binding?.actionLayout?.visibility = View.GONE
                 } else {
-                    binding?.actionTV?.visibility = View.VISIBLE
+                    binding?.actionLayout?.visibility = View.VISIBLE
                 }
             }
         })

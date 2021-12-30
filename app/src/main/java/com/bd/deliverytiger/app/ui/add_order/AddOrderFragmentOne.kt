@@ -203,6 +203,9 @@ class AddOrderFragmentOne : Fragment() {
     private var isPohEnable: Boolean = false
     private var pohCharge: Double = 0.0
 
+    private var applicablePOHCharge = 0.0
+    private var applicablePOHType = 0
+
     private var deliveryType: String = ""
     private var orderType: String = "Only Delivery"
     private var productType: String = "small"
@@ -592,6 +595,13 @@ class AddOrderFragmentOne : Fragment() {
                 }
             }else{
                 isAgreeInPOH = b
+                if (isAgreeInPOH){
+                    applicablePOHCharge = homeViewModel.paymentServiceCharge
+                    applicablePOHType =  homeViewModel.paymentServiceType
+                }else{
+                    applicablePOHCharge = 0.0
+                    applicablePOHType =  0
+                }
             }
         }
         checkTermsTV.setOnClickListener {
@@ -1901,7 +1911,7 @@ class AddOrderFragmentOne : Fragment() {
             payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,
             "android", SessionManager.versionName, true, collectionDistrictId, collectionThanaId,
             deliveryDate, collectionDate, isOfficeDrop, payActualPackagePrice, timeSlotId, selectedCollectionSlotDate,
-            offerType, relationType, serviceType, isHeavyWeight, voucherDiscount.toInt() ?: 0, voucherCode, voucherDeliveryRangeId, homeViewModel.paymentServiceType, homeViewModel.paymentServiceCharge
+            offerType, relationType, serviceType, isHeavyWeight, voucherDiscount.toInt() ?: 0, voucherCode, voucherDeliveryRangeId, applicablePOHType, applicablePOHCharge
         )
 
 
