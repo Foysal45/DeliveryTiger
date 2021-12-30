@@ -611,10 +611,15 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         binding?.orderRequestDatePicker?.setOnClickListener {
+            timeSlotDataAdapter.setSelectedPositions(-1)
+            timeSlotId = 0
+            timeSlotDataAdapter.clear()
             datePicker()
         }
 
         binding?.collectionToday?.setOnClickListener {
+            timeSlotDataAdapter.setSelectedPositions(-1)
+            timeSlotId = 0
             binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
             binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
             val calender = Calendar.getInstance()
@@ -646,6 +651,8 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         binding?.collectionTomorrow?.setOnClickListener {
+            timeSlotDataAdapter.setSelectedPositions(-1)
+            timeSlotId = 0
             binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
             binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
             val calender = Calendar.getInstance()
@@ -1486,18 +1493,6 @@ class AddOrderFragmentOne : Fragment() {
                     areaId = 0
                     etAriaPostOffice.setText("")
                     filteredAreaLists.clear()
-
-                    //new logic for timeSlot
-                    /*if (!model.alertMsg.isNullOrEmpty()){
-                        alertMsg = model.alertMsg.toString()
-                        isNextDayActive = true
-                    } else{
-                        isNextDayActive = false
-                        isNextDay = false
-                    }
-                    context?.toast("isNextDayActive $isNextDayActive")*/
-                    //new logic end
-
                     getDeliveryCharge(districtId, thanaId, 0, serviceType)
                     getSpecialService(districtId, thanaId, 0)
                     fetchLocationById(thanaId, LocationType.AREA, true)
@@ -1743,6 +1738,7 @@ class AddOrderFragmentOne : Fragment() {
                         }else{
                             homeViewModel.codChargeDhaka
                         }
+                        codChargePercentage = 0.0
                     }
                     2->{
                         if (homeViewModel.codChargePercentageDhaka < 0.0) {
@@ -1763,6 +1759,7 @@ class AddOrderFragmentOne : Fragment() {
                         }else{
                             homeViewModel.codChargeOutsideDhaka
                         }
+                        codChargePercentage = 0.0
                     }
                     2->{
                         if (homeViewModel.codChargePercentageOutsideDhaka < 0.0) {
@@ -1820,7 +1817,15 @@ class AddOrderFragmentOne : Fragment() {
     }
 
     private fun setCodChargeWithPercentage( percentage: Double){
-        codChargePercentage = percentage
+        codChargePercentage = if (percentage < 0){
+            if (districtId == 14) {
+                codChargePercentageInsideDhaka
+            } else {
+                codChargePercentageOutsideDhaka
+            }
+        }else{
+            percentage
+        }
         payCODCharge = (payCollectionAmount / 100.0) * codChargePercentage
     }
 
