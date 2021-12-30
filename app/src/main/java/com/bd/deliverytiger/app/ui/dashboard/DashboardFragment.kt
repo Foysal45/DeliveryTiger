@@ -35,6 +35,7 @@ import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnC
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
+import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceiveableDetailRequest
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
@@ -124,6 +125,7 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initDashboard()
+        initPoh()
         getCourierUsersInformation()
         fetchBannerData()
         fetchCODData()
@@ -577,6 +579,20 @@ class DashboardFragment : Fragment() {
             layoutManager = gridLayoutManager
             adapter = dashboardAdapter
         }
+    }
+
+    private fun initPoh() {
+        val requestBody = MerchantPayableReceiveableDetailRequest(SessionManager.courierUserId, 0)
+        viewModel.getMerchantPayableDetailForInstantPayment(requestBody).observe(viewLifecycleOwner, Observer { data->
+            if (data != null){
+                binding?.countTV?.text = "৳ ${DigitConverter.toBanglaDigit(data.pohPaybleAmount)}"
+                if (data.pohPaybleAmount == 0){
+                    binding?.actionTV?.visibility = View.GONE
+                } else {
+                    binding?.actionTV?.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 
     private fun initRetentionManagerData(userId: Int, retentionManagerName: String, retentionManagerNumber: String) {
