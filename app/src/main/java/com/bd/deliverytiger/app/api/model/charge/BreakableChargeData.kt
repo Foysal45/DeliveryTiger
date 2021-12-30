@@ -8,6 +8,10 @@ data class BreakableChargeData(
     var id: Int,
     @SerializedName("breakableCharge")
     var breakableCharge: Double,
+    @SerializedName("codChargeDhaka")
+    var codChargeDhaka: Double,
+    @SerializedName("codChargeOutsideDhaka")
+    var codChargeOutsideDhaka: Double,
     @SerializedName("codChargePercentage")
     var codChargePercentage: Double,
     @SerializedName("codChargeDhakaPercentage")

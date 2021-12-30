@@ -744,7 +744,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
 
     private fun validateSuperExpress(): Boolean{
 
-        if (model.netPayableAmount == 0){
+        if (model.superExpressNetPayableAmount == 0){
             context?.toast("আপনার তথ্য লোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন..")
             return false
         }
@@ -755,7 +755,7 @@ class InstantPaymentRequestBottomSheet : BottomSheetDialogFragment() {
         }
 
         if (isMatchBankAccount == 0){
-            context?.toast("আপনার তথ্য লোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন..")
+            context?.toast("আপনার তথ্য লোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন")
             return false
         }
 

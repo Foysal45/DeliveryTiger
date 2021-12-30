@@ -57,5 +57,9 @@ data class DistrictData(
 
     @ColumnInfo(name = "districtPriority")
     @SerializedName("districtPriority")
-    var districtPriority: Int = 0
+    var districtPriority: Int = 0,
+
+    @ColumnInfo(name = "nextDayAlertMessage")
+    @SerializedName("nextDayAlertMessage")
+    var nextDayAlertMessage: String? = ""
 ): Parcelable

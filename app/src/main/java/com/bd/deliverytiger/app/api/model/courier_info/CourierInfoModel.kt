@@ -106,6 +106,18 @@ data class CourierInfoModel(
     var isLoanActive: Boolean = false,
     @SerializedName("customerVoiceSmsLimit")
     var customerVoiceSmsLimit: Int = 0,
+    @SerializedName("codChargeTypeFlag")
+    var codChargeTypeFlag: Int = 0,
+    @SerializedName("codChargeTypeOutsideFlag")
+    var codChargeTypeOutsideFlag: Int = 0,
+    @SerializedName("codChargeDhaka")
+    var codChargeDhaka: Double = 0.0,
+    @SerializedName("codChargeOutsideDhaka")
+    var codChargeOutsideDhaka: Double = 0.0,
+    @SerializedName("codChargePercentageDhaka")
+    var codChargePercentageDhaka: Double = 0.0,
+    @SerializedName("codChargePercentageOutsideDhaka")
+    var codChargePercentageOutsideDhaka: Double = 0.0,
 
     //Internal
     var isOfferTaken: Boolean = false

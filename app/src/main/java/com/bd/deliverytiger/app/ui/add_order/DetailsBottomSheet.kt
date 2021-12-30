@@ -78,7 +78,7 @@ class DetailsBottomSheet : BottomSheetDialogFragment() {
 
         binding?.shipmentTV?.text = "${DigitConverter.toBanglaDigit(deliveryCharge, true)} ৳"
         binding?.shipmentExtraTV?.text = "${DigitConverter.toBanglaDigit(extraDeliveryCharge, true)} ৳"
-        binding?.codChargeTitleTV?.text = "COD চার্জঃ (${DigitConverter.toBanglaDigit(codChargePercentage, false)}%)"
+        binding?.codChargeTitleTV?.text = if (codChargePercentage > 0){"COD চার্জঃ (${DigitConverter.toBanglaDigit(codChargePercentage, false)}%)"}else{ "COD চার্জঃ" }
         binding?.codChargeTV?.text = "${DigitConverter.toBanglaDigit(payCODCharge, true)} ৳"
         binding?.breakableChargeTV?.text = "${DigitConverter.toBanglaDigit(payBreakableCharge, true)} ৳"
         binding?.collectionChargeTV?.text = "${DigitConverter.toBanglaDigit(payCollectionCharge, true)} ৳"

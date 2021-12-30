@@ -217,6 +217,26 @@ object SessionManager {
             }
         }
 
+    var codChargeInsideDhaka: Double
+        get() {
+            return pref.getFloat("codChargeInsideDhaka", 1f).toDouble()
+        }
+        set(value) {
+            pref.edit {
+                putFloat("codChargeInsideDhaka", value.toFloat())
+            }
+        }
+
+    var codChargeOutsideDhaka: Double
+        get() {
+            return pref.getFloat("codChargeOutsideDhaka", 1f).toDouble()
+        }
+        set(value) {
+            pref.edit {
+                putFloat("codChargeOutsideDhaka", value.toFloat())
+            }
+        }
+
     var codChargePercentageOutsideDhaka: Double
         get() {
             return pref.getFloat("codChargePercentageOutsideDhaka", 1f).toDouble()

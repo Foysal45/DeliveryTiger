@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bd.deliverytiger.app.BuildConfig
 import com.bd.deliverytiger.app.R
+import com.bd.deliverytiger.app.api.model.charge.BreakableChargeData
 import com.bd.deliverytiger.app.api.model.charge.DeliveryChargeRequest
 import com.bd.deliverytiger.app.api.model.charge.SpecialServiceRequestBody
 import com.bd.deliverytiger.app.api.model.charge.WeightRangeWiseData
@@ -151,6 +152,8 @@ class AddOrderFragmentOne : Fragment() {
     private var collectionChargeApi: Double = 0.0
     private var collectionChargeExtraWeightWiseApi: Double = 0.0
     private var isCheckBigProduct: Boolean = false
+    private var codChargeInsideDhaka: Double = 0.0
+    private var codChargeOutsideDhaka: Double = 0.0
     private var codChargePercentageInsideDhaka: Double = 0.0
     private var codChargePercentageOutsideDhaka: Double = 0.0
 
@@ -175,6 +178,9 @@ class AddOrderFragmentOne : Fragment() {
     private var payActualPackagePrice: Double = 0.0
     private var isOpenBoxCheck: Boolean = false
     private var isOfficeDrop: Boolean = true
+    private var isNextDay: Boolean = false
+    private var isNextDayActive: Boolean = false
+    private var isMsgShown: Boolean = false
     private var isCollectionLocationSelected: Boolean = false
     private var removeCollectionTimeSlotId: Int = 0
     private var isCollectionTypeSelected: Boolean = false
@@ -212,6 +218,7 @@ class AddOrderFragmentOne : Fragment() {
 
     private var deliveryTypeFlag: Int = 0
     private var alertMsg: String = ""
+    private var alertMsg2: String = ""
     private var logicExpression: String = ""
     private var dayAdvance: String = ""
     private var isSameDay: Boolean = false
@@ -381,7 +388,8 @@ class AddOrderFragmentOne : Fragment() {
             deliveryType = "${model.deliveryType} ${model.days}"
             deliveryRangeId = model.deliveryRangeId
             weightRangeId = model.weightRangeId
-            alertMsg = model.deliveryAlertMessage ?: ""
+            //alertMsg = model.deliveryAlertMessage ?: ""
+            alertMsg = alertMsg2 ?: ""
             logicExpression = model.loginHours?.trim() ?: ""
             dayAdvance = model.dateAdvance ?: ""
             val showHide = model.showHide
@@ -411,6 +419,10 @@ class AddOrderFragmentOne : Fragment() {
                     deliveryDatePicker.text = ""
                     collectionDate = ""
                     collectionDatePicker.text = ""
+
+                    if (isNextDayActive){
+                        isNextDay = false
+                    }
                 }
                 // Show delivery date collection date
                 1 -> {
@@ -421,6 +433,10 @@ class AddOrderFragmentOne : Fragment() {
                     deliveryDatePicker.text = ""
                     collectionDate = ""
                     collectionDatePicker.text = ""
+
+                    if (isNextDayActive){
+                        isNextDay = false
+                    }
                 }
                 // Show office drop
                 2 -> {
@@ -431,9 +447,19 @@ class AddOrderFragmentOne : Fragment() {
                     deliveryDatePicker.text = ""
                     collectionDate = ""
                     collectionDatePicker.text = ""
+
+                    if (isNextDayActive){
+                        isNextDay = false
+                    }
+
                 }
                 // Delivery alert msg show
                 3 -> {
+
+                    if (isNextDayActive){
+                        isNextDay = true
+                    }
+
                     if (selectedDeliveryType != deliveryType) {
                         selectedDeliveryType = deliveryType
                         if (logicExpression.isNotEmpty()) {
@@ -441,13 +467,32 @@ class AddOrderFragmentOne : Fragment() {
                             val hour24 = calendar.get(Calendar.HOUR_OF_DAY)
                             val timeValidity = executeExpression("$hour24 $logicExpression")
                             if (timeValidity) {
+                                if (!alertMsg.isNullOrEmpty()){
+                                    isMsgShown = true
+                                    alert("নির্দেশনা", alertMsg) {
+                                    }.show()
+                                }
+                            }
+                        } else {
+                            if (!alertMsg.isNullOrEmpty()){
+                                    isMsgShown = true
+                                    alert("নির্দেশনা", alertMsg) {
+                                    }.show()
+                                }
+                        }
+                    } else {
+                        if (!isMsgShown){
+                            if(!alertMsg.isNullOrEmpty()){
+                                isMsgShown = true
                                 alert("নির্দেশনা", alertMsg) {
                                 }.show()
                             }
-                        } else {
-                            alert("নির্দেশনা", alertMsg) {
-                            }.show()
                         }
+                    }
+                }
+                else -> {
+                    if (isNextDayActive){
+                        isNextDay = false
                     }
                 }
             }
@@ -599,10 +644,15 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         binding?.orderRequestDatePicker?.setOnClickListener {
+            timeSlotDataAdapter.setSelectedPositions(-1)
+            timeSlotId = 0
+            selectedDate = ""
             datePicker()
         }
 
         binding?.collectionToday?.setOnClickListener {
+            timeSlotDataAdapter.setSelectedPositions(-1)
+            timeSlotId = 0
             binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
             binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
             val calender = Calendar.getInstance()
@@ -634,6 +684,8 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         binding?.collectionTomorrow?.setOnClickListener {
+            timeSlotDataAdapter.setSelectedPositions(-1)
+            timeSlotId = 0
             binding?.collectionTomorrow?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_selected)
             binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
             val calender = Calendar.getInstance()
@@ -1032,8 +1084,12 @@ class AddOrderFragmentOne : Fragment() {
             breakableChargeApi = model.breakableCharge
             codChargeMin = model.codChargeMin
             bigProductCharge = model.bigProductCharge
+            codChargeInsideDhaka = model.codChargeDhaka
+            codChargeOutsideDhaka = model.codChargeOutsideDhaka
             codChargePercentageInsideDhaka = model.codChargeDhakaPercentage
             codChargePercentageOutsideDhaka = model.codChargePercentage
+            SessionManager.codChargeInsideDhaka = codChargeInsideDhaka
+            SessionManager.codChargeOutsideDhaka = codChargeOutsideDhaka
             SessionManager.codChargePercentageInsideDhaka = codChargePercentageInsideDhaka
             SessionManager.codChargePercentageOutsideDhaka = codChargePercentageOutsideDhaka
             SessionManager.codChargeMin = codChargeMin
@@ -1144,6 +1200,7 @@ class AddOrderFragmentOne : Fragment() {
                         getSpecialService(districtId,thanaId,areaId)
                         deliveryTypeAdapter.initLoad(filterDeliveryTypeList)
                         deliveryTypeAdapter.selectPreSelection()
+                        //deliveryTypeAdapter.selectPreSelectionV2()
                     } else {
                         isWeightSelected = false
                         deliveryType = ""
@@ -1164,6 +1221,7 @@ class AddOrderFragmentOne : Fragment() {
                                 deliveryTypeAdapter.selectByDeliveryRangeId(selectedServiceType)
                             } else {
                                 deliveryTypeAdapter.selectPreSelection()
+                                //deliveryTypeAdapter.selectPreSelectionV2()
                             }
                         } else {
                             deliveryTypeAdapter.clearList()
@@ -1228,6 +1286,18 @@ class AddOrderFragmentOne : Fragment() {
                 val area = list.find { it.districtId == areaID }
                 etAriaPostOffice.setText(area?.districtBng)
             }
+            //new logic for timeSlot
+            alertMsg2 = district?.nextDayAlertMessage ?:""
+            if (district?.nextDayAlertMessage.isNullOrEmpty()){
+                isNextDayActive = false
+                isNextDay = false
+            } else{
+                isNextDayActive = true
+                isNextDay = true
+            }
+            fetchCollectionTimeSlot()
+            Timber.d("alertMsg ${district?.nextDayAlertMessage}")
+            //new logic end
         })
     }
 
@@ -1429,6 +1499,20 @@ class AddOrderFragmentOne : Fragment() {
                     filteredThanaLists.clear()
                     filteredAreaLists.clear()
 
+                    //new logic for timeSlot
+                    if (!model.alertMsg.isNullOrEmpty()){
+                        alertMsg2 = model.alertMsg.toString()
+                        isNextDayActive = true
+                        isNextDay = true
+                    } else{
+                        isNextDayActive = false
+                        isNextDay = false
+                    }
+                    //deliveryTypeAdapter.clearSelection()
+                    fetchCollectionTimeSlot()
+                    //context?.toast("isNextDayActive $isNextDayActive")
+                    //new logic end
+
                     if (list.isNotEmpty()) {
                         val locationModel = list.find { it.districtId == model.id }
                         locationModel?.let {
@@ -1444,7 +1528,6 @@ class AddOrderFragmentOne : Fragment() {
                     areaId = 0
                     etAriaPostOffice.setText("")
                     filteredAreaLists.clear()
-
                     getDeliveryCharge(districtId, thanaId, 0, serviceType)
                     getSpecialService(districtId, thanaId, 0)
                     fetchLocationById(thanaId, LocationType.AREA, true)
@@ -1489,6 +1572,17 @@ class AddOrderFragmentOne : Fragment() {
         etAriaPostOffice.setText("")
         etAriaPostOfficeLayout.visibility = View.GONE
 
+        //new logic for timeSlot
+        if (!model.alertMsg.isNullOrEmpty()){
+            alertMsg2 = model.alertMsg ?: ""
+            isNextDayActive = true
+        } else{
+            isNextDayActive = false
+            isNextDay = false
+        }
+        Timber.d("Bool $isNextDayActive")
+        //new logic end
+
         val selectedDistrict = filteredDistrictLists.find { it.districtId == districtId }
         selectedDistrict?.let { district ->
             showLocationAlert(district, LocationType.DISTRICT)
@@ -1496,13 +1590,13 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         selectServiceType()
-        codChargePercentage = if (districtId == 14) {
+        /*codChargePercentage = if (districtId == 14) {
             codChargePercentageInsideDhaka
         } else {
             codChargePercentageOutsideDhaka
-        }
+        }*/
         calculateTotalPrice()
-        fetchLocationById(districtId, LocationType.THANA, true)
+        fetchLocationById(districtId, LocationType.THANA, districtId != 14)
 
         /*val filterList = allLocationList.filter { it.parentId == districtId }
         filteredThanaLists.clear()
@@ -1597,6 +1691,9 @@ class AddOrderFragmentOne : Fragment() {
                             timeSlotList.removeAll { it.collectionTimeSlotId == removeCollectionTimeSlotId }
                         }
                     }
+                    if (isNextDay){
+                        timeSlotList.removeAll{it.collectionTimeSlotId != 1}
+                    }
                 }
                 timeSlotDataAdapter.initLoad(timeSlotList)
                 Timber.d("timeSlotDebug $timeSlotList")
@@ -1616,6 +1713,9 @@ class AddOrderFragmentOne : Fragment() {
                         if (removeCollectionTimeSlotId != 0){
                             timeSlotList.removeAll { it.collectionTimeSlotId == removeCollectionTimeSlotId }
                         }
+                    }
+                    if (isNextDay){
+                        timeSlotList.removeAll{it.collectionTimeSlotId != 1}
                     }
                 }
                 timeSlotDataAdapter.initLoad(timeSlotList)
@@ -1665,10 +1765,50 @@ class AddOrderFragmentOne : Fragment() {
                     e.printStackTrace()
                 }
             }
-            payCODCharge = (payCollectionAmount / 100.0) * codChargePercentage
-            if (payCODCharge < codChargeMin) {
-                payCODCharge = codChargeMin.toDouble()
+            if (districtId == 14){
+                when (homeViewModel.codChargeTypeFlag){
+                    1->{
+                        payCODCharge = if (homeViewModel.codChargeDhaka < 0.0) {
+                            codChargeInsideDhaka
+                        }else{
+                            homeViewModel.codChargeDhaka
+                        }
+                        codChargePercentage = 0.0
+                    }
+                    2->{
+                        if (homeViewModel.codChargePercentageDhaka < 0.0) {
+                            setCodChargeWithPercentage(codChargePercentageInsideDhaka)
+                        }else{
+                            setCodChargeWithPercentage(homeViewModel.codChargePercentageDhaka)
+                        }
+                        if (payCODCharge < codChargeMin) {
+                            payCODCharge = codChargeMin.toDouble()
+                        }
+                    }
+                }
+            }else{
+                when (homeViewModel.codChargeTypeOutsideFlag){
+                    1->{
+                        payCODCharge = if (homeViewModel.codChargeOutsideDhaka < 0.0) {
+                            codChargeOutsideDhaka
+                        }else{
+                            homeViewModel.codChargeOutsideDhaka
+                        }
+                        codChargePercentage = 0.0
+                    }
+                    2->{
+                        if (homeViewModel.codChargePercentageOutsideDhaka < 0.0) {
+                            setCodChargeWithPercentage(codChargePercentageOutsideDhaka)
+                        }else{
+                            setCodChargeWithPercentage(homeViewModel.codChargePercentageOutsideDhaka)
+                        }
+                        if (payCODCharge < codChargeMin) {
+                            payCODCharge = codChargeMin.toDouble()
+                        }
+                    }
+                }
             }
+
             if (SessionManager.maxCodCharge != 0.0) {
                 if (payCODCharge > SessionManager.maxCodCharge) {
                     payCODCharge = SessionManager.maxCodCharge
@@ -1678,6 +1818,7 @@ class AddOrderFragmentOne : Fragment() {
         } else {
             payCollectionAmount = 0.0
             payCODCharge = 0.0
+            codChargePercentage = 0.0
         }
 
         if (isOfficeDrop) {
@@ -1708,6 +1849,19 @@ class AddOrderFragmentOne : Fragment() {
 
         totalTV.text = "${DigitConverter.toBanglaDigit(total.toInt(), true)} ৳"
 
+    }
+
+    private fun setCodChargeWithPercentage( percentage: Double){
+        codChargePercentage = if (percentage < 0){
+            if (districtId == 14) {
+                codChargePercentageInsideDhaka
+            } else {
+                codChargePercentageOutsideDhaka
+            }
+        }else{
+            percentage
+        }
+        payCODCharge = (payCollectionAmount / 100.0) * codChargePercentage
     }
 
     private fun submitOrder() {
@@ -1884,6 +2038,11 @@ class AddOrderFragmentOne : Fragment() {
         }
         if (isCollection && payCollectionAmount <= total) {
             context?.showToast("কালেকশন অ্যামাউন্ট সার্ভিস চার্জ থেকে বেশি হতে হবে")
+            return false
+        }
+
+        if (selectedDate == "") {
+            context?.toast(getString(R.string.select_yr_delivery_date))
             return false
         }
 
