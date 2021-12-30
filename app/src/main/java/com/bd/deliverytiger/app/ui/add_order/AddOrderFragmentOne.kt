@@ -1747,7 +1747,7 @@ class AddOrderFragmentOne : Fragment() {
             payPackagingCharge, collectionAddress, productType, deliveryRangeId, weightRangeId, isOpenBoxCheck,
             "android", SessionManager.versionName, true, collectionDistrictId, collectionThanaId,
             deliveryDate, collectionDate, isOfficeDrop, payActualPackagePrice, timeSlotId, selectedCollectionSlotDate,
-            offerType, relationType, serviceType, isHeavyWeight, voucherDiscount.toInt() ?: 0, voucherCode, voucherDeliveryRangeId
+            offerType, relationType, serviceType, isHeavyWeight, voucherDiscount.toInt() ?: 0, voucherCode, voucherDeliveryRangeId, homeViewModel.paymentServiceType, homeViewModel.paymentServiceCharge
         )
 
 

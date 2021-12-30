@@ -97,5 +97,5 @@ data class OrderRequest(
     @SerializedName("paymentServiceType")
     var paymentServiceType: Int = 0,
     @SerializedName("paymentServiceCharge")
-    var paymentServiceCharge: Int = 0
+    var paymentServiceCharge: Double = 0.0
 )
