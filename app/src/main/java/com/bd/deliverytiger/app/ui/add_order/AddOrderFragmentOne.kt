@@ -613,7 +613,7 @@ class AddOrderFragmentOne : Fragment() {
         binding?.orderRequestDatePicker?.setOnClickListener {
             timeSlotDataAdapter.setSelectedPositions(-1)
             timeSlotId = 0
-            timeSlotDataAdapter.clear()
+            selectedDate = ""
             datePicker()
         }
 
@@ -2003,6 +2003,11 @@ class AddOrderFragmentOne : Fragment() {
         }
         if (isCollection && payCollectionAmount <= total) {
             context?.showToast("কালেকশন অ্যামাউন্ট সার্ভিস চার্জ থেকে বেশি হতে হবে")
+            return false
+        }
+
+        if (selectedDate == "") {
+            context?.toast(getString(R.string.select_yr_delivery_date))
             return false
         }
 
