@@ -17,6 +17,8 @@ import com.bd.deliverytiger.app.api.model.order.OrderRequest
 import com.bd.deliverytiger.app.api.model.order.OrderResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
+import com.bd.deliverytiger.app.api.model.poh.MerchantPoHEligibilityCheckResponse
+import com.bd.deliverytiger.app.api.model.poh.PohApplicableResponse
 import com.bd.deliverytiger.app.api.model.quick_order.QuickOrderTimeSlotData
 import com.bd.deliverytiger.app.api.model.quick_order.TimeSlotRequest
 import com.bd.deliverytiger.app.api.model.referral.OfferData
@@ -535,6 +537,60 @@ class AddOrderViewModel(private val repository: AppRepository) : ViewModel() {
                     }
                     is NetworkResponse.ServerError -> {
 
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        viewState.value = ViewState.ShowMessage(networkErrorMessage)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        viewState.value = ViewState.ShowMessage(unknownErrorMessage)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
+    }
+
+    fun getIfPohApplicable(mobile: String, courierUserId: Int) : LiveData<PohApplicableResponse>{
+        viewState.value = ViewState.ProgressState(true)
+        val responseData = MutableLiveData<PohApplicableResponse>()
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getIfPohApplicable(mobile, courierUserId)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        responseData.value = response.body.model!!
+                    }
+                    is NetworkResponse.ServerError -> {
+                        viewState.value = ViewState.ShowMessage(serverErrorMessage)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        viewState.value = ViewState.ShowMessage(networkErrorMessage)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        viewState.value = ViewState.ShowMessage(unknownErrorMessage)
+                        Timber.d(response.error)
+                    }
+                }
+            }
+        }
+        return responseData
+    }
+
+    fun merchantPoHEligibilityCheck(courierUserId: String) : LiveData<MerchantPoHEligibilityCheckResponse?>{
+        viewState.value = ViewState.ProgressState(true)
+        val responseData = MutableLiveData<MerchantPoHEligibilityCheckResponse?>()
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.merchantPoHEligibilityCheck(courierUserId)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        responseData.value = response.body.model
+                    }
+                    is NetworkResponse.ServerError -> {
+                        viewState.value = ViewState.ShowMessage(serverErrorMessage)
                     }
                     is NetworkResponse.NetworkError -> {
                         viewState.value = ViewState.ShowMessage(networkErrorMessage)

@@ -1070,7 +1070,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="10dp"
-                        android:text="POH নিতে চাই"
+                        android:text="আমি POH সার্ভিস নিতে চাই"
                         android:textColor="@color/black_80"
                         android:textSize="@dimen/text_14"
                         android:drawablePadding="4dp"

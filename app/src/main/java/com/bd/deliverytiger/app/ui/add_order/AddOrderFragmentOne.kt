@@ -202,6 +202,8 @@ class AddOrderFragmentOne : Fragment() {
     //POH
     private var isPohEnable: Boolean = false
     private var pohCharge: Double = 0.0
+    private var isPohApplicable: Int = -1
+    private var isMerchantPoHEligibility: Int = 0
 
     private var applicablePOHCharge = 0.0
     private var applicablePOHType = 0
@@ -320,6 +322,7 @@ class AddOrderFragmentOne : Fragment() {
         // Order is important
         getCourierUsersInformation()
         fetchMerchantBalanceInfo()
+        merchantPoHEligibilityCheck()
         getBreakableCharge()
         if (isBreakable) {
             getPackagingCharge()
@@ -583,18 +586,11 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         checkPoh.setOnCheckedChangeListener { compoundButton, b ->
-            if (merchantDistrict == districtId && b){
-                val msg = "Same City Not Applicable"
-                alert(getString(R.string.instruction), msg, false, getString(R.string.ok), getString(R.string.cancel)) {
-                    if (it == AlertDialog.BUTTON_POSITIVE) {
-                        checkPoh.isChecked = false
-                    }
-                }.apply {
-                    setCancelable(false)
-                    show()
-                }
-            }else{
+            if (validationPoh() && b){
+                checkPoh.isChecked = false
+            } else{
                 isAgreeInPOH = b
+                checkPoh.isChecked = true
                 if (isAgreeInPOH){
                     applicablePOHCharge = homeViewModel.paymentServiceCharge
                     applicablePOHType =  homeViewModel.paymentServiceType
@@ -1248,6 +1244,7 @@ class AddOrderFragmentOne : Fragment() {
             if (s != null) {
                 if (s.count() == 11) {
                     fetchCustomerInformation(s.toString())
+                    fetchIfPohApplicable(s.toString(), SessionManager.courierUserId)
                 }
             }
         }
@@ -1277,6 +1274,22 @@ class AddOrderFragmentOne : Fragment() {
                 fetchSelectedDistrictInfo(model.districtId, model.thanaId, model.areaId)
             }
             Timber.d("customerInfo $model")
+        })
+    }
+
+    private fun fetchIfPohApplicable(mobile: String, courierUserId: Int){
+        viewModel.getIfPohApplicable(mobile, courierUserId).observe(viewLifecycleOwner, Observer { model->
+            if (model != null){
+                isPohApplicable = model.pohApplicable
+            }
+        })
+    }
+
+    private fun merchantPoHEligibilityCheck(){
+        viewModel.merchantPoHEligibilityCheck(SessionManager.courierUserId.toString() ?: "").observe(viewLifecycleOwner, Observer { model->
+            if (model != null){
+                isMerchantPoHEligibility = model.netPayableAmount
+            }
         })
     }
 
@@ -1529,8 +1542,8 @@ class AddOrderFragmentOne : Fragment() {
                             showLocationAlert(it, LocationType.DISTRICT)
                         }
                     }
-                    updateUIAfterDistrict(model)
                     clearPoh()
+                    updateUIAfterDistrict(model)
                 }
                 LocationType.THANA -> {
                     thanaId = model.id
@@ -2107,6 +2120,41 @@ class AddOrderFragmentOne : Fragment() {
         return true
     }
 
+    private fun validationPoh(): Boolean{
+        if (merchantDistrict == districtId ){
+            val msg = "Same City Not Applicable"
+            customAlert(getString(R.string.instruction), msg, true,false, getString(R.string.ok), getString(R.string.cancel)) {}.show()
+            return true
+        }
+
+        if(isPohApplicable > -1 && isPohApplicable != 1) {
+            val msg = "POH Not Applicable For this Order"
+            customAlert(getString(R.string.instruction), msg, true,false, getString(R.string.ok), getString(R.string.cancel)) {}.show()
+            return true
+        }
+
+        if (isCollection) {
+            val collectionAmount = collectionAmountET.text.toString()
+
+            try {
+                payCollectionAmount = collectionAmount.toDouble()
+            } catch (e: NumberFormatException) {
+                e.printStackTrace()
+            }
+            if (payCollectionAmount  <= isMerchantPoHEligibility) {
+                customAlert(getString(R.string.instruction),
+                    "কালেকশন অ্যামাউন্ট ${DigitConverter.toBanglaDigit(isMerchantPoHEligibility.toInt() ?: 0)} টাকার কম হলে POH নিতে পারবেন না",
+                    true,
+                    false,
+                    getString(R.string.ok),
+                    getString(R.string.cancel))
+                {}.show()
+            }
+            return true
+        }
+        return false
+    }
+
     private fun goToVoucherBottomSheet() {
         val tag: String = VoucherBottomSheet.tag
         val dialog: VoucherBottomSheet = VoucherBottomSheet.newInstance(deliveryRangeId)
@@ -2141,6 +2189,7 @@ class AddOrderFragmentOne : Fragment() {
     private fun clearPoh(){
         checkPoh?.isChecked = false
         isAgreeInPOH = false
+        isPohApplicable = -1
     }
 
     private fun goToVoucherInformationBottomSheet() {
