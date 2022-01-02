@@ -1255,11 +1255,11 @@ class AddOrderFragmentOne : Fragment() {
             //new logic for timeSlot
             alertMsg2 = district?.nextDayAlertMessage ?:""
             if (district?.nextDayAlertMessage.isNullOrEmpty()){
-                isNextDayActive = false
-                isNextDay = false
-            } else{
                 isNextDayActive = true
                 isNextDay = true
+            } else{
+                isNextDayActive = false
+                isNextDay = false
             }
             fetchCollectionTimeSlot()
             Timber.d("alertMsg ${district?.nextDayAlertMessage}")
@@ -1468,11 +1468,11 @@ class AddOrderFragmentOne : Fragment() {
                     //new logic for timeSlot
                     if (!model.alertMsg.isNullOrEmpty()){
                         alertMsg2 = model.alertMsg.toString()
-                        isNextDayActive = true
-                        isNextDay = true
-                    } else{
                         isNextDayActive = false
                         isNextDay = false
+                    } else{
+                        isNextDayActive = true
+                        isNextDay = true
                     }
                     //deliveryTypeAdapter.clearSelection()
                     fetchCollectionTimeSlot()
@@ -1540,10 +1540,11 @@ class AddOrderFragmentOne : Fragment() {
         //new logic for timeSlot
         if (!model.alertMsg.isNullOrEmpty()){
             alertMsg2 = model.alertMsg ?: ""
-            isNextDayActive = true
-        } else{
             isNextDayActive = false
             isNextDay = false
+        } else{
+            isNextDayActive = true
+            isNextDay = true
         }
         Timber.d("Bool $isNextDayActive")
         //new logic end
@@ -1656,8 +1657,10 @@ class AddOrderFragmentOne : Fragment() {
                             timeSlotList.removeAll { it.collectionTimeSlotId == removeCollectionTimeSlotId }
                         }
                     }
-                    if (isNextDay){
-                        timeSlotList.removeAll{it.collectionTimeSlotId != 1}
+                    if(isTodaySelected){
+                        if (isNextDay){
+                            timeSlotList.removeAll{it.collectionTimeSlotId != 1}
+                        }
                     }
                 }
                 timeSlotDataAdapter.initLoad(timeSlotList)
@@ -1679,9 +1682,12 @@ class AddOrderFragmentOne : Fragment() {
                             timeSlotList.removeAll { it.collectionTimeSlotId == removeCollectionTimeSlotId }
                         }
                     }
-                    if (isNextDay){
-                        timeSlotList.removeAll{it.collectionTimeSlotId != 1}
+                    if (isTodaySelected){
+                        if (isNextDay) {
+                            timeSlotList.removeAll{it.collectionTimeSlotId != 1}
+                        }
                     }
+
                 }
                 timeSlotDataAdapter.initLoad(timeSlotList)
                 binding?.emptyView?.isVisible = timeSlotList.isEmpty()
