@@ -465,11 +465,11 @@ class AddOrderFragmentOne : Fragment() {
 
                 handler.removeCallbacks(runnable)
                 runnable = Runnable {
-                    clearVoucher()
                     calculateTotalPrice()
                     //Timber.d(logTag, "$p0")
                 }
                 handler.postDelayed(runnable, 400L)
+                clearVoucher()
             }
 
         })
