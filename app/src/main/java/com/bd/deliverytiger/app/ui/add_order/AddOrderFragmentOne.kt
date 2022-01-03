@@ -2165,7 +2165,7 @@ class AddOrderFragmentOne : Fragment() {
 
             if (payCollectionAmount  >= isMerchantPoHEligibility && payCollectionAmount <= homeViewModel.collectionAmountLimt) {
                 customAlert(getString(R.string.instruction),
-                    "কালেকশন এমাউন্ট অনুযায়ী এই অর্ডারটি POH এর জন্য প্রযোজ্য নয়।",
+                    "POH এই অর্ডারের জন্য প্রযোজ্য নয়।",
                     true,
                     false,
                     getString(R.string.ok),
