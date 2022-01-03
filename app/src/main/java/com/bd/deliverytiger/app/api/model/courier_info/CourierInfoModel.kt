@@ -96,6 +96,8 @@ data class CourierInfoModel(
     var paymentServiceType: Int = 0,
     @SerializedName("paymentServiceCharge")
     var paymentServiceCharge: Double = 0.0,
+    @SerializedName("collectionAmountLimt")
+    var collectionAmountLimt: Double = 0.0,
     @SerializedName("pohBalance")
     var pohBalance: Double = 0.0,
     @SerializedName("merchantAssignActive")

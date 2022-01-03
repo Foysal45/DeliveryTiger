@@ -2162,9 +2162,10 @@ class AddOrderFragmentOne : Fragment() {
             } catch (e: NumberFormatException) {
                 e.printStackTrace()
             }
-            if (payCollectionAmount  <= isMerchantPoHEligibility) {
+
+            if (payCollectionAmount  >= isMerchantPoHEligibility && payCollectionAmount <= homeViewModel.collectionAmountLimt) {
                 customAlert(getString(R.string.instruction),
-                    "কালেকশন অ্যামাউন্ট ${DigitConverter.toBanglaDigit(isMerchantPoHEligibility.toInt() ?: 0)} টাকার কম হলে POH নিতে পারবেন না",
+                    "কালেকশন এমাউন্ট অনুযায়ী এই অর্ডারটি POH এর জন্য প্রযোজ্য নয়।",
                     true,
                     false,
                     getString(R.string.ok),
@@ -2172,6 +2173,7 @@ class AddOrderFragmentOne : Fragment() {
                 {}.show()
                 return true
             }
+
         }
         return false
     }
