@@ -35,6 +35,7 @@ import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnC
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
+import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantInstantPaymentRequest
 import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceiveableDetailRequest
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.log.UserLogger
@@ -45,6 +46,7 @@ import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleActivity
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleBottomSheet
 import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentRequestBottomSheet
+import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentUpdateViewModel
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -72,6 +74,7 @@ class DashboardFragment : Fragment() {
     private var dateRangeFilterList: MutableList<DeliveredReturnCountResponseItem> = mutableListOf()
     private val viewModel: DashboardViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
+    private val instantPaymentViewModel: InstantPaymentUpdateViewModel by inject()
     //private lateinit var monthSpinnerAdapter: CustomSpinnerAdapter
 
     private val calenderNow = Calendar.getInstance()
@@ -113,6 +116,7 @@ class DashboardFragment : Fragment() {
     private var countDownTimer: CountDownTimer? = null
     private var adminUser: AdminUser? = null
     private var isPhoneVisible = false
+    private var pohAmount: Int = 0
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -454,6 +458,15 @@ class DashboardFragment : Fragment() {
             UserLogger.logGenie("Dashboard_Loan_Survey")
         }
 
+        binding?.actionLayout?.setOnClickListener {
+            if (pohAmount!=0){
+                transferPoh()
+            } else {
+                context?.toast("আপনার পর্যাপ্ত POH ব্যালেন্স নেই")
+            }
+
+        }
+
         /* binding?.dateRangePicker?.setOnClickListener {
              val builder = MaterialDatePicker.Builder.dateRangePicker()
              builder.setTheme(R.style.CustomMaterialCalendarTheme)
@@ -500,6 +513,30 @@ class DashboardFragment : Fragment() {
                         binding?.progressBar?.visibility = View.GONE
                     }
                 }
+            }
+        })
+    }
+
+    private fun transferPoh() {
+        val progressDialog = progressDialog("আপনার পেমেন্টটি প্রসেসিং হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+        val requestBody = MerchantInstantPaymentRequest(0, SessionManager.courierUserId, pohAmount, 2, 1)
+        instantPaymentViewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { response ->
+            progressDialog.dismiss()
+            if (response.message == 1 && !response.transactionId.isNullOrEmpty()){
+                customAlert("", "আপনার লেনদেনটি সফলভাবে সম্পন্ন হয়েছে।",false, false, "ঠিক আছে") {
+                    UserLogger.logGenie("Instant_payment_transfer_Successfully")
+                    /*if (it == AlertDialog.BUTTON_POSITIVE) {
+                    }*/
+                }.show()
+            }else if (response.message == 1 && response.transactionId.isNullOrEmpty()){
+                customAlert("",  "অনুগ্রহ পূর্বক ডেলিভারি টাইগার এর একাউন্টস ডিপার্মেন্ট এর সাথে যোগাযোগ করুন।", false, false, "ঠিক আছে") {
+                    /*if (it == AlertDialog.BUTTON_POSITIVE) {
+                    }*/
+                }.show()
+            }else{
+                customAlert ( "", "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন।", false, false, "ঠিক আছে" ).show()
             }
         })
     }
@@ -586,6 +623,7 @@ class DashboardFragment : Fragment() {
         viewModel.getMerchantPayableDetailForInstantPayment(requestBody).observe(viewLifecycleOwner, Observer { data->
             if (data != null){
                 binding?.countTV?.text = "৳ ${DigitConverter.toBanglaDigit(data.pohPaybleAmount)}"
+                pohAmount = data.pohPaybleAmount
                 if (data.pohPaybleAmount < 1){
                     binding?.actionLayout?.visibility = View.GONE
                 } else {
