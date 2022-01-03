@@ -538,6 +538,13 @@ class AddOrderFragmentOne : Fragment() {
                     //Timber.d(logTag, "$p0")
                 }
                 handler.postDelayed(runnable, 400L)
+
+                if (!p0.isNullOrEmpty()){
+                  if (Integer.parseInt(p0.toString() ?: "") <= isMerchantPoHEligibility){
+                    clearPoh()
+                  }
+                }
+
             }
 
         })
@@ -588,9 +595,12 @@ class AddOrderFragmentOne : Fragment() {
         checkPoh.setOnCheckedChangeListener { compoundButton, b ->
             if (validationPoh() && b){
                 checkPoh.isChecked = false
+                isAgreeInPOH = false
             } else{
-                isAgreeInPOH = b
-                checkPoh.isChecked = true
+                checkPoh.isChecked = b
+                if (!b){
+                    isAgreeInPOH = false
+                }
                 if (isAgreeInPOH){
                     applicablePOHCharge = homeViewModel.paymentServiceCharge
                     applicablePOHType =  homeViewModel.paymentServiceType
@@ -981,7 +991,6 @@ class AddOrderFragmentOne : Fragment() {
             fetchCollectionTimeSlot()
         }
     }
-
 
     private fun datePicker(dateTypeFlag: Int) {
 
@@ -2121,15 +2130,27 @@ class AddOrderFragmentOne : Fragment() {
     }
 
     private fun validationPoh(): Boolean{
-        if (merchantDistrict == districtId ){
-            val msg = "Same City Not Applicable"
+
+        if(isPohApplicable == -1 ) {
+            val msg = "প্রথমে মোবাইল নাম্বার দিন"
+            context?.toast(msg)
+            return true
+        }
+
+        if(isPohApplicable != 1 ) {
+            val msg = "POH এই অর্ডারের জন্য প্রযোজ্য নয়।"
             customAlert(getString(R.string.instruction), msg, true,false, getString(R.string.ok), getString(R.string.cancel)) {}.show()
             return true
         }
 
-        if(isPohApplicable > -1 && isPohApplicable != 1) {
-            val msg = "POH Not Applicable For this Order"
+        if (merchantDistrict == districtId){
+            val msg = "এই জেলায় POH এর সার্ভিস প্রযোজ্য নয়।"
             customAlert(getString(R.string.instruction), msg, true,false, getString(R.string.ok), getString(R.string.cancel)) {}.show()
+            return true
+        }
+
+        if (!isCollection){
+            context?.toast("POH নিতে হলে, COD অর্ডার হতে হবে")
             return true
         }
 
@@ -2149,8 +2170,8 @@ class AddOrderFragmentOne : Fragment() {
                     getString(R.string.ok),
                     getString(R.string.cancel))
                 {}.show()
+                return true
             }
-            return true
         }
         return false
     }
@@ -2189,7 +2210,6 @@ class AddOrderFragmentOne : Fragment() {
     private fun clearPoh(){
         checkPoh?.isChecked = false
         isAgreeInPOH = false
-        isPohApplicable = -1
     }
 
     private fun goToVoucherInformationBottomSheet() {
