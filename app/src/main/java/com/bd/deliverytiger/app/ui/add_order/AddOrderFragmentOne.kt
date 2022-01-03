@@ -52,6 +52,7 @@ import com.bd.deliverytiger.app.ui.add_order.voucher.VoucherBottomSheet
 import com.bd.deliverytiger.app.ui.add_order.voucher.VoucherInformationBottomSheet
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
+import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentUpdateViewModel
 import com.bd.deliverytiger.app.utils.*
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -258,8 +259,11 @@ class AddOrderFragmentOne : Fragment() {
     private var timeSlotDataAdapter: AddOrderTimeSlotAdapter = AddOrderTimeSlotAdapter()
     private val viewModel: AddOrderViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
+    private val currentTimeViewModel: InstantPaymentUpdateViewModel by inject()
 
     private var progressDialog: ProgressDialog? = null
+
+    private var currentTime = ""
 
     //#region Life cycle
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -316,6 +320,7 @@ class AddOrderFragmentOne : Fragment() {
         orderPlaceBtn = view.findViewById(R.id.orderPlaceBtn)
 
         initView()
+        getCurrentTime()
         initClickLister()
         // Order is important
         getCourierUsersInformation()
@@ -778,6 +783,14 @@ class AddOrderFragmentOne : Fragment() {
             //mockUserData()
         }
     }
+
+    private fun getCurrentTime() {
+        currentTimeViewModel.getMessageAlertForIP().observe(viewLifecycleOwner, Observer { model ->
+            if (model != null){
+                currentTime = model.currentTime
+            }
+        })
+    }
     //#endregion
 
     private fun isMerchantCreditAvailable(): Boolean {
@@ -1205,6 +1218,20 @@ class AddOrderFragmentOne : Fragment() {
                         if (merchantDistrict != 14) {
                             filterDeliveryTypeList = model2.weightRangeWiseData.filterNot { it.type == "express" }
                         }
+
+                        //new condition to remove nextDay Delivery type after 4:30 PM
+                        val time = currentTime.split(":")
+                        if (Integer.parseInt(time[0]) == 16){
+                            if (Integer.parseInt(time[1]) >= 30){
+                                val data = filterDeliveryTypeList.filter { it.deliveryRangeId != 14 }
+                                filterDeliveryTypeList = data.filter { it.deliveryRangeId != 17 }
+                            }
+                        } else if (Integer.parseInt(time[0]) > 16){
+                            val data = filterDeliveryTypeList.filter { it.deliveryRangeId != 14 }
+                            filterDeliveryTypeList = data.filter { it.deliveryRangeId != 17 }
+                        }
+                        //new condition ends
+
                         getSpecialService(districtId,thanaId,areaId)
                         deliveryTypeAdapter.initLoad(filterDeliveryTypeList)
                         deliveryTypeAdapter.selectPreSelection()
@@ -1218,6 +1245,20 @@ class AddOrderFragmentOne : Fragment() {
                             if (merchantDistrict != 14) {
                                 filterDeliveryTypeList = model2.weightRangeWiseData.filterNot { it.type == "express" }
                             }
+
+                            //new condition to remove nextDay Delivery type after 4:30 PM
+                            val time = currentTime.split(":")
+                            if (Integer.parseInt(time[0]) == 16){
+                                if (Integer.parseInt(time[1]) >= 30){
+                                    val data = filterDeliveryTypeList.filter { it.deliveryRangeId != 14 }
+                                    filterDeliveryTypeList = data.filter { it.deliveryRangeId != 17 }
+                                }
+                            } else if (Integer.parseInt(time[0]) > 16){
+                                val data = filterDeliveryTypeList.filter { it.deliveryRangeId != 14 }
+                                filterDeliveryTypeList = data.filter { it.deliveryRangeId != 17 }
+                            }
+                            //new condition ends
+
                             deliveryTypeAdapter.initLoad(filterDeliveryTypeList)
                             //Reset change
                             payShipmentCharge = 0.0
