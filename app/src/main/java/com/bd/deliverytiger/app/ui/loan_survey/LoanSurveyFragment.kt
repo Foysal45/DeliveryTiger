@@ -820,7 +820,7 @@ class LoanSurveyFragment : Fragment() {
         val titleText = "নির্দেশনা"
         val descriptionText = "সার্ভেটি পূরণ করার জন্য ধন্যবাদ।"
         val descriptionTextOnUpdate = "সার্ভেটি আপডেট করার জন্য ধন্যবাদ।"
-        if (SessionManager.isSurveyUpdate) {
+        if (isPut) {
             alert(titleText, descriptionTextOnUpdate, false, "ঠিক আছে", "না").show()
         } else {
             alert(titleText, descriptionText, false, "ঠিক আছে", "না").show()
