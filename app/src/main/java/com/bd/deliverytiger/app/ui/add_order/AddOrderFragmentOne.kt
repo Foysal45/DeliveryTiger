@@ -162,7 +162,6 @@ class AddOrderFragmentOne : Fragment() {
     private var isHeavyWeight: Boolean = false
     private var isEligibleForSpecialService: Boolean = false
     private var isAgreeTerms: Boolean = false
-    private var isAgreeInPOH: Boolean = false
     private var isWeightSelected: Boolean = false
     private var isPackagingSelected: Boolean = true
     private var payCollectionAmount: Double = 0.0
@@ -200,7 +199,6 @@ class AddOrderFragmentOne : Fragment() {
     private var voucherDeliveryRangeId: Int = 0
 
     //POH
-    private var isPohEnable: Boolean = false
     private var pohCharge: Double = 0.0
     private var isPohApplicable: Int = -1
     private var isMerchantPoHEligibility: Int = 0
@@ -376,8 +374,6 @@ class AddOrderFragmentOne : Fragment() {
         }else{
             binding?.pohLayout?.visibility = View.GONE
         }
-
-        isPohEnable = isAgreeInPOH && homeViewModel.paymentServiceType > 0
 
         val calender = Calendar.getInstance()
         val todayDate = calender.timeInMillis
@@ -595,13 +591,10 @@ class AddOrderFragmentOne : Fragment() {
         checkPoh.setOnCheckedChangeListener { compoundButton, b ->
             if (validationPoh() && b){
                 checkPoh.isChecked = false
-                isAgreeInPOH = false
             } else{
                 checkPoh.isChecked = b
-                if (!b){
-                    isAgreeInPOH = false
-                }
-                if (isAgreeInPOH){
+
+                if (b){
                     applicablePOHCharge = homeViewModel.paymentServiceCharge
                     applicablePOHType =  homeViewModel.paymentServiceType
                 }else{
@@ -2174,7 +2167,7 @@ class AddOrderFragmentOne : Fragment() {
                 return true
             }
 
-            if (payCollectionAmount  >= isMerchantPoHEligibility && payCollectionAmount <= homeViewModel.collectionAmountLimt) {
+            if (payCollectionAmount <= homeViewModel.collectionAmountLimt && isMerchantPoHEligibility >= payCollectionAmount) {
                 customAlert(getString(R.string.instruction),
                     "POH এই অর্ডারের জন্য প্রযোজ্য নয়।",
                     true,
@@ -2222,7 +2215,6 @@ class AddOrderFragmentOne : Fragment() {
 
     private fun clearPoh(){
         checkPoh?.isChecked = false
-        isAgreeInPOH = false
     }
 
     private fun goToVoucherInformationBottomSheet() {

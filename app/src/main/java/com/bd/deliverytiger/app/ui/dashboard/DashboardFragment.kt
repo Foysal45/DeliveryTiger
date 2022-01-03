@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
+import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -108,6 +109,12 @@ class DashboardFragment : Fragment() {
     private var collectionToday: Int = 0
     private var isQuickBookingEnable: Boolean = false
 
+    //POH
+    private var isPhoneVisible = false
+    private var pohAmount: Int = 0
+    private var bkashStatus: Int = 0
+    private var bkashNumber: String = ""
+
     private var isBannerEnable: Boolean = false
     private var worker: Runnable? = null
     private var handler = Handler(Looper.getMainLooper())
@@ -115,9 +122,6 @@ class DashboardFragment : Fragment() {
     private var collectorInformation: CollectorInformation = CollectorInformation()
     private var countDownTimer: CountDownTimer? = null
     private var adminUser: AdminUser? = null
-    private var isPhoneVisible = false
-    private var pohAmount: Int = 0
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return binding?.root ?: FragmentDashboardBinding.inflate(inflater).also {
@@ -460,7 +464,16 @@ class DashboardFragment : Fragment() {
 
         binding?.actionLayout?.setOnClickListener {
             if (pohAmount!=0){
-                transferPoh()
+                if (bkashStatus == 1){
+                    alert("", HtmlCompat.fromHtml("<font><b>আপনি কি এখনই আপনার বিকাশ একাউন্টে ($bkashNumber) পেমেন্ট নিতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
+                        if (it == AlertDialog.BUTTON_POSITIVE) {
+                            UserLogger.logGenie("Instant_poh_payment_transfer_clicked")
+                            transferPoh() // for transfer poh balance 2
+                        }
+                    }.show()
+                }else{
+                    context?.toast("আপনার বিকাশ একাউন্টের তথ্য অ্যাড করা নেই। তথ্য অ্যাড করার জন্য একাউন্টম্যানেজার এর সাথে যোগাযোগ করুন।")
+                }
             } else {
                 context?.toast("আপনার পর্যাপ্ত POH ব্যালেন্স নেই")
             }
@@ -624,6 +637,8 @@ class DashboardFragment : Fragment() {
             if (data != null){
                 binding?.countTV?.text = "৳ ${DigitConverter.toBanglaDigit(data.pohPaybleAmount)}"
                 pohAmount = data.pohPaybleAmount
+                bkashStatus = data.bKashStatus
+                bkashNumber = data.bKashNo
                 if (data.pohPaybleAmount < 1){
                     binding?.actionLayout?.visibility = View.GONE
                 } else {
