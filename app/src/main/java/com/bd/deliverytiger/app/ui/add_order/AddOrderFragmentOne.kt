@@ -2132,7 +2132,7 @@ class AddOrderFragmentOne : Fragment() {
     private fun validationPoh(): Boolean{
 
         if(isPohApplicable == -1 ) {
-            val msg = "প্রথমে মোবাইল নাম্বার দিন"
+            val msg = "মোবাইল নাম্বার লিখুন"
             context?.toast(msg)
             return true
         }
@@ -2161,6 +2161,11 @@ class AddOrderFragmentOne : Fragment() {
                 payCollectionAmount = collectionAmount.toDouble()
             } catch (e: NumberFormatException) {
                 e.printStackTrace()
+            }
+
+            if (payCollectionAmount == 0.0){
+                context?.toast("কালেকশন অ্যামাউন্ট লিখুন")
+                return true
             }
 
             if (payCollectionAmount  >= isMerchantPoHEligibility && payCollectionAmount <= homeViewModel.collectionAmountLimt) {
