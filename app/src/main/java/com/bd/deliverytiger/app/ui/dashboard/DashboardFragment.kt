@@ -536,8 +536,7 @@ class DashboardFragment : Fragment() {
         progressDialog.show()
         val requestBody = MerchantInstantPaymentRequest(0, SessionManager.courierUserId, pohAmount, 2, 1)
         Timber.d("transferDebug $requestBody")
-        progressDialog.dismiss()
-        /*instantPaymentViewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { response ->
+        instantPaymentViewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { response ->
             progressDialog.dismiss()
             if (response.message == 1 && !response.transactionId.isNullOrEmpty()){
                 alert("", "আপনার লেনদেনটি সফলভাবে সম্পন্ন হয়েছে।", false, "ঠিক আছে") {}.show()
@@ -546,7 +545,7 @@ class DashboardFragment : Fragment() {
             }else{
                 alert ( "", "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন।", false, "ঠিক আছে" ).show()
             }
-        })*/
+        })
     }
 
     private fun goToPreviousPaymentHistory(){

@@ -542,9 +542,9 @@ class AddOrderFragmentOne : Fragment() {
                 handler.postDelayed(runnable, 400L)
 
                 if (!p0.isNullOrEmpty()){
-                  if (Integer.parseInt(p0.toString() ?: "") <= isMerchantPoHEligibility){
-                    clearPoh()
-                  }
+                    checkPohApplicableCODAmount()
+                }else{
+                    checkPoh.isChecked = false
                 }
 
             }
@@ -776,21 +776,46 @@ class AddOrderFragmentOne : Fragment() {
 
     private fun checkISPohApplicable() {
         if (isAgreePOH){
-            if (validationPoh()){
+            if (validationPoh(1)){
                 checkPoh.isChecked = false
             } else{
-                if (payCollectionAmount <= homeViewModel.collectionAmountLimt && isMerchantPoHEligibility >= payCollectionAmount) {
-                    checkPoh.isChecked = true
-                    applicablePOHCharge = homeViewModel.paymentServiceCharge
-                    applicablePOHType =  homeViewModel.paymentServiceType
+                if (homeViewModel.paymentServiceType == 1 && isPohApplicable == 1 && payCollectionAmount > 0){
+                    if (payCollectionAmount <= homeViewModel.collectionAmountLimt && isMerchantPoHEligibility >= payCollectionAmount) {
+                        checkPoh.isChecked = true
+                        applicablePOHCharge = homeViewModel.paymentServiceCharge
+                        applicablePOHType =  homeViewModel.paymentServiceType
+                    }else{
+                        context?.toast("POH লিমিট অনুসারে এই অর্ডারটি POH এর জন্য প্রযোজ্য নয়।")
+                        checkPoh.isChecked = false
+                        applicablePOHCharge = 0.0
+                        applicablePOHType =  0
+                    }
                 }else{
-                    customAlert(getString(R.string.instruction),
-                        "POH এই অর্ডারের জন্য প্রযোজ্য নয়।",
-                        true,
-                        false,
-                        getString(R.string.ok),
-                        getString(R.string.cancel))
-                    {}.show()
+                    context?.toast("POH এই অর্ডারের জন্য প্রযোজ্য নয়।")
+                    checkPoh.isChecked = false
+                    applicablePOHCharge = 0.0
+                    applicablePOHType =  0
+                }
+            }
+        }else{
+            applicablePOHCharge = 0.0
+            applicablePOHType =  0
+        }
+    }
+
+    private fun checkPohApplicableCODAmount() {
+        if (isAgreePOH){
+            if (validationPoh(0)){
+                checkPoh.isChecked = false
+            } else{
+                if (homeViewModel.paymentServiceType == 1 && isPohApplicable == 1 && payCollectionAmount > 0){
+                    if (payCollectionAmount <= homeViewModel.collectionAmountLimt && isMerchantPoHEligibility >= payCollectionAmount) {
+                        applicablePOHCharge = homeViewModel.paymentServiceCharge
+                        applicablePOHType =  homeViewModel.paymentServiceType
+                    }else{
+                        checkPoh.isChecked = false
+                    }
+                }else{
                     checkPoh.isChecked = false
                 }
             }
@@ -2182,7 +2207,7 @@ class AddOrderFragmentOne : Fragment() {
         return true
     }
 
-    private fun validationPoh(): Boolean{
+    private fun validationPoh(isWatcher: Int): Boolean{
 
         if(isPohApplicable == -1 ) {
             val msg = "মোবাইল নাম্বার লিখুন"
@@ -2192,18 +2217,26 @@ class AddOrderFragmentOne : Fragment() {
 
         if(isPohApplicable != 1 ) {
             val msg = "POH এই অর্ডারের জন্য প্রযোজ্য নয়।"
-            customAlert(getString(R.string.instruction), msg, true,false, getString(R.string.ok), getString(R.string.cancel)) {}.show()
+            if (isWatcher == 1){
+                context?.toast(msg)
+            }
+            //customAlert(getString(R.string.instruction), msg, true,false, getString(R.string.ok), getString(R.string.cancel)) {}.show()
             return true
         }
 
         if (merchantDistrict == districtId){
             val msg = "এই জেলায় POH এর সার্ভিস প্রযোজ্য নয়।"
-            customAlert(getString(R.string.instruction), msg, true,false, getString(R.string.ok), getString(R.string.cancel)) {}.show()
+            if (isWatcher == 1){
+                context?.toast(msg)
+            }
+            //customAlert(getString(R.string.instruction), msg, true,false, getString(R.string.ok), getString(R.string.cancel)) {}.show()
             return true
         }
 
         if (!isCollection){
-            context?.toast("POH নিতে হলে, COD অর্ডার হতে হবে")
+            if (isWatcher == 1){
+                context?.toast("POH নিতে হলে, COD অর্ডার হতে হবে")
+            }
             return true
         }
 
@@ -2216,8 +2249,13 @@ class AddOrderFragmentOne : Fragment() {
                 e.printStackTrace()
             }
 
-            if (payCollectionAmount < 1){
+            if (collectionAmountET.text.isNullOrEmpty()){
                 context?.toast("কালেকশন অ্যামাউন্ট লিখুন")
+                return true
+            }
+
+            if (payCollectionAmount < 1){
+                context?.toast("সঠিক কালেকশন অ্যামাউন্ট লিখুন")
                 return true
             }
         }
@@ -2257,6 +2295,8 @@ class AddOrderFragmentOne : Fragment() {
 
     private fun clearPoh(){
         checkPoh?.isChecked = false
+        applicablePOHCharge = 0.0
+        applicablePOHType = 0
     }
 
     private fun goToVoucherInformationBottomSheet() {
