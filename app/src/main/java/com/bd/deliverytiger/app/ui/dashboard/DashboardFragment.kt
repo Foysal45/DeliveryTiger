@@ -111,7 +111,7 @@ class DashboardFragment : Fragment() {
 
     //POH
     private var isPhoneVisible = false
-    private var pohAmount: Int = 0
+    private var pohAmount: Int = -1
     private var bkashStatus: Int = 0
     private var bkashNumber: String = ""
 
@@ -266,6 +266,7 @@ class DashboardFragment : Fragment() {
         binding?.swipeRefresh?.setOnRefreshListener {
             getDashBoardData(selectedMonth, selectedYear)
             fetchCODData()
+            initPoh()
             fetchCollection()
             fetchAcceptedOrder()
             //fetchCurrentBalance()
@@ -399,31 +400,38 @@ class DashboardFragment : Fragment() {
         }
         dashboardAdapter.onPaymentRequestClick = { position, model ->
 
+            if (pohAmount == 0){
+                if (availability && netAmount > 0) {
+                    if (netAmount > instantPaymentOTPLimit) {
+                        if (!isOTPRequested) {
+                            sendOTP()
+                        }
+                    } else {
+                        val tag = InstantPaymentRequestBottomSheet.tag
+                        val dialog = InstantPaymentRequestBottomSheet.newInstance()
+                        dialog.show(childFragmentManager, tag)
 
-            if (availability && netAmount > 0) {
-                if (netAmount > instantPaymentOTPLimit) {
-                    if (!isOTPRequested) {
-                        sendOTP()
+                        dialog.onCloseBottomSheet = {
+                            fetchCODData()
+                            fetchCollection()
+                            fetchAcceptedOrder()
+                        }
                     }
                 } else {
-                    val tag = InstantPaymentRequestBottomSheet.tag
-                    val dialog = InstantPaymentRequestBottomSheet.newInstance()
-                    dialog.show(childFragmentManager, tag)
-
-                    dialog.onCloseBottomSheet = {
-                        fetchCODData()
-                        fetchCollection()
-                        fetchAcceptedOrder()
+                    if (availabilityMessage.isEmpty()) {
+                        availabilityMessage = "পর্যাপ্ত তথ্য নেই"
                     }
+                    alert("নির্দেশনা", availabilityMessage, true, "ঠিক আছে", "ক্যানসেল") {
+                    }.show()
+                    //binding?.swipeRefresh?.snackbar(availabilityMessage, Snackbar.LENGTH_INDEFINITE, "ঠিক আছে"){}?.show()
                 }
-            } else {
-                if (availabilityMessage.isEmpty()) {
-                    availabilityMessage = "পর্যাপ্ত তথ্য নেই"
-                }
-                alert("নির্দেশনা", availabilityMessage, true, "ঠিক আছে", "ক্যানসেল") {
+            }else if (pohAmount == -1){
+                context?.toast("আপনার তথ্য লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন")
+            }else{
+                alert("নির্দেশনা", "ইনস্ট্যান্ট পেমেন্ট নেয়ার আগে POH পেমেন্ট নিন।", true, "ঠিক আছে", "ক্যানসেল") {
                 }.show()
-                //binding?.swipeRefresh?.snackbar(availabilityMessage, Snackbar.LENGTH_INDEFINITE, "ঠিক আছে"){}?.show()
             }
+
         }
 
         dashboardAdapter.onPreviousPaymentHistoryClick = {
@@ -463,7 +471,7 @@ class DashboardFragment : Fragment() {
         }
 
         binding?.actionLayout?.setOnClickListener {
-            if (pohAmount!=0){
+            if (pohAmount > 0){
                 if (bkashStatus == 1){
                     alert("", HtmlCompat.fromHtml("<font><b>আপনি কি এখনই আপনার বিকাশ একাউন্টে ($bkashNumber) পেমেন্ট নিতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
                         if (it == AlertDialog.BUTTON_POSITIVE) {
@@ -539,6 +547,7 @@ class DashboardFragment : Fragment() {
         instantPaymentViewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { response ->
             progressDialog.dismiss()
             if (response.message == 1 && !response.transactionId.isNullOrEmpty()){
+                binding?.actionLayout?.visibility = View.GONE
                 alert("", "আপনার লেনদেনটি সফলভাবে সম্পন্ন হয়েছে।", false, "ঠিক আছে") {}.show()
             }else if (response.message == 1 && response.transactionId.isNullOrEmpty()){
                 alert("",  "অনুগ্রহ পূর্বক ডেলিভারি টাইগার এর একাউন্টস ডিপার্মেন্ট এর সাথে যোগাযোগ করুন।", false, "ঠিক আছে") {}.show()
