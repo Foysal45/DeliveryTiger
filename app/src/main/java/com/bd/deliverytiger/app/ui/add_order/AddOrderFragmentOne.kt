@@ -477,23 +477,23 @@ class AddOrderFragmentOne : Fragment() {
                             if (timeValidity) {
                                 if (!alertMsg.isNullOrEmpty()){
                                     isMsgShown = true
-                                    alert("নির্দেশনা", alertMsg) {
-                                    }.show()
+                                    /*alert("নির্দেশনা", alertMsg) {
+                                    }.show()*/
                                 }
                             }
                         } else {
                             if (!alertMsg.isNullOrEmpty()){
                                     isMsgShown = true
-                                    alert("নির্দেশনা", alertMsg) {
-                                    }.show()
+                                    /*alert("নির্দেশনা", alertMsg) {
+                                    }.show()*/
                                 }
                         }
                     } else {
                         if (!isMsgShown){
                             if(!alertMsg.isNullOrEmpty()){
                                 isMsgShown = true
-                                alert("নির্দেশনা", alertMsg) {
-                                }.show()
+                                /*alert("নির্দেশনা", alertMsg) {
+                                }.show()*/
                             }
                         }
                     }
@@ -665,6 +665,7 @@ class AddOrderFragmentOne : Fragment() {
             Timber.d("selectedDate $selectedDate")
             isTodaySelected = true
             fetchCollectionTimeSlot()
+            getDeliveryCharge(districtId, thanaId, areaId, serviceType)
         }
 
         voucherLayoutButton?.setOnClickListener {
@@ -699,6 +700,7 @@ class AddOrderFragmentOne : Fragment() {
             Timber.d("selectedDate $selectedDate")
             isTodaySelected = false
             fetchCollectionTimeSlot()
+            getDeliveryCharge(districtId,thanaId,areaId,serviceType)
         }
 
         timeSlotDataAdapter.onItemClick = { model, position  ->
@@ -1033,6 +1035,7 @@ class AddOrderFragmentOne : Fragment() {
             binding?.collectionToday?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_time_slot_unselected)
             isTodaySelected = false
             fetchCollectionTimeSlot()
+            getDeliveryCharge(districtId, thanaId, areaId, serviceType)
         }
     }
 
@@ -1258,15 +1261,17 @@ class AddOrderFragmentOne : Fragment() {
                         }
 
                         //new condition to remove nextDay Delivery type after 4:30 PM
-                        val time = currentTime.split(":")
-                        if (Integer.parseInt(time[0]) == 16){
-                            if (Integer.parseInt(time[1]) >= 30){
+                        if(isTodaySelected){
+                            val time = currentTime.split(":")
+                            if (Integer.parseInt(time[0]) == 16){
+                                if (Integer.parseInt(time[1]) >= 30){
+                                    val data = filterDeliveryTypeList.filter { it.deliveryRangeId != 14 }
+                                    filterDeliveryTypeList = data.filter { it.deliveryRangeId != 17 }
+                                }
+                            } else if (Integer.parseInt(time[0]) > 16){
                                 val data = filterDeliveryTypeList.filter { it.deliveryRangeId != 14 }
                                 filterDeliveryTypeList = data.filter { it.deliveryRangeId != 17 }
                             }
-                        } else if (Integer.parseInt(time[0]) > 16){
-                            val data = filterDeliveryTypeList.filter { it.deliveryRangeId != 14 }
-                            filterDeliveryTypeList = data.filter { it.deliveryRangeId != 17 }
                         }
                         //new condition ends
 
@@ -1285,15 +1290,17 @@ class AddOrderFragmentOne : Fragment() {
                             }
 
                             //new condition to remove nextDay Delivery type after 4:30 PM
-                            val time = currentTime.split(":")
-                            if (Integer.parseInt(time[0]) == 16){
-                                if (Integer.parseInt(time[1]) >= 30){
+                            if(isTodaySelected){
+                                val time = currentTime.split(":")
+                                if (Integer.parseInt(time[0]) == 16){
+                                    if (Integer.parseInt(time[1]) >= 30){
+                                        val data = filterDeliveryTypeList.filter { it.deliveryRangeId != 14 }
+                                        filterDeliveryTypeList = data.filter { it.deliveryRangeId != 17 }
+                                    }
+                                } else if (Integer.parseInt(time[0]) > 16){
                                     val data = filterDeliveryTypeList.filter { it.deliveryRangeId != 14 }
                                     filterDeliveryTypeList = data.filter { it.deliveryRangeId != 17 }
                                 }
-                            } else if (Integer.parseInt(time[0]) > 16){
-                                val data = filterDeliveryTypeList.filter { it.deliveryRangeId != 14 }
-                                filterDeliveryTypeList = data.filter { it.deliveryRangeId != 17 }
                             }
                             //new condition ends
 
