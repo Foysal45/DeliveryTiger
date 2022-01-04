@@ -163,6 +163,7 @@ class AddOrderFragmentOne : Fragment() {
     private var isHeavyWeight: Boolean = false
     private var isEligibleForSpecialService: Boolean = false
     private var isAgreeTerms: Boolean = false
+    private var isAgreePOH: Boolean = false
     private var isWeightSelected: Boolean = false
     private var isPackagingSelected: Boolean = true
     private var payCollectionAmount: Double = 0.0
@@ -594,19 +595,8 @@ class AddOrderFragmentOne : Fragment() {
         }
 
         checkPoh.setOnCheckedChangeListener { compoundButton, b ->
-            if (validationPoh() && b){
-                checkPoh.isChecked = false
-            } else{
-                checkPoh.isChecked = b
-
-                if (b){
-                    applicablePOHCharge = homeViewModel.paymentServiceCharge
-                    applicablePOHType =  homeViewModel.paymentServiceType
-                }else{
-                    applicablePOHCharge = 0.0
-                    applicablePOHType =  0
-                }
-            }
+            isAgreePOH = b
+            checkISPohApplicable()
         }
         checkTermsTV.setOnClickListener {
 
@@ -781,6 +771,29 @@ class AddOrderFragmentOne : Fragment() {
 
         if (BuildConfig.DEBUG) {
             //mockUserData()
+        }
+    }
+
+    private fun checkISPohApplicable() {
+        if (isAgreePOH){
+            if (validationPoh()){
+                checkPoh.isChecked = false
+            } else{
+                if (payCollectionAmount <= homeViewModel.collectionAmountLimt && isMerchantPoHEligibility >= payCollectionAmount) {
+                    checkPoh.isChecked = true
+                    applicablePOHCharge = homeViewModel.paymentServiceCharge
+                    applicablePOHType =  homeViewModel.paymentServiceType
+                }else{
+                    customAlert(getString(R.string.instruction),
+                        "POH এই অর্ডারের জন্য প্রযোজ্য নয়।",
+                        true,
+                        false,
+                        getString(R.string.ok),
+                        getString(R.string.cancel))
+                    {}.show()
+                    checkPoh.isChecked = false
+                }
+            }
         }
     }
 
@@ -2203,22 +2216,10 @@ class AddOrderFragmentOne : Fragment() {
                 e.printStackTrace()
             }
 
-            if (payCollectionAmount == 0.0){
+            if (payCollectionAmount < 1){
                 context?.toast("কালেকশন অ্যামাউন্ট লিখুন")
                 return true
             }
-
-            if (payCollectionAmount <= homeViewModel.collectionAmountLimt && isMerchantPoHEligibility >= payCollectionAmount) {
-                customAlert(getString(R.string.instruction),
-                    "POH এই অর্ডারের জন্য প্রযোজ্য নয়।",
-                    true,
-                    false,
-                    getString(R.string.ok),
-                    getString(R.string.cancel))
-                {}.show()
-                return true
-            }
-
         }
         return false
     }

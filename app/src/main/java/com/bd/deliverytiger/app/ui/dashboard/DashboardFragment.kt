@@ -535,23 +535,18 @@ class DashboardFragment : Fragment() {
         progressDialog.setCancelable(false)
         progressDialog.show()
         val requestBody = MerchantInstantPaymentRequest(0, SessionManager.courierUserId, pohAmount, 2, 1)
-        instantPaymentViewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { response ->
+        Timber.d("transferDebug $requestBody")
+        progressDialog.dismiss()
+        /*instantPaymentViewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { response ->
             progressDialog.dismiss()
             if (response.message == 1 && !response.transactionId.isNullOrEmpty()){
-                customAlert("", "আপনার লেনদেনটি সফলভাবে সম্পন্ন হয়েছে।",false, false, "ঠিক আছে") {
-                    UserLogger.logGenie("Instant_payment_transfer_Successfully")
-                    /*if (it == AlertDialog.BUTTON_POSITIVE) {
-                    }*/
-                }.show()
+                alert("", "আপনার লেনদেনটি সফলভাবে সম্পন্ন হয়েছে।", false, "ঠিক আছে") {}.show()
             }else if (response.message == 1 && response.transactionId.isNullOrEmpty()){
-                customAlert("",  "অনুগ্রহ পূর্বক ডেলিভারি টাইগার এর একাউন্টস ডিপার্মেন্ট এর সাথে যোগাযোগ করুন।", false, false, "ঠিক আছে") {
-                    /*if (it == AlertDialog.BUTTON_POSITIVE) {
-                    }*/
-                }.show()
+                alert("",  "অনুগ্রহ পূর্বক ডেলিভারি টাইগার এর একাউন্টস ডিপার্মেন্ট এর সাথে যোগাযোগ করুন।", false, "ঠিক আছে") {}.show()
             }else{
-                customAlert ( "", "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন।", false, false, "ঠিক আছে" ).show()
+                alert ( "", "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন।", false, "ঠিক আছে" ).show()
             }
-        })
+        })*/
     }
 
     private fun goToPreviousPaymentHistory(){
