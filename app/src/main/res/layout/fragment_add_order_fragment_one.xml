@@ -1048,9 +1048,39 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/pohLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/check_poh"
+                        android:layout_width="26dp"
+                        android:layout_height="wrap_content"
+                        android:text="@null"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14" />
+
+                    <TextView
+                        android:id="@+id/check_poh_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp"
+                        android:text="আমি POH সার্ভিস নিতে চাই"
+                        android:textColor="@color/black_80"
+                        android:textSize="@dimen/text_14"
+                        android:drawablePadding="4dp"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatCheckBox

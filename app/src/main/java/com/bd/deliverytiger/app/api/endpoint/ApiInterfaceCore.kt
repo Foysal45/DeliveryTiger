@@ -50,6 +50,8 @@ import com.bd.deliverytiger.app.api.model.order_track.OrderTrackReqBody
 import com.bd.deliverytiger.app.api.model.order_track.OrderTrackResponse
 import com.bd.deliverytiger.app.api.model.packaging.PackagingData
 import com.bd.deliverytiger.app.api.model.pickup_location.PickupLocation
+import com.bd.deliverytiger.app.api.model.poh.MerchantPoHEligibilityCheckResponse
+import com.bd.deliverytiger.app.api.model.poh.PohApplicableResponse
 import com.bd.deliverytiger.app.api.model.profile_update.ProfileUpdateReqBody
 import com.bd.deliverytiger.app.api.model.quick_order.*
 import com.bd.deliverytiger.app.api.model.quick_order.quick_order_history.QuickOrderList
@@ -225,8 +227,14 @@ interface ApiInterfaceCore {
     @GET("api/Offer/GetOfferByMerchant/{courierUserId}")
     suspend fun isGetOfferByMerchant(@Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<Boolean>, ErrorResponse>
 
-    @GET("/api/Dashboard/GetCustomerInfoByMobile/{mobile}")
+    @GET("api/Dashboard/GetCustomerInfoByMobile/{mobile}")
     suspend fun getCustomerInfoByMobile(@Path("mobile") mobile: String): NetworkResponse<GenericResponse<CustomerInfo>, ErrorResponse>
+
+    @GET("api/Fetch/GetPohApplicable/{mobile}/{courierUserId}")
+    suspend fun getIfPohApplicable(@Path("mobile") mobile: String, @Path("courierUserId") courierUserId: Int): NetworkResponse<GenericResponse<PohApplicableResponse>, ErrorResponse>
+
+    @GET("api/Other/MerchantPoHEligibilityCheck/{id}")
+    suspend fun merchantPoHEligibilityCheck(@Path("id") id: String): NetworkResponse<GenericResponse<MerchantPoHEligibilityCheckResponse>, ErrorResponse>
 
     @POST("api/Fetch/GetDeliveredReturnedCount")
     suspend fun fetchDeliveredReturnedCount(@Body requestBody: DeliveredReturnedCountRequest): NetworkResponse<GenericResponse<List<DeliveredReturnCountResponseItem>>, ErrorResponse>

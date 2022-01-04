@@ -19,6 +19,8 @@ import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnC
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.instant_payment_status.InstantPaymentStatusData
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
+import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceivableDetailResponse
+import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceiveableDetailRequest
 import com.bd.deliverytiger.app.api.model.unpaid_cod.UnpaidCODResponse
 import com.bd.deliverytiger.app.repository.AppRepository
 import com.bd.deliverytiger.app.utils.ViewState
@@ -579,6 +581,36 @@ class DashboardViewModel(private val repository: AppRepository) : ViewModel() {
             }
         }
 
+        return responseBody
+    }
+
+    fun getMerchantPayableDetailForInstantPayment(requestBody: MerchantPayableReceiveableDetailRequest): LiveData<MerchantPayableReceivableDetailResponse> {
+        viewState.value = ViewState.ProgressState(true)
+        val responseBody = MutableLiveData<MerchantPayableReceivableDetailResponse>()
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.merchantPayableReceiveableDetailForInstantPayment(requestBody)
+            withContext(Dispatchers.Main) {
+                viewState.value = ViewState.ProgressState(false)
+                when (response) {
+                    is NetworkResponse.Success -> {
+                        responseBody.value = response.body
+                    }
+                    is NetworkResponse.ServerError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আমাদের সার্ভার কানেকশনে সমস্যা হচ্ছে, কিছুক্ষণ পর আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.NetworkError -> {
+                        val message = "দুঃখিত, এই মুহূর্তে আপনার ইন্টারনেট কানেকশনে সমস্যা হচ্ছে"
+                        viewState.value = ViewState.ShowMessage(message)
+                    }
+                    is NetworkResponse.UnknownError -> {
+                        val message = "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন"
+                        viewState.value = ViewState.ShowMessage(message)
+                        Timber.d(response.error)
+                    }
+                }.exhaustive
+            }
+        }
         return responseBody
     }
 

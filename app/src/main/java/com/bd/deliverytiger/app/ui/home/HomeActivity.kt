@@ -1122,6 +1122,13 @@ class HomeActivity : AppCompatActivity(),
             SessionManager.isHeavyWeight = model.isHeavyWeight
             SessionManager.isEligibleForSpecialService = model.merchantAssignActive
             isQuickBookingEnable = model.isQuickOrderActive
+            //custom cod charge
+            viewModel.codChargeTypeFlag = model.codChargeTypeFlag
+            viewModel.codChargeTypeOutsideFlag = model.codChargeTypeOutsideFlag
+            viewModel.codChargeDhaka = model.codChargeDhaka
+            viewModel.codChargeOutsideDhaka = model.codChargeOutsideDhaka
+            viewModel.codChargePercentageDhaka = model.codChargePercentageDhaka
+            viewModel.codChargePercentageOutsideDhaka = model.codChargePercentageOutsideDhaka
         })
     }
 
@@ -1388,9 +1395,9 @@ class HomeActivity : AppCompatActivity(),
     private fun appUpdateManager() {
         appUpdateManager = AppUpdateManagerFactory.create(this)
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
                 try {
-                    appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE, this, requestCodeAppUpdate)
+                    appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, requestCodeAppUpdate)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }

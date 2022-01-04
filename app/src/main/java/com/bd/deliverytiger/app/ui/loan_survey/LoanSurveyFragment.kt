@@ -85,8 +85,8 @@ class LoanSurveyFragment : Fragment() {
     private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
     private val sdf1 = SimpleDateFormat("dd MMM, yyyy", Locale.US)
 
-    private var selectedDateTradeLisence = "2001-01-01"
-    private var selectedDateDOB = "2001-01-01"
+    private var selectedDateTradeLisence = ""
+    private var selectedDateDOB = ""
     private var selectedDateFormattedTradeLisence = ""
     private var selectedDateFormattedDOB = ""
     private var tradeLicenseImageUrlFrag = ""
@@ -555,6 +555,8 @@ class LoanSurveyFragment : Fragment() {
                     imagePickFlag = 0
                     tradeLicenseImageUrlFrag = ""
                     binding?.tradeliesenceNOTV?.setText("")
+                    binding?.tradeliesencExpireDateTV?.setText("")
+                    selectedDateTradeLisence = ""
                     binding?.merchantTradeLicenceLayout?.isVisible = false
                     binding?.tradeliesencenoandexpiredateLayout?.visibility = View.GONE
                     binding?.tradeliesenceNOLayout?.visibility = View.GONE
@@ -818,7 +820,7 @@ class LoanSurveyFragment : Fragment() {
         val titleText = "নির্দেশনা"
         val descriptionText = "সার্ভেটি পূরণ করার জন্য ধন্যবাদ।"
         val descriptionTextOnUpdate = "সার্ভেটি আপডেট করার জন্য ধন্যবাদ।"
-        if (SessionManager.isSurveyUpdate) {
+        if (isPut) {
             alert(titleText, descriptionTextOnUpdate, false, "ঠিক আছে", "না").show()
         } else {
             alert(titleText, descriptionText, false, "ঠিক আছে", "না").show()

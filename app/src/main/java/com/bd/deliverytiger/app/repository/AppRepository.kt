@@ -401,6 +401,10 @@ class AppRepository(
 
     suspend fun getCustomerInfoByMobile(mobile: String) = apiInterfaceCore.getCustomerInfoByMobile(mobile)
 
+    suspend fun getIfPohApplicable(mobile: String, courierUserId: Int) = apiInterfaceCore.getIfPohApplicable(mobile, courierUserId)
+
+    suspend fun merchantPoHEligibilityCheck(courierUserId: String) = apiInterfaceCore.merchantPoHEligibilityCheck(courierUserId)
+
     suspend fun updateCustomerSMSLimit(
         courierUserId: Int,
         customerSMSLimit: Int

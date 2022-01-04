@@ -93,5 +93,9 @@ data class OrderRequest(
     @SerializedName("voucherCode")
     var voucherCode: String = "",
     @SerializedName("voucherDeliveryRangeId")
-    var voucherDeliveryRangeId: Int = 0
+    var voucherDeliveryRangeId: Int = 0,
+    @SerializedName("paymentServiceType")
+    var paymentServiceType: Int = 0,
+    @SerializedName("paymentServiceCharge")
+    var paymentServiceCharge: Double = 0.0
 )

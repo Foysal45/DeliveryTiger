@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
+import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -35,6 +36,8 @@ import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnC
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveredReturnedCountRequest
 import com.bd.deliverytiger.app.api.model.delivery_return_count.DeliveryDetailsRequest
 import com.bd.deliverytiger.app.api.model.login.OTPRequestModel
+import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantInstantPaymentRequest
+import com.bd.deliverytiger.app.api.model.payment_receieve.MerchantPayableReceiveableDetailRequest
 import com.bd.deliverytiger.app.databinding.FragmentDashboardBinding
 import com.bd.deliverytiger.app.log.UserLogger
 import com.bd.deliverytiger.app.ui.banner.SliderAdapter
@@ -42,7 +45,9 @@ import com.bd.deliverytiger.app.ui.chat.ChatConfigure
 import com.bd.deliverytiger.app.ui.home.HomeActivity
 import com.bd.deliverytiger.app.ui.home.HomeViewModel
 import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleActivity
+import com.bd.deliverytiger.app.ui.live.live_schedule.LiveScheduleBottomSheet
 import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentRequestBottomSheet
+import com.bd.deliverytiger.app.ui.payment_request.InstantPaymentUpdateViewModel
 import com.bd.deliverytiger.app.utils.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -70,6 +75,7 @@ class DashboardFragment : Fragment() {
     private var dateRangeFilterList: MutableList<DeliveredReturnCountResponseItem> = mutableListOf()
     private val viewModel: DashboardViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
+    private val instantPaymentViewModel: InstantPaymentUpdateViewModel by inject()
     //private lateinit var monthSpinnerAdapter: CustomSpinnerAdapter
 
     private val calenderNow = Calendar.getInstance()
@@ -103,6 +109,12 @@ class DashboardFragment : Fragment() {
     private var collectionToday: Int = 0
     private var isQuickBookingEnable: Boolean = false
 
+    //POH
+    private var isPhoneVisible = false
+    private var pohAmount: Int = 0
+    private var bkashStatus: Int = 0
+    private var bkashNumber: String = ""
+
     private var isBannerEnable: Boolean = false
     private var worker: Runnable? = null
     private var handler = Handler(Looper.getMainLooper())
@@ -110,8 +122,6 @@ class DashboardFragment : Fragment() {
     private var collectorInformation: CollectorInformation = CollectorInformation()
     private var countDownTimer: CountDownTimer? = null
     private var adminUser: AdminUser? = null
-    private var isPhoneVisible = false
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return binding?.root ?: FragmentDashboardBinding.inflate(inflater).also {
@@ -123,6 +133,7 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initDashboard()
+        initPoh()
         getCourierUsersInformation()
         fetchBannerData()
         fetchCODData()
@@ -415,6 +426,10 @@ class DashboardFragment : Fragment() {
             }
         }
 
+        dashboardAdapter.onPreviousPaymentHistoryClick = {
+            goToPreviousPaymentHistory()
+        }
+
         binding?.callTextImageLayout?.setOnClickListener {
             if(isPhoneVisible){
                 binding?.phoneNumberLayout?.visibility = View.GONE
@@ -447,9 +462,22 @@ class DashboardFragment : Fragment() {
             UserLogger.logGenie("Dashboard_Loan_Survey")
         }
 
-        binding?.paymentHistoryBtn?.setOnClickListener {
-            findNavController().navigate(R.id.nav_payment_history)
-            UserLogger.logGenie("Dashboard_PaymentStatement")
+        binding?.actionLayout?.setOnClickListener {
+            if (pohAmount!=0){
+                if (bkashStatus == 1){
+                    alert("", HtmlCompat.fromHtml("<font><b>আপনি কি এখনই আপনার বিকাশ একাউন্টে ($bkashNumber) পেমেন্ট নিতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
+                        if (it == AlertDialog.BUTTON_POSITIVE) {
+                            UserLogger.logGenie("Instant_poh_payment_transfer_clicked")
+                            transferPoh() // for transfer poh balance 2
+                        }
+                    }.show()
+                }else{
+                    context?.toast("আপনার বিকাশ একাউন্টের তথ্য অ্যাড করা নেই। তথ্য অ্যাড করার জন্য একাউন্টম্যানেজার এর সাথে যোগাযোগ করুন।")
+                }
+            } else {
+                context?.toast("আপনার পর্যাপ্ত POH ব্যালেন্স নেই")
+            }
+
         }
 
         /* binding?.dateRangePicker?.setOnClickListener {
@@ -500,6 +528,29 @@ class DashboardFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun transferPoh() {
+        val progressDialog = progressDialog("আপনার পেমেন্টটি প্রসেসিং হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+        val requestBody = MerchantInstantPaymentRequest(0, SessionManager.courierUserId, pohAmount, 2, 1)
+        Timber.d("transferDebug $requestBody")
+        instantPaymentViewModel.instantOr24hourPayment(requestBody).observe(viewLifecycleOwner, Observer { response ->
+            progressDialog.dismiss()
+            if (response.message == 1 && !response.transactionId.isNullOrEmpty()){
+                alert("", "আপনার লেনদেনটি সফলভাবে সম্পন্ন হয়েছে।", false, "ঠিক আছে") {}.show()
+            }else if (response.message == 1 && response.transactionId.isNullOrEmpty()){
+                alert("",  "অনুগ্রহ পূর্বক ডেলিভারি টাইগার এর একাউন্টস ডিপার্মেন্ট এর সাথে যোগাযোগ করুন।", false, "ঠিক আছে") {}.show()
+            }else{
+                alert ( "", "কোথাও কোনো সমস্যা হচ্ছে, আবার চেষ্টা করুন।", false, "ঠিক আছে" ).show()
+            }
+        })
+    }
+
+    private fun goToPreviousPaymentHistory(){
+        findNavController().navigate(R.id.nav_payment_history)
+        UserLogger.logGenie("Dashboard_PaymentStatement")
     }
 
     private fun showBanner(bannerModel: BannerModel) {
@@ -572,6 +623,23 @@ class DashboardFragment : Fragment() {
             layoutManager = gridLayoutManager
             adapter = dashboardAdapter
         }
+    }
+
+    private fun initPoh() {
+        val requestBody = MerchantPayableReceiveableDetailRequest(SessionManager.courierUserId, 0)
+        viewModel.getMerchantPayableDetailForInstantPayment(requestBody).observe(viewLifecycleOwner, Observer { data->
+            if (data != null){
+                binding?.countTV?.text = "৳ ${DigitConverter.toBanglaDigit(data.pohPaybleAmount)}"
+                pohAmount = data.pohPaybleAmount
+                bkashStatus = data.bKashStatus
+                bkashNumber = data.bKashNo
+                if (data.pohPaybleAmount < 1){
+                    binding?.actionLayout?.visibility = View.GONE
+                } else {
+                    binding?.actionLayout?.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 
     private fun initRetentionManagerData(userId: Int, retentionManagerName: String, retentionManagerNumber: String) {
@@ -674,6 +742,10 @@ class DashboardFragment : Fragment() {
 
     private fun getCourierUsersInformation() {
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            homeViewModel.paymentServiceType = model.paymentServiceType
+            homeViewModel.paymentServiceCharge = model.paymentServiceCharge
+            homeViewModel.collectionAmountLimt = model.collectionAmountLimt
+            homeViewModel.pohBalance = model.pohBalance
             adminUser = model?.adminUsers
             initRetentionManagerData(
                 model?.adminUsers?.userId ?: 0,

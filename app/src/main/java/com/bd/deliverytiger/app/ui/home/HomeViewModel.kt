@@ -45,7 +45,20 @@ class HomeViewModel(private val repository: AppRepository): ViewModel() {
 
     val pickupLocationList = MutableLiveData<List<PickupLocation>>()
 
+    //custom cod charge
+    var codChargeTypeFlag: Int = -1
+    var codChargeTypeOutsideFlag: Int = -1
+    var codChargeDhaka: Double = -1.0
+    var codChargeOutsideDhaka: Double = -1.0
+    var codChargePercentageDhaka: Double = -1.0
+    var codChargePercentageOutsideDhaka: Double = -1.0
+
     val netAmount = MutableLiveData<Int>(0)
+
+    var paymentServiceType : Int = 0
+    var paymentServiceCharge : Double = 0.0
+    var collectionAmountLimt : Double = 0.0
+    var pohBalance : Double = 0.0
 
     fun getBannerInfo(): LiveData<BannerResponse> {
 

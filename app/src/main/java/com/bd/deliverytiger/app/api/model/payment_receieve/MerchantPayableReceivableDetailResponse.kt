@@ -53,5 +53,7 @@ data class MerchantPayableReceivableDetailResponse(
     @SerializedName("OptionImageUrl")
     val optionImageUrl: List<OptionImageUrl> = listOf(),
     @SerializedName("PayableAmount")
-    val payableAmount: Int = 0
+    val payableAmount: Int = 0,
+    @SerializedName("PohPaybleAmount")
+    val pohPaybleAmount: Int = 0
 )
