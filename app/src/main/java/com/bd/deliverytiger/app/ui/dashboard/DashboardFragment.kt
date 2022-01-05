@@ -400,7 +400,6 @@ class DashboardFragment : Fragment() {
         }
         dashboardAdapter.onPaymentRequestClick = { position, model ->
 
-            if (pohAmount == 0){
                 if (availability && netAmount > 0) {
                     if (netAmount > instantPaymentOTPLimit) {
                         if (!isOTPRequested) {
@@ -425,13 +424,6 @@ class DashboardFragment : Fragment() {
                     }.show()
                     //binding?.swipeRefresh?.snackbar(availabilityMessage, Snackbar.LENGTH_INDEFINITE, "ঠিক আছে"){}?.show()
                 }
-            }else if (pohAmount == -1){
-                context?.toast("আপনার তথ্য লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন")
-            }else{
-                alert("নির্দেশনা", "ইনস্ট্যান্ট পেমেন্ট নেয়ার আগে POH পেমেন্ট নিন।", true, "ঠিক আছে", "ক্যানসেল") {
-                }.show()
-            }
-
         }
 
         dashboardAdapter.onPreviousPaymentHistoryClick = {
@@ -470,7 +462,8 @@ class DashboardFragment : Fragment() {
             UserLogger.logGenie("Dashboard_Loan_Survey")
         }
 
-        binding?.actionLayout?.setOnClickListener {
+        //poh transfer click event
+        /*binding?.actionLayout?.setOnClickListener {
             if (pohAmount > 0){
                 if (bkashStatus == 1){
                     alert("", HtmlCompat.fromHtml("<font><b>আপনি কি এখনই আপনার বিকাশ একাউন্টে ($bkashNumber) পেমেন্ট নিতে চান?</b></font>", HtmlCompat.FROM_HTML_MODE_LEGACY),true, "হ্যাঁ", "না") {
@@ -486,7 +479,7 @@ class DashboardFragment : Fragment() {
                 context?.toast("আপনার পর্যাপ্ত POH ব্যালেন্স নেই")
             }
 
-        }
+        }*/
 
         /* binding?.dateRangePicker?.setOnClickListener {
              val builder = MaterialDatePicker.Builder.dateRangePicker()
@@ -642,11 +635,11 @@ class DashboardFragment : Fragment() {
                 pohAmount = data.pohPaybleAmount
                 bkashStatus = data.bKashStatus
                 bkashNumber = data.bKashNo
-                if (data.pohPaybleAmount < 1){
+                /*if (data.pohPaybleAmount < 1){
                     binding?.actionLayout?.visibility = View.GONE
                 } else {
                     binding?.actionLayout?.visibility = View.VISIBLE
-                }
+                }*/
             }
         })
     }
@@ -751,6 +744,11 @@ class DashboardFragment : Fragment() {
 
     private fun getCourierUsersInformation() {
         viewModel.getCourierUsersInformation(SessionManager.courierUserId).observe(viewLifecycleOwner, Observer { model ->
+            if (model.paymentServiceType > 0){
+                binding?.pohMainLayout?.visibility = View.VISIBLE
+            }else{
+                binding?.pohMainLayout?.visibility = View.GONE
+            }
             homeViewModel.paymentServiceType = model.paymentServiceType
             homeViewModel.paymentServiceCharge = model.paymentServiceCharge
             homeViewModel.collectionAmountLimt = model.collectionAmountLimt

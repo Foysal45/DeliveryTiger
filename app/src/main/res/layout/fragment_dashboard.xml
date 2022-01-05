@@ -170,8 +170,10 @@
                         android:layout_marginHorizontal="21dp"
                         android:layout_marginTop="16dp"
                         android:paddingVertical="12dp"
-                        android:id="@+id/parent"
-                        android:background="@drawable/bg_poh_background">
+                        android:id="@+id/pohMainLayout"
+                        android:background="@drawable/bg_poh_background"
+                        android:visibility="gone"
+                        tools:visibility="visible">
 
                         <TextView
                             android:id="@+id/titleTV"
